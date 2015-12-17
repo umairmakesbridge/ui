@@ -2,37 +2,48 @@
    'use strict';
     require.config({  
        deps: ['main'], 
-       waitSeconds:300,
-       urlArgs: "bust=1.14" ,
+       waitSeconds:400,       
+       urlArgs: "bust=1.469_1" ,       
        paths:{
-           jquery:'../shared/libs/jquery',
-           underscore:'../shared/libs/underscore',
-           backbone:'../shared/libs/backbone-min',
-           text:'../shared/libs/text',
-           router: '../shared/router',
-           async: '../shared/libs/async',
-           goog: '../shared/libs/goog',
-           propertyParser: '../shared/libs/propertyParser',
-           'iframed-app': '../shared/iframed-app',           
-           'jquery.bmsgrid': '../shared/libs/bmsgrid',
-           'jquery.calendario': '../shared/libs/jquery.calendario',
-           'jquery.icheck': '../shared/libs/jquery.icheck',
-           'jquery.chosen': '../shared/libs/chosen.jquery',
-           'jquery.highlight': '../shared/libs/jquery.highlight',           
-           'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
-           'jquery-ui': '../shared/libs/jquery-ui',
-           'fileuploader': '../shared/libs/jquery.form',
-           'bms-filters': '../shared/filters',
-           'bms-crm_filters': '../shared/crm_filters',
-           'bms-tags': '../shared/tags',
-           'bms-mapping': '../shared/mapping',
-           'bms-addbox': '../shared/addbox',
-           'moment': '../shared/libs/moment',
-           'bootstrap': '../shared/libs/bootstrap.min',
-           '_date': '../shared/libs/date',
-           'daterangepicker': '../shared/libs/daterangepicker.jQuery',
-           'bms-dragfile': '../shared/dragfile',
-           'bms-mergefields':'../shared/mergefields'
+           jquery:'shared/libs/jquery',
+           underscore:'shared/libs/underscore',
+           backbone:'shared/libs/backbone-min',
+           text:'shared/libs/text',
+           router: 'shared/router',
+           async: 'shared/libs/async',
+           goog: 'shared/libs/goog',
+           propertyParser: 'shared/libs/propertyParser',           
+           'jquery.bmsgrid': 'shared/libs/bmsgrid',
+           'jquery.calendario': 'shared/libs/jquery.calendario',
+           'jquery.icheck': 'shared/libs/jquery.icheck',
+           'jquery.chosen': 'shared/libs/chosen.jquery',
+           'jquery.highlight': 'shared/libs/jquery.highlight',           
+           'jquery.searchcontrol': 'shared/searchcontrol',
+           'jquery-ui': 'shared/libs/jquery-ui',
+           'bms-remote': 'shared/libs/remote',
+           'fileuploader': 'shared/libs/jquery.form',
+           'bms-shuffle': 'shared/shuffle',
+           'bms-filters': 'shared/filters',
+           'bms-crm_filters': 'shared/crm_filters',
+           'bms-tags': 'shared/tags',
+           'bms-mapping': 'shared/mapping',
+           'bms-addbox': 'shared/addbox',
+           'moment': 'shared/libs/moment',
+           'bootstrap': 'shared/libs/bootstrap.min',
+           '_date': 'shared/libs/date',
+           'daterangepicker': 'shared/libs/daterangepicker.jQuery',
+           'bms-dragfile': 'shared/dragfile',
+           'bms-mergefields':'shared/mergefields',
+           'jquery.customScroll':'shared/libs/jquery.mCustomScrollbar',
+           'datetimepicker':'shared/libs/jquery.datetimepicker',
+           'jquery.isotope':'shared/libs/jquery.isotope',
+           'mee-helper': 'shared/editor_common',
+           'mincolors':'shared/libs/jquery.minicolors',
+           'tinymce':'shared/libs/tinymce/tinymce',
+           'scrollbox':'shared/jquery.scrollbox',
+           'highcharts':'shared/libs/charts/highcharts',
+           'export-chart':'shared/libs/charts/modules/exporting',
+           'jspdf' : 'reports/summary/vendors/jspdf'
        },
         shim: {
                 backbone: {
@@ -91,6 +102,9 @@
                },
                'bms-mergefields':{
                    deps: ['jquery']
+               },
+               'bms-shuffle':{
+                   deps: ['jquery']
                }
                ,
                'bms-mapping':{
@@ -102,12 +116,25 @@
                },
                'bms-dragfile':{
                    deps: ['jquery']
+               },
+               'datetimepicker':{
+                   deps: ['jquery']
+               }
+               ,
+               'jquery.isotope':{
+                   deps: ['jquery']
+               },
+               'jquery.customScroll':{
+                   deps: ['jquery']
+               },
+               'jquery.scrollbox':{
+                   deps: ['jquery']
                }
          }
     });
  
     define(['backbone', 'app', 'router', 'views/main_container'], function (Backbone, app, Router, MainContainer) {
-        app.start(Router, MainContainer, function () {
+        app.start(Router, MainContainer, function () {                
                 Backbone.history.start({pushState: true}); //Start routing
         });
         return app;

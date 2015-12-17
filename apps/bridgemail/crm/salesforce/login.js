@@ -46,8 +46,10 @@ function (template) {
                         if(salesforceLoggedIn && this.passwordChange==true){
                             postData['sfPass']= curview.$el.find('#sf_pwd').val();
                         }
+                        this.$("#btnTestLogin").addClass("saving");
                         $.post(URL, postData)
                         .done(function(data) { 
+                               curview.$("#btnTestLogin").removeClass("saving"); 
                                curview.$el.find('#sf_pwd,#sf_userid').removeAttr('readonly');
                                 var creds = jQuery.parseJSON(data);                            
                                 if(creds.err)							
@@ -62,10 +64,12 @@ function (template) {
                         app.showLoading(true,curview.$el);
                         var URL = "/pms/io/salesforce/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setEmail";
                         curview.$el.find('#sf_email').attr('readonly','readonly');
+                        this.$('.setEmail').addClass('saving');
                         $.post(URL, { sfEmail:curview.$el.find('#sf_email').val()})
                         .done(function(data) { 
                                 var creds = jQuery.parseJSON(data);                            
                                 curview.$el.find('#sf_email').removeAttr('readonly')
+                                curview.$('.setEmail').removeClass('saving');
                                 if(creds.err)							
                                     app.showAlert(creds.err.replace('&#58;',':'),curview.$el);
                                 else						
@@ -80,13 +84,13 @@ function (template) {
                         var app = this.app;
                         var el = this.$el;
                         el.find('#sf_userid,#sf_pwd').attr('readonly','readonly');
-                        el.find('#btnSaveLogin').addClass('saving');
+                        el.find('.btnSaveLogin').addClass('saving');
                         var URL = "/pms/io/salesforce/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setCred";
                         $.post(URL, { sfUserID: curview.$el.find('#sf_userid').val(),sfPass: curview.$el.find('#sf_pwd').val(),sfEmail:curview.$el.find('#sf_email').val()})
                         .done(function(data) { 
                                 var creds = jQuery.parseJSON(data);        
                                 el.find('#sf_userid,#sf_pwd').removeAttr('readonly');
-                                el.find('#btnSaveLogin').removeClass('saving');
+                                el.find('.btnSaveLogin').removeClass('saving');
                                 if(creds.err)
                                 {							
                                     app.showAlert(creds.err.replace('&#58;',':'),curview.$el);							
@@ -162,7 +166,14 @@ function (template) {
                     var isValid = true;
                     var app = this.app;
                     var appMsgs = this.app.messages[0];
-                  if(el.find('#sf_email').val() != '' && !app.validateEmail(el.find('#sf_email').val()))
+                    if(el.find('#sf_email').val() == ''){
+                        app.showError({
+                                control:el.find('.email-container'),
+                                message:'Email can\'t be empty'
+                        });
+                        isValid = false;
+                    }
+                    else if(el.find('#sf_email').val() != '' && !app.validateEmail(el.find('#sf_email').val()))
                     {						
                         app.showError({
                                 control:el.find('.email-container'),

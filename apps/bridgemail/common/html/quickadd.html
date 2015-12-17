@@ -1,0 +1,151 @@
+<ul  class="nav-tabs options" id="add_options">
+    <li class="active q-graphic-g"><a data-t="dp1" href="#dp1"><img alt=" " class="activated-image" data-t="dp1" data-src="" src="<%- this.app.get('path')%>img/graphics-gw.png"></a></li>
+    <li class="q-csv-g"><a href="#dp2" data-t="dp2"><img alt="" data-t="dp2" data-src="" src="<%- this.app.get('path')%>img/csv-g.png"></a></li>
+    <li class="q-campaign-g"><a href="#dp3" data-t="dp3"><img alt="" data-t="dp3" data-src="" src="<%- this.app.get('path')%>img/campaign-g.png"></a></li>
+    <li class="q-nurturetrack-g"><a href="#dp4" data-t="dp4"> <img data-t="dp4" alt="" data-src="" src="<%- this.app.get('path')%>img/nurture-track-g.png"></a></li>
+    <li class="q-autobot-g"><a href="#dp5" data-t="dp5"><img alt="" data-t="dp5" data-src="" src="<%- this.app.get('path')%>img/autobots-g.png"></a></li>
+</ul>
+
+
+<div class="add_detail tab-content">
+
+    <div  class="tab-pane active" id="dp1">
+        
+        
+        
+        <div id="drop-image" class="droppanel" ondragover="return false">
+             
+            <div id="uploaded-image">
+                <div id="dropped-image"> </div>
+            </div>
+            <div class="middle">
+                <form name="imageupload_form" id="imageupload_form" method="post" action="" enctype="multipart/form-data">
+                   <h4><img alt="" src="<%- this.app.get('path')%>img/graphic-b.png"><br class="clearfix">Drag and drop an image</h4>
+                     
+                    <div style="text-align:center">
+                        <div class="SI-FILES-STYLIZED" style="display:inline-block;position:relative;">
+                            <label style="width:195px; height: 0px;padding:0px;float:none;">
+                                <input type="file" id="image_control" name="file" class="file">
+                            </label>
+                            <a id="list_image_upload" class="btn-blue g-btn  "><span>Browse &amp; Upload </span><i class="icon update"></i></a>
+                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+        
+         
+        <div class="imgs_added" style="display:none;">
+            <h4>Recently added images &nbsp;&nbsp; <a id="hrfGallary">Visit Image Gallery &raquo;</a></h4>
+               <div class="scroll-text" style="background: none repeat scroll 0% 0% #9EB8CA;">   
+                     <a class="arrow_left" id="box_backward" style="display:none;;"><span></span></a>
+                         <ul class="images" style="width:5000px;"> 
+                           </ul>
+                    <a class="arrow_r" id="box_forward" style="display:none;"><span></span></a>
+                </div>  
+            
+            <div class="img_detail">
+
+                <h3><a id="recent_title" class="showtooltip"></a>  
+                   
+
+
+                    <span class="size" id="recent_size"> </span></h3>
+
+                <p>    </p>
+
+                <div class="imgurl">
+                    <h4>Image URL</h4>
+                    <input type="text"   id="recent_url" placeholder="Image URL" onclick="this.focus();this.select()" class="left tginput" style="width:455px;" value=" ">
+                </div>
+
+
+
+            </div>
+
+            
+            
+                 
+            <div class="clearfix"></div>
+        </div>
+    </div> <!--  add_detail  -->
+
+    <div  class="tab-pane" id="dp2">
+        <div id="drop-files" class="droppanel" ondragover="return false">
+
+            <div id="uploaded-holder">
+                <div id="dropped-files"> </div>
+            </div>
+            <div class="middle">
+                <form name="listupload_form" id="listupload_form" method="post" action="" enctype="multipart/form-data">
+                   <h4><img alt="" src="<%- this.app.get('path')%>img/csv-b.png"><br class="clearfix">Drag .CSV file or browse from computer</h4>
+                     
+                    <div style="text-align:center">
+                        <div class="SI-FILES-STYLIZED" style="display:inline-block;position:relative;">
+                            <label style="width:195px; height: 0px;padding:0px;float:none;">
+                                <input type="file" id="file_control" name="file" class="file">
+                            </label>
+                            <a id="list_file_upload" class="btn-blue g-btn  "><span>Browse &amp; Upload </span><i class="icon update"></i></a>
+                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+
+    </div> <!--  add_detail  -->
+
+    <div  class="tab-pane" id="dp3">
+        <div class="add_panel">
+            <h2>Create a new campaign</h2>
+            <div class="takename campaign-container">
+                <div class="inputcont left"> 
+                    <input type="text"  style="width:300px;height:22px;" placeholder="Enter campaign name here" id="quick_txtcampaign">
+                    
+                </div>
+                <a class="btn-green g-btn quick-campaign-add"><span>Create </span><i class="icon next"></i></a>
+            </div>
+
+        </div>
+    </div> <!--  add_detail  -->
+
+    <div  class="tab-pane" id="dp4">
+        <div class="add_panel">
+            <h2>Create a new Nurture Track</h2>
+            <div class="takename nurturetrack-container">
+                <div class="inputcont left"> 
+                    <input type="text" style="width:300px;height:22px;" placeholder="Enter Nurture Track name here" id="quick_txtnurturetrack" name="">
+                </div>
+                <a  class="btn-green g-btn quick-nurturetrack-add "><span>Create </span><i class="icon next"></i></a>
+            </div>
+
+        </div>
+    </div> <!--  add_detail  -->
+
+    <div  class="tab-pane" id="dp5">
+        <div class="add_panel">
+            <h2>Create a new Autobot</h2>
+
+            <ol class="slctbot">
+               <li data-type="E"><a class="active"><img src="<%- this.app.get('path')%>img/mailbot-icon.png" alt=""><span>Mail Bot</span></a></li>
+                <li data-type="A"><a><img src="<%- this.app.get('path')%>img/alertbot-icon.png" alt=""> <span>Alert Bot</span></a></li>
+                <li data-type="TG"><a><img src="<%- this.app.get('path')%>img/tagbot-icon.png" alt=""><span>Tag Bot</span></a></li>
+                <li data-type="SC"><a><img src="<%- this.app.get('path')%>img/scorebot-icon.png" alt=""><span>Score Bot</span></a></li>
+
+            </ol>
+
+            <div class="takename autobot-container" style=" padding-bottom: 50px;"> 
+                 <div class="inputcont left">
+                     <input type="text" style="width:300px;height:22px;" placeholder="Enter autobot name here" id="txtautobot"/>
+                 </div>
+                <a class="btn-green g-btn quick-autobot-add"><span>Create </span><i class="icon next"></i></a>
+            </div>
+
+        </div>
+    </div> <!--  add_detail  -->
+
+
+
+</div>
+

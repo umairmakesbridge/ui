@@ -1,15 +1,18 @@
 <div class="thumbnail graphics">
     <div class="img">
-        <div style="height:auto!important">
-            <a style="display:none;" class="selectbtn select-image main-action _graphics" data-url="<%=originalURL%>">
-                <span style="margin: 5px auto;" data-url="<%=originalURL%>">Use Image</span></a>
-            <a class="previewbtn" id="preview" data-id="<%=this.getId('imageId.encode')%>"><span></span></a>
+        <div style="height:auto!important" class="gallery-action-btns three s-clr4">
+            <a style="display:none; width:100%!important;" class="selectbtn select-image main-action _graphics clr3" data-url="<%=originalURL%>">
+                <span style="margin: 5px auto;" data-url="<%=originalURL%>" data-thumb="<%=thumbURL%>">Use Image</span></a>
+            <a class="previewbtn clr2" id="preview" data-id="<%=this.getId('imageId.encode')%>"><span>Preview</span></a>
            
-            <a class="deletebtn" id="delete" rel="delete__<%=this.getId('imageId.encode')%>">
-                <span rel="delete__<%=this.getId('imageId.encode')%>"></span>
+           <!-- <a class="download_img" id="download">
+                <span>Download</span>
+            </a> -->
+            <a class="deletebtn clr1" id="delete" rel="delete__<%=this.getId('imageId.encode')%>">
+                <span rel="delete__<%=this.getId('imageId.encode')%>">Delete</span>
             </a>
         </div>
-            <span style="line-height: 230px;width:250px;"> <img src="<%=thumbURL%>"></span>
+        <span style="line-height: 230px;width:250px;"> <img src="<%=thumbURL%>"></span>
     </div>
      <div class="caption">
                 <h3 id="graphics-title" class="graphics-name">

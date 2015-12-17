@@ -26,53 +26,67 @@ if(userInfo == null) {
 %><jsp:forward page="../InvalidAccess.jsp"/><%
   return;
 }
-
+String _path = "/pms/umair/";
 %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="loading-html">
 <head>
     <meta charset="utf-8">
-    <title>Bridgemail System</title>
-    
+    <title>Bridgemail System</title>    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="">    
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <meta name="author" content="">     
+    <style>
+            html {
+                -webkit-transition: background-color 1s;
+                transition: background-color 1s;
+            }
+            html, body { min-height: 100%; }
+            html.loading-html {
+                background: #fff url('img/mb-loading.gif') no-repeat 50% 50%;
+                -webkit-transition: background-color 0;
+                transition: background-color 0;
+            }
+            body {
+                -webkit-transition: opacity 1s ease-in;
+                transition: opacity 1s ease-in;
+            }
+            html.loading-html body {
+                opacity: 0;
+                -webkit-transition: opacity 0;
+                transition: opacity 0;
+            }
+            
+    </style>
+    <link rel="shortcut icon" href="img/favicon.ico">        
+    <link href="<%= _path %>css/bootstrap.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/bridgemail.css?bust=1.362" rel="stylesheet" type="text/css" >   
+    <link href="<%= _path %>css/plugins.css?bust=1.362" rel="stylesheet" />        
+    <link href="<%= _path %>css/changes.css?bust=1.362" rel="stylesheet" type="text/css" >    
+    <link href="<%= _path %>css/editorcss/mee.css?bust=1.362" rel="stylesheet"> 
     
-    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" >
-    <link href="css/icons.css" rel="stylesheet" type="text/css" >
-    <link href="css/style.css" rel="stylesheet" type="text/css" >    
-    <link href="css/bmsgrid.css" rel="stylesheet" type="text/css" >
-    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" >
-    <link href="css/calendar.css" rel="stylesheet" type="text/css" >
-    <link href="css/custom_2.css" rel="stylesheet" type="text/css" >
-    <link href="css/chosen.css" rel="stylesheet" type="text/css" >
-    <link href="css/changes.css" rel="stylesheet" type="text/css" >
-    <link href="css/skins/lightgray/skin.min.css" rel="stylesheet">
-    <link href="css/tan_changes.css" rel="stylesheet" type="text/css" >
-    <link rel="stylesheet" href="css/ui.daterangepicker.css" type="text/css" />
-    <link rel="stylesheet" href="css/animate.css" type="text/css" />
-    <link rel="stylesheet" href="css/dash.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/a_changes.css" rel="stylesheet" />
-    
-    <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
-    <script  type="text/javascript">
+    <script>
+        var bms_token = '<%= Default.toDefault((String)session.getAttribute(PMSDefinitions.CSRF_TOKEN_NAME)) %>';
+        var _path = '<%= _path %>';
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
         var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";
-        var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>";        
+        var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>"; 
+        var contentDomain = "<%=PMSResources.getInstance().getEventsDomain()%>"
+        var userKey =  "<%=userInfo.getUserKey()%>"; 
+        var sharedObject = {};
     </script>
-    
-    <!-- <link href="build/bridgemail/bridgemail_0.1.min.css" rel="stylesheet" type="text/css" >
-    <script type="text/javascript" src="js/require.js" data-main="build/bridgemail/bridgemail_0.1.min"></script>-->
-    
+    <script type="text/javascript" src="<%= _path %>js/require.js" data-main="apps/bridgemail/main"></script>
 
+    
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+          <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->   
-    <script type="text/javascript" src="https://test.bridgemailsystem.com/tiny_mce/tiny_mce.js"></script>
+    <script type="text/javascript" src="https://<%=PMSResources.getInstance().getBaseDomain()%>/tinymce_3/tiny_mce_old.js"></script>
 </head>
 <body>
+
+    
     
 </body>
 </html>

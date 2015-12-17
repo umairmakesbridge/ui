@@ -9,7 +9,14 @@ function ($,Backbone, _,app,Wizard, template) {
                     'click .close-wp':function(obj){
                         var cur_wp = $(obj.target).parents(".ws-content");
                         var wp_id = cur_wp.attr("id").split("_")[1];
-                        $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();
+                        var close_wp = $("#wp_li_"+wp_id).data('viewObj');
+                        if(close_wp && close_wp.$el.find('#mee_editor').length > 0 && close_wp.$el.find('#mee_editor').resetAutoSaveTimer && close_wp.$el.find('#mee_editor').html() !== ""){
+                               close_wp.$el.find('#mee_editor').resetAutoSaveTimer();
+                        }
+                        if(close_wp && close_wp.closeCallBack){
+                            close_wp.closeCallBack();
+                        }
+                        $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();                        
                         if($("#wstabs li").length==1){                           
                             $(".tw-toggle button").removeClass("active");
                             $(".tw-toggle button:first").addClass("active");
@@ -19,10 +26,14 @@ function ($,Backbone, _,app,Wizard, template) {
                             });    
                         }
                         else{
-                           $("#wstabs li:first").click();
+                           //$("#wstabs li:first").click();
                            //$("#"+app.mainContainer.lastActiveWorkSpace).click();
+                           app.tabsArray.pop();
+                           app.popWKSTabs();
                            
                         }
+                        app.mainContainer.openTipnTest=false;
+                        app.mainContainer.openTipnTest2=false;
                         $("body").css("overflow","auto");                                                    
                         $("#activities,#search,.icons-bar").show();                        
                     },
@@ -53,7 +64,7 @@ function ($,Backbone, _,app,Wizard, template) {
                         this.$(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});	
                 },
                 render: function () {
-                        this.$el.html(this.template({}));
+                        this.$el.html(this.template({app:app}));
                         var page_container = null;
                         //Render workspace title
                         if(this.options.title){
@@ -77,7 +88,7 @@ function ($,Backbone, _,app,Wizard, template) {
                             this.$el.find(".add-action").addClass("show-add");
                         }
                         //Load a page 
-                        if(this.options.url){
+                        if(this.options.url){                            
                             this.loadPage(this.options.url,page_container,this.options.params);
                         }
                         
@@ -95,6 +106,7 @@ function ($,Backbone, _,app,Wizard, template) {
                 },
                 loadPage:function(_url,container,params){                       
                     app.showLoading(true,this.$el);
+                    var _this = this;
                     var wsp = this.$el;
                     require(
                             [_url],function(pageView){
@@ -115,9 +127,14 @@ function ($,Backbone, _,app,Wizard, template) {
                                         page_view.init();      //This will initilize any controls that are in page.
                                     }
                                 }
+                                _this.attachView(wsp,page_view);
                             }
                      );
-                },         
+                },   
+                attachView:function(ws,pageView){
+                    var workspace_id = ws.attr("id").split("_")[1]; 
+                    $("#wp_li_"+workspace_id).data('viewObj',pageView);
+                },
                 initScroll:function(el){
             
                 this.$win=$(window)

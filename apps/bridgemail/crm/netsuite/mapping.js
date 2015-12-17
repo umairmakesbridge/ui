@@ -45,14 +45,14 @@ function (template,Mapping) {
                                    if(val[0].nsObject=="Customer"){                                     
                                      var mapping_field = val[0].bmsMappingField;
                                      fields_html += '<tr id="row_'+val[0].name+'">';                                                                                               
-                                     fields_html += '<td><div class="name-type colico sfr"> <strong><span><em>Salesforce Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
+                                     fields_html += '<td><div class="name-type colico nst"> <strong><span><em>Netsuite Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
                                      fields_html += '<td><div class="type colico mbr show" style="width:174px"> <strong><span><em>Makesbridge Field</em>'+mapping_field+'</span></strong> </div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                                                             
                                      fields_html += '</tr>';
                                     }
                                     else if(val[0].nsObject=="Contact"){                                   
                                      var mapping_field = val[0].bmsMappingField;
                                      c_fields_html += '<tr id="row_'+val[0].name+'">';                                                                                               
-                                     c_fields_html += '<td><div class="name-type colico sfr"> <strong><span><em>Salesforce Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
+                                     c_fields_html += '<td><div class="name-type colico nst"> <strong><span><em>Netsuite Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
                                      c_fields_html += '<td><div class="type colico mbr show" style="width:174px"> <strong><span><em>Makesbridge Field</em>'+mapping_field+'</span></strong> </div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                                                             
                                      c_fields_html += '</tr>';
                                     }
@@ -60,7 +60,7 @@ function (template,Mapping) {
                                         
                                      var mapping_field = val[0].bmsMappingField;
                                      p_fields_html += '<tr id="row_'+val[0].name+'">';                                                                                               
-                                     p_fields_html += '<td><div class="name-type colico sfr"> <strong><span><em>Salesforce Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
+                                     p_fields_html += '<td><div class="name-type colico nst"> <strong><span><em>Netsuite Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
                                      p_fields_html += '<td><div class="type colico mbr show" style="width:174px"> <strong><span><em>Makesbridge Field</em>'+mapping_field+'</span></strong> </div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                                                             
                                      p_fields_html += '</tr>';
                                     }

@@ -19,28 +19,37 @@ function (template,crm_filters) {
                     this.initControl();                                       
                        
                 },
-                initControl:function(){
-                    this.$("#accordion_login").accordion({heightStyle: "fill",collapsible: true});
-                    this.$("#accordion_sync").accordion({heightStyle: "fill",collapsible: true,active:1});
-                    this.$("#accordion_mapping").accordion({heightStyle: "fill",collapsible: true,active:1});
-                    
-                   this.$loginInner = this.$(".accordion_login-inner");
-                   this.$syncInner = this.$(".accordion_sync-inner");
-                   this.$mappingInner = this.$(".accordion_mapping-inner");
-                   /*Load login view for salesforce*/
-                   this.$loginInner.css({"min-height":"235px","position":"relative"});
-                   this.app.showLoading("Loading Login...",this.$loginInner);
-                   require(["crm/salesforce/login"],_.bind(function(page){    
-                       this.app.showLoading(false,this.$loginInner);
-                       this.$loginInner.css("position","inherit");
-                       var login_page = new page({page:this,layout:'col'})                       
-                       this.$loginInner.append(login_page.$el);                       
-                   },this));
-                   var sf = this.app.getAppData("salesfocre");                   
-                   if(sf && sf.isSalesforceUser=="Y"){
-                        this.loadMapping();
-                        this.loadSyncArea();
-                   }                                                                           
+                initControl:function(){                    
+                    var sf = this.app.getAppData("salesfocre");                   
+                    if(sf && sf.isSalesforceUser=="N"){
+                       this.$("#salesforce_welcome").show();
+                       this.$(".setup-accordion").hide();
+                   } 
+                   else{
+                       this.$("#salesforce_welcome").hide();
+                       this.$(".setup-accordion").show();
+                        this.$("#accordion_login").accordion({heightStyle: "fill",collapsible: true});
+                        this.$("#accordion_sync").accordion({heightStyle: "fill",collapsible: true,active:1});
+                        this.$("#accordion_mapping").accordion({heightStyle: "fill",collapsible: true,active:1});
+
+                       this.$loginInner = this.$(".accordion_login-inner");
+                       this.$syncInner = this.$(".accordion_sync-inner");
+                       this.$mappingInner = this.$(".accordion_mapping-inner");
+                       /*Load login view for salesforce*/
+                       this.$loginInner.css({"min-height":"235px","position":"relative"});
+                       this.app.showLoading("Loading Login...",this.$loginInner);
+                       require(["crm/salesforce/login"],_.bind(function(page){    
+                           this.app.showLoading(false,this.$loginInner);
+                           this.$loginInner.css("position","inherit");
+                           var login_page = new page({page:this,layout:'col'})                       
+                           this.$loginInner.append(login_page.$el);                       
+                       },this));
+
+                       if(sf && sf.isSalesforceUser=="Y"){
+                            this.loadMapping();
+                            this.loadSyncArea();
+                       } 
+                   }
                 },
                 loadMapping:function(){
                    if(this.mappingLoaded ==false){ 

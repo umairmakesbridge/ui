@@ -1,0 +1,47 @@
+
+<td width="">
+    <div>
+         <div class="name-type left">
+               <strong style="padding:5px 10px 5px 45px;"><span><em style="margin: 0px 0px 0px -40px;">Subject</em></span></strong>
+                <h3 class="subject-name showhand showtooltip" style="" data-original-title="Click to preview">
+                    <%= this.model.get('subject')%>
+                </h3>
+         </div>
+    </div>
+</td>
+<td width=""><div>
+                        <div class="colico subject"> 
+                            
+                        </div>
+                      </div>
+</td>
+
+                              
+<td width="90px"></td>
+<td width="90px"> <% if(this.model.get('isOpen')==='Y'){ %>
+   <div>
+       <div class="time">
+           <strong><span><em>Open Date</em><%= this.getTimeShow().dtOpen %></span></strong>
+       </div>
+       <% }%>     
+   </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="" class="colico time ">
+                                <strong><span><em>Sent Date</em><%= this.getTimeShow().dateTime %></span></strong>
+         </div>
+        <div class="slide-btns two s-clr3">
+              <span class="icon setting"></span>
+              <div>                 
+               <a class="icon preview-camp preview clr2"><span>Preview</span></a>  
+               <a class="icon sendmail clr1"><span>Send Email</span></a>
+
+      
+               </div>   
+        </div> 
+        
+    </div>
+</td>
+
+

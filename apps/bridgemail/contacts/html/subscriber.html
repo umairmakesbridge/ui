@@ -6,11 +6,16 @@
        <div class="profile-infostats">         
 
         <div class="score-buttons">
-                     <ul>
-                 <li style="visibility:hidden"><div class="score"><i class="icon score"></i>0</div> 
-                 <a  class="sf"><img src="img/sficon2.png" alt=""></a></li>
-                 <li><a  class="btn-green edit-profile"><span>Edit Profile</span><i class="icon editpro2"></i></a></li>
-                 <li><a  class="btn-yellow manage-lists"><span>Manage Lists</span><i class="icon mlist2"></i></a></li>
+             <ul>
+                 <li style="width: auto;min-width: 120px;max-width:150px;overflow:hidden"><div class="score"><i class="icon score"></i>+<span class="score-value">0</span></div> 
+                 <!--<a  class="sf"><img src="<%- this.app.get('path')%>img/sficon2.png" alt=""></a></li>-->                                  
+                 <% if(this.editable) { %>
+                 <li style="float:right;width: auto;"><a  class="btn-red suppress-sub showtooltip" data-original-title="Click to suppress contact"><i class="icon supress-w"></i></a></li>                 
+                 <li style="float:right;width: auto;"><a  class="btn-green coursecorrect-sub showtooltip" data-original-title="Click for course correct"><i class="icon coursecorrect-w"></i></a></li>                    
+                 <% } %>
+                 <li style="float:right;width: auto;"><a  class="btn-yellow manage-lists showtooltip" data-original-title="<% if(this.editable){%>Click to manage lists<%} else {%>Click to view lists<%}%>"><i class="icon mlist2"></i></a></li>
+                 <li style="float:right;width: auto;"><a  class="btn-green edit-profile showtooltip" data-original-title="<% if(this.editable){%>Click to edit profile<%} else {%>Click to view profile<%}%>"><i class="icon editpro2"></i></a></li>
+                 <li style="float:right;width: auto;"><a  class="btn-blue oto-sendmail showtooltip" data-original-title="Click to send email"><i class="icon otolist"></i></a></li>
              </ul>
          </div>
 
@@ -22,7 +27,7 @@
                 <span class="s-month-year"> </span>
             </li>
             <li>                             
-                <h5><i class="icon clock"></i>Last Seen</h5>
+                <h5><i class="icon clock"></i>Last Seen</h5> 
                <h3 class="seen-interval">12</h3>
                <span> <strong class="seen-time-text">Hrs</strong>Ago</span>
             </li>

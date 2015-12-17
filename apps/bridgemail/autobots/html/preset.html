@@ -1,0 +1,185 @@
+  
+<div class="bot_p_box">
+    <div class="bot_p_boxinner">
+
+
+        
+        <div class="filt_cont" id="div_condition">
+            <h4> 
+                <%=this.getPresetTitle(0)%>  <em class="text ifs" style="margin-right:5px;">when </em>
+            <select id="ddlif" class=" nosearch" style="width: 40px; margin: 0px 5px; display: none;">
+                <option value="A">All</option>
+                <option value="1">Any</option>
+            </select>
+            <em class="text ifs" style="margin-left:5px;">conditions below are met.</em>
+            </h4>
+        </div>
+
+
+
+        <div class="pre_row emailclicks-submit">
+            <div class="filt_cont">
+              
+            </div>    
+        </div> <!--  pre_row  -->
+        <div class="pre_row pageviews-submit">
+            <div class="filt_cont">
+                
+            </div>    
+        </div> <!--  pre_row  -->
+        <div class="pre_row form-submit">
+            <div class="filt_cont">
+               
+            </div>    
+        </div> <!--  pre_row  -->
+        <div class="pre_row form-score">
+            <div class="filt_cont">
+              
+
+            </div>    
+        </div> <!--  pre_row  -->
+
+
+
+
+
+    </div>
+</div>
+<div id="meetingmessage" style="display:none;">
+    
+    <h2>
+    <i style="left: 250px; position: absolute;cursor:pointer;" class="showtooltip icon edit2 blue left small-edit " data-original-title="edit"></i><i class="icon mail"></i>
+     Meeting Request Message
+
+</h2>
+    <div class="bot_p_box">
+        <div class="bot_p_boxinner">
+
+
+            <div class="sumry">
+                <div class="row"><label>Subject</label><span class="text camp-subject">Subject line goes here ...</span></div>
+                <div class="row"><label>From Email</label><span class="text camp-fromemail">bms@bridgemailsystem.com
+
+                    </span>
+                </div>
+                <div class="row"><label>From Name</label><span class="text camp-fromname">MakesBridge Technology
+
+                    </span></div>
+                <div class="row last-row"><label>Reply To</label><span class="text  camp-replyto">demo@makesbridge.com
+                    </span></div>
+
+            </div>
+            <!-- 
+             <div class=" tagscont tagslist"> 
+         
+             <a href="" class="btn-green add-tag "><span class="right">Add Tag</span><i class="icon plus left"></i></a>
+    
+       </div>
+            -->
+
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    
+</div>
+<div id="responsemessage" style="display:none;">
+    
+    <h2>
+    <i style="left: 250px; position: absolute;cursor:pointer;" class="showtooltip icon edit2 blue left small-edit " data-original-title="edit"></i><i class="icon mail"></i>
+     Auto Responder Message 
+
+</h2>
+    <div class="bot_p_box">
+        <div class="bot_p_boxinner">
+
+
+            <div class="sumry">
+                <div class="row"><label>Subject</label><span class="text camp-subject">Subject line goes here ...</span></div>
+                <div class="row"><label>From Email</label><span class="text camp-fromemail">bms@bridgemailsystem.com
+
+                    </span>
+                </div>
+                <div class="row"><label>From Name</label><span class="text camp-fromname">MakesBridge Technology
+
+                    </span></div>
+                <div class="row last-row"><label>Reply To</label><span class="text  camp-replyto">demo@makesbridge.com
+                    </span></div>
+
+            </div>
+            <!-- 
+             <div class=" tagscont tagslist"> 
+         
+             <a href="" class="btn-green add-tag "><span class="right">Add Tag</span><i class="icon plus left"></i></a>
+    
+       </div>
+            -->
+
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    
+</div>
+<div id="alert" style="display:none;">
+
+<h2><i class="icon alerts"></i>Sales Alert Message </h2>
+
+<div class="bot_p_box">
+    <div class="bot_p_boxinner">
+
+        <div class="alert_b_content">
+
+            <div class="row ">
+<div style="width: 100%; display: block; height: 30px; padding-left: 20px;"><em style="display: block;">Use a comma to separate email addresses.</em></div>
+                <div class="input-append adv_dd email-addresses  uid-container ">
+                     <div class="inputcont">
+                        <input placeholder="e.g abc@domain.com" id="alertemails" class="header-info" type="text">
+                    </div>
+                </div>
+            </div><!-- row -->
+
+            <div class="row">
+                
+                <div class="input-append adv_dd ">
+                    <div class="inputcont">
+                        <textarea id="alertmessage" placehoder="Type your alert message here. You can also insert merge tags in your message."></textarea>
+                        <em>Select merge tags here then copy and paste into your alert message.</em>
+                        <div class="input-append adv_dd " id="wrap_email" style="margin:0px 0px 0px 0px;">
+                            <div class="inputcont">
+                                <input placeholder="{{LASTNAME}}" id="alert_merge_field" class="header-info" type="text" style="width:72%!important;"></div>
+                            <div class="btn-group">
+                                <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div> <!-- sumry -->
+
+
+
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+</div>
+
+
+<div class="bot_msg">
+
+    <%=this.getPresetImage()%>
+    <span><%=this.getPresetTitle(1)%></span>
+
+
+    <div class="clearfix"></div>
+</div>
+
+
+

@@ -1,0 +1,898 @@
+<div id="imageTitleDialog" title="Basic dialog">
+    <table style="width: 400px;">
+        <tr>
+            <td>
+                <label id="imageTitleLabel">
+                    Image
+                </label>
+            </td>
+            <td>
+                <input type="text" id="imageTitleText" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<div id="imageToolbar" class="imageToolbar-menu">
+    <ul>
+        <li title="Set Link" class="ImageToolbarLinkClass">
+            <a >
+                <i class="mce-ico mce-i-link" style="margin-top: -5px;"></i>
+            </a>
+        </li>
+        <li title="Remove Link" class="ImageToolbarUnLinkClass" style="display: none">
+            <a >
+                <i class="mce-ico mce-i-unlink" style="margin-top: -5px;"></i>
+            </a>
+        </li>
+        <li title="Left Align" class="ImageToolbarLeftAlignClass">
+            <a >
+                <img src="css/images/Image-align-left-icon.png" />
+            </a>
+        </li>
+        <li title="Center Align" class="ImageToolbarCenterAlignClass">
+            <a >
+                <img src="css/images/Image-align-center-icon.png" />
+            </a>
+        </li>
+        <li title="Right Align" class="ImageToolbarRightAlignClass">
+            <a >
+                <img src="css/images/Image-align-right-icon.png" />
+            </a>
+        </li>
+        <li title="Set Title" class="ImageToolbarTitleSetClass">
+            <a >
+                <img src="css/images/Adobe_Premiere_Pro_Title.png" />
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div id="currTinyMCE" style="display:none;"></div>
+<div id="linkTrack" style="display:none;"></div>
+<div id="imageDataSavingObject" style="display:none;"></div>
+
+<div class="tools editortools">
+    <ul class="tabsnav">
+        <li>
+            <a  class="tabs active builder-tab">
+                <i class="icon build"></i><span>Builder</span>
+            </a>
+        </li>
+        <li>
+            <a  class="tabs style-tab">
+                <i class="icon styles"></i><span>Styles</span>
+            </a>
+        </li>
+    </ul>
+
+    <!--  tabsnav  -->
+
+    <div class="tabcontent builder-panel">
+        
+        <div class="accordian" style="margin-top:0px;">
+            
+            <!--  accordian-content  -->
+            <h3 class="active">
+                Building Blocks
+            </h3>
+            <div class="scrollarea">                
+                <div class="accordian-content ">                                        
+                    
+                    <div class="clearfix">
+                        <h4 class="">Rows</h4>
+                        <ul class="b-blocks">
+                            <li class="draggableControl ui-draggable" data-type="oneColumnContainer" draggable="true">
+                                <i class="icon col1"></i>
+                                <a >
+                                    <span class=" font_75">1 Item</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="twoColumnContainer" draggable="true">
+                                <i class="icon col2"></i>
+                                <a >
+                                    <span class=" font_75">2 Items</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="threeColumnContainer" draggable="true">
+                                <i class="icon col3"></i>
+                                <a >
+                                    <span class=" font_75">3 Items</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="fourColumnContainer" draggable="true">
+                                <i class="icon col4"></i>
+                                <a >
+                                    <span class=" font_75">4 Items</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="clearfix">
+                        <h4 class="">Content Blocks</h4>
+                        <ul class="b-blocks content-block">
+                            
+                        </ul>
+                    </div>
+                    <div class="clearfix">
+                        <h4 class="">Items</h4>
+                        <ul class="b-blocks">
+                            <li class="draggableControl ui-draggable" data-type="text" draggable="true">
+                                <i class="icon txt"></i>
+                                <a >
+                                    <span class=" font_75">Text</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="image" draggable="true">
+                                <i class="icon imag"></i>
+                                <a >
+                                    <span class=" font_75">Image</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="textWithImage" draggable="true">
+                                <i class="icon txtimag"></i>
+                                <a >
+                                    <span class=" font_75">Text + Image</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="imageWithText" draggable="true">
+                                <i class="icon imagtxt"></i>
+                                <a >
+                                    <span class=" font_75">Image + Text</span>
+                                </a>
+                            </li>
+                            <% if(options.landingPage) { %>
+                            <li class="draggableControl ui-draggable" data-type="signupForm" draggable="true">
+                                <i class="icon signupform"></i>
+                                <a>
+                                    <span class=" font_75">SignUp Form</span>
+                                </a>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                     <div class="clearfix">
+                        <h4 class="">Spacer</h4>
+                        <ul class="b-blocks">
+                            <li class="draggableControl ui-draggable" data-type="spacer5" draggable="true">
+                                <i class="icon spacer1"></i>
+                                <a >
+                                    <span class=" font_75">Spacer 1</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="spacer10" draggable="true">
+                                <i class="icon spacer2"></i>
+                                <a >
+                                    <span class=" font_75">Spacer 2</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="spacer15" draggable="true">
+                                <i class="icon spacer3"></i>
+                                <a >
+                                    <span class=" font_75">Spacer 3</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="spacer20" draggable="true">
+                                <i class="icon spacer4"></i>
+                                <a >
+                                    <span class=" font_75">Spacer 4</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--  accordian-content  -->
+
+            <h3>
+                <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>My Building Blocks
+            </h3>
+            <div class="scrollarea">
+                 <div class="dropblockpanel divLoading divBuildingBlockLoading buildingBlockDroppableOverlay" style="display: none;">
+                    <div class="blockdrop">
+                        <h3>Drop Block Here</h3>
+                    </div>
+                </div>
+                <div class="accordian-content">                   
+
+                    <div class="accordianbar">
+                        <div>
+                            <div class="search" style="width: 223px;">
+                                <input type="text" value="" name="" style="width: 195px;" id="searchBB" />
+                                <a class="close-icon" id="clearsearch-blocks" style="display: none"></a>
+                                <a  class="search searchBBLink">
+                                    <i class="icon search"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix">
+                        <div id="BBResultDiv" class="no-results"  style="display: none;"> No results Found </div>
+                    </div>
+                    <div class="clearfix">
+                        <div class="buildingBlockDroppable">
+                            <div>
+                                <ul class="ulBuildingBlocks image-gallery b-blocks">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  accordian-content  -->
+           <% if(options.landingPage==false &&  options.otopage==false ){ %>     
+           <h3 class="DCH3" style="dispaly:none">
+                <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
+                Dynamic Content Blocks
+            </h3>
+            <div class="scrollarea" style="dispaly:none">
+                <div class="accordian-content active DCCC">
+                    <div class="accordianbar">
+                        <div>
+                            <h5></h5>
+                            <div class="search" style="width:223px;">
+                                <input type="text" value="" name="" style="width:195px;" id="searchDC"/>                                
+                                <a  class="search searchDCLink">
+                                    <i class="icon search"></i>
+                                </a>
+                            </div>
+   
+                        </div>
+
+                    </div>
+                    <div class="clearfix">
+                        <div id="DCResultDiv" class="no-results"  style="display: none;"> No results Found </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <ul class="b-blocks">
+                            <li class="draggableControl ui-draggable newblock" data-type="dynamicContentContainer" data-isnew="true" draggable="true">
+                                <i class="icon plus"></i>
+                                <a >
+                                    <span class=" font_75">New Dynamic Block</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <ul class="b-blocks dynamicBlockDroppable ulDynamicBlocks">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+            
+           <% if(options.landingPage==true){ %>      
+           <h3 class="formH3" >
+                <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
+                Forms Library
+            </h3>
+            <div class="scrollarea forms-accordion">
+                <div class="accordian-content active formContent">
+                    <div class="accordianbar">
+                        <div>
+                            <h5></h5>
+                            <div class="search" style="width:223pxpx;">
+                                <input type="text" value="" name="" style="width:195px;" id="searchForm"/>
+                                <a class="close-icon" id="clearsearch-forms" style="display: none"></a>
+                                <a  class="search searchFormLink">
+                                    <i class="icon search"></i>
+                                </a>
+
+                            </div>
+                            <a  class="addNewFormLink" style="display: none">
+                                <i class="icon add"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="clearfix" style="padding-top: 0px">
+                        <div id="FBResultDiv" class="no-results"  style="display: none;margin-bottom:-20px"> No results Found </div>
+                    </div>
+                    <div class="clearfix formDroppable">                        
+                        <ul class="b-blocks">
+                            <li class="draggableControl ui-draggable newblock" data-type="formBlock" data-isnew="true" draggable="true">
+                                <i class="icon plus"></i>
+                                <a >
+                                    <span class=" font_75">Add New Form</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <ul class="ulFormBlocks b-blocks" style="display: inline-block;">
+                        </ul>
+                        <div style="display:none" class="footer-loading form-footer-loading">
+                            <hr>
+                            <div class="gridLoading"><img alt="" src="/pms/umair/img/loading.gif"> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+            <!--  accordian-content  -->
+            <h3>
+                Image Library
+            </h3>
+            <div class="scrollarea images-accordion">
+                <div id="HTML5FileUploader">
+                    <div class="accordian-content active">
+                        <!--<div class="dropblockpanel divLoading divBuildingBlockLoadingImages buildingBlockDroppableOverlay" style="display: none;">
+                            <div class="blockdrop">
+                                <h3>Drop Image Here</h3>
+                            </div>
+                        </div>                -->
+                        <div class="accordianbar">
+                            <div class="search" style="width:190px;">
+                                <input class="searchimg-text" type="text" value="" name="" style="width:170px;" id="searchImg" />
+                                <a class="close-icon" id="clearsearch-image" style="display: none"></a>
+                                <a  class="search search-img">
+                                    <i class="icon search"></i>
+                                </a>
+
+                                <form id="form1" enctype="multipart/form-data" action="/pms/io/publish/saveImagesData/?<%- this.BMSTOKEN %>&type=add" method="POST">
+                                    <input type="file" id="myUploadFile" name="fileName" style="display: none;" />
+                                    <input type="hidden" name="type" value="add" />
+                                    <input type="hidden" name="allowOverwrite" value="N" />
+                                    <input type="hidden" name="BMS_REQ_TK" value="" />
+
+                                </form>
+
+
+                            </div>
+                            <a  class="upload uploadFile">
+                                <i class="icon upload"></i>
+                            </a>
+                        </div>
+                        <!--  accordianbar  -->
+                        <div class="clearfix">
+                            <div id="ILResultDiv" class="no-results"  style="display: none;"> No results Found </div>
+                        </div>
+                        <div class="clearfix">
+                            <ul class="b-blocks imageLib">                                
+                            </ul>
+                            <div style="display:none" class="footer-loading">
+                                <hr>
+                                <div class="gridLoading"><img alt="" src="/pms/umair/img/loading.gif"> <!--span class="gridFooterSpinner"></span>--> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  accordian-content  -->
+
+        </div>
+          
+    </div>
+    <!--  tabcontent  -->
+
+    <div class="tabcontent style-panel" style="display: none;">
+        
+        <div class="accordian"  style="margin-top:0px;">
+            <h3 class="">
+                <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>Background Color
+            </h3>
+            <div class="scrollarea">
+                <div class="accordian-content ">
+
+                    <div class="clearfix"  style="padding:5px;">
+                        <h4 class="">Parent Layers</h4>
+                        <select class="nosearch ddlBackgroundLayers" data-placeholder="Select Parent Layer">
+                            <option value=""></option>
+                        </select>
+                        <br class="clearfix"/> <br/>
+                        <div class="clearfix"></div>
+                        <div class="minicolors minicolors-theme-default minicolors-position-bottom minicolors-position-left minicolors-inline" style="text-align:center;">
+
+                            <div class="divColorPicker"></div>
+                        </div>
+                        <input type="text" maxlength="15" size="15" class="txtColorCode acco-input">
+                        <input type="button" style="float:right; margin:0;" value="Add to my Colors" class="addToMyColors">
+                    </div>
+                    <div class="clearfix">
+                        <h4 class="">Template Colors</h4>
+                        <ul class="color-box templateColors">
+                            <li style="background-color:none;">
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="clearfix">
+                        <h4 class="">My Colors</h4>
+                        <ul class="color-box myColors">
+                            <li style="background-color:none;">
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--  accordian-content  -->
+            <h3 class="active">
+                <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> Borders & Paddings
+            </h3>
+            <div class="scrollarea">
+                <div class="accordian-content active">
+                    <div class="clearfix">
+                        <h4 class="">Borders</h4>
+                        <div style="padding:5px;">
+
+                            <div class="styletable clearfix">
+
+                                <div class="stylebox">
+
+                                    <label class="acco-label grey-col fl width_140 ">Styles</label>
+
+                                    <select class="ddlBorderType acco-select margin_20 width_140 fl">
+                                        <option value="solid">Solid</option>
+                                        <option value="dashed">Dashed</option>
+                                        <option value="double">Double</option>
+                                    </select>
+
+                                    <label class="acco-label grey-col fl  width_140">Weight</label>
+                                    <select class="ddlBorderWidth acco-select margin_20 width_140 fl">
+                                        <option value="1">-----1px</option>
+                                        <option value="2">-----2px</option>
+                                        <option value="3">-----3px</option>
+                                        <option value="4">-----4px</option>
+                                        <option value="5">-----5px</option>
+                                    </select>
+
+                                    <label class="acco-label grey-col fl  width_140">Border Color</label>
+                                    <div class="minicolors minicolors-theme-default minicolors-position-top minicolors-position-left">
+                                        <a class="fl colorPickerBorder acco-label minicolors-input" ></a>
+                                    </div>
+
+                                </div>
+                                <div class="stylebox">
+
+                                    <div class="ddg-control ved-edges ddg-container borderControl" style=" top: 39px;">
+                                        <div unselectable="on"  class="ddg-control ddg-button ved-edges-button ved-edges-top ddg-unselectable" >
+                                            <div  data-type="Top" id="topBorder" class="ddg-unselectable sBorderLine" unselectable="on"></div>
+                                        </div>
+                                        <div unselectable="on"  class="ddg-control ddg-button ved-edges-button ved-edges-bottom ddg-unselectable" >
+                                            <div data-type="Bottom" id="bottomBorder" class="ddg-unselectable sBorderLine" unselectable="on"></div>
+                                        </div>
+                                        <div unselectable="on" class="ddg-control ddg-button ved-edges-button ved-edges-left ddg-unselectable">
+                                            <div data-type="Left" id="leftBorder" class="ddg-unselectable sBorderLine" unselectable="on"></div>
+                                        </div>
+                                        <div unselectable="on" class="ddg-control ddg-button ved-edges-button ved-edges-right ddg-unselectable">
+                                            <div data-type="Right" id="rightBorder" class="ddg-unselectable sBorderLine" unselectable="on"></div>
+                                        </div>
+                                        <div class="ved-edge-control">
+                                            <div class="edges-dotted-topbottom"></div>
+                                            <div class="edges-dotted-leftright"></div>
+                                            <div style="width: 48px; height: 48px; border-bottom: medium none; border-top: medium none;" class="ved-edge-inner"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="clearfix" style="padding:0;">
+                                <h4 class="">Alignment</h4>
+                                <ul class="aligncol">
+                                    <li id="top" class="sVerticalAlign active">
+                                        <a>
+                                            <i class=" icon aligntop" data-type="Top"></i>Top
+                                        </a>
+                                    </li>
+                                    <li id="middle" class="sVerticalAlign" >
+                                        <a>
+                                            <i class="icon alignmiddle" data-type="Middle"></i>Middle
+                                        </a>
+                                    </li>
+                                    <li id="bottom" class="sVerticalAlign" >
+                                        <a>
+                                            <i class="icon alignbottom" data-type="Bottom"></i>Bottom
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="styletable clearfix">
+
+                                <div class="stylebox">
+
+                                    <label class="acco-label grey-col fl  width_140">Padding </label>
+
+                                    <select class="acco-select margin_20 width_140 fl ddlPadding">
+                                        <option value="6">6px</option>
+                                        <option value="8">8px</option>
+                                        <option value="10">10px</option>
+                                    </select>
+
+                                </div>
+                                <div class="stylebox">
+
+                                    <div class="ddg-control ved-edges ved-padding-edges ddg-container paddingControl">
+                                        <div unselectable="on" class="ddg-control ddg-button ved-edges-button ved-edges-top ddg-unselectable">
+                                            <div data-type="Top" id="topPadding" class="ddg-unselectable sPadding" unselectable="on"></div>
+                                        </div>
+                                        <div unselectable="on" class="ddg-control ddg-button ved-edges-button ved-edges-bottom ddg-unselectable">
+                                            <div data-type="Bottom" id="bottomPadding" class="ddg-unselectable sPadding" unselectable="on"></div>
+                                        </div>
+                                        <div unselectable="on" class="ddg-control ddg-button ved-edges-button ved-edges-left ddg-unselectable">
+                                            <div data-type="Left" id="leftPadding" class="ddg-unselectable sPadding" unselectable="on"></div>
+                                        </div>
+                                        <div unselectable="on" class="ddg-control ddg-button ved-edges-button ved-edges-right ddg-unselectable">
+                                            <div data-type="Right" id="rightPadding" class="ddg-unselectable sPadding" unselectable="on"></div>
+                                        </div>
+                                        <div class="ved-edge-control">
+                                            <div class="edges-dotted-topbottom"></div>
+                                            <div class="edges-dotted-leftright"></div>
+                                            <div style="width: 48px; height: 48px;" class="ved-edge-inner">
+                                                <div style="width: 48px; height: 48px;" class="edge-text-preview"></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div> <!--  styletable -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% if(!options.landingPage){ %>
+            <!--  accordian-content  -->
+            <h3 class="">
+                <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> Email Width
+            </h3>
+            <div class="scrollarea">
+                <div class="accordian-content active ">
+
+                    <div class="clearfix">
+                        <h4>Choose a width for your email</h4>
+
+                        <div style="padding:5px;" class="email-width">
+                            <input type="button" id="700" value="LARGE (700px)" data-value="700" class="large-button acco-button btnContainerSize">
+                            <input type="button" id="600" value="MEDIUM (600px)" data-value="600" class="medium-button acco-button btnContainerSize active ">
+                            <input type="button" id="500" value="SMALL (500px)" data-value="500" class="small-button acco-button btnContainerSize">
+
+                            <label class="acco-label grey-col fl width_140 ">Custom width</label>
+                            <input type="text" class="txtContSize txtContainerSize acco-input " size="15" maxlength="15"> pixels
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--  accordian-content  -->
+           <% } %> 
+        </div>
+        
+    </div>
+    <!--  tabcontent  -->
+
+</div>
+<!--  tools  -->
+
+<div class="editorpanel">
+    <div class="editorbar editortoolbar ">
+        <ul style="margin-top:5px;margin-left: 5px;width:100%">
+            <li class="undo undo_li">
+                <a  class="btn-gray">
+                    <i class="icon undo"></i>
+                </a>
+            </li>
+            <li class="redo redo_li">
+                <a  class="btn-gray">
+                    <i class="icon redo"></i>
+                </a>
+            </li>     
+            <% if(options.landingPage) { %>
+             <li class="MenuCallTemplate">
+                <a  class="btn-blue">
+                    <i class="icon template"></i><span>Change Template</span>
+                </a>
+            </li>
+            <% } %>
+            <% if (!options.otopage) { %>
+            <li class="save MenuCallBackSave" style="float:right;margin-right:5px;">
+                <a  class="btn-green save-step2 showtooltip" data-original-title="Click to save">
+                    <% if(options.saveBtnText){ %>
+                    <i class="icon save"></i>
+                    <!--<span><%= options.saveBtnText %></span>-->
+                    <% }else{ %>
+                    <i class="icon save"></i>
+                    <!--<span>Save Email Body</span>-->
+                    <% } %>
+                </a>
+            </li>
+            <% } %>
+            
+             <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>">
+                <a  class="btn-blue showtooltip" data-original-title="Click to preview" >
+                    <i class="icon preview"></i>
+                    <!--<span>Preview</span>-->
+                </a>
+            </li>
+             <li class="MenuCallCode" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>" >
+                <a  class="btn-blue showtooltip" data-original-title="Click to set/get html" >
+                    <i class="icon code" ></i>
+                    <!--<span>Code</span>-->
+                </a>
+            </li>
+            <% if (!options.otopage && !options.landingPage) { %>
+            <li class="MenuCallTextVersion" style="float:right">
+                <a  class="btn-green">
+                    <i class="icon plaintext"></i><span>Text Version</span>
+                </a>
+            </li>
+            <% if (options._app.dcItemsUsers.indexOf(options._app.get("user").userId)>-1 ) { %>
+            <li class="MenuCallDCItems" style="float:right">
+                <a  class="btn-yellow">
+                    <i class="icon dcitems"></i>
+                    <span>Dynamic Content Items</span>
+                </a>
+            </li>
+            <% } %>
+            
+            <% } %>
+            <span class="lastSaveInfo"></span>
+        </ul>
+            <div class="disabled-toolbar"></div> 
+    </div>
+    <!--  tools  -->
+
+    <div class="editorbox content" style="height: 1000px;">
+        <iframe class="mee-iframe" id="mee-iframe" frameborder="0" style="position: relative" src="<% if(options._app.get('complied')==0){ print('apps/bridgemail/')}else{print(options._app.get('s_path'))} %>editor/html/MEE_AREA.html?bust=1.464_9"></iframe>        
+    </div>
+    <!--  editorpanel  -->
+
+</div>
+<!--  editorpanel  -->
+<div class="ui-widget-overlay ui-front modalDialog" style="display:none; position:absolute;"></div>
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons " id="ColorPickerpop" style="height: auto;  position: absolute;width: 300px; top:254px; left: 566px; display: none;" tabindex="-1" role="dialog" aria-describedby="fontColorDialog" aria-labelledby="ui-id-8">
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" style="display:none;">
+        <span id="ui-id-8" class="ui-dialog-title">Font Color Picker</span>
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" title="close">
+            <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span>
+        </button>
+    </div>
+
+    <div style="width: auto; min-height: 0px; max-height: none; height: 305px; " id="fontColorDialog" class="ui-dialog-content ui-widget-content">
+        <div id="CustomColorPicker">
+            <label>
+                <p class="grey-col background"> Pick a color</p>
+            </label>
+            <div class="divFontColorPicker"></div>
+
+            <div class="mycolorFontPicker clearfix" style="margin-top: -20px; padding-left:10px;z-index:auto; position: relative;">
+                <label>
+                    <p class="grey-col background">My Colors</p>
+                </label>
+                <ul class="color-box myFontColors" >
+                    <li style="background-color: none;"></li>
+                </ul>
+                <label>
+                    <p class="grey-col"> Selected color</p>
+                </label>
+                <input type="text"  value="#fff34a" maxlength="15" size="15" class="selectedFontColor acco-input" >
+            </div>
+
+        </div>
+    </div>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+        <div class="ui-dialog-buttonset">
+
+            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only btn-gray" role="button" aria-disabled="false" id="fontDialogCancelButtonID">
+                <span class="ui-button-text">Close</span>
+            </button>
+            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" id="fontDialogOKButtonID">
+                <span class="ui-button-text">OK</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class='image-info info-windowDiv' style='display:none;'></div>
+<div class='image-info link-windowDiv'  style='display:none;'></div>
+<div class='image-info tag-windowDiv'  style='display:none;'></div>
+<div class='image-info del-windowDiv'  style='display:none;'></div>
+<div class="image-info editBox BBEditDialog" style="display: none;"></div>
+<div class="image-info delBox BBDeleteDialog" style="display: none;" > </div>
+<div class="image-info editBox DCEditDialog" style="display: none;"></div>
+<div class="image-info delBox DCDeleteDialog" style="display: none;" > </div>
+<div class="moredd alertButtons" style="display: none;" > </div>
+
+
+<div class="image-info buildingBlock_name" style="display: none; left: 0px;top: 0px;box-shadow: none; ">
+    <a class="closebtn"></a>
+    <h5 style="padding-bottom:10px;">Block Name</h5> 
+
+    <input type="text" placeholder="Buiding Block Name" class="left tginput txtPlaceHolder" style="width:202px; margin-bottom:10px; dis" value="Add Block Name">
+
+    <h5 style="padding-bottom:10px;">Give your block a name that you will be able to recognise later. </h5>
+
+    <a class="btn-green left addBBSave"><span>Save</span><i class="icon save"></i></a>
+    <a class="btn-gray right addBBClose"><span>Cancel</span><i class="icon cross"></i></a>
+</div>  <!-- image-info   -->
+
+
+<div class="buildingBlock_name_edit" style="display: none;">
+    <div class="ddgwin-titlebar">
+        <span class="ddgwin-title">Edit building block name</span>
+    </div>
+    <div style="height: 106px;">
+        <br>
+        <div style="width: 250px;">
+            <div>
+                <div style="width: 200px; font-size: 12px;">
+                    Block name<br>
+                </div>
+            </div>
+            <div>
+                <input type="text" class='txtPlaceHolder editBlockInputName' placeholder="Provide a name for your building block"
+                       style="width: 430px;" maxlength="255">
+            </div>
+        </div>
+        <div style="font-size: 12px;">
+            Give your block a name that you will be able to recognise later.
+        </div>
+    </div>
+</div>
+<div class="divActionButtonsForBuildingBlock" style="display: none;">
+    <div class="imageicons">
+        <i class="imgicons edit"></i>
+        <i class="imgicons delete right"></i>
+
+        <div class="image-info editBox" style="left: -21px; display: none;">
+            <a class="closebtn"></a>
+            <h5 style="padding-bottom: 10px;">Edit Block Name</h5>
+
+            <input type="text" placeholder="Image URL" class="left tginput txtBlockName" style="width: 202px; margin-bottom: 10px; dis" value="Edit Block Name">
+            <a class="btn-green left btnSave ">
+                <span>Save</span><i class="icon save"></i>
+            </a>
+        </div>
+        <!-- image-info   -->
+
+        <div style="left: 69px; display: none;" class="image-info delBox">
+            <a class="closebtn"></a>
+            <h5 style="padding-bottom: 10px;">Do you want to delete this Image?</h5>
+            <a class="btn-red left btnDelete">
+                <span>Delete</span><i class="icon delete"></i>
+            </a>
+            <!--   tagscont  -->
+        </div>
+        <!--   image-info link  -->
+    </div>
+</div>
+<div class="divDCTemplate" style="display:none;">
+
+    <table class="container dynamicContentContainer dataContainer" id="0">
+        <tbody>
+            <tr>
+                <td class="tab-header">
+
+                    <div class="overlay dcContentName" style="display:none;">            
+                        <div class="image-info" style="width:266px">                          
+                            <input type="text" value="" style="width:250px; margin-bottom:10px; dis" class="left tginput txtContentName" placeholder="Content Option Name">
+                            <a class="btn-green left btnSaveContent"><span>Create Option</span><i class="icon save"></i></a>
+                            <a class="btn-gray right btnCancelContent"><span>Cancel</span><i class="icon cross"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="overlay dcContentNameUpdate" style="display:none;">            
+                        <div style="width:270px" class="image-info">                          
+                            <input type="text" value="" style="width:254px; margin-bottom:10px; dis" class="left tginput txtContentName" placeholder="Content Option Name">
+                            <a class="btn-green left btnUpdateContent"><span>Update Option</span><i class="icon save"></i></a>
+                            <a class="btn-gray right btnUpdateCancelContent"><span>Cancel</span><i class="icon cross"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="overlay dcVariationName" style="display:none;">            
+                        <div style="" class="image-info">                          
+                            <input type="text" value="" style="width:202px; margin-bottom:10px; dis" class="left tginput txtPlaceHolder" placeholder="Dynamic Variation Name">
+                            <a class="btn-green left btnSaveVariation"><span>Save</span><i class="icon save"></i></a>
+                            <a class="btn-gray right btnCancelVariation"><span>Cancel</span><i class="icon cross"></i></a>
+                        </div>
+                    </div>
+
+                    <div id="basic" class=" main_blocker">
+                        <div class="block_head">
+
+                            <h5 class="dcName">
+                                <span>Dynamic Block 1</span>
+
+                                <a class="editname">
+                                    <i class="icon edit"></i>
+                                </a>
+                            </h5>
+
+                            <div style=" display: none; left: 20px; top: 30px;" class="tagbox editNameBox">
+
+                                <input type="text" placeholder="Change Name" class="left txtVariationName">
+                                <a class="btn-gray right btnCloseDCName">
+                                    <span>Close</span><i class="icon cross"></i>
+                                </a>
+                                <a class="btn-green left btnSaveDCName">
+                                    <span>Save</span><i class="icon save"></i>
+                                </a>
+
+                            </div>
+                        </div>
+
+                        <div class="block_body">
+                            <div class="block_controls">
+                                <ul class="dcContents">
+
+                                </ul>
+
+                                <div class="icon add addDynamicRule"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="height:200px">
+                    <ul class="sortable dcInternalContents" ></ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<div class="rulesdiv dcRulesDialog" style="display:none;">
+    <div style="position: relative;min-height: 200px;width:100%;padding:0px">        
+    </div>
+</div>
+
+<div class="dcLI" style="display:none;">
+    <li>
+        <span>Content 1</span>
+
+        <i class="icon filter"></i>
+        <i class="icon more">
+            <div class="moredd">
+                <ul>
+                    <li>
+                        <a class="btn-gray btnContentEditName" >
+                            <i class="icon edit"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn-red btnContentDelete" >
+                            <i class="icon delete"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </i>
+
+
+
+    </li>
+</div>
+<div class="DCNameDialog" style="display: none;">
+    <div class="ddgwin-titlebar">
+        <span class="ddgwin-title">Create a Dynamic Block</span>
+    </div>
+    <div style="height: 106px;">
+        <br>
+        <div style="width: 250px;">
+            <div>
+                <div style="width: 200px; font-size: 12px;">
+                    Dynamic Block Name<br>
+                </div>
+            </div>
+            <div>
+                <input type="text" class='txtPlaceHolder' placeholder="Provide a name for your dynamic block"
+                       style="width: 430px;" maxlength="255">
+            </div>
+        </div>
+        <div style="font-size: 12px;">
+            Give your dynamic control a name that you will be able to recognise later.
+        </div>
+    </div>
+</div>

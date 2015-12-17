@@ -1,0 +1,216 @@
+<div class="row-fluid">
+    <h3 style="padding:5px;">User Profile</h3>
+    <div class="boxinner">
+
+        <div class="span6">
+            <div class="row">
+                <label>User ID <span class="required" style="color:#fb8080;">*</span></label>
+                <div class="input-append  ">
+                    <div class="inputcont left">
+                        <input type="text" value="" class="subacc-userid" placeholder="Enter User ID here">
+                    </div>
+                </div>
+            </div> <!-- row  -->
+            <div class="row">
+                <label>Password </label>
+                <div class="input-append  ">
+                    <div class="inputcont left">
+                        <input type="password" value="" class="subacc-password" placeholder="">
+                    </div>
+                </div>
+            </div> <!-- row  -->
+
+            <div class="row">
+                <label>Confirm Password </label>
+                <div class="input-append  ">
+                    <div class="inputcont left">
+                        <input type="password" value="" class="subacc-confirm-password" placeholder="">
+                    </div>
+                </div>
+            </div> <!-- row  -->
+
+            <div class="row">
+                <label>Account Type </label>
+                <div class="input-append  ">
+                    <div class="inputcont">
+                        <span class="account-type"> Operator </span>
+                    </div>
+                </div>
+            </div> <!-- row  -->
+
+
+            <div class="row">
+                <label>Email <span class="required" style="color:#fb8080;">*</span></label>
+                <div class="input-append  ">
+                    <div class="inputcont left">
+                        <input type="text" value="" class="subacc-email" placeholder="">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="span6">
+
+            <div class="row">
+                <label>First Name </label>
+                <div class="input-append  ">
+                    <div class="inputcont">
+                        <input type="text" value="" class="subacc-firstname" placeholder="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <label>Last Name </label>
+                <div class="input-append  ">
+                    <div class="inputcont">
+                        <input type="text" value="" class="subacc-lastname" placeholder="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <label>Telephone</label>
+                <div class="input-append  ">
+                    <div class="inputcont">
+                        <input type="text" value="" class="subacc-telephone" placeholder="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <label>URL</label>
+                <div class="input-append  ">
+                    <div class="inputcont">
+                        <input type="text" value="" class="subacc-url" placeholder="">
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <label>Address</label>
+                <div class="input-append  ">
+                    <div class="inputcont">
+                        <input type="text" value="" style="width:310px" class="subacc-address1" placeholder="">
+                    </div>
+                    <div style="margin-top:5px;" class="inputcont">
+                        <input type="text" value="" style="width:310px" class="subacc-address2" placeholder="">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="clearfix"></div>
+
+    </div>
+    <br>
+
+
+</div> <!--  row-fluid -->
+<div class="row-fluid">
+    <div class="span6">
+        <h3 style="padding:5px;">Email Settings for Campaign</h3>
+        <div class="boxinner">
+            <div>
+                <div class="row">
+                    <label>Sender Name</label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <input type="text" value="" class="subacc-sendername" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>From Email </label>
+                    <div class="input-append  ">
+                        <div class="inputcont">                            
+                            <input type="text" value="" class="subacc-fromEmail" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label> Reply to </label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <input type="text" value="" class="subacc-replyto" placeholder="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>  <!--  2 -->
+    
+    <div class="span6">
+        <h3 style="padding:5px;">Website Tracking</h3>
+        <div class="boxinner">
+            <div class="row">
+                <label>Web Address</label>
+                <div class="input-append  ">
+                    <div class="inputcont">
+                        <input type="text" value="" class="subacc-webaddress" placeholder=""><br/> <span><em>example: <b>mywebsite.com</b></em></span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>  <!--  3 -->
+</div><!--  row-fluid --> 
+
+<div class="row-fluid">
+    <h3 style="padding:5px;">Application Subscription</h3>
+    <div class="boxinner" style="min-height:60px;">
+        <div class="row">
+
+            <div class="app_subs">
+                <% if(this.apps.bridgemail) { %>
+                <span class="btnunchecked">
+                    <input type="checkbox" id="o-BridgeMailSystem" class="checkpanel" value="" data-appid="1" />
+                    <label for="o-BridgeMailSystem">BridgeMail System - Email Marketing</label>
+                </span>
+                <% } %>
+                <% if(this.apps.bridgestatz) { %>
+                <span class="btnunchecked">
+                    <input type="checkbox" id="o-BridgeStatz" class="checkpanel" value="" data-appid="2"/>
+                    <label for="o-BridgeStatz">BridgeStatz - Web Analytics</label>
+                </span>
+                <% } %>
+                <% if(this.apps.sam) { %>
+                <span class="btnunchecked" id="o-sam-btn">
+                    <input type="checkbox" id="o-sam" class="checkpanel" value="" data-appid="3" />
+                    <label for="o-sam">Sales Automation Module (SAM)</label>
+                </span>
+                <% } %>
+            </div>
+        </div>  <!--  row -->
+        <br/>
+        <div id="select-sam-users" style="display:none">
+            <h3 style="padding:5px 5px 0;">SAM User Configuration</h3>
+            <p style="padding:0 5px 5px;">Specify Which Sales Rep(s) Contacts Should Be Visible.</p>
+            <div class="target-listing table_checkboxes sam_users">
+                <div class="bmsgrid">
+                    <div class="hDiv"><div class="hDivBox campaings-hDiv"><table cellspacing="0" cellpadding="0"></table></div></div>
+                    <div style="height: 300px" class="bDiv">
+                        <table cellpadding="0" cellspacing="0" width="100%" class="_salesrep_grid">
+                            <tbody>
+                                <tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading salesrep...</p></div></td></tr>
+                            </tbody>
+                        </table>
+                        <div style="display: none;" class="iDiv"></div>
+                    </div>
+                </div>
+            </div>  <!--  sam_users -->
+        </div>  <!--  select-sam-users -->
+        <div class="clearfix"></div>
+
+    </div>
+    <br>
+
+
+</div> <!--  row-fluid -->
+

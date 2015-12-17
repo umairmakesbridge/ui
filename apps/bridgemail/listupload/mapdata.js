@@ -1,5 +1,5 @@
-define(['text!listupload/html/mapdata.html','jquery.chosen','bms-addbox'],
-function (template,chosen,addbox) {
+define(['text!listupload/html/mapdata.html'],
+function (template) {
 	'use strict';
 	return Backbone.View.extend({
 		id: 'mapdata',
@@ -54,13 +54,28 @@ function (template,chosen,addbox) {
                             else{                        
                                 this.app.showAlert('Please supply csv file to upload',this.$el.parents(".ws-content"));                        
                             }
+                        },
+                        'click .videobar': function(e) {
+                        var _a  = $.getObj(e,"a");
+                        if (_a.length){
+                                var video_id = _a.attr("rel");
+                                var dialog_title = "Help Video";
+                                var dialog = this.app.showDialog({title: dialog_title,
+                                    css: {"width": "720px", "margin-left": "-360px"},
+                                    bodyCss: {"min-height": "410px"}
+                                });
+                                dialog.getBody().html('<iframe src="//player.vimeo.com/video/'+video_id+'" width="700" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> ');
                         }
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
 		},	
 		mapAndImport: function(){
 		   var campview = this.camp_obj;
 		   var curview = campview?campview.states.step3.csvupload:this.csv;
 		   var app = this.app;
 		   var mapview = this;
+                   var that = this;
 		   var appMsgs = app.messages[0];
 		   var el = this.$el;
 		   var actid = el.find('.map-toggle .active').attr('id');
@@ -181,17 +196,19 @@ function (template,chosen,addbox) {
                                  app.showAlert(appMsgs.MAPDATA_bmsfields_email_error,el);
                                 isValid = false;
                             }
+                            layout_map = layout_map.join();
                         }
 			if(dup > 0)			
 			{
-				app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
-				isValid = false;						
+                            app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
+                            isValid = false;						
 			}
 			  
 		   if(isValid)
 		   {					 
 			   var alertemail = el.find('#alertemail').val();
-			   app.showLoading("Uploading file",curview.$el);
+			   app.showLoading("Uploading file",this.$el);
+                           var that= this;
 			   var importURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';                           
 			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:curview.fileName,layout:layout_map })
 			   .done(function(data) {
@@ -208,10 +225,28 @@ function (template,chosen,addbox) {
                                                  app.showLoading(false,mapview.$el);
                                            }
                                            else{
-                                               app.showLoading(false,curview.$el);
-                                               mapview.$el.hide();
-                                               mapview.$el.parents(".ws-content").find(".camp_header .close-wp").click();
-                                               app.showMessge("Your contacts in CSV file updated successfully");
+                                               app.showMessge("Your contacts in CSV file updated successfully.You can upload other CSV file as well.");
+                                                 if(typeof(mapview.options.params) !="undefined"){
+                                                    app.showLoading(false,mapview.$el);
+                                                    //that.$el.hide();
+                                                    require(["listupload/csvupload"], function(csvupload) {
+                                                        var mPage = new csvupload({app:app,camp:mapview});
+                                                        mapview.$el.html(mPage.$el);
+                                                      //  mapview.$el.find('#mapdata').show();
+                                                        mapview.$el.parents(".ws-content").find("#drop-files").show();
+                                                        mapview.$el.parents(".ws-content").find(".csvpng").show();
+                                                    });
+                                                }else{
+                                                  app.showLoading(false,curview.$el);
+                                                  mapview.$el.hide();
+                                                  mapview.$el.parents(".ws-content").find("#drop-files .middle").show();
+                                                  mapview.$el.parents(".ws-content").find("#drop-files .middle #list_file_upload").parent().show();
+                                                  mapview.$el.parents(".ws-content").find("#drop-files").show();
+                                                  mapview.$el.parents(".ws-content").find(".csvpng").show();
+                                                  mapview.$el.parents(".ws-content").find("#progress").remove();
+                                                  mapview.csv.fileuploaded = false;
+                                               }
+                                               
                                            }
 					  
 				   }
@@ -246,24 +281,7 @@ function (template,chosen,addbox) {
 			var list_html = "";
 			var campview = this.camp_obj;
 			var app = this.app;
-			var curview = this;
-			if(app.getAppData("lists"))
-			{
-				list_array = app.getAppData("lists");
-				if(list_array != '')
-				{					
-					$.each(list_array.lists[0], function(index, val) { 
-						list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-					});
-					curview.$el.find("#existing_lists").html(list_html);								
-				}
-				curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
-                                if(curview.csv){
-                                    app.showLoading(false,curview.csv.$el);
-                                }
-			}
-			else
-			{				
+			var curview = this;				
                             URL = "/pms/io/list/getListData/?BMS_REQ_TK="+app.get('bms_token')+"&type=all";				
                             jQuery.getJSON(URL,  function(tsv, state, xhr){				
                                     if(xhr && xhr.responseText){
@@ -275,29 +293,73 @@ function (template,chosen,addbox) {
                                             }
                                             list_array = jQuery.parseJSON(xhr.responseText);
                                             if(list_array != '')
-                                            {							
+                                            {		
+                                                    var $i = 0;
                                                     $.each(list_array.lists[0], function(index, val) { 
-                                                            list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-                                                    })
-                                                    curview.$el.find("#existing_lists").html(list_html);							
+                                                        /*=========
+                                                        * Check if Supress List to be show
+                                                        * ========*/    
+                                                         if (curview.isSupressListFlag) {
+                                                                    if (val[0].isSupressList === "true") {
+                                                                        list_html += "<option value='" + val[0]["listNumber.encode"] + "'>" + val[0].name + "</option>";
+                                                                        $i++; // count total supress list
+                                                                    }
+                                                                }
+                                                          if(!curview.isSupressListFlag){
+                                                              if (val[0].isSupressList == "false" && val[0].isBounceSupressList == "false") {
+                                                                        list_html += "<option value='" + val[0]["listNumber.encode"] + "'>" + val[0].name + "</option>";
+                                                                    } else {
+                                                                        $i++; // count total supress list
+                                                                    }
+                                                          }
+                                                                
+                                                    });
+                                                    var total_count = parseInt(list_array.count) - $i ;
+                                                    /*=========
+                                                     * Check if Supress List available
+                                                     * ========*/
+                                                if(curview.isSupressListFlag){
+                                                            if(total_count == 0 || total_count==parseInt(list_array.count)){
+                                                                curview.$el.find("#existing_lists").html('<option>No Supress List Available</option>')
+                                                                curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
+
+                                                            }else{
+                                                                 curview.$el.find("#existing_lists").html(list_html);
+                                                            }
+                                                }else{
+                                                   if(total_count != 0){
+                                                                curview.$el.find("#existing_lists").html(list_html);
+                                                            }else{
+                                                              curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
+                                                            }	 
+                                                }
+                                                    							
                                             }
                                             app.setAppData('lists',list_array);
                                             curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
                                     }
                             }).fail(function() { console.log( "error lists listing" ); });
-			}			
+						
 		},
 		initialize:function(){                    
 		   this.template = _.template(template);
 		   this.render();
 		   var curview = this;
 		   var app = this.app;
+  
+                  
 		   var campview = this.options.camp;
+                   if(typeof(this.options.params) != 'undefined' ){
+                       this.rows = curview.options.params.rows
+                   }else{
+                      this.rows =  curview.options.rows
+                   }
 		   var appMsgs = app.messages[0];
 		   this.filllistsdropdown();
 		   curview.$el.find('.tabel-div').children().remove();
-		   var mappingHTML = curview.createMappingTable(curview.options.rows);
+		   var mappingHTML = curview.createMappingTable(this.rows);
 		   curview.$el.find('.tabel-div').append(mappingHTML);
+                   
                    if(campview){
                     campview.$el.find('.step3 #area_upload_csv').html(curview.$el);
                    }
@@ -310,13 +372,23 @@ function (template,chosen,addbox) {
                         placeholder_text:appMsgs.MAPDATA_customfield_placeholder
 		   });
 		   var curview = this;
+                   this.isSupressListFlag = this.$el.parents(".ws-content.active").find('.camp_header').hasClass('orange-head');
+                   if(this.isSupressListFlag){
+                       this.$('.map-toggle').hide();
+                   }
 		   curview.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 		},
 		render: function () {
 			this.$el.html(this.template({}));
+                         
 			this.app = this.options.app;                        
 			this.camp_obj = this.options.camp;
-                        this.csv = this.options.csv;
+                        this.isSupressListFlag = false;
+                       if(typeof(this.options.params) != 'undefined' ){
+                            this.csv = this.options.params.csv;
+                        }else{
+                            this.csv = this.options.csv;
+                        }
                         if(this.csv){
                             this.$(".save-contacts").show();
                         }
@@ -324,9 +396,12 @@ function (template,chosen,addbox) {
                             var alertEmail = this.app.get("user").alertEmail?this.app.get("user").alertEmail:this.app.get("user").userEmail;
                             this.$("#alertemail").val(alertEmail);
                         }
+                       
+                        
 		}
 		,
 		init:function(){
+                    this.app.removeSpinner(this.$el);
                     this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
 		},
 		createMappingTable:function(rows){			
@@ -393,7 +468,9 @@ function (template,chosen,addbox) {
 			var elemId = obj.attr('id');
 			curview.$el.find('.mapfields.'+elemId).val(val);
 			curview.$el.find('.mapfields').trigger("chosen:updated");
-		},
+                        return true;
+                    //curview.$el.find('.btn-close').click();
+            },
 		mapCombo: function(num) {
 			var campview = this.options.camp;						
 			var csvupload = campview?campview.states.step3.csvupload:this.csv;

@@ -6,12 +6,14 @@ define(['text!crm/salesforce/html/salesforce.html'],
              * Attach events on elements in view.
             */ 
             events: {
-                'click #choose_soruce li':'chooseTile'
+                'click #choose_soruce li':'chooseTile',
+                'mouseover #choose_soruce li':'chooseTileHover'
             },
             /**
              * Initialize view - backbone .
             */
-            initialize: function () {                    
+            initialize: function () {   
+                this.app = this.options.app;
                 this.template = _.template(template);	
                 this.states = {
                     setup:false,
@@ -28,8 +30,7 @@ define(['text!crm/salesforce/html/salesforce.html'],
              * Initialize view .
             */
             render: function () {                        
-                this.$el.html(this.template({}));                    
-                this.app = this.options.app;
+                this.$el.html(this.template({}));                                    
                 this.setupArea = this.$("#salesforce-setup");
                 this.myImportsArea = this.$("#salesforce-imports");
                 this.newImportArea = this.$("#salesforce-new-import");
@@ -44,16 +45,51 @@ define(['text!crm/salesforce/html/salesforce.html'],
             */
             init:function(){
                 this.current_ws = this.$el.parents(".ws-content");                
-                var sf = this.app.getAppData("salesfocre");
-                if(!sf || sf.isSalesforceUser=="N"){
-                    this.loadSetupArea();                  
+                this.checkSalesforceStatus();
+            },
+            // showing hover, change text of tooltip
+            chooseTileHover:function(obj){
+                var li = $.getObj(obj,"li");
+                if(li.hasClass("salesforce-imports")){
+                   this.$(".messagebox p").html("Create, view and edit your existing imports.");  
+                }else if(li.hasClass("salesforce-setup")){
+                    this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                }else{
+                    this.$(".messagebox p").html("Export your existing imports.");
                 }
-                else{                 
+            },
+            checkSalesforceStatus:function(){
+              var salesforce_setting = this.app.getAppData("salesfocre");  
+              this.app.showLoading("Checking Salesforce status...",this.$el);    
+              if(!salesforce_setting || salesforce_setting[0] == "err" || salesforce_setting.isSalesforceUser=="N")
+                {                    
+                    this.app.getData({
+                        "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "key":"salesfocre",
+                        callback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);    
+                            var sf = this.app.getAppData("salesfocre");
+                            if(sf[0] == "err" ||sf.isSalesforceUser=="N"){
+                               this.loadSetupArea();  
+                            }
+                            else{
+                                this.salesforceSetup = true;
+                                this.$(".salesforce-imports").click();    
+                                this.showHeader();
+                            }
+                        },this),
+                        errorCallback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);                        
+                            this.loadSetupArea();  
+                        },this)
+                    });
+                }
+                else{
+                    this.app.showLoading(false,this.$el);                            
                     this.salesforceSetup = true;
                     this.$(".salesforce-imports").click();    
                     this.showHeader();
-                    
-                }
+                }  
             },
             showHeader:function(){                               
                 var header_part = $('<div class="bottomdiv">\n\
@@ -91,6 +127,7 @@ define(['text!crm/salesforce/html/salesforce.html'],
                 }  
             },
             updateCount:function(c){
+                this.myimports_page.getMyImports();
                 var count = parseInt(this.current_ws.find(".camp_header .sync_count")[0].innerHTML); 
                 this.current_ws.find(".camp_header .sync_count").html(count+c);
             },
@@ -219,7 +256,7 @@ define(['text!crm/salesforce/html/salesforce.html'],
                         _this.peeringPage.init();
                     });
                 }               
-                this.current_ws.find(".camp_header .cstats").css({"left":103+"px","top":63+"px","width":"520px","height":"286px"}).show();
+                this.current_ws.find(".camp_header .cstats").css({"left":103+"px","top":63+"px","width":"520px","height":"313px"}).show();
             },
             hidePeeringDialog:function(){
                 this.current_ws.find(".camp_header .cstats").hide();
@@ -230,7 +267,7 @@ define(['text!crm/salesforce/html/salesforce.html'],
                     var dialogTitle = importName?importName:"Loading...";
                     var dialog = this.app.showDialog({title:dialogTitle,
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
-                              headerEditable:true,
+                              headerEditable:false,
                               headerIcon : 'import',
                               bodyCss:{"min-height":dialog_height+"px"},
                               buttons: {saveBtn:{text:'Save'} }                                                                           
@@ -241,9 +278,14 @@ define(['text!crm/salesforce/html/salesforce.html'],
                                 page:this,
                                 dialog:dialog
                            })                        
-                           dialog.getBody().html(this.newImport_page.$el);                           
+                           dialog.getBody().append(this.newImport_page.$el);
+                           this.app.showLoading(false, this.newImport_page.$el.parent());
                            dialog.getBody().addClass("dialog-wizard")
                            dialog.saveCallBack(_.bind(this.newImport_page.startImport,this.newImport_page));
+                           var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                           this.newImport_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                           this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(this.newImport_page.startImport,this.newImport_page); // New Dialog
+
                            this.myimports_page.loadImport(json);
                     },this));                   
                 }

@@ -1,0 +1,30 @@
+<td width="100%">
+    <div>
+        <div class="name-type">              
+            <h3>                
+                <a class="edit-page showtooltip" title="Click to view"> <%= this.model.get('name')%> </a>                
+                <a class="cstatus pclr3 showtooltip"  title="Click to view Pages with '<b><%= this.model.get('category')%></b>' category"> <%= this.model.get('category')%> </a> 
+            </h3>  
+                <div class="tags tagscont">
+                    <%= this.app.showTags(this.model.get('tags')) %>
+                </div>
+        </div>
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
+        </div>
+        <div class="slide-btns two s-clr3">
+            <span class="icon setting"></span>
+            <div>                                 
+                <a class="icon use-page check clr2"><span>Use</span></a>
+                <a class="icon preview-page preview clr1"><span>Preview</span></a>                
+            </div>   
+        </div> 
+
+    </div>
+</td>
+
+

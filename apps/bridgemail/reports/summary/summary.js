@@ -7,8 +7,8 @@
  * Dependency: HTML, Summary Model, Graphs View, Stats Model, Contacts VIew.
  */
 
-define(['text!reports/summary/html/summary.html','reports/summary/models/summary','reports/summary/views/links','reports/summary/views/graphs','reports/summary/models/stats','reports/summary/views/scontacts'],
-function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
+define(['text!reports/summary/html/summary.html','reports/summary/models/summary','reports/summary/views/links','reports/summary/views/graphs','reports/summary/models/stats','reports/summary/views/scontacts',"reports/summary/views/settings"],
+function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage) {
         'use strict';
         return Backbone.View.extend({
             className: 'campaign-summary',
@@ -20,57 +20,146 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 "click .click-views":"clickViews",
                 "click .convert-views":"convertViews",
                 "click .open-views":"openViews",
-                "click .closebtn":"closeContactsListing"
+                "click .sent-views":"sentViews",
+                "click .pending-views":"pendingViews",
+                "click .closebtn":"closeContactsListing",
+                "click .s-report":"openSnapshotReport"
             },
             initialize: function () {
                this.template = _.template(template);				
                this.campNum = this.options.params.camp_id;
+               this.trackId = this.options.params.trackId || null;
+               this.icon = this.options.params.icon || null;
+               if(this.icon)
+                   this.icon = "autobot18"
+               this.label = this.options.params.label || null;
+               this.autobotId = this.options.params.autobotId || null;
                this.active_ws = "";
+               this.clickType = this.options.params.clickType || null;
                this.type="basic";
-               this.stats = new Stats();
+               var type = "";
+               if(this.autobotId)
+                type = "bot";
+                
+               this.stats = new Stats({type:type});
                this.objSummary = new Summary();
                this.render();
             },
             render: function () {
-                this.options.app.showLoading('Loading Campaign....',this.$el);
+                this.options.app.addSpinner(this.$el);
                 this.fetchStats();
-                this.options.app.showLoading(false,this.$el);
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.scrollTop,this));
                 $(window).resize(_.bind(this.scrollTop,this));
+               
+                //console.log(this.options);
+            },
+            refreshWorkSpace:function(options){
+                 if(options && options.params){
+                    this.clickType = options.params.clickType;
+                    this.fetchStats();
+                 }
             },
             addLinks:function(){
                this.$el.find('.links-container').prepend(new ViewLinks({clickCount:this.stats.get('clickCount'),app:this.options.app,campNum:this.campNum}).el);  
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
+                 /*-----Remove loading------*/
+                    this.options.app.removeSpinner(this.$el);
+                   
+                   /*------------*/
+                   if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
+                      
+                       this.graphView.$el.find('.download').html('Loading...');
+                      
+                   }
             },
-            addGraphs:function(self){
-                self.$el.find('.col-cstats').prepend(new ViewGraphs({clicks:this.stats.get('clickCount'),model:self.stats,tags:self.objSummary.get('tags'),status:self.objSummary.get('status'),app:self.options.app,campNum:self.campNum}).el);  
-                this.options.app.showLoading(false,this.$el.find('.col-cstats'));
+            addGraphs:function(data){
+                this.graphView = new ViewGraphs({campaignType:this.objSummary.get('campaignType'),triggerOrder:this.options.params.messageNo,clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId,botId:this.autobotId});
+                this.$('.col-cstats').prepend(this.graphView.el);  
+                
+                this.options.app.showLoading(false,this.$('.col-cstats'));
             },
             fetchStats:function(){
+                this.options.app.showLoading("Loading Summary...",this.active_ws);
                 var _data = {};
                 var self = this;
                 _data['type'] =  "stats";
                 _data['isSummary'] = "Y";
                 _data['campNums'] = this.campNum;
-                 self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
-                    self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
+                if(this.trackId != null  && this.trackId){
+                     this.stats.url = "/pms/io/trigger/getNurtureData/?BMS_REQ_TK="+this.options.app.get('bms_token')
+                    _data['trackId'] = this.trackId;
+                    _data["triggerOrder"] = this.options.params.messageNo
+                    _data['type'] = "messageStats";
+                    //type=get&trackId=kzaqwKb26Dd17Mj20kbhui&triggerOrder=1&status=C&searchText=jay
+                }
+                if(this.autobotId !=null && this.autobotId){
+                     this.stats.url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK="+this.options.app.get('bms_token')
+                    _data['botId'] = this.autobotId;
+                    
+                   // _data["triggerOrder"] = this.options.params.messageNo
+                   _data['type'] = "mailBotStats";
+                    //xxx.bridgemailsystem.com/pms/io/trigger/getAutobotData/?type=mailBotStats&botId=xxx0
+                }
+               
                 this.stats.fetch({data:_data,success:function(data){
-                    self.$el.html(self.template({stats:data}));
                     var _data = {};
                     _data['type'] = self.type;
                     _data['campNum'] = self.campNum;
-                    self.objSummary.fetch({data:_data,success:function(){
-                        self.addGraphs(self); 
+                    
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+self.options.app.get("bms_token")+"&campNum="+self.campNum+"&type=basic";
+                     $.get(URL,  function(xhrData){
+                        var result= xhrData.replace(//g, "");
+                        var camp_json = jQuery.parseJSON(result);
+                        var Model = Backbone.Model.extend({});
+                        var Collection = Backbone.Collection.extend({
+                            model:Model
+                         });
+                        var collection = new Collection(camp_json);
+                        var dataS = collection.models[0];
+                        self.objSummary = dataS;
+                        self.$el.html(self.template({stats:data,summary:dataS}));                        
+                        self.addGraphs(data);
                         self.setHeader(self);
+                        self.options.app.showLoading(false,self.active_ws);
+                        if(dataS.get('campaignType') == "T" || self.autobotId){
+                             switch (self.clickType){
+                                 case "sent":
+                                     self.sentViews();
+                                     break;
+                                 case "pending":
+                                     self.pendingViews()
+                                     break;
+                                 case "views":
+                                     self.pageViews();
+                                     break;
+                                 case "open":
+                                    self.openViews();
+                                    break;
+                                 case "click":
+                                    self.clickViews();
+                                    break;
+                                 default:
+                                      self.sentViews();        
+                             }
+                        }else{
+                             self.openViews();
+                        } 
+                         
+                        self.addLinks();
+                        
+                    });
+                    /*self.objSummary.fetch({data:_data,success:function(dataS){
+                            
+                      
 
-                    }});
+                    }});*/
                     self.active_ws = self.$el.parents(".ws-content");
-                    self.openViews();
-                    self.addLinks();
+                   
                  }});
-                self.options.app.showLoading(false,self.$el.find('.links-container'));
-                self.options.app.showLoading(false,self.$el.find('.col-cstats'));
+                //self.options.app.showLoading(false,self.$el.find('.links-container'));
+                //self.options.app.showLoading(false,self.$el.find('.col-cstats'));
+               
                 
             }
             ,
@@ -80,6 +169,14 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                  case "open":
                     tab = "Opened";
                     numbers = this.stats.get('openCount');
+                    break;    
+                 case "sent":
+                    tab = "Sent";
+                    numbers = this.stats.get('sentCount');
+                    break;    
+                 case "pending":
+                    tab = "Pending";
+                    numbers = this.stats.get('pendingCount');
                     break;    
                  case "click":
                      tab = "Clicked";
@@ -100,7 +197,13 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     var percent =  ((numbers/sent) * 100);
                     percent = Math.ceil(percent);
                     percent = (isNaN(percent = parseInt(percent, 10)) ? 0 : percent)
-                    var span = "<span> "+tab+" </span><em>"+percent+"%</em><strong>"+this.options.app.addCommas(numbers)+"</strong>";
+                    var span = "";
+                     if(((this.autobotId != null  && this.autobotId) || (this.trackId != null  && this.trackId)) && (tab == "Page Views" || tab == "Sent" || tab == "Pending" )){
+                          span = "<span> "+tab+" </span><strong>"+this.options.app.addCommas(numbers)+"</strong>";
+                     }else{
+                           span = "<span> "+tab+" </span><em>"+percent+"%</em><strong>"+this.options.app.addCommas(numbers)+"</strong>";
+                     }
+                        
                     return span;
             },
             scrollTop:function(){
@@ -116,35 +219,88 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
             campaignSetting:function(){
                   var dialog_width = 800;
                   var that = this;
-                  var dialog_height = $(document.documentElement).height()-280;
+                  var title = 'Settings';
+                  var loading = "Loading Settings...";
+                  var height = 250;
+                  if(this.trackId != null  && this.trackId){
+                      height = 450;
+                      title = "Settings"
+                      loading = "Loading Settings... ";
+                  }
+                  if(this.autobotId != null  && this.autobotId){
+                      height = 450;
+                  }
+                  //console.log(height + this.autobotId + this.trackId);
+                  var dialog_height = $(document.documentElement).height()-height;
                   var dialog = this.options.app.showDialog(
                         {           
-                                    title:'Campaign Settings',
+                                    title:title,
                                     css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                     headerEditable:false,
                                     headerIcon : 'setting2',
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
-                  that.options.app.showLoading('Loading Campaign Settings....',dialog.getBody());
-                  require(["reports/summary/views/settings"],function(Settings){
-                         var mPage = new Settings({model:that.objSummary});
+                  that.options.app.showLoading(loading,dialog.getBody());
+                  //require(["reports/summary/views/settings"],function(settingsPage){
+                         var mPage = new settingsPage({model:that.objSummary,app:that.options.app, botId:that.autobotId,trackId:that.trackId});
                          dialog.getBody().html(mPage.$el);
                          that.options.app.showLoading(false,dialog.getBody());
-                   });
+                   //});
                   
             },
             pageViews:function(ev){
-                 if($(ev.target).parents('li').hasClass('active')) return;
-                 var count = $(ev.target).parents('li').data("count");
-                 if(!count){
-                  this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
-                     this.closeContactsListing();
-                     return;
+                if(ev){
+                    if($(ev.target).parents('li').hasClass('active')) return;
+                        var count = $(ev.target).parents('li').data("count");
+                        if(!count){
+                         this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                            this.closeContactsListing();
+                            return;
+                    }
+                }else{
+                    this.active_ws.find(".page-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".page-views").parents('li').addClass('active');
                 }
-               
+                
                 this.clearHTML();  
-                this.active_ws.find(".contacts_listing").html(new contactsView({type:"WV",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"WV",botId:this.autobotId,app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+            },
+             pendingViews:function(ev){
+                 if(ev){
+                    if($(ev.target).parents('li').hasClass('active')) return;
+                    var count = $(ev.target).parents('li').data("count");
+                    if(!count){
+                     this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                        this.closeContactsListing();
+                        return;
+                   }
+                 }else{
+                    this.active_ws.find(".pending-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".pending-views").parents('li').addClass('active');
+                }
+                this.clearHTML();  
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"P",botId:this.autobotId,app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
+                this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+               /// this.active_ws.find(".contacts_listing #tblcontacts").css('margin-bottom','90px!important');
+            },
+             sentViews:function(ev){
+                 if(ev){ 
+                    if($(ev.target).parents('li').hasClass('active')) return;
+                    var count = $(ev.target).parents('li').data("count");
+                    if(!count){
+                     this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                        this.closeContactsListing();
+                        return;
+                    }
+                 }else{
+                    this.active_ws.find(".sent-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".sent-views").parents('li').addClass('active');
+                }
+                this.clearHTML();  
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"C",app:this.options.app,botId:this.autobotId,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
+                this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+                 
             },
             convertViews:function(ev){
                 if($(ev.target).parents('li').hasClass('active')) return;
@@ -153,25 +309,32 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                   this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
                      this.closeContactsListing();
                      return;
+                }else{
+                    this.active_ws.find(".convert-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".convert-views").parents('li').addClass('active');
                 }
                 this.clearHTML();
-               this.active_ws.find(".contacts_listing").html(new contactsView({type:"CT",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+               this.active_ws.find(".contacts_listing").html(new contactsView({type:"CT",botId:this.autobotId,app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                this.active_ws.find(".contacts_listing").find(".closebtn").remove();
              },
             clickViews:function(ev){
-                if($(ev.target).parents('li').hasClass('active')) return;
-                var count = $(ev.target).parents('li').data("count");
-                 if(!count){
-                   this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
-                     this.closeContactsListing();
-                     return;
+                if(ev){
+                    if($(ev.target).parents('li').hasClass('active')) return;
+                    var count = $(ev.target).parents('li').data("count");
+                     if(!count){
+                       this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                         this.closeContactsListing();
+                         return;
+                    }
+                }else{
+                    this.active_ws.find(".click-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".click-views").parents('li').addClass('active');
                 }
                 this.clearHTML();  
-                this.active_ws.find(".contacts_listing").html(new contactsView({type:"CK",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"CK",botId:this.autobotId,app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
             },
             openViews:function(ev){
-                
                 if(ev){ 
                     if($(ev.target).parents('li').hasClass('active')) return;
                     var count = $(ev.target).parents('li').data("count");
@@ -180,9 +343,13 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         this.closeContactsListing();
                         return;
                     }
-                  }
+                  }else{
+                    this.active_ws.find(".open-views").parents('li').parents('ul').find('li').removeClass('active');  
+                    this.active_ws.find(".open-views").parents('li').addClass('active');
+                }
                   this.clearHTML();
-                  this.active_ws.find(".contacts_listing").html(new contactsView({type:"OP",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+                 
+                  this.active_ws.find(".contacts_listing").html(new contactsView({type:"OP",botId:this.autobotId,app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                   this.active_ws.find(".contacts_listing").find(".closebtn").remove();
               
             },
@@ -191,6 +358,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.$el.find(".stats_listing").empty();
                 this.active_ws.find(".stats_listing").hide();
                 this.active_ws.find(".stats_listing").show();
+                
                 this.active_ws.find(".stats_listing #tblcontacts tbody #loading-tr").remove();
                  
             },
@@ -207,34 +375,95 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 
                 this.active_ws.find(".sentat").remove();
                 this.active_ws.find("#campaign_tags").html('');
-                var c_name = this.options.app.encodeHTML(this.objSummary.get('name'));
+                var subheading = "Campaign Summary";
+                if(this.objSummary.get('campaignType') == "T" || this.autobotId){
+                    var c_name = this.options.app.encodeHTML(this.objSummary.get('subject'));
+                    this.$el.find(".c-settings span").html("Message Settings")
+                    if(c_name == ""){
+                        c_name = "&lt;subject line &gt;";
+                    }
+                    subheading = "Message Summary";
+                }else{
+                    var c_name = this.options.app.encodeHTML(this.objSummary.get('name'));
+                }
                 var name = this.truncateHeader(c_name);
+                this.active_ws.find("#workspace-header").css('min-width','60px');
                 this.active_ws.find("#workspace-header").addClass('showtooltip').attr('data-original-title',c_name).html(name);
                 //Setting tab details for workspace. 
                  var workspace_id = this.$el.parents(".ws-content").attr("id");
-                 this.options.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:name,subheading:"Campaign Summary"});
-                
-                var tags ="<ul>";
+                 this.options.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:name,subheading:subheading});
+                if(this.objSummary.get('campaignType') == "T" || this.icon){
+                    if(!this.icon)
+                         this.icon = "nurture2";
+                     if(!this.label)
+                         this.label = this.options.params.trackName;
+                     this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("").append("<ul><li style='color:#fff'><span class='"+this.icon+"'></span>&nbsp;"+this.label+" </li></ul>");
+                    if(this.options.params.messageNo)
+                        this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> Message <b>"+ this.options.params.messageNo +"</b>  </strong>")
+                    this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    
+                }else{
+                  var tags ="<ul>";
                             _.each(this.options.app.encodeHTML(this.objSummary.get('tags')).split(","),function(t){ 
                               tags =tags+ "<li><a  class='tag'><span>"+t+"</span></a> </li>";
                             }); 
                     tags=tags+"</ul> ";
                 
-                var sentAt = "<div class='sentat'> <em>Sent at</em> <strong>"+this.objSummary.get('updationDate')+"</strong> </div>";    
+                var date = moment(this.options.app.decodeHTML(this.objSummary.get('scheduledDate')), 'YYYY-M-D H:m');
+                var dateFormat = date.format("DD MMM, YYYY hh:mm A");
+                var sentAt = "<div class='sentat'> <em>Sent at</em> <strong>"+dateFormat+"</strong> </div>";    
+                if(this.objSummary.get('scheduledDate')==""){
+                    sentAt="";
+                }
                 //this.$el.parents(".ws-content").find(".camp_header").find('.c-name').append(sentAt);
                 this.active_ws.find(".camp_header").find("#campaign_tags").addClass("tagscont").css("width","auto").append("<span class='tagicon gray'></span>").append(tags).append(sentAt);
+                    
+                }
                 var previewIconCampaign = $('<a class="icon preview showtooltip" data-original-title="Preview Campaign"></a>');  
                 var copyIconCampaign = $('<a class="icon copy showtooltip" data-original-title="Copy Campaign"></a>');
                 var deleteIconCampaign = $('<a class="icon delete showtooltip" data-original-title="Delete Campaign"></a>');
+                var header_title =this.active_ws.find(".camp_header .edited  h2");
+                var action_icon = $('<div class="pointy"></div>")');
+                header_title.append(action_icon); 
+                header_title.append(previewIconCampaign);
+                   previewIconCampaign.click(function(e){
+                       //active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
+                       var camp_name = that.active_ws.find("#workspace-header").html();                                                
+                        var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-182;
+                        var dialog = that.options.app.showDialog({title:'Campaign Preview of &quot;'+ camp_name +'&quot;',
+                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                  headerEditable:false,
+                                  headerIcon : 'dlgpreview',
+                                  bodyCss:{"min-height":dialog_height+"px"},
+                                  //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                        });
+                        //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
+                        var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum;
+                        require(["common/templatePreview"],_.bind(function(templatePreview){
+                            var tmPr =  new templatePreview({frameSrc:preview_url,app:that.options.app,frameHeight:dialog_height,prevFlag:'C',tempNum:that.campNum});
+                             dialog.getBody().html(tmPr.$el);
+                             tmPr.init();
+                         },this));       
+//                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+//                        dialog.getBody().html(preview_iframe);               
+//                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
+                        e.stopPropagation();     
+                  })
+                
+                 if(this.objSummary.get('campaignType') == "T"){
+                     this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                     return;
+                 }
+                 if(!this.autobotId){
+                    action_icon.append(copyIconCampaign);
+                    action_icon.append(deleteIconCampaign);
+                }
+                
                 copyIconCampaign.on('click',function(){
                     that.copyCampaign(that.campNum);
                 });
-                var header_title =this.active_ws.find(".camp_header .edited  h2");
-                var action_icon = $('<div class="pointy"></div>")');
-                action_icon.append(copyIconCampaign);
-                action_icon.append(deleteIconCampaign);
-                header_title.append(action_icon); 
-                header_title.append(previewIconCampaign); 
+               
                 this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 deleteIconCampaign.click(function(){
                         
@@ -248,24 +477,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                       //}
                 });
                 
-                 previewIconCampaign.click(function(e){
-                       //active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
-                       var camp_name = that.active_ws.find("#workspace-header").html();                                                
-                        var dialog_width = $(document.documentElement).width()-60;
-                        var dialog_height = $(document.documentElement).height()-182;
-                        var dialog = that.options.app.showDialog({title:'Campaign Preview of &quot;'+ camp_name +'&quot;',
-                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                                  headerEditable:false,
-                                  headerIcon : 'dlgpreview',
-                                  bodyCss:{"min-height":dialog_height+"px"},
-                                  buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
-                        });
-                        var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";                                                            
-                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
-                        dialog.getBody().html(preview_iframe);               
-                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
-                        e.stopPropagation();     
-                  })
+              
                 
             },
               sendTextPreview:function(){
@@ -337,28 +549,40 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                    });
 		 },
                  copyCampaign: function(camp_id)
-			{
-                            var camp_obj = this;
-                            var dialog_title = "Copy Campaign";
-                            var dialog = this.options.app.showDialog({title:dialog_title,
-                                              css:{"width":"600px","margin-left":"-300px"},
-                                              bodyCss:{"min-height":"260px"},							   
-                                              headerIcon : 'copycamp',
-                                              buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
-                            });
-                            this.options.app.showLoading("Loading...",dialog.getBody());
-                            require(["copycampaign"],function(copycampaignPage){                                     
-                                             var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.options.app,copycampsdialog:dialog});
-                                             dialog.getBody().html(mPage.$el);
-                                             dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
-                            });
-			},
-                        truncateHeader:function(header){
-                             
-                            if(header.length > 47) 
-                            return header.substring(0,47)+ '...';
-                            else return header;
-                        },
+                {
+                    var camp_obj = this;
+                    var dialog_title = "Copy Campaign";
+                    var dialog = this.options.app.showDialog({title:dialog_title,
+                                      css:{"width":"600px","margin-left":"-300px"},
+                                      bodyCss:{"min-height":"260px"},							   
+                                      headerIcon : 'copycamp',
+                                      buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
+                    });
+                    this.options.app.showLoading("Loading...",dialog.getBody());
+                    require(["campaigns/copycampaign"],function(copycampaignPage){                                     
+                                     var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.options.app,copycampsdialog:dialog});
+                                     dialog.getBody().html(mPage.$el);
+                                     dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
+                    });
+                },
+                truncateHeader:function(header){
+
+                    if(header.length > 47) 
+                    return header.substring(0,47)+ '...';
+                    else return header;
+                },
+                openSnapshotReport:function(){
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = this.options.app.showDialog({title:'Snapshot Report',
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                              headerEditable:false,                              
+                              bodyCss:{"min-height":dialog_height+"px"}
+                    });
+                    var URL = "/pms/report/SnapshotReport.jsp?viewBy=campaign&selectCampaign="+this.campNum+"&BMS_REQ_TK="+this.options.app.get('bms_token')+"&fromNewUI=true&ft=y&as=y&doPreview=n";
+                    var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                    dialog.getBody().html(iframHTML);
+                }        
 
             
         });    

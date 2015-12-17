@@ -12,7 +12,8 @@ function (template,Contacts,viewContact) {
             events: {
                 "keyup .search-control":"search",
                 "click  #clearsearch":"clearSearch",
-                'click .stats-scroll':'scrollToTop'
+                'click .stats-scroll':'scrollToTop',
+                'click #prev-closebtn':'closeContactsListing'
             },
             className:'contacts-div',
             initialize: function () {
@@ -32,17 +33,25 @@ function (template,Contacts,viewContact) {
                  this.timer = 0;
                  this.app = this.options.page.app;
                  this.parent = this.options.page;
+                 this.searchWidth = this.options.searchCss ? this.options.searchCss:'415px';
+                 this.isOTOFlag = (this.options.isOTOFlag) ? this.options.isOTOFlag  : false;
+                 this.contactHeight = this.options.contactHeight;
+                 this.placeholderText = this.options.placeholderText ? this.options.placeholderText:'Search Contacts &amp; Tags';
+                 this.isHideCross = this.options.hideCross;
+                 this.isCamPreview = this.options.isCamPreview;
                  this.render();
                   
             },
             render: function () {
               this.$el.html(this.template());
-              this.loadContacts();
+              //this.loadContacts();
              if(this.where != "page"){
                 this.$el.find(".stats_listing").scroll(_.bind(this.liveLoading,this));
                 this.$el.find(".stats_listing").resize(_.bind(this.liveLoading,this));
               }
-            
+              // Search Text Width 
+              if(this.isHideCross)this.$('#prev-closebtn').hide();
+              if(this.isCamPreview)this.$('.stats_listing').hide();
            // $(window).scroll(_.bind(this.liveLoading,this));
            // $(window).resize(_.bind(this.liveLoading,this));
              
@@ -79,6 +88,7 @@ function (template,Contacts,viewContact) {
                   _data['offset'] = this.offset;
                   _data['responderType'] = this.responderType;
                   _data['type'] = this.type ;
+                  _data['orderBy'] = "firstName";
                   //_data['campNum'] = this.campNum ;
 //                  if(this.options.article)
 //                    _data['articleNum'] = this.options.article;
@@ -100,16 +110,20 @@ function (template,Contacts,viewContact) {
                            that.$el.find('#tblcontacts tbody #loading-tr').remove();
                       }
                       _.each(data1.models, function(model){
-                           that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,page:that}).el);
+                           that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,page:that,isCamPreview:that.isCamPreview}).el);
                        });
                        if(that.where != "page"){
-                           var height = that.$el.find(".stats_listing").outerHeight(true) ;
+                           if(that.contactHeight)
+                                height = that.contactHeight;
+                           else
+                                var height = that.$el.find(".stats_listing").outerHeight(true) ;
                            if(height < 360){
-                             that.$el.find(".stats_listing").css({"height":height+"px", "overflow-y":"auto"});
                                
+                             that.$el.find(".stats_listing").css({"height":height+"px", "overflow-y":"auto"});
+                            
                            }else{
                                 if(data1.models.length != 0)
-                                    that.$el.find(".stats_listing").css({"height":"200px", "overflow-y":"auto"});
+                                    that.$el.find(".stats_listing").css({"height":"273px", "overflow-y":"auto"});
                              if(height > 375){
                                     that.$el.find(".stats_listing").find('.stats-scroll').remove();
                               that.$el.find(".stats_listing").append("<button class='stats-scroll ScrollToTop' type='button' style='display: none; position:absolute;bottom:5px;right:20px;'></button>") ;
@@ -156,9 +170,15 @@ function (template,Contacts,viewContact) {
                
                if (code == 13 || code == 8){
                  that.$el.find('#clearsearch').show();
+                
                  var text = $(ev.target).val();
-                 this.searchText = text;
-                 that.loadContacts();
+                 if(text){
+                     that.searchText = text;
+                     that.loadContacts();
+                    }else{
+                        this.$('#clearsearch').click();
+                        return false;
+                    }
                }else if(code == 8 || code == 46){
                    var text = $(ev.target).val();
                    if(!text){
@@ -168,6 +188,7 @@ function (template,Contacts,viewContact) {
                    }
                }else{ 
                      that.$el.find('#clearsearch').show();
+                      if(that.isCamPreview) {that.$('.stats_listing').show();that.$el.parents('#camp-prev-contact-search').css('background','#fff');that.loadContacts();}
                      var text = $(ev.target).val();
                      clearTimeout(that.timer); // Clear the timer so we don't end up with dupes.
                      that.timer = setTimeout(function() { // assign timer a new timeout 
@@ -184,8 +205,19 @@ function (template,Contacts,viewContact) {
                    this.searchText = '';
                    this.searchTags = '';
                    this.total_fetch = 0; 
+                   
+                   if(this.isCamPreview) {
+                       this.$('.stats_listing').hide();
+                       this.parent.$el.find('#camp-prev-contact-search').css('background','none');
+                       if(this.parent.subNum != null){
+                           this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').show();
+                           this.parent.subNum=null;
+                           if(!this.isOTOFlag){this.parent.setiFrameSrc();}
+                       }
+                   };
                    this.$el.find("#total_subscriber span").html("contacts found");
-                   this.loadContacts();
+                   
+                   //this.loadContacts();
            },
            liveLoading:function(){
                 var $w = $(window);
@@ -213,6 +245,14 @@ function (template,Contacts,viewContact) {
             },
             scrollToTop:function(){
                 this.$el.find(".stats_listing").animate({scrollTop:0},600);    
+            },
+            closeContactsListing:function(){
+                this.$el.parents('.modal-body').find('#contact-search').val('');
+                this.$el.parents('.modal-body').find('#campaign-temp-contact-dialog').hide();
+                  if(this.parent.subNum === null){
+                      this.$el.parents('.modal-body').find('.annonymous-btn').removeClass('active');
+                      this.$el.parents('.modal-body').find('#camp-prev-select-contact').addClass('active');
+                  }
             }
         });
     

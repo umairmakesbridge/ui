@@ -1,0 +1,134 @@
+<div style="position:relative;top:-22px; left:296px; width:20px;display: none">
+    <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
+            <i class="icon"></i><em>Please tell me which target to check for this bot, you can select only one target.</em></span></label>
+</div>
+
+<h2><i class="icon target"></i>
+    <span>Please use a target to specify Alert rules</span> 
+    <a style="float:right; margin-right:5px;text-decoration:underline; cursor:pointer;font-size: 16px;display:none" id="hrfchangetarget" class="add-targets"  > Set target</a>
+</h2>
+<div class="bot_p_box">
+
+    <div class="bmsgrid" style="overflow:visible;">
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                </table>
+            </div>
+        </div>
+        <div style="height: ; background:none repeat scroll 0% 0% #EFF7FB; overflow:visible" class="bDiv">
+            <table cellspacing="0" cellpadding="0" border="0" id="autobot_targets_grid" style="margin-bottom:0px!important;">
+                <tbody>
+
+                <div style="margin-left:41%; text-align:center; min-height: 50px; padding-top: 4px;" class="no-target-defined">
+                    <a class="btn-green add-targets target-added  "   style="width:130px;"><span>Set target</span><i class="icon targetw"></i></a>
+                </div>
+
+                </tbody>
+            </table>
+            <div style="display: none;" class="iDiv"></div>
+        </div>
+    </div>
+
+</div>
+
+<div style="position:relative;top:-21px; left:334px; width:20px;display: none"><label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo"><i style="width:;height:none!important" class="icon"></i><em>Choose to perform the alerts action once or mutliple times</em></span></label></div>
+<h2><i class="icon setting"></i>Would you like to be alerted more than once? </h2>
+
+<div class="bot_p_box">
+    <div class="bot_p_boxinner">
+        <div>
+            <div style="display:inline-block; float:left">
+                <select id="ddlIsRecur" class="nosearch" style="width: 120px; display: none;">
+                    <option value="N">Only once</option>
+                    <option value="Y">Repeat</option>
+                    <option value="I">Instantly</option>
+                </select>
+                <span id="spnhelptext" style="color: #6292AD;">&nbsp;Selected action will be perform one time.</span>       
+                <span id="spninstant" style="color: #6292AD;">&nbsp;Action will be performed instantly, whenever rule matches</span>
+            </div>
+            <div id="show_other" class="set-row_col" style="display:none">
+                <span class="" style="margin-left:25px;">After every </span>
+                <select id="txtRecurPeriod" class="nosearch" style="width: 70px; display: none;">
+                   <% for(var i=1;i<=60;i++) { %>
+                    <option value="<%-i%>"><%-i%></option>
+                   <% } %>
+                </select>
+                <select id="ddlRecurType" class="nosearch" style="width: 120px; display: none;">
+                    <option value="N">Minutes</option>
+                    <option value="H">Hour</option> 
+                    <option value="D">Days</option>
+                    <option value="M">Month</option>
+                    <option value="Y">Year</option>
+                </select>
+                <select id="ddlendless" class="nosearch" style="width: 150px; display: none;">
+                    <option value="0" selected="selected">forever</option>
+                    <option value="1">Not more than</option>
+                </select>
+                <div class="show-recur-period" style="display:none; padding-top:2px;">
+                    <input type="text" value="1" id="txtRecurTimes" name="" placeholder="1" style="width:50px">
+                    <span class="text-times">    time(s) </span> 
+                </div>
+                
+            </div>
+        </div> <!-- set-row  -->
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div style="position:relative;top:-22px; left:25px; width:20px;display: none">
+    <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
+            <i class="icon"></i><em>Following alert will be sent on entered emails for matching contacts</em></span></label>
+</div>
+<h2><i class="icon alerts"></i>Alerts </h2>
+
+<div class="bot_p_box">
+    <div class="bot_p_boxinner">
+
+        <div class="alert_b_content">
+
+            <div class="row ">
+<div style="width: 100%; display: block; height: 30px; padding-left: 20px;"><em style="display: block;">Use a comma to separate email addresses.</em></div>
+                <div class="input-append adv_dd email-addresses  uid-container ">
+                     <div class="inputcont">
+                        <input placeholder="e.g abc@domain.com" id="alertemails" class="header-info" type="text">
+                        <div class="inputlabel salesrep-alert">
+                            <input type="checkbox" value="" class="checkinput alert-salesrep"/>
+                            <label for="alert_salesrep">Alert Sales Rep</label>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div><!-- row -->
+
+            <div class="row">
+                
+                <div class="input-append adv_dd ">
+                    <div class="inputcont">
+                        <textarea id="alertmessage" placehoder="Type your alert message here. You can also insert merge tags in your message."></textarea>
+                        <em>Select merge tags here then copy and paste into your alert message.</em>
+                        <div class="input-append adv_dd " id="wrap_email" style="margin:0px 0px 0px 0px;">
+                            <div class="inputcont">
+                                <input placeholder="{{LASTNAME}}" id="alert_merge_field" class="header-info" type="text" style="width:72%!important;"></div>
+                            <div class="btn-group">
+                                <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div> <!-- sumry -->
+
+
+
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div style="right: 78px;   min-height: 70px; width:70%; display:none; top:150px!important;" class="dddiv" id="div_targets">
+
+</div>

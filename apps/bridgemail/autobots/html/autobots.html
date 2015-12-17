@@ -1,0 +1,68 @@
+<div class="content-inner soruces" id="area_choose_targets" style="margin:  0 0;">
+    <div class="temp-filters clearfix">
+        <h2 id="total_autobots"><strong class="badge">0</strong> <span class='sort-text'></span> autobots found <span class='search-text'></span></h2>
+        <div style=" " class="srt-div">
+            <div class="btn-group tile-list">
+                <button class="btn btn-default view-tiles active showtooltip" style="border-radius: 3px;" data-original-title="Switch to gallery view" type="button"><i class="icon tiles"></i></button>
+                <button class="btn btn-default view-listing active showtooltip" style="border-radius: 3px;display:none;"  data-original-title="Switch to list view" type="button"><i class="icon listing"></i></button>
+            </div>
+            <div class="template-filter_expand right" id="autobots"> <strong class="sort left">Filter</strong>
+                <span class="sortoption_expand active text-truncated showtooltip" data-original-title="Click to expand/collapse"><span class="spntext">All</span> <b class="caret right" style="position:absolute; top:8px; right:435px"> </b></span>
+
+                <ul id="autobots_search_menu" class="breadcrumb template_search_menu" style="display: none;">
+                    <li text-info=" " title="" class=" showtooltip active" data-text="all"><a search="recent" tabindex="-1" data-text="all" >   All </a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a search="recent" tabindex="-1" data-text="E"><i class="icon "><img src="<%=this.options.app.get('path')%>img/mailbot-icon.png" data-text="E" alt=""></i> Email</a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a data-text="A" search="recent" tabindex="-1"><i class="icon "><img data-text="A" alt="" src="<%=this.options.app.get('path')%>img/alertbot-icon.png"></i> Alert</a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a data-text="TG" search="recent" tabindex="-1"><i class="icon "><img data-text="TG" alt="" src="<%=this.options.app.get('path')%>img/tagbot-icon.png"></i> Tag</a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a data-text="SC" search="recent" tabindex="-1"><i class="icon "><img data-text="SC" alt="" src="<%=this.options.app.get('path')%>img/scorebot-icon.png"></i> Score</a></li>
+ 
+                    <li id="li_playing" text-info=" " title="" class=" showtooltip"><a search="recent" class="" tabindex="-1" data-text="R"><i class="icon  "><img alt="" src="<%=this.options.app.get('path')%>img/play-g.png" data-text="R"></i>Playing</a></li>
+                    <li id='li_paused' text-info=" " title="" class=" showtooltip"><a search="recent" class="" tabindex="-1" data-text="D"><i class="icon "><img alt="" data-text="D" src="<%=this.options.app.get('path')%>img/pause-g.png"></i>Paused</a></li>
+                    <li id='li_preset' text-info=" " title="" class=" showtooltip"><a search="recent" class="" tabindex="-1" data-text="PRE"><i class="icon "><img alt="" data-text="D" src="<%=this.options.app.get('path')%>img/mb.png"></i>Preset</a></li>
+                    
+                </ul>
+            </div>
+
+ 
+        <div id="" class="input-append search">         
+            <span class="icon bot"></span><input type="text" id="txtAutobotSearch" placeholder="Search autobots" class="search-control show-image" style="width:300px;"><a class="close-icon" id="clearsearch" style="display:none"></a><div class="btn-group"><button tabindex="-1" class="searchbtn" id="searchbtn"><span class="icon-search icon-white"> 				  </span></button></div></div>
+        <a  data-original-title="Refresh listing" class="refresh_btn showtooltip"><i id="refresh_autobots">Refresh</i></a>
+        <!--  search  --> 
+    </div>
+
+</div>
+<div class="template-container">
+    <div id="autobots_tiles" class=" tileview autobots" style="display: none;">
+        <div class="row-fluid">
+            <ul class="thumbnails">
+            </ul> 
+            <div class="footer-loading" style="display:none">
+                <hr>
+                <div class="gridLoading" ><img src="<%=this.options.app.get('path')%>img/loading.gif" alt=""> <!--span class="gridFooterSpinner"></span>--> </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="autobots_listing" class="target-listing camp_listing" >
+        <div class="bmsgrid">
+            <div class="hDiv">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0">
+                    </table>
+                 
+                </div>
+            </div>
+            <div class="bDiv" style="height: ;">
+                <table cellspacing="0" cellpadding="0" border="0" id="tblAutobots">
+                    <tbody>
+                           
+                    </tbody>
+                </table>
+                
+                <div class="iDiv" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+    <button class="ScrollToTop scrollautobots" type="button" style='display: none'></button>
+</div> 

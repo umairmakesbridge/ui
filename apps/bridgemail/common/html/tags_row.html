@@ -1,0 +1,12 @@
+<% if(this.tagsplit){ %>
+    <% _.each(this.tagsplit,function(value){  %>
+    <% if(this.options.type === "NT" ){ %>
+    <a class='showtooltip tag trim-text' title='Click to View <%- this.options.helpText %> With  <strong>&#39;<%- value %>&#39;</strong> Tag'><%- this.app.decodeHTML(value) %></a>
+    <% }else if(this.options.type==="contacts" ){  %>
+        <li><a class='showtooltip tag trim-text' title="Click to View <%- this.options.helpText %> With  <strong>&#39;<%- value %>&#39;</strong> Tag"><%- this.app.decodeHTML(value) %></a></li>
+    <%} else { %>
+        <a class='showtooltip tag trim-text' title='Click to View <%- this.options.helpText %> With  <strong>&#39;<%- value %>&#39;</strong> Tag'><%- this.app.decodeHTML(value) %></a>
+    <% } %>
+    
+    <%},this)%>
+<% } %>

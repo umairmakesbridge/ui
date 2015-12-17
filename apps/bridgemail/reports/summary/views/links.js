@@ -45,8 +45,9 @@ function (Links,viewLinks,template) {
                  });
                }});
             },
-            viewAll:function(){
+            viewAll:function(ev){
                    
+                    if(this.total <= 0) return;
                     var dialog_width = 80;
                     var dialog_height = $(document.documentElement).height()-200;
                     var dialog = this.options.app.showDialog(
@@ -54,7 +55,7 @@ function (Links,viewLinks,template) {
                                     title:'Top Links',
                                     css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
                                     headerEditable:false,
-                                    headerIcon : 'link2',
+                                    headerIcon : 'link24',
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
                          var that =this;

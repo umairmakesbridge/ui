@@ -8,8 +8,8 @@
  * Changing this file may cause changes in Image Module First Step / Graphics Upload
  */
 
-define(['userimages/collections/userimages','userimages/userimage','text!userimages/html/userimages.html','jquery.bmsgrid','bms-dragfile','jquery-ui'],
-function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryui) {
+define(['userimages/collections/userimages','userimages/userimage','text!userimages/html/userimages.html','bms-dragfile','jquery-ui'],
+function (collectionUserImages,viewUserImage,template,dragfiles,jqueryui) {
         'use strict';
         return Backbone.View.extend({
             className: 'images_grid',
@@ -19,7 +19,12 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                "click #clearsearch":"clearSearch",
                "click .search-graphics-div ._graphics":"TryDialog",
                "click .tip-dialogue .closebtn":"hideURL",
-               "click .ScrollToTop":"scrollToTop"
+               "click .ScrollToTop":"scrollToTop",
+               "click .refresh_btn":function(){
+                    this.app.addSpinner(this.$el);
+                    this.fetchImages();               
+                }
+               
                ///"click .try":"showDialog"
             },
             initialize: function () {
@@ -32,6 +37,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                    this.total = 0;
                    this.offsetLength = 0;
                    this._select_dialog =this.options._select_dialog;
+                   this.callBack = this.options.callBack;
                    this.type = "list";
                    this.total_fetch = 0;
                    this.objUserImages = new collectionUserImages();                              
@@ -41,6 +47,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                    this.search_tags = '';
                    this.order_by = 'updationDate';
                    this.container = "";
+                   this.$('#file_control').attr('title','');
                    this.render();
                   
                                      
@@ -51,14 +58,12 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
               this.stackImages = "";
               this.app = this.options.app;
               this.$el.html(this.template({}));
-              
+              this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
               this.fetchImages();
-              console.log(this.objUserImages);
               if(this.fromDialog){
                 $(".modal-body").scroll(_.bind(this.liveLoading,this));
                 $(".modal-body").resize(_.bind(this.liveLoading,this));
-                
-                ///workspace.;
+               
               }else{
                 $(window).scroll(_.bind(this.liveLoading,this));
                 $(window).resize(_.bind(this.liveLoading,this));
@@ -179,7 +184,12 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                if(!fcount){
                     this.offset = 0;
                     this.app.showLoading('Loading Images....',that.$el);
-              
+                    _.each(that.$el.find('.thumbnails li'),function(val,key){
+                        if(!$(val).hasClass("upload")){
+                            $(val).remove();
+                        }
+                    },this);
+                    
                }
                else{
                     this.offset = this.offset + this.offsetLength;
@@ -203,11 +213,14 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                         success:function(data){
                            
                          _.each(data.models, function(model){
-                           var viewImage = new viewUserImage({model: model,'app':that.app,fromDialog:that.fromDialog,_dialog:that._select_dialog,_select_page:that._select_page});
+                           var viewImage = new viewUserImage({model: model,'app':that.app,fromDialog:that.fromDialog,_dialog:that._select_dialog,_select_page:that._select_page,callBack:that.callBack,parent:that,isClose:that.options.isClose});
                            that.$el.find('.thumbnails').append(viewImage.el);
                            that.listenTo(viewImage, 'tagclick', that.searchTag);
                          });
                          that.app.showLoading(false,that.$el);
+                         /*-----Remove loading------*/
+                                 that.app.removeSpinner(that.$el);
+                               /*------------*/
                          that.total_fetch = that.total_fetch + data.length;
                          that.dragFileSetting();
                          if(that.fromDialog){
@@ -246,7 +259,14 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                         var parents = this.$el.parents(".ws-content");
                     }
              parents.find(".thumbnails").prepend(that.thumbnailHTML(that));
-                that.$(".droppanel").dragfile({
+             /* Providing Hover effect on Browse Buttons*/
+              this.$('#file_control').on('mouseover',_.bind(function(obj){
+				this.$("#list_file_upload").css({'background' : '#00A1DD', 'color' : '#ffffff'});
+			},this));
+               this.$('#file_control').on('mouseout',_.bind(function(obj){
+				this.$("#list_file_upload").css({'background' : '#01AEEE', 'color' : '#ffffff'});
+			},this));
+                that.$(".template-container").dragfile({
                     post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+that.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=230',
                     callBack : _.bind(that.processUpload,that),
                     app:that.app,
@@ -265,10 +285,11 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
               
                 if(headerSet == "0" || this.changecount){
                    this.$el.parents(".ws-content").find(".camp_header .tcount").text(this.total);
+                   this.$el.parents(".ws-content").find(".camp_header .tcount").parent().addClass(this.app.getClickableClass(this.total_count));
                 }
                 this.changecount = false;
                 this.$el.find('#total_graphics .badge').text(this.total);
-                this.dropPanel = this.$(".droppanel");
+                this.dropPanel = this.$(".template-container");
            },
              headerSettingDialog:function(total){
                 if(total)
@@ -278,8 +299,10 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 
                 var headerSet = this.$el.parents(".modal").find(".camp_header .tcount").text();
                 this.$el.parents(".modal").find('.dialog-title').addClass('images-preview').css("margin-left","5px");
-                this.$el.parents(".modal").find('#dialog-title .pointy').remove();
-                
+                this.$el.parents(".modal").find('#dialog-title .pointy').html('');
+                this.$el.parents('.modal').find(".modal-header .edited  h2 a.preview").remove();
+                this.$el.parents(".modal").find("#dialog-title span").removeAttr('data-original-title');
+                this.$el.parents(".modal").find("#dialog-title span").unbind( "click" );
 
                 //this.$el.parents(".modal").find('#dialog-title').append("<span class='icon fav'></span>");
                 
@@ -288,7 +311,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 }
                 this.changecount = false;
                 this.$el.find('#total_graphics .badge').text(this.total);
-                this.dropPanel = this.$(".droppanel");
+                this.dropPanel = this.$(".template-container");
            },
            //Search By Tag function called from multiple trigger events. 
            searchTag:function(text){
@@ -326,7 +349,9 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                  this.$el.parents(".ws-content").find(".camp_header h2").after(header);
                  this.$el.append("<button class='ScrollToTop' style='display:none;' type='button'></button>");  
                  var that = this;
-                 $(".c-current-status,#template_search_menu li a").click(function(){
+                 $(".c-current-status,#template_search_menu li a").click(function(ev){
+                    var target = $.getObj(ev, "ul");
+                   if(!target.find('li').hasClass('clickable_badge')){return false;}
                     that.type = "list";
                     that.search_text = "";
                     that.offset = 0;
@@ -405,14 +430,14 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
               
                 
                var li = "<li class='span3 upload'>"
-                            +"<div class='thumbnail browse graphics'>"
-                               +"<div class='drag'>"
-                                   +"<div class='droppanel'><h4><img src='img/droparrow.png'><br class='clearfix'>Drag images here to upload</h4></div>"
+                            +"<div class='thumbnail browse graphics image-browse'>"
+                               +"<div class='drag image-drag'>"
+                                   +"<div class='droppanel'><h4><img src='"+this.options.app.get("path")+"img/droparrow.png'><br class='clearfix'>Drag images here to upload</h4></div>"
                                    +"<div class='SI-FILES-STYLIZED' style='display:inline-block;position:relative;'>"
                                    +"<label style='width:154px;' class='cabinet'>"
                                    +"<input id='file_control' name='file' class='file' type='file'>"
                                    +"</label>"
-                                   +"<a  class='btn-blue g-btn'><span style='padding: 0px 36px;'>Browse & upload</span><i class='icon update' style='padding-top:15px'></i></a>"
+                                   +"<a  class='btn-blue g-btn' id='list_file_upload'><span style='padding: 0px 36px;'>Browse & upload</span><i class='icon update' style='padding-top:15px'></i></a>"
                                 +"</div>"
                                 +"</div>"
                             +"</div>"
@@ -442,6 +467,9 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 },
                 useImage:function(url){
                     this.$el.find(".search-control").val(url);
+                },
+                ReattachEvents: function(){
+                   this.$el.parents('.modal').find('.c-current-status').show();
                 }
         });    
 });

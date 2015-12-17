@@ -20,6 +20,7 @@ function (template) {
 					var curview = this;
 					var campview = curview.options.camp;
 					var editview = curview.options.editview;
+                                        var camp_parent_obj = curview.options.camp_parent_obj;
                    var target_id = curview.target_id;
 				   var el = curview.$el;
 				   var app = curview.app;
@@ -56,14 +57,27 @@ function (template) {
 										  if(app.checkError(selected_target)){
 											return false;
 										  }
-										  if(selected_target){											  
+										  if(selected_target){
+                                                                                        if(editview.dialog){
+                                                                                            
 											editview.dialog.$el.find("#dialog-title span").html(selected_target.name);
-											campview.states.step3.targetDialog.target_id = selected_target["filterNumber.encode"];											   
+                                                                                       if(camp_parent_obj){
+                                                                                           console.log('direct target')
+                                                                                       }
+                                                                                        else if(campview){
+                                                                                                campview.states.step3.targetDialog.target_id = selected_target["filterNumber.encode"];	
+                                                                                             }
+                                                                                        }
 										  }
                     				 });									
 								}
-								copydialog.hide();
-								campview.loadTargets();
+								copydialog.showPrevious();
+                                                            if(camp_parent_obj){
+                                                                     camp_parent_obj.loadTargets();
+                                                                }	
+                                                            else if(campview){
+                                                                    campview.loadTargets();
+                                                                } 
 							}
 						});
 					}

@@ -1,0 +1,356 @@
+define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylandingpage'],
+        function (template, copyLandingPage) {
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
+            // Landing page row View to show on listing page
+            //
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+            'use strict';
+            return Backbone.View.extend({
+                className: 'landingpage-box',
+                tagName: 'tr',
+                /**
+                 * Attach events on elements in view.
+                 */
+                events: {
+                    'click .copy-page': 'copyPage',
+                    'click .edit-page': 'openPage',
+                    "click .preview-page": 'previewPage',                    
+                    "click .publish-page": 'publishPage',
+                    "click .unpublish-page": 'unpublishPage',
+                    'click .delete-page': 'deletePageDialoge',
+                    'click .link-page' : 'linkPageDialog',
+                    'click .taglink': 'tagClick',
+                    'click .category-click': 'categoryClick',
+                    'click .published':'publishBadgeClick',
+                    'click .draf-badge' : 'draftBadgeClick',
+                    "click .row-move":"addRowToCol2",
+                    "click .row-remove":"removeRowToCol2",
+                    "click .check-box":'checkUncheck'
+                },
+                /**
+                 * Initialize view - backbone
+                 */
+                initialize: function () {
+                    this.template = _.template(template);
+                    this.sub = this.options.sub
+                    this.app = this.sub.app;
+                    this.tagTxt = '';
+                    this.showUseButton = this.options.showUse;
+                    this.showRemoveButton = this.options.showRemove;
+                    this.showCheckbox = this.options.showCheckbox;
+                    this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
+                    this.render();
+                    //this.model.on('change',this.renderRow,this);
+                },
+                /**
+                 * Render view on page.
+                 */
+                render: function () {
+
+                    this.$el.html(this.template({
+                        model: this.model
+                    }));
+                    if(this.showUseButton){
+                        this.$el.attr("data-checksum",this.model.get("pageId.checksum"))
+                    }
+                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.initControls();
+
+                },
+                /*
+                 * 
+                 * @returns Page Status
+                 */
+                getPageStatus: function () {
+                    var value = this.app.getCampStatus(this.model.get('status'));
+                    var tooltipMsg = '';
+                    if (this.model.get('status') == 'D')
+                    {
+                        tooltipMsg = "Click to edit";
+                    }
+                    else
+                    {
+                        tooltipMsg = "Click to preview";
+                    }
+                    return {status: value, tooltip: tooltipMsg}
+                },
+                /*
+                 * 
+                 * @returns Time Show
+                 */
+                getTimeShow: function () {
+                    var datetime = '';
+                    var dtHead = '';
+                    var dateFormat = '';
+                    if (this.model.get('status') == 'P' || this.model.get('status') == 'R')
+                    {
+                        dtHead = 'Publish Date';
+                        datetime = this.model.get('updationDate');
+                    }                                      
+                    else {
+                        dtHead = 'Last Edited';
+                        if (this.model.get('updationDate'))
+                            datetime = this.model.get('updationDate');
+                        else
+                            datetime = this.model.get('creationDate');
+                    }
+                    if (datetime)
+                    {
+                        var date = moment(this.app.decodeHTML(datetime), 'M-D-YY');
+                        dateFormat = date.format("DD MMM, YYYY");
+                        if (this.model.get('status') == 'S' || this.model.get('status') == 'P') {
+                            dateFormat = date.format("DD MMM, YYYY");
+                        }
+                    }
+                    else {
+                        dateFormat = '';
+                    }
+                    return {dtHead: dtHead, dateTime: dateFormat}
+                },
+                /**
+                 * Initializing all controls here which need to show in view.
+                 */
+                initControls: function () {
+                    if (this.sub.searchTxt) {
+                        if(this.sub.actionType=="T"){
+                            this.$(".taglink").highlight($.trim(this.sub.searchTxt));
+                        }
+                        else if(this.sub.actionType=="C"){
+                            this.$(".category-click").highlight($.trim(this.sub.searchTxt));
+                        }
+                        else {                             
+                            this.$(".edit-page").highlight($.trim(this.sub.searchTxt));
+                            this.$(".taglink").highlight($.trim(this.sub.searchTxt));
+                            this.$(".category-click").highlight($.trim(this.sub.searchTxt));
+                        }
+                    } else {
+                        this.$(".taglink").highlight($.trim(this.sub.tagTxt));
+                    }
+
+                },
+                publishPage: function(dialog){
+                    var element =  this.$el.parents(".ws-content.active");
+                    if(dialog.$el){
+                        element = dialog.$el;
+                    }
+                    this.app.showLoading("Publishing landing page...",element);
+                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
+                    $.post(URL, {type:'changeStatus',pageId:this.model.get("pageId.encode"),status:'P'})
+                    .done(_.bind(function(data) {                  
+                           this.app.showLoading(false,element);   
+                           var _json = jQuery.parseJSON(data);        
+                           if(!_json.err){
+                               if(dialog.$el){
+                                   dialog.$(".pointy").remove();
+                                   dialog.$("#page_link").val(this.app.decodeHTML(_json[1]));
+                                   dialog.$(".copy-message").show();
+                                   dialog.$(".btn-save").remove();
+                                   if(dialog.$("#email-template-iframe").length){
+                                    dialog.$("#email-template-iframe").attr("src",dialog.$("#email-template-iframe").attr("src"));
+                                   }
+                               }
+                               this.app.showMessge("Landing page is published.");
+                               this.sub.headBadge();                                                                
+                               this.sub.getLandingPages();                                                                
+                           }
+                           else{
+                               this.app.showAlert(_json.err1,$("body"),{fixed:true}); 
+                           }
+                   },this));
+                },
+                unpublishPage: function(){
+                    this.app.showLoading("Unpublishing landing page...",this.$el);
+                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
+                    $.post(URL, {type:'changeStatus',pageId:this.model.get("pageId.encode"),status:'D'})
+                    .done(_.bind(function(data) {                  
+                           this.app.showLoading(false,this.$el);   
+                           var _json = jQuery.parseJSON(data);        
+                           if(_json[0]!=='err'){
+                              this.app.showMessge("Landing page is Unpublished.");
+                              this.sub.headBadge();                                                                
+                              this.sub.getLandingPages();                                                                
+                           }
+                           else{
+                              this.app.showAlert(_json[0],$("body"),{fixed:true}); 
+                           }
+                   },this));
+                },
+                openPage: function () {
+                    var editable = true;
+                    if(this.model.get("status")!=="D"){
+                        editable = false;
+                    }                
+                    this.app.mainContainer.openLandingPage({"id":this.model.get("pageId.encode"),"checksum":this.model.get("pageId.checksum"),"parent":this.sub,editable:editable});
+                },
+                copyPage: function ()
+                {
+                    var page_id = this.model.get('pageId.encode');
+                    var dialog_title = "Copy Landing Page";
+                    var dialog = this.app.showDialog({title: dialog_title,
+                        css: {"width": "600px", "margin-left": "-300px"},
+                        bodyCss: {"min-height": "260px"},
+                        headerIcon: 'copycamp',
+                        buttons: {saveBtn: {text: 'Create Page'}}
+                    });
+                    this.app.showLoading("Loading...", dialog.getBody());
+                    this.sub.total_fetch = 0;
+                    //require(["landingpages/copylandingpage"], _.bind(function (copyLandingPage) {
+                        var mPage = new copyLandingPage({page: this, copydialog: dialog});
+                        dialog.getBody().html(mPage.$el);
+                        mPage.init();
+                        dialog.saveCallBack(_.bind(mPage.copyPage, mPage));
+                    //}, this));
+                },
+                previewPage: function () {                    
+                    var camp_obj = this.sub;                                        
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = camp_obj.app.showDialog({title: 'Preview of landing page &quot;' + this.model.get('name') + '&quot;',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'dlgpreview',
+                        bodyCss: {"min-height": dialog_height + "px"}
+                    });
+                    this.app.showLoading("Loading Page...", dialog.getBody());
+                    var preview_url =  this.app.decodeHTML(this.model.get('previewURL')).replace("http","https");
+                    require(["common/templatePreview"], _.bind(function (templatePreview) {
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
+                        dialog.getBody().html(tmPr.$el);
+                        tmPr.init();
+                    }, this));
+                    dialog.$el.find(".pointy").remove();
+                    if(this.model.get("status")=="D"){
+                        var publishButton = $(' <div class="pointy" style="display:inline-block !important;opacity:1;position:absolute;margin-left:10px"> <a class="icon play24 showtooltip" title="Publish Landing Page" ></a> </div>');
+                        dialog.$el.find("#dialog-title").append(publishButton);
+                        publishButton.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                        publishButton.find(".play24").click(_.bind(this.publishPage,this,dialog));
+                    }
+                },
+                linkPageDialog: function(){                    
+                    var dialog_title = "Link of &quot;" + this.model.get('name') + "&quot;";
+                    var config = {title: dialog_title,
+                        css: {"width": "600px", "margin-left": "-300px"},
+                        bodyCss: {"min-height": "140px"},
+                        headerIcon: 'link'
+                    };
+                    if(this.model.get("status")=="D"){
+                        config.buttons ={saveBtn: {text: 'Publish', btnicon: 'check'}};                        
+                    }
+                    var dialog = this.app.showDialog(config);                    
+                    var html = '<div style="margin-top:0px;" class="blockname-container">'
+                        html += '<div class="label-text">Page Link:</div>'
+                        html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'  
+                        if(this.model.get("status")=="D"){
+                            html += '<input type="text" id="page_link" value="Page is not published yet." style="width:558px" readonly="readonly">'
+                        }
+                        else{
+                            html += '<input type="text" id="page_link" value="'+this.app.decodeHTML(this.model.get("publishURL"))+'" style="width:558px" readonly="readonly">'
+                        }
+                        html += '</div></div>'
+                        var message_display =(this.model.get("status")=="D")?"none":"block";
+                        html += '<div class="copy-message" style="font-size: 12px;margin-top:10px;display:'+message_display+'">'                        
+                        var key = navigator.platform.toUpperCase().indexOf("MAC")>-1 ? "Command" : "Ctrl";                        
+                        html += '<i >Press '+key+' + C to copy link.</i>'
+                        
+                        html += '</div> </div>'
+                        
+                        html = $(html);
+                        dialog.getBody().append(html);
+                        dialog.getBody().find("#page_link").select().focus();
+                        dialog.getBody().find("#page_link").mousedown(function(event){
+                            $(this).select().focus();
+                             event.stopPropagation();
+                             event.preventDefault();
+                        })
+                        dialog.saveCallBack(_.bind(this.publishPage, this, dialog));
+                        
+                },
+                deletePageDialoge: function () {                                      
+                    var page_id = this.model.get('pageId.encode')
+                    if (page_id) {
+                        this.app.showAlertDetail({heading: 'Confirm Deletion',
+                            detail: "Are you sure you want to delete this page?",
+                            callback: _.bind(function () {                                
+                                this.deletePage();
+                            }, this)},
+                        $('body'));                      
+                    }
+                },
+                deletePage: function ()
+                {
+                    var camp_obj = this.sub;                   
+                    var URL = '/pms/io/publish/saveLandingPages/?BMS_REQ_TK=' + camp_obj.app.get('bms_token');
+                    camp_obj.app.showLoading("Deleting Page...", camp_obj.$el.parents(".ws-content.active"), {fixed: 'fixed'});
+                    $.post(URL, {type: 'delete', pageId: this.model.get('pageId.encode')})
+                            .done(_.bind(function (data) {
+                                this.app.showLoading(false, camp_obj.$el.parents(".ws-content.active"));
+                                var _json = jQuery.parseJSON(data);
+                                if(this.app.checkError(_json)){
+                                 return false;
+                                 }
+                                if (_json[0] !== "err") {
+                                    this.app.showMessge("Page has been deleted successfully!");                                    
+                                    this.$el.fadeOut(_.bind(function(){
+                                       this.$el.remove();
+                                    },this));    
+                                    camp_obj.headBadge();
+                                    var total_count = camp_obj.$("#total_templates .badge");
+                                    total_count.html(parseInt(total_count.text())-1);
+                                    if ($("#wstabs li[workspace_id=landingpage_" + this.model.get('pageId.checksum') + "]").length) {
+                                        var wp_id = $("#wstabs li[workspace_id=landingpage_" + this.model.get('pageId.checksum') + "]").attr('id').split("_")[2];
+                                        $("#wp_li_" + wp_id + ",#workspace_" + wp_id).remove();
+                                    }
+                                }
+                                else {
+                                    camp_obj.app.showAlert(_json[1], camp_obj.$el.parents(".ws-content.active"));
+                                }
+
+                            }, this));
+                },
+                tagClick: function (obj) {
+                    this.sub.taglinkVal = true;
+                    this.sub.actionType = "T";
+                    this.tagTxt = $(obj.currentTarget).text();
+                    this.app.initSearch(obj, this.sub.$el.find("#list-search"));
+                },
+                categoryClick: function(obj){
+                    this.trigger('categorySearch',$(obj.target).text());                    
+                },
+                publishBadgeClick:function(){
+                    this.$el.parents(".ws-content.active").find("[data-search='P']").click();
+                },
+                draftBadgeClick:function(){
+                    this.$el.parents(".ws-content.active").find("[data-search='D']").click();
+                },
+                addRowToCol2:function(){                    
+                    if(this.showUseButton){
+                        this.$el.fadeOut("fast",_.bind(function(){                            
+                            this.sub.addToCol2(this.model);    
+                            this.$el.hide();                            
+                        },this));
+                    }
+                },
+                removeRowToCol2:function(){
+                    if(this.showRemoveButton){
+                        this.$el.fadeOut("fast",_.bind(function(){                        
+                            this.sub.adToCol1(this.model);    
+                            this.$el.remove();
+                        },this));
+                    }
+                },
+                checkUncheck:function(obj){
+                    var addBtn = $.getObj(obj,"a");     
+                    if(addBtn.hasClass("unchecked")){
+                        addBtn.removeClass("unchecked").addClass("checkedadded");               
+                    }
+                    else{
+                         addBtn.removeClass("checkedadded").addClass("unchecked"); 
+                    }                    
+                    if(this.sub.createPageChart){
+                        this.sub.createPageChart();
+                    }
+                }
+
+            });
+        });

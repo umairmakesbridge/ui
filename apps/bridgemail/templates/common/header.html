@@ -1,52 +1,58 @@
-<nav id="dashnav">
-            
+<nav id="dashnav" style="z-index:1000!important">
+
     <ul class="leftnav">
         <li class="icon-menu"><a ><i class="icon menu"></i></a></li>
         <li><a  class="logo">  Makesbridge</a></li>
-           <li class="ddmenu"><a ><i  class="icon campaigns"></i><span>Campaigns</span></a>
-             <ul class="submenu firstMenu">
-                <li class="firstblock campaigns-li"><a><i class="icon massemail"></i><span>Campaigns</span></a></li>
-                <li class="add-template-li"><a><i class="icon template_m"></i><span>Template Gallery</span></a></li>
-                <li class="image-gallery-li"><a><i class="icon image-gallery"></i><span>Image Gallery</span></a></li>
-                <li class="reports-li"><a><i class="icon reports_m"></i><span>Reports</span></a></li>
-                <!--<li><a><i class="icon workflow"></i><span>Workflow</span></a></li>
-                <li><a><i class="icon salesrep"></i><span>1-1 Messages</span></a></li>-->
-            </ul>
-        </li>
-        <li class="ddmenu"><a ><i class="icon contacts"></i><span>About</span></a>
-            <ul class="submenu secondMenu">
-                <li class="contacts-li"><a><i class="icon subscribers"></i><span>Contacts</span></a></li>
-                <li class="csv-li"><a><i class="icon csv"></i><span>Upload CSV</span></a></li>                
-                <!--<li><a><i class="icon sf"></i><span><em>Import from</em> Salesforce</span></a></li>
-                <li><a><i class="icon ns"></i><span><em>Import from</em> Netsuite</span></a></li>-->
-            </ul>
-        </li>
     </ul>
+    <div class="sc-links">
+         
+        <a class="addbtn quick-add"><i class="icon plusicon"></i></a>
+        <a class="messagesbtn"><i class="icon messagesicon"></i><sup>0</sup></a>
+        <a class="announcementbtn " style="display:none;"><i class="icon announcementicon"></i></a>
+        <a class="tipntest-toggle tipntestlistings" style="height: 30px; left: 107px; background: transparent none repeat scroll 0% 0%; top: -3px;"><i class="icon" style="height: 30px; width: 30px;"></i></a>
+       <!-- <a class=""><i class="icon announcementicon"></i></a>-->
 
-            <ul class="rightnav">
-    <li class="logout"><a ><i class="icon logout"></i><span>Logout</span></a>
+
+    </div>
+
+    <ul class="rightnav">
+        <li class="logout"><a ><i class="icon logout"></i><span>Logout</span></a>
             <div class="lo-confirm">
-            <p>Are you sure, you want to logout?</p>
-            <a href="/pms/Logout.jsp" class="lo-yes">Yes</a>
-            <a  class="lo-no">No</a>
+                <p>Are you sure, you want to logout?</p>
+                <a href="/pms/Logout.jsp" class="lo-yes">Yes</a>
+                <a  class="lo-no">No</a>
             </div>
-    </li>
-        <li class="profiledd">
-            <a  class=""><strong class="user-name">&nbsp;</strong><!-- <b class="caret"></b>--><span class="profile"><img src="images/avatar.jpg" alt=""/></span></a>
+        </li>
+        <li class="profiledd" >
+            <a  class=""><strong class="user-name">&nbsp;</strong><!-- <b class="caret"></b>--><span class="profile"><img src="<%- this.app.get('path')%>images/avatar.jpg" alt=""/></span></a>
             <ul class="submenu">
-                    <li><a><i class="icon myaccount"></i><span>My Account</span></a></li>
-                    <li><a><i class="icon manage"></i><span>Manage Sub Accounts</span></a></li>
-                    <li><a><i class="icon settings"></i><span>Settings</span></a></li>
+                <li><a><i class="icon myaccount"></i><span>My Account</span></a></li>
+                <li><a><i class="icon manage"></i><span>Manage Sub Accounts</span></a></li>
+                <li><a><i class="icon settings"></i><span>Settings</span></a></li>
             </ul>
         </li>
 
     </ul>
+    <div class="overlay overlay-notification" style="display:none">
+
+    </div>
+   
+    <div class="announcement_dialogue" style="display:none!important;">
+        <a class="closebtn-gray"></a>
+        <em class="date">&nbsp;</em> 
+        <p class="sys-maintain-message">Loading....</p>	
+    </div>
 
 </nav>
+ <div class="messages_dialogue dropdown-nav" style="display:none;">
+
+    </div>
+  <div class="add_dialogue" style="min-height: 300px; top:-300px;display:block!important;z-index: 999!important">  
+        <div style="position:absolute; left:45%;top:47%; display:block;"><img src="<%- this.app.get('path')%>img/loading.gif"/></div>
+
+    </div> <!--  add_dialogue  -->
 
 
 
 
-   
-           
-          
+

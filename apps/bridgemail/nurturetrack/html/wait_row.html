@@ -1,0 +1,33 @@
+<div class="accordion-heading collapse-handle">
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        <span style="float:left">Wait <span class="wait-container"></span></span>
+        <% if(this.editable===true) { %>
+            <i title="Edit" class="icon editnt edit-message showtooltip"></i>
+        <% } %>
+        <b class="caret"></b>
+    </a>
+</div>
+<div class="accordion-body collapse in collapse-body" style="height:0px;display:none">
+    <div class="accordion-inner" style="height:38px">
+
+        <div class="btn-group schedule-group" data-toggle="buttons-radio" style="margin-right:10px;">
+            <button class="btn active" rel="days">Days</button>
+            <button class="btn" rel="date">Date</button>
+        </div>
+        <div style="display: inline-block" class="days-select wait-select">
+            <input type="text" id="waitday" value="1" style=" width:50px;" maxlength="3" />            
+        Day(s)
+        </div>
+        <div  style="display:none;height:23px;" class="date-select wait-select" >
+            <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
+                <input type="text" id="waitdatetime" placeholder="Select Date..." />        
+            </div>
+        </div>     
+        <div class="btns">
+            <% if(this.editable===true) { %>
+            <a class="btn-red left delete-row" ><span class="right">Delete</span><i class="icon delete left"></i></a>                    
+            <a class="btn-green left save-wait"><span>Save</span><i class="icon save"></i></a>
+            <% } %>
+        </div>
+    </div>
+</div>

@@ -29,10 +29,14 @@ function (template,Contacts,viewContact) {
                  this.total_fetch  = 0;
                  this.total = 0;
                  this.timer = 0;
+                 this.botId = this.options.botId || null;
+                 this.trackId = this.options.trackId || null;
                  this.render();
             },
             render: function () {
               this.$el.html(this.template());
+               
+              
               this.loadContacts();
               
               if(this.where != "page"){
@@ -70,12 +74,9 @@ function (template,Contacts,viewContact) {
                   this.$el.find('#tblcontacts tbody .load-tr').remove();
                   this.$el.find('#tblcontacts tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=4><div class='no-contacts' style='display:none;margin-top:15px;padding-left:43%;'>No contacts founds!</div><div class='loading-contacts' style='margin-top:45px'></div></td></tr>");
                   this.options.app.showLoading("&nbsp;",this.$el.find('#tblcontacts tbody').find('.loading-contacts'));
-                 
+                   
                   var that = this;
                   _data['offset'] = this.offset;
-                  _data['responderType'] = this.responderType;
-                  _data['type'] = this.type ;
-                  _data['campNum'] = this.campNum ;
                   if(this.options.article)
                     _data['articleNum'] = this.options.article;
                   
@@ -84,7 +85,34 @@ function (template,Contacts,viewContact) {
                       _data['searchText'] = this.searchText;
                        that.showSearchFilters(this.searchText);
                     }
-                  this.contacts_request = this.objContacts.fetch({data:_data,success:function(data1){
+                    
+                        if((this.options.type=="C" || this.options.type == "P") && this.options.trackId){
+                            this.type = this.options.type;
+                           // _data['responderType'] = this.responderType;
+                            //_data['type'] = this.type ;
+                            //_data['campNum'] = this.campNum ;
+                            
+                            this.objContacts.url = "/pms/io/trigger/getNurturePopulation/?BMS_REQ_TK="+this.options.app.get('bms_token');
+                            _data['type'] = "get";
+                            _data['trackId'] = this.options.trackId;
+                            _data['triggerOrder'] = this.options.triggerOrder;
+                            _data['status'] = this.type;
+                        }else if((this.options.type=="C" || this.options.type == "P") && this.options.botId){
+                            this.type = this.options.type;
+                            
+                            this.objContacts.url = "/pms/io/trigger/getAutobotPopulation/?BMS_REQ_TK="+this.options.app.get('bms_token');
+                            _data['type'] = "get";
+                            _data['botId'] = this.options.botId;
+                           // _data['triggerOrder'] = this.options.triggerOrder;
+                            _data['status'] = this.type;
+                        }else{
+                        _data['responderType'] = this.responderType;
+                        _data['type'] = this.type ;
+                        _data['campNum'] = this.campNum ;
+                     
+                        }
+                     
+                   this.contacts_request = this.objContacts.fetch({data:_data,success:function(data1){
                       that.$el.find('#total_subscriber .badge').text(that.options.app.addCommas(that.objContacts.total));  
                       that.offsetLength = data1.length;
                        that.total_fetch = that.total_fetch + data1.length;
@@ -96,7 +124,7 @@ function (template,Contacts,viewContact) {
                            that.$el.find('#tblcontacts tbody #loading-tr').remove();
                       }
                       _.each(data1.models, function(model){
-                           that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,article:that.options.article,app:that.options.app,type:that.options.type,campNum:that.campNum,url:that.options.url}).el);
+                           that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,article:that.options.article,app:that.options.app,type:that.options.type,campNum:that.campNum,url:that.options.url,botId:that.botId,trackId:that.trackId}).el);
                        });
                        if(that.where != "page"){
                            
@@ -109,7 +137,7 @@ function (template,Contacts,viewContact) {
                                 if(data1.models.length != 0)
                                     that.$el.find(".stats_listing").css({"height":"357px", "overflow-y":"auto"});
                              if(height > 375){
-                                    that.$el.find(".stats_listing").find('.stats-scroll').remove();
+                              that.$el.find(".stats_listing").find('.stats-scroll').remove();
                               that.$el.find(".stats_listing").append("<button class='stats-scroll ScrollToTop' type='button' style='display: none; position:absolute;bottom:5px;right:20px;'></button>") ;
                              
                              }
@@ -139,6 +167,7 @@ function (template,Contacts,viewContact) {
                       });
                      
                   }});
+              
             },
             search:function(ev){
               this.searchText = '';
@@ -153,7 +182,7 @@ function (template,Contacts,viewContact) {
                var text = $(ev.target).val();
                text = text.replace('Sale Status:', '');
                text = text.replace('Tag:', '');
-               
+                
                    
                if (code == 13 || code == 8){
                  that.$el.find('#clearsearch').show();
@@ -221,6 +250,14 @@ function (template,Contacts,viewContact) {
                    inview.removeAttr("data-load");
                     this.loadContacts(this.offsetLength);
                 }  
+            },
+            getContactWidth:function(){
+                   if(this.options.type == "UN" || this.options.type=="CB" || this.options.type=="SP"){
+                    return "width:565px;";
+                   }else{
+                     return "width:465px;";  
+                   }
+                   
             }
            
         });

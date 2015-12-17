@@ -1,0 +1,91 @@
+<div class="filter_pop">
+    <a class="closebtn"></a>
+    <h3>Advanced Filter</h3>
+    <h4>Choose Filter</h4>
+    <select class="select-type" data-placeholder="Choose Event Type...">
+        <option value="">All</option>
+        <option value="N" <% if(this.filter.filterType=='N'){ print('selected="selected"') } %>>Campaign </option>
+        <option value="W" <% if(this.filter.filterType=='W'){ print('selected="selected"') } %>>Workflow  </option>
+        <option value="T" <% if(this.filter.filterType=='T'){ print('selected="selected"') } %>>Nurture Track  </option>
+        <option value="B" <% if(this.filter.filterType=='B'){ print('selected="selected"') } %>>Autobot  </option>
+        <option value="A" <% if(this.filter.filterType=='A'){ print('selected="selected"') } %>>Auto Trigger   </option>
+        <option value="SM" <% if(this.filter.filterType=='SM'){ print('selected="selected"') } %>>Single Message  </option>
+        <option value="SU" <% if(this.filter.filterType=='SU'){ print('selected="selected"') } %>>Signup Form  </option>
+    </select>
+    <select class="select-message" data-placeholder="Choose Message Type..." style="display: none">
+        <option value="">None </option>
+        <option value="">Message 1 </option>
+        <option value="">Message 2 </option>
+    </select>
+    <br/><br/>
+    <h4 class="activity-heading">Choose Activity Type &nbsp;<a class="check-all">check all</a>&nbsp;|&nbsp;<a class="uncheck-all">un-check all</a></h4>
+    <ul class="checklist all-events">
+        <li class=" btnunchecked">
+            <input type="checkbox" id="act-Sent" class="checkpanel camp-event" value="CS" name="" <% if(this.filter.filerEvents.indexOf('CS')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Sent"><span class="social-icon fb"></span><strong>Sent</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Open"  class="checkpanel camp-event" value="OP" name=""  <% if(this.filter.filerEvents.indexOf('OP')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Open"><span class="social-icon tw"></span><strong>Open</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Click"  class="checkpanel camp-event" value="CK" name=""  <% if(this.filter.filerEvents.indexOf('CK')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Click"><span class="social-icon in"></span><strong>Click</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Views"  class="checkpanel camp-event" value="WV" name=""  <% if(this.filter.filerEvents.indexOf('WV')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Views"><span class="social-icon pi"></span><strong>Page Views</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Converted"  class="checkpanel camp-event" value="CT" name=""  <% if(this.filter.filerEvents.indexOf('CT')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Converted"><span class="social-icon pi"></span><strong>Converted</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Bounced"  class="checkpanel camp-event" value="CB" name=""  <% if(this.filter.filerEvents.indexOf('CB')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Bounced"><span class="social-icon gp"></span><strong>Bounced</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Unsubscribed"  class="checkpanel camp-event" value="UN" name=""  <% if(this.filter.filerEvents.indexOf('UN')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Unsubscribed"><span class="social-icon gp"></span><strong>Unsubscribed</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Suppressed"  class="checkpanel  camp-event" value="SP" name=""  <% if(this.filter.filerEvents.indexOf('SP')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Suppressed"><span class="social-icon gp"></span><strong>Suppressed</strong></label>
+        </li>       
+        <li class="act-wf">
+            <input type="checkbox" id="act-Alert"  class="checkpanel" value="A" name=""  <% if(this.filter.filerEvents.indexOf('A')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Alert"><span class="social-icon gp"></span><strong>Alert</strong></label>
+        </li>
+        <li class="act-wf">
+            <input type="checkbox" id="act-scorechange"  class="checkpanel" value="SC" name=""  <% if(this.filter.filerEvents.indexOf('SC')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Alert"><span class="social-icon gp"></span><strong>Score Change</strong></label>
+        </li>
+    </ul>
+    <ul class="checklist singleMessage-events" style="display: none">
+        <li class="">
+            <input type="checkbox" id="act-Sent" class="checkpanel" value="MT" name="" <% if(this.filter.filerEvents.indexOf('MT')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Sent"><span class="social-icon fb"></span><strong>Sent</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Open"  class="checkpanel" value="MO" name=""  <% if(this.filter.filerEvents.indexOf('MO')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Open"><span class="social-icon tw"></span><strong>Open</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Click"  class="checkpanel" value="MC" name="" <% if(this.filter.filerEvents.indexOf('MC')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Click"><span class="social-icon in"></span><strong>Click</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Views"  class="checkpanel" value="MS" name=""  <% if(this.filter.filerEvents.indexOf('MS')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />
+            <label for="act-Views"><span class="social-icon pi"></span><strong>Supress</strong></label>
+        </li>
+       
+    </ul>
+    <div class="clearfix"></div>     
+    <br/> 
+    <div class="btns">
+        <a class="btn-green apply-filter"><span>Filter</span><i class="icon filter"></i></a>
+        <a class="btn-gray btn-cancel"><span>Cancel</span><i class="icon cross"></i></a>
+    </div>
+
+    <div class="clearfix"></div>
+</div>

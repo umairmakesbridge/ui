@@ -1,0 +1,78 @@
+<td width="100%">
+    <div>
+        <div class="name-type">
+            <h3><a   class="view-profile showtooltip" data-original-title="Click to view profile detail"><%=this.getFullName()%></a> 
+            </h3>
+            <%if(this.model.get('salesStatus') !=""){%> <a class="statusdd color2 salestatus showtooltip" data-original-title="Click to view contacts with same sale status"><%=this.model.get('salesStatus')%> </a><%}%>
+            <div class="tags tagscont">
+                <ul>
+                    <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                    <li><a  class="tag showtooltip" data-original-title="Click to view contacts with same tag"><%- this.app.decodeHTML(t) %></a> </li>
+                    <% },this)%> 
+                </ul>
+            </div>
+        </div>
+    </div>
+</td>
+<%if(this.options.type != "autobots"){ %>
+<td width="90px">
+    
+     
+    <div>
+        <div class="colico open showtooltip" data-original-title="Unique campaigns open count">
+            <strong><span><em>Opens</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].openCount)%></span></strong>
+        </div>
+    </div>
+</td>
+<td width="90px">
+    <div>
+        <div class="colico click showtooltip" data-original-title="Unique campaign links clicked count">
+            <strong><span><em>Clicks</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].clickCount)%></span></strong>
+        </div>
+    </div>
+</td>
+<td width="90px">
+    <div>
+        <div class="colico pgview">
+            <strong><span><em>Page Views</em>
+                    <% if(this.model.get('subscriptionData')[0].pageViewsCount !="0") { %>
+                        <%if(this.options.type != "autobots"){ %>
+                            <% if(!this.options.isSubscriber){ %>
+                            <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%></b></a>
+                            <% } else{%>
+                            <%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%>
+                            <% } %>
+                           <%}%>
+                    <% } else { %>
+                    <%=this.model.get('subscriptionData')[0].pageViewsCount%> 
+                    <% } %>
+                </span></strong>
+        </div>
+    </div>
+</td>
+<%}else{ var data = this.model.get('autobotData')[0];%>
+  <td width="120px">
+     
+        <div class="colico   recur showtooltip " data-original-title="How many time action repeated">
+            <strong><span><em>Match</em><%=this.options.app.addCommas(data.recurCount)%> times</span></strong> 
+        </div>
+     
+</td>
+   
+<%}%>
+
+<% if(this.options.type != "tag") { %>
+<% if(this.options.type != "target") { %>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time show">
+            <%if(this.options.type == "autobots"){%>
+                  <strong><span><em><%=this.options.sentAt%></em><%=this.getFullDate(data.execDate)%></span></strong>
+            <%}else{%>
+                  <strong><span><em>Subscribed on</em><%=this.dateSetting(this.model.get('creationDate'),"-")%></span></strong> 
+            <%}%>
+        </div>
+    </div>
+</td>
+<% } %>
+<% } %>

@@ -1,0 +1,44 @@
+ 
+<div class="ui-accordion">
+    <h3 class="ui-accordion-header" role="tab" id="hImportAll">
+        <input type="radio" class="radiopanel " value="importall" name="options_hr">
+        <span class="left" style="width:30%;"> Import all Google contacts</span> 
+
+
+    </h3>
+</div> 
+
+<div  class="ui-accordion">
+    <h3 class="ui-accordion-header" aria-controls="pn" style="padding:2px;"> 
+
+        <input type="radio" class="radiopanel" value="sheet" name="options_hr" id="">
+        <span class="left" style="width:30%;">Import Google spreadsheet </span> 
+        <div id="highrise-group-search" class="input-append search" style="margin:2px 0px 0px 0px;">   
+
+    </h3>
+
+    <div class="accordion-body" id="panel_0" style="min-height: 100px!important; padding:20px 0px 0px 20px">
+        <div class="uid-container" style="display:inline-block;">
+            <select id="ddlspreadsheet" class="">
+                <option> Select spreadsheet </option>
+                <% _.each(this.options.spreadSheet,function(elems,idx){
+                _.each(elems,function(elem,idx){%>
+                <option value="<%=elem.id%>"> <%=elem.title%></option>
+
+                <%})})%>
+            </select>
+        </div>
+        <div class="uid-container container1" style="display:inline-block; position: relative;">
+            <select id="ddlworksheet" style="display: none;" class="">
+
+            </select>
+        </div>
+        <div>
+            <div class="bmsgrid" id="sampletable" style="overflow: inherit; position: inherit; display:none;">
+
+            </div>
+
+        </div>
+
+    </div>    
+</div>

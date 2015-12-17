@@ -18,11 +18,13 @@ String message = "";
 			case 1 : message="You are here due to one of the following reasons:<br><br>";
 			message+="1. Your login session has expired.<br>";
 			message+="2. You are trying to access the page without logging-in.<br>";
-			message+="3. You did not follow the provided link to access this page and are trying to reach here by invalid means.";
+			message+="3. You did not follow the provided link to access this page.";
 			break;
+
 			case 2 : message="Invalid Credentials:<br>";
 			message+=" You have entered invalid user ID and(or) password.<br>";
 			break;
+
 			case 3 : message="";break;
 			case 4 : message="Invalid change password request. Please follow the instructions sent to the email address you provided during change password request.";
 				 break;
@@ -46,13 +48,13 @@ String message = "";
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Makesbridge Login</title>
-<link href="beta/css/bootstrap_login.css" rel="stylesheet">
-<link href="beta/css/dash.css" rel="stylesheet">
+<link href="mks/css/login.css?bust=1" rel="stylesheet">
 <style>
     center{
         display: none !important;
     }
 </style>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script language="javascript">
 function validate() {
    var isOK=true,errorMessage="Please correct following(s)\n";
@@ -88,14 +90,27 @@ function isValidPass(string) {
   else
         return false;
 }
+$(document).ready(function(){
+    $('.oldui').delay(2000).slideDown(500);
+	
+	$('.closebtn').click(function() {
+    	$('.oldui').slideUp(500);
+	});
+
+
+});
 </script>
 
 </head>
 
 <body class="login" onLoad="document.passwdLogin.userid.focus();">
+    <div class="oldui" style="display:none;">
+                Looking for old UI? <a href="https://www.bridgemailsystem.com/pms/login.jsp" class="here">Click Here</a>
+                <a class="closebtn"></a>
+        </div>	
     <div class="header">
     <div class="makesbridge">
-        <img src="beta/images/makesbridge.png" alt="" />                       
+        <img src="mks/images/makesbridge.png" alt="" />                       
     </div>
     </div>
 <div class="logincontnet">
@@ -113,12 +128,11 @@ function isValidPass(string) {
                 <li>Connections</li>
              </ul>
                 </div>
-                <img src="beta/images/mbs.png" alt=""/>
+                <img src="mks/images/mbs.png" alt=""/>
 
         </div> <!-- features login  -->
 
         <form name="passwdLogin" action="loginHandler.jsp" method="POST" onsubmit="javascript:return validate();">
-            
           
             <div class="loginform">
 
@@ -140,6 +154,9 @@ function isValidPass(string) {
                     <input autocomplete="off" input name="password" type="password" />
                 </div>
 
+<div align="center" style="color: rgb(255, 255, 255); text-align: left; font-size: 12px; padding: 10px 0px 0px;" colspan="3">By clicking Login you agree to Makesbridge 
+<a href="http://www.makesbridge.com/index.php?option=com_content&amp;view=article&amp;id=130&amp;Itemid=137" style="color:#fff; text-decoration:underline;" target="_blank">Terms of Service</a>
+</div>
                     <button class="loginbtn" type=submit name="submit"><span>Login</span> <i class="icon next"></i></button>
 
             </div><!-- login form  -->
@@ -150,7 +167,7 @@ function isValidPass(string) {
     <div class="content-l">        		
         <p><a href="passwordRequest.jsp?<%=WebSecurityManager.getCSRFToken_HREF(session)%>">Forgot your password?</a> &nbsp;&nbsp;&nbsp;&nbsp;  |  &nbsp;&nbsp;&nbsp;&nbsp;  
             <a href="requestForm.jsp?<%=WebSecurityManager.getCSRFToken_HREF(session)%>">Forgot your User ID?</a></p>                
-        <p>Copyright &copy; 2002 - 2014 Makesbridge Technologies, Inc. All rights reserved.</p>        	
+        <p>Copyright &copy; 2002 - 2015 Makesbridge Technologies, Inc. All rights reserved.</p>        	
     </div>
 </div>
 <% String sysAdminMessage = SysAdminManager.getLoginPageMessage();

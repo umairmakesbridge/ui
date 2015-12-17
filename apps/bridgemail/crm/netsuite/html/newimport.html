@@ -1,8 +1,8 @@
 <div class="wizard-steps step1">
-    <h3 class="center_h"> Specify Target List  </h3>
+    <h3 class="center_h">  Tell us where you'd like us to put your Netsuite contacts    </h3>
     <div class="temp-filters clearfix" style="margin:0px;">      
         <h2 class="header-list">                                    
-            <strong class="left" style="font-size:15px"> Choose From Existing List</strong>
+            <strong class="left" style="font-size:15px"> Choose existing list</strong>
             <div class="iconpointy" style="top:3px;">
                 <a class="btn-green add-list" title="Create List"><i class="icon plus left"></i></a>
             </div>
@@ -20,7 +20,7 @@
 
 </div>
 <div class="wizard-steps step2">
-    <h3 class="center_h"  > Choose to Import Customers, Contacts, Partners - OR - Netsuite Group </h3>
+    <h3 class="center_h"  >  Who should we import?  </h3>
 </div>
 <div class="wizard-steps step3">
     <h3 class="center_h"> Import Records </h3>
@@ -31,7 +31,7 @@
                     <span class="left"><span class="customer-count">0</span><i> of Customers being transfered </i></span>
                     <b class="caret"></b>
                 </h3>
-                <div class="accordion-inner" style="max-height:381px">
+                <div class="accordion-inner" style="min-height:400px">
                     <h4>Customer Record Import Sample</h4>
                     <div class="template-container">
                         <div class="target-listing copy_camp" id="copy-camp-listing">
@@ -56,7 +56,7 @@
                     <span class="left"><span class="contact-count">0</span><i> of Contacts being transfered </i></span>
                     <b class="caret"></b>
                 </h3>
-                <div class="accordion-inner" style="max-height:381px">
+                <div class="accordion-inner" style="min-height:400px">
                     <h4>Contact Record Import Sample</h4>
                     <div class="template-container">
                         <div class="target-listing copy_camp" id="copy-camp-listing">
@@ -81,7 +81,7 @@
                     <span class="left"><span class="partner-count">0</span><i> of Partners being transfered </i></span>
                     <b class="caret"></b>
                 </h3>
-                <div class="accordion-inner" style="max-height:381px">
+                <div class="accordion-inner" style="min-height:400px">
                     <h4>Partner Record Import Sample</h4>
                     <div class="template-container">
                         <div class="target-listing copy_camp" id="copy-camp-listing">
@@ -105,18 +105,25 @@
         <div class="col2">  
             <div class="c-frequency">                
                 <div>
+                     <div class="ui-accordion">
+                        <h3 class="ui-accordion-header" role="tab">
+                          <input type="radio" class="radiopanel " value="I" name="options_import">
+                          <span class="left">Import Now </span>                                             
+                        </h3>
+                      </div>   
+                    <div>
                     <div class="ui-accordion">
                     <h3 class="ui-accordion-header" role="tab">
                         <input type="radio" class="radiopanel " value="S" name="options_import" checked="checked">
-                      <span class="left">Schedule Import </span>                                             
+                      <span class="left">Schedule Recurring Import  </span>                                             
                     </h3>
                   </div> 
-                  <div class="control-area" style="margin-top:15px;position: relative">   
+                  <div class="control-area" style="margin-top:15px;position: relative;height:298px">   
                     <div class="row">
                         <label>Frequency</label>
 
                         <select class="nosearch frequency-type">
-                            <option value="O">Weekly</option>
+                            <option value="O">Day(s) of week</option>
                             <option value="T">Once every two Weeks</option>
                             <option value="M">Once per month</option>
                             <option value="">Once Only </option>
@@ -202,7 +209,7 @@
 
                         <div class="row">        
                             <label>Time</label>      
-                             <div class="set-time" style="margin-top:2px;margin-left: 127px;">
+                             <div class="set-time adjust-time" style="margin-top:2px;margin-left: 127px;">
                                 <div class="timebox hour">
                                     <input type="text" value="" name="" class="timebox-hour" readonly="readonly" />
                                 </div>
@@ -217,15 +224,9 @@
                           </div>
                         </div>                      
                     </div> <!--  Row -->
-                        <div class="timezone-note">* Time is according to Pacific time zone</div>
+                        <div class="timezone-note" style="margin-top:150px">* Time is according to Pacific time zone</div>
                     </div>
-                    <div class="ui-accordion">
-                        <h3 class="ui-accordion-header" role="tab">
-                          <input type="radio" class="radiopanel " value="I" name="options_import">
-                          <span class="left">Import Now </span>                                             
-                        </h3>
-                      </div>   
-                    <div>
+                   
                 </div>
                 
 

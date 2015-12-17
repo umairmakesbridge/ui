@@ -1,0 +1,15 @@
+                            <td width=""><div>
+                                    <div class="colico link"> <strong><span><em>Link URL</em><a  class="showtooltip" data-original-title="<%=this.model.get('articleURL')%>" href="<%=this.model.get('articleURL')%>" target='_blank'><%=this.truncateURL(this.checkTitle(this.model.get('articleTitle')))%></a></span></strong> </div>
+                                </div></td>
+                            <td width="90px"><div>
+                                     <div class='colico pgview'>
+                                         <%if(this.model.get('pageViewCount') !="0"){%>
+                                            <strong><span><em>Page Views</em><a><b class='page-view' data-id="<%=this.model.get('subNum.encode')%>"> <%=this.model.get('pageViewCount')%></b></a></span></strong></div></div></td>
+                                         <%}else{%>
+                                         <strong><span><em>Page Views</em> <%=this.model.get('pageViewCount')%></span></strong></div></div></td>
+                                         <%}%>
+                            <td width="190px"><div>
+                                    <div class="time show showtooltip" data-original-title="<%=this.dateSetting(this.model.get('logTime'),'/')%>"> 
+                                        <strong><span><em>Clicked on </em>  <%=this.dateSetting(this.model.get('logTime'),"/")%></span></strong> </div>
+                                </div></td>
+  

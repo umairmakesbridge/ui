@@ -1,0 +1,178 @@
+<% if(this.showUseButton  || this.showRemoveButton){ %>
+<td width="75%">
+    <div>
+         <div class="name-type">              
+                <h3>                    
+                 <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" style="max-width:355px;overflow-x:hidden;text-overflow: ellipsis" title="Click to view"> <%= this.model.get('name')%> </a>                    
+                 <a class="cstatus cflag <%= this.getFlagClass().flag_class %>"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
+                 <div class="tags tagscont" id="campaign_tag_camp">
+                     <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         
+                 </div>
+         </div>
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
+        </div>
+        <div class="slide-btns one s-clr2">
+            <span class="icon setting"></span>
+            <div>                 
+               <% if(this.showUseButton) {%>
+                    <a class="icon check clr3 row-move" ><span>Use</span></a>
+                <% } else if(this.showRemoveButton) {%>
+                    <a class="icon remove clr3 row-remove" ><span>Remove</span></a>
+                <% } %>  
+            </div>   
+        </div>        
+    </div>
+</td>
+<% } else if(this.showSummaryChart){ %>
+<td width="100%" style="padding:0px;background-color: #fff;">
+    <table cellpading="0" cellspacing="0" width="100%" class="chart-tile">
+        <tr class="header">
+            <td>
+                 <div>
+                    <div class="name-type">              
+                           <h3>                    
+                            <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" style="max-width:355px;overflow-x:hidden;text-overflow: ellipsis" title="Click to view"> <%= this.model.get('name')%> </a>                    
+                            <a class="cstatus cflag <%= this.getFlagClass().flag_class %>" ><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>                              
+                    </div>
+               </div>
+            </td>                        
+        </tr>
+        <tr>
+            <td class="s-chart">
+                <div style="height: 250px" id="chart-<%-this.model.get('campNum.checksum')%>">
+                    
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:0px" id="stats-<%-this.model.get('campNum.checksum')%>">
+                <div class="stats-panel">
+                    <div>
+                        <ul class="socpc">
+                            <li style="width:16.66%" class="clr-sent"><span>Sent <em class="sentCountPer">0%</em><strong class="sentCount">-</strong></span></li>
+                            <li style="width:16.66%" class="clr-open"><span>Open <em class="openCountPer">0%</em><strong class="openCount">-</strong></span></li>   
+                            <li style="width:16.66%" class="clr-click"><span>Click <em class="clickCountPer">0%</em><strong class="clickCount">-</strong></span></li>                            
+                            <li style="width:16.66%" class="clr-view"><span>View <em class="pageViewsCountPer">0%</em><strong class="pageViewsCount">-</strong></span></li>                            
+                            <li style="width:16.66%" class="clr-social"><span>Social <em class="socialCountPer">0%</em><strong class="socialCount">-</strong></span></li>
+                            <li style="width:16.66%" class="clr-bounce"><span>Bounce <em class="bounceCountPer">0%</em><strong class="bounceCount">-</strong></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</td>
+<% } else if(this.showCheckbox){ %>
+<td style="padding:0px;width:40px">
+    <a class="checkedadded check-box" id="<%-this.model.get('campNum.encode')%>" style="margin:0px;position:relative"><i class="icon check"></i></a>    
+</td>
+<td width="100%">
+    <div>
+         <div class="name-type">              
+                <h3>                    
+                    <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" style="max-width:<%-this.maxWidth%>px;overflow-x:hidden;text-overflow: ellipsis" title="Click to view"> <%= this.model.get('name')%> </a>
+                    <a class="cstatus cflag <%= this.getFlagClass().flag_class %>" ><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %>
+                </h3>  
+                 <div class="tags tagscont" id="campaign_tag_camp">
+                     <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         
+                 </div>
+         </div>
+    </div>
+</td>
+</td>
+<td width="90px">
+   <% if(this.model.get('status')!== 'D'){ %>
+   <div>
+       <div class="subscribers">
+           <strong><span><em>Sent</em><%= this.app.addCommas(this.model.get('sentCount')) %></span></strong>
+       </div>
+       <% }%>     
+   </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
+        </div>
+   </div>
+</td>        
+<% } else {%>
+<td width="100%">
+    <div>
+         <div class="name-type">
+              
+                <h3>
+                    <% if(this.getCampStatus().status == "Scheduled"){ %>
+                         <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" title="Click to view"> <%= this.model.get('name')%> </a>
+                    <% }else{ %>
+                    <a class="campname show-detail showtooltip <%= this.getFlagClass().editClass %>" title="<%= this.getCampStatus().tooltip %>"> <%= this.model.get('name')%> </a>
+                    <% } %>
+                    <a class="cstatus cflag showtooltip <%= this.getFlagClass().flag_class %>" title="Click to view <%= this.getCampStatus().status.toLowerCase() %> campaigns"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
+                 <div class="tags tagscont" id="campaign_tag_camp">
+                     <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         
+                 </div>
+         </div>
+    </div>
+</td>
+<td width="90px">
+   <% if(this.model.get('status')!== 'D'){ %>
+   <div>
+       <div class="subscribers">
+           <strong><span><em>Sent</em><%= this.app.addCommas(this.model.get('sentCount')) %></span></strong>
+       </div>
+       <% }%>     
+   </div>
+</td>
+
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
+        </div>
+        <div class="slide-btns <% if(model.get('status')==='D'){ print('five s-clr6') } else if(model.get('status')==='S'){ print('five s-clr6 slidebtn-sp') } else if(model.get('status')==='C') { print('three s-clr4') } else if(model.get('status')==='P') { print('two s-clr3 slidebtn-sp') } else { print('five s-clr6') }%>">
+              <span class="icon setting"></span>
+              <div>                 
+                <% if(model.get('status')==='D'){  %>
+
+               <a class="icon preview-camp preview clr5"><span>Preview</span></a>
+               <a class="icon edit-camp edit clr4"><span>Edit</span></a>
+               <a class="icon schedule-camp calender clr3"><span>Schedule</span></a>  
+               <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+               <a class="icon delete-camp delete clr1"><span>Delete</span></a>
+
+               <% } else if(model.get('status')==='S') {
+               %>
+                   <a class="icon preview-camp preview clr5"><span>Preview</span></a>
+                   <a class="icon draft-camp draft clr4" title="draft"><span>Draft</span></a>
+                   <a class="icon reschedule-camp calender clr3"><span>Reschedule</span></a>
+                   <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                   <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	
+               <%} else if(model.get('status')==='P') {
+               %>
+                   <a class="icon preview-camp preview clr2"><span>Preview</span></a>                                 	
+                   <a class="icon copy-camp copy clr1"><span>Copy</span></a> 
+               <%} else if(model.get('status')==='C') {
+               %>
+                   <a class="icon preview-camp preview clr3"><span>Preview</span></a>
+                   <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                   <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	
+               <%} else {%>
+               <a class="icon preview-camp preview clr5"><span>Preview</span></a>
+               <a class="icon edit-camp edit clr4"><span>Edit</span></a>
+               <a class="icon schedule-camp calender clr3"><span>Schedule</span></a>  
+               <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+               <a class="icon delete-camp delete clr1"><span>Delete</span></a>
+               <% } %>
+               </div>   
+        </div> 
+        
+    </div>
+</td>
+<% } %>
+
+

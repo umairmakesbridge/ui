@@ -1,61 +1,99 @@
-<nav class="slidenav">
+<!-- =============================== -->
+ <nav class="slidenav-dd" id="slidenav-newdd"> 
+        	<ul>
+            	 
+            	<li class="dd"><h4><i class="icon firststeps"></i><span>First Steps</span></h4>
+                	<ul>
+                    	<li class="new-campaign"><a><i class="icon campaign"></i><span>Send Mass Email</span></a></li>                    	
+                    	<li class="new-template"><a><i class="icon templates"></i><span>Create Email Template</span></a></li>                        
+                    	<li class="connect-crm"><a><i class="icon crm"></i><span>Connect with Apps</span></a></li>
+                        <li class="new-graphics"><a><i class="icon graphic"></i><span>Upload Images</span></a></li>
+                        <li class="csv-upload"><a><i class="icon uploadcontact"></i><span>Upload Contacts</span></a></li>
+                        <li class="view-contacts"><a><i class="icon viewcontact"></i><span>Viewing Contacts</span></a></li>
+                        <li class="camapign-report"><a><i class="icon accessreports"></i><span>Access Reports</span></a></li>
+                    </ul>
+                </li>
+                <li class="dd"><h4><i class="icon marketing"></i><span>Marketing</span></h4>
+                    <ul>
+                        <li class="new-campaign"><a><i class="icon campaign"></i><span>Send Mass Email</span></a></li>
+                        <li class="campaign-listing"><a><i class="icon campaignlist"></i><span>Mass emails </span></a></li>
+                        <li class="camapign-report"><a><i class="icon creports"></i><span>Mass email Reports </span></a></li>                        
+                        <li class="nurture-tracks nt-li"><a><i class="icon templates"></i><span>Nurture Tracks</span></a></li>                       
+                    	<li class="template-gallery"><a><i class="icon templates"></i><span>Template  Gallery</span></a></li>
+                        <li class="landing-pages"><a><i class="icon socialsharing"></i><span>Landing Pages</span></a></li>                                           
+                        <li class="one-one-listing"><a><i class="icon socialsharing"></i><span>My 1:1 Emails</span></a></li>  
+                        <li class="signup-forms"><a><i class="icon socialsharing"></i><span>Signup Forms</span></a></li>
+                        <li class="workflow-listing" ><a><i class="icon socialsharing"></i><span>Workflows</span></a></li>
+                    </ul>
+                </li>
+                <li  class="dd"><h4><i class="icon studio"></i><span>Studio</span></h4>
+                	<ul>
+                    	<li class="new-template"><a><i class="icon  createtemplates"></i><span>Create Template</span></a></li>
+                        <li class="template-gallery"><a><i class="icon templates"></i><span>Template Gallery </span></a></li>
+                        <!--<li><a><i class="icon mee"></i><span>Easy Editor</span></a></li>-->
+                        <li class="new-graphics"><a><i class="icon graphic"></i><span>Image Gallery</span></a></li>
+                    </ul>
+                </li>
+                <li class="dd" style="margin-top:-13px;"><h4><i class="icon contacts"></i><span>Contacts</span></h4>
+                	<ul>
+                    	<li class="view-contacts"><a><i class="icon viewcontact"></i><span>Contacts</span></a></li>
+                        <li class="view-lists"><a><i class="icon viewcontact"></i><span>Lists</span></a></li>
+                        <li class="view-targets"><a><i class="icon viewcontact"></i><span>Targets</span></a></li>
+                        <li class="view-tags"><a><i class="icon viewcontact"></i><span>Tags</span></a></li>
+                        <li class="csv-upload"><a><i class="icon csvuploadicon"></i><span>CSV upload</span></a></li>
+                        <li class="supress-list"><a><i class="icon csvuploadicon"></i><span>CSV Upload To Supress List</span></a></li>
+                        <li class="exportsubscribers"><a><i class="icon viewcontact"></i><span>Export Subscriber</span></a></li>                        
+                    </ul>
+                </li>
+                <li class="dd reports-section" style="margin-top:-138px;clear:both;"><h4><i class="icon reports"></i><span>Reports &amp; Analytics</span></h4>
+                	<ul>
+                    	<li class="camapign-report"><a><i class="icon emarketing"></i><span>Email</span></a></li>
+                        <li class="bridge-statz"><a><i class="icon bridgestatz"></i><span>Bridge Statz</span></a></li>
+                        <li class="custom-reports"><a><i class="icon customreports"></i><span>Custom Charts</span></a></li>
+                    </ul>
+                </li>                                               
+        	</ul>
+            
+            <ul class="quicklinks">
+             <li class="dd">
+                	<ul>
+                            <li class="view-contacts block" id="ql_contacts"><a><span>Contacts</span><i class="icon subscribers"></i><strong>0</strong></a></li>                            
+                    	<li class="campaign-listing" id="ql_campaigns"><a><i class="icon campaign"></i><em>0</em><span>Campaigns</span></a></li>  
+                        <li class="template-gallery" id="ql_templates"><a><i class="icon templates"></i><em>0</em><span>Templates</span></a></li> 
+                        <li class="new-graphics block" id="ql_graphics"><a><span>Images  </span><i class="icon graphic"></i><strong>0</strong></a></li>
+                        <li class="nurture-tracks nt-li" id="ql_nurturetracks"><a><i class="icon nurturetracks"></i><span>Nurture Tracks</span><strong class="play">0</strong><strong class="pause">0</strong></a></li>                        
+                    	<li class="autobots-gallery" id="ql_autobots"><a><i class="icon autobots"></i><span>Autobots</span><strong class="play">0</strong><strong class="pause">0</strong></a></li>
+                    	
+                        
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="clearfix"></div>
+            <div class="supporthelp">
+            	<a class="refresh" id="ql_refresh"></a>
+                <!--<a >Support & Help</a>-->
+            </div>
+        </nav>
 
-    <ul>
-
-        <li class="dd"><a ><i class="icon firststeps"></i><span>First Steps</span></a>
-            <ul style="display:block;">
-                <li class="new-campaign"><a ><i class="icon campaign"></i><span>Send Mass Email</span></a></li>
-                <li><a ><i class="icon socialsharing"></i><span>Enable Social Sharing</span></a></li>
-                <li class="new-template"><a ><i class="icon create-email-templates2"></i><span>Create Email Template</span></a></li>
-                <li><a ><i class="icon createsegments"></i><span>Create Segments</span></a></li>
-                <li class="connect-crm"><a ><i class="icon crm"></i><span>Connect with Apps</span></a></li>
-                <li class="new-graphics"><a ><i class="icon graphic"></i><span>Upload Graphics</span></a></li>
-                <li class="csv-upload"><a ><i class="icon uploadcontact"></i><span>Upload Contacts</span></a></li>
-                <li class="view-contacts"><a ><i class="icon viewcontact"></i><span>Viewing Contacts</span></a></li>
-                <li class="camapign-report"><a ><i class="icon accessreports"></i><span>Access Reports</span></a></li>
-            </ul>
-        </li>
-        <li class="dd"><a ><i class="icon marketing"></i><span>Marketing</span></a>
-            <ul>
-                <li class="new-campaign"><a ><i class="icon campaign"></i><span>Send Mass Email</span></a></li>
-                <li class="template-gallery"><a ><i class="icon templates"></i><span>Template Gallery </span></a></li>
-                <li class="campaign-listing"><a ><i class="icon campaignlist"></i><span>Campaigns</span></a></li>
-                <li class="camapign-report"><a ><i class="icon creports"></i><span>Campaign Reports </span></a></li>
-            </ul>
-        </li>
-        <li  class="dd"><a ><i class="icon studio"></i><span>Studio</span></a>
-            <ul>
-                <li class="new-template"><a ><i class="icon create-email-templates2"></i><span>Create Template</span></a></li>
-                <li class="template-gallery"><a ><i class="icon templates"></i><span>Template Gallery </span></a></li>
-                <li class="new-graphics"><a ><i class="icon graphic"></i><span>Image Gallery</span></a></li>
-            </ul>
-        </li>
-        <li class="dd"><a ><i class="icon contacts"></i><span>Contacts</span></a>
-            <ul>
-                <li class="view-contacts"><a ><i class="icon viewcontact"></i><span>View Contacts</span></a></li>
-                <li class="csv-upload"><a ><i class="icon csvuploadicon"></i><span>CSV Upload</span></a></li>
-            </ul>
-        </li>
-        <li class="dd"><a ><i class="icon reports"></i><span>Reports &amp; Analytics</span></a>
-            <ul>
-                <li class="camapign-report"><a ><i class="icon emarketing"></i><span>Email</span></a></li>
-                <li><a ><i class="icon website"></i><span>Website</span></a></li>
-            </ul>
-        </li>
-        <li class="dd"><a ><i class="icon supprthelp"></i><span>Support &amp; Help</span></a></li>
-    </ul>
-</nav>
-
-<div class="btn-group tw-toggle">
+<!-- =============================== -->
+                             
+<% if(!this.app.get("newWin")){ %>                             
+<a class="tw-toggle tiles"><i class="icon"></i></a>
+<a class="loacl-toggle local-adds" style="display:none"><i class="icon"></i></a> <!-- use "wsicon" for workspcae icon   -->
+<a class="loacl-toggle local-adds" style="display:none"><i class="icon"></i></a>
+<a class="tipntest-toggle" id='tipntest-toggle-one' style="display:none"><i class="icon"></i></a>
+<a class="tipntest-toggle" id='tipntest-toggle-two' style="display:none"><i class="icon"></i></a>
+<!--<div class="btn-group tw-toggle">
     <button class="btn active"><span class="icon tiles"></span></button>
     <button class="btn"><span class="icon workspace"></span></button>
-</div> 
-<div id="tiles" class="clearfix" style=" ">
+</div> -->
+<div id="tiles"  class="clearfix" style=" ">
 
     <div class="box green ">
         <div class="title"><span>First Steps </span>
             <p>Watch video demonstrations that teach you how to complete essential tasks.</p>
-            <img src="images/1fs.png" alt=""/>
+            <img src="<%- this.app.get('path')%>images/1fs.png" alt=""/>
             <div class="helpvid">
                 <a  class="helpbtn"><i class="icon helpbig "></i><span>Help</span></a>                                 
                 <a  class="videobtn"><i class="icon videobig "></i><span>Video</span></a>
@@ -64,48 +102,51 @@
         </div>
         <div class="tile-shortcuts" >
             <ul>
-                <li class="new-campaign"><a ><i class="icon campaign"></i><span>Send mass email</span></a>
-                    <div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li><a  class="new-campaign"><i class="icon campaign"></i><span>Send mass Email</span></a>
+                    <div class="schelpvid videobar" style="display:block">                                                   
+                        <a   rel="90175265"><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                </li>
+                <li><a ><i class="icon socialsharing"></i><span>Enable social sharing</span></a><div class="schelpvid videobar"  style="display:block">
+                                                    
+                        <a  rel="90911241"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li><a ><i class="icon socialsharing"></i><span>Enable social sharing</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li><a class="new-template"><i class="icon create-email-templates"></i><span>Create email template</span></a><div class="schelpvid videobar"  style="display:block">
+                        
+                        <a  rel="91455913"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="new-template"><a ><i class="icon create-email-templates"></i><span>Create email template</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li><a class="create-target"><i class="icon createsegments"></i><span>Create targets</span></a><div class="schelpvid videobar"  style="display:block">
+                                                        
+                        <a  rel="90911241"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li><a ><i class="icon createsegments"></i><span>Create segments</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li><a class="connect-crm"><i class="icon crm"></i><span>Connect with apps</span></a><div class="schelpvid videobar"  style="display:block">
+                                                   
+                        <a  rel="90911241"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="connect-crm"><a ><i class="icon crm"></i><span>Connect with apps</span></a></li>
-                <li class="new-graphics"><a ><i class="icon graphic"></i><span>Upload graphics</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li><a class="new-graphics"><i class="icon graphic"></i><span>Upload Images</span></a><div class="schelpvid videobar"  style="display:block">
+                                                      
+                        <a  rel="93542801"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="csv-upload"><a ><i class="icon uploadcontact"></i><span>Upload contacts</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li ><a class="csv-upload"><i class="icon uploadcontact"></i><span>Upload contacts</span></a><div class="schelpvid videobar"  style="display:block">
+                                                         
+                        <a  rel="87609468"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="view-contacts"><a ><i class="icon viewcontact"></i><span>Viewing contacts</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li ><a class="view-contacts"><i class="icon viewcontact"></i><span>Viewing contacts</span></a><div class="schelpvid videobar"  style="display:block">
+                                                     
+                        <a  rel="90595740"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="camapign-report"><a ><i class="icon accessreports"></i><span>Access reports</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li ><a class="camapign-report"><i class="icon accessreports"></i><span>Access reports</span></a><div class="schelpvid videobar"  style="display:block">
+                                                       
+                        <a  rel="90598216"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
             </ul>
         </div> <!--  tile-shortcuts -->
     </div>
     <div class="box blue">
         <div class="title"><span>Marketing</span>
-            <p>Watch video demonstrations that teach you how to complete essential tasks.</p>
-            <img src="images/2sm.png" alt=""/>
-            <div class="helpvid">
+            <p style="display:none">Watch video demonstrations that teach you how to complete essential tasks.</p>
+            <img src="<%- this.app.get('path')%>images/2sm.png" alt=""/>
+            <div class="helpvid ">
                 <a><i class="icon helpbig "></i><span>Help</span></a>                                 
                 <a><i class="icon videobig "></i><span>Video</span></a>
             </div>
@@ -113,61 +154,52 @@
 
         <div class="tile-shortcuts" >
             <ul>
-                <li class="new-campaign"><a ><i class="icon campaign"></i><span>Send mass email</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li class="new-campaign"><a ><i class="icon campaign"></i><span>Send mass email</span></a><div class="schelpvid videobar" style="display: block;">                                                       
+                        <a rel="90175265"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="template-gallery"><a ><i class="icon templates"></i><span>Template Gallery</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                  <li class="nurture-tracks nt-li"><a ><i class="icon nurturetracks"></i><span>Nurture tracks</span></a><div class="schelpvid videobar" style="display: block;">                              
+                        <a rel="99293579"><i class="icon video"></i><span>Video</span></a>
+                    </div></li>                      
+                     <li class="one-one-listing"><a ><i class="icon onetoonelisting"></i><span>My 1:1 Emails</span></a><div class="schelpvid videobar" style="display:none;">                                                         
+                        <a rel="90175265"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="campaign-listing"><a ><i class="icon campaignlist"></i><span>Campaigns</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                   
+                    <li class="campaign-listing"><a ><i class="icon campaignlist"></i><span>Mass emails</span></a><div class="schelpvid videobar" style="display:block;">                                                         
+                        <a rel="90175265"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="camapign-report"><a ><i class="icon creports"></i><span>Campaign reports</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
-                    </div></li>
-            </ul>
-        </div> <!--  tile-shortcuts -->
+                    <li class="camapign-report"><a ><i class="icon creports"></i><span>Mass email reports</span></a><div class="schelpvid videobar" style="display:block">
+                        <!--<a ><i class="icon help"></i><span>Help</span></a>-->                                 
+                        <a rel="90598216"><i class="icon video"></i><span>Video</span></a>
 
-
-
-    </div>
-    <div class="box red"><div class="title"><span>Studio</span>
-            <p>Watch video demonstrations that teach you how to complete essential tasks.</p>
-            <img src="images/6st.png" alt=""/><div class="helpvid">
-                <a ><i class="icon helpbig "></i><span>Help</span></a>                                 
-                <a ><i class="icon videobig "></i><span>Video</span></a>
-            </div>
-        </div>
-
-        <div class="tile-shortcuts" >
-            <ul>
-                <li class="new-template"><a ><i class="icon create-email-templates"></i><span>Create  template</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
-                    </div></li>
-                <li class="template-gallery"><a ><i class="icon templates"></i><span>Template Gallery</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
-                    </div></li>
-                    <li class="template-gallery" style="visibility: hidden"></li>    
-                <li class="new-graphics"><a ><i class="icon graphic"></i><span>Image Gallery</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
                     </div></li>    
+                                                         
+                 <li style="visibility: hidden"></li> 
+                <li class="template-gallery"><a ><i class="icon templates"></i><span>Email Template Gallery</span></a><div class="schelpvid videobar" style="display:block;">                                                      
+                        <a rel="91455913"><i class="icon video"></i><span>Video</span></a>
+                    </div></li>                                     
+                 <li class="landing-pages"><a ><i class="icon landingpgs"></i><span>Landing Pages</span></a>
+                     <div class="schelpvid videobar" style="display:block">                                                      
+                        <a rel="126551379"><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                 </li>
+                 <li class="signup-forms"><a ><i class="icon signupforms"></i><span>Signup Forms</span></a>
+                     <div class="schelpvid videobar" style="display:none;">                                                      
+                        <a rel="91455913"><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                 </li>
+                
             </ul>
         </div> <!--  tile-shortcuts -->
 
-    </div>
 
+
+    </div>
+  
 
     <div class=" box orange">
         <div class="title"><span>Contacts</span>
-            <p>Watch video demonstrations that teach you how to complete essential tasks.</p>
-            <img src="images/3ct.png" alt=""/>
+            <p style="display:none">Watch video demonstrations that teach you how to complete essential tasks.</p>
+            <img src="<%- this.app.get('path')%>images/3ct.png" alt=""/>
             <div class="helpvid">
                 <a ><i class="icon helpbig "></i><span>Help</span></a>                                 
                 <a ><i class="icon videobig "></i><span>Video</span></a>
@@ -176,25 +208,152 @@
 
         <div class="tile-shortcuts" >
             <ul>
-                <li class="view-contacts"><a ><i class="icon viewcontact"></i><span>View contacts</span></a><div class="schelpvid">
+                <li class="view-contacts"><a ><i class="icon n_activityfeed"></i><span>Contacts Activities</span></a><div class="schelpvid videobar" style="display: block;">
+                        <!--<a ><i class="icon help"></i><span>Help</span></a>-->                                  
+                        <a rel="90595740"><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                </li>
+                
+                   <li class="exportsubscribers"><a ><i class="icon exportcontacts"></i><span>Export Subscribers</span></a><div class="schelpvid videobar" style="display:none;">                                                         
+                        <a rel=""><i class="icon video"></i><span>Video</span></a>
+                    </div></li>
+                    <li class="removesubscribers"><a ><i class="icon removecontacts"></i><span>Remove Subscribers</span></a><div class="schelpvid videobar" style="display:none;">                                                         
+                        <a rel=""><i class="icon video"></i><span>Video</span></a>
+                    </div></li>
+                        
+                 <li class="view-lists"><a ><i class="icon n_lists"></i><span>Lists</span></a><div class="schelpvid videobar" >
                         <a ><i class="icon help"></i><span>Help</span></a>                                 
                         <a ><i class="icon video"></i><span>Video</span></a>
                     </div>
                 </li>
-                <li class="csv-upload"><a ><i class="icon csvuploadicon"></i><span>CSV Upload</span></a><div class="schelpvid">
+                <li class="view-targets"><a ><i class="icon n_targets"></i><span>Targets</span></a><div class="schelpvid videobar">
                         <a ><i class="icon help"></i><span>Help</span></a>                                 
                         <a ><i class="icon video"></i><span>Video</span></a>
                     </div>
                 </li>
+                 <li class="view-tags"><a ><i class="icon n_tags"></i><span>Tags</span></a><div class="schelpvid videobar">
+                        <a ><i class="icon help"></i><span>Help</span></a>                                 
+                        <a ><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                </li>
+                  
+                <li class="csv-upload"><a ><i class="icon csvuploadicon"></i><span>CSV Upload</span></a><div class="schelpvid videobar" style="display: block;">                        
+                        <a rel="87609468"><i class="icon video"></i><span>Video</span></a>
+
+                    </div>
+                </li>
+                
+                <li class="connect-crm"><a ><i class="icon n_cloudimport"></i><span>Cloud Imports</span></a><div class="schelpvid videobar" style="display: block;">
+                        <!--<a ><i class="icon help"></i><span>Help</span></a>-->                                 
+                        <a rel="94249680"><i class="icon video"></i><span>Video</span></a>
+
+                    </div>
+                </li>
+                <li style="visibility: hidden"></li>             
+                 
+            </ul>
+        </div> <!--  tile-shortcuts -->
+     </div>
+    
+        <div class=" box red">
+        <div class="title"><span>Automation</span>
+            <p style="display:none">Watch video demonstrations that teach you how to complete essential tasks.</p>
+            <img src="<%- this.app.get('path')%>img/autobot_gallery.png" alt=""/>
+            <div class="helpvid">
+                <a ><i class="icon helpbig "></i><span>Help</span></a>                                 
+                <a ><i class="icon videobig "></i><span>Video</span></a>
+            </div>
+        </div>
+
+        <div class="tile-shortcuts" >
+            <ul>
+                <li class="autobots-gallery"><a ><i class="icon auto_gallery"></i><span>Autobots gallery</span></a>
+                    <div class="schelpvid videobar">
+                        <!--<a ><i class="icon help"></i><span>Help</span></a>-->                                  
+                   </div>
+                </li>
+                <li class="nurture-tracks nt-li"><a ><i class="icon nurturetracks"></i><span>Nurture tracks</span></a><div class="schelpvid videobar" style="display: block;">                              
+                        <a rel="99293579"><i class="icon video"></i><span>Video</span></a>
+                    </div></li>                                         
+                    <li class="workflow-listing"><a ><i class="icon workflows-tile"></i><span>Workflows</span></a><div class="schelpvid videobar">                              
+                        <a rel=""><i class="icon video"></i><span>Video</span></a>
+                    </div></li>                                         
+                 <li class="new-emailbot" data-type="E"><a ><i class="icon n_emailbot"></i><span>Email Bot</span></a><div class="schelpvid videobar" >
+                        <a ><i class="icon help"></i><span>Help</span></a>                                 
+                        <a ><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                </li>
+                <li class="new-tagbot" data-type="TG"><a ><i class="icon n_tagbot"></i><span>Tag Bot</span></a><div class="schelpvid videobar">
+                        <a ><i class="icon help"></i><span>Help</span></a>                                 
+                        <a ><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                </li>
+                 <li class="new-scorebot" data-type="SC"><a ><i class="icon n_scorebot"></i><span>Score Bot</span></a><div class="schelpvid videobar">
+                        <a ><i class="icon help"></i><span>Help</span></a>                                 
+                        <a ><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                </li>
+                <li class="new-alertbot" data-type="A"><a ><i class="icon n_alertbot"></i><span>Alert Bot</span></a><div class="schelpvid videobar">                        
+                        <a rel="87609468"><i class="icon video"></i><span>Video</span></a>
+
+                    </div>
+                </li>
+                <li class="linkfilters" >
+                        <a ><i class="icon linksfilter"></i><span>URL Filter Bot</span></a><div class="schelpvid videobar" style="display:none;">                                                         
+                        <a rel=""><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                        
+                    </li>
+               
+                <li style="visibility: hidden"></li>             
+                 
+            </ul>
+        </div> <!--  tile-shortcuts -->
+     </div>
+    
+    
+      <div class="box brown"><div class="title"><span>Studio</span>
+            <p style="display:none">Watch video demonstrations that teach you how to complete essential tasks.</p>
+            <img src="<%- this.app.get('path')%>images/6st.png" alt=""/><div class="helpvid">
+                <a ><i class="icon helpbig "></i><span>Help</span></a>                                 
+                <a ><i class="icon videobig "></i><span>Video</span></a>
+            </div>
+        </div>
+
+        <div class="tile-shortcuts" >
+            <ul>                
+                    <li class="template-gallery"><a ><i class="icon templates"></i><span>Email Template Gallery</span></a><div class="schelpvid videobar" style="display: block;"> 
+                        <!--<a ><i class="icon help"></i><span>Help</span></a>-->                                 
+                        <a rel="91455913"><i class="icon video"></i><span>Video</span></a>
+                    </div></li>
+                    <li class="landing-pages"><a ><i class="icon landingpgs"></i><span>Landing Pages</span></a>
+                     <div class="schelpvid videobar" style="display:block;">                                                      
+                        <a rel="126551379"><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                    </li>
+                    <li class="signup-forms"><a ><i class="icon signupforms"></i><span>Signup Forms</span></a>
+                        <div class="schelpvid videobar" style="display:none;">                                                      
+                           <a rel="91455913"><i class="icon video"></i><span>Video</span></a>
+                       </div>
+                    </li>
+                    <li class="new-graphics"><a ><i class="icon graphic"></i><span>Image Gallery</span></a><div class="schelpvid videobar" style="display: block;">
+                        <!--<a ><i class="icon help"></i><span>Help</span></a>-->                                 
+                        <a rel="93542801"><i class="icon video"></i><span>Video</span></a>
+                    </div></li>
+                    
+                    <li style="visibility: hidden"><a ><i class="icon mee"></i><span>Easy Editor</span></a><div class="schelpvid videobar" style="display:block">
+                        <a ><span style="padding-left:25px;">Coming Soon!</span></a>                                                         
+                    </div></li>    
+                
             </ul>
         </div> <!--  tile-shortcuts -->
 
-
     </div>
-    <div class="box brown">
+
+    <div class="box yellow">
         <div class="title"><span>Reports &amp; Analytics</span>
-            <p>Watch video demonstrations that teach you how to complete essential tasks.</p>
-            <img src="images/4ra.png" alt=""/>
+            <p style="display:none">Watch video demonstrations that teach you how to complete essential tasks.</p>
+            <img src="<%- this.app.get('path')%>images/4ra.png" alt=""/>
             <div class="helpvid">
                 <a ><i class="icon helpbig "></i><span>Help</span></a>                                 
                 <a ><i class="icon videobig "></i><span>Video</span></a>
@@ -202,35 +361,66 @@
         </div>
         <div class="tile-shortcuts" >
             <ul>
-                <li class="camapign-report"><a ><i class="icon emarketing"></i><span>Email</span></a><div class="schelpvid">
+                <li class="camapign-report"><a ><i class="icon creports"></i><span>Email</span></a><div class="schelpvid videobar">
                         <a ><i class="icon help"></i><span>Help</span></a>                                 
                         <a ><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li><a ><i class="icon website"></i><span>Website</span></a><div class="schelpvid">
+                <li class="bridge-statz"><a ><i class="icon webstatz"></i><span>Bridge Statz</span></a><div class="schelpvid videobar">
                         <a ><i class="icon help"></i><span>Help</span></a>                                 
                         <a ><i class="icon video"></i><span>Video</span></a>
+                    </div></li>    
+
+                    <li class="bounced-email">
+                        <a ><i class="icon bouncedemails"></i><span>Bounced Emails</span></a><div class="schelpvid videobar" style="display:none;">                                                         
+                        <a rel=""><i class="icon video"></i><span>Video</span></a>
+                        </div>                        
+                    </li>
+                <li class="custom-reports" >
+                        <a ><i class="icon customreports"></i><span>Custom Charts</span></a><div class="schelpvid videobar" style="display:none;">                                                         
+                        <a rel=""><i class="icon video"></i><span>Video</span></a>
+                    </div>                                                
+                 </li>    
+                 <li class="report-flow"><a ><i class="icon cust-reports"></i><span>Reports</span></a><div class="schelpvid videobar" style="display:none">
+                        <a ><span style="padding-left:25px;">Coming Soon!</span></a>                                                         
+                 </div></li>
+                <li style="visibility: hidden"><a ><i class="icon website"></i><span>Website</span></a><div class="schelpvid videobar" style="display:block">
+                        <a ><span style="padding-left:25px;">Coming Soon!</span></a>                                                         
                     </div></li>
+                    
+                    
             </ul>
         </div> <!--  tile-shortcuts -->
 
     </div>
-    <div class="box yellow"><div class="title"><span>Connect with Apps</span>
-            <p>Watch video demonstrations that teach you how to complete essential tasks.</p>
-            <img src="images/5ca.png" alt=""/><div class="helpvid">
+    <div class="box gray"><div class="title"><span>Connect with Apps</span>
+            <p style="display:none">Watch video demonstrations that teach you how to complete essential tasks.</p>
+            <img src="<%- this.app.get('path')%>images/5ca.png" alt=""/><div class="helpvid">
                 <a ><i class="icon helpbig "></i><span>Help</span></a>                                 
                 <a ><i class="icon videobig "></i><span>Video</span></a>
             </div>
         </div>
         <div class="tile-shortcuts" >
            <ul>
-                <li class="crm-salesforce"><a ><i class="icon dashsalesforce"></i><span>Salesforce</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+               <li class="crm-salesforce"><a ><i class="icon dashsalesforce"></i><span>Salesforce</span></a><div class="schelpvid videobar" style="display: block;">
+                        <!--<a ><i class="icon help"></i><span>Help</span></a>-->                                 
+                        <a rel="94249680"><i class="icon video"></i><span>Video</span></a>
                     </div></li>
-                <li class="crm-netsuite"><a ><i class="icon dashnetsuite"></i><span>Netsuite</span></a><div class="schelpvid">
-                        <a ><i class="icon help"></i><span>Help</span></a>                                 
-                        <a ><i class="icon video"></i><span>Video</span></a>
+                <li class="crm-netsuite"><a ><i class="icon dashnetsuite"></i><span>Netsuite</span></a><div class="schelpvid videobar" style="display: block;">
+                        <!--<a ><i class="icon help"></i><span>Help</span></a>-->                                 
+                        <a rel="94237419"><i class="icon video"></i><span>Video</span></a>
+                    </div>
+                </li>
+                    <li class="crm-highrise"><a ><i class="icon dashhighrise"></i><span>Highrise</span></a><div class="schelpvid videobar" style="display: block;">
+                        <a rel="95050778"><i class="icon video"></i><span>Video</span></a>                                                         
                     </div></li>
+                    <li class="crm-google"><a ><i class="icon dashgoogle"></i><span>Google</span></a>
+                              <div class="schelpvid videobar" style="display: block;"></div>
+                    </li>
+                <li class="crm-linkedin">
+                    <a><i class="icon dashlinkedin"></i><span>Linkedin</span></a><div class="schelpvid videobar"  style="display:block">
+                        <a><span style="padding-left:25px;">Coming Soon!</span></a>                                                         
+                    </div>
+                </li>   
             </ul>
         </div> <!--  tile-shortcuts -->
 
@@ -241,10 +431,10 @@
 
 
 
-    <div class=" box gray supporthelp">
+    <div class=" box voilet supporthelp" >
         <div class="title"><span>Support & Help</span>
-            <p>Watch video demonstrations that teach you how to complete essential tasks.</p>
-            <img src="images/9sh.png" alt=""/>
+            <p style="display:none">Watch video demonstrations that teach you how to complete essential tasks.</p>
+            <img src="<%- this.app.get('path')%>images/9sh.png" alt=""/>
         </div>
 
         <div class="tile-shortcuts" >
@@ -273,14 +463,15 @@
 
 
 
-    <div class="box voilet releasecalender"><div class="title"><span>Release Calendar</span>
+   <!--   RELEASE CALENDER     -->
+         <div class="box voilet releasecalender" style="display:none;"><div class="title"><span>Release Calendar</span>
 
             <p>Here's what's planned for release in the coming months. <br/><br/>
                 View screenshots and videos. <br/><br/>
                 Please tell us what you think for the planned release to help us prioritize new features!
             </p>
 
-            <img src="images/10rc.png" alt=""/><div class="helpvid">
+            <img src="<%- this.app.get('path')%>images/10rc.png" alt=""/><div class="helpvid">
                 <a ><i class="icon helpbig "></i><span>Help</span></a>                                 
                 <a ><i class="icon videobig "></i><span>Video</span></a>
             </div>
@@ -304,45 +495,41 @@
             <div>
                 <h4>Contacts</h4>
                 <ol>
-                    <li><strong>Activity Timeline(Update)</strong> <em>TBD</em></li>                    
+                    <li><strong>Activity Timeline(Update)</strong> <em>TBD</em></li>  
+                    <li><strong>LinkedIn Connections</strong> <em>TBD</em></li>  
+                    <li><strong>Connection Social Monitoring</strong> <em>TBD</em></li>  
                 </ol>
             </div>
             <div>    
-                <h4>Reporting</h4>
+                <h4>Reports & Analytics</h4>
                 <ol>
-                    <li><strong>Campaign Summary(Update)</strong><em>Mar 20</em></li>
-                    <li><strong>View Activity Population</strong><em>Mar 20</em></li>
+                    <li><strong>Website stats</strong></li>
+                    <li><strong>SEO stats</strong></li>
                 </ol>
             </div>
             <div>    
                 <h4>App Connections</h4>
-                <ol>
-                    <li><strong>Salesforce Synch</strong><em>Mar 07</em></li>
-                    <li><strong>Import from Highrise</strong><em>Mar 28</em></li>
-                    <li><strong>Access from Salesforce</strong><em>Mar 15</em></li>
+                <ol>                    
+                    <li><strong>Highrise connection</strong><em>Apr 18</em></li>
+                    <li><strong>LinkedIn</strong><em>TBD</em></li>
+                    <li><strong>MKS'14 for Salesforce</strong><em>June 15</em></li>
                 </ol>
             </div>
             <div>    
                 <h4>Studio</h4>
                 <ol>
-                    <li><strong>Easy Editor</strong><em>Apr 15</em></li>
+                    <li><strong>Easy Editor</strong><em>June 1</em></li>
                 </ol>
             </div>
 
 
-        </div> <!--  tile-shortcuts -->
-
-
-
-
-
+        </div> <!--  tile-shortcuts -->       
 
     </div>
-
-
+  
 
 </div> <!-- tiles -->
-
+<% } %>
 
 
 <div class="slideoverlay">
@@ -352,52 +539,22 @@
 <div class="videopop">
     <h2>First Steps</h2>
     <p>Watch video demonstrations that teach you how to complete essential tasks.</p>
-    <a  class="close"><img src="images/closebtn-blue.png" alt=""/></a>
+    <a  class="close"><img src="<%- this.app.get('path')%>images/closebtn-blue.png" alt=""/></a>
     <div class="video">
-        <img src="images/videosample.jpg" alt=""/>
+        <img src="<%- this.app.get('path')%>images/videosample.jpg" alt=""/>
     </div>
 </div>
-
-
-<div id="menu1" class="dropdown-menu mergefields sort-options custom_popup" role="menu" style="display:none" >
-    <h2>Merge Fields
-        <div class="input-append search"> <span class="icon list"></span>
-            <input type="text" id="merge_list_search" placeholder="Search merge fields here..." />
-            <a class="close-icon" id="remove-merge-list" style="display:none"></a>
-            <div class="btn-group">
-                <button tabindex="-1" class="searchbtn"><span class="icon-search icon-white"></span></button>
-            </div>
-        </div>
-    </h2>
-    <div class="browsefields" >
-        <ul class="merge-feilds-type">
-            <li id="mergefields_basic" class="group1" ><a tabindex="-1">Basic Fields</a></li>
-            <li id="mergefields_salesRep"><a tabindex="-1">Sales Rep Fields</a></li>
-            <li id="mergefields_custom"><a tabindex="-1">Custom Fields</a></li>
-            <li id="mergefields_links" ><a tabindex="-1">Links</a></li>
-        </ul>
-        <div class="search-panel">
-            <div class="searchlist">      
-            </div>
-            <!-- searchlist --> 
-        </div>
-        <!-- search-panel --> 
-    </div>
-    <div class="searchfields" style="display:none;">
-        <div class="searchlist">    
-        </div>
-    </div>
-    <!-- searchfields -->     
-</div>    
 
 <!-- workspace -->
 <div  id="workspace" style="">
     <div class="workspace grayicons">
+        <% if(!this.app.get("newWin")){ %>     
         <div class="ws-tabs" >
             <ul id="wstabs" class="tabs-menu">
                 <li id="wp_li_0" style="display:none"><a><span class="icon add-list"></span></a></li>
             </ul>
         </div>
+        <% } %>
     </div>
 </div>
 <!-- workspace -->

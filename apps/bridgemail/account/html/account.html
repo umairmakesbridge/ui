@@ -1,0 +1,160 @@
+<div class="manage_account row-fluid">
+    <div class=" span2">
+
+        <ul class="mng_acct">
+            <li class="selected" data-key="update-profile"><a ><span>Update Profile</span></a></li>
+            <li data-key="changepassword"><a><span>Change Password</span></a></li>
+            <li data-key="campaignemailsettings"><a ><span>Email Settings for Campaign</span></a></li>
+            <li data-key="websitetracking"><a class="" ><span>Website Tracking</span></a></li>
+            <li data-key="bridgemailapis"><a class="" ><span>Bridgemail APIs</span></a></li>
+            <li data-key="salesforcesettings"><a class="" ><span>Salesforce</span></a></li>            
+            <li data-key="managesubaccounts" style="display:none"><a class="" ><span>Manage Sub-Accounts</span></a></li>
+            <li data-key="updatesalesreps" style="display:none"><a class="" ><span>Add & Edit Sales Reps</span></a></li>
+        </ul>
+
+    </div>  <!-- camp_header -->
+
+    <div class="span10 setting-container" style="position: relative">
+       <div class="update-profile setting-section">
+            <h3>Update Profile</h3>
+            <p>Please fill in the fields below to update your information. </p>
+
+            <div class="boxinner">
+                <form id="profile-form">
+                    <div class="row">
+                      <div class="avatarimg left">
+                      <div class="droppanel editor-new-template"><h4><img src="<%- this.app.get('path')%>img/imgiconb-w.png" alt=""><br class="clearfix">Drag images here to upload</h4><img style="width:150px;height:150px;display:none" src="">
+                          <div style="display:inline-block;position:relative;" class="SI-FILES-STYLIZED">                              
+                              <a style="display: inline;position: relative;top: 5px;width: 165px;" class="btn btn-blue btn-opengallery right">
+                                  <span>Browse Images</span>
+                                  <i class="icon update"></i>
+                              </a>
+                          </div>
+                      </div>
+
+                  </div>
+                  </div>
+                <div class="row">
+                    <label>User ID </label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <span class="user-id"> </span>
+                        </div>
+                    </div>
+                </div> <!-- row  -->
+
+                <div class="row">
+                    <label>Account Type </label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <span class="account-type">  </span>
+                        </div>
+                    </div>
+                </div> <!-- row  -->
+
+                <div class="row">
+                    <label>Subscription </label>
+                    <div class="input-append ">
+                        <div class="inputcont">
+                            <span class="subscription">  </span>
+                        </div>
+                    </div>
+                </div> <!-- row  -->
+
+                <div class="row">
+                    <label>Account Expiry </label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <span class="account-expiry">  </span>
+                        </div>
+                    </div>
+                </div> <!-- row  -->
+
+                <div class="row">
+                    <label>Email </label>
+                    <div class="input-append">
+                        <div class="inputcont left">
+                            <input type="text" placeholder=""  class="acc-email" value="" name="email" style="width:300px" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label>First Name </label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <input type="text" placeholder=""  class="acc-firstname" value="" name="firstName" style="width:300px">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label>Last Name </label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <input type="text" placeholder=""  class="acc-lastname" value="" name="lastName" style="width:300px">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label>Telephone</label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <input type="text" placeholder=""  class="acc-telephone" value="" name="phone" style="width:300px">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label>URL</label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <input type="text" placeholder=""  class="acc-url" value="" name="url" style="width:300px">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label>Company</label>
+                    <div class="input-append  ">
+                        <div class="inputcont left">
+                            <input type="text" placeholder=""  class="acc-company" value="" name="customerName" style="width:300px">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label>Logo for Unsubscribed Page</label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <input type="text" placeholder=""  class="acc-unsubscribed-logo" value="" name="customerLogo" style="width:300px"><a style=" margin:2px 0 0 10px;" class=" btn-green btn-unsubscribe-logo">  <span>Upload Image</span>   <i class="icon plus"></i> </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <label>Address</label>
+                    <div class="input-append  ">
+                        <div class="inputcont">
+                            <input type="text" placeholder=""  class="acc-addressline1" style="width:50%" value="" name="address1">
+                        </div>
+                        <div class="inputcont" style="margin-top:5px;">
+                            <input type="text" placeholder=""  class="acc-addressline2" style="width:50%" value="" name="address2">
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="type" value="set" />
+                </form>
+                <div class="clearfix"></div>
+
+            </div>
+            <br/>
+            <div class="btns"> 
+                <a class="btn-green save-profile left"><span>Save</span><i class="icon save"></i></a>
+            </div>
+            <div class="clearfix"></div>
+       </div> 
+    </div>
+
+</div> <!-- manage_account -->

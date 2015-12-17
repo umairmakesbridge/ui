@@ -6,12 +6,14 @@ define(['text!crm/netsuite/html/netsuite.html'],
              * Attach events on elements in view.
             */ 
             events: {
-                'click #choose_soruce li':'chooseTile'
+                'click #choose_soruce li':'chooseTile',
+                'mouseover #choose_soruce li':'chooseTileHover'
             },
             /**
              * Initialize view - backbone .
             */
-            initialize: function () {                    
+            initialize: function () {   
+                this.app = this.options.app;
                 this.template = _.template(template);	
                 this.states = {
                     setup:false,
@@ -22,12 +24,21 @@ define(['text!crm/netsuite/html/netsuite.html'],
                 this.render();
 
             },
+             chooseTileHover:function(obj){
+                var li = $.getObj(obj,"li");
+                if(li.hasClass("netsuite-imports")){
+                   this.$(".messagebox p").html("Create, view and edit your existing imports.");  
+                }else if(li.hasClass("netsuite-setup")){
+                   this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                }else{
+                    this.$(".messagebox p").html("Export your existing imports.");
+                }
+            },
             /**
              * Initialize view .
             */
             render: function () {                        
-                this.$el.html(this.template({}));                    
-                this.app = this.options.app;
+                this.$el.html(this.template({}));                                    
                 this.setupArea = this.$("#netsuite-setup");
                 this.myImportsArea = this.$("#netsuite-imports");
                 this.newImportArea = this.$("#netsuite-new-import");
@@ -41,16 +52,41 @@ define(['text!crm/netsuite/html/netsuite.html'],
             */
             init:function(){
                 this.current_ws = this.$el.parents(".ws-content");
-                var ns = this.app.getAppData("netsuite");                
-                if(!ns || ns.isNetsuiteUser=="N"){
-                    this.loadSetupArea();  
+                this.checkNetSuiteStatus();
+            },
+            checkNetSuiteStatus: function(){                                
+                var netsuite_setting = this.app.getAppData("netsuite");
+                this.app.showLoading("Checking Netsuite Status...",this.$el);
+                if(!netsuite_setting || netsuite_setting[0] == "err" || netsuite_setting.isNetsuiteUser=="N")
+                {                        
+                    this.app.getData({
+                        "URL":"/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "key":"netsuite",
+                        callback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);
+                            var ns = this.app.getAppData("netsuite");
+                            if(ns[0]=="err" || ns.isNetsuiteUser=="N"){
+                                this.loadSetupArea();  
+                            }
+                            else{
+                                this.netsuiteSetup = true;
+                                this.showHeader();
+                                this.$(".netsuite-imports").click();                                            
+                            }
+                        },this),
+                        errorCallback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);                            
+                            this.loadSetupArea();  
+                        },this)
+                    });
                 }
-                else{                   
-                    this.netsuiteSetup = true;
-                    this.showHeader();
-                    this.$(".netsuite-imports").click();                                            
-
+                else{
+                     this.app.showLoading(false,this.$el);                            
+                     this.netsuiteSetup = true;
+                     this.showHeader();
+                     this.$(".netsuite-imports").click();                                            
                 }
+                
             },
             showHeader:function(){                               
                 var header_part = $('<div class="bottomdiv">\n\
@@ -72,6 +108,7 @@ define(['text!crm/netsuite/html/netsuite.html'],
                 },this))
             },
               updateCount:function(c){
+                  this.myimports_page.getMyImports();
                 var count = parseInt(this.current_ws.find(".camp_header .sync_count")[0].innerHTML); 
                 this.current_ws.find(".camp_header .sync_count").html(count+c);
             },
@@ -205,8 +242,11 @@ define(['text!crm/netsuite/html/netsuite.html'],
                                 page:this,
                                 dialog:dialog
                            })                        
-                           dialog.getBody().html(this.newImport_page.$el);                           
-                           dialog.getBody().addClass("dialog-wizard")
+                           dialog.getBody().append(this.newImport_page.$el);
+                           this.app.showLoading(false, this.newImport_page.$el.parent());
+                           var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                           this.newImport_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                           dialog.getBody().addClass("dialog-wizard");
                            dialog.saveCallBack(_.bind(this.newImport_page.startImport,this.newImport_page));
                            this.myimports_page.loadImport(json);
                     },this));                   

@@ -4,7 +4,8 @@ function (template,MyImports,moment) {
         return Backbone.View.extend({                                
                 className:'clearfix',
                 events: {
-                    'click #addnew_import':'newImport'
+                    'click #addnew_import,.create_new':'newImport',
+                    "click .refresh_btn":'getMyImports'
                  },
                 initialize: function () {
                     this.template = _.template(template);				
@@ -16,7 +17,7 @@ function (template,MyImports,moment) {
                     this.app = this.options.page.app;                                                 
                     this.parent = this.options.page;
                     this.$el.html(this.template({}));                    
-                    this.$myImportsContainer = this.$(".myimports-table");
+                    this.$myImportsContainer = this.$(".sfmyimports-table");
                     this.initControl();                                                              
                     
                 },
@@ -25,7 +26,7 @@ function (template,MyImports,moment) {
                             id:'myimports-search',
                             width:'300px',
                             height:'22px',
-                            gridcontainer: 'myimports_list_grid',
+                            gridcontainer:'myimports_list_grid_salesforce',
                             placeholder: 'Search my imports',                     
                             showicon: 'yes',
                             iconsource: 'campaigns'
@@ -35,51 +36,52 @@ function (template,MyImports,moment) {
                     
                 },
                 getMyImports:function(){
+                    this.app.addSpinner(this.$el);
                     this.app.showLoading("Loading My Imports...",this.$myImportsContainer);
                     this._request = this.myImportsRequest.fetch({
                       success: _.bind(function (collection, response) {                                                        
                            if(collection.length){                               
-                            var myimports_html = '<table cellpadding="0" cellspacing="0" width="100%" id="myimports_list_grid"><tbody>';                                
+                            var myimports_html = '<div class="create_new"><span>Add Import</span></div><table cellpadding="0" cellspacing="0" width="100%" id="myimports_list_grid_salesforce"><tbody>';                                
                            _.each(collection.models,function(val,key){
                               myimports_html += '<tr id="row_'+val.get("tId")+'">';    
                                 var import_name = val.get("name")?val.get("name"):val.get("listName");
                                 myimports_html += '<td><div class="name-type"><h3><a id="editname_'+val.get("tId")+'" class="get-import">'+import_name+'</a>'+this.setStatus(val.get("status"))+'</h3></div></td>';
                                 myimports_html += '<td>';
                                 if(val.get("frequency")!==''){
-                                    myimports_html += '<img src="img/recurring2.gif"  class="recurring2img" alt=""/>';                                
+                                    myimports_html += '<img src="'+this.app.get("path")+'img/recurring2.gif"  class="recurring2img" alt=""/>';                                
                                 }
                                 myimports_html += '</td>';
-                                myimports_html += '<td>';
-                                    if(val.get("status")=='S'){
-                                        myimports_html += '<div class="sched show" style="width:145px"><strong><span><em><b>'+this.getFrequency(val.get("frequency"))+'</b></em>'+this.getDate(val.get("scheduledDate"))+'</span></strong></div>';                                    
-                                        myimports_html += '<div class="action"><a class="btn-red deactivate-import" id="deact_'+val.get("tId")+'"><span>Delete</span><i class="icon deactivate"></i></a><a class="btn-gray get-import" id="edit_'+val.get("tId")+'"><span>Edit</span><i class="icon edit"></i></a></div>';
-                                    }
+                                myimports_html += '<td>';                                    
+                                    var daysDisplay = this.getDate(val.get("scheduledDate"),val.get("frequency"),val.get("day"));
+                                    myimports_html += '<div class="sched" data-original-title='+daysDisplay+'><strong><span><em><b>'+this.getFrequency(val.get("frequency"))+'</b></em>'+daysDisplay+'</span></strong></div>';                                    
+                                    myimports_html += '<div class="slide-btns two s-clr3" style="width:;"><span class="icon setting"></span><div><a class="icon delete clr2  deactivate-import" id="deact_' + val.get("tId") + '"><span>Delete</span></a><a class="icon edit clr1 get-import" id="edit_' + val.get("tId") + '"><span>Edit</span> </a></div></div>';                                      
                                 myimports_html += '</td>';
                               myimports_html += '</tr>';
                           },this);
                             myimports_html +="</tbody></table>";
                             this.$myImportsContainer.html(myimports_html);
-                            this.$("#myimports_list_grid").bmsgrid({
+                            
+                            this.$("#myimports_list_grid_salesforce").bmsgrid({
                                     useRp : false,
                                     resizable:false,
                                     colresize:false,
                                     height:'auto',
                                     usepager : false,
-                                    colWidth : ['100%','20px','60px']
+                                    colWidth : ['90%','5%','35%']
                             });
+                            this.$("#myimports_list_grid_salesforce tr td:nth-child(1)").attr("width","80%");
+                            this.$("#myimports_list_grid_salesforce tr td:nth-child(2)").attr("width","20px");
+                            this.$("#myimports_list_grid_salesforce tr td:nth-child(3)").attr("width","220px");
                             this.$myImportsContainer.find(".deactivate-import").click(_.bind(this.deactivateImport,this)); 
                              this.$myImportsContainer.find(".get-import").click(_.bind(this.getImport,this)); 
                             
                           }
                           else{
-                             this.$myImportsContainer.html('<p class="notfound">No imports found</p>');
-                          }
-                          
-                          
-                          
-                          
-                          
-                            
+                             this.$myImportsContainer.html('<div class="create_new"><span>Add import</span></div><p class="notfound">No imports found</p>');
+                          }       
+                          /*-----Remove loading------*/
+                          this.app.removeSpinner(this.$myImportsContainer);
+                        /*------------*/
                       }, this),
                       error: function (collection, resp) {
 
@@ -93,14 +95,60 @@ function (template,MyImports,moment) {
                         statusHTML = '<a class="cstatus pclr2">Scheduled </a>'
                     }
                     else if(status=='P'){
-                        statusHTML = '<a class="cstatus pclr6">Pending </a>'
+                        statusHTML = '<a class="cstatus pclr1">Pending </a>'
+                    }
+                    else if(status=='E'){
+                        statusHTML = '<a class="cstatus pclr6">Error </a>'
                     }
                     
                     return statusHTML;
                 },
-                getDate:function(val){
+                getDate:function(val,freq, days){
+                   
+                    if(freq =="O"){
+                         if(days != ""){
+                             return this.caluculateDays(days);
+                         }
+                    }
                     var _date = moment(this.app.decodeHTML(val),'YYYY-M-D H:m');
                     return _date.format("DD MMM, YYYY");
+                },
+                caluculateDays:function(days){
+                    var days = days.split(",");
+                    var str = "";
+                      _.each(days,function(day){
+                        
+                        switch(day){
+                            case "1":
+                                str = str + "Sun";
+                                break;
+                            case "2":
+                                str = str + ", Mon";
+                                break;
+                            case "3":
+                                str = str + ", Tue";
+                                break;
+                            case "4":
+                                str = str + ", Wed";
+                                break;
+                            case "5":
+                                str = str + ", Thu";
+                                break;
+                            case "6":
+                                str = str + ", Fri";
+                                break;
+                            case "7":
+                                str = str + ", Sat";
+                                break;
+                        }
+                    })
+                    var result = [];
+                    str =  str.replace(/^,|,$/g,'');
+                   // result[0] = str;
+                  //  str =  $.trim(str).substring(0, 25).split(" ").slice(0, -1).join(" ") + "...";
+                    //result[1] = str;
+                    //console.log(result);
+                    return str;
                 },
                 getFrequency:function(freq){
                     var frequency = "";
@@ -108,13 +156,13 @@ function (template,MyImports,moment) {
                         frequency = "Once only";
                     }
                     else if(freq=="O"){
-                        frequency = "Once a Week";
+                        frequency = "Next import";
                     }
                     else if(freq=="T"){
-                        frequency = "After two weeks";
+                        frequency = "Next import";
                     }
                     else if(freq=="M"){
-                        frequency = "After a month";
+                        frequency = "Next import";
                     }
                     return frequency;
                 },
@@ -125,7 +173,7 @@ function (template,MyImports,moment) {
                             callback: _.bind(function(){													
                                     this.deactivateCall(tid.split("_")[1]);
                             },this)},
-                    this.$el);       
+                    $('body'));       
                 },
                 deactivateCall:function(tId){
                     this.app.showLoading("Deactivating Import...",this.$el);
@@ -166,36 +214,41 @@ function (template,MyImports,moment) {
                 },
                 newImport:function(){
                     var camp_obj = this;
-                    var dialog_width = 650;
-                    var dialog_height = 100;
-                    var dialog = camp_obj.app.showDialog({title:'New Import' ,
-                            css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20%"},
-                            headerEditable:false,
-                            headerIcon : 'import',
-                            bodyCss:{"min-height":dialog_height+"px"},
-                            buttons: {saveBtn:{text:'Create Import',btnicon:'save'} }
-                    });	
-                    var new_import ='<div style=" min-height:100px;"  class="clearfix template-container gray-panel" id="create-import-container">';
-                        new_import +='<div class="cont-box" style="margin-top:10px; top:0; left:56%; width:90%;">';
-                        new_import +='<div class="row campname-container">';
-                        new_import +='<label style="width:10%;">Name:</label>';
-                        new_import +='<div class="inputcont" style="text-align:right;">';
-                        new_import +='<input type="text" name="_import" id="import_name" placeholder="Enter salesforce import name" style="width:83%;" />';
-                        new_import +='</div></div></div></div>';
+                    var new_import ='<div class="overlay"><div style="margin-left: -385px; width: 770px;" class="moda-v2 modal-open modal in"><div style="min-height: 300px;" class="modal-body">';
+                        new_import +='<div class="sd_common salesforce-tilt"><a class="closebtn close_import"></a>';
+                        new_import +=' <div class="watermark_tilt" style="background-position:"></div>';
+                        new_import +='<h2>Create a new Salesforce Import</h2><div class="lp_name">';
+                        new_import +=' <div class="inputcont" style="height:39px;float:left;width:324px;">';
+                        new_import +='<input type="text" id="import_name" placeholder="Enter Salesforce import name" name="_import" style="width:300px;" class="field-text">';
+                        new_import +='</div><a class="btn-green g-btn create-button"><span style="min-width: 40px;"> Create </span><i class="icon next"></i></a></div><div class="clearfix"></div></div></div><br></div></div>';
                         new_import = $(new_import);                                
-                        dialog.getBody().html(new_import);
+                        $('body').append(new_import);
                         new_import.find("#import_name").focus();                        
+                       new_import.find(".close_import").click(function(e){
+                            new_import.remove();
+                        });       
+                        new_import.find(".create-button").click(_.bind(function(e){
+                                this.editImport(new_import);
+                        },this));
                         new_import.find("#import_name").keydown(_.bind(function(e){
                             if(e.keyCode==13){
-                                this.editImport(dialog);
+                                this.editImport(new_import);
                             }
-                        },this))
-                        dialog.saveCallBack(_.bind(this.editImport,this,dialog));
+                        },this))                        
                 },
                 editImport:function(dialog){
-                    dialog.hide();
-                    var importName = dialog.$("#import_name").val();
-                    this.parent.updateImport(importName);
+                    var importName = dialog.find("#import_name").val();
+                    var appMsgs = this.app.messages[0];
+                    var el = this.$el;
+                    if(importName){
+                        dialog.remove();
+                        this.parent.updateImport(importName);
+                    }else{
+                        this.app.showError({
+                            control: el.parents('body').find('.modal-open'),
+                            message: appMsgs.MAPDATA_importlist_empty_error
+                            });
+                    }
                 }
         });
 });

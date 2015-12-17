@@ -1,0 +1,71 @@
+ 
+<% if(isAuthorize) { %>
+<div style=" position:static; margin:0;" class="cont-box row-fluid ">
+    <div class="span6">
+        <div style="margin-left: 10%; text-align: center;">
+            <div style="margin-left: 10%; width: 400px;">
+                <img style="margin-bottom: 2px;" src="<%=this.app.get('path')%>img/google.jpg" alt="">
+                
+                <div style="box-shadow: 3px 3px 3px 3px rgb(204, 204, 204); border-radius: 5px;">
+
+
+                    <div style="padding: 0px;">
+                        <div style="display: inline-block;  float: left;">
+                            <img style="border-radius: 5px;" id="imguser" height="120px" width="120px"/>
+                        </div>
+                        <div style="display: inline-block; width: 200px; text-align: left; padding-top: 20px;">
+                            <strong id="spnname">Loading please wait...</strong>
+                            <span id="spnemail"></span>
+
+                        </div>          
+
+
+                    </div> 
+                    <div class="clearfix"></div>
+                </div>
+                <div style="margin-top: 15px;color: #6494AF;font-size: 16px;">
+                    <em>You have allowed Makesbridge to access this account</em>
+                </div>
+                <div>
+                    <a style="margin-top: 15px;" class="btn-green" id="btnChangeLogin"><span>Change Account</span><i class="icon next"></i> </a>
+                    <a style="margin-top: 15px;" class="btn-gray" id="btnRevokeAccess"><span>Revoke Access</span><i class="icon next"></i> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span6 second-div">
+        <h5 style="padding-left: 183px!important;margin:0px!important;">
+            Send synchronization confirmation email to:</h5>
+        <div class="row email-container">
+            <div class="input-append adv_dd sort-options">
+                <div class="inputcont ">
+                    <input  id="google_email" class="header-info textfield" placeholder="Enter email to send confirmation" type="text">
+                </div>
+            </div>
+
+        </div>
+        <div class="row btnrow login-saving"><a class="btn-green right setEmail"><span>Save</span><i class="icon save"></i></a></div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<% } else { %>
+<div style=" position:static; margin:0;" class="cont-box row-fluid ">
+
+    <div class="span12">
+        <div style="text-align: center;">
+            <img style="margin:0px!important;" src="<%=this.app.get('path')%>img/google.jpg" alt="">
+            <div style="" class="">
+                <h3>Add Google App Account</h3>
+                <p>Authorize access to Google App account with Makesbridge</p>
+                <a style="margin-top: 15px;" class="btn-green" id="btnGoogleLogin"><span>Add an Account </span><i class="icon next"></i> </a>
+            </div>
+
+
+
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<% } %>

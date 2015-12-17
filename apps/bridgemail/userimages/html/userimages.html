@@ -3,7 +3,7 @@
     <h2 id="total_graphics"><strong class="badge"></strong>  <span>Images found</span></h2>
  
   <div class="srt-div" style=" ">        
- 
+     <a class="refresh_btn showtooltip" title="Refresh listing"><i>Refresh</i></a> 
     <div class="input-append search search-graphics-div">         
         <span class="icon _graphics"></span>
         <input type="text" style="width:300px;" class="search-control show-image " placeholder="Search images by name or tag" id="search-graphics-input">
@@ -17,13 +17,13 @@
 <!--  temp-filters  -->
 
 <div class="template-container">
-  <div id="content-1" class="scroll-content">
+  <div id="content-1" class="scroll-content tileview ">
     <div class="row-fluid">
       <ul class="thumbnails">
       
       </ul>
        <div class="loadmore" style="display:none">
-         <img src="img/loading.gif" alt=""/>
+         <img src="<%=this.options.app.get("path")%>img/loading.gif" alt=""/>
          </div>   
       <div class="footer-loading" style="display:none">
         <hr>

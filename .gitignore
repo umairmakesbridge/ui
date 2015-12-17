@@ -14,3 +14,9 @@ DS_Store
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+apps/shared/.DS_Store
+
+.DS_Store
+
+js/myUsers.js

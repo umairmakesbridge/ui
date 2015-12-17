@@ -1,0 +1,27 @@
+<div class="thumbnail temp-thumbnail">
+  <div title="Stock Template" class="template-type builticonnew showtooltip"></div>  
+  <div class="img">                               
+      <div class="gallery-action-btns two s-clr3">                              
+        <a class="usebtn use-track clr2"><span>Use</span></a>
+        <a class="previewbtn clr1" id=""><span>Preview</span></a>
+      </div>              
+                                
+      <% if(model.get('thumbURL')){  %> 
+      <span>
+          <img src='<%- this.app.decodeHTML(model.get("thumbURL")) %>' data-src="holder.js" alt="" />
+       </span>
+     <% } else {
+       %>  
+       <img src="<%- this.app.get('path')%>img/nurtureimg.png" data-src="holder.js" alt="">              
+      <%}      
+      %>      
+  </div>
+  <div class="caption nurture-caption" style="height:145px;">
+      <h3><a class="edit-track showtooltip" title="Click to copy template"><%- this.app.decodeHTML(model.get('name'))%></a></h3>    
+   <a class="cstatus pclr20">Template</a>    
+   <div class="t-scroll"></div>    
+    <div class="btm-bar">        
+        <span style="float:left"><span title="Click to preview messages gallery" class="icon message-tiles message-view showtooltip"></span><em><%- model.get('msgCount')%></em></span>        
+    </div>
+  </div>
+</div>
