@@ -295,10 +295,11 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     }, this));
                 },
                 saveTemplateCall: function (obj) {
+             
                     var _this = this;
                     if(!this.meeView.autoSaveFlag){
                     var button = '';
-                    if(obj){
+                    if(obj && typeof obj!=="boolean"){
                          button = $.getObj(obj,"a");
                     }else{
                         this.meeView.autoSaveFlag = true; 
@@ -327,13 +328,17 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     if(button &&  !button.hasClass("disabled-btn")){
                             button.addClass("disabled-btn");
                             _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
-                        }
+                        }else if(typeof obj==="boolean"){
+                                 _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
+                            }
                     $.post(URL, this.dataObj)
                             .done(function (data) {
                                 _this.app.showLoading(false, _this.$el.parents('.modal'));
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== 'err') {
                                      if(!_this.meeView.autoSaveFlag){
+                                         _this.app.showMessge("Template Updated Successfully!");
+                                        }else if(typeof obj==="boolean"){
                                          _this.app.showMessge("Template Updated Successfully!");
                                         }
                                         if(button){
