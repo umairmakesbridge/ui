@@ -372,20 +372,17 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 }
                                 camp_obj.$("#campaign_from_email_default").show();
                                 camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
-                                camp_obj.$("#fromemail_default_input").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail));
-                                //setTimeout(_.bind(camp_obj.setFromNameField,camp_obj),300);    
+                                camp_obj.$("#fromemail_default_input").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail));                                
 
                             }
                             else
                             {
-                                camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail)).trigger("chosen:updated");
-                                //camp_obj.$("#campaign_from_email_input").val(camp_obj.app.decodeHTML(camp_json.fromEmail));                                
+                                camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail)).trigger("chosen:updated");                                                       
                                 camp_obj.$("#campaign_from_email_default").hide();
                             }
                         }
                         var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah Check
-                        var fegb_w = camp_obj.$el.find('#fecol3').width();
-                        //camp_obj.$('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
+                        var fegb_w = camp_obj.$el.find('#fecol3').width();                        
                         if (camp_obj.campFromName) {
                             camp_obj.$("#campaign_from_name").val(camp_obj.campFromName);
                         }

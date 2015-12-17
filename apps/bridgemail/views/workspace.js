@@ -10,7 +10,7 @@ function ($,Backbone, _,app,Wizard, template) {
                         var cur_wp = $(obj.target).parents(".ws-content");
                         var wp_id = cur_wp.attr("id").split("_")[1];
                         var close_wp = $("#wp_li_"+wp_id).data('viewObj');
-                        if(close_wp && close_wp.$el.find('#mee_editor').length > 0 && close_wp.$el.find('#mee_editor').html() !== ""){
+                        if(close_wp && close_wp.$el.find('#mee_editor').length > 0 && close_wp.$el.find('#mee_editor').resetAutoSaveTimer && close_wp.$el.find('#mee_editor').html() !== ""){
                                close_wp.$el.find('#mee_editor').resetAutoSaveTimer();
                         }
                         if(close_wp && close_wp.closeCallBack){

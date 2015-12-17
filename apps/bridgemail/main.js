@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.469" ,       
+       urlArgs: "bust=1.469_1" ,       
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
@@ -12,8 +12,7 @@
            router: 'shared/router',
            async: 'shared/libs/async',
            goog: 'shared/libs/goog',
-           propertyParser: 'shared/libs/propertyParser',
-           'iframed-app': 'shared/iframed-app',           
+           propertyParser: 'shared/libs/propertyParser',           
            'jquery.bmsgrid': 'shared/libs/bmsgrid',
            'jquery.calendario': 'shared/libs/jquery.calendario',
            'jquery.icheck': 'shared/libs/jquery.icheck',

@@ -2894,15 +2894,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     e.preventDefault();
                                 });
 
-
-
                                 myElement.find("#HTML5FileUploader").on("dragleave", function (e) {
                                     e.stopPropagation();
                                     e.preventDefault();
                                 });
-
-
-
 
                                 myElement.find("#HTML5FileUploader").on("drop", function (e) {                                    
                                     e.stopPropagation();
