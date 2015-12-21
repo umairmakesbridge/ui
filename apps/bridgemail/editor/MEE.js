@@ -5975,7 +5975,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         },
                         OnSaveDynamicContent: function (args)
                         {
-
                             var content = args.DynamicContent;
                             var dynamicNumber = content.DynamicVariationID;
                             var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&isDefault=" + (content.IsDefault ? "Y" : "N");
@@ -6343,8 +6342,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 async: false,
                                 success: function (e) {
                                     if (e.count != "0") {
-                                        args.formBlocks = e.forms[0];
-                                        
+                                        args.formBlocks = e.forms[0];                                        
                                     }
                                 },
                                 error: function (e) {
