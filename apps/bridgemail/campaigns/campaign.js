@@ -568,7 +568,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             headerIcon: 'dlgpreview',
                             bodyCss: {"min-height": dialog_height + "px"}
                         });
-
+                        camp_obj.app.showLoading("Loading Campaign Preview...", dialog.getBody());
                         var preview_url = "https://" + camp_obj.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + camp_obj.camp_id;
                         require(["common/templatePreview"], _.bind(function (templatePreview) {
                             var tmPr = new templatePreview({frameSrc: preview_url, app: camp_obj.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: camp_obj.camp_id, isText: camp_obj.camp_istext}); // isText to Dynamic
@@ -3448,6 +3448,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         headerIcon: 'dlgpreview',
                         bodyCss: {"min-height": dialog_height + "px"}
                     });
+                    this.app.showLoading("Loading Campaign Preview...", dialog.getBody());
                     var preview_url = "https://" + this.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.camp_id;
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: this.camp_id, isText: this.camp_istext});

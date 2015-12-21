@@ -66,7 +66,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     copyIconTemplate.attr('data-original-title', 'Copy template').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     ;
                     this.head_action_bar.find(".delete").attr('data-original-title', 'Delete template').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    this.head_action_bar.append(previewIconTemplate);                                        
+                    this.head_action_bar.append(previewIconTemplate);
                     this.tagDiv.addClass("template-tag");
                     this.loadTemplate();
                     this.iThumbnail = this.$(".droppanel");
@@ -90,7 +90,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         addCallBack: _.bind(this.addCategory, this),
                         placeholder_text: 'Please enter category',
                         fromDialog: this.dialog.$el,
-                        _eletop : 142
+                        _eletop: 142
                     });
 
                     // Merge Field Abdullah 
@@ -155,15 +155,15 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     }, this));
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
-                loadEditor : function(obj){
-                  //var target_li =$.getObj(obj,"li");   
-                  if(obj==='editor'){
-                      this.initEditor();
-                      
-                  }
-                  else{
-                      this.loadMEE();
-                  }
+                loadEditor: function (obj) {
+                    //var target_li =$.getObj(obj,"li");   
+                    if (obj === 'editor') {
+                        this.initEditor();
+
+                    }
+                    else {
+                        this.loadMEE();
+                    }
                 },
                 /**
                  * Load template contents and flag doing a get Ajax call.
@@ -181,21 +181,21 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=get&templateNumber=" + this.template_id;
                     this.getTemplateCall = jQuery.getJSON(URL, function (tsv, state, xhr) {
                         if (xhr && xhr.responseText) {
-                            
+
                             var template_json = jQuery.parseJSON(xhr.responseText);
                             if (_this.app.checkError(template_json)) {
                                 return false;
                             }
 
                             _this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title", "Click to rename").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                            _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;                            
-                            if(template_json.isEasyEditorCompatible=="N" && !_this.createTempOnly){                                     
+                            _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;
+                            if (template_json.isEasyEditorCompatible == "N" && !_this.createTempOnly) {
                                 _this.editorContent = _this.app.decodeHTML(template_json.htmlText, true);
-                               _this.loadEditor('editor');
+                                _this.loadEditor('editor');
                             }
-                            else{
+                            else {
                                 _this.editorContentMEE = template_json.htmlText
-                                _this.loadMEE(); 
+                                _this.loadMEE();
                             }
                             if (template_json.isFeatured == 'Y') {
                                 _this.$(".featured").iCheck('check');
@@ -227,7 +227,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                 params: {type: 'tags', templateNumber: _this.template_id, tags: ''}
                                 , showAddButton: true,
                                 tags: template_json.tags,
-                                fromDialog: _this.dialog.$el,                                
+                                fromDialog: _this.dialog.$el,
                                 callBack: _.bind(_this.newTags, _this),
                                 typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + _this.app.get('bms_token') + "&type=allTemplateTags"
                             });
@@ -295,18 +295,23 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     }, this));
                 },
                 saveTemplateCall: function (obj) {
-             
                     var _this = this;
-                    if(!this.meeView.autoSaveFlag){
                     var button = '';
-                    if(obj && typeof obj!=="boolean"){
-                         button = $.getObj(obj,"a");
-                    }else{
-                        this.meeView.autoSaveFlag = true; 
+                    if (this.meeView && !this.meeView.autoSaveFlag) {                        
+                        if (obj && typeof obj !== "boolean") {
+                            button = $.getObj(obj, "a");
+                        } else {
+                            this.meeView.autoSaveFlag = true;
+                        }
+                        if ((button && button.hasClass("disabled-btn")) || this.meeView.autoSaveFlag == false) {
+                            return false;
+                        }
+                    }else {
+                        if(typeof obj !== "boolean"){
+                            button = $.getObj(obj, "a");
+                        }
                     }
-                    
-                    if((button && !button.hasClass("disabled-btn")) ||  this.meeView.autoSaveFlag == true){  
-                    
+
                     var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token');
                     var isReturnPath = this.$(".return-path").prop("checked") ? 'Y' : 'N';
                     var isFeatured = this.$(".featured").prop("checked") ? 'Y' : 'N';
@@ -318,50 +323,52 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         isMobile: isMobile,
                         categoryID: this.$(".category-input").val()
                     };
-                    if (this.isEasyEditorCompatibleFlag || this.createTempOnly) {
+                    if (this.$("#mee_editor").getMEEHTML && (this.isEasyEditorCompatibleFlag || this.createTempOnly)) {
                         this.dataObj["isMEE"] = 'Y';
                         this.dataObj["templateHtml"] = this.$("#mee_editor").getMEEHTML();
                     }
                     else {
                         this.dataObj["templateHtml"] = _tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
                     }
-                    if(button &&  !button.hasClass("disabled-btn")){
-                            button.addClass("disabled-btn");
-                            _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
-                        }else if(typeof obj==="boolean"){
-                                 _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
-                            }
+                    if (button && !button.hasClass("disabled-btn")) {
+                        button.addClass("disabled-btn");
+                        _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
+                    } else if (typeof obj === "boolean") {
+                        _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
+                    }
                     $.post(URL, this.dataObj)
                             .done(function (data) {
                                 _this.app.showLoading(false, _this.$el.parents('.modal'));
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== 'err') {
-                                     if(!_this.meeView.autoSaveFlag){
-                                         _this.app.showMessge("Template Updated Successfully!");
-                                        }else if(typeof obj==="boolean"){
-                                         _this.app.showMessge("Template Updated Successfully!");
-                                        }
-                                        if(button){
-                                            button.removeClass("disabled-btn"); 
-                                        }
-                                        _this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
-                                        _this.meeView.autoSaveFlag = false;   
-                                        _this.editor_change = false;
+                                    if (typeof obj === "boolean"|| (_this.meeView && !_this.meeView.autoSaveFlag)) {
+                                        _this.app.showMessge("Template Updated Successfully!");
+                                    }
+                                    if (button) {
+                                        button.removeClass("disabled-btn");
+                                    }
+                                    if(_this.meeView){
+                                        _this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: ' + moment().format('h:mm:ss a'));
+                                        _this.meeView.autoSaveFlag = false;
+                                    }
+                                    _this.editor_change = false;
                                     if (_this.modelTemplate) {
                                         _this.modelSave();
                                     }
                                 }
                                 else {
                                     _this.app.showAlert(_json[1], $("body"), {fixed: true});
-                                    }
-                                });
-                            }
-                        }
+                                }
+                            });
+
+
                 },
                 initEditor: function () {
-                    if(this.tinymceEditor==true){return false}
+                    if (this.tinymceEditor == true) {
+                        return false
+                    }
                     this.tinymceEditor = true;
-                    this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");                  
+                    this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");
                     var _this = this;
                     _tinyMCE.init({
                         // General options
@@ -461,8 +468,9 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                     _this.showHideTargetTitle();
                                     _this.app.showMessge("Templated Renamed");
                                     //_this.page.$("#template_search_menu li:first-child").removeClass("active").click();
-                                   if(_this.modelTemplate){
-                                   _this.modelTemplate.model.set("name", template_name_input.val());}
+                                    if (_this.modelTemplate) {
+                                        _this.modelTemplate.model.set("name", template_name_input.val());
+                                    }
                                 }
                                 else {
                                     _this.app.showAlert(_json[1], _this.$el);
@@ -536,7 +544,9 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== 'err') {
                                     this.app.showMessge("Thumbnail Saved Successfully");
-                                    if(this.modelTemplate){this.modelTemplate.model.set("thumbURL", this.iThumbImage);}
+                                    if (this.modelTemplate) {
+                                        this.modelTemplate.model.set("thumbURL", this.iThumbImage);
+                                    }
                                 } else {
                                     this.app.showAlert(_json[1], $("body"), {fixed: true});
                                 }
@@ -650,95 +660,96 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         e.stopPropagation();
                     }, this));
                 },
-                loadMEE:function(){
-                    if(!this.meeEditor){
-                         this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));                         
-                         this.meeEditor = true;               
-                         setTimeout(_.bind(this.setMEEView,this),100);                        
+                loadMEE: function () {
+                    if (!this.meeEditor) {
+                        this.app.showLoading("Loading MEE Editor...", this.$("#area_html_editor_mee"));
+                        this.meeEditor = true;
+                        setTimeout(_.bind(this.setMEEView, this), 100);
                     }
                 },
-                setMEEView:function(){
-                        var _html = this.editorContent!==""?$('<div/>').html(this.editorContentMEE).text().replace(/&line;/g,""):""; 
-                        var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 31); // Scroll Top Minus from Body
-                         require(["editor/MEE"],_.bind(function(MEE){                                              
-                            var MEEPage = new MEE({app:this.app,margin:{top:236,left:0},_el:this.$("#mee_editor"),parentWindow:this.$el.parents(".modal-body"),scrollTopMinus:topaccordian,html:'',saveClick:_.bind(this.saveTemplateCall,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),saveBtnText:'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});                                    
-                            this.$("#mee_editor").setChange(this); 
-                            this.meeView = MEEPage;
-                            this.setMEE(_html);
-                            this.initScroll();
-                             
-                        },this));  
-                },
-                setMEE:function(html){
-                   if(this.$("#mee_editor").setMEEHTML){
-                        this.$("#mee_editor").setMEEHTML(html);   
-                        this.app.showLoading(false,this.$("#area_html_editor_mee"));
-                   } 
-                   else{
-                       setTimeout(_.bind(this.setMEE,this,html),200);
-                   }
-                },
-                initScroll:function(){            
-                    this.$win=this.$el.parents(".modal-body")
-                    ,this.$nav = this.$('.editortoolbar')
-                    ,this.$tools = this.$('.editortools')                                    
-                    ,this.$editorarea =this.$('.editorbox')
-                    ,this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top                
-                    ,this.isFixed = 0,this.scrollChanged=false;
+                setMEEView: function () {
+                    var _html = this.editorContent !== "" ? $('<div/>').html(this.editorContentMEE).text().replace(/&line;/g, "") : "";
+                    var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 31); // Scroll Top Minus from Body
+                    require(["editor/MEE"], _.bind(function (MEE) {
+                        var MEEPage = new MEE({app: this.app, margin: {top: 236, left: 0}, _el: this.$("#mee_editor"), parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: topaccordian, html: '', saveClick: _.bind(this.saveTemplateCall, this), fromDialog: true, reattachEvents: _.bind(this.ReattachEvents, this), saveBtnText: 'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});
+                        this.$("#mee_editor").setChange(this);
+                        this.meeView = MEEPage;
+                        this.setMEE(_html);
+                        this.initScroll();
 
-                    this.processScroll=_.bind(function(){                                                       
-                      if(this.$("#area_html_editor_mee").height() > 0 ){ 
-                        if(this.$("#area_html_editor_mee").css("display")!=="none"){  
-                          var i, scrollTop = this.$win.scrollTop();
-                          this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top  ;
-                          
-                          if (scrollTop >= (this.navTop + 12) && !this.isFixed) {
-                            this.isFixed = 1
-                            this.$nav.addClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');                            
-                            this.$nav.css("width",this.$(".editorpanel").width());
-                            this.$tools.addClass('editor-lefttoolbar-fixed');                        
-                            this.$editorarea.addClass('editor-panel-fixed');                                                
-                            this.$nav.attr("style","top:90px !important");
-                            this.$tools.attr("style","top:90px !important");
-                            this.$nav.css("width",this.$(".editorpanel").width());
-                            this.scrollfixPanel();
-                          } else if (scrollTop <= (this.navTop + 12) && this.isFixed) {
-                            this.isFixed = 0
-                            this.$nav.removeClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');
-                            this.$nav.css("top","7px");this.$tools.css("top","0px");
-                            this.$nav.css("width","100%");
-                            this.$tools.removeClass('editor-lefttoolbar-fixed');                        
-                            this.$editorarea.removeClass('editor-panel-fixed');                        
-                          }                      
-                        }
-                      }
-                    },this);
-                    this.processScroll();
-                    this.$win.on('scroll', this.processScroll);                                
+                    }, this));
                 },
-                scrollfixPanel: function(){
-                    this.$win.scroll(_.bind(function(){
+                setMEE: function (html) {
+                    if (this.$("#mee_editor").setMEEHTML) {
+                        this.$("#mee_editor").setMEEHTML(html);
+                        this.app.showLoading(false, this.$("#area_html_editor_mee"));
+                    }
+                    else {
+                        setTimeout(_.bind(this.setMEE, this, html), 200);
+                    }
+                },
+                initScroll: function () {
+                    this.$win = this.$el.parents(".modal-body")
+                            , this.$nav = this.$('.editortoolbar')
+                            , this.$tools = this.$('.editortools')
+                            , this.$editorarea = this.$('.editorbox')
+                            , this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top
+                            , this.isFixed = 0, this.scrollChanged = false;
+
+                    this.processScroll = _.bind(function () {
+                        if (this.$("#area_html_editor_mee").height() > 0) {
+                            if (this.$("#area_html_editor_mee").css("display") !== "none") {
+                                var i, scrollTop = this.$win.scrollTop();
+                                this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top;
+
+                                if (scrollTop >= (this.navTop + 12) && !this.isFixed) {
+                                    this.isFixed = 1
+                                    this.$nav.addClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');
+                                    this.$nav.css("width", this.$(".editorpanel").width());
+                                    this.$tools.addClass('editor-lefttoolbar-fixed');
+                                    this.$editorarea.addClass('editor-panel-fixed');
+                                    this.$nav.attr("style", "top:90px !important");
+                                    this.$tools.attr("style", "top:90px !important");
+                                    this.$nav.css("width", this.$(".editorpanel").width());
+                                    this.scrollfixPanel();
+                                } else if (scrollTop <= (this.navTop + 12) && this.isFixed) {
+                                    this.isFixed = 0
+                                    this.$nav.removeClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');
+                                    this.$nav.css("top", "7px");
+                                    this.$tools.css("top", "0px");
+                                    this.$nav.css("width", "100%");
+                                    this.$tools.removeClass('editor-lefttoolbar-fixed');
+                                    this.$editorarea.removeClass('editor-panel-fixed');
+                                }
+                            }
+                        }
+                    }, this);
+                    this.processScroll();
+                    this.$win.on('scroll', this.processScroll);
+                },
+                scrollfixPanel: function () {
+                    this.$win.scroll(_.bind(function () {
                         var scrollTop = this.$win.scrollTop();
                         //var scrollPosition = scrollTop - 500;
-                      
-                            var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 31); // h3 + padding
-                            var scrollTop = scrollTop - topaccordian;
-                       
-                        if(scrollTop >= (this.navTop - 270) && scrollTop > 0){
+
+                        var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 31); // h3 + padding
+                        var scrollTop = scrollTop - topaccordian;
+
+                        if (scrollTop >= (this.navTop - 270) && scrollTop > 0) {
                             this.$editorarea.removeClass('editor-panel-zero-padding');
-                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollTop+'px');
-                        }else if(this.$tools.hasClass('editor-lefttoolbar-fixed')){
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', scrollTop + 'px');
+                        } else if (this.$tools.hasClass('editor-lefttoolbar-fixed')) {
                             this.$editorarea.addClass('editor-panel-zero-padding');
-                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','48px'); 
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '48px');
                         }
-                        else{
+                        else {
                             this.$editorarea.addClass('editor-panel-zero-padding');
-                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '0');
                         }
-                      
-                    },this));
+
+                    }, this));
                 },
-                previewCallback: function(){
+                previewCallback: function () {
                     this.head_action_bar.find('.preview').trigger('click');
                 }
             });

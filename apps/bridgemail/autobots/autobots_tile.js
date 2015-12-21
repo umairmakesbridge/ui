@@ -4,6 +4,8 @@
  * Author: Pir Abdul Wakeel
  * Description: Notification View
  * Dependency: Notifications
+ * 
+ * Comments: Hovering logic needs to be corrected
  */
 define(['text!autobots/html/autobots_tile.html','common/tags_row'],
         function(template,tagView) {
