@@ -1498,7 +1498,7 @@
                         this.offsetLengthSubList = 0;
                         this.options.app.showLoading("Loading Lists...", dialog.find('#filter_list_grid'));
                         dialog.find('#filter_list_grid .loading p').css({'margin-left':'-150px','margin-right':'0'});
-                        dialog.find('#filter_list_grid tbody').html('');
+                        
                          dialog.find(".notfound").remove();
 
                     }
@@ -1508,6 +1508,7 @@
        
       if(searchtext){
             var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=batches&offset="+self.offsetLengthSubList+"&searchText="+searchtext;
+            dialog.find("#filter_list_grid tbody").html('');
             dialog.find("#filter_list_grid tbody").html('<tr class="loading-campagins"><td colspan="2"><div class="loadmore"><img src="img/loading.gif" alt=""/><p style="float:none;">Please wait, Loading Lists.</p></div></td></tr>');
         }else{
             var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=batches&offset="+self.offsetLengthSubList
@@ -1550,9 +1551,12 @@
                         list_html += '<td width="100px"><div><div class="subscribers show" style="min-width:90px"><span  class=""></span>'+filter.options.app.addCommas(val[0].subscriberCount)+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></div></td>';                        
                         list_html += '</tr>';
                     });
-       dialog.find('.loading-campagins').remove();    
-       dialog.find("#filter_list_grid").append(list_html);
-       
+       dialog.find('.loading-campagins').remove();  
+       if(this.subListObj.searchText){
+       dialog.find("#filter_list_grid").html(list_html);
+        }else{
+            dialog.find("#filter_list_grid").append(list_html);
+        }    
        if(this.subListObj.searchText){
                                 
                                 dialog.find("#filter_list_grid tr").each(function(k,val){
@@ -1595,8 +1599,11 @@
        dialog.find('.stats-scroll').click(function(){
             self.scrollingTop(dialog);
        });
-          
-                var selected_list = dialog.attr('checksumlist');
+                if(this.subListObj.searchText){
+                    var selected_list = dialog.parent().attr('checksumlist');
+                }else{
+                    var selected_list = dialog.attr('checksumlist');
+                }
                     if(selected_list && dialog.find('#filter-lists tr[list_checksum='+selected_list+']').length == 0){
                                 var showloading = $('#show-loading');
                                 self.options.app.showLoading("Loading Lists...",dialog.find('#filter_list_grid'));
