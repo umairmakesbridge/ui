@@ -303,7 +303,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         } else {
                             this.meeView.autoSaveFlag = true;
                         }
-                        if ((button && button.hasClass("disabled-btn")) || this.meeView.autoSaveFlag == false) {
+                        if (button && button.hasClass("disabled-btn")) {
                             return false;
                         }
                     }else {

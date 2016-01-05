@@ -141,7 +141,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                             /*------------*/
                             
                             if (this.total_fetch < parseInt(collection.totalCount)) {
-                                this.$(".landingpage-box").last().attr("data-load", "true");
+                                this.$(".report-box").last().attr("data-load", "true");
                             }
 
                             if (this.offsetLength == 0) {

@@ -2619,6 +2619,11 @@ a,
 .MEE_EDITOR .icon.delete  { background: url("../images/delete.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.move  { background: url("../images/move.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.dcitems { background: url("../images/dynamic-content.png") no-repeat scroll center center; }
+.MEE_EDITOR .icon.setpagetitle { background-position: -390px 0px; }
+.header-icon .pagetitleicon {
+    background: url("../images/meeicons.png") no-repeat -360px -118px;
+    height: 30px;
+}
 .MEE_EDITOR .icon.cross {
     background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }

@@ -223,13 +223,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var myColorsFromServiceGlobal = "";
                                 var txtColorCode = myElement.find(".txtColorCode");
                                 var ulMyColors = myElement.find(".myColors");
-                                var personalizedTagsGlobal = new Array();var customTagsGlobal = new Array();var linksTagsGlobal = new Array();var basicTagsGlobal=new Array();
-                                var formBlocksGlobal = "";
+                                var personalizedTagsGlobal = new Array();var customTagsGlobal = new Array();var linksTagsGlobal = new Array();var basicTagsGlobal=new Array();                                
                                 var topPlus = options.topPlus;
                                 var leftPlus = options.leftPlus;
                                 var $element = null;
                                 var emailWidth = options.landingPage? "100%":"600px";                              
                                 var pageBackgroundColor = "#fff";
+                                var pageTitle = "";
                                 var undoredo = true;
                                 var _offset = 0;
                                 var forms_offset = 0;
@@ -299,8 +299,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     mainTable.find("div.ui-resizable-se").remove();
                                     mainTable.find("div.textcontent").removeClass('mce-content-body');                                    
                                     undoManager.registerAction(mainTable);
-                                     mee.resizeHeight();
-                                    
+                                    mee.resizeHeight();                                    
                                     return false;
                                 }
                                 mee.setScrollHeight = function(){                                    
@@ -437,7 +436,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         $(this).removeAttr("mee-style");
                                     });
                                     
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
@@ -456,6 +455,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var outerCss = outerTD.attr('style');
                                     //get background color of body
                                     pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
+                                    pageTitle = outerTD.length ?outerTD.attr("data-pageTitle"):""; 
                                     emailWidth = options.landingPage? "100%":outerTD.attr("width");
                                     this.find('#mee-iframe').contents().find('.mainContentHtmlGrand').attr('style',outerCss);
                                     if(!emailWidth){
@@ -483,6 +483,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         //Set background color of body
                                         if(pageBackgroundColor){
                                             meeIframe.find("body").css("background-color",pageBackgroundColor);
+                                        }
+                                        if(pageTitle){
+                                            meeIframe.find("head").append($("<title>"+pageTitle+"</title>"));
                                         }
                                         meeIframe.find(".mainTable").css("width",emailWidth+"px");
                                         mainObj.html(innerHTML);                          
@@ -562,6 +565,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 function InitializePreviewControls() {
                                     var lnkPreviewCode = myElement.find(".MenuCallPreview");
                                     var lnkTextVersion = myElement.find(".MenuCallTextVersion");
+                                    var lnkSetTitle = myElement.find(".MenuSetTitle");
                                     var lnkDCItems = myElement.find(".MenuCallDCItems");    
                                     var divPreviewCode = myElement.find(".divPreviewCode");
                                     var lnkHtmlCode = myElement.find(".MenuCallCode");
@@ -645,6 +649,56 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         iframe.close();
                                         dialog.getBody().find(".divHtmlCode").val(outputHTML);
                                     });
+                                    lnkSetTitle.click(function () {
+                                        //this need to handle for dialog, if landing page editor opens in dialog
+                                        var dialog_width = 500;
+                                        var dialog_height = 130;
+                                        var dialog = options._app.showDialog({
+                                            title: 'Set Page Title',
+                                            css: {
+                                                "width": dialog_width + "px",
+                                                "margin-left": "-" + (dialog_width / 2) + "px",
+                                                "top": "20px"
+                                            },
+                                            bodyCss: {
+                                                "min-height": dialog_height + "px"
+                                            },
+                                            headerEditable: false,                                            
+                                            headerIcon: 'pagetitleicon',
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Set Title'
+                                                }
+                                            }
+                                        });
+                                        var page_title_val = "";
+                                        if(meeIframe.find("head title").length){
+                                            page_title_val = meeIframe.find("head title").text();
+                                        }
+                                        var title_html = '<div style="margin-top:0px;" class="blockname-container"><div class="label-text">Page Title:</div>';                                        
+                                        title_html += '<div class="input-append sort-options blockname-container"><div class="inputcont"><input type="text" style="width:' + (dialog_width - 40) + 'px;" placeholder="Enter page title here" value="'+page_title_val+'"></div></div>';
+                                        title_html += '<div style="font-size: 12px;margin-top:10px"><i>Give your page a title that you will be able to recognize later.</i></div></div>';
+                                        title_html = $(title_html);
+                                        dialog.getBody().append(title_html);
+                                        setTimeout(function(){dialog.getBody().find("input").focus().select()},50);
+                                        dialog.saveCallBack(_.bind(function(obj){
+                                            var page_title = title_html.find("input").val();
+                                            if($.trim(page_title)){
+                                                if(meeIframe.find("head title").length){
+                                                    meeIframe.find("head title").text(page_title);                                                    
+                                                }
+                                                else{
+                                                    meeIframe.find("head").append($("<title>"+page_title+"</title>"));
+                                                }
+                                                pageTitle = page_title;
+                                                changFlag.editor_change = true;
+                                                options._app.showMessge("Page title set successfully. Press save button to save landing page.", $("body"));
+                                            }
+                                            dialog.hide();                                            
+                                        }, this, dialog));                                                                               
+
+                                    });
+                                    
                                     lnkTextVersion.click(function () {
                                         
                                         var dialog_width = $(document.documentElement).width() - 60;
@@ -5048,7 +5102,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             //alert(args.predefinedControl.Html.html());
                                             oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);
                                         }
-
                                         if ((args.predefinedControl.Type == "text") || (args.predefinedControl.Type == "textWithImage") || (args.predefinedControl.Type == "imageWithText")) {
 
                                             oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);

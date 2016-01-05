@@ -131,6 +131,9 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                             }                            
                             this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
                         }
+                        if (this.reportType == "webstats") {
+                            this.setDateRange(true);
+                        }
                     }
                     this.loadRows();
 
@@ -152,7 +155,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.$('#daterange').click();
                     return false;
                 },
-                setDateRange: function () {
+                setDateRange: function (setDateVars) {
                     var val = this.$("#daterange").val();
                     if ($.trim(val)) {
                         this.$('#clearcal').show();
@@ -172,7 +175,9 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         } else {
                             this.toDate = fromDate.format("MM-DD-YYYY");
                         }
-                        this.loadSummaryReports();
+                        if(typeof(setDateVars)!=="boolean"){
+                            this.loadSummaryReports();
+                        }
                     }
                 },
                 showSelected: function(setSelected){                    

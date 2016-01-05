@@ -79,9 +79,8 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                  if(this.option.isAutobot===true){
                                      this.$('.pointy').html('<a class="icon edit"></a><a class="icon copy"></a><a class="icon delete"></a>');
                                  }
-                             }
-                             
-                              if(this.option.headerIcon){
+                             }                             
+                             if(this.option.headerIcon){
                                  this.$('#dialog-title i').removeAttr('class');
                                  this.$("#dialog-title i").addClass('icon left header-icon '+this.option.headerIcon).show();
                                  this.$(".modal-header .c-name").addClass("header-icon");

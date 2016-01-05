@@ -38,7 +38,7 @@ define(['text!landingpages/html/landingpage_templates.html', 'landingpages/colle
                 /**
                  * Custom init function called after view is completely render in wrokspace.
                  */
-                init: function(notLoadData) {                                       
+                init: function() {                                       
                   this.scrollElement.scroll(_.bind(this.liveLoading,this));
                   this.scrollElement.resize(_.bind(this.liveLoading,this));
                   this.app.scrollingTop({scrollDiv:'window',appendto:this.$el,scrollElement:this.scrollElement});
@@ -147,7 +147,7 @@ define(['text!landingpages/html/landingpage_templates.html', 'landingpages/colle
                     if(inview.length && inview.attr("data-load") && this.$el.height()){
                        inview.removeAttr("data-load");
                        this.$(".footer-loading").show();
-                       this.callTemplates(20); 
+                       this.getTemplatesLandingPages(20); 
                     }  
                 },               
                 searchTemplatePages:function(o, txt){                    
