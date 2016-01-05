@@ -3290,6 +3290,129 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     right: 0px;
     top: 0px;
 }
+/*------------------------Backgorund Image-----------------------------------*/
+.MEE_EDITOR .bgimg-thumb .removeThumb {
+    background: url("../images/closeicon.png") no-repeat scroll center center #fff;
+    display: block;
+    height: 18px;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    width: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.bgimg-thumb{
+   position: relative; 
+    border: 2px solid #079cd3;
+    border-radius: 2px;
+    box-shadow: 1px 1px 5px 0 #cad5dd;
+    margin: 10px auto;
+    max-width: 145px;
+    text-align: center;
+}
+.bgimg-thumb_imgwrap{
+    text-align: center;
+   position: relative; 
+    border: 2px solid #079cd3;
+    border-radius: 2px;
+    box-shadow: 1px 1px 5px 0 #cad5dd;
+    margin: 10px auto;
+    max-width: 145px;
+}
+.bgimage-properties li{
+    width: 49%;
+    float: left;
+}
+.bgimage-properties li label{
+    width: 50%;
+}
+.image-repeat-icons {
+    float: left;
+    margin: 3px 6px 3px 45px;
+    font-weight: bold;
+}
+.bgimage-setposition h5 {
+    color: #6494af;
+    float: left;
+    width: 50%;
+}
+.bgimage-setposition .bg-leftpos, .bgimage-setposition .bg-toppos{
+    clear:none;
+    width: 110px;
+    margin-top: 3px; 
+    margin-bottom: 2px; 
+}
+.bgimage-setposition .bg-leftpos{
+    margin-right: 2px;
+}
+.bgimage-setposition input.bg-leftpos_input[type="text"],.bgimage-setposition input.bg-toppos_input[type="text"]{
+    width: 60px;
+    margin-right: 5px;
+}
+.bgimage-setposition label {
+    background: #eaf4f9 none repeat scroll 0 0;
+    border-radius: 2px;
+    color: #336670;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: normal;
+    height: 36px;
+    line-height: 36px;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+}
+
+.img-posiotion-li .radiopanelinput.checked .icheck_radio-icon {
+    margin: 7px 0 0 7px !important;
+    width: 35px  !important;
+}
+.img-posiotion-li .radiopanelinput.checked {
+    max-width: 35px;
+}
+.bgimage-properties li.img-posiotion-li {
+    width: 100%;
+}
+.img-posiotion-li .radiopanelinput .icheck_radio-icon {
+    margin: 6px 0 0 6px;
+}
+.bgimage-repeatposition {
+    margin-bottom: 10px;
+    overflow: hidden;
+    border: 2px solid #6494af;
+}
+.img-position-ul{
+    margin: 0 0 3px !important;
+    overflow: hidden;
+}
+input.openUpGallery[type="button"] {
+    width: 229px !important;
+    font-size: 14px !important;
+}
+.bgimage-properties .bgimage-repeat-h4{
+    background: #6494af none repeat scroll 0 0;
+    color: #fff;
+    margin: 10px 0 0;
+    padding-left: 3px;
+}
+.bgimage-repeatposition .socialbtns{
+     margin: 3px 0;
+}
+#loadingbgimg {
+    border: 2px solid #079cd3;
+    border-radius: 2px;
+    box-shadow: 1px 1px 5px 0 #cad5dd;
+    margin: 10px auto;
+    max-width: 145px;
+    position: relative;
+    text-align: center;
+}
+#loadingbgimg img{
+  margin: 25px 0 6px !important;
+}
+
 /* --------------------------------------------- */
 
 

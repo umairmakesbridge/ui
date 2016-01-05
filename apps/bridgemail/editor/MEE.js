@@ -9,7 +9,7 @@
  * * Section8 - Landing page Forms
  ****/
 
-define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors','bms-remote'],
+define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors','bms-remote','editor/editor-dragfile'],
         function ($, Backbone, _, template, linksPage, blocksPage, filterPage) {
             'use strict';
             return Backbone.View.extend({
@@ -22,6 +22,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
                     this.autoSaveFlag = false;
                     this.timer = false;
+                    this.isRepeatX = false;
+                    this.isRepeatY = false;
                     var mee_view = this;
                     var predefinedControls = [
                         {
@@ -209,7 +211,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 //$this = element;
                                 $this.html(mainView.el);
                                 var myElement = $this;
- 
+                                 myElement.find(".bgimage-properties li input.radiopanel").iCheck({
+                                                                checkboxClass: 'checkpanelinput',
+                                                                insert: '<div class="icheck_line-icon"></div>'
+                                                            });
+                                 myElement.find(".bgimage-properties input.radiopanel_percent").iCheck({
+                                                                radioClass: 'radiopanelinput',
+                                                                insert: '<div class="icheck_radio-icon"></div>'
+                                                            });
                                 var meeIframe = myElement.find("#mee-iframe").contents();
                                 var meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                 var oInitDestroyEvents = new InitializeAndDestroyEvents();
@@ -229,7 +238,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var $element = null;
                                 var emailWidth = options.landingPage? "100%":"600px";                              
                                 var pageBackgroundColor = "#fff";
+<<<<<<< HEAD
                                 var pageTitle = "";
+=======
+                                var pageBackgroundimage = "none";
+                                var pageBackgroundimage_repeat = "no-repeat";
+                                var pageBackgroundimage_pos = "0% 0%";
+>>>>>>> origin/abdullah_9.0
                                 var undoredo = true;
                                 var _offset = 0;
                                 var forms_offset = 0;
@@ -435,15 +450,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         $(this).attr("style",$(this).attr("mee-style"));
                                         $(this).removeAttr("mee-style");
                                     });
-                                    
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+
+                                    if(!pageBackgroundimage){
+                                        pageBackgroundimage = "none";
+                                    }
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
                                     header_section.find("link").remove();
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+"</head><body style='background-color:"+pageBackgroundColor+"'>"+outputHTML+"</body></html>";                                    
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+"' >"+outputHTML+"</body></html>";                                    
                                     
                                      //"" + outputter.outerHTML();
+                                     outputHTML = outputHTML.replace(/&quot;/g,'&#39;')
                                     return outputHTML;
                                 };
 
@@ -455,7 +474,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var outerCss = outerTD.attr('style');
                                     //get background color of body
                                     pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
+
                                     pageTitle = outerTD.length ?outerTD.attr("data-pageTitle"):""; 
+
+                                    pageBackgroundimage = outerTD.length ?outerTD.attr("data-bgimg"):"none"; 
+                                    pageBackgroundimage_repeat = outerTD.length ?outerTD.attr("data-bgimgrepeat"):"no-repeat"; 
+                                    pageBackgroundimage_pos = outerTD.length ?outerTD.attr("data-bgimgpos"):"0% 0%"; 
+
                                     emailWidth = options.landingPage? "100%":outerTD.attr("width");
                                     this.find('#mee-iframe').contents().find('.mainContentHtmlGrand').attr('style',outerCss);
                                     if(!emailWidth){
@@ -481,6 +506,22 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var htmlOBJ = $(oHtml);
                                         var innerHTML = htmlOBJ.find("#__OUTERTD").length? htmlOBJ.find("#__OUTERTD").html() : oHtml;
                                         //Set background color of body
+                                        if(pageBackgroundimage){
+                                            meeIframe.find("body").css('background-image','url(' + pageBackgroundimage + ')');
+                                            meeIframe.find("body").css('background-repeat',pageBackgroundimage_repeat);
+                                            meeIframe.find("body").css('background-position',pageBackgroundimage_pos);
+                                            if(pageBackgroundimage_repeat=="repeat-x"){
+                                              myElement.find('#bgimg_repeatx').iCheck('check');  
+                                            }else if(pageBackgroundimage_repeat=="repeat-y"){
+                                                myElement.find('#bgimg_repeaty').iCheck('check');  
+                                            }else if(pageBackgroundimage_repeat=="no-repeat"){
+                                                myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                            }else{
+                                                myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                                myElement.find('#bgimg_repeatx').iCheck('check');
+                                            }
+                                        }
                                         if(pageBackgroundColor){
                                             meeIframe.find("body").css("background-color",pageBackgroundColor);
                                         }
@@ -1235,6 +1276,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 myElement.find(".style-panel").css("height", (myElement.find(".style-panel").height() + 12) + "px");
                                                 showStyle = true;
                                             }
+                                            myElement.find(".style-panel .accordian").on( "accordionactivate", function( event, ui ) {
+                                                    myElement.find('.ddlBackgroundLayers').chosen("destroy").chosen();
+                                                    myElement.find('.ddlBackgroundLayers').val("body").chosen('update');
+                                                    if(myElement.find('.ddlBackgroundImgLayers').length > 0){
+                                                        myElement.find('.bgimg-thumb_imgwrap').show();
+                                                        myElement.find('.ddlBackgroundImgLayers').trigger('change');
+                                                    }
+                                             
+                                                    SelectedElementForStyle = meeIframe.find("body");
+                                                } );
                                             initStyles = true;
                                         }
                                         if (options.fromDialog == false) {
@@ -1358,9 +1409,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         }
 
                                                     });
+                                                   // console.log('i got hit after loop');
                                                     ddlBackgroundLayers.append(
                                                             $('<option value="body">BODY</option>'));
                                                     myElement.find(".ddlBackgroundLayers").trigger("chosen:updated");
+                                                    if(myElement.find('.ddlBackgroundImgLayers').length > 0){
+                                                        myElement.find('.ddlBackgroundImgLayers option').eq(1).attr('selected','selected');
+                                                        myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
+                                                        myElement.find('.ddlBackgroundImgLayers').trigger('change');
+                                                    }
+                                                    
                                                     //////////////////////////////////////////////////
 
                                                 }
@@ -1473,7 +1531,91 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     makeCloneAndRegister();
                                                 }
                                             });
-
+                                            var ddlBackgroundLayersImg = myElement.find(".ddlBackgroundImgLayers");
+                                            if(ddlBackgroundLayersImg.length > 0){
+                                                ddlBackgroundLayersImg.on('change', function () {
+                                                if ($(this).find(':selected').val() != "-1") {
+                                                    RemoveAllOutline(); 
+                                                    $(this).parent().find('.bgimg-thumb').remove(); // Remove the thumbnail 
+                                                    $(this).parent().find('#bgUrlCode').val(''); // Empty the input
+                                                    SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
+                                                    if(SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== ""){
+                                                        var bgimage = SelectedElementForStyle.css('background-image').replace(/^url|[\(\)]/g, '');
+                                                        
+                                                        /*=====Repeat Icheck set on change of ======*/
+                                                        if(SelectedElementForStyle.css('background-repeat')=="repeat-x"){
+                                                            myElement.find('#bgimg_repeatx').iCheck('check');
+                                                             myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                        }else if(SelectedElementForStyle.css('background-repeat')=="repeat-y"){
+                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                                             myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                                        }else if(SelectedElementForStyle.css('background-repeat')=="no-repeat"){
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                                        }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('check'); 
+                                                        }
+                                                        // Check background position in px
+                                                        var splitbackground = SelectedElementForStyle.css('background-position').split(" ");
+                                                        if(splitbackground[0].slice(-2)=="px" || splitbackground[1].slice(-2)=="px"){
+                                                            myElement.find('.bg-leftpos_input').val(parseFloat(splitbackground[0], 10))
+                                                            myElement.find('.bg-toppos_input').val(parseFloat(splitbackground[1], 10))
+                                                            myElement.find('#bg_img_pixel').iCheck('check');
+                                                        }
+                                                        else if(SelectedElementForStyle.css('background-position') !=="0% 0%" && SelectedElementForStyle.css('background-position')!=="" && SelectedElementForStyle.css('background-position') !=="0 0"){
+                                                            var splitImgpos = SelectedElementForStyle.css('background-position').split(" ");
+                                                            myElement.find('.bg-leftpos').val(splitImgpos[0]).attr("selected", "selected");
+                                                            myElement.find('.bg-toppos').val(splitImgpos[1]).attr("selected", "selected");
+                                                            
+                                                        }else{
+                                                            myElement.find('.bg-leftpos').val('0%').attr("selected", "selected");
+                                                            myElement.find('.bg-toppos').val('0%').attr("selected", "selected");
+                                                            $(this).parent().find('.bgimg-thumb').remove();
+                                                        }
+                                                        if(bgimage && bgimage !== "" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="none" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="undefined"){
+                                                            $(this).parent().find('.bgimg-thumb').remove();
+                                                            $(this).parent().find('.bgimg-thumb_imgwrap').hide();
+                                                            $(this).parent().find('#bgUrlCode').before('<div class="bgimg-thumb"><span class="removeThumb"></span><img class="center-block" src='+bgimage+'/></div>')
+                                                            $(this).parent().find('#bgUrlCode').val(bgimage.replace(/^"(.*)"$/, '$1'));
+                                                            myElement.find(".bgimage-properties").show();
+                                                            
+                                                        }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                        }
+                                                        
+                                                    }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                            $(this).parent().find('.bgimg-thumb').remove();
+                                                            $(this).parent().find('.bgimg-thumb_imgwrap').show();
+                                                            
+                                                    }
+                                                    SelectedElementForStyle.css("outline", "2px solid #6298be"); 
+                                                     myElement.find('.removeThumb').click(function(){
+                                                         SelectedElementForStyle.css('background-image','none');
+                                                         $(this).parent().parent().find('#bgUrlCode').val('');
+                                                         $(this).parent().parent().find('.bgimg-thumb_imgwrap').show();
+                                                         myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                         myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                         $(this).parent().parent().find('.bgimg-thumb').remove();
+                                                         mee_view.isRepeatY = false;
+                                                         mee_view.isRepeatX = true;
+                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                                    pageBackgroundimage='none';
+                                                            }
+                                                         
+                                                         pageBackgroundimage_repeat = 'no-repeat';
+                                                         pageBackgroundimage_pos = '0% 0%';
+                                                     });
+                                                    // undoManager.registerAction(mainContentHtmlGrand.html());
+                                                    makeCloneAndRegister();
+                                                }
+                                            });
+                                            
+                                            }
+                                            
                                             ///////////////////////
 
 
@@ -1868,6 +2010,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         SelectedElementForStyle.css("background-color", hex);
                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
                                             pageBackgroundColor = hex;
+                                        }
+                                    }
+                                }
+                                var SetBackgroundImage = function (data) {
+                                    console.log(data);
+                                    if (IsStyleActivated && SelectedElementForStyle != null) {
+
+                                        SelectedElementForStyle.attr('style','background-image:url('+data+');background-repeat:no-repeat');
+                                        myElement.find('.bgimg-thumb_imgwrap').hide();
+                                        //SelectedElementForStyle.css('background-image','url(' + data + ')');
+                                       // SelectedElementForStyle.css('','');
+                                        myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                        myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                        mee_view.isRepeatX = false;
+                                        mee_view.isRepeatY = false;
+                                        changFlag.editor_change = true;
+                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                            
+                                            pageBackgroundimage = data;
+                                            pageBackgroundimage_repeat = 'no-repeat';
+                                            pageBackgroundimage_pos = '0% 0%';
                                         }
                                     }
                                 }
@@ -2780,7 +2943,128 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     window.find("div.modal-body").children("img").attr('src', '');
                                     window.hide();
                                 }
-
+                                myElement.on('change','#bgUrlCode',function(){
+                                        //console.log('Active Style : '+ IsStyleActivated + ' SelectedElementForStyle :' + SelectedElementForStyle )
+                                        if($(this).val()==""){
+                                            myElement.find('.removeThumb').click();
+                                            myElement.find('.bgimg-thumb').remove();
+                                        }
+                                        myElement.find('.bgimg-thumb').remove();
+                                        $(this).before('<div class="bgimg-thumb" style="display:none;"><span class="removeThumb"></span><img class="center-block" /></div>')  
+                                        myElement.find('#loadingbgimg').show();
+                                        
+                                        myElement.find('.bgimg-thumb img').attr('src',$(this).val()).load(function(){
+                                            //alert('image loaded');
+                                            myElement.find('#loadingbgimg').hide();
+                                            myElement.find('.bgimg-thumb').show();
+                                            changFlag.editor_change = true;
+                                        })
+                                        
+                                        myElement.find('.removeThumb').click(function(){
+                                                         SelectedElementForStyle.css('background-image','none');
+                                                         $(this).parent().parent().find('#bgUrlCode').val('');
+                                                         myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                                         myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                         mee_view.isRepeatY = false;
+                                                         mee_view.isRepeatX = false;
+                                                         $(this).parent().parent().find('.bgimg-thumb').remove();
+                                                         myElement.find('.bgimg-thumb_imgwrap').show();
+                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                                    pageBackgroundimage='none';
+                                                            }
+                                                         changFlag.editor_change = true;
+                                                         pageBackgroundimage_repeat = 'no-repeat';
+                                                         pageBackgroundimage_pos = '0% 0%';
+                                                     });
+                                            
+                                        SetBackgroundImage($(this).val());
+                                })
+                                myElement.find('#bgimg_position_percent').on('ifChecked', function(event){
+                                    //console.log($(this).val());
+                                    myElement.find('#bg-leftpos_input,#bg-toppos_input').val('0');
+                                    myElement.find('#bg-leftpos_input,#bg-toppos_input').attr('disabled','disabled');
+                                    myElement.find('#bg-leftpos,#bg-toppos').removeAttr('disabled')
+                                })
+                                myElement.find('#bg_img_pixel').on('ifChecked', function(event){
+                                    //console.log($(this).val());
+                                     myElement.find('#bg-leftpos,#bg-toppos').attr('disabled','disabled');
+                                     myElement.find('#bg-leftpos_input,#bg-toppos_input').removeAttr('disabled');
+                                })
+                                myElement.find('#bg-leftpos_input').on('change', function(event){
+                                    // validation need to be added 
+                                    var leftposval = $(this).val()+'px';
+                                    var rightposval = myElement.find('#bg-toppos_input').val()+'px';
+                                    SelectedElementForStyle.css('background-position',leftposval +' '+ rightposval);
+                                    changFlag.editor_change = true;
+                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        pageBackgroundimage_pos = leftposval +' '+ rightposval;
+                                    }
+                                });
+                                myElement.find('#bg-toppos_input').on('change', function(event){
+                                    // Validation need to be set
+                                    var rightposval  = $(this).val()+'px';
+                                    var leftposval= myElement.find('#bg-leftpos_input').val()+'px';
+                                    SelectedElementForStyle.css('background-position',leftposval +' '+ rightposval);
+                                    changFlag.editor_change = true;
+                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        pageBackgroundimage_pos = leftposval +' '+ rightposval;
+                                    }
+                                });
+                                myElement.on('change','.bg-leftpos',function(){
+                                    var leftpos = $(this).val();
+                                    var toppos = myElement.find('.bg-toppos').val();
+                                    leftpos = leftpos.replace(/^"(.+(?="$))"$/, '$1');
+                                    toppos = toppos.replace(/^"(.+(?="$))"$/, '$1');
+                                    SelectedElementForStyle.css('background-position',leftpos +' '+ toppos);
+                                    changFlag.editor_change = true;
+                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        pageBackgroundimage_pos = leftpos +' '+ toppos;
+                                    }
+                                })
+                                myElement.on('change','.bg-toppos',function(){
+                                    var toppos  = $(this).val();
+                                    var leftpos = myElement.find('.bg-leftpos').val();
+                                    leftpos = leftpos.replace(/^"(.+(?="$))"$/, '$1');
+                                    toppos = toppos.replace(/^"(.+(?="$))"$/, '$1');
+                                    SelectedElementForStyle.css('background-position',leftpos +' '+ toppos);
+                                    changFlag.editor_change = true;
+                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        pageBackgroundimage_pos = leftpos +' '+ toppos;
+                                    }
+                                })
+                                
+                                myElement.on('click','.openUpGallery',function(){
+                                      mee.openupGallery();
+                                })
+                              
+                               
+                                 myElement.find('#bgimg_repeaty').on('ifChecked', function(event){
+                                    mee_view.isRepeatY = true;
+                                    mee.repeatImageProperties();
+//                                    alert('repeat Y : '+event.type + ' callback');
+                                  });
+                               
+                               
+                                 myElement.find('#bgimg_repeaty').on('ifUnchecked', function(event){
+                                    mee_view.isRepeatY = false;
+                                    mee.repeatImageProperties();
+                                   });
+                               
+                               
+                                myElement.find('#bgimg_repeatx').on('ifChecked', function(event){
+                                    mee_view.isRepeatX = true;
+                                    mee.repeatImageProperties();
+                                    //alert('repeat X : '+event.type + ' callback');
+                                  });
+                               
+                               
+                                myElement.find('#bgimg_repeatx').on('ifUnchecked', function(event){
+                                    mee_view.isRepeatX = false;
+                                    mee.repeatImageProperties();
+                                    //alert('repeat X : '+event.type + ' callback');
+                                  });
+                               
+                               
                                 myElement.on("click", "i,action", function () {
                                     var element = $(this);
                                     var type = element.data("actiontype");
@@ -2936,9 +3220,84 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                     return false;
                                 });
+                                 mee.processUpload = function(data){
+                                        var _image = jQuery.parseJSON(data);
+                                        if (_image.success) {
+                                            options._app.showMessge("Image has been successfully uploaded.", $("body"));
+                                            LoadImagesInLibrary();
+                                        }
+                                        else {
+                                            options._app.showAlert(_image.err1, $("body"), {fixed: true});
+                                        }
+                                        
+                                }
+                                myElement.find("#HTML5FileUploader").dragfileEditor({
+                                    post_url: '/pms/io/publish/saveImagesData/?&type=add&BMS_REQ_TK=' + options._app.get('bms_token'),
+                                    callBack: _.bind(mee.processUpload, mee),
+                                    app: options._app,
+                                    module: 'template',
+                                    progressElement: myElement.find('#HTML5FileUploader')
+                                });
+                                
+                                mee.openupGallery = function(){
+                                    var dialog_width = $(document.documentElement).width() - 60;
+                                        var dialog_height = $(document.documentElement).height() - 162;
+                                        var dialog = options._app.showDialog({title:  'Images',
+                                            css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
+                                            headerEditable: true,
+                                            headerIcon: '_graphics',
+                                            bodyCss: {"min-height": dialog_height + "px"}
+                                        });
 
-
-                                myElement.find("#HTML5FileUploader").on("dragenter", function (e) {
+                                      
+                                        options._app.showLoading("Loading...", dialog.getBody());
+                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                        var wrapelement = 'dialogWrap-' + dialogArrayLength; // New Dialog
+                                        //var img = "<img id='img1' src= '" + args.URL + "' class='" + wrapelement + "'>";
+                                        require(["userimages/userimages", 'app'], function (pageTemplate, app) {
+                                            var mPage = new pageTemplate({app: options._app, fromDialog: true, _select_dialog: dialog, _select_page: mee, callBack: _.bind(mee.insertImageURL, mee)});
+                                            dialog.getBody().append(mPage.$el);
+                                            options._app.showLoading(false, mPage.$el.parent());
+                                            var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                            mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog                         
+                                            options._app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog                       
+                                        });
+                                        
+                                } 
+                                mee.insertImageURL = function(data){
+                                    console.log(data);
+                                    if(data){
+                                        myElement.find('#bgUrlCode').parent().find('.bgimg-thumb').remove();
+                                        myElement.find('#bgUrlCode').val(data.imgurl);
+                                        myElement.find(".bgimage-properties").show();
+                                        myElement.find('#bgUrlCode').trigger('change');
+                                        
+                                    }
+                                    
+                                }
+                                mee.repeatImageProperties = function(){
+                                    var setRepeatprop = '';
+                                    if(mee_view.isRepeatX && mee_view.isRepeatY){
+                                        setRepeatprop = 'repeat'; // Both are true
+                                    }else if(mee_view.isRepeatX && !mee_view.isRepeatY){
+                                        setRepeatprop = 'repeat-x'; // Repeat X 
+                                    }else if(!mee_view.isRepeatX && mee_view.isRepeatY){
+                                        setRepeatprop = 'repeat-y'; // Repeat Y 
+                                    }else{
+                                        setRepeatprop = 'no-repeat';
+                                    }
+                                    if(SelectedElementForStyle){
+                                        changFlag.editor_change = true;
+                                        SelectedElementForStyle.css('background-repeat',setRepeatprop);
+                                        
+                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                           pageBackgroundimage_repeat = setRepeatprop;
+                                        }
+                                    }
+                                    
+                                    
+                                }
+                               /* myElement.find("#HTML5FileUploader").on("dragenter", function (e) {
                                     e.stopPropagation();
                                     e.preventDefault();                                    
                                 });
@@ -3017,7 +3376,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                     });
 
-                                }
+                                }*/
 
 //**************************************************************End Images Library***********************************************************************************///
 

@@ -318,11 +318,11 @@
             <div class="scrollarea images-accordion">
                 <div id="HTML5FileUploader">
                     <div class="accordian-content active">
-                        <!--<div class="dropblockpanel divLoading divBuildingBlockLoadingImages buildingBlockDroppableOverlay" style="display: none;">
+                        <div class="dropblockpanel divLoading divBuildingBlockLoadingImages " style="display: none;">
                             <div class="blockdrop">
-                                <h3>Drop Image Here</h3>
+                                <h3 style="top: 15%;">Drop Image Here</h3>
                             </div>
-                        </div>                -->
+                        </div>    
                         <div class="accordianbar">
                             <div class="search" style="width:190px;">
                                 <input class="searchimg-text" type="text" value="" name="" style="width:170px;" id="searchImg" />
@@ -408,6 +408,84 @@
                     </div>
                 </div>
             </div>
+            <!--  accordian-content  -->
+            <% if (options._app.testUsers.indexOf(options._app.get("user").userId)>-1 ) { %>
+            <h3>
+                Background Image
+            </h3>
+            
+            <div class="scrollarea images-accordion">
+                <div class="clearfix"  style="padding:5px;">
+                        <h4 class="" style="margin: 10px 0px 15px;">Parent Layers</h4>
+                        <select class="nosearch ddlBackgroundLayers ddlBackgroundImgLayers" data-placeholder="Select Parent Layer">
+                            <option value=""></option>
+                        </select>
+                        
+                        <div class="clearfix"></div>
+                        <div id="loadingbgimg" style="min-height: 90px;display:none;">
+                            <img alt="" src="<%- options._app.get('path')%>img/recurring2.GIF">
+                            <h4>Loading...</h4>
+                        </div> 
+
+                        <div class="bgimg-thumb_imgwrap">
+                            <img alt="" src="<%- options._app.get('path')%>img/imgiconb-w.png">
+                            <h4>Select Image or Paste URL</h4>  
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                        <input type="text" class="urlCode acco-input" placeholder="Enter Image URL" id="bgUrlCode">
+                <input type="button" class="acco-button medium-button active openUpGallery" value="Open Gallery">
+                 <div class="clearfix"></div>
+                    <div class="bgimage-properties">
+                        <h4 class="bgimage-repeat-h4" >Repeat Background</h4>  
+                        <div class="bgimage-repeatposition"> <ul class="socialbtns">
+                                    <li class="rpeatx">
+                                        <input type="checkbox" id="bgimg_repeatx" class="radiopanel" value="repeat-x" name="bgimg_repeatx"  />
+                                        <label for="bgimg_repeatx"><span class="image-repeat-icons">Horizontal</span></label>
+                                    </li>
+                                    <li class="rpeaty">
+                                        <input type="checkbox" id="bgimg_repeaty"  class="radiopanel" value="repeat-y" name="bgimg_repeaty" />
+                                        <label for="bgimg_repeaty"><span class="image-repeat-icons">Veritcal</span></label>
+                                    </li>
+                                </ul> </div>
+                        <h4 class="bgimage-repeat-h4" style="margin: 20px 0px 0px;">Image Position</h4>
+                        <div class="bgimage-setposition bgimage-repeatposition">
+                            <ul class="socialbtns" style="display:none;">
+                                    <li class="img-posiotion-li">
+                                        <input type="radio" id="bgimg_position_percent" class="radiopanel_percent" value="bg_img_percent" name="bg_img_percent"  checked="checked"  />
+                                        <label for="bgimg_position_percent"><span class="image-repeat-icons">Horizontal or Vertical</span></label>
+                                    </li>
+                            </ul>
+                                <select class="bg-leftpos acco-select margin_20 width_140 fl" id="bg-leftpos">
+                                        <option value="0%">Left</option>
+                                        <option value="50%">Center</option>
+                                        <option value="100%">Right</option>
+                                    </select>
+                            
+                            <select class="bg-toppos acco-select margin_20 width_140 fl" id="bg-toppos">
+                                        <option value="0%">Top</option>
+                                        <option value="50%">Center</option>
+                                        <option value="100%">Bottom</option>
+                                    </select>
+                            <div class="clearfix"></div>
+                            <ul class="socialbtns img-position-ul" style="display:none;">
+                                    <li class="img-posiotion-li">
+                                        <input type="radio" id="bg_img_pixel" class="radiopanel_percent" value="bg_img_pixel" name="bg_img_percent" />
+                                        <label for="bg_img_pixel"><span class="image-repeat-icons">Pixel Selection</span></label>
+                                    </li>
+                                    <div class="clearfix"></div>
+                            <input type="text" disabled="disabled" maxlength="15" size="15" value="0" class="bg-leftpos_input txtContSize acco-input " id="bg-leftpos_input"><span>px</span>
+                            <input type="text" disabled="disabled" maxlength="15" size="15" value="0" class="bg-toppos_input txtContSize acco-input " id="bg-toppos_input"><span>px</span>
+                            </ul>
+                            
+                        </div>
+                    </div> 
+                 
+                  <div class="clearfix"></div>
+                    </div>
+               
+            </div>
+            <% } %>
             <!--  accordian-content  -->
             <h3 class="active">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> Borders & Paddings
