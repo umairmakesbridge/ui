@@ -1325,10 +1325,19 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var camp_obj = this;
                     var proceed = -1;
                     var html = "", plain = "";
-                    var post_data = {type: "saveStep2", campNum: this.camp_id, htmlCode: '', plainText: ''}
+                    var post_data = {type: "saveStep2", campNum: this.camp_id, htmlCode: '', plainText: ''};
+                    var campaign_subject_title = $.trim(this.$("#campaign_subject").val());
                     var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
-                    if (selected_li == "html_editor") {
+                    if (selected_li == "html_editor") {                                                
                         html = (this.$(".textdiv").css("display") == "block") ? this.$("#htmlarea").val() : _tinyMCE.get('bmseditor_' + this.wp_id).getContent();
+                        //setting email title;                        
+                        if(campaign_subject_title!==""){                            
+                            var newTitle = '<title>'+campaign_subject_title+'</title>';
+                            if(html.indexOf('<meta property="og:image"')==-1){
+                                newTitle = newTitle + '<meta property="og:image" content="http://d1xgyg9kndz45n.cloudfront.net/pms/graphics/WaW6c5IH/email_img.png?v=1"></meta>';
+                            }
+                            html = html.replace(/<title>(.*?)<\/title>/ig, newTitle);
+                        }
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html;
                         post_data['plainText'] = plain;
@@ -1346,6 +1355,16 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         post_data['htmlCode'] = '';
                     }
                     else if (selected_li == "html_editor_mee") {
+                        if(campaign_subject_title!==""){
+                            var newTitle = '<title>'+campaign_subject_title+'</title>';
+                            var meeElement = this.$("#mee-iframe").contents();
+                            if(meeElement.find("head title").length==1){
+                                meeElement.find("head title").html(campaign_subject_title);
+                            }
+                            else{
+                                 meeElement.find("head").append(newTitle);
+                            }
+                        }
                         html = this.$("#mee_editor").getMEEHTML();
                         post_data['htmlCode'] = html;
                         post_data['plainText'] = this.states.step2.plainText;

@@ -4458,9 +4458,10 @@ ul.aligncol li i.alignbottom { background: url("../images/alignbottom.png") no-r
     width: auto;}
 
 .grey-col {
-    color: #1D91BC;
+    color: #1D91BC !important;
     margin:0;
     padding:0;
+    text-align: left !important;
 }
 #CustomColorPicker .selectedFontColor , .mycolorFontPicker .selectedFontColor
 {  border-radius: 2px;

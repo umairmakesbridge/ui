@@ -238,13 +238,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var $element = null;
                                 var emailWidth = options.landingPage? "100%":"600px";                              
                                 var pageBackgroundColor = "#fff";
-<<<<<<< HEAD
                                 var pageTitle = "";
-=======
                                 var pageBackgroundimage = "none";
                                 var pageBackgroundimage_repeat = "no-repeat";
                                 var pageBackgroundimage_pos = "0% 0%";
->>>>>>> origin/abdullah_9.0
                                 var undoredo = true;
                                 var _offset = 0;
                                 var forms_offset = 0;
@@ -438,6 +435,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');
                                         
                                     }
+                                    
                                     mainHTMLELE.find(".bgimage").each(function(){
                                         $(this).attr("mee-style",$(this).attr("style"));
                                         $(this).removeAttr("style");
@@ -458,7 +456,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
-                                    header_section.find("link").remove();
+                                    header_section.find("link:not([rel='image_src'])").remove();
                                     outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+"' >"+outputHTML+"</body></html>";                                    
                                     
                                      //"" + outputter.outerHTML();
@@ -524,10 +522,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                         if(pageBackgroundColor){
                                             meeIframe.find("body").css("background-color",pageBackgroundColor);
-                                        }
+                                        }                                        
+                                        
                                         if(pageTitle){
                                             meeIframe.find("head").append($("<title>"+pageTitle+"</title>"));
                                         }
+                                        
+                                        
                                         meeIframe.find(".mainTable").css("width",emailWidth+"px");
                                         mainObj.html(innerHTML);                          
                                         if(!options.landingPage && emailWidth){
@@ -722,7 +723,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         title_html = $(title_html);
                                         dialog.getBody().append(title_html);
                                         setTimeout(function(){dialog.getBody().find("input").focus().select()},50);
-                                        dialog.saveCallBack(_.bind(function(obj){
+                                        var saveTitle = function(obj){
                                             var page_title = title_html.find("input").val();
                                             if($.trim(page_title)){
                                                 if(meeIframe.find("head title").length){
@@ -734,9 +735,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 pageTitle = page_title;
                                                 changFlag.editor_change = true;
                                                 options._app.showMessge("Page title set successfully. Press save button to save landing page.", $("body"));
+                                                
+                                                return true;
                                             }
-                                            dialog.hide();                                            
-                                        }, this, dialog));                                                                               
+                                            
+                                        };
+                                        dialog.saveCallBack(_.bind(function(){
+                                            if(saveTitle()){
+                                                dialog.hide();  
+                                            }
+                                        }, this, dialog));  
+                                        dialog.getBody().find("input").keypress(_.bind(function (obj,e){
+                                            if(e.keyCode==13){
+                                               if(saveTitle()){
+                                                    dialog.hide();  
+                                                }
+                                            }                                           
+                                        },this,dialog))
 
                                     });
                                     
@@ -6329,7 +6344,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         saveCallBack: this.options.saveClick,
                         templatesCallBack: this.options.changeTemplateClick,
                         saveTextVersionCallBack: this.options.textVersionCallBack,
-                        previewdesignTemplateCallback :  this.options.previewCallback,
+                        previewdesignTemplateCallback :  this.options.previewCallback,                        
                         textVersion:this.options.text,
                         formCallBack: this.options.formAttach, 
                         formid : this.options.formid,
