@@ -1475,7 +1475,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 ddlBackgroundLayersImg.on('change', function () {
                                                 if ($(this).find(':selected').val() != "-1") {
                                                     RemoveAllOutline(); 
-                                                    $(this).parent().find('.bgimg-thumb').remove(); // Remove the thumbnail 
+                                                    $(this).parent().find('.bgimg-thumb_imgwrap h4').show();
+                                                    $(this).parent().find('.bgimg-thumb,.removeThumb').remove(); // Remove the thumbnail 
                                                     $(this).parent().find('#bgUrlCode').val(''); // Empty the input
                                                     SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
                                                     if(SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== ""){
@@ -1513,9 +1514,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             $(this).parent().find('.bgimg-thumb').remove();
                                                         }
                                                         if(bgimage && bgimage !== "" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="none" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="undefined"){
-                                                            $(this).parent().find('.bgimg-thumb').remove();
-                                                            $(this).parent().find('.bgimg-thumb_imgwrap').hide();
-                                                            $(this).parent().find('#bgUrlCode').before('<div class="bgimg-thumb"><span class="removeThumb"></span><img class="center-block" src='+bgimage+'/></div>')
+                                                            $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
+                                                            $(this).parent().find('.bgimg-thumb_imgwrap').find('h4').hide();
+                                                            $(this).parent().find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img class="center-block bgimg-thumb" style="width: 133px; height: 100px;" src='+bgimage+'/>')
                                                             $(this).parent().find('#bgUrlCode').val(bgimage.replace(/^"(.*)"$/, '$1'));
                                                             myElement.find(".bgimage-properties").show();
                                                             
@@ -1534,11 +1535,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     SelectedElementForStyle.css("outline", "2px solid #6298be"); 
                                                      myElement.find('.removeThumb').click(function(){
                                                          SelectedElementForStyle.css('background-image','none');
-                                                         $(this).parent().parent().find('#bgUrlCode').val('');
-                                                         $(this).parent().parent().find('.bgimg-thumb_imgwrap').show();
+                                                         $(this).parent().parent().parent().find('#bgUrlCode').val('');
                                                          myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
                                                          myElement.find('#bgimg_repeatx').iCheck('uncheck');
-                                                         $(this).parent().parent().find('.bgimg-thumb').remove();
+                                                         $(this).parent().find('h4').show();
+                                                         $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
                                                          mee_view.isRepeatY = false;
                                                          mee_view.isRepeatX = true;
                                                          if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
@@ -1956,8 +1957,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     console.log(data);
                                     if (IsStyleActivated && SelectedElementForStyle != null) {
 
-                                        SelectedElementForStyle.attr('style','background-image:url('+data+');background-repeat:no-repeat');
-                                        myElement.find('.bgimg-thumb_imgwrap').hide();
+                                        SelectedElementForStyle.css({"background-image":"url('"+data+"')","background-repeat":"no-repeat"});
+                                     
+                                         myElement.find('.bgimg-thumb_imgwrap h4').hide();
                                         //SelectedElementForStyle.css('background-image','url(' + data + ')');
                                        // SelectedElementForStyle.css('','');
                                         myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
@@ -2882,32 +2884,76 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     window.find("div.modal-body").children("img").attr('src', '');
                                     window.hide();
                                 }
+                                /*myElement.on('keyup','#bgUrlCode',function(){
+                                    var url = $(this).val();
+                                         var filename = $(this).val().substring(url.lastIndexOf('/')+1);
+                                            var str = decodeURIComponent(filename);
+                                            if(/^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                                this.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                                $(this).val('');
+                                            }
+                                })*/
+                               myElement.find('#bgUrlCode').bind('paste', function(e) {
+                                                var _this = $(this)
+                                                var url = '';
+                                               setTimeout(function(){ 
+                                                   url = _this.val()
+                                                   var filename = url.substring(url.lastIndexOf('/')+1);
+                                                    var str = decodeURIComponent(filename);
+                                               if(str!== "" &&  /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                                   
+                                                   myElement.find('.removeThumb').click();
+                                                   _this.val(url);
+                                                   e.stopPropagation();
+                                                   options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                                }else{
+                                                   setTimeout(function(){ myElement.find('#bgUrlCode').trigger('change');  }, 500);   
+                                                    }
+                                               }, 300);
+                                               
+                                            });
                                 myElement.on('change','#bgUrlCode',function(){
                                         //console.log('Active Style : '+ IsStyleActivated + ' SelectedElementForStyle :' + SelectedElementForStyle )
+                                        var url = $(this).val();
+                                         var filename = $(this).val().substring(url.lastIndexOf('/')+1);
+                                         var str = decodeURIComponent(filename);
+                                            
                                         if($(this).val()==""){
                                             myElement.find('.removeThumb').click();
-                                            myElement.find('.bgimg-thumb').remove();
+                                            myElement.find('.bgimg-thumb,.removeThumb').remove();
                                         }
-                                        myElement.find('.bgimg-thumb').remove();
-                                        $(this).before('<div class="bgimg-thumb" style="display:none;"><span class="removeThumb"></span><img class="center-block" /></div>')  
+                                        else if($(this).val()!== "" &&  /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                                $(this).val('');
+                                                myElement.find('.removeThumb').click();
+                                                options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                            }
+                                        else{
+                                            
+                                            myElement.find('.bgimg-thumb,.removeThumb').remove();
+                                        myElement.find('.bgimg-thumb_imgwrap').hide();
+                                        myElement.find('.bgimg-thumb_imgwrap h4').hide();
+                                        myElement.find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img style="width: 133px; height: 100px;" class="center-block bgimg-thumb" />')
+                                        
+                                        
                                         myElement.find('#loadingbgimg').show();
                                         
-                                        myElement.find('.bgimg-thumb img').attr('src',$(this).val()).load(function(){
+                                        myElement.find('.bgimg-thumb').attr('src',$(this).val()).load(function(){
                                             //alert('image loaded');
                                             myElement.find('#loadingbgimg').hide();
-                                            myElement.find('.bgimg-thumb').show();
+                                            myElement.find('.bgimg-thumb_imgwrap').show();
                                             changFlag.editor_change = true;
+                                            //myElement.find('#bgUrlCode').trigger('change');
                                         })
                                         
                                         myElement.find('.removeThumb').click(function(){
                                                          SelectedElementForStyle.css('background-image','none');
-                                                         $(this).parent().parent().find('#bgUrlCode').val('');
+                                                         $(this).parent().parent().parent().find('#bgUrlCode').val('');
                                                          myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
                                                          myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
                                                          mee_view.isRepeatY = false;
                                                          mee_view.isRepeatX = false;
-                                                         $(this).parent().parent().find('.bgimg-thumb').remove();
-                                                         myElement.find('.bgimg-thumb_imgwrap').show();
+                                                         $(this).parent().find('h4').show();
+                                                         $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
                                                          if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
                                                                     pageBackgroundimage='none';
                                                             }
@@ -2917,6 +2963,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                      });
                                             
                                         SetBackgroundImage($(this).val());
+                                        }
+                                        
                                 })
                                 myElement.find('#bgimg_position_percent').on('ifChecked', function(event){
                                     //console.log($(this).val());
@@ -3176,7 +3224,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     app: options._app,
                                     module: 'template',
                                     progressElement: myElement.find('#HTML5FileUploader')
-                                });
+                                }); 
                                 
                                 mee.openupGallery = function(){
                                     var dialog_width = $(document.documentElement).width() - 60;
@@ -3206,7 +3254,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 mee.insertImageURL = function(data){
                                     console.log(data);
                                     if(data){
-                                        myElement.find('#bgUrlCode').parent().find('.bgimg-thumb').remove();
+                                        myElement.find('.bgimg-thumb,.removeThumb').remove();
+                                       
                                         myElement.find('#bgUrlCode').val(data.imgurl);
                                         myElement.find(".bgimage-properties").show();
                                         myElement.find('#bgUrlCode').trigger('change');

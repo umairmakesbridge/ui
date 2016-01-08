@@ -306,6 +306,12 @@
      },
      valideImage:function(file){
             var isImage = true;
+            var str = file.name;
+            if(/^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                //alert('your file name contain illegal character');
+                this.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true})
+                isImage = false;
+            }
             if(file.type.indexOf("image") < 0){
              this.app.showAlert("Please select a image with extension jpeg,jpg,png or gif.",$("body"),{fixed:true})
              isImage = false;
