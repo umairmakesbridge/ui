@@ -472,8 +472,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var outerCss = outerTD.attr('style');
                                     //get background color of body
                                     pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
-
-                                    pageTitle = outerTD.length ?outerTD.attr("data-pageTitle"):""; 
+                                    if(outerTD.length){
+                                        pageTitle = outerTD.attr("data-pageTitle") ?outerTD.attr("data-pageTitle"):""; 
+                                    }
 
                                     pageBackgroundimage = outerTD.length ?outerTD.attr("data-bgimg"):"none"; 
                                     pageBackgroundimage_repeat = outerTD.length ?outerTD.attr("data-bgimgrepeat"):"no-repeat"; 
