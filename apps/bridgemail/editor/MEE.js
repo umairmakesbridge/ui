@@ -3270,7 +3270,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var wrapelement = 'dialogWrap-' + dialogArrayLength; // New Dialog
                                         //var img = "<img id='img1' src= '" + args.URL + "' class='" + wrapelement + "'>";
                                         require(["userimages/userimages", 'app'], function (pageTemplate, app) {
-                                            var mPage = new pageTemplate({app: options._app, fromDialog: true, _select_dialog: dialog, _select_page: mee, callBack: _.bind(mee.insertImageURL, mee)});
+                                            var mPage = new pageTemplate({app: options._app, fromDialog: true, _select_dialog: dialog, _select_page: mee});
                                             dialog.getBody().append(mPage.$el);
                                             options._app.showLoading(false, mPage.$el.parent());
                                             var dialogArrayLength = options._app.dialogArray.length; // New Dialog
@@ -3278,12 +3278,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             options._app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog                       
                                         });
                                         
-                                } 
-                                mee.insertImageURL = function(data){
+                                }                                
+                                mee.useImage = function(data){
                                     console.log(data);
                                     if(data){
                                         myElement.find('#bgUrlCode').parent().find('.bgimg-thumb').remove();
-                                        myElement.find('#bgUrlCode').val(data.imgurl);
+                                        myElement.find('#bgUrlCode').val(data);
                                         myElement.find(".bgimage-properties").show();
                                         myElement.find('#bgUrlCode').trigger('change');
                                         
