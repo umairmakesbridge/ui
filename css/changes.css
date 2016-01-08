@@ -2042,6 +2042,10 @@ input[type='file'] {
 .close-icon {
     background: url("../img/closeiconurl.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+
+.wtab-performance {
+    background-position: -90px -120px;
+}
 /* New Dash board Menu*/
 
 .sc-links {
