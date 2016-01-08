@@ -3291,7 +3291,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     top: 0px;
 }
 /*------------------------Backgorund Image-----------------------------------*/
-.MEE_EDITOR .bgimg-thumb .removeThumb {
+.MEE_EDITOR .bgimg-thumb_imgwrap .removeThumb {
     background: url("../images/closeicon.png") no-repeat scroll center center #fff;
     display: block;
     height: 18px;
@@ -3303,22 +3303,39 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     cursor: pointer;
 }
 .bgimg-thumb{
-   position: relative; 
-    border: 2px solid #079cd3;
-    border-radius: 2px;
-    box-shadow: 1px 1px 5px 0 #cad5dd;
-    margin: 10px auto;
-    max-width: 145px;
-    text-align: center;
+  margin: 15px 0 0;
 }
 .bgimg-thumb_imgwrap{
-    text-align: center;
-   position: relative; 
-    border: 2px solid #079cd3;
+    display: block;
+    float: left;
+    margin: 0 12%;
+    background: #f8fdff none repeat scroll 0 0;
     border-radius: 2px;
-    box-shadow: 1px 1px 5px 0 #cad5dd;
-    margin: 10px auto;
-    max-width: 145px;
+    padding: 10px;
+    
+}
+.bgimg-thumb_imgwrap .droppanel {
+    border: 2px dashed #eaf4f9;
+    border-radius: 2px;
+    color: #666666;
+    font-size: 12px;
+    margin: 0;
+    position: relative;
+    text-align: center;
+    background: #fff none repeat scroll 0 0;
+    height: 165px;
+    width: 145px;
+    overflow: visible;
+}
+.bgimg-thumb_imgwrap .droppanel h4{
+    font-size: 12px;
+       margin: 35px 10px 0;
+       line-height: 14px;
+}
+.bgimg-thumb_imgwrap .SI-FILES-STYLIZED i.upload {
+    background: rgba(0, 0, 0, 0) url("../images/upload.png") no-repeat scroll center center;
+     height: 35px;
+    width: 30px;
 }
 .bgimage-properties li{
     width: 49%;
@@ -3339,7 +3356,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 }
 .bgimage-setposition .bg-leftpos, .bgimage-setposition .bg-toppos{
     clear:none;
-    width: 110px;
+    width: 112px;
     margin-top: 3px; 
     margin-bottom: 2px; 
 }
@@ -3379,9 +3396,10 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     margin: 6px 0 0 6px;
 }
 .bgimage-repeatposition {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     overflow: hidden;
     border: 2px solid #6494af;
+    padding:5px;
 }
 .img-position-ul{
     margin: 0 0 3px !important;
@@ -3394,11 +3412,17 @@ input.openUpGallery[type="button"] {
 .bgimage-properties .bgimage-repeat-h4{
     background: #6494af none repeat scroll 0 0;
     color: #fff;
-    margin: 10px 0 0;
+    margin: 8px 0 0;
     padding-left: 3px;
 }
 .bgimage-repeatposition .socialbtns{
-     margin: 3px 0;
+     margin: 5px 0px;
+}
+.bgimage-repeatposition > ul.socialbtns li {
+    margin: 0 0 5px 2%;
+}
+.bgimage-repeatposition > ul.socialbtns li:first-child {
+    margin-left: 0;
 }
 #loadingbgimg {
     border: 2px solid #079cd3;

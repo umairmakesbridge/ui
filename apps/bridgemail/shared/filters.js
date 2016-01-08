@@ -143,7 +143,7 @@
       //filter.find(".filter-cont").append('<span class="timelinelabel">Basic Filter</span>');  
       //Chosen with fields
       var self = this;
-      filter.find(".fields").chosen({width:'200px'}).change(function(){
+      filter.find(".fields").chosen({width:'320px'}).change(function(){
           if($(this).val()=="{{SUBSCRIPTION_DATE}}"){
               self.subListObj['parentFilter']=filter;
               filter.find(".sub-date-container").hide();

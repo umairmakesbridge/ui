@@ -427,17 +427,34 @@
                             <h4>Loading...</h4>
                         </div> 
 
-                        <div class="bgimg-thumb_imgwrap">
+<!--                        <div class="bgimg-thumb_imgwrap">
                             <img alt="" src="<%- options._app.get('path')%>img/imgiconb-w.png">
-                            <h4>Select Image or Paste URL</h4>  
-                        </div>
-                        
+                            <h4></h4>  
+                            
+                        </div>-->
+                        <div class="templateimg bgimg-thumb_imgwrap">
+                                <div class="droppanel"><h4><img src="/pms/abdullah/img/imgiconb-w.png" alt=""><br class="clearfix">Select Image or Paste URL</h4><img style="width:150px;height:150px;display:none" src="">
+                                    <div style="display:inline-block;position:relative;" class="SI-FILES-STYLIZED">
+                                        <!--<label style="width:154px;" class="cabinet">
+                                             <input type="button" id="file_control" name="file" class="file">
+                                           </label>
+                                           <a href="" class="btn-blue g-btn" id="list_file_upload"><span>Browse Photo </span><i class="icon update"></i></a>-->
+                                        <a style="display: inline;position: relative;top: 10px;width: 135px;" class="btn btn-blue openUpGallery right">
+                                            <span style="font-size: 13px; padding: 0px 7px;">Browse Images</span>
+                                            <i class="icon upload" style="width: 30px;"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
                         <div class="clearfix"></div>
                         <input type="text" class="urlCode acco-input" placeholder="Enter Image URL" id="bgUrlCode">
-                <input type="button" class="acco-button medium-button active openUpGallery" value="Open Gallery">
+                <!--<input type="button" class="acco-button medium-button active openUpGallery" value="Open Gallery">-->
                  <div class="clearfix"></div>
                     <div class="bgimage-properties">
-                        <h4 class="bgimage-repeat-h4" >Repeat Background</h4>  
+                        <h4 class="bgimage-repeat-h4">Repeat Background</h4>  
                         <div class="bgimage-repeatposition"> <ul class="socialbtns">
                                     <li class="rpeatx">
                                         <input type="checkbox" id="bgimg_repeatx" class="radiopanel" value="repeat-x" name="bgimg_repeatx"  />

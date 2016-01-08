@@ -271,20 +271,28 @@ define(['text!userimages/html/userimage.html'],
                     $('body'));
                 },
                 useImage: function(ev) {
-                    if (this.options.callBack) {
-
-                        this.options.callBack({imgurl: $(ev.target).data('url'), imgencode: this.model.get('imageId.encode'), imgthumb: $(ev.target).data('thumb')});
+                    var imgurl = $(ev.target).data('url');
+                   var filename = imgurl.substring(imgurl.lastIndexOf('/')+1);
+                    var str = decodeURIComponent(filename);
+                    if(imgurl!== "" &&  /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                         ev.stopPropagation();
+                        this.options.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                    }else{
+                          if (this.options.callBack) {
+                            this.options.callBack({imgurl: $(ev.target).data('url'), imgencode: this.model.get('imageId.encode'), imgthumb: $(ev.target).data('thumb')});
+                        }
+                        else {
+                            this.options._select_page.useImage($(ev.target).data('url'), this.model.get('imageId.encode'));
+                        }
+                        $('.modal-open .custom_popup').remove();
+                        if (this.options.isClose) {
+                            this._dialog.hide();
+                        }
+                        else {
+                            this._dialog.showPrevious();
+                        }
                     }
-                    else {
-                        this.options._select_page.useImage($(ev.target).data('url'),this.model.get('imageId.encode'));
-                    }
-                    $('.modal-open .custom_popup').remove();
-                    if(this.options.isClose){
-                        this._dialog.hide();
-                    }
-                    else{
-                    this._dialog.showPrevious();
-                    }
+                    
                 },
                 // Update header count when delete called inside success for deletion.
                 updateCount: function() {
