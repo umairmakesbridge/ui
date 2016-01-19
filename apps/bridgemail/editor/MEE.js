@@ -583,7 +583,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     //require(["editor/links"], function (page) {
                                         
                                         var iframeval = (cHtml.find('.embedvido-wrap').length) ? cHtml.find('.embedvido-wrap').attr('data-url') : ""; 
-                                        dialog.getBody().append('<div class="">Paste the video url here, from your media (youtube/vimeo) provider:<br><div class="ui-code-area" style="padding: 4px 0; margin: 6px 0px; "><input type="text" class="divVideoCode" style="font-size:12px;width:500px;" value="'+iframeval+'" placeholder="Paste video url here"></div></div>');
+                                        dialog.getBody().append('<div class="embedvideolinkwrap" style="position:relative;">Paste the video url here, from your media (youtube/vimeo) provider:<br><div class="ui-code-area inputcont" style="padding: 4px 0; margin: 6px 0px; "><input type="text" class="divVideoCode " style="font-size:12px;width:500px;" value="'+iframeval+'" placeholder="Paste video url here"></div></div>');
                                         dialog.saveCallBack(_.bind(mee.saveVideo,mee,dialog,cHtml));
                                         options._app.showLoading(false, dialog.getBody());
                                         dialog.$el.find('.divVideoCode').focus()
@@ -625,7 +625,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         iframe = '<iframe src="https://player.vimeo.com/video/'+videoid+'?badge=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
                                     }else{
                                         isvalidurl = false;
-                                        alert('We are only supporting youtube and vimeo.');
+                                         options._app.showError({
+                                            control:dialog.$el.find('.embedvideolinkwrap'),
+                                            message: "We are only supporting youtube and vimeo."
+                                        });
+                                         dialog.$el.find('.embedvideolinkwrap .errortext').css({right:"6px",bottom:"51px"});
+                                         dialog.$el.find('.embedvideolinkwrap .errortext em').show();
+                                        //alert('We are only supporting youtube and vimeo.');
                                         dialog.$el.find('.divVideoCode').val('');
                                     }
                                     if(isvalidurl){
