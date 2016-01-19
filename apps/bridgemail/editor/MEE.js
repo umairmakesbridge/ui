@@ -608,18 +608,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                 },
                                 mee.saveVideo = function(dialog,cHtml){
-                                    cHtml.addClass('videoenable');
+                                    
                                     var embedval = dialog.$el.find('.divVideoCode').val();
                                     var iframe = '';
                                     var ytp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-                                    var regVimeo =  /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+                                    var regVimeo =   /vimeo.*(?:\/|clip_id=)([0-9a-z]*)/i;
                                     var ytmatches = embedval.match(ytp);
                                     var vmatches = embedval.match(regVimeo);
                                     var isvalidurl = true;
                                     if (ytmatches) {
                                         var videoid = mee.youtube_parser(embedval);
                                         iframe = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoid+'" frameborder="0" allowfullscreen></iframe>'
-                                    }else if(vmatches[1].split('.')[0]==="vimeo"){
+                                    }else if(vmatches){
                                         var videoid = mee.parseVimeo(embedval);
                                         //console.log('vimeo :'+videoid);
                                         iframe = '<iframe src="https://player.vimeo.com/video/'+videoid+'?badge=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
@@ -629,6 +629,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         dialog.$el.find('.divVideoCode').val('');
                                     }
                                     if(isvalidurl){
+                                        cHtml.addClass('videoenable');
                                         cHtml.find('.embedvido-wrap').remove();
                                         cHtml.append('<div class="embedvido-wrap" align="center" style="display:none;" data-url="'+embedval+'">'+iframe+'</div>');
                                         cHtml.css({width:cHtml.find('.embedvido-wrap iframe').attr('width'),height:cHtml.find('.embedvido-wrap iframe').attr('height')});
