@@ -181,7 +181,7 @@ function (template) {
                         if(campaign_subject_title!==""){                            
                             var newTitle = '<title>'+campaign_subject_title+'</title>';
                             if(html.indexOf('<meta property="og:image"')==-1){
-                                newTitle = newTitle + '<meta property="og:image" content="http://d1xgyg9kndz45n.cloudfront.net/pms/graphics/WaW6c5IH/email_img.png?v=1"></meta>';
+                                newTitle = newTitle + '<meta content="'+campaign_subject_title+'" itemprop="title name" property="og:title" name="twitter:title">';
                             }
                             html = html.replace(/<title>(.*?)<\/title>/ig, newTitle);
                         }
@@ -206,6 +206,7 @@ function (template) {
                             else{
                                  meeElement.find("head").append(newTitle);
                             }
+                            meeElement.find("head meta[property='og:title']").attr("content",campaign_subject_title);
                         }
                          html =this.$("#mee_editor").getMEEHTML?this.$("#mee_editor").getMEEHTML():"";
                          post_data['htmlCode'] = html;       

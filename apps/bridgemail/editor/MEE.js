@@ -9,7 +9,7 @@
  * * Section8 - Landing page Forms
  ****/
 
-define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors','bms-remote','editor/editor-dragfile'],
+define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors','bms-remote','editor/editor-dragfile', 'jquery.colresize'],
         function ($, Backbone, _, template, linksPage, blocksPage, filterPage) {
             'use strict';
             return Backbone.View.extend({
@@ -198,7 +198,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.$el.html(this.my_template({allowedUser: ['admin', 'jayadams', 'demo'], options: options}));
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;
-                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                            
+                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                          
+                                            console.log('iframe loaded');
                                         })
                                         
                                     }
@@ -1186,7 +1187,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find("p").css("margin","0px");
                                     oHtml.find("ul,ol").css({"margin-top":"0px","margin-bottom":"0px"});
                                     oHtml.find("li").css({"margin":"0px"});
-                                    
+                                    oHtml.find(".JCLRgrips").remove();
+                                    oHtml.find(".JColResizer").removeAttr("id").removeClass("JColResizer");
 
                                     // oHtml.find("*").not(".DYNAMIC_VARIATION").removeAttr("class");
 
@@ -4311,6 +4313,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
                                             meeIframeWindow.$(element.find(".formresizable")).resizable({});
                                         }
+                                        
+                                        if (meeIframeWindow.$(element.find("table.container")).colResizable) {
+                                            if(meeIframeWindow.$("body").height()>4){
+                                                meeIframeWindow.$(element.find("table.container")).colResizable({
+                                                    gripInnerHtml:"<div class='colresize-grip'></div>" 
+                                                });
+                                            }
+                                            else{
+                                                setTimeout(function(){
+                                                    meeIframeWindow.$(element.find("table.container")).colResizable({
+                                                        gripInnerHtml:"<div class='colresize-grip'></div>"
+                                                    });
+                                                },200)
+                                            }
+                                        }
 
                                         if (element.find("div.textcontent").length === 0) {
                                             mee.initTinyMCE();
@@ -4923,8 +4940,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     mee.showFormWizard(form_id);
                                                 })
                                             }
-                                            var activeTab = myElement.find("#tabs").tabs("option", "active");
-
+                                            var activeTab = myElement.find("#tabs").tabs("option", "active");                                               
                                         }
                                     }
 

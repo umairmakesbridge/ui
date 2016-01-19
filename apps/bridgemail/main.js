@@ -18,6 +18,7 @@
            'jquery.icheck': 'shared/libs/jquery.icheck',
            'jquery.chosen': 'shared/libs/chosen.jquery',
            'jquery.highlight': 'shared/libs/jquery.highlight',           
+           'jquery.colresize':'shared/libs/jquery.colresizable',
            'jquery.searchcontrol': 'shared/searchcontrol',
            'jquery-ui': 'shared/libs/jquery-ui',
            'bms-remote': 'shared/libs/remote',
@@ -78,6 +79,11 @@
                'jquery.highlight':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.highlight'
+               }
+               ,
+               'jquery.colresize':{
+                   deps: ['jquery'],
+                   exports: 'jQuery.fn.colResizable'
                }
                ,
                'jquery.searchcontrol':{

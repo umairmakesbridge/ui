@@ -2152,3 +2152,17 @@ i.icon{
 .hoverParent{
     z-index: 1000 !important;
 }
+.colresize-grip{
+    width:22px;
+    height:30px;
+    margin-top:3px;
+    background-image:url('../images/resize_h1.png');
+    margin-left:-7px;
+    position:relative;
+    z-index:88;
+    background-repeat: no-repeat;
+    cursor:e-resize;
+}
+.colresize-grip:hover{
+    background-position-x:-22px;
+}
