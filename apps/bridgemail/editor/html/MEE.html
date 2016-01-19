@@ -49,6 +49,43 @@
     </ul>
 </div>
 
+<% if(options.landingPage) { %>
+<div id="videoToolbar" class="videoToolbar-menu imageToolbar-menu">
+    <ul>
+<!--        <li title="Set Link" class="ImageToolbarLinkClass">
+            <a >
+                <i class="mce-ico mce-i-link" style="margin-top: -5px;"></i>
+            </a>
+        </li>
+        <li title="Remove Link" class="VideoToolbarUnLinkClass" style="display: none">
+            <a >
+                <i class="mce-ico mce-i-unlink" style="margin-top: -5px;"></i>
+            </a>
+        </li>-->
+        <li title="Left Align" class="VideoToolbarLeftAlignClass">
+            <a >
+                <img src="css/images/Image-align-left-icon.png" />
+            </a>
+        </li>
+        <li title="Center Align" class="VideoToolbarCenterAlignClass">
+            <a >
+                <img src="css/images/Image-align-center-icon.png" />
+            </a>
+        </li>
+        <li title="Right Align" class="VideoToolbarRightAlignClass">
+            <a >
+                <img src="css/images/Image-align-right-icon.png" />
+            </a>
+        </li>
+<!--        <li title="Set Title" class="ImageToolbarTitleSetClass">
+            <a >
+                <img src="css/images/Adobe_Premiere_Pro_Title.png" />
+            </a>
+        </li>-->
+    </ul>
+</div>
+<div id="videoDataSavingObject" style="display:none;"></div>
+<% } %>
 <div id="currTinyMCE" style="display:none;"></div>
 <div id="linkTrack" style="display:none;"></div>
 <div id="imageDataSavingObject" style="display:none;"></div>
@@ -147,6 +184,12 @@
                                 <i class="icon signupform"></i>
                                 <a>
                                     <span class=" font_75">SignUp Form</span>
+                                </a>
+                            </li>
+                            <li class="draggableControl ui-draggable" data-type="embedvideo" draggable="true">
+                                <i class="icon embedvideo"></i>
+                                <a>
+                                    <span class=" font_75">Embed Video</span>
                                 </a>
                             </li>
                             <% } %>

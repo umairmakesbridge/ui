@@ -72,6 +72,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.campDefaults = {};
                     this.allowedUser = ['admin', 'jayadams', 'demo'];
                     this.campFromName = '';
+                    this.isSaveCallFromMee = false;
                     this.states = {
                         "step1": {change: false, sf_checkbox: false, ns_checkbox: false, sfCampaignID: '', nsCampaignID: '', hasResultToSalesCampaign: false, hasResultToNetsuiteCampaign: false, pageconversation_checkbox: false, hasConversionFilter: false},
                         "step2": {"templates": false, htmlText: '', plainText: '', change: false, editorType: ''},
@@ -1305,24 +1306,28 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     return proceed;
                 },
                 saveForStep2: function (obj) {
-                    
-                    if(this.meeView && !this.meeView.autoSaveFlag){
-                       if(obj){
+                    this.isSaveCallFromMee = false;
+                     var button = $.getObj(obj, "a");
+                    if (!button.hasClass("saving")) {
+                        this.saveStep2(false);
+                        button.css('width',button.outerWidth());
+                        button.addClass("saving savingbg");
+                    }
+                },
+                saveForStep2Mee: function (obj) {
+                    this.isSaveCallFromMee = true;
+                     if(obj){
                            this.isNextPress = false;
                             var button = $.getObj(obj, "a");
                                 if (!button.hasClass("disabled-btn")) {
                                 this.saveStep2(false);
+                                this.isSaveCallFromMee = false;
                                 button.addClass("disabled-btn");
                             }  
                         }else{
                            this.meeView.autoSaveFlag = true; 
                            this.saveStep2(false); 
                         } 
-                    }else{
-                        this.saveStep2(false); 
-                    }
-                    
-                    
                 },
                 saveStep2: function (gotoNext, htmlText) {
                     var camp_obj = this;
@@ -1367,10 +1372,13 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     var step1_json = jQuery.parseJSON(data);
                                     camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
                                     camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("disabled-btn");
+                                    camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("saving savingbg");
+                                    camp_obj.$(".save-step2").css('width','auto');
                                     if (step1_json[0] !== "err") {
-                                        if(camp_obj.meeView && !camp_obj.meeView.autoSaveFlag){
+                                        if(camp_obj.meeView && !camp_obj.meeView.autoSaveFlag && !camp_obj.isSaveCallFromMee){
                                         camp_obj.app.showMessge("Step 2 saved successfully!");
-                                        }else if(!camp_obj.meeView){
+                                        
+                                        }else if(!camp_obj.meeView && !camp_obj.isSaveCallFromMee){
                                              camp_obj.app.showMessge("Step 2 saved successfully!");
                                         }
                                         if(camp_obj.meeView){
@@ -2345,7 +2353,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 setMEEView: function () {
                     var _html = this.campobjData.editorType == "MEE" ? $('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g, "") : "";
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:43, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this), previewCallback: _.bind(this.previewCallback, this)});
+                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:43, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2Mee, this), textVersionCallBack: _.bind(this.setTextVersion, this), previewCallback: _.bind(this.previewCallback, this)});
                         this.$("#mee_editor").setChange(this.states);
                         this.meeView = MEEPage;
                         this.setMEE(_html);
@@ -2386,7 +2394,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var bms_token = this.app.get('bms_token');
                     this.app.showLoading('Loading HTML...', this.$el);
                     this.$("#mee-iframe").contents().find('.mainContentHtml').html('');
-                    this.$el.find('.lastSaveInfo').html('Saving...');
+                    this.$el.find('.lastSaveInfo').html('Saving...').show();
                     this.states.editor_change = true;
                     var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + bms_token + "&type=html&templateNumber=" + target.attr("id").split("_")[1];
                     jQuery.getJSON(URL, _.bind(this.setEditorHTML, this));

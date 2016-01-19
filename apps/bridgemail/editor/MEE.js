@@ -47,6 +47,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             "html": "<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>"
                         },
                         {
+                            "type": "embedvideo",
+                            "html": "<div class='MEEVIDEOCONTAINER'><div class='editvideopanel' style='display:none;'><span class='edit-video'><button >Edit Embed Video</button></span> </div></div>"
+                        },
+                        {
                             "type": "spacer5",
                             "html": '<div style=\'height:5px\' class=\'spacer-ele\'><table class="fullCenter" align="center" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td style="font-size: 1px; line-height: 1px;" height="5">&nbsp;</td></tr></table></div>'
                         },
@@ -549,7 +553,116 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find("[data-type='signupForm']").removeClass("disabled").attr("draggable",true);   
                                     }
                                 }
-                               
+                                mee.openvideoDialog = function(cHtml){
+                                    
+                                    myElement.trigger('click');
+                                   if(cHtml.length && cHtml.hasClass('MEEVIDEOCONTAINER')){
+                                       cHtml.addClass('clickEventVideo');
+                                       var dialogOptions = {
+                                            title: "Embed Video",
+                                            css: {
+                                                "width": "550px",
+                                                "margin-left": "-250px"
+                                            },
+                                            bodyCss: {
+                                                "min-height": "90px"
+                                            },
+                                            headerIcon: 'emvideo',
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Insert'
+                                                }
+                                            }
+                                        };
+                                    var dialog = null;  
+                                    dialog = options._app.showStaticDialog(dialogOptions);                                            
+                                    options._app.showLoading("Loading...", dialog.getBody());
+                                    dialog.$el.css("z-index", "99999");
+                                    dialog.$el.find('.dialog-backbtn').hide();
+                                    $(".modal-backdrop").css("z-index", "99998");
+                                    //require(["editor/links"], function (page) {
+                                        
+                                        var iframeval = (cHtml.find('.embedvido-wrap').length) ? cHtml.find('.embedvido-wrap').attr('data-url') : ""; 
+                                        dialog.getBody().append('<div class="">Paste the video url here, from your media (youtube/vimeo) provider:<br><div class="ui-code-area" style="padding: 4px 0; margin: 6px 0px; "><input type="text" class="divVideoCode" style="font-size:12px;width:500px;" value="'+iframeval+'" placeholder="Paste video url here"></div></div>');
+                                        dialog.saveCallBack(_.bind(mee.saveVideo,mee,dialog,cHtml));
+                                        options._app.showLoading(false, dialog.getBody());
+                                        dialog.$el.find('.divVideoCode').focus()
+                                        dialog.closeDialogCallBack(_.bind(mee.videocloseCallBack,mee,dialog,cHtml));
+                                    oInitDestroyEvents.InitializeClickEvent(cHtml);  
+                                   }
+                                        
+                                },
+                                mee.videocloseCallBack = function(dialog,cHtml){
+                                    var embedvideo = dialog.$el.find('.divVideoCode').val();
+                                    if(embedvideo.trim()==""){
+                                        /*cHtml.parent().prev().remove();
+                                        cHtml.parent().next().remove();
+                                        cHtml.parent().remove();*/
+                                        //cHtml.removeClass('clickEventVideo');
+                                        cHtml.find('.embedvido-wrap').remove();
+                                        cHtml.removeClass('videoenable');
+                                    }else{
+                                        //cHtml.addClass('clickEventVideo');
+                                        cHtml.addClass('videoenable');
+                                    }
+                                    
+                                },
+                                mee.saveVideo = function(dialog,cHtml){
+                                    cHtml.addClass('videoenable');
+                                    var embedval = dialog.$el.find('.divVideoCode').val();
+                                    var iframe = '';
+                                    var ytp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                                    var regVimeo =  /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+                                    var ytmatches = embedval.match(ytp);
+                                    var vmatches = embedval.match(regVimeo);
+                                    var isvalidurl = true;
+                                    if (ytmatches) {
+                                        var videoid = mee.youtube_parser(embedval);
+                                        iframe = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoid+'" frameborder="0" allowfullscreen></iframe>'
+                                    }else if(vmatches[1].split('.')[0]==="vimeo"){
+                                        var videoid = mee.parseVimeo(embedval);
+                                        //console.log('vimeo :'+videoid);
+                                        iframe = '<iframe src="https://player.vimeo.com/video/'+videoid+'?badge=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+                                    }else{
+                                        isvalidurl = false;
+                                        alert('We are only supporting youtube and vimeo.');
+                                        dialog.$el.find('.divVideoCode').val('');
+                                    }
+                                    if(isvalidurl){
+                                        cHtml.find('.embedvido-wrap').remove();
+                                        cHtml.append('<div class="embedvido-wrap" align="center" style="display:none;" data-url="'+embedval+'">'+iframe+'</div>');
+                                        cHtml.css({width:cHtml.find('.embedvido-wrap iframe').attr('width'),height:cHtml.find('.embedvido-wrap iframe').attr('height')});
+                                    
+                                        dialog.hide();     
+                                    }
+                                },
+                                
+                                mee.youtube_parser = function (url){
+                                        /*==========Supporting youtube URL ===========*/
+                                      /*http://www.youtube.com/watch?v=0zM3nApSvMg&feature=feedrec_grec_index
+                                        http://www.youtube.com/user/IngridMichaelsonVEVO#p/a/u/1/QdK8U-VIH_o
+                                        http://www.youtube.com/v/0zM3nApSvMg?fs=1&amp;hl=en_US&amp;rel=0
+                                        http://www.youtube.com/watch?v=0zM3nApSvMg#t=0m10s
+                                        http://www.youtube.com/embed/0zM3nApSvMg?rel=0
+                                        http://www.youtube.com/watch?v=0zM3nApSvMg
+                                        http://youtu.be/0zM3nApSvMg*/
+                                        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+                                        var match = url.match(regExp);
+                                        if (match&&match[7].length==11){
+                                            var b=match[7];
+                                            return b;
+                                        }else{
+                                            alert("Url incorrect");
+                                        }
+                                },
+                                mee.parseVimeo = function (url) {
+                                    // embed & link: http://vimeo.com/86164897
+                                    // embed & link: http://vimeo.com/channels/86164897
+
+                                    var re = /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+                                    var matches = re.exec(url);
+                                    return matches && matches[5];
+                                }
                                 $.fn.getIframeStatus = function () {
                                     return mee.iframeLoaded;
                                 }
@@ -873,10 +986,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                     oHtml.find(".MEEFORMCONTAINER").each(function () {
                                         if($(this).find("iframe").length){
-                                            $(this).append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button data-formid='"+options.formid+"'>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>")
-                                            
+                                            $(this).append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button data-formid='"+options.formid+"'>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>")   
                                         }
                                     });
+                                    if(oHtml.find(".MEEVIDEOCONTAINER").length){
+                                            oHtml.find(".MEEVIDEOCONTAINER .editvideopanel").remove();
+                                            oHtml.find(".MEEVIDEOCONTAINER .embedvido-wrap").hide();
+                                            $.each(oHtml.find(".MEEVIDEOCONTAINER"),function(key,val){
+                                                $(val).css({width: $(val).find(".embedvido-wrap iframe").attr('width'),height: $(val).find(".embedvido-wrap iframe").attr('height')})
+                                            });
+                                            
+                                            oHtml.find(".MEEVIDEOCONTAINER").append("<div class='editvideopanel' style='display:none;'><span class='edit-video'><button >Edit Embed Video</button></span> </div>");
+                                    }
+                                    
+                                    
 
                                     oHtml.find("table").each(function () {
                                         oHtml.find(".container .sortable .csHaveData").each(function () {
@@ -969,10 +1092,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find("div.ui-resizable-e").remove();
                                     oHtml.find("div.ui-resizable-s").remove();
                                     oHtml.find("div.ui-resizable-se").remove();
-
+                                    
                                     oHtml.find(".space").removeInlineStyle("background");
                                     oHtml.find("*").removeInlineStyle("outline");
 
+                                    // Show the video iframe
+                                    oHtml.find('.embedvido-wrap').parent().removeAttr('style'); //Remove width and height on parent video wrapper
+                                    oHtml.find('.embedvido-wrap').removeAttr('style');
+                                    oHtml.find('.editvideopanel').remove();
                                     //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
                                     oHtml.find(".drapableImageContainer").each(function (index, object) {
                                         var imageContainer = $(object);
@@ -1954,7 +2081,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                 }
                                 var SetBackgroundImage = function (data) {
-                                    console.log(data);
+                                    //console.log(data);
                                     if (IsStyleActivated && SelectedElementForStyle != null) {
 
                                         SelectedElementForStyle.css({"background-image":"url('"+data+"')","background-repeat":"no-repeat"});
@@ -2393,7 +2520,41 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         _newTitleHTML.find("input#image_title").focus();
                                     }
                                 }
-
+                                 // == Enabling VideoFunctionality before access 
+                                 var videoFunctionality = {
+                                        leftAlign: function (myHtmlInstance, workingObject) {
+                                        //$(workingObject).parents(".myImage");
+                                        
+                                        if($(workingObject).hasClass('videoenable')){
+                                                $(workingObject).parent().css('overflow','hidden');
+                                                $(workingObject).css('float','left');
+                                                $(workingObject).find('.embedvido-wrap').attr("align", "left");
+                                                myHtmlInstance.find('#videoToolbar').hide();
+                                        }else{
+                                            alert('No Embed Video is found');
+                                        }
+                                    },
+                                    centerAlign: function (myHtmlInstance, workingObject) {
+                                        if($(workingObject).hasClass('videoenable')){
+                                                $(workingObject).parent().css('overflow','unset');
+                                                $(workingObject).css('float','none');
+                                                $(workingObject).find('.embedvido-wrap').attr("align", "center");
+                                                myHtmlInstance.find('#videoToolbar').hide();
+                                        }else{
+                                            alert('No Embed Video is found');
+                                        }
+                                    },
+                                    rightAlign: function (myHtmlInstance, workingObject) {
+                                        if($(workingObject).hasClass('videoenable')){
+                                                $(workingObject).parent().css('overflow','hidden');
+                                                $(workingObject).css('float','right');
+                                                $(workingObject).find('.embedvido-wrap').attr("align", "right");
+                                                myHtmlInstance.find('#videoToolbar').hide();
+                                        }else{
+                                            alert('No Embed Video is found');
+                                        }
+                                    },
+                                 }
                                 //========================= End Sohaib Nadeem =====================////
 
                                 var isElementClicked = false;
@@ -2416,7 +2577,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     makeCloneAndRegister();
                                     return false;
                                 });
-
+                                
                                 myElement.find(".ImageToolbarLinkClass").click(function () {
                                     //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     showLinkGUI();
@@ -2442,6 +2603,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     imageFunctionality.setImageTitle(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     makeCloneAndRegister();
+                                    return false;
+                                });
+                                // Video Frame
+                                myElement.find(".VideoToolbarLeftAlignClass").click(function () {
+                                   
+                                    videoFunctionality.leftAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
+                                   // makeCloneAndRegister();
+                                    return false;
+                                });
+                                myElement.find(".VideoToolbarCenterAlignClass").click(function () {
+                                    
+                                    videoFunctionality.centerAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
+                                   // makeCloneAndRegister();
+                                    return false;
+                                });
+                                myElement.find(".VideoToolbarRightAlignClass").click(function () {
+                              
+                                    videoFunctionality.rightAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
+                                    //makeCloneAndRegister();
                                     return false;
                                 });
 
@@ -2493,6 +2673,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find("#imageToolbar").css("width", "310px");
                                     }
                                     myElement.find("#imageToolbar").css({
+                                        top: $(event.target).offset().top + 19 + topPlus,
+                                        left: $(event.target).offset().left + 292 + leftPlus
+                                    });
+
+                                }
+                                var OnClickedOnVideoElement = function (event) {
+                                    myElement.find("#videoDataSavingObject").data("myWorkingObject", event.target);
+                                    //myElement.find("#linkTrack").data("linkObject", "image");
+                                    myElement.find("#videoToolbar").addClass("imageToolbar-menu videoToolbar-menu");
+                                    myElement.find("#videoToolbar").show();
+                                    /*if ($(event.target).parent().prop("tagName").toLowerCase() == "a") {
+                                        myElement.find("#imageToolbar").css("width", "366px");
+                                        myElement.find("#imageToolbar .ImageToolbarUnLinkClass").show();
+                                    }
+                                    else {
+                                        myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
+                                        myElement.find("#imageToolbar").css("width", "310px");
+                                    }*/
+                                    myElement.find("#videoToolbar").css({
                                         top: $(event.target).offset().top + 19 + topPlus,
                                         left: $(event.target).offset().left + 292 + leftPlus
                                     });
@@ -3252,7 +3451,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         
                                 } 
                                 mee.insertImageURL = function(data){
-                                    console.log(data);
+                                    //console.log(data);
                                     if(data){
                                         myElement.find('.bgimg-thumb,.removeThumb').remove();
                                        
@@ -4240,6 +4439,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             });
                                             meeIframeWindow.$(element.find(".formresizable")).resizable({});
+                                            meeIframeWindow.$(element.find(".MEEVIDEOCONTAINER")).resizable({
+                                                 aspectRatio: true,
+                                                start:function(event,ui){
+                                                    $(this).find(".resizeable-tooltip").remove();
+                                                    $(this).append("<div class='resizeable-tooltip'></div>")
+                                                },
+                                                resize: function( event, ui ) {
+                                                    if( $(this).find(".embedvido-wrap").length){
+                                                        $(this).find(".embedvido-wrap iframe").attr("width",$(this).css("width"));
+                                                        $(this).find(".embedvido-wrap iframe").attr("height",$(this).css("height"));
+                                                    }
+                                                    $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                                },
+                                                stop: function(event,ui){
+                                                    $(this).find(".resizeable-tooltip").remove();
+                                                }
+                                            });
                                         }
 
                                         if (element.find("div.textcontent").length === 0) {
@@ -4572,6 +4788,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             $(this).prepend(myobject);
                                                             $(this).parents(".csHaveData").removeClass("hover");
                                                             $(this).find(".editformpanel,.edit-form").show();
+                                                            $(this).find(".editvideopanel").show();
                                                             $(this).find(".drop-here").hide();
                                                             //Assign DELETE functionality here
                                                             InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
@@ -4583,6 +4800,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         $(this).parents(".csHaveData").removeClass("hoverParent");
                                                         $(this).find(".topHandlers").remove();
                                                         $(this).find(".editformpanel").hide();
+                                                        $(this).find(".editvideopanel").hide();
                                                         $(this).removeClass("hover");
                                                     }
                                                 );
@@ -4820,6 +5038,22 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                 });
                                             }
+                                            
+                                            if (oHtml.find('.clickEventVideo').andSelf().filter('.clickEventVideo').length > 0) {
+                                                
+                                                oHtml.find('.clickEventVideo').andSelf().filter('.clickEventVideo').each(function (index, element) {
+                                                    //console.log('video iframes'+index);
+                                                    $(element).click(function (event) {
+                                                        
+                                                        isElementClicked = true;
+                                                        if($(event.target).hasClass('MEEVIDEOCONTAINER')){
+                                                                OnClickedOnVideoElement(event);
+                                                        }
+
+                                                    });
+
+                                                });
+                                            }
                                         }
 
                                         //return args;
@@ -4851,6 +5085,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 oHtml.find(".editformpanel button").click(function(){
                                                     var form_id = $(this).attr("data-formid");
                                                     mee.showFormWizard(form_id);
+                                                })
+                                                oHtml.find(".editvideopanel button").click(function(e){
+                                                    //var form_id = $(this).attr("data-formid");
+                                                    //myElement.find('#videoToolbar').hide()
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    mee.openvideoDialog($(e.currentTarget).parents('.MEEVIDEOCONTAINER'));
                                                 })
                                             }
                                             var activeTab = myElement.find("#tabs").tabs("option", "active");
@@ -5356,6 +5597,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 var RemovePopups = function () {
                                     myElement.find("#imageToolbar").hide();
+                                    myElement.find("#videoToolbar").hide();
                                 }
 
                                 var IsFirstDroppableElement = false;
@@ -5428,6 +5670,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             
                                             meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #01aeee"});
                                             meeIframe.find(".editformpanel,.drop-here").show();
+                                            
                                             meeIframe.find(".editformpanel .edit-form").hide();
                                             
                                             
@@ -5476,6 +5719,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         makeCloneAndRegister();
                                         return false;
                                     });
+                                    
+                                        /*===Video Enabled attached later if needed====*/
+                                    
+                                    mee.openvideoDialog(args.predefinedControl.Html);
                                     mee.checkForm();
 
                                 }

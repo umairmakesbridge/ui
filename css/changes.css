@@ -534,7 +534,9 @@ input[type="text"].search-template{
     text-indent: -999em;
     min-width: 65px;
 }
-
+.savingbg{
+    background-position: center center;
+}
 .c-name .edited .btn-green,.c-name .edited .btn-gray {
   /*  position: absolute;     */
 }
@@ -2044,7 +2046,10 @@ input[type='file'] {
 }
 
 .wtab-performance {
-    background-position: -90px -120px;
+    background-position: -90px -30px;
+}
+.performance-icon {
+    background: rgba(0, 0, 0, 0) url("../img/performanceanalytics.png") no-repeat scroll center center;;
 }
 /* New Dash board Menu*/
 

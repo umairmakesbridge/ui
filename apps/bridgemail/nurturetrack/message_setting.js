@@ -35,7 +35,8 @@ function (template) {
                      this.camp_id = this.options.campNum;     
                  else
                      this.camp_id = this.camp_obj['campNum.encode'];     
-                this.app = this.parent.app;                                                
+                this.app = this.parent.app;       
+                this.isSaveCallFromMee = false;
                 this.render();                    
             },
             /**
@@ -207,11 +208,14 @@ function (template) {
                             var step1_json = jQuery.parseJSON(data);
                             this.app.showLoading(false,this.dialog.$el);
                             this.$(".save-step2").removeClass("disabled-btn");
+                            this.$(".save-step2,.MenuCallBackSave a").removeClass("saving savingbg");
+                            this.$(".save-step2").css('width','auto');
                             if(step1_json[0]!=="err"){
-                                if(this.messagebody_page.meeView && !this.messagebody_page.meeView.autoSaveFlag){
+                                
+                                if(this.messagebody_page.meeView && !this.messagebody_page.meeView.autoSaveFlag && !this.isSaveCallFromMee){
                                         this.app.showMessge("Message settings saved successfully!");
-                                        }else if(!this.messagebody_page.meeView){
-                                             this.app.showMessge("Step 2 saved successfully!");
+                                        }else if(!this.messagebody_page.meeView && !this.isSaveCallFromMee){
+                                             this.app.showMessge("Message settings saved successfully!");
                                         }
                                         if(this.messagebody_page.meeView){
                                             this.messagebody_page.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));

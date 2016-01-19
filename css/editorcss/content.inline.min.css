@@ -746,6 +746,20 @@ div.csHaveData.hover  > .topHandlers { background:#03d3ff; display:block;  }
     margin:5px;
     text-align: center;
 }
+.MEEVIDEOCONTAINER {
+    background: #A9C2D6 url("../images/play_disabled.png") no-repeat scroll center center;
+    border: 2px dashed #e5e5e5;
+    display: block;
+    height: 250px;
+    margin: 0px auto;
+    text-align: center;
+    vertical-align: middle;
+    width: 400px;
+}
+.MEEVIDEOCONTAINER.videoenable{
+    background: #74D2F6 url("../images/play_white.png") no-repeat scroll center center;
+}
+
 
 .imagePlaceHolderAlone .drapableImageContainer {
     background-color: #FFFFFF;
@@ -1917,7 +1931,7 @@ div.textcontent ol{
     right:0px;
     bottom:0px;
 }
-.resizableImage .ui-icon-gripsmall-diagonal-se,.formresizable  .ui-icon-gripsmall-diagonal-se{
+.resizableImage .ui-icon-gripsmall-diagonal-se,.formresizable  .ui-icon-gripsmall-diagonal-se,.MEEVIDEOCONTAINER  .ui-icon-gripsmall-diagonal-se{
     background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(255, 255, 255, 1);
 }
 .sortable > li{
@@ -2087,7 +2101,7 @@ i.icon{
     width:100% !important;
     padding-right: 25px;
 }
-.MEEFORMCONTAINER{
+.MEEFORMCONTAINER,.MEEVIDEOCONTAINER{
     position: relative;
 }
 .MEEFORMCONTAINER .editformpanel{
@@ -2098,7 +2112,7 @@ i.icon{
     display: none;
     background: url("../images/drop-form2.png") no-repeat scroll center 44% rgba(255, 255, 255, 0.6);
 }
-.MEEFORMCONTAINER .editformpanel div{
+.MEEFORMCONTAINER .editformpanel div,.MEEVIDEOCONTAINER .editvideopanel div{
     text-align: center;
     color:#0d7298;
     font-size:13px;    
@@ -2112,7 +2126,7 @@ i.icon{
     
 }
 
-.MEEFORMCONTAINER .editformpanel button{
+.MEEFORMCONTAINER .editformpanel button,.MEEVIDEOCONTAINER .editvideopanel button{
     font-family: 'PT Sans', sans-serif;
     background-color: #00aff0;
     border: 0 none;
@@ -2124,6 +2138,9 @@ i.icon{
     position: absolute;     
     top: 50%;
     cursor: pointer;
+}
+.MEEVIDEOCONTAINER .editvideopanel button{
+    left:48%;
 }
 .resizeable-tooltip{
     font-family: 'PT Sans', sans-serif;

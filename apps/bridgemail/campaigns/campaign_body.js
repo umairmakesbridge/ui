@@ -55,21 +55,29 @@ function (template,editorView) {
                
             },
             saveForStep2:function(obj){ 
-                if(this.meeView && !this.meeView.autoSaveFlag){
-                       if(obj){
+                this.parent.isSaveCallFromMee = false;
+                     var button = $.getObj(obj, "a");
+                    if (!button.hasClass("saving")) {
+                        this.parent.saveStep2(false);
+                        button.css('width',button.outerWidth());
+                        button.addClass("saving savingbg");
+                    }
+            },
+            saveForStep2Mee: function (obj) {
+                    this.parent.isSaveCallFromMee = true;
+                     if(obj){
+                            //this.isNextPress = false;
                             var button = $.getObj(obj, "a");
                                 if (!button.hasClass("disabled-btn")) {
-                                this.parent.saveStep2(false); 
+                                this.parent.isSaveCallFromMee = false;
+                                this.parent.saveStep2(false);
                                 button.addClass("disabled-btn");
                             }  
                         }else{
-                           this.meeView.autoSaveFlag = true; 
+                           this.meeView.autoSaveFlag = true;
                            this.parent.saveStep2(false); 
                         } 
-                    }else{
-                        this.parent.saveStep2(false); 
-                    }
-            },
+                },
             initScroll:function(){            
                 this.$win=this.$el.parents(".modal-body")
                 ,this.$nav = this.$('.editortoolbar')
@@ -294,7 +302,7 @@ function (template,editorView) {
                            // topaccordian = parseInt(topaccordian) - 10;
                         }
                         var topaccordianObj = {topopenaccordian:topaccordian,topcloseaccordian:topcloseaccord}
-                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',parentWindow:this.$el.parents(".modal-body"),scrollTopMinusObj:topaccordianObj,text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this), previewCallback: _.bind(this.previewCallback, this)});                                    
+                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',parentWindow:this.$el.parents(".modal-body"),scrollTopMinusObj:topaccordianObj,text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2Mee,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this), previewCallback: _.bind(this.previewCallback, this)});                                    
                         this.$("#mee_editor").setChange(this.states);  
                         this.meeView = MEEPage;
                         this.setMEE(_html);
