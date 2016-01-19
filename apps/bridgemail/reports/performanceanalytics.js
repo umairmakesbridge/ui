@@ -36,7 +36,7 @@ define(['text!reports/html/performanceanalytics.html'],
                     if(reduceHeight){
                         this.$(".customreportsiframe").attr("src","about:blank").css("height","400px");
                     }
-                    this.app.showLoading(msg?msg:"Loading Analytics Report...",this.$el);    
+                    this.app.showLoading(msg?msg:"Loading Email Send Analytics...",this.$el);    
                 }
             });
         });

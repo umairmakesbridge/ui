@@ -18,6 +18,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/common/dialog.html']
                 },
                 initialize: function () {
                     this.template = _.template(template);
+                    this.CloseCall = null;
                     this.render();
                 },
                 render: function () {
@@ -109,6 +110,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/common/dialog.html']
                          $(".modal,.modal-backdrop").css("visibility","visible");
                          $(".modal-backdrop").css("z-index","1000");
                     }
+                    if(this.CloseCall){
+                               this.CloseCall();
+                           }
                 },
                 getBody: function () {
                     return this.$(".modal-body");
@@ -126,7 +130,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/common/dialog.html']
                     var link = this.$("iframe")[0].src;
                     window.open(link, 'WFMTRX_', 'width=800,height=600,left=50,top=50,screenX=100,screenY=100,scrollbars=yes,status=yes,resizable=yes');
                     this.hide();
-                }
+                },
+                closeDialogCallBack : function(closeCall){
+                            this.CloseCall = closeCall;
+                        },
 
             });
         });

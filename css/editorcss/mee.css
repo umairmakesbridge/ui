@@ -1992,6 +1992,9 @@ div.mce-tinymce-inline {
     left:-2px;
     z-index:1000;
 }
+.MEE_EDITOR .videoToolbar-menu{
+    width:185px; 
+}
 .MEE_EDITOR .imageToolbar-menu ul{list-style-type: none; display: inline-block; padding: 0; margin: 0; width: 370px; height: 34px;}
 .MEE_EDITOR .imageToolbar-menu ul li{width: 60px; height: 27px; border-right: 1px solid #222; float: left; text-align: center; padding-top: 6px;}
 .MEE_EDITOR .imageToolbar-menu ul li:last-child{border-right:none;}
@@ -4179,6 +4182,8 @@ input[type="button"].small-button {
 
 
 .c-name h2 i.icon.link { background:url("../images/link.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);}
+.c-name h2 i.icon.emvideo { background:url("../images/play_icon_30x30.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);}
+
 .spacer-ele{background:url("../images/_spacer.png") repeat transparent;}
 
 
@@ -4929,6 +4934,7 @@ body > .draggableControl{
 .mce-i-unlink {background-position: -330px -0px;}
 .mce-i-link {background-position: -300px -0px;}
 .droppedFormBlock i.icon,.signupform{background:url("../images/drop-form1.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;}
+.embedvideo{background:url("../images/play_icon.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;}
 .draggableControl.disabled {opacity: 0.4;}
 /* ================================================End editorstyle.css================================================ */
 .editor-panel-zero-padding{
