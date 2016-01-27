@@ -542,7 +542,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                        this.total_fetch = 0;
                        this.getallcampaigns();
                     }
-                    this.app.mainContainer.createCampaign(fieldText, _json);
+                    this.app.mainContainer.createCampaign(fieldText, _json,this);
                }
 
             });

@@ -348,8 +348,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#wp_li_" + wp_id + " .subheading").html(params.subheading);
                     }
                 },
-                openCampaign: function (camp_id, camp_wsid,isCreateCamp ,schFlag, reschedule, hidecalender) {
-                    var camp_id = camp_id ? camp_id : 0;
+                openCampaign: function (camp_obj,schFlag, reschedule, hidecalender) {
+                    if(typeof(camp_obj)=="object"){
+                        var camp_id = camp_obj.campid ? camp_obj.campid : 0;
+                        var parent = camp_obj.parent ? camp_obj.parent : "";
+                    }
+                    //var camp_id = camp_id ? camp_id : 0;
                     var active_step = 1;
                     if (schFlag) {
                         active_step = schFlag;   // Active Step if Schedule is called
@@ -357,12 +361,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: 'wizard',
                         title: "Campaigns",
                         isLoadSpinner: true,
-                        workspace_id: 'campaign_' + camp_wsid,
+                        workspace_id: 'campaign_' + camp_obj.camp_wsid,
                         url: 'campaigns/campaign',
                         tab_icon: 'campaign',
                         sub_title: 'Campaing Wizard',
-                        params: {camp_id: camp_id},
-                        wizard: {cssClass: 'campaign_progress', isCreateCamp:isCreateCamp,rescheduled: reschedule, hidecalender: hidecalender, steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
+                        params: {camp_id: camp_id,parent:parent},
+                        wizard: {cssClass: 'campaign_progress', isCreateCamp:camp_obj.isCreateCamp,rescheduled: reschedule, hidecalender: hidecalender, steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
                                 "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]},
                         actions: []
                     });
@@ -896,11 +900,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                  this.openNurtureTrack({"id":_json[1],"checksum":_json[2],isCreateNT:isCreateNT,"parent":this,editable:true});
                              
                     },
-                createCampaign: function (fieldText, _json) {
+                createCampaign: function (fieldText, _json,parent) {
                     var camp_id = _json[1];
                     var camp_wsid = _json[2];
                     var isCreateCamp = true;
-                    this.openCampaign(camp_id, camp_wsid , isCreateCamp);
+                    this.openCampaign({campid:camp_id, camp_wsid:camp_wsid , isCreateCamp:isCreateCamp,parent:parent});
 
                 },
                 initCreateEditTarget: function (target_id) {

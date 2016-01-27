@@ -113,7 +113,7 @@ define(['app', 'text!common/html/quickadd.html','fileuploader','bms-dragfile','s
                                    var isCreateCamp = true;
                                     that.toggleVisibility();
                                     that.$('#quick_txtcampaign').val('');
-                                    that.app.mainContainer.openCampaign(camp_id,camp_wsid,isCreateCamp);
+                                    that.app.mainContainer.openCampaign({campid:camp_id,camp_wsid:camp_wsid,isCreateCamp:isCreateCamp});
                                    
                                 }
                                 else{

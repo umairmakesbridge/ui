@@ -141,7 +141,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                 openCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
                     var camp_wsid = this.model.get('campNum.checksum');
-                    this.app.mainContainer.openCampaign(camp_id, camp_wsid);
+                    this.app.mainContainer.openCampaign({campid:camp_id, camp_wsid:camp_wsid});
 
                 },
                 copyCampaign: function ()
@@ -304,7 +304,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                                     camp_obj.total_fetch;
                                     camp_obj.getallcampaigns();
                                     camp_obj.headBadge();
-                                    this.app.mainContainer.openCampaign(camp_id);
+                                    this.app.mainContainer.openCampaign({campid:camp_id});
                                 }
                             }, this));
                 },
