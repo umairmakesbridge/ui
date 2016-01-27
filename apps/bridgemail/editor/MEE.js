@@ -72,15 +72,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         },
                         {
                             "type": "twoColumnContainer",
-                            "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none; '></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td></tr></table>"
+                            "html": "<table class='MEE_CONTAINER container COLRESIZEABLE' width='100%'><tr><td><ul class='sortable' style='list-style: none; '></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td></tr></table>"
                         },
                         {
                             "type": "threeColumnContainer",
-                            "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td></tr></table>"
+                            "html": "<table class='MEE_CONTAINER container COLRESIZEABLE' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td></tr></table>"
                         },
                         {
                             "type": "fourColumnContainer",
-                            "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td></tr></table>"
+                            "html": "<table class='MEE_CONTAINER container COLRESIZEABLE' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td></tr></table>"
                         },
                         {
                             "type": "dynamicContentContainer",
@@ -4536,19 +4536,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             });
                                         }
-                                        
-                                        if (meeIframeWindow.$(element.find("table.container")).colResizable) {
-                                            if(meeIframeWindow.$("body").height()>4){
-                                                meeIframeWindow.$(element.find("table.container")).colResizable({
-                                                    gripInnerHtml:"<div class='colresize-grip'></div>" 
-                                                });
-                                            }
-                                            else{
-                                                setTimeout(function(){
-                                                    meeIframeWindow.$(element.find("table.container")).colResizable({
-                                                        gripInnerHtml:"<div class='colresize-grip'></div>"
+                                        if (options.landingPage) {
+                                            if (meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable) {
+                                                if(meeIframeWindow.$("body").height()>4){
+                                                    meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable({
+                                                        gripInnerHtml:"<div class='colresize-grip'></div>" 
                                                     });
-                                                },200)
+                                                }
+                                                else{
+                                                    setTimeout(function(){
+                                                        meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable({
+                                                            gripInnerHtml:"<div class='colresize-grip'></div>"
+                                                        });
+                                                    },200)
+                                                }
                                             }
                                         }
 
