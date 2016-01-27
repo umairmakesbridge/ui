@@ -570,12 +570,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                     myElement.trigger('click');
                                    if(cHtml.length && cHtml.hasClass('MEEVIDEOCONTAINER')){
+                                       cHtml.append('<div class="preloadGif" style="display:none;"><img src="'+options._app.get('path')+'/css/images/youtube.gif" /><img src="'+options._app.get('path')+'/css/images/embed_vimeo.gif" /></div>')
                                        cHtml.addClass('clickEventVideo');
                                        var dialogOptions = {
                                             title: "Embed Video",
                                             css: {
-                                                "width": "550px",
-                                                "margin-left": "-250px"
+                                                "width": "800px",
+                                                "margin-left": "-340px",
+                                                "top":"20%"
                                             },
                                             bodyCss: {
                                                 "min-height": "90px"
@@ -595,9 +597,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     $(".modal-backdrop").css("z-index", "99998");
                                     //require(["editor/links"], function (page) {
                                         
-                                        var iframeval = (cHtml.find('.embedvido-wrap').length) ? cHtml.find('.embedvido-wrap').attr('data-url') : ""; 
-                                        dialog.getBody().append('<div class="embedvideolinkwrap" style="position:relative;">Paste the video url here, from your media (youtube/vimeo) provider:<br><div class="ui-code-area inputcont" style="padding: 4px 0; margin: 6px 0px; "><input type="text" class="divVideoCode " style="font-size:12px;width:500px;" value="'+iframeval+'" placeholder="Paste video url here"></div></div>');
+                                        var iframeval = (cHtml.find('.embedvido-wrap').length) ? cHtml.find('.embedvido-wrap').html() : ""; 
+                                        var yotubeGif = options._app.get('path')+'/css/images/youtube.gif';
+                                        var vimeoGif = options._app.get('path')+'/css/images/embed_vimeo.gif';
+                                        dialog.getBody().append('<div class="embedvideolinkwrap" style="position:relative;">Paste the video url here, from your media (youtube/vimeo) provider<br><span style="float:left">For youtube help&nbsp;</span> <a id="ytube" style="display: block;float:left;" class="bs-docs-popover" data-content="<img src= '+yotubeGif+' class=\'img-responsive\' /> " title="" data-toggle="popover" data-original-title="Help for Youtube" aria-describedby="popover628884">click here.</a><span style="float:left">&nbsp;For vimeo help&nbsp;</span><a id="vtube" style="display: block;float:left" class="bs-docs-popover" data-content="<img src= '+vimeoGif+' class=\'img-responsive\' /> " title="" data-toggle="popover" data-original-title="Help for Vimeo" aria-describedby="popover628884">click here</a><br/><div class="ui-code-area inputcont" style="padding: 4px 0; margin: 6px 0px; "><textarea type="text" class="divVideoCode " style="font-size:12px;width:750px;height:130px;" placeholder="Paste video embed code here">'+iframeval+'</textarea></div></div>');
                                         dialog.saveCallBack(_.bind(mee.saveVideo,mee,dialog,cHtml));
+                                        mee.openPopup(dialog.getBody());
                                         options._app.showLoading(false, dialog.getBody());
                                         dialog.$el.find('.divVideoCode').focus()
                                         dialog.closeDialogCallBack(_.bind(mee.videocloseCallBack,mee,dialog,cHtml));
@@ -605,14 +610,34 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                    }
                                         
                                 },
+                                mee.openPopup = function(dialog){
+                                    
+                                    $('body').click(function(e) {
+                                        dialog.find('.bs-docs-popover').popover('hide');
+                                    });
+                                    
+                                    dialog.find('.bs-docs-popover').popover({
+                                        html: true,
+                                        trigger: 'manual'
+                                    }).click(function(e) {
+                                        $('.popover').remove();
+                                        $(this).popover('show');
+                                        e.stopPropagation();
+                                    });
+                                    
+                                    //dialog.find('#ytube').popover({html:true}); 
+                                    
+                                },
                                 mee.videocloseCallBack = function(dialog,cHtml){
                                     var embedvideo = dialog.$el.find('.divVideoCode').val();
+                                    $('.popover').remove();
                                     if(embedvideo.trim()==""){
                                         /*cHtml.parent().prev().remove();
                                         cHtml.parent().next().remove();
                                         cHtml.parent().remove();*/
                                         //cHtml.removeClass('clickEventVideo');
                                         cHtml.find('.embedvido-wrap').remove();
+                                        
                                         cHtml.removeClass('videoenable');
                                     }else{
                                         //cHtml.addClass('clickEventVideo');
@@ -621,39 +646,48 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                 },
                                 mee.saveVideo = function(dialog,cHtml){
-                                    
+                                    $('.popover').remove();
                                     var embedval = dialog.$el.find('.divVideoCode').val();
                                     var iframe = '';
                                     var ytp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-                                    var regVimeo =   /vimeo.*(?:\/|clip_id=)([0-9a-z]*)/i;
+                                    //var regVimeo =   /vimeo.*(?:\/|clip_id=)([0-9a-z]*)/i;
+                                    
+                                    var matchlist=embedval.match(/^(<iframe.*? src=")(.*?)(\??)(.*?)(".*)$/mg);
                                     var ytmatches = embedval.match(ytp);
-                                    var vmatches = embedval.match(regVimeo);
+                                    //var vmatches = embedval.match(regVimeo);
                                     var isvalidurl = true;
-                                    if (ytmatches) {
-                                        var videoid = mee.youtube_parser(embedval);
-                                        iframe = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoid+'" frameborder="0" allowfullscreen></iframe>'
-                                    }else if(vmatches){
+                                    /*
+                                     * 
+                                     * else if(){
                                         var videoid = mee.parseVimeo(embedval);
+                                        isvalidurl = false;
                                         //console.log('vimeo :'+videoid);
-                                        iframe = '<iframe src="https://player.vimeo.com/video/'+videoid+'?badge=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+                                        //iframe = '<iframe src="https://player.vimeo.com/video/'+videoid+'?badge=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+                                    }
+                                     */
+                                    console.log(matchlist);
+                                    if (ytmatches || !matchlist || embedval=="") {
+                                        //var videoid = mee.youtube_parser(embedval);
+                                        isvalidurl = false;
+                                        //iframe = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoid+'" frameborder="0" allowfullscreen></iframe>'
+                                    }
+                                    if(isvalidurl){
+                                        cHtml.addClass('videoenable');
+                                        cHtml.find('.embedvido-wrap').remove();
+                                        cHtml.append('<div class="embedvido-wrap" align="center" style="display:none;" >'+embedval+'</div>');
+                                        cHtml.css({width:cHtml.find('.embedvido-wrap iframe').attr('width'),height:cHtml.find('.embedvido-wrap iframe').attr('height')});
+                                        dialog.hide();
+                                        
                                     }else{
                                         isvalidurl = false;
                                          options._app.showError({
                                             control:dialog.$el.find('.embedvideolinkwrap'),
                                             message: "We are only supporting youtube and vimeo."
                                         });
-                                         dialog.$el.find('.embedvideolinkwrap .errortext').css({right:"6px",bottom:"51px"});
+                                         dialog.$el.find('.embedvideolinkwrap .errortext').css({right:"6px",bottom:"158px"});
                                          dialog.$el.find('.embedvideolinkwrap .errortext em').show();
                                         //alert('We are only supporting youtube and vimeo.');
                                         dialog.$el.find('.divVideoCode').val('');
-                                    }
-                                    if(isvalidurl){
-                                        cHtml.addClass('videoenable');
-                                        cHtml.find('.embedvido-wrap').remove();
-                                        cHtml.append('<div class="embedvido-wrap" align="center" style="display:none;" data-url="'+embedval+'">'+iframe+'</div>');
-                                        cHtml.css({width:cHtml.find('.embedvido-wrap iframe').attr('width'),height:cHtml.find('.embedvido-wrap iframe').attr('height')});
-                                    
-                                        dialog.hide();     
                                     }
                                 },
                                 
@@ -1185,6 +1219,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find('.embedvido-wrap').parent().removeAttr('style'); //Remove width and height on parent video wrapper
                                     oHtml.find('.embedvido-wrap').removeAttr('style');
                                     oHtml.find('.editvideopanel').remove();
+                                    oHtml.find('.preloadGif').remove();
                                     //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
                                     oHtml.find(".drapableImageContainer").each(function (index, object) {
                                         var imageContainer = $(object);

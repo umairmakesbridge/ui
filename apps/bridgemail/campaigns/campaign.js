@@ -1,4 +1,4 @@
-define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/templates', "listupload/campaign_recipients_lists",'target/selecttarget', 'listupload/csvupload', 'bms-filters', 'bms-mapping', 'bms-mergefields', 'scrollbox'],
+define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/templates', "listupload/campaign_recipients_lists",'target/selecttarget', 'listupload/csvupload', 'bms-filters', 'bms-mapping', 'bms-mergefields', 'scrollbox','bms-remote'],
         function ( template, editorView,templatesPage, selectListPage, selectTarget, csvuploadPage, bmsfilters, Mapping, bms, scrollbox) {
             'use strict';
             return Backbone.View.extend({
@@ -969,18 +969,29 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         this.$(".other_accord").show();
                     else
                         this.$(".other_accord").hide();
-                    var preview_url = "https://" + camp_obj.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.camp_id + "&html=Y&original=N";
-                    this.$("#email-preview").attr("src", preview_url);
-                    this.$('#email-preview').height("600px");
-                    /* Set the Height of Iframe*/
-                    $("#email-preview").load(_.bind(function () {
-                        var iframe_height = this.$("#email-preview").contents().find("body").height();
-                        if (iframe_height < 600) {
-                            this.$('#email-preview').height('600');
-                        } else {
-                            this.$('#email-preview').height(iframe_height);
-                        }
-                    }, this));
+                    if(this.camp_istext=="Y"){
+                        var html = 'N';
+                        this.$el.find('.previewbtns').hide();
+                    }else{
+                        var html = 'Y';
+                        this.$el.find('.previewbtns').show();
+                    }
+                    var transport = new easyXDM.Socket({           
+                                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewcamp_test.jsp?cnum=" + this.camp_id + "&html="+html+"&original=N",
+                                        onReady: function(){
+                                              //  this._app.showLoading(false,dialog.getBody());
+                                        },
+                                        onMessage: _.bind(function(message, origin){
+                                            var response = jQuery.parseJSON(message);
+                                            if (Number(response.height) < 600) {
+                                                    this.$el.find('.email-preview iframe').height('600');
+                                                } else {
+                                                    this.$el.find('.email-preview iframe').height(response.height);
+                                                }
+                                        },this),
+                                        props:{style:{width:"100%",height:"600px"},frameborder:0},
+                                        container : this.$(".email-preview")[0]
+                                    }); 
                 },
                 setupCampaign: function () {
                     var active_ws = this.$el.parents(".ws-content");
@@ -1347,16 +1358,18 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         post_data['htmlCode'] = html;
                         post_data['plainText'] = plain;
                         post_data['isCampaignText'] = 'N';
-
+                        camp_obj.camp_istext = 'N';
 
                     } else if (selected_li == "html_code") {
                         html = this.$("textarea#handcodedhtml").val();
                         post_data['htmlCode'] = html;
                         post_data['isCampaignText'] = 'N';
+                        camp_obj.camp_istext = 'N';
                     } else if (selected_li == "plain_text") {
                         plain = this.$("textarea#plain-text").val();
                         post_data['plainText'] = plain;
                         post_data['isCampaignText'] = 'Y';
+                        camp_obj.camp_istext = 'Y';
                         post_data['htmlCode'] = '';
                     }
                     else if (selected_li == "html_editor_mee") {
@@ -1375,6 +1388,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         post_data['htmlCode'] = html;
                         post_data['plainText'] = this.states.step2.plainText;
                         post_data['isCampaignText'] = 'N';
+                        camp_obj.camp_istext = 'N';
                     }
                     if (typeof (htmlText) !== "undefined") {
                         post_data['htmlCode'] = "";
@@ -1394,9 +1408,15 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     if (step1_json[0] !== "err") {
                                         if(camp_obj.meeView && !camp_obj.meeView.autoSaveFlag && !camp_obj.isSaveCallFromMee){
                                         camp_obj.app.showMessge("Step 2 saved successfully!");
-                                        
+                                        if(camp_obj.options.params.parent !== ""){
+                                                 camp_obj.options.params.parent.getallcampaigns();
+                                             }
                                         }else if(!camp_obj.meeView && !camp_obj.isSaveCallFromMee){
                                              camp_obj.app.showMessge("Step 2 saved successfully!");
+                                             if(camp_obj.options.params.parent !== ""){
+                                                 camp_obj.options.params.parent.getallcampaigns();
+                                             }
+                                            
                                         }
                                         if(camp_obj.meeView){
                                             camp_obj.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));

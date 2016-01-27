@@ -78,7 +78,7 @@ function (template) {
                                                         curview.options.copycampdialog.hide();
                                                         campview.getcampaigns();                                                         
                                                 }				
-                                                app.mainContainer.openCampaign(res[1],res[2]);
+                                                app.mainContainer.openCampaign({campid:res[1],camp_wsid:res[2]});
                                         }
                                 });
                         }

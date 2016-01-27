@@ -2351,7 +2351,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
     background: none repeat scroll 0 0 #e1f3ff;
     border-left: 0 solid #eff5f9;
     float: left;
-    height: 383px;
+    height: 415px;
     margin: -5px -5px -5px -6px;
     padding: 9px;
     width: 240px;
@@ -2400,7 +2400,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
     border-bottom: 0 none;
     border-radius: 2px;
     float: left;
-    height: 80px;
+    height: 100px;
     line-height: 30px;
     margin: 2px;
     width: 48%;
@@ -4856,7 +4856,19 @@ div.tooltip.right { right:auto; width:auto; top:inherit; margin-left: 5px;
 }
 .tooltip.right:before { display:none; }
 div.tooltip.right .tooltip-inner { border-radius:6px; }
-.popover-title { display: none; }
+.bs-docs-popover{
+    cursor:pointer;
+}
+.popover{
+     max-width: 500px;
+    width: 500px !important;
+    z-index: 99999;
+}
+
+.popover.right .arrow{
+    /*top: 23%;*/
+}
+/*.popover-title { display: none; }
 .popover-content {
     color: #FFFFFF;
     margin-top: 1px;
@@ -4883,7 +4895,8 @@ div.tooltip.right .tooltip-inner { border-radius:6px; }
 .popover.right .arrow { border-right: 0; left:-8px; margin-top:-13px; }
 .popover.left .arrow { border:0; }
 .popover .arrow, .popover .arrow:after { border:0; }
-.popover.left { margin-left:17px; }
+.popover.left { margin-left:17px; }*/
+
 #mapdata #email_erroricon { float:left; }
 .icon.copy {   background: url("../img/copy24.png") no-repeat center center; float:left; margin:0px 0px 0 5px !important; }
 #area_choose_tags h2.header-list { margin-top:0; padding:5px 0; }
