@@ -452,7 +452,7 @@
                 </div>
             </div>
             <!--  accordian-content  -->
-            <% if (options._app.testUsers.indexOf(options._app.get("user").userId)>-1 ) { %>
+            
             <h3>
                 Background Image
             </h3>
@@ -545,7 +545,7 @@
                     </div>
                
             </div>
-            <% } %>
+            
             <!--  accordian-content  -->
             <h3 class="active">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> Borders & Paddings
@@ -769,7 +769,8 @@
             </li>
             <% } %>
             
-            <% } else { %>
+            <% } 
+            if(options.landingPage) { %>
                 <li class="MenuSetTitle" style="float:right">
                     <a  class="btn-green">
                         <i class="icon setpagetitle"></i><span>Set Page Title</span>

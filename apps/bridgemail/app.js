@@ -76,7 +76,7 @@ define([
                 session: null,
                 app_data: {}
             }, window.sz_config || {}));
-            this.testUsers = ['admin', 'jayadams', 'demo', 'MKS-Training2', 'mansoor@makesbridge.com'];
+            this.testUsers = ['admin', 'jayadams', 'demo', 'MKS-Training2', 'mansoor@makesbridge.com','babar'];
             this.dcItemsUsers = ['admin', 'jayadams', 'demo', 'fisglobal'];                                                                                  
 
             //Convenience for accessing the app object in the console

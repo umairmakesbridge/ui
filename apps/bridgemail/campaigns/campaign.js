@@ -977,7 +977,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         this.$el.find('.previewbtns').show();
                     }
                     var transport = new easyXDM.Socket({           
-                                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewcamp_test.jsp?cnum=" + this.camp_id + "&html="+html+"&original=N",
+                                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum=" + this.camp_id + "&html="+html+"&original=N",
                                         onReady: function(){
                                               //  this._app.showLoading(false,dialog.getBody());
                                         },

@@ -203,7 +203,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;
                                             $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                          
-                                            console.log('iframe loaded');
+                                            //Iframe loaded here
                                         })
                                         
                                     }
@@ -536,6 +536,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         
                                         
                                         meeIframe.find(".mainTable").css("width",emailWidth+"px");
+                                        
                                         mainObj.html(innerHTML);                          
                                         if(!options.landingPage && emailWidth){
                                             myElement.find(".email-width input.btnContainerSize").removeClass("active");
@@ -4481,11 +4482,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             statusbar: true,
                                             object_resizing: false
                                         })
-                                        meeIframeWindow.$("div#load_css").remove();
+                                        meeIframeWindow.$("div#load_css").remove();                                        
                                     }
                                     else{
                                          setTimeout(_.bind(mee.initTinyMCE,mee),200);
                                     }
+                                }
+                                mee.setColResize = function(element){
+                                    if(mee.isHTMLSet){
+                                        meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable({
+                                                            gripInnerHtml:"<div class='colresize-grip'></div>"
+                                                        });
+                                    }
+                                    else{
+                                         setTimeout(_.bind(mee.setColResize,mee,element),500);
+                                    }                                  
                                 }
                                 
                                 function InitializeAndDestroyEvents() {
@@ -4571,21 +4582,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             });
                                         }
-                                        if (options.landingPage) {
+                                        if (options.landingPage && options._app.testUsers.indexOf(options._app.get("user").userId)>-1) {
                                             if (meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable) {
-                                                if(meeIframeWindow.$("body").height()>4){
-                                                    meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable({
-                                                        gripInnerHtml:"<div class='colresize-grip'></div>" 
-                                                    });
-                                                }
-                                                else{
-                                                    setTimeout(function(){
-                                                        meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable({
-                                                            gripInnerHtml:"<div class='colresize-grip'></div>"
-                                                        });
-                                                    },200)
-                                                }
+                                                mee.setColResize(element);                                                
                                             }
+                                        }
+                                        else{
+                                            meeIframeWindow.$(element.find("table.COLRESIZEABLE")).removeClass("COLRESIZEABLE");
                                         }
 
                                         if (element.find("div.textcontent").length === 0) {
@@ -4615,7 +4618,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 makeCloneAndRegister();
                                                             }
                                                         });
-                                                         
+                                                        editor.on("LoadContent", function (e) {
+                                                            mee.isHTMLSet = true;                                                            
+                                                        });
                                                         editor.on("mouseUp", function (e) {
                                                             myElement.find(".alertButtons").hide();
                                                             var tiny_editor_selection = editor.selection;
