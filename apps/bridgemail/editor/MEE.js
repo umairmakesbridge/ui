@@ -728,6 +728,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 $.fn.setAccordian = function (diff) {
                                     this.find(".builder-panel").css("height", ($(window).height() - 62 - diff) + "px");
                                     this.find(".style-panel").css("height", ($(window).height() - 62 - diff) + "px");
+                                     
                                     if (this.find(".style-panel").css("display") !== "none") {
                                         this.find(".style-panel .accordian").accordion("refresh");
                                         this.find(".style-panel").css("height", (this.find(".style-panel").height() + 12) + "px");
@@ -735,6 +736,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     else {
                                         this.find(".builder-panel .accordian").accordion("refresh");
                                         this.find(".builder-panel").css("height", (this.find(".style-panel").height() + 12) + "px");
+                                        var bbaccord = myElement.find(".builder-panel .bb-scrollarea-wrapper").height();
+                                        myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height":(parseInt(bbaccord)),"overflow-y":"scroll"});
                                     }
                                 };
                                 function setHTML(dialog) {
@@ -1427,7 +1430,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         heightStyle: "fill",
                                         collapsible: false
                                     });
+                                    
                                     myElement.find(".builder-panel").css("height", (myElement.find(".builder-panel").height() + 12) + "px");
+                                    var bbaccord = myElement.find(".builder-panel .bb-scrollarea-wrapper").height();
+                                    myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height":(parseInt(bbaccord) - 20),"overflow-y":"scroll"});
                                     //Load building blocks from service:
                                     mee._LoadBuildingBlocks();
                                     //////////

@@ -346,10 +346,22 @@ function (template,contactsView) {
              sendEmail : function(){
                     var isValid = true;
                     var html = '';
+                    var campaign_subject_title = $.trim(this.$('#campaign_subject').val());
+                        if(campaign_subject_title!==""){
+                            var newTitle = '<title>'+campaign_subject_title+'</title>';
+                            var meeElement = this.$("#mee-iframe").contents();
+                            if(meeElement.find("head title").length==1){
+                                meeElement.find("head title").html(campaign_subject_title);
+                            }
+                            else{
+                                 meeElement.find("head").append(newTitle);
+                            }
+                           // meeElement.find("head meta[property='og:title']").attr("content",campaign_subject_title);
+                        }
                     if(this.isloadMeeEditor){
                        html = this.$("#mee_editor").getMEEHTML();
                      }else{
-                         html = _tinyMCE.get('bmseditor_template').getContent()
+                       //  html = _tinyMCE.get('bmseditor_template').getContent()
                      }
                     var defaultSenderName = "",defaultReplyToEmail="";
                     var msgId= this.subEmailDetails["msgId.encode"];
@@ -549,6 +561,7 @@ function (template,contactsView) {
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                         var fromEmail = this.$('#campaign_from_email').val();
                         var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val():"";
+                        
                         //if( this.settingchange || this.parent.camp_id==0){
                                 this.app.showLoading("Sending message...",this.dialog.getBody());
                                 var URL = "/pms/io/subscriber/saveSingleEmailData/?BMS_REQ_TK="+this.app.get('bms_token');
