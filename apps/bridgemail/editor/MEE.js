@@ -457,7 +457,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if(!pageBackgroundimage){
                                         pageBackgroundimage = "none";
                                     }
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
@@ -727,8 +727,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
 
                                 $.fn.setAccordian = function (diff) {
-                                    this.find(".builder-panel").css("height", ($(window).height() - 62 - diff) + "px");
-                                    this.find(".style-panel").css("height", ($(window).height() - 62 - diff) + "px");
+                                    var accordian_height = 550;
+                                    if(options._app.get("isFromCRM") && options._app.get("isFromCRM").toLowerCase() == "y"){
+                                        accordian_height =550;
+                                    }
+                                    else{
+                                        accordian_height = options.parentWindowobj.height() - 62 - diff;
+                                    }
+                                    this.find(".builder-panel").css("height",  accordian_height + "px");
+                                    this.find(".style-panel").css("height", accordian_height + "px");
                                     if (this.find(".style-panel").css("display") !== "none") {
                                         this.find(".style-panel .accordian").accordion("refresh");
                                         this.find(".style-panel").css("height", (this.find(".style-panel").height() + 12) + "px");
@@ -1488,6 +1495,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 mee.setAccordian(0);
                                             }
                                         }
+                                        
 
                                         InitializeElementsForStyle(initStyles);
 

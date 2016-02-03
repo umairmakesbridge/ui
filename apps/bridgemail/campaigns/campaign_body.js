@@ -112,7 +112,11 @@ function (template,editorView) {
                         this.$nav.css("width","100%");
                         this.$tools.removeClass('editor-lefttoolbar-fixed');                        
                         this.$editorarea.removeClass('editor-panel-fixed');                        
-                      }                      
+                      }
+                        var lessBy = this.navTop - scrollTop;
+                        if(lessBy>0){
+                            this.$("#mee_editor").setAccordian(lessBy);
+                        }  
                     }
                   }
                 },this);

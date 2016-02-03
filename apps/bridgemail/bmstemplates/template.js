@@ -711,7 +711,8 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                     this.$nav.attr("style", "top:90px !important");
                                     this.$tools.attr("style", "top:90px !important");
                                     this.$nav.css("width", this.$(".editorpanel").width());
-                                    this.scrollfixPanel();
+                                    this.scrollfixPanel();                                    
+                                    this.$("#mee_editor").setAccordian(0);
                                 } else if (scrollTop <= (this.navTop + 12) && this.isFixed) {
                                     this.isFixed = 0
                                     this.$nav.removeClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');
@@ -720,8 +721,17 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                     this.$nav.css("width", "100%");
                                     this.$tools.removeClass('editor-lefttoolbar-fixed');
                                     this.$editorarea.removeClass('editor-panel-fixed');
+                                    var lessBy = this.navTop - scrollTop;
+                                    this.$("#mee_editor").setAccordian(lessBy);
+                                    
                                 }
+                                
+                                var lessBy = this.navTop - scrollTop;
+                                if(lessBy>0){
+                                    this.$("#mee_editor").setAccordian(lessBy);
+                                }                                
                             }
+                            
                         }
                     }, this);
                     this.processScroll();

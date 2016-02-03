@@ -784,6 +784,16 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     this.$("#mee_editor").setAccordian(0);
                                     this.scrollChanged = false;
                                 }
+                                else {                                    
+                                    var lessBy =  this.navTop - $(window).scrollTop();
+                                    if(lessBy>0){
+                                    this.$("#mee_editor").setAccordian(lessBy);
+                                        this.scrollChanged = false;                                    
+                                    }
+                                    else{
+                                        this.scrollChanged = true;
+                                    }
+                                }
                             }
                         }
                     }, this);
