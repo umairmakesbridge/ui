@@ -4986,7 +4986,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     $(element).on('dragover', function (event) {
                                                         event.preventDefault();
                                                         if ($(this).hasClass("imagePlaceHolderAlone") && mee.dragElement) {
-                                                            $(this).css({"outline": "2px dashed #01aeee"});
+                                                            $(this).css({"outline": "2px dashed #94cf1e"});
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
