@@ -984,24 +984,28 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         this.$el.find('.previewbtns').hide();
                     }else{
                         var html = 'Y';
+                        this.camp_istext = 'N';
                         this.$el.find('.previewbtns').show();
                     }
+                    this.$el.find('.email-preview iframe').remove();
                     var transport = new easyXDM.Socket({           
-                                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum=" + this.camp_id + "&html="+html+"&original=N",
-                                        onReady: function(){
-                                              //  this._app.showLoading(false,dialog.getBody());
-                                        },
-                                        onMessage: _.bind(function(message, origin){
-                                            var response = jQuery.parseJSON(message);
-                                            if (Number(response.height) < 600) {
-                                                    this.$el.find('.email-preview iframe').height('600');
-                                                } else {
-                                                    this.$el.find('.email-preview iframe').height(response.height);
-                                                }
-                                        },this),
-                                        props:{style:{width:"100%",height:"600px"},frameborder:0},
-                                        container : this.$(".email-preview")[0]
-                                    }); 
+
+                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum=" + this.camp_id + "&html="+html+"&original="+this.camp_istext+"&xdm=true",
+
+                        onReady: function(){
+                              //  this._app.showLoading(false,dialog.getBody());
+                        },
+                        onMessage: _.bind(function(message, origin){
+                            var response = jQuery.parseJSON(message);
+                            if (Number(response.height) < 600) {
+                                    this.$el.find('.email-preview iframe').height('600');
+                                } else {
+                                    this.$el.find('.email-preview iframe').height(response.height);
+                                }
+                        },this),
+                        props:{style:{width:"100%",height:"600px"},frameborder:0},
+                        container : this.$(".email-preview")[0]
+                    }); 
                 },
                 setupCampaign: function () {
                     var active_ws = this.$el.parents(".ws-content");
@@ -4024,13 +4028,35 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                      }else{
                      this.html='N';
                      }*/
-                    var preview_url = "https://" + this.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.camp_id;
-                    var frame = preview_url + "&html=" + this.html + "&original=" + this.original;
+                    if(this.html=='Y'){
+                        this.$el.find('.email-preview iframe').remove();
+                        var transport = new easyXDM.Socket({           
+                                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewcamp_test.jsp?cnum=" + this.camp_id + "&html="+this.html+"&original="+this.original,
+                                        onReady: function(){
+                                              //  this._app.showLoading(false,dialog.getBody());
+                                        },
+                                        onMessage: _.bind(function(message, origin){
+                                            var response = jQuery.parseJSON(message);
+                                            if (Number(response.height) < 600) {
+                                                    this.$el.find('.email-preview iframe').height('600');
+                                                } else {
+                                                    this.$el.find('.email-preview iframe').height(response.height);
+                                                }
+                                        },this),
+                                        props:{style:{width:"100%",height:"600px"},frameborder:0},
+                                        container : this.$(".email-preview")[0]
+                                    }); 
+                    }else{
+                                    var preview_url = "https://" + this.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.camp_id;
+                                    var frame = preview_url + "&html=" + this.html + "&original=" + this.original;
+                                     this.$('.email-preview iframe').attr('src', frame).css('height', 600);
+                    }
+                    //this.$el.find('.email-preview iframe').height(response.height);
                     /*Check if Contact is selected or not
                      if(this.subNum !== null){
                      frame+="&snum="+this.subNum; 
                      }*/
-                    this.$('#email-preview').attr('src', frame).css('height', this.options.frameHeight - 48);
+                   
                 },
                 htmlTextClick: function (ev) {
                     var tabID = ev.currentTarget.id;

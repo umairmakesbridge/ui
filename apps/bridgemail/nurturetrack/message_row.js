@@ -16,7 +16,7 @@ function (template) {
              'click .delete-row':'deleteRow',
              'click .timer-group button':'showTimer',
              'click .edit-message ':'editMessage',
-             'click .preview': 'previewCampaign',
+             'click .preview': 'campDetails',
              'click .save-message': 'saveMessage',
              'click .message-image':'imageDialog',
              'click .accordion-heading':'toggleAccordion'
@@ -204,9 +204,11 @@ function (template) {
             disableButtons:function(disable){
                 
             },
-            previewCampaign:function(e){
-                var camp_id = this.object[0]['campNum.encode'];                
-                //var appMsgs = this.app.messages[0];				
+            campDetails:function(e){
+                var camp_id = this.object[0]['campNum.encode'];  
+               //?BMS_REQ_TK=QxwRFLs31lNbcAKSEI8r94ttY4wQ51&campNum=zdTyioHn17Lo20Ln21Oh30Si33zdTyio&type=basic
+                var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=basic&campNum="+camp_id;
+                var _this = this;
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
                 var dialog = this.app.showDialog({title:'Message Preview' ,
@@ -215,14 +217,29 @@ function (template) {
                                   headerIcon : 'dlgpreview',
                                   bodyCss:{"min-height":dialog_height+"px"}
                 });	
-                this.app.showLoading("Loading Message HTML...",dialog.getBody());									
+                this.app.showLoading("Loading Message...",dialog.getBody());	
+                    jQuery.getJSON(URL, function (tsv, state, xhr) {
+                        if (xhr && xhr.responseText) {
+                            var defaults_json = jQuery.parseJSON(xhr.responseText);
+                            if (_this.app.checkError(defaults_json)) {
+                                return false;
+                            }
+                            _this.previewCampaign(dialog,dialog_height,defaults_json);
+                        }
+                    }).fail(function () {
+                        console.log("error in detauls");
+                    });
+                  e.stopPropagation();
+            },
+            previewCampaign:function(dialog,dialog_height,defaults_json){
+                 var camp_id = this.object[0]['campNum.encode'];  		
                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                 require(["common/templatePreview"],_.bind(function(templatePreview){
-                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:this.camp_json.isTextOnly}); // isText to Dynamic
+                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:defaults_json.isTextOnly}); // isText to Dynamic
                  dialog.getBody().html(tmPr.$el);
                  tmPr.init();
                },this));
-               e.stopPropagation();
+              
             },
             loadCampaign:function(){               
               var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.object[0]['campNum.encode']+"&type=basic";

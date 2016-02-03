@@ -2754,7 +2754,7 @@ a,
     color: #1d91bc;
     font-size: 14px;
     font-weight: normal;
-    margin: 0;
+    margin: 30px 0 0;
     letter-spacing:0;
     padding: 5px;
 }
@@ -4981,4 +4981,44 @@ body > .draggableControl{
     position: relative;
     text-align: center;
     width: auto;
+}
+/*=========================================================
+Stickybar accordian
+=========================================================*/
+.stickybar {
+    background: #d6ebf6 none repeat scroll 0 0;
+    box-shadow: 0 2px 4px rgba(93, 162, 190, 0.7);
+    display: block;
+    left: 0;
+    min-height: 40px;
+    padding: 0 !important;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 99;
+}
+.stickybar > a.icon {
+    display: block;
+    float: left;
+    height: 40px;
+    width: 25%;
+    margin:0;
+}
+.stickybar a.icon.columns {
+    background: rgba(0, 0, 0, 0) url("../images/columns.png") no-repeat scroll center center;
+}
+.stickybar a.icon.items {
+    background: rgba(0, 0, 0, 0) url("../images/items.png") no-repeat scroll center center;
+}
+.stickybar a.icon.spacers {
+    background: rgba(0, 0, 0, 0) url("../images/spacers.png") no-repeat scroll center center;
+}
+.stickybar a.icon.blocks {
+    background: rgba(0, 0, 0, 0) url("../images/blocks.png") no-repeat scroll center center;
+}
+.stickybar a:hover, .stickybar a.active {
+    background-color: #b4d7e6 !important;
+}
+.bb-scrollarea-wrapper{
+    overflow: hidden !important;
 }

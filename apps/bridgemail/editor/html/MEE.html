@@ -114,12 +114,22 @@
             <h3 class="active">
                 Building Blocks
             </h3>
-            <div class="scrollarea">                
+            
+            <div class="bb-scrollarea-wrapper" style="position:relative;">  
+                 
+                <div class="scrollarea">
+                    <div class="stickybar">
+					<a class="icon columns showtooltip " data-original-title="Click to view row elements" id="rows" ></a>
+					<a class="icon items showtooltip active" data-original-title="Click to view item elements" id="items"></a>
+					<a class="icon spacers showtooltip" data-original-title="Click to view spacer elements" id="spacers"></a>
+					<a class="icon blocks showtooltip" data-original-title="Click to view content block elements" id="cblocks" ></a>
+				</div>
                 <div class="accordian-content ">                                        
-                    
-                    <div class="clearfix">
-                        <h4 class="">Rows</h4>
+                   
+                    <div class="clearfix first-accordian" style="display:none;" data-element="rows">
+                        <h4 style="margin-top:40px;">Rows</h4>
                         <ul class="b-blocks">
+                            
                             <li class="draggableControl ui-draggable" data-type="oneColumnContainer" draggable="true">
                                 <i class="icon col1"></i>
                                 <a >
@@ -146,13 +156,13 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="clearfix">
+                    <div class="clearfix first-accordian" style="display: none;" data-element="cblocks">
                         <h4 class="">Content Blocks</h4>
                         <ul class="b-blocks content-block">
                             
                         </ul>
                     </div>
-                    <div class="clearfix">
+                    <div class="clearfix first-accordian" data-element="items">
                         <h4 class="">Items</h4>
                         <ul class="b-blocks">
                             <li class="draggableControl ui-draggable" data-type="text" draggable="true">
@@ -195,7 +205,7 @@
                             <% } %>
                         </ul>
                     </div>
-                     <div class="clearfix">
+                     <div class="clearfix first-accordian" style="display: none;" data-element="spacers">
                         <h4 class="">Spacer</h4>
                         <ul class="b-blocks">
                             <li class="draggableControl ui-draggable" data-type="spacer5" draggable="true">
@@ -224,6 +234,7 @@
                             </li>
                         </ul>
                     </div>
+                </div>
                 </div>
             </div>
             <!--  accordian-content  -->

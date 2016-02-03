@@ -80,7 +80,7 @@ function (template) {
                 this.app.showLoading("Loading Message HTML...",dialog.getBody());									
                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                 require(["common/templatePreview"],_.bind(function(MessagePreview){
-
+                    
                 var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:this.camp_json.isTextOnly}); // isText to Dynamic
                  dialog.getBody().append(tmPr.$el);
                  this.app.showLoading(false, tmPr.$el.parent());
@@ -195,8 +195,10 @@ function (template) {
                      }else if(selected_li=="plain_text"){
                         plain = this.$("textarea#plain-text").val();      
                         post_data['plainText'] = plain;
+                        this.camp_json['isTextOnly'] = 'Y';
                         post_data['isCampaignText'] = 'Y';                        
                         post_data['htmlCode'] = '';
+                        
                      }else if(selected_li=="html_editor_mee"){
                          if(campaign_subject_title!==""){
                             var newTitle = '<title>'+campaign_subject_title+'</title>';
