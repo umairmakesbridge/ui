@@ -464,13 +464,35 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                         headerIcon: 'dlgpreview',
                         bodyCss: {"min-height": dialog_height + "px"},                       
                     });                        
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + that.model.get('actionData')[0]['campNum.encode'] + "&type=basic";
+                        
+                        jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
+                            
+                       if (xhr && xhr.responseText) {
+                            var defaults_json = jQuery.parseJSON(xhr.responseText);
+                            if (this.app.checkError(defaults_json)) {
+                                return false;
+                            }
+                            this.camp_json = defaults_json;
+                            this.previewCampainDetails({dialogview:dialog,dialogHeight:dialog_height});
+                        }
+                    
+                        
+                        
+                    }, this));       
+                    e.stopPropagation();
+                },
+                previewCampainDetails : function(dialogObj){
+                    var dialog = dialogObj.dialogview;
+                    var dialog_height = dialogObj.dialogHeight;  
+                    var that = this;
+                    var app = that.options.app ? that.options.app : this.app;
                     var preview_url = "https://" + app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + that.model.get('actionData')[0]['campNum.encode'];
                     require(["common/templatePreview"], _.bind(function(templatePreview) {
-                        var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: that.model.get('actionData')[0]['campNum.encode']});
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: that.model.get('actionData')[0]['campNum.encode'],isText:this.camp_json.isTextOnly});
                         dialog.getBody().html(tmPr.$el);
                         tmPr.init();
-                    }, this));                     
-                    e.stopPropagation();
+                    }, this));              
                 },
                 addRowToCol2: function () {
                     if (this.showUseButton) {

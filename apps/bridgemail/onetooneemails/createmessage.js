@@ -607,9 +607,32 @@ function (template,contactsView) {
                     }
              },
              showIframe : function(){
-                 var iframe = '<iframe id="email-template-iframe" class="email-iframe" frameborder="0" style="height: 494px;" src="https://'+this.app.get("preview_domain")+'/pms/events/viewmsg.jsp?msgId='+this.msgID+'&subNo='+this.subNum+'"></iframe>'
+                 if(this.isPreviewEmail){
+                    this.$('#mee-iframe-wrapper iframe').remove();
+                    var transport = new easyXDM.Socket({           
+                                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewmsg.jsp?msgId=" + this.msgID + "&subNo="+this.subNum+"&xdm=true",
+                                        onReady: function(){
+                                              //  this._app.showLoading(false,dialog.getBody());
+                                        },
+                                        onMessage: _.bind(function(message, origin){
+                                            var response = jQuery.parseJSON(message);
+                                            //console.log(response);
+                                            if (Number(response.height) < 600) {
+                                                    this.$el.find('#mee-iframe-wrapper iframe').height('600');
+                                                } else {
+                                                    this.$el.find('#mee-iframe-wrapper iframe').height(response.height);
+                                                }
+                                        },this),
+                                        props:{style:{width:"100%",height:"600px"},frameborder:0},
+                                        container : this.$('#mee-iframe-wrapper')[0]
+                                    }); 
+                 }else{
+                     var iframe = '<iframe id="email-template-iframe" class="email-iframe" frameborder="0" style="height: 494px;" src="https://'+this.app.get("preview_domain")+'/pms/events/viewmsg.jsp?msgId='+this.msgID+'&subNo='+this.subNum+'"></iframe>'
                  this.$('.tabpanel-wrapper').hide();
-                 this.$('#mee-iframe-wrapper').html(iframe);
+                  this.$('#mee-iframe-wrapper').html(iframe);
+                 }
+                 
+                
              },
             
                  /**

@@ -389,6 +389,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     }
                                 });
+                                myElement.find(".stickybar a").click(function (event) {
+                                    event.preventDefault();
+                                    myElement.find('.first-accordian').hide();
+                                    myElement.find(".stickybar a").removeClass('active');
+                                    $(this).addClass('active');
+                                    myElement.find('div[data-element="' + $(this).attr('id') + '"]').show();
+                                });
+                                
                                 function setIFrameElements() {
                                     meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                     mainContentHtmlGrand = meeIframe.find(".mainContentHtmlGrand");
@@ -674,7 +682,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if(isvalidurl){
                                         cHtml.addClass('videoenable');
                                         cHtml.find('.embedvido-wrap').remove();
-                                        cHtml.append('<div class="embedvido-wrap" align="center" style="display:none;" >'+embedval+'</div>');
+                                        cHtml.append('<div class="embedvido-wrap responsive_video" align="center" style="display:none;" >'+embedval+'</div>');
                                         cHtml.css({width:cHtml.find('.embedvido-wrap iframe').attr('width'),height:cHtml.find('.embedvido-wrap iframe').attr('height')});
                                         dialog.hide();
                                         
@@ -767,6 +775,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var lnkPreviewCode = myElement.find(".MenuCallPreview");
                                     var lnkTextVersion = myElement.find(".MenuCallTextVersion");
                                     var lnkSetTitle = myElement.find(".MenuSetTitle");
+                                    var loadScriptBox = myElement.find(".MenuLoadScriptBox");
                                     var lnkDCItems = myElement.find(".MenuCallDCItems");    
                                     var divPreviewCode = myElement.find(".divPreviewCode");
                                     var lnkHtmlCode = myElement.find(".MenuCallCode");
@@ -913,7 +922,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         },this,dialog))
 
                                     });
-                                    
+                                   
                                     lnkTextVersion.click(function () {
                                         
                                         var dialog_width = $(document.documentElement).width() - 60;
@@ -936,6 +945,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             }
                                         });
+                                        
                                         var preview_html = '<div class="divTextVersion">';                                        
                                         preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 28) + 'px;margin-bottom:0px;border:2px solid #eaf4f9" class="divHtmlCode" cols="1000" rows="250" placeholder="Enter text version....">'+options.textVersion+'</textarea>';
                                         preview_html += '</div>';
@@ -5018,7 +5028,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     $(element).on('dragover', function (event) {
                                                         event.preventDefault();
                                                         if ($(this).hasClass("resizableImage") && mee.dragElement) {
-                                                            $(this).css({"outline": "2px dashed #01aeee"});
+                                                            $(this).css({"outline": "2px dashed #94CF1E"});
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
@@ -5068,7 +5078,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     $(element).on('dragover', function (event) {
                                                         event.preventDefault();
                                                         if ($(this).hasClass("MEEFORMCONTAINER") && mee.dragElement) {
-                                                            $(this).css({"outline": "2px dashed #01aeee"});
+                                                            $(this).css({"outline": "2px dashed #94CF1E"});
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
@@ -5243,7 +5253,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 mouseenter: function () {
                                                     if ($(this).hasClass("myDroppable")) {
                                                         $(this).css({
-                                                            "background-color": "#9fcbf1"
+                                                            "background-color": "#80C000"
                                                         });
                                                     }
                                                 }
@@ -5251,7 +5261,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 mouseleave: function () {
                                                     if ($(this).hasClass("myDroppable")) {
                                                         $(this).css({
-                                                            "background-color": "#dceefe"
+                                                            "background-color": "#80C000"
                                                         });
                                                     }
 
@@ -5264,12 +5274,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     sender.on('dragover', function (event) {
                                         event.preventDefault();
                                         if ($(this).html() == "") {
-                                            $(this).css({'height': '20px', "background": "#379ffb"});
+                                            $(this).css({'height': '10px', "background": "#80C000","box-shadow":"0 0 5px rgba(0, 0, 0, 0.5)"});
                                         }
                                     }).on('dragleave', function (event) {
                                         event.preventDefault();
                                         if ($(this).html() == "") {
-                                            $(this).css({'height': '10px', "background": "#dceefe"});
+                                            $(this).css({'height': '4px', "background": "#80C000","box-shadow":"none"});
                                         }
                                     });
 
@@ -5803,7 +5813,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                         else if(draggedControlType =="formBlock"){
                                             
-                                            meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #01aeee"});
+                                            meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #94CF1E"});
                                             meeIframe.find(".editformpanel,.drop-here").show();
                                             
                                             meeIframe.find(".editformpanel .edit-form").hide();
