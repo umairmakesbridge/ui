@@ -3674,7 +3674,7 @@ input[type="text"].txtContSize {
     width: 80px;
 }
 
-.addToMyColors {
+.addToMyColors,.removeMyColors {
     background: none repeat scroll 0 0 #94CF1E;
     border: 0 none;
     border-radius: 2px;
@@ -3691,7 +3691,10 @@ input[type="text"].txtContSize {
     text-align: center;
 }
 
-
+ .removeMyColors{
+    background: #E03A3A none repeat scroll 0 0;
+    float:left;
+}
 
 ul.color-box {
     display: inline-block;

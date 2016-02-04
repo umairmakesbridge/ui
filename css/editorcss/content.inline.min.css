@@ -638,7 +638,7 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
 /* ---------------------- */
 
 
-.topHandlers { position:absolute; right:-25px;  background:#03d3ff; width:25px; height:80px; top:-1px; z-index:99;
+.topHandlers { position:absolute; right:-25px;  background:#94CF1E; width:25px; height:80px; top:-1px; z-index:99;
                -webkit-border-radius: 0 2px 2px 0 ;
                -moz-border-radius:  0 2px 2px 0 ;
                border-radius:  0 2px 2px 0; 
@@ -661,9 +661,10 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
 .myDroppable.hover > .topHandlers { background:#03d3ff;top:-10px;  }
 
 .mce-edit-focus {
-    border: 1px solid #94cf1e;
-    outline: 0 none;
+    outline: 2px solid #94cf1e;
+    /*outline1 0 none;*/
 }
+
 /* ---------------------- */
 
 div.csHaveData{
@@ -1947,7 +1948,7 @@ div.textcontent ol{
 
 .sortable>li:hover {
     outline: none;
-    border: 1px solid #03d3ff;        
+    border: 1px solid #94cf1e;        
 }
 .ui-resizable {
     position: relative;
