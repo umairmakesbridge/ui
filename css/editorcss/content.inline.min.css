@@ -661,9 +661,10 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
 .myDroppable.hover > .topHandlers { background:#03d3ff;top:-10px;  }
 
 .mce-edit-focus {
-    border: 1px solid #94cf1e;
-    outline: 0 none;
+    outline: 2px solid #94cf1e;
+    /*outline1 0 none;*/
 }
+
 /* ---------------------- */
 
 div.csHaveData{

@@ -427,12 +427,12 @@
             <h3 class="">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>Background Color
             </h3>
-            <div class="scrollarea">
+            <div class="scrollarea color-accordion">
                 <div class="accordian-content ">
 
                     <div class="clearfix"  style="padding:5px;">
                         <h4 class="">Parent Layers</h4>
-                        <select class="nosearch ddlBackgroundLayers" data-placeholder="Select Parent Layer">
+                        <select class="nosearch ddlBackgroundLayers ddlBackgroundColorLayers" data-placeholder="Select Parent Layer">
                             <option value=""></option>
                         </select>
                         <br class="clearfix"/> <br/>
@@ -443,6 +443,8 @@
                         </div>
                         <input type="text" maxlength="15" size="15" class="txtColorCode acco-input">
                         <input type="button" style="float:right; margin:0;" value="Add to my Colors" class="addToMyColors">
+                        <br/>
+                        <input type="button" style="margin:0;" value="Remove color" class="removeMyColors">
                     </div>
                     <div class="clearfix">
                         <h4 class="">Template Colors</h4>
@@ -561,7 +563,7 @@
             <h3 class="active">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> Borders & Paddings
             </h3>
-            <div class="scrollarea">
+            <div class="scrollarea border-accordion">
                 <div class="accordian-content active">
                     <div class="clearfix">
                         <h4 class="">Borders</h4>
@@ -786,6 +788,7 @@
                         <i class="icon setpagetitle"></i><span>Set Page Title</span>
                     </a>
                  </li>
+                 
             <% } %>
             <span class="lastSaveInfo"></span>
         </ul>
