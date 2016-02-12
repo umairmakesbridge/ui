@@ -1590,9 +1590,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         oInitDestroyEvents.DestroyPluginsEvents(meeIframe);
                                         meeIframe.find('.mce-edit-focus').removeClass('mce-edit-focus');
                                         IsStyleActivated = true;
-                                        if (undoredo === true) {
+                                        meeIframe.find(".csHaveData td, .csHaveData div").unbind("click");
+                                        
                                             //Selection
-                                            meeIframe.find(".csHaveData td, .csHaveData div").click(function (event) {
+                                            meeIframe.find(".csHaveData td, .csHaveData div").bind("click",function (event) {
                                                 if (IsStyleActivated) {
                                                     event.stopPropagation(); //Stop bubbling
 
@@ -1659,8 +1660,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                 }
                                             });
-                                            undoredo = false;
-                                        }
+                                         
                                         //////////////////////
 
                                         if (eventsApplied === false) {

@@ -158,15 +158,20 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         this.$('#prev-email').attr('disabled', 'disabled');
                         $.post(this.url, post_val)
                                 .done(_.bind(function (data) {
-                                    data = JSON.parse(data);
+                                    this.$('#send-template-preview').removeClass('loading-preview');
+                                    this.$('#prev-email').removeAttr('disabled');
+                                    data = JSON.parse(data);                                    
                                     if (data[0] == "success") {
                                         this.$('#prev-email').val("");
-                                        this.app.showMessge('Template Preview Sent Successfully');
-                                        this.$('#send-template-preview').removeClass('loading-preview');
-                                        this.$('#prev-email').removeAttr('disabled');
+                                        this.app.showMessge('Template Preview Sent Successfully');                                        
                                         this.$('.contact-name').text('');
                                         this.$('#contact-name-prev').hide();
                                         this.subNum = null;
+                                    }
+                                    else if (data[0] == "err") {
+                                        if(data[1]){
+                                            this.app.showAlert(data[1]);
+                                        }
                                     }
                                 }, this));
                     } else {
