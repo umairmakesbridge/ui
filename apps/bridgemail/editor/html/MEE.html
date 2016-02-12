@@ -788,11 +788,13 @@
                         <i class="icon setpagetitle"></i><span>Set Page Title</span>
                     </a>
                  </li>
+                 <% if(options._app.allowedUser.indexOf(options._app.get("user").userId) > -1){ %>
                  <li class="MenuLoadScriptBox" style="float:right">
                     <a  class="btn-blue">
                         <i class="icon setactionscript"></i><span>Action Script</span>
                     </a>
                  </li>
+                 <% } %>
                  
             <% } %>
             <span class="lastSaveInfo"></span>
