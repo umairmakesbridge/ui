@@ -248,6 +248,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var pageBackgroundimage = "none";
                                 var pageBackgroundimage_repeat = "no-repeat";
                                 var pageBackgroundimage_pos = "0% 0%";
+                                var pageActionScriptSet = '';
                                 var undoredo = true;
                                 var _offset = 0;
                                 var forms_offset = 0;
@@ -472,7 +473,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     header_section.find(".system").remove();
                                     header_section.find("link:not([rel='image_src'])").remove();
                                     
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+mee.isActionScriptSet+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+"' >"+outputHTML+"</body></html>";                                    
+                                    if(mee.isActionScriptSet){
+                                        pageActionScriptSet = mee.isActionScriptSet;
+                                    }else{
+                                        pageActionScriptSet = "";
+                                    }
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+pageActionScriptSet+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+"' >"+outputHTML+"</body></html>";                                    
                                     
                                      //"" + outputter.outerHTML();
                                      outputHTML = outputHTML.replace(/&quot;/g,'&#39;')
