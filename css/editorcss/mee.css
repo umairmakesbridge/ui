@@ -2623,8 +2623,13 @@ a,
 .MEE_EDITOR .icon.move  { background: url("../images/move.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.dcitems { background: url("../images/dynamic-content.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.setpagetitle { background-position: -390px 0px; }
+.MEE_EDITOR .icon.setactionscript { background-position: -390px -30px; }
 .header-icon .pagetitleicon {
     background: url("../images/meeicons.png") no-repeat -360px -118px;
+    height: 30px;
+}
+.header-icon .actionScripicon {
+    background: rgba(0, 0, 0, 0) url("../images/meeicons.png") no-repeat scroll -410px -118px;
     height: 30px;
 }
 .MEE_EDITOR .icon.cross {
