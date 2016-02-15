@@ -736,12 +736,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            }
                                        });
                                    
-                                 }else{
+                                 }else if(embedval==""){
+                                                  mee.isActionScriptSet = "";
+                                                   dialog.hide();
+                                               }
+                                 else{
                                      options._app.showError({
                                             control:dialog.$el.find('.divScriptVersion'),
-                                            message: "Please paste the facebook pixel."
+                                            message: "Please paste a valid script."
                                         });
-                                         dialog.$el.find('.divScriptVersion .errortext').css({right:"0",bottom:"312px"});
+                                         dialog.$el.find('.divScriptVersion .errortext').css({right:"2px",bottom:"485px"});
                                          dialog.$el.find('.divScriptVersion .errortext em').show();
                                  }
                                  
