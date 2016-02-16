@@ -120,7 +120,7 @@ define(['text!forms/html/formlistings_row.html','forms/copyform'],
                     var dialog_title = "Link of form &quot;" + this.model.get('name') + "&quot;";
                     var dialog = this.app.showDialog({title: dialog_title,
                         css: {"width": "642px", "margin-left": "-300px"},
-                        bodyCss: {"min-height": "100px"},
+                        bodyCss: {"min-height": "270px"},
                         headerIcon: 'link'
                     });
                     var html = '<div style="margin-top:0px;" class="blockname-container">'
@@ -128,6 +128,12 @@ define(['text!forms/html/formlistings_row.html','forms/copyform'],
                     html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'
                     html += '<input id="form_link" style="width:600px" readonly="readonly" value="'+this.app.decodeHTML(this.model.get("formPreviewURL"))+'"></input>'
                     html += '</div></div>'
+                    
+                    html += '<div class="label-text">Form Iframe Snippet:</div>'
+                    html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'
+                    html += '<textarea id="form_iframe_snippet" style="width:600px;height:60px" readonly="readonly"><iframe src="' + this.app.decodeHTML(this.model.get("formPreviewURL")) + '" frameborder="0" style="width:400px;height:600px"></iframe></textarea>'
+                    html += '</div></div>'
+                    
                     html += '<div style="font-size: 12px;margin-top:10px">'
                     var key = navigator.platform.toUpperCase().indexOf("MAC") > -1 ? "Command" : "Ctrl";
                     html += '<i>Press ' + key + ' + C to copy link.</i>'
@@ -135,8 +141,8 @@ define(['text!forms/html/formlistings_row.html','forms/copyform'],
 
                     html = $(html);
                     dialog.getBody().append(html);
-                    dialog.getBody().find("#form_link").select().focus();
-                    dialog.getBody().find("#form_link").mousedown(function (event) {
+                    dialog.getBody().find("#form_link").select().focus();                    
+                    dialog.getBody().find("#form_link,#form_iframe_snippet").mousedown(function (event) {
                         $(this).select().focus();
                         event.stopPropagation();
                         event.preventDefault();

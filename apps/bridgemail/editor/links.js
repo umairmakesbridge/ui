@@ -292,31 +292,49 @@ function (template) {
                 if(linkName){
                     linkNameAttr = "name='"+linkName+"'";
                 }
+                this.meeIframeWindow.﻿tinyMCE.activeEditor.﻿selection.moveToBookmark(this.selection);
+                this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
+                var selected_node = this.tiny_editor_selection.getNode();
+                var selected_color = 'color:inherit';
+                var selected_text_decoration = 'text-decoration:underline;';
+                
+                if(selected_node){
+                    if(selected_node.style && selected_node.style.color){
+                        selected_color = "color:"+selected_node.style.color+";";
+                    }
+                    var parent_table = $(selected_node).parents("table");
+                    if(parent_table.length && parent_table.eq(0)[0].style.borderRadius){
+                        selected_text_decoration = '';
+                    } 
+                    
+                    if(selected_node.nodeName ==="B" || $(selected_node).find("b").length){
+                        selected_text_decoration = selected_text_decoration + "font-weight:bold;";
+                    }
+                }
                  if(!postBackupLink){return false}
-                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='text-decoration:underline;'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
+                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
                     selected_element_range = null;
                  }*/
-                this.meeIframeWindow.﻿tinyMCE.activeEditor.﻿selection.moveToBookmark(this.selection);
-                this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
-                if (this.tiny_editor_selection.getNode().nodeName == "a" || this.tiny_editor_selection.getNode().nodeName == "A") {                    
-                    this.tiny_editor_selection.getNode().setAttribute("href", postBackupLink);
+                
+                if (selected_node.nodeName == "a" || selected_node.nodeName == "A") {                    
+                    selected_node.setAttribute("href", postBackupLink);
                     if(target){
-                        this.tiny_editor_selection.getNode().setAttribute("target", target);
+                        selected_node.setAttribute("target", target);
                     }
                     else{
-                        this.tiny_editor_selection.getNode().removeAttribute("target")
+                        selected_node.removeAttribute("target")
                     }
                     if(linkName){
-                        this.tiny_editor_selection.getNode().setAttribute("name", linkName);
+                        selected_node.setAttribute("name", linkName);
                     }
                     else{
-                        this.tiny_editor_selection.getNode().removeAttribute("name")
+                        selected_node.removeAttribute("name")
                     }
                     if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val()){
-                        this.tiny_editor_selection.getNode().innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
+                        selected_node.innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
                     }
                 }
                 else {                    
