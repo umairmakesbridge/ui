@@ -1045,7 +1045,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             headerIcon: 'actionScripicon',
                                             buttons: {
                                                 saveBtn: {
-                                                    text: 'Add Script'
+                                                    text: 'Save'
                                                 }
                                             }
                                         });
