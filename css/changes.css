@@ -2081,7 +2081,10 @@ input[type='file'] {
     margin: 9px 5px 0 0;
     padding: 5px 10px;
 }
-
+.announcementbtn {
+    left: 50px;
+    position: relative;
+}
 .sc-links .workflowicon {
     background: url("../img/workflowicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
@@ -8620,7 +8623,7 @@ box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15);
     bottom: auto;
     content: "";
     display: inline-block;
-    left: 215px;
+    left: 265px;
     position: absolute;
     top: -13px;
 }

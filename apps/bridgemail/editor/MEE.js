@@ -330,6 +330,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var ul_container = meeIframe.find(".mainContentHtml");
                                     var main_container = myElement.find(".editorbox");
                                     if (ul_container.height() > ($(".tabcontent").height() - 100)) {
+                        
                                         main_container.css("height", (ul_container.height() + 200) + "px");
                                         iframeEle.css("height", (ul_container.height() + 200) + "px");
                                     }
@@ -737,8 +738,26 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                        });
                                    
                                  }else if(embedval==""){
-                                                  mee.isActionScriptSet = "";
-                                                   dialog.hide();
+                                                 type = 'delete';
+                                                  dialog.hide();
+                                                 $.ajax({
+                                                        url: '/pms/events/thirdPartyTrackingSnippet.jsp',
+                                                        data: {"type":type,"userId":userId,"snippetType":snippetType,"landingPageId":options.pageId},
+                                                        type: 'POST',
+                                                        success: function (data, textStatus, jqXHR) {                                            
+                                                            options._app.showLoading(false, dialog.getBody());
+                                                            var result = jQuery.parseJSON(data);
+                                                            if (result.result=="success") {
+                                                                mee.isActionScriptSet = "";
+                                                               
+                                                                
+                                                            }
+                                                            else {
+                                                                options._app.showAlert("Unfortunetly some error occured", $("body"));
+                                                            }
+                                                        }
+                                                    });
+                                                  
                                                }
                                  else{
                                      options._app.showError({

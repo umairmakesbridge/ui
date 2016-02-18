@@ -126,7 +126,7 @@ function (template) {
 		   }
 		   else if(actid == 'old')
 		   {
-			  if(el.find('#existing_lists').val() == '')
+			  if(el.find('#existing_lists').val() == '' || el.find('#existing_lists').val() == 'No List Available')
 			  {				  
 				  app.showError({
 					  control:el.find('.list-container'),
@@ -253,6 +253,7 @@ function (template) {
 				   else
 				   {					  
 					  app.showAlert(list_json[1],mapview.$el);
+                                          app.showLoading(false,mapview.$el);
 					  return false;
 				   }				   
 			   });
