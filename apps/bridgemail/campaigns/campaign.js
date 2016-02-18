@@ -3808,30 +3808,40 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             }, this);
                             // Making Comma Separated String
                             var textstring = this.$('.recipient-details label').text();
-                            this.$('.recipient-details').html(textstring.substring(0, textstring.length - 2));
+                            this.$('.recipient-details').html(textstring.replace(/,(?=[^,]*$)/, '').trim());
                         }
 
                     }
                     else {
                         if (type === "Target" || type === "List") {
                             var recipientDetailsVal = this.$("#recipients tr");
-                            _.each(recipientDetailsVal, function (val) {
+                            _.each(recipientDetailsVal, function (val,key) {
                                 //var checksum = $(val).attr('_checksum');
-                                this.$(".recipient-details").append('<label>' + $(val).find('h3').text() + ', </label>');
+                                if(key < (recipientDetailsVal.length - 1)){
+                                    this.$(".recipient-details").append('<label>' + $(val).find('h3').text() + ', </label>');
+                                }else{
+                                    this.$(".recipient-details").append('<label>' + $(val).find('h3').text() + '</label>');
+                                }
+                                
                             }, this);
                             // Making Comma Separated String
                             var textstring = this.$('.recipient-details label').text();
-                            this.$('.recipient-details').html(textstring.substring(0, textstring.length - 2));
+                            this.$('.recipient-details').html(textstring.trim());
                         }
                         else if (type === "Tags") {
                             var recipientDetailsVal = this.$("#tagsrecpslist ul li");
-                            _.each(recipientDetailsVal, function (val) {
+                            _.each(recipientDetailsVal, function (val,key) {
                                 var tag = $(val).attr('checksum');
-                                this.$(".recipient-details").append('<label>' + $("[checksum='" + tag + "'] a:first-child").find('span').text() + ', </label>');
+                                if(key < (recipientDetailsVal.length - 1)){
+                                    this.$(".recipient-details").append('<label>' + $("[checksum='" + tag + "'] a:first-child").find('span').text() + ', </label>');
+                                }else{
+                                    this.$(".recipient-details").append('<label>' + $("[checksum='" + tag + "'] a:first-child").find('span').text() + '</label>');
+                                }
+                                
                             }, this);
                             // Making Comma Separated String
                             var textstring = this.$('.recipient-details label').text();
-                            this.$('.recipient-details').html(textstring.substring(0, textstring.length - 2));
+                            this.$('.recipient-details').html(textstring.trim());
                         }
                         else if (type === "Salesforce") {
                             if (this.states.step3.sfObject) {
