@@ -4487,7 +4487,7 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 .ribbon-red:after {
   right: 0;
 }
-.landingpage-box .form{
+.landingpage-box .form,.form-box .form{
     background: none;
 }
 .btn-link .link{
