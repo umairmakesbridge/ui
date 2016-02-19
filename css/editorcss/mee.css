@@ -3108,6 +3108,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     -webkit-border-radius: 2px 2px;
     -moz-border-radius: 2px 2px;
     border-radius: 2px 2px; 
+    padding-top:52px;
 }
 
 

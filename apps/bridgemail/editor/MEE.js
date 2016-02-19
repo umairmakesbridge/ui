@@ -244,6 +244,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var $element = null;
                                 var emailWidth = options.landingPage? "100%":"600px";                              
                                 var pageBackgroundColor = "#fff";
+                                var pageBorderWidth = '0px';
+                                var pageBorderColor = 'transparent';
+                                var pageBorderType= 'none'; // Style of 
+                                var pageBorderLeft = 'none';
+                                var pageBorderLeftProp = '';
+                                var pageBorderRight = 'none';
+                                var pageBorderRightProp = '';
+                                var pageBorderTop = 'none';
+                                var pageBorderTopProp = '';
+                                var pageBorderBottom = 'none';
+                                var pageBorderBottomProp = '';
                                 var pageTitle = "";
                                 var pageBackgroundimage = "none";
                                 var pageBackgroundimage_repeat = "no-repeat";
@@ -468,7 +479,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if(!pageBackgroundimage){
                                         pageBackgroundimage = "none";
                                     }
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    if(pageBorderLeft !="none" || pageBorderRight !="none" || pageBorderTop !="none" || pageBorderBottom !="none"){
+                                        if(pageBorderLeft !="none" && pageBorderLeft !=""){
+                                            pageBorderLeftProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
+                                        }else{
+                                            pageBorderLeftProp = '';
+                                        }
+                                         if(pageBorderRight !="none" && pageBorderRight !=""){
+                                            pageBorderRightProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
+                                        }else{
+                                            pageBorderRightProp = '';
+                                        }
+                                        if(pageBorderTop !="none" && pageBorderTop !=""){
+                                            pageBorderTopProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
+                                        }else{
+                                            pageBorderTopProp = '';
+                                        }
+                                        if(pageBorderBottom !="none" && pageBorderBottom !=""){
+                                            pageBorderBottomProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
+                                        }else{
+                                            pageBorderBottomProp = '';
+                                        }
+                                    }
+                                    
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgleftborder='"+pageBorderLeftProp+"' data-bgrightborder='"+pageBorderRightProp+"' data-bgtopborder='"+pageBorderTopProp+"' data-bgbottomborder='"+pageBorderBottomProp+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
@@ -479,7 +513,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }else{
                                         pageActionScriptSet = "";
                                     }
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+pageActionScriptSet+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+"' >"+outputHTML+"</body></html>";                                    
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+pageActionScriptSet+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+";border-left:"+pageBorderLeftProp+";border-right:"+pageBorderRightProp+";border-top:"+pageBorderTopProp+";border-bottom:"+pageBorderBottomProp+" ' >"+outputHTML+"</body></html>";                                    
                                     
                                      //"" + outputter.outerHTML();
                                      outputHTML = outputHTML.replace(/&quot;/g,'&#39;')
@@ -501,7 +535,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     pageBackgroundimage = outerTD.length ?outerTD.attr("data-bgimg"):"none"; 
                                     pageBackgroundimage_repeat = outerTD.length ?outerTD.attr("data-bgimgrepeat"):"no-repeat"; 
                                     pageBackgroundimage_pos = outerTD.length ?outerTD.attr("data-bgimgpos"):"0% 0%"; 
-
+                                    pageBorderLeftProp = outerTD.length ?outerTD.attr("data-bgleftborder"):"none"; 
+                                    pageBorderRightProp = outerTD.length ?outerTD.attr("data-bgrightborder"):"none"; 
+                                    pageBorderTopProp = outerTD.length ?outerTD.attr("data-bgtopborder"):"none"; 
+                                    pageBorderBottomProp = outerTD.length ?outerTD.attr("data-bgbottomborder"):"none"; 
+                                    
                                     emailWidth = options.landingPage? "100%":outerTD.attr("width");
                                     this.find('#mee-iframe').contents().find('.mainContentHtmlGrand').attr('style',outerCss);
                                     if(!emailWidth){
@@ -543,9 +581,22 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 myElement.find('#bgimg_repeatx').iCheck('check');
                                             }
                                         }
+                                        if(pageBorderLeftProp){
+                                            meeIframe.find('body').css('border-left',pageBorderLeftProp);
+                                        }
+                                        if(pageBorderRightProp){
+                                            meeIframe.find('body').css('border-right',pageBorderRightProp);
+                                        }
+                                        if(pageBorderTopProp){
+                                            meeIframe.find('body').css('border-top',pageBorderTopProp);
+                                        }
+                                        if(pageBorderBottomProp){
+                                            meeIframe.find('body').css('border-bottom',pageBorderBottomProp);
+                                        }
                                         if(pageBackgroundColor){
                                             meeIframe.find("body").css("background-color",pageBackgroundColor);
-                                        }                                        
+                                        } 
+                                        
                                         
                                         if(pageTitle){
                                             meeIframe.find("head").append($("<title>"+pageTitle+"</title>"));
@@ -705,6 +756,48 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                          dialog.$el.find('.embedvideolinkwrap .errortext em').show();
                                         //alert('We are only supporting youtube and vimeo.');
                                         dialog.$el.find('.divVideoCode').val('');
+                                    }
+                                },
+                                mee.setBodyBorders = function(){
+                                   
+                                    var isSetprop = false;
+                                    if(pageBorderTopProp !="none" || pageBorderBottomProp !="none" || pageBorderLeftProp !="none" || pageBorderRightProp !="none"){
+                                        if(pageBorderTopProp !="none" && pageBorderTopProp !=""){
+                                            if(!isSetprop){
+                                                     var properties = pageBorderTopProp.split(" ");
+                                                     myElement.find('.ddlBorderType').val(properties[1]);
+                                                     myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
+                                                     isSetprop = true;
+                                                }
+                                            myElement.find('#topBorder').trigger("click");
+                                        }
+                                        if(pageBorderBottomProp !="none" && pageBorderBottomProp !=""){
+                                            if(!isSetprop){
+                                                     var properties = pageBorderBottomProp.split(" ");
+                                                     myElement.find('.ddlBorderType').val(properties[1]);
+                                                     myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
+                                                     isSetprop = true;
+                                                }
+                                            myElement.find('#bottomBorder').trigger("click");
+                                        }
+                                        if(pageBorderLeftProp !="none" && pageBorderLeftProp !=""){
+                                            if(!isSetprop){
+                                                     var properties = pageBorderLeftProp.split(" ");
+                                                     myElement.find('.ddlBorderType').val(properties[1]);
+                                                     myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
+                                                     isSetprop = true;
+                                                }
+                                            myElement.find('#leftBorder').trigger("click");
+                                        }
+                                        if(pageBorderRightProp !="none" && pageBorderRightProp !=""){
+                                            if(!isSetprop){
+                                                     var properties = pageBorderLeftProp.split(" ");
+                                                     myElement.find('.ddlBorderType').val(properties[1]);
+                                                     myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
+                                                     isSetprop = true;
+                                                }
+                                            myElement.find('#rightBorder').trigger("click");
+                                        }
                                     }
                                 },
                                 mee.saveActionScript = function(dialog){
@@ -1621,6 +1714,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated")
                                                             }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
                                                                 SelectedElementForStyle = SelectedElementForStyle;
+                                                                if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
+                                                                    mee.setBodyBorders();
+                                                                }
                                                             }
                                                             else{
 
@@ -1796,6 +1892,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         SelectedElementForStyle.removeInlineStyle("border-" + type);
                                                         myElement.find("#" + type + "Border").removeClass('borderselected');
                                                         $element.css("border-" + type, "none");
+                                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                        if(type=='left'){
+                                                                        pageBorderLeft = '';
+                                                                    }
+                                                                    if(type=='top'){
+                                                                        pageBorderTop = '';
+                                                                    }
+                                                                    if(type=='right'){
+                                                                        pageBorderRight = '';
+                                                                    }
+                                                                    if(type=='bottom'){
+                                                                        pageBorderBottom = '';
+                                                                    }
+                                                                }
                                                     }
                                                     else {
 
@@ -1803,6 +1913,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         var borderType = myElement.find(".ddlBorderType").val();
                                                         var borderWidth = myElement.find(".ddlBorderWidth").val();
                                                         SelectedElementForStyle.css("border-" + type, borderWidth + "px " + borderType + " " + borderColor);
+                                                        
                                                         myElement.find("#" + type + "Border").addClass('borderselected');
 
                                                         var string = borderWidth + "px " + borderType + " #000";
@@ -1818,6 +1929,24 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         else {
                                                             $element.css("width", 48 - TotalBorderTopBottom + "px");
                                                         }
+                                                        
+                                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                                    pageBorderWidth = borderWidth+"px";
+                                                                    pageBorderColor = borderColor;
+                                                                    pageBorderType= borderType;
+                                                                    if(type=='left'){
+                                                                        pageBorderLeft = 'border-left';
+                                                                    }
+                                                                    if(type=='top'){
+                                                                        pageBorderTop = 'border-top';
+                                                                    }
+                                                                    if(type=='right'){
+                                                                        pageBorderRight = 'border-right';
+                                                                    }
+                                                                    if(type=='bottom'){
+                                                                        pageBorderBottom = 'border-bottom';
+                                                                    }
+                                                                }
                                                     }
                                                     makeCloneAndRegister();
                                                 }
