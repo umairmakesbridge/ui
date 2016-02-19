@@ -765,38 +765,42 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         if(pageBorderTopProp !="none" && pageBorderTopProp !=""){
                                             if(!isSetprop){
                                                      var properties = pageBorderTopProp.split(" ");
+                                                     myElement.find('.colorPickerBorder').minicolors('value', properties[2])
                                                      myElement.find('.ddlBorderType').val(properties[1]);
                                                      myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
                                                      isSetprop = true;
                                                 }
-                                            myElement.find('#topBorder').trigger("click");
+                                           setTimeout(function(){ myElement.find('#topBorder').trigger("click");},100);
                                         }
                                         if(pageBorderBottomProp !="none" && pageBorderBottomProp !=""){
                                             if(!isSetprop){
                                                      var properties = pageBorderBottomProp.split(" ");
+                                                     myElement.find('.colorPickerBorder').minicolors('value', properties[2])
                                                      myElement.find('.ddlBorderType').val(properties[1]);
                                                      myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
                                                      isSetprop = true;
                                                 }
-                                            myElement.find('#bottomBorder').trigger("click");
+                                            setTimeout(function(){ myElement.find('#bottomBorder').trigger("click");},100);
                                         }
                                         if(pageBorderLeftProp !="none" && pageBorderLeftProp !=""){
                                             if(!isSetprop){
                                                      var properties = pageBorderLeftProp.split(" ");
+                                                     myElement.find('.colorPickerBorder').minicolors('value', properties[2])
                                                      myElement.find('.ddlBorderType').val(properties[1]);
                                                      myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
                                                      isSetprop = true;
                                                 }
-                                            myElement.find('#leftBorder').trigger("click");
+                                            setTimeout(function(){myElement.find('#leftBorder').trigger("click");},100);
                                         }
                                         if(pageBorderRightProp !="none" && pageBorderRightProp !=""){
                                             if(!isSetprop){
                                                      var properties = pageBorderLeftProp.split(" ");
+                                                     myElement.find('.colorPickerBorder').minicolors('value', properties[2])
                                                      myElement.find('.ddlBorderType').val(properties[1]);
                                                      myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
                                                      isSetprop = true;
                                                 }
-                                            myElement.find('#rightBorder').trigger("click");
+                                            setTimeout(function(){myElement.find('#rightBorder').trigger("click");},100);
                                         }
                                     }
                                 },
