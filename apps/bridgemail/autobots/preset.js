@@ -5,7 +5,7 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/preset.html', 'bms-tags'],
+define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
         function (template) {
             'use strict';
             return Backbone.View.extend({
