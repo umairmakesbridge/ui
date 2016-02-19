@@ -758,49 +758,55 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         dialog.$el.find('.divVideoCode').val('');
                                     }
                                 },
+                                mee.setBorderColor = function(){
+                                    $.each(myElement.find(".sBorderLine"),function(key,val){
+                                                        if($(val).hasClass('borderselected')== true){
+                                                          $(val).removeClass('borderselected').trigger('click');
+                                                        }
+                                                    })
+                                },
                                 mee.setBodyBorders = function(){
-                                   
-                                    var isSetprop = false;
+                                   var properties = '';
+                                    $element = myElement.find(".borderControl .ved-edge-inner");
                                     if(pageBorderTopProp !="none" || pageBorderBottomProp !="none" || pageBorderLeftProp !="none" || pageBorderRightProp !="none"){
                                         if(pageBorderTopProp !="none" && pageBorderTopProp !=""){
-                                            if(!isSetprop){
-                                                     var properties = pageBorderTopProp.split(" ");
-                                                     myElement.find('.colorPickerBorder').minicolors('value', properties[2])
-                                                     myElement.find('.ddlBorderType').val(properties[1]);
-                                                     myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
-                                                     isSetprop = true;
-                                                }
-                                           setTimeout(function(){ myElement.find('#topBorder').trigger("click");},100);
+                                            properties= pageBorderTopProp.split(" "); 
+                                        }else if(pageBorderBottomProp !="none" && pageBorderBottomProp !=""){
+                                            properties = pageBorderBottomProp.split(" ");
+                                        }else if(pageBorderLeftProp !="none" && pageBorderLeftProp !=""){
+                                            properties = pageBorderLeftProp.split(" ");
+                                        }else if(pageBorderRightProp !="none" && pageBorderRightProp !=""){
+                                            properties = pageBorderLeftProp.split(" ");
+                                        }
+                                        myElement.find('.colorPickerBorder').minicolors('value', properties[2])
+                                        myElement.find('.ddlBorderType').val(properties[1]);
+                                        myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
+                                        pageBorderWidth =  properties[0];
+                                        pageBorderType = properties[1] ;
+                                        pageBorderColor = properties[2];
+                                        if(pageBorderTopProp !="none" && pageBorderTopProp !=""){
+                                           var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                           $element.css("border-top", string);
+                                           pageBorderTop = "border-top";
+                                           myElement.find('#topBorder').addClass("borderselected");
                                         }
                                         if(pageBorderBottomProp !="none" && pageBorderBottomProp !=""){
-                                            if(!isSetprop){
-                                                     var properties = pageBorderBottomProp.split(" ");
-                                                     myElement.find('.colorPickerBorder').minicolors('value', properties[2])
-                                                     myElement.find('.ddlBorderType').val(properties[1]);
-                                                     myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
-                                                     isSetprop = true;
-                                                }
-                                            setTimeout(function(){ myElement.find('#bottomBorder').trigger("click");},100);
+                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                           $element.css("border-bottom", string);
+                                           pageBorderBottom = "border-bottom";
+                                            myElement.find('#bottomBorder').addClass("borderselected");
                                         }
                                         if(pageBorderLeftProp !="none" && pageBorderLeftProp !=""){
-                                            if(!isSetprop){
-                                                     var properties = pageBorderLeftProp.split(" ");
-                                                     myElement.find('.colorPickerBorder').minicolors('value', properties[2])
-                                                     myElement.find('.ddlBorderType').val(properties[1]);
-                                                     myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
-                                                     isSetprop = true;
-                                                }
-                                            setTimeout(function(){myElement.find('#leftBorder').trigger("click");},100);
+                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                            $element.css("border-left", string);
+                                            pageBorderLeft = "border-left";
+                                            myElement.find('#leftBorder').addClass("borderselected");
                                         }
                                         if(pageBorderRightProp !="none" && pageBorderRightProp !=""){
-                                            if(!isSetprop){
-                                                     var properties = pageBorderLeftProp.split(" ");
-                                                     myElement.find('.colorPickerBorder').minicolors('value', properties[2])
-                                                     myElement.find('.ddlBorderType').val(properties[1]);
-                                                     myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
-                                                     isSetprop = true;
-                                                }
-                                            setTimeout(function(){myElement.find('#rightBorder').trigger("click");},100);
+                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                            $element.css("border-right", string);
+                                            pageBorderRight = "border-right";
+                                            myElement.find('#rightBorder').addClass("borderselected");
                                         }
                                     }
                                 },
@@ -1956,6 +1962,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
 
                                             });
+                                            myElement.find(".ddlBorderType").change(function(){
+                                                    var borderType = $(this).val();
+                                                    //var type = $(this).data("type").toLowerCase();
+                                                    $.each(myElement.find(".sBorderLine"),function(key,val){
+                                                        if($(val).hasClass('borderselected')== true){
+                                                          $(val).removeClass('borderselected').trigger('click');
+                                                        }
+                                                    })
+                                            });
+                                            myElement.find(".ddlBorderWidth").change(function(){
+                                                    var borderWidth = $(this).val();
+                                                    //var type = $(this).data("type").toLowerCase();
+                                                    $.each(myElement.find(".sBorderLine"),function(key,val){
+                                                        if($(val).hasClass('borderselected')== true){
+                                                          $(val).removeClass('borderselected').trigger('click');
+                                                        }
+                                                    })
+                                            });
+                                            
                                             //////////////////////
                                             //Vertical Align
                                             myElement.find(".sVerticalAlign").click(function () {
@@ -2474,6 +2499,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     colorPickerBorder.minicolors({
                                         change: function (hex, opacity) {
                                             borderColor = hex;
+                                            setTimeout(function(){ mee.setBorderColor(borderColor)  }, 100);   
                                         },
                                         inline: false,
                                         position: 'top left',
