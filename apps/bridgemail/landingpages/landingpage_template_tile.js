@@ -120,11 +120,11 @@ define(['text!landingpages/html/landingpage_template_tile.html', 'common/tags_ro
                         }                                                  
                         this.app.showLoading(false, this.parent.dialog.getBody().parents(".modal"));
                         this.parent.options.parentView.editor_change = true;
+                        this.parent.options.parentView.templatePageId = _json['pageId.encode'];
                         this.parent.options.parentView.$("#mee-iframe").contents().find('.mainContentHtml').html('');
                         this.parent.options.parentView.$('.lastSaveInfo').html('Saving...');
                         var html = $('<div/>').html(_json.html).text().replace(/&line;/g,"");                        
-                        this.parent.$("#mee_editor").setMEEHTML(html);  
-                        
+                        this.parent.$("#mee_editor").setMEEHTML(html);                          
                         this.parent.dialog.hide();
                     },this))  
                 }

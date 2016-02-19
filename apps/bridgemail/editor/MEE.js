@@ -718,7 +718,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                  var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
                                  
                                  if(embedval.match(/facebook/g) && embedval.match(/facebook/g).length > 0){
-                                     options._app.showLoading("Saving action script...", dialog.getBody());
+                                     options._app.showLoading("Saving tracking Snippet...", dialog.getBody());
                                      var saveUrl = "/pms/events/thirdPartyTrackingSnippet.jsp";
                                     $.ajax({
                                            url: saveUrl,
@@ -730,7 +730,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                if (result.result=="success") {
                                                    
                                                    mee.isActionScriptSet = embedval;
-                                                   options._app.showMessge("Action Script added successfully", $("body"));
+                                                   options._app.showMessge("Tracking Snippet added successfully", $("body"));
                                                    dialog.hide();
                                                }
                                                else {
@@ -1032,7 +1032,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var dialog_height = $(document.documentElement).height() - 182;
                                         var fbpixel = (mee.isActionScriptSet) ? mee.isActionScriptSet : "";
                                         var dialog = options._app.showDialog({
-                                            title: 'Add analytics script',
+                                            title: 'Add Tracking Snippets',
                                             css: {
                                                 "width": dialog_width+"px",
                                                 "margin-left": "-"+(dialog_width / 2)+"px",

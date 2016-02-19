@@ -26,6 +26,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                     this.editable = true;
                     this.status = "D";
                     this.editor_change = false;
+                    this.templatePageId = null;
                     this.meeEditor = false;
                     if (this.options.params) {                        
                         this.editable = this.options.params.editable;
@@ -490,6 +491,9 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         }
                          var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
                          var post_data = {type:"update",pageId:this.page_id,html:this.$("#mee_editor").getMEEHTML()};
+                         if(this.templatePageId){
+                             post_data['parentPageId'] = this.templatePageId;
+                         }
                         $.post(URL,post_data )
                              .done(_.bind(function(data) {                                 
                                  var _json = jQuery.parseJSON(data);
@@ -501,12 +505,14 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                                         }
                                          
                                         this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
-                                        this.meeView.autoSaveFlag = false; 
-                                        this.editor_change = false;
+                                        
                                  }
                                  else{                               
                                     this.app.showAlert(_json[1],$("body"));
+                                    this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: ');                                    
                                  }
+                                 this.meeView.autoSaveFlag = false; 
+                                 this.editor_change = false;                                        
                             },this));
                         } 
                     } //  ./autoSaveFlag
