@@ -5,7 +5,7 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target'],
+define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target','bms-mergefields'],
         function(template, recipientView, tags, ModelRecipient) {
             'use strict';
             return Backbone.View.extend({
@@ -132,7 +132,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$('#wrap_email').mergefields({autobot: true, app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: '{{LASTNAME}}', cssClass: "show-top"});
-                    this.$('#merge_field_plugin').css('width', '72%!important');
+                    this.$('#merge_field_plugin').css('width', '73.1%');
                     this.$("#txtRecurTimes").ForceNumericOnly();
                     this.$(".alert-salesrep").iCheck({
                         checkboxClass: 'checkinput'
