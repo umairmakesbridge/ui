@@ -4,8 +4,8 @@
  * Description: List Grid.
  * Dependency: List Grid Single Grid View
  */
-define(['text!listupload/html/recipient_list.html'],
-function (template) {
+define(['text!listupload/html/recipient_list.html','text!listupload/html/editlist.html'],
+function (template,elistTemplate) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',
@@ -47,15 +47,15 @@ function (template) {
                     headerIcon : 'list2',
                         buttons: {saveBtn:{text:'Update'} }                                                                           
                 });
-                require(["text!listupload/html/editlist.html"],function(list){
-                    dialog.getBody().html(list);
+                //require(["text!listupload/html/editlist.html"],function(list){
+                    dialog.getBody().html(elistTemplate);
                     
                     dialog.$el.addClass('gray-panel');
                      dialog.$el.find('#list_name').focus();
                     that.showTags(dialog);
                      dialog.$el.find('#list_name').val(listName);
                    
-                });
+                //});
                 dialog.saveCallBack(_.bind(this.finishEditList,this,dialog,listNumber,listName,target));
              //    dialog.saveCallBack(_.bind(this.sendTestCampaign,this,dialog,camp_id));
                 
