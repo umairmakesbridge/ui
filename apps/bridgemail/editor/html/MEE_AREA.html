@@ -13,11 +13,12 @@
     <script  type="text/javascript" class="system">
            function setDragging(object,mee){
             $(object).on('dragstart', function(e) {
-                var crt = this.cloneNode(true);                
+                var crt = this.parentNode.cloneNode(true);
+                var parentcsHaveData = $(e.currentTarget).parent().parent()
                 crt.id = "drag-class";
                 crt.style.backgroundColor = "#fff";crt.style.border="1px solid #a9c2d5";crt.style.borderTop="10px solid #a9c2d5";crt.style.zIndex=-1;
-                crt.style.position = "absolute"; crt.style.top = $(e.currentTarget).offset().top+"px"; crt.style.left = ($(e.currentTarget).offset().left-1)+"px";crt.style.listStyle = "outside none none";               
-                crt.innerHTML = "";crt.style.width = $(e.currentTarget).width() +"px";crt.style.height=$(e.currentTarget).height()+"px";
+                crt.style.position = "absolute"; crt.style.top = parentcsHaveData.offset().top+"px"; crt.style.left = (parentcsHaveData.offset().left-1)+"px";crt.style.listStyle = "outside none none";               
+                crt.innerHTML = "";crt.style.width = parentcsHaveData.width() +"px";crt.style.height=parentcsHaveData.height()+"px";
                 document.body.appendChild(crt);                
                 e.originalEvent.dataTransfer.setData("text", "text"); 
                 try{
@@ -26,7 +27,7 @@
                 catch(e){
                     
                 }
-                mee.dragElementIframe =$(e.currentTarget);
+                mee.dragElementIframe =$(e.currentTarget).parent().parent();
                 mee.startDragging(e);            
                 top.$("#top_scroll_page,#bottom_scroll_page").show();
                 e.stopPropagation();    

@@ -3061,7 +3061,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     -moz-border-radius: 2px 2px 0 0;
     border-radius:  2px 2px 0 0; 
     top:7px;
-     margin-bottom: 0px;
+     margin-bottom: 45px;
      background: #fff;
 } 
 
@@ -3108,7 +3108,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     -webkit-border-radius: 2px 2px;
     -moz-border-radius: 2px 2px;
     border-radius: 2px 2px; 
-    padding-top:52px;
+    padding-top:10px;
 }
 
 
