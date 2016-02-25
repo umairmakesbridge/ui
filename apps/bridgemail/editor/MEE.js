@@ -2207,6 +2207,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 SelectedElementForStyle.css('background-color','transparent');
                                                 myElement.find('.txtColorCode').val('');
                                             });
+                                            myElement.find(".txtColorCode").change(function () {
+                                               SetBackgroundColor($(this).val())
+                                               myElement.find(".divColorPicker").minicolors('value', $(this).val())
+                                            });
+                                            
+
+                                            myElement.find(".txtColorCode").keyup(function (e) {
+                                                if (e.keyCode == 13) {
+                                                    SetBackgroundColor($(this).val())
+                                                    myElement.find(".divColorPicker").minicolors('value', $(this).val())
+                                                }
+                                            });
+
+
                                             eventsApplied = true;
                                         } //End of attached events 
                                         
