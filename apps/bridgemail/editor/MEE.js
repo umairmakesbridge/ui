@@ -2211,6 +2211,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 SelectedElementForStyle.css('background-color','transparent');
                                                 myElement.find('.txtColorCode').val('');
                                             });
+                                            myElement.find(".txtColorCode").change(function () {
+                                               SetBackgroundColor($(this).val())
+                                               myElement.find(".divColorPicker").minicolors('value', $(this).val())
+                                            });
+                                            
+
+                                            myElement.find(".txtColorCode").keyup(function (e) {
+                                                if (e.keyCode == 13) {
+                                                    SetBackgroundColor($(this).val())
+                                                    myElement.find(".divColorPicker").minicolors('value', $(this).val())
+                                                }
+                                            });
+
+
                                             eventsApplied = true;
                                         } //End of attached events 
                                         
@@ -5273,6 +5287,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             $(this).addClass("hover");
                                                             $(this).parents(".csHaveData").addClass("hoverParent");
                                                             $(this).prepend(myobject);
+                                                            meeIframeWindow.setDragging(myobject.find('.myHandle'), mee);
                                                             $(this).parents(".csHaveData").removeClass("hover");
                                                             $(this).find(".editformpanel,.edit-form").show();
                                                             $(this).find(".editvideopanel").show();
@@ -6030,7 +6045,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 //Elements DRAGGING - for swapping elements:dragging2
                                 function InitializeElementWithDraggable(object) {
-                                    meeIframeWindow.setDragging(object, mee);
+                                    
                                     return object;
                                 }
 
@@ -6206,8 +6221,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
                                     
                                         /*===Video Enabled attached later if needed====*/
+                                    if(args.predefinedControl && args.predefinedControl.Html){
+                                        mee.openvideoDialog(args.predefinedControl.Html);
+                                    }
                                     
-                                    mee.openvideoDialog(args.predefinedControl.Html);
                                     mee.checkForm();
 
                                 }
