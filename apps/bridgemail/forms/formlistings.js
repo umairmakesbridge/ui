@@ -9,11 +9,18 @@ define(['text!forms/html/formlistings.html', 'forms/collections/formlistings', '
                         this.app.addSpinner(this.$el);
                         this.type='search';
                         this.fetchForms();                        
-                    }
+                    },
+                    "keyup #daterange": 'showDatePicker',
+                    "mouseup #daterange" : 'showSelected',
+                    "click #clearcal": 'hideDatePicker',
+                    "click .calendericon": 'showDatePickerFromClick'
                 },
                 initialize: function () {
                     this.template = _.template(template);
                     this.formsCollection = new formsCollection();
+                    this.fromDate = null;
+                    this.toDate = null;
+                    this.dateRange = 0;
                     this.render();
                 },
                 render: function ()
@@ -46,6 +53,91 @@ define(['text!forms/html/formlistings.html', 'forms/collections/formlistings', '
 
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
+                /*---------- Calender functions---------------*/
+                showDatePicker: function () {
+                    this.$('#clearcal').show();
+                    return false;
+                },
+                hideDatePicker: function () {
+                    this.$('#clearcal').hide();
+                    this.fromDate = "";
+                    this.toDate = "";
+                    this.dateRange = 0;
+                    this.$('#daterange').val('');                    
+                    this.fetchForms();
+                },
+                showDatePickerFromClick: function () {
+                    this.$('#daterange').click();
+                    return false;
+                },
+                setDateRange: function (setDateVars) {
+                    var val = this.$("#daterange").val();
+                    if ($.trim(val)) {
+                        this.$('#clearcal').show();
+                        var _dateRange = val.split("-");
+                        var toDate = "", fromDate = "";
+                        if (_dateRange[0]) {
+                            fromDate = moment($.trim(_dateRange[0]), 'M/D/YYYY');
+                        }
+                        if ($.trim(_dateRange[1])) {
+                            toDate = moment($.trim(_dateRange[1]), 'M/D/YYYY');
+                        }
+                        if (fromDate) {
+                            this.fromDate = fromDate.format("MM-DD-YY");
+                        }
+                        if (toDate) {
+                            this.toDate = toDate.format("MM-DD-YY");
+                        } else {
+                            this.toDate = fromDate.format("MM-DD-YY");
+                        }
+                        if (typeof (setDateVars) !== "boolean") {
+                            this.fetchForms();
+                        }
+                    }
+                },
+                showSelected: function(setSelected){                    
+                    if(typeof(setSelected)=="boolean"){
+                        if(this.dateRange==1){                        
+                           this.dateRangeControl.panel.find("ul.ui-widget-content .ui-daterangepicker-Today").addClass("ui-state-active");
+                        }
+                        else if(this.dateRange==2){                                                       
+                            this.dateRangeControl.panel.find("ul.ui-widget-content .ui-daterangepicker-Yesterday").addClass("ui-state-active");
+                        }
+                        else if(this.dateRange==7){                                                                             
+                            this.dateRangeControl.panel.find("ul.ui-widget-content .ui-daterangepicker-Last7days").addClass("ui-state-active");
+                        }
+                        else if(this.dateRange==30){                                                                      
+                            this.dateRangeControl.panel.find("ul.ui-widget-content .ui-daterangepicker-Last30Days").addClass("ui-state-active");
+                        }               
+                    }
+                    else{
+                        setTimeout(_.bind(this.showSelected,this,true),100);
+                    }
+                    
+                },
+                setDateRangeLi: function (obj) {
+                    var target = $.getObj(obj, "li");
+                    if (!target.hasClass("ui-daterangepicker-dateRange")) {
+                        var anchorTag = target.find("a");
+                        if(anchorTag.attr("datestart")=="yesterday"){
+                            this.dateRange = 2;
+                        } else if(anchorTag.attr("datestart")=="today"){
+                            this.dateRange = 1;
+                        }
+                        else if(anchorTag.attr("datestart")=="today-7days"){
+                            this.dateRange = 7;
+                        }
+                        else if(anchorTag.attr("datestart")=="Today-30"){
+                            this.dateRange = 30;
+                        }
+                        else{
+                            this.dateRange = 0;
+                        }
+                        this.setDateRange();
+                    }
+                }
+                /*---------- End Calender functions---------------*/
+                ,
                 init: function () {
                     
                     this.current_ws = this.$el.parents(".ws-content");                                        
@@ -57,6 +149,10 @@ define(['text!forms/html/formlistings.html', 'forms/collections/formlistings', '
                     this.ws_header.find(".workspace-field").remove();
                     this.current_ws.find("#addnew_action").attr("data-original-title", "Create Signup Form").click(_.bind(this.createFormDialog, this));
                     this.$("div.create_new").click(_.bind(this.createFormDialog, this));  
+                    
+                    this.dateRangeControl = this.$('#daterange').daterangepicker();
+                    this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange, this));
+                    this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
                     
                 },
                 fetchForms: function (fcount, filterObj) {
@@ -82,6 +178,11 @@ define(['text!forms/html/formlistings.html', 'forms/collections/formlistings', '
                     var _data = {type: this.type};
                     _data['offset'] = this.offset;                   
                     _data['bucket'] = 20;
+                    
+                    if (this.toDate && this.fromDate) {
+                        _data['fromDate'] = this.fromDate;
+                        _data['toDate'] = this.toDate;
+                    }
                     
                     if (this.searchTxt) {
                         _data['searchText'] = this.searchTxt;

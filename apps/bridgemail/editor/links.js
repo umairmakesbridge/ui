@@ -164,7 +164,10 @@ function (template) {
                 }
                 return selectedNode ;
             },
-            showLinkDetails:function(anchorObj){                
+            showLinkDetails:function(anchorObj){    
+                if(typeof(anchorObj.attr("href"))==="undefined"){
+                    anchorObj.attr("href","");
+                }
                 var _a_href = anchorObj.attr("href").toLowerCase();
                 var actual_href = anchorObj.attr("href");
                 var actual_target = anchorObj.attr("target");

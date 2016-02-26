@@ -460,9 +460,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var parentTd = '';
                                     if(this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style')!==""){
-                                        parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');
-                                        
+                                        parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');                                        
+                                        if(parentTd){
+                                            parentTd = "height:500px;"
+                                        }
                                     }
+                                    
                                     
                                     mainHTMLELE.find(".bgimage").each(function(){
                                         $(this).attr("mee-style",$(this).attr("style"));
@@ -557,6 +560,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 mee.encodeSpecialHTML = function(str){                                    
                                     str = str.replace(/mee-style=/g, "style=");                                                                      
                                     str = str.replace(/\​/g,"");
+                                    str = str.replace(//g, "");
                                     return str;
                                 }
                                 
@@ -4945,8 +4949,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             meeIframeWindow.tinymce.init({
                                                 selector: "div.textcontent",
                                                 inline: true,
-                                                theme: "modern",
-                                                paste_as_text:true,    
+                                                theme: "modern",                                                
+                                                paste_enable_default_filters: false,
+                                                paste_preprocess: function(plugin, args) {
+                                                    console.log(args.content);                                                    
+                                                },
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',

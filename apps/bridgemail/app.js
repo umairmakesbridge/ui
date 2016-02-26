@@ -57,7 +57,7 @@ define([
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
-                env: 'production',
+                env: 'test',
                 complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
@@ -485,6 +485,16 @@ define([
                 })
             });
         },
+        replaceNonPrintableChar: function(str){
+            if (typeof (str) !== "undefined") {
+                str = str.replace(//g, "");
+            }
+            else{
+                str = "";
+            }
+            return str;
+        }
+        ,
         encodeHTML: function (str) {
             if (typeof (str) !== "undefined") {
                 str = str.replace(/:/g, "&#58;");
@@ -495,7 +505,8 @@ define([
                 str = str.replace(/</g, "&lt;");
                 str = str.replace(/>/g, "&gt;");
                 str = str.replace(/\"/g, "&quot;");
-                str = str.replace(/\‘/g, "&#8216;");
+                str = str.replace(/\‘/g, "&#8216;");                
+                str = str.replace(//g, "");
             }
             else {
                 str = "";

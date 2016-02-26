@@ -9,6 +9,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     'keyup .header-info': 'defaultFieldHide',
                     'click #save_conversion_filter': 'saveConversionPage',
                     'click #save_results_sf': 'saveResultToSF',
+                    'paste input[type="text"]':'cleanNonPrintableCharacters',
+                    'paste textarea':'cleanNonPrintableCharacters',
                     //'click .mergefields-box' :'showMergeFieldDialog',
                     'click #drop4': function (obj) {
                         this.$('.mergefields-box').click();
@@ -94,6 +96,11 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.app.showInfo(this.$el.find('#lblFromname'), appMsgs.CAMP_fname_info);
                     this.app.showInfo(this.$el.find('#lblReplyto'), appMsgs.CAMP_replyto_info);
 
+                },
+                cleanNonPrintableCharacters: function(obj){
+                    var _input = $(obj.target);                                        
+                    setTimeout(_.bind(function(){_input.val(this.app.replaceNonPrintableChar(_input.val()));}, this), 100);
+                    
                 },
                 initMergeFields: function () {
                     this.$('#campaign_subject-wrap').mergefields({app: this.app, elementID: 'campaign_subject', config: {state: 'workspace', isrequest: true}, placeholder_text: 'Enter subject'});
