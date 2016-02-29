@@ -184,6 +184,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var mee = this;
                             mee.iframeLoaded = false;
                             mee.isActionScriptSet= '';
+                            mee.isActionScriptSetG = '';
                             this.each(function () {
                                 var $this = $(this);
                                 var undoManager = new MakeBridgeUndoRedoManager({
@@ -261,6 +262,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var pageBackgroundimage_repeat = "no-repeat";
                                 var pageBackgroundimage_pos = "0% 0%";
                                 var pageActionScriptSet = '';
+                                var pageActionScriptSetG = '';
                                 var undoredo = true;
                                 var _offset = 0;
                                 var forms_offset = 0;
@@ -519,7 +521,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }else{
                                         pageActionScriptSet = "";
                                     }
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+pageActionScriptSet+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+";border-left:"+pageBorderLeftProp+";border-right:"+pageBorderRightProp+";border-top:"+pageBorderTopProp+";border-bottom:"+pageBorderBottomProp+" ' >"+outputHTML+"</body></html>";                                    
+                                    if(mee.isActionScriptSetG){
+                                        pageActionScriptSetG = mee.isActionScriptSetG;
+                                    }else{
+                                        pageActionScriptSetG = "";
+                                    }
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+pageActionScriptSet+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+";border-left:"+pageBorderLeftProp+";border-right:"+pageBorderRightProp+";border-top:"+pageBorderTopProp+";border-bottom:"+pageBorderBottomProp+" ' >"+outputHTML+pageActionScriptSetG+"</body></html>";                                    
                                     
                                      //"" + outputter.outerHTML();
                                      outputHTML = outputHTML.replace(/&quot;/g,'&#39;')
@@ -820,27 +827,63 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 },
                                 mee.saveActionScript = function(dialog){
                                  var embedval = dialog.$el.find('.divPixelCode').val();
+                                 var embedvalG = dialog.$el.find('.divPixelCodeGoogle').val();
                                  var encodeEmbedval = embedval.replace(/(&amp;)/g, "%26amp%3B");
                                      encodeEmbedval = encodeEmbedval.replace(/(&)/g, "%26");
+                                 var encodeEmbedvalG = embedvalG.replace(/(&amp;)/g, "%26amp%3B");
+                                     encodeEmbedvalG = encodeEmbedvalG.replace(/(&)/g, "%26");
+                                   
+                                   if(encodeEmbedvalG && encodeEmbedval){ 
+                                     var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
+                                     var snippetTypeG  = $(dialog.$el.find('.pixelTab li')[1]).data('snippet'); 
+                                     
+                                   }else{
+                                       var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
+                                   }
                                  var type = "add"; // needs to be dynamic 
                                  var userId = options._app.get("user").userId;
-                                 var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
                                  
-                                 if(embedval.match(/facebook/g) && embedval.match(/facebook/g).length > 0){
+                                 
+                                 if((embedval.match(/facebook/g) && embedval.match(/facebook/g).length > 0)){
+                                      mee.isActionScriptSet = embedval;
+                                      var snippetType = "facebook";
+                                      mee.saveAjaxActionScript({type:type,embedval:embedval,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedval,dialog:dialog})
+                                 }else{
+                                     mee.saveAjaxActionScript({embedval:"",dialog:dialog,userId:userId,snippetType:snippetType,landingPageId:options.pageId})
+                                 }
+                                 if( (embedvalG.match(/google/g) && embedvalG.match(/google/g).length > 0)){
+                                     if(snippetTypeG){
+                                         snippetType = snippetTypeG;
+                                     }
+                                     var snippetType = "google";
+                                      mee.isActionScriptSetG = embedvalG;
+                                     mee.saveAjaxActionScript({type:type,embedval:embedvalG,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedvalG,dialog:dialog,closeDialog:true})
+                                 }else{
+                                     mee.saveAjaxActionScript({embedval:"",dialog:dialog,userId:userId,snippetType:"google",landingPageId:options.pageId,closeDialog:true})
+                                 }
+                                 
+                                 
+                                 
+                                },
+                                mee.saveAjaxActionScript = function(embedObj){
+                                    var dialog = embedObj.dialog
+                                    if(embedObj.embedval !="" && embedObj.type=="add"){
                                      options._app.showLoading("Saving tracking Snippet...", dialog.getBody());
                                      var saveUrl = "/pms/events/thirdPartyTrackingSnippet.jsp";
                                     $.ajax({
                                            url: saveUrl,
-                                           data: {"type":type,"userId":userId,"snippetType":snippetType,"landingPageId":options.pageId,"snippetValue":encodeEmbedval},
+                                           data: {"type":embedObj.type,"userId":embedObj.userId,"snippetType":embedObj.snippetType,"landingPageId":embedObj.landingPageId,"snippetValue":embedObj.snippetValue},
                                            type: 'POST',
                                            success: function (data, textStatus, jqXHR) {                                            
                                                options._app.showLoading(false, dialog.getBody());
                                                var result = jQuery.parseJSON(data);
                                                if (result.result=="success") {
-                                                   
-                                                   mee.isActionScriptSet = embedval;
                                                    options._app.showMessge("Tracking Snippet added successfully", $("body"));
-                                                   dialog.hide();
+                                                   if(embedObj.closeDialog){
+                                                       dialog.hide();
+                                                     
+                                                   }
+                                                   
                                                }
                                                else {
                                                    options._app.showAlert("Error while saving", $("body"));
@@ -848,18 +891,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            }
                                        });
                                    
-                                 }else if(embedval==""){
-                                                 type = 'delete';
-                                                  dialog.hide();
+                                 }else if(embedObj.embedval==""){
+                                                var type = 'delete';
+                                                  if(embedObj.closeDialog){
+                                                       dialog.hide();
+                                                     
+                                                   }
                                                  $.ajax({
                                                         url: '/pms/events/thirdPartyTrackingSnippet.jsp',
-                                                        data: {"type":type,"userId":userId,"snippetType":snippetType,"landingPageId":options.pageId},
+                                                        data: {"type":type,"userId":embedObj.userId,"snippetType":embedObj.snippetType,"landingPageId":embedObj.landingPageId},
                                                         type: 'POST',
                                                         success: function (data, textStatus, jqXHR) {                                            
                                                             options._app.showLoading(false, dialog.getBody());
                                                             var result = jQuery.parseJSON(data);
                                                             if (result.result=="success") {
-                                                                mee.isActionScriptSet = "";
+                                                                if(embedObj.snippetType =="facebook"){
+                                                                    mee.isActionScriptSet = "";
+                                                                }
+                                                                if(embedObj.snippetType =="google"){
+                                                                    mee.isActionScriptSetG = "";
+                                                                }
+                                                                
                                                                
                                                                 
                                                             }
@@ -878,9 +930,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                          dialog.$el.find('.divScriptVersion .errortext').css({right:"2px",bottom:"485px"});
                                          dialog.$el.find('.divScriptVersion .errortext em').show();
                                  }
-                                 
-                                 
-                                 
                                 },
                                 mee.getActionScript = function(){
                                     var type = "get"; // needs to be dynamic 
@@ -894,13 +943,33 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                var result = jQuery.parseJSON(data);
                                                if (result.result=="success" && result.message != "No data available.") {
                                                    var myString = result.trackingSnippet[0].snippetValue;
+                                                   if(result.trackingSnippet.length > 1){
+                                                        var myStringF = result.trackingSnippet[0].snippetValue;
+                                                        var decodeEmbedvalF = myStringF.replace(/(%26amp%3B)/g, "&amp;");
+                                                        decodeEmbedvalF = decodeEmbedvalF.replace(/(%26)/g, "&");
+                                                        mee.isActionScriptSet = decodeEmbedvalF;
+                                                        
+                                                        var myStringG = result.trackingSnippet[1].snippetValue;
+                                                        var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
+                                                        decodeEmbedvalG = decodeEmbedvalG.replace(/(%26)/g, "&");
+                                                        mee.isActionScriptSetG = decodeEmbedvalG;
+                                                   }else if(result.trackingSnippet[0].snippetType=="facebook"){
+                                                       var myString = result.trackingSnippet[0].snippetValue;
+                                                       var decodeEmbedval = myString.replace(/(%26amp%3B)/g, "&amp;");
+                                                       decodeEmbedval = decodeEmbedval.replace(/(%26)/g, "&");
+                                                       mee.isActionScriptSet = decodeEmbedval;
+                                                   }else{
+                                                       var myStringG = result.trackingSnippet[0].snippetValue;
+                                                       var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
+                                                       decodeEmbedval = decodeEmbedvalG.replace(/(%26)/g, "&");
+                                                       mee.isActionScriptSetG = decodeEmbedval;
+                                                   }
                                                    //myString = myString.substring(1, myString.length-1);
-                                                   var decodeEmbedval = myString.replace(/(%26amp%3B)/g, "&amp;");
-                                                   decodeEmbedval = decodeEmbedval.replace(/(%26)/g, "&");
-                                                   mee.isActionScriptSet = decodeEmbedval;
+                                                  
                                                }
                                                else {
                                                    mee.isActionScriptSet="";
+                                                   mee.isActionScriptSetG = "";
                                                }
                                            }
                                        });
@@ -1140,6 +1209,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var dialog_width = $(document.documentElement).width() - 60;
                                         var dialog_height = $(document.documentElement).height() - 182;
                                         var fbpixel = (mee.isActionScriptSet) ? mee.isActionScriptSet : "";
+                                        var gpixel = (mee.isActionScriptSetG) ? mee.isActionScriptSetG : "";
                                         var dialog = options._app.showDialog({
                                             title: 'Add Tracking Snippets',
                                             css: {
@@ -1160,11 +1230,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         });
                                         
                                          var preview_html = '<div class="divScriptVersion">';                                        
-                                        preview_html += '<ul  class="pixelTab tabs-btns clearfix"><li class="active" data-snippet="facebook"><a data-toggle="tab" href="#fbpixel">Facebook Pixel</a></li><li style="display:none;" data-snippet="google"><a  data-toggle="tab" href="#ganalytics">Google Analytics</a></li></ul><div class="ui-code-area inputcont"><textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 60) + 'px;margin-bottom:0px;" class="divPixelCode" cols="1000" rows="250" placeholder="Paste facebook pixel snippet...."></textarea></div>';
+                                        preview_html += '<ul  class="pixelTab tabs-btns clearfix"><li class="active" data-snippet="facebook"><a data-toggle="tab" href="#fbpixel">Facebook Pixel</a></li><li data-snippet="google"><a  data-toggle="tab" href="#ganalytics">Google Analytics</a></li></ul><div class="ui-code-area inputcont"><textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 60) + 'px;margin-bottom:0px;" class="divPixelCode" cols="1000" rows="250" placeholder="Paste facebook pixel snippet...."></textarea><textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 60) + 'px;margin-bottom:0px;display:none;" class="divPixelCodeGoogle" cols="1000" rows="250" placeholder="Paste google snippet...."></textarea></div>';
                                         preview_html += '</div>';
                                         preview_html = $(preview_html);
                                         dialog.getBody().append(preview_html);
+                                        dialog.getBody().find('.pixelTab li').click(function(){
+                                           if($(this).data('snippet')=="facebook"){
+                                               dialog.getBody().find('.divPixelCode').show();
+                                               dialog.getBody().find('.divPixelCodeGoogle').hide();
+                                           }else{
+                                               dialog.getBody().find('.divPixelCode').hide();
+                                               dialog.getBody().find('.divPixelCodeGoogle').show();
+                                           }
+                                        })
                                         dialog.$el.find('.divPixelCode').val(fbpixel);
+                                        dialog.$el.find('.divPixelCodeGoogle').val(gpixel);
                                         dialog.$el.find('.divPixelCode').focus()
                                         
                                         dialog.saveCallBack(_.bind(mee.saveActionScript,mee,dialog));
