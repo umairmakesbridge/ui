@@ -1193,13 +1193,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         });
                                         
                                         var preview_html = '<div class="divTextVersion">';                                        
-                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 28) + 'px;margin-bottom:0px;border:2px solid #eaf4f9" class="divHtmlCode" cols="1000" rows="250" placeholder="Enter text version....">'+options.textVersion+'</textarea>';
+                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 28) + 'px;margin-bottom:0px;border:2px solid #eaf4f9" class="divHtmlCode" cols="1000" rows="250" placeholder="Enter text version....">'+options._app.decodeHTML(options.textVersion,true)+'</textarea>';
                                         preview_html += '</div>';
                                         preview_html = $(preview_html);
                                         dialog.getBody().append(preview_html);
                                         dialog.saveCallBack(_.bind(function(obj){
                                             options.textVersion = preview_html.find("textarea").val();
                                             options.saveTextVersionCallBack(preview_html.find("textarea").val());
+                                            changFlag.editor_change = true;
                                             if (options.fromDialog) {
                                                 dialog.showPrevious();
                                             }

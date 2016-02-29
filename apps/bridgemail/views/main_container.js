@@ -446,14 +446,14 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 openLandingPage: function (opt) {
                     var page_id = opt.id ? opt.id : 0;
-                    var page_checksum = opt.checksum ? opt.checksum : 0;
+                    var page_checksum = opt.checksum ? opt.checksum : 0;                    
                     this.addWorkSpace({type: '',
                         title: "Loading...",
                         sub_title: 'Landing Page',
                         tab_icon: 'lpages',
                         workspace_id: 'landingpage_' + page_checksum,
                         url: 'landingpages/landingpage',
-                        params: {page_id: page_id, parent: opt.parent, editable: opt.editable}
+                        params: {page_id: page_id, parent: opt.parent, editable: opt.editable,parentPageId:opt.parentPageId}
 
                     });
                 }

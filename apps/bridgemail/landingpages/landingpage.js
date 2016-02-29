@@ -30,6 +30,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                     this.meeEditor = false;
                     if (this.options.params) {                        
                         this.editable = this.options.params.editable;
+                        this.templatePageId = this.options.params.parentPageId;
                     }                   
                     this.render();
                 },

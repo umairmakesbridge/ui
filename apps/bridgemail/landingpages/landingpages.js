@@ -244,6 +244,7 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                     }, this));
                 },
                 createLandingPage: function (  ) {
+                    var templateId = this.app.get("env")!= 'production'?"kzaqwNe26Ii17Mj20kbhui":"zdTyioJp17Eh20Km21zbgFyh";
                     this.app.showAddDialog(
                     {
                       app: this.app,
@@ -254,13 +255,14 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                       emptyError : 'Landing page name can\'t be empty',
                       createURL : '/pms/io/publish/saveLandingPages/',
                       fieldKey : "name",
-                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),category:"Marketing"},
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),category:"Marketing",parentPageId:templateId},
                       saveCallBack :  _.bind(this.createPage,this)
                     });
                 },
                 createPage: function(txt,json){
                     if(json[0]=="success"){
-                        this.app.mainContainer.openLandingPage({"id":json[1],"checksum":json[2],"parent":this,editable:true});        
+                        var templateId = this.app.get("env")!= 'production'?"kzaqwNe26Ii17Mj20kbhui":"zdTyioJp17Eh20Km21zbgFyh";
+                        this.app.mainContainer.openLandingPage({"id":json[1],"checksum":json[2],"parent":this,editable:true,parentPageId:templateId});        
                         this.headBadge();
                         this.getLandingPages();
                     }
