@@ -106,11 +106,11 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                     }
                                 }
                             }else{
-                                this.addReport('campaigns');
+                               // this.addReport('campaigns');
                             }
                         }
                         else{
-                            this.addReport('campaigns');
+                            //this.addReport('campaigns');
                         }
                         
                     },this));

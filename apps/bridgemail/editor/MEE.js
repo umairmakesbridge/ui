@@ -6853,7 +6853,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     _AjaxParameters.Url = "/pms/io/form/getSignUpFormData/?" + options._BMSTOKEN + "&type=search&offset=" + forms_offset;
                                     returnData = SendServerRequest(_AjaxParameters);
                                     options._app.showLoading(false, myElement.find(".ulFormBlocks"));
-                                    if(returnData[0] && returnData[0]=="err"){
+                                    if(returnData && returnData[0] && returnData[0]=="err"){
                                         myElement.find("#FBResultDiv").html(returnData[1]);
                                         myElement.find("#FBResultDiv").show();      
                                         myElement.find(".formDroppable").hide();

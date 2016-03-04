@@ -39,6 +39,7 @@ define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylanding
                     this.showUseButton = this.options.showUse;
                     this.showRemoveButton = this.options.showRemove;
                     this.showCheckbox = this.options.showCheckbox;
+                    this.showSummaryChart = this.options.showSummaryChart;
                     this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.render();
                     //this.model.on('change',this.renderRow,this);
@@ -51,10 +52,11 @@ define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylanding
                     this.$el.html(this.template({
                         model: this.model
                     }));
-                    if(this.showUseButton){
+                    if(this.showUseButton || this.showSummaryChart){
                         this.$el.attr("data-checksum",this.model.get("pageId.checksum"))
                     }
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    
                     this.initControls();
 
                 },
