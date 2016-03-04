@@ -638,7 +638,7 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
 /* ---------------------- */
 
 
-.topHandlers { position:absolute; right:-25px;  background:#94CF1E; width:25px; height:80px; top:-1px; z-index:99;
+.topHandlers { position:absolute; right:-1px;  background:#94CF1E; width:120px; height:25px; top:-1px; z-index:99;
                -webkit-border-radius: 0 2px 2px 0 ;
                -moz-border-radius:  0 2px 2px 0 ;
                border-radius:  0 2px 2px 0; 
@@ -646,12 +646,25 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
                -webkit-box-shadow:3px 0px 8px rgba(148, 207, 30, 0.5);
                -moz-box-shadow: 3px 0px 8px rgba(148, 207, 30, 0.5);
                box-shadow: 3px 0px 8px rgba(148, 207, 30, 0.5);
+               transition: all .2s;
+               -webkit-transition: all .2s;
+               -moz-transition: all .2s;
 
 }
-
-.topHandlers div { cursor:pointer;height:25px;width:25px;background:#03d3ff;}
+.mce-highlight-div .topHandlers{
+    top : -25px;
+}
+.topHandlers_wrap{
+    font-size: 1px;
+    height: 0;
+    position: relative;
+}
+.topHandlers div { cursor:pointer;height:25px;width:25px;background:#03d3ff;float:left;}
 .topHandlers div i { width:25px; height:25px;background:#03d3ff;}
-.topHandlers div.myHandle { cursor:move;}
+.topHandlers div.myHandle { cursor:move;width: 55px;}
+.topHandlers .icon.copy  { background-position: right center; margin:0px !important;}
+.topHandlers .icon.delete  { background-position: right center;}
+.topHandlers .icon.move  { background-position: 4px center; width:55px;}
 
 .myDroppable.hover { border:1px solid #03d3ff; 
                      -webkit-box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);
