@@ -16,13 +16,13 @@
                 var crt = this.parentNode.cloneNode(true);
                 var parentcsHaveData = $(e.currentTarget).parent().parent()
                 crt.id = "drag-class";
-                crt.style.backgroundColor = "#fff";crt.style.border="1px solid #a9c2d5";crt.style.borderTop="10px solid #a9c2d5";crt.style.zIndex=-1;
+                crt.style.backgroundColor = "transparent";crt.style.border="1px solid #a9c2d5";crt.style.borderTop="10px solid #a9c2d5";crt.style.zIndex=-1;
                 crt.style.position = "absolute"; crt.style.top = parentcsHaveData.offset().top+"px"; crt.style.left = (parentcsHaveData.offset().left-1)+"px";crt.style.listStyle = "outside none none";               
                 crt.innerHTML = "";crt.style.width = parentcsHaveData.width() +"px";crt.style.height=parentcsHaveData.height()+"px";
                 document.body.appendChild(crt);                
                 e.originalEvent.dataTransfer.setData("text", "text"); 
                 try{
-                    e.originalEvent.dataTransfer.setDragImage(crt, parseInt($(this).width()), 0); 
+                    e.originalEvent.dataTransfer.setDragImage(crt, parseInt(parentcsHaveData.width()), 0); 
                 }
                 catch(e){
                     

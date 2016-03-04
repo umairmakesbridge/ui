@@ -842,24 +842,29 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                    }
                                  var type = "add"; // needs to be dynamic 
                                  var userId = options._app.get("user").userId;
-                                 
+                                 var isScriptTrue = true;
                                  
                                  if((embedval.match(/facebook/g) && embedval.match(/facebook/g).length > 0)){
-                                      mee.isActionScriptSet = embedval;
+                                      
                                       var snippetType = "facebook";
-                                      mee.saveAjaxActionScript({type:type,embedval:embedval,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedval,dialog:dialog})
+                                      mee.saveAjaxActionScript({type:type,embedval:embedval,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedval,dialog:dialog,isScriptTrue:true})
+                                 }else if(embedval ==""){
+                                        mee.saveAjaxActionScript({type:type,embedval:embedval,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedval,dialog:dialog,isScriptTrue:true})
                                  }else{
-                                     mee.saveAjaxActionScript({embedval:"",dialog:dialog,userId:userId,snippetType:snippetType,landingPageId:options.pageId})
+                                     isScriptTrue = false;
+                                     mee.saveAjaxActionScript({embedval:embedval,dialog:dialog,userId:userId,snippetType:snippetType,landingPageId:options.pageId,isScriptTrue:false})
                                  }
-                                 if( (embedvalG.match(/google/g) && embedvalG.match(/google/g).length > 0)){
+                                 if( (embedvalG.match(/google/g) && embedvalG.match(/google/g).length > 0) && isScriptTrue){
                                      if(snippetTypeG){
                                          snippetType = snippetTypeG;
                                      }
                                      var snippetType = "google";
-                                      mee.isActionScriptSetG = embedvalG;
-                                     mee.saveAjaxActionScript({type:type,embedval:embedvalG,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedvalG,dialog:dialog,closeDialog:true})
+                                     mee.saveAjaxActionScript({type:type,embedval:embedvalG,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedvalG,dialog:dialog,closeDialog:true,isScriptTrue:true})
+                                 }else if(embedvalG =="" && isScriptTrue){
+                                     mee.saveAjaxActionScript({type:type,embedval:embedvalG,userId:userId,snippetType:"google",landingPageId:options.pageId,snippetValue:encodeEmbedvalG,dialog:dialog,closeDialog:true,isScriptTrue:true})
                                  }else{
-                                     mee.saveAjaxActionScript({embedval:"",dialog:dialog,userId:userId,snippetType:"google",landingPageId:options.pageId,closeDialog:true})
+                                     isScriptTrue = false;
+                                     mee.saveAjaxActionScript({embedval:embedvalG,dialog:dialog,userId:userId,snippetType:"google",landingPageId:options.pageId,closeDialog:true,isScriptTrue:isScriptTrue})
                                  }
                                  
                                  
@@ -867,7 +872,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 },
                                 mee.saveAjaxActionScript = function(embedObj){
                                     var dialog = embedObj.dialog
-                                    if(embedObj.embedval !="" && embedObj.type=="add"){
+                                    if(embedObj.embedval !="" && embedObj.type=="add" && embedObj.isScriptTrue){
                                      options._app.showLoading("Saving tracking Snippet...", dialog.getBody());
                                      var saveUrl = "/pms/events/thirdPartyTrackingSnippet.jsp";
                                     $.ajax({
@@ -879,6 +884,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                var result = jQuery.parseJSON(data);
                                                if (result.result=="success") {
                                                    options._app.showMessge("Tracking Snippet added successfully", $("body"));
+                                                   if(embedObj.snippetType =="facebook"){
+                                                       mee.isActionScriptSet = embedObj.snippetValue;
+                                                   }
+                                                   if(embedObj.snippetType =="google"){
+                                                      mee.isActionScriptSetG = embedObj.snippetValue; 
+                                                   }
                                                    if(embedObj.closeDialog){
                                                        dialog.hide();
                                                      
@@ -891,7 +902,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            }
                                        });
                                    
-                                 }else if(embedObj.embedval==""){
+                                 }else if(embedObj.embedval=="" && embedObj.isScriptTrue){
                                                 var type = 'delete';
                                                   if(embedObj.closeDialog){
                                                        dialog.hide();
@@ -1560,6 +1571,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find('.embedvido-wrap').removeAttr('style');
                                     oHtml.find('.editvideopanel').remove();
                                     oHtml.find('.preloadGif').remove();
+                                    // Remove Highlight 
+                                    oHtml.find('.csHaveData').removeClass('mce-highlight-div');
+                                    oHtml.find('.mce-edit-focus').removeClass('mce-edit-focus');
                                     //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
                                     oHtml.find(".drapableImageContainer").each(function (index, object) {
                                         var imageContainer = $(object);
@@ -5059,6 +5073,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         meeIframe.find("#" + editor.id).data('tinymce', true);
                                                         editor.on("mouseDown", function (e) {
                                                             selectedLinkFromTinyMCE = e.target;
+                                                            
                                                         });
                                                         editor.on("AddUndo", function (e) {
                                                             if (editor.undoManager.hasUndo() || editor.undoManager.hasRedo()) {
@@ -5072,7 +5087,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             myElement.find(".alertButtons").hide();
                                                             var tiny_editor_selection = editor.selection;
                                                             var currentNode = tiny_editor_selection.getNode();
-                                                           
+                                                            $(tiny_editor_selection.getSelectedBlocks()).closest('.csHaveData').addClass('mce-highlight-div');
                                                             isElementClicked = false;
                                                              $(editor.bodyElement).parents('body').find('.mce-floatpanel').removeClass('fixed-panel');
                                                             var toolbar = $(editor.bodyElement).parents('body').find('.mce-floatpanel');
@@ -5114,11 +5129,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
                                                                               $(val).css({top:scrollPosition+"px","left":"0"});
                                                                             }else{
-                                                                               $(val).css({top:"0px","left":"0"}); 
+                                                                                        $(val).css({top:"0px","left":"0"}); 
                                                                             }
                                                                     setTimeout(function(){ $(val).addClass('fixed-panel'); }, 50);
                                                                     
-                                                                    setTimeout(function(){ myElement.find('.disabled-toolbar').css('visibility','hidden'); }, 100);
+                                                                    setTimeout(function(){ myElement.find('.disabled-toolbar').css('visibility','hidden');}, 100);
                                                                 }
                                                             })
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A" || currentNode.parentNode.nodeName == "A" || currentNode.parentNode.nodeName == "a") {
@@ -5362,7 +5377,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     function (e) {
                                                         e.stopPropagation();
                                                         meeIframe.find(".topHandlers").remove();                                                                                                                
-
+                                                        meeIframe.find('.csHaveData').removeClass('mce-highlight-div');
                                                         if (!IsStyleActivated) {
                                                                                                                         
                                                             $(this).addClass("hover");
@@ -5393,17 +5408,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         }
 
-
                                         //-------------- Initialize Again all nested controls after dropped-------------------//:
                                         //Droppable:
                                         oHtml.find(".myDroppable").andSelf().filter(".myDroppable").each(function (i, o) {
                                             CreateDroppableWithAllFunctions(o);
+                                            attachClickEvent(o);
                                             DropableMouseEnterLeave($(o));                                            
                                         });
 
                                         //Moving Handlers - Mouse Hover
                                         oHtml.find(".csHaveData").andSelf().filter(".csHaveData").each(function (i, o) {
                                             InitializeElementWithDraggable($(o));
+                                            attachClickEvent(o);
                                             InitializeMouseHover($(o));                                            
                                         });
 
@@ -6144,6 +6160,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var d1WithDroppable = InitializeWithDropable(d1WithDraggable);
 
                                     return d1WithDroppable;
+                                }
+                                function attachClickEvent(object){
+                                    var d1;
+                                    if (object == null) {
+                                        console.log('object is empty');
+                                        //d1 = CreateDroppable();
+                                    }
+                                    else {
+                                        d1 = $(object);
+                                    }
+                                    
+                                    d1.click(function(e){
+                                           $(this).addClass('mce-highlight-div');
+                                          // e.stopPropagation();
+                                        })
+
+                                    //return d1WithDroppable;
                                 }
 
                                 var InsertDroppableInEmpty = function (sender, listOfElements) {
