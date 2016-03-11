@@ -1,4 +1,4 @@
-define(['text!reports/html/campaign_pie_chart.html','highcharts','export-chart'],
+define(['text!reports/html/campaign_pie_chart.html','highcharts','export-chart','funnel-chart'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -80,8 +80,8 @@ function (template) {
                     colors: this.colors,
                     yAxis: {
                         lineWidth:0,
-                        minorGridLineWidth:0,
-                        gridLineColor:'transparent',
+                        minorGridLineWidth:1,
+                        gridLineColor:'#cbd0d3',
                         min: 0,
                         title: {
                             text: '',
@@ -156,6 +156,46 @@ function (template) {
                         }
                   ]    
                 }
+                
+                Highcharts.setOptions({
+                    lang: {
+                        thousandsSep: ',',
+                        contextButtonTitle:'Choose an output format'
+                    }
+                });
+                
+                this.$el.highcharts(options);                           
+            },
+            createFunnelChart:function(_data){
+                            
+               var options = {
+                    chart: {
+                        type: 'funnel',
+                        marginRight: 80
+                    },
+                    title: {
+                        text: this.title,
+                        x: -50
+                    },
+                    colors: this.colors,
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b> ({point.y:,.0f})',
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                                softConnector: true
+                            },
+                            neckWidth: '30%',
+                            neckHeight: '25%'                            
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: _data,
+                }
+                
                 
                 Highcharts.setOptions({
                     lang: {

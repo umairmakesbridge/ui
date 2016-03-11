@@ -61,8 +61,18 @@ function (template) {
                     var _li = $(this).parents("li");
                     _li.find("input.radiopanel").iCheck("check");
                 });
+                this.$('input.checkinput').iCheck({
+                        checkboxClass: 'checkinput'
+                });
                 this.$(".select-target").chosen({ width: "200px", disable_search: "false"});
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                
+                this.$('input.checkinput').on('ifChecked', _.bind(function(event){
+                     this.$(".right_columnLinkGUI textarea").css("text-decoration","underline");   
+                },this));
+                this.$('input.checkinput').on('ifUnchecked', _.bind(function(event){
+                     this.$(".right_columnLinkGUI textarea").css("text-decoration","none");   
+                },this));
             },
             /**
              * Render Row view on page.
@@ -82,6 +92,14 @@ function (template) {
               this.$(".tcontent").hide();
               this.activeTab = obj.attr("id");
               this.$("div."+obj.attr("id")+"Div").show();      
+              if(this.activeTab=="_addNewSocialLink"){
+                  this.$(".underline-checkbox").css("top","122px");
+              }
+              else{
+                  this.$(".underline-checkbox").css("top","48px");
+              }
+                  
+                  
             },
             insertLink:function(dialog){
                 var imgLink = null;
@@ -109,6 +127,7 @@ function (template) {
             showHyperLink:function(){
                if (this.linkType == "image") { 
                 this.$("div.linkImagePreview").show();
+                this.$(".underline-checkbox").hide();
                 this.$("div.textAreaDivfortextLink").hide();
                 var imgObj = this.hiddenObj.is("img")?this.hiddenObj:this.hiddenObj.find("img");
                 this.$("img").attr("src", imgObj.attr("src"));                
@@ -119,6 +138,7 @@ function (template) {
                 else if(this.linkType == "text"){                    
                     // Selection is text from editor 
                     this.$("div.linkImagePreview").hide();
+                    this.$(".underline-checkbox").show();
                     this.$("div.textAreaDivfortextLink").show();                    
                     this.$("textarea.linkTextArea").val(this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({
                         format: 'text'
@@ -171,6 +191,14 @@ function (template) {
                 var _a_href = anchorObj.attr("href").toLowerCase();
                 var actual_href = anchorObj.attr("href");
                 var actual_target = anchorObj.attr("target");
+                if(anchorObj.css("text-decoration")=="underline"){
+                    this.$(".underline-checkbox input").prop("checked",true);
+                    this.$(".right_columnLinkGUI textarea").css("text-decoration","underline");
+                }
+                else{
+                    this.$(".underline-checkbox input").prop("checked",false);
+                    this.$(".right_columnLinkGUI textarea").css("text-decoration","none");
+                }
                 if(_a_href.startsWith("mailto:")){
                     var showSubject = $.getUrlVar(_a_href,'subject');
                     _a_href = _a_href.replace("?subject="+showSubject,"");
@@ -299,7 +327,7 @@ function (template) {
                 this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
                 var selected_node = this.tiny_editor_selection.getNode();
                 var selected_color = 'color:inherit';
-                var selected_text_decoration = 'text-decoration:underline;';
+                var selected_text_decoration = this.$("input.checkinput:checked").length?'text-decoration:underline;':'';
                 
                 if(selected_node){
                     if(selected_node.style && selected_node.style.color){
@@ -324,7 +352,7 @@ function (template) {
                 
                 if (selected_node.nodeName == "a" || selected_node.nodeName == "A") {                    
                     selected_node.setAttribute("href", postBackupLink);
-                    if(target){
+                    if(target){ 
                         selected_node.setAttribute("target", target);
                     }
                     else{
@@ -338,6 +366,12 @@ function (template) {
                     }
                     if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val()){
                         selected_node.innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
+                    }
+                    if(this.$("input.checkinput:checked").length){
+                        selected_node.style.textDecoration = "underline";
+                    }
+                    else{
+                        selected_node.style.textDecoration = "none";
                     }
                 }
                 else {                    

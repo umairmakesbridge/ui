@@ -244,19 +244,24 @@ function (template, AutobotCollection, botRowView) {
                 saveCall:function(){
                     var col2 = this.$(this.col2).find(".bDiv tbody");
                     if(col2.find("tr").length>0){
-                       var pagesArray =  {};
-                       var objectArray = [];
-                        var t =1;
-                        _.each(this.botsModelArray,function(val,key){
-                           pagesArray["page"+t] = [{"checksum":val.get("botId.checksum"),"encode":val.get("botId.checksum")}] ;
-                           objectArray.push({"id":val.get("botId.encode"),"checked":true})
-                           t++;
-                        },this);   
-                        this.parent.modelArray = this.botsModelArray;
-                        this.parent.pagesArray = pagesArray;
-                        this.parent.objects = objectArray;
-                        this.dialog.hide();
-                        this.parent.createAutobots();
+                       if(this.botsModelArray.length <= 6){  
+                            var pagesArray =  {};
+                            var objectArray = [];
+                             var t =1;
+                             _.each(this.botsModelArray,function(val,key){
+                                pagesArray["page"+t] = [{"checksum":val.get("botId.checksum"),"encode":val.get("botId.checksum")}] ;
+                                objectArray.push({"id":val.get("botId.encode"),"checked":true})
+                                t++;
+                             },this);   
+                             this.parent.modelArray = this.botsModelArray;
+                             this.parent.pagesArray = pagesArray;
+                             this.parent.objects = objectArray;
+                             this.dialog.hide();
+                             this.parent.createAutobots();
+                        }
+                        else{
+                            setTimeout(_.bind(function(){this.app.showAlert("You cann't select more than 6 autobots",this.$el)},this),100);
+                        }
                     }
                     else{
                         this.app.showAlert("Please select at least on autobot",this.$el);

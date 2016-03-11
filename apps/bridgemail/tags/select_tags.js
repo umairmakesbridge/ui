@@ -82,20 +82,25 @@ define(['text!tags/html/select_tags.html', 'bms-mapping'],
                 saveCall:function(){
                     var col2 = this.$(".col2 .tagslist");
                     var tags = col2.find("li");
-                    if(tags.length>0){                       
-                       var objectArray =[];                   
-                       var tagVal = "";
-                       var count = "0";
-                        _.each(tags,function(val,key){                           
-                           tagVal = $(val).find(".tag span").text();
-                           count = $(val).find(".tag .badge").text();
-                           objectArray.push({"id":tagVal,"checked":true});                           
-                           this.tagsModelArray.push(new Backbone.Model({tag:tagVal,subCount:count}));
-                        },this);   
-                        this.parent.modelArray = this.tagsModelArray;                        
-                        this.parent.objects = objectArray;
-                        this.dialog.hide();
-                        this.parent.createTags();
+                    if(tags.length>0){
+                       if(tags.length <= 10){ 
+                        var objectArray =[];                   
+                        var tagVal = "";
+                        var count = "0";
+                         _.each(tags,function(val,key){                           
+                            tagVal = $(val).find(".tag span").text();
+                            count = $(val).find(".tag .badge").text();
+                            objectArray.push({"id":tagVal,"checked":true});                           
+                            this.tagsModelArray.push(new Backbone.Model({tag:tagVal,subCount:count}));
+                         },this);   
+                         this.parent.modelArray = this.tagsModelArray;                        
+                         this.parent.objects = objectArray;
+                         this.dialog.hide();
+                         this.parent.createTags();
+                        }
+                        else{
+                           setTimeout(_.bind(function(){this.app.showAlert("You cann't select more than 10 tags",this.$el)},this),100); 
+                        }
                     }
                     else{
                         this.app.showAlert("Please select at least on tag",this.$el);

@@ -1,36 +1,39 @@
-define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
-        function (template, barChartPage) {
+define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/campaign_bar_chart'],
+        function (template, reportBlock ,barChartPage) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',
-                className: 'act_row',
+                className: 'rpt_detail-wrap',
                 events: {
-                    'click .delete': 'removeReport',
+                    'click .rpblue-delete': 'removeReport',
                     'click .add-msg-report': 'openSelectionDialog',
-                    'click .edit': 'openSelectionDialog',
+                    'click .rpt-add-report': 'openSelectionDialog',
+                    'click .rpblue-edit': 'openSelectionDialog',
                     "keyup #daterange": 'showDatePicker',
                     "mouseup #daterange" : 'showSelected',
                     "click #clearcal": 'hideDatePicker',
                     "click .calendericon": 'showDatePickerFromClick',
                     "click .percent": 'showPercentDiv',
                     "click .icons-bar-chart .icons":'changeChart',
-                    "click .tagsexpand":"expandCollapseTags"
+                    "click .tagsexpand":"expandCollapseTags",
+                    'click .funnel-tabs-btns li':'changeLevel'
                 },
                 initialize: function () {
-                    this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'darkblue', iconClass: 'open'},
-                        landingpages: {label: 'Landing Pages', colorClass: 'yellow', iconClass: 'form2'},
-                        nurturetracks: {label: 'Nurture Tracks', colorClass: 'blue', iconClass: 'track'},
-                        autobots: {label: 'Autobots', colorClass: 'grey', iconClass: 'autobot'},
-                        tags: {label: 'Tags', colorClass: 'green', iconClass: 'tags'},
-                        webforms: {label: 'Signup Forms', colorClass: '', iconClass: 'form'},
+                    this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'rpt-campaign', iconClass: 'rpblue-campagin'},
+                        landingpages: {label: 'Landing Pages', colorClass: 'rpt-landingpages', iconClass: 'rpblue-lp'},
+                        nurturetracks: {label: 'Nurture Tracks', colorClass: 'rpt-nt', iconClass: 'rpblue-nt'},
+                        autobots: {label: 'Autobots', colorClass: '.rpt-autobots', iconClass: 'rpblue-autobots'},
+                        tags: {label: 'Tags', colorClass: 'rpt-tag', iconClass: 'rpblue-tag'},
+                        webforms: {label: 'Signup Forms', colorClass: 'rpt-webforms', iconClass: 'rpblue-webforms'},
                         targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'},
-                        webstats: {label: 'Web Stats', colorClass: 'yellow', iconClass: 'webstats'}
+                        webstats: {label: 'Web Stats', colorClass: 'rpt-webstats', iconClass: 'rpblue-webstats'},
+                        funnel: {label: 'Funnel', colorClass: 'rpt-funnel', iconClass: 'rpblue-funnel'}
 
                     };
                     this.webstats = {
-                        "uv": {title: "Unique Visitors", subtitle: "", yAxisText: "Unique Visits", xAxisText: "", barColor: "#93be4c"},
-                        "pv": {title: "Page Views", subtitle: "", yAxisText: "Page Views", xAxisText: "", barColor: "#2f93e5"},
-                        "rv": {title: "Return Visitors", subtitle: "", yAxisText: "Return Visitor Count", xAxisText: "", barColor: "#dfaa2c"},
+                        "uv": {title: "Unique Visitors", subtitle: "", yAxisText: "Unique Visits", xAxisText: "", barColor: "#44c875"},
+                        "pv": {title: "Page Views", subtitle: "", yAxisText: "Page Views", xAxisText: "", barColor: "#ffb149"},
+                        "rv": {title: "Return Visitors", subtitle: "", yAxisText: "Return Visitor Count", xAxisText: "", barColor: "#5b9ecb"},
                         "seo": {title: "Top Keywords", subtitle: "", yAxisText: "Keywords count", xAxisText: "Top Keywords", xAxisLabelDisabled: true, multipColrs: true},
                         "lcdetail": {title: "Top Companies", subtitle: "", yAxisText: "Views Count", xAxisText: "Top Companies Visited", xAxisLabelDisabled: true, multipColrs: true},
                         "ref": {title: "Top Referral Links", subtitle: "", yAxisText: "Count", xAxisText: "Top Referral Links", xAxisLabelDisabled: true, multipColrs: true},
@@ -44,6 +47,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.fromDate = null;
                     this.toDate = null;
                     this.dateRange = 0;
+                    this.doDraw = false;
                     this.loadReport = this.options.loadReport;
                     this.fromClick=false;
                     this.row_obj = this.options.row_obj;
@@ -66,7 +70,8 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     var mapObj = this.mapping[this.reportType];
                     this.$el.html(this.template({
                         rType: mapObj.label,
-                        rIcon: mapObj.iconClass
+                        rIcon: mapObj.iconClass,
+                        modelArray: this.modelArray
                     }));
                     this.$el.addClass(mapObj.colorClass);
 
@@ -83,21 +88,21 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.dateRangeControl = this.$('#daterange').daterangepicker();
                     this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange, this));
                     this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
-                    this.$('input.checkinput').iCheck({
+                    this.$('input.icheckbox').iCheck({
                         checkboxClass: 'checkinput'
                     });
-                    this.$('input.checkinput').on('ifChecked', _.bind(function(event){
-                        if(this.fromClick){
-                            var selectedStates = $.map( this.$("input.checkinput:checked"), function( val, i ) {
+                    this.$('input.icheckbox').on('ifChecked', _.bind(function(event){                        
+                        if(this.fromClick){                                                    
+                            var selectedStates = $.map( this.$("input.icheckbox:checked"), function( val, i ) {                                
                                 return val.value;
                            }).join();
                            this.modelArray[0].id = selectedStates;
                            this.drawMultiCharts();
                       }
                     },this));
-                     this.$('input.checkinput').on('ifUnchecked', _.bind(function(event){
-                        if(this.fromClick){ 
-                            var selectedStates = $.map( this.$("input.checkinput:checked"), function( val, i ) {
+                     this.$('input.icheckbox').on('ifUnchecked', _.bind(function(event){
+                        if(this.fromClick){                                                         
+                            var selectedStates = $.map( this.$("input.icheckbox:checked"), function( val, i ) {                                
                                 return val.value;
                            }).join();
                            this.modelArray[0].id = selectedStates;
@@ -235,51 +240,28 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.saveSettings();
                 },
                 loadRows: function () {
-                    if (this.reportType == "landingpages") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["landingpages/landingpage_row"], _.bind(function (lpRow) {
-                            this.lpRow = lpRow;
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadLandingPages();
-                            }
-                        }, this));
-                    } else if (this.reportType == "campaigns") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["campaigns/campaign_row"], _.bind(function (campRow) {
-                            this.campRow = campRow;
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadCampaigns();
-                            }
-                        }, this));
-                    } else if (this.reportType == "autobots") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["autobots/autobot"], _.bind(function (botRow) {
-                            this.botRow = botRow;
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadAutobots();
-                            }
-                        }, this));
-                    } else if (this.reportType == "webforms") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["forms/formlistings_row"], _.bind(function (formRow) {
-                            this.formRow = formRow;
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadSignupforms();
-                            }
-                        }, this));
-                    } else if (this.reportType == "nurturetracks") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["nurturetrack/track_row"], _.bind(function (trackRow) {
-                            this.trackRow = trackRow;                            
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadNurtureTracks();
-                            }
-                        }, this));
+                    if (this.reportType == "landingpages") {                                                                            
+                        if (this.objects.length) {
+                            this.loadLandingPages();
+                        }
+                        
+                    } else if (this.reportType == "campaigns") {                                                                                                
+                        if (this.objects.length) {
+                            this.loadCampaigns();
+                        }
+                        
+                    } else if (this.reportType == "autobots") {                        
+                        if (this.objects.length) {
+                            this.loadAutobots();
+                        }
+                    } else if (this.reportType == "webforms") {                        
+                        if (this.objects.length) {
+                            this.loadSignupforms();
+                        }
+                    } else if (this.reportType == "nurturetracks") {                        
+                        if (this.objects.length) {
+                            this.loadNurtureTracks();
+                        }                        
                     }
                     else if (this.reportType == "targets") {
                         this.app.showLoading('Loading...', this.$el);
@@ -298,6 +280,10 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     } else if (this.reportType == "webstats") {
                         if (this.objects.length) {
                             this.loadWebStats();
+                        }
+                    }else if (this.reportType == "funnel") {
+                        if (this.objects.length) {
+                            this.loadFunnel();
                         }
                     }
 
@@ -320,6 +306,8 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         this.openTagsDialog();
                     } else if (this.reportType == "webstats") {
                         this.openWebStatsDialog();
+                    } else if (this.reportType == "funnel") {
+                        this.openFunnelDialog();
                     }
 
                 },
@@ -332,13 +320,16 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     } else if (this.reportType == "autobots") {
                         this.loadAutobots();
                     } else if (this.reportType == "webforms") {
-                        //this.openSignupFormsDialog();
+                        this.loadSignupforms();
                     } else if (this.reportType == "nurturetracks") {
                         this.loadNurtureTracks();
                     } else if (this.reportType == "tags") {
                         this.loadTags();
                     } else if (this.reportType == "webstats") {
                         this.loadWebStats();
+                    }
+                    else if (this.reportType == "funnel") {
+                        this.loadFunnel();
                     }
 
                 },
@@ -351,11 +342,11 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     } else if (this.reportType == "autobots") {
                         this.loadAutobotsSummary();
                     } else if (this.reportType == "webforms") {
-                        //this.openSignupFormsDialog();
+                        this.loadSignupformsSummary();
                     } else if (this.reportType == "nurturetracks") {
                         this.loadNurtureTrackSummary();
                     } else if (this.reportType == "tags") {
-                        this.drawTagsInOne();
+                        this.loadTagsSummary();
                     } else if (this.reportType == "webstats") {
                         this.createWebstats();
                     }
@@ -414,44 +405,40 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createPages: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        var _grid = this.$("#_grid tbody");
-                        var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        }                                                
+                        var _grid = this.$(".rpt-block-area");                                                
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var pageRow = new this.lpRow({model: val, sub: this, showCheckbox: true, maxWidth: _maxWidth});
-                            _grid.append(pageRow.$el);
-                        }, this);
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                            //this.chartPage = new barChartPage({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
-                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a']});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createPageChart();
-                            this.app.showLoading(false, this.$(".cstats"));
-                        //}, this));
+                            var rpBlock = new reportBlock({model: val, page: this, type: "page"});
+                           _grid.append(rpBlock.$el);
+                        }, this);                        
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#39c8a9', '#66a2cd']});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "370px"});
+                        this.createPageChart();                                                
                     }
                 },
                 createPageChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_pages_selected = this.$(".checkedadded").length;
+                    if (this.modelArray.length) {                        
+                        
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> landing pages selected');
+                            this.$(".total-count .rp-selected").html('landing pages selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> landing page selected');
+                            this.$(".total-count .rp-selected").html('landing page selected');
                         }
                         this.chart_data = {submitCount: 0, viewCount: 0};
                         
-                        _.each(this.modelArray, function (val, index) {
-                            if (this.$("[id='" + val.get("pageId.encode") + "']").hasClass("checkedadded")) {
-                                this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));
-                                this.chart_data['viewCount'] = this.chart_data['viewCount'] + parseFloat(val.get("viewCount"));
-                            }
+                        _.each(this.modelArray, function (val, index) {                            
+                            this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));
+                            this.chart_data['viewCount'] = this.chart_data['viewCount'] + parseFloat(val.get("viewCount"));
+                            
                         }, this);
                                                 
 
@@ -459,41 +446,41 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                             ['Page Views', this.chart_data["viewCount"]],
                             ['Submission', this.chart_data["submitCount"]]
                         ];
+                        
                         this.chartPage.createChart(_data);
-                        _.each(this.chart_data, function (val, key) {
+                        /*_.each(this.chart_data, function (val, key) {
                             this.$(".col-2 ." + key).html(this.app.addCommas(val));
-                        }, this);
+                        }, this);*/
                         
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                        
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> landing pages selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('landing pages selected');                        
                     }
 
                     this.saveSettings();
                 },
                 loadPagesSummary: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
                         this.showHideChartArea(true);
-                        var _grid = this.$("#_grid tbody");
-                        _grid.children().remove();
                         var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> landing page selected');
+                            this.$(".total-count .rp-selected").html('landing pages selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> landing pages selected');
-                        }                                              
+                            this.$(".total-count .rp-selected").html('landing page selected');
+                        }
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();                                                                      
                         _.each(this.modelArray, function (val, index) {
-                            var lpRow = new this.lpRow({model: val, sub: this, showSummaryChart: true});
+                            var lpRow = new reportBlock({model: val, page: this, type: "page","expandedView":true});
                             _grid.append(lpRow.$el);
                             this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("pageId.checksum")));
                             var URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=getLandingPagesSummaryCount";
                             var pageNum = val.get("pageId.encode");
-                            var post_data = {pageId: pageNum, toDate: this.toDate, fromDate: this.fromDate}
+                            var post_data = {pageId: pageNum, toDate: this.toDate, fromDate: this.fromDate,formId:val.get("formId.encode")}
                             $.post(URL, post_data).done(_.bind(function (sJson) {
                                 var summary_json = jQuery.parseJSON(sJson);
                                 if (summary_json[0] == "err") {
@@ -543,18 +530,18 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         }
                                         
                                         var _data = [{"name": "Views", "data": viewData}, {"name": "Submissions", "data": submitData}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4']});
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#39c8a9', '#66a2cd']});
                                         this.$("#chart-" + val.get("pageId.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
-                                            this.$("#stats-" + val.get("pageId.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
+                                            this.$("#stats-" + val.get("pageId.checksum") + " ." + key).html(this.app.addCommas(v));
                                             //this.$("#stats-" + val.get("pageId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
                                     
                                 }
                                 else {
-                                    this.$("#chart-" + val.get("pageId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for Landing page <i>"' + val.get("name") + '"</i> </p></div>');
+                                    this.$("#chart-" + val.get("pageId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for Landing page </p></div>');
                                 }
                             }, this));
 
@@ -567,7 +554,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.app.showLoading("Loading selection...", this.$el);
                     var campNums = this.objects.map(function (index) {
                         return index.id
-                    }).join()
+                    }).join();
                     var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=list_csv";
                     var post_data = {campNum_csv: campNums};
                     this.modelArray = [];
@@ -609,38 +596,37 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createCampaigns: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        var _grid = this.$("#_grid tbody");
-                        var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        }                                                
+                        var _grid = this.$(".rpt-block-area");                        
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var campRow = new this.campRow({model: val, sub: this, showCheckbox: true, maxWidth: _maxWidth});
-                            _grid.append(campRow.$el);
+                            var rpBlock = new reportBlock({model: val, page: this, type: "campaign"});
+                            _grid.append(rpBlock.$el);
                         }, this);
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createCampaignChart();
-                        //}, this));
+                        this.app.showLoading("Creating Chart...", this.$(".cstats"));                        
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#8b9ca6', '#ffba55', '#5c62b8','#67a1d1','#44c7a7']});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "370px"});
+                        this.createCampaignChart();                       
                     }
                 },
                 createCampaignChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_pages_selected = this.$(".checkedadded").length;
+                    if (this.modelArray.length) {
+                        this.app.showLoading("Creating Chart...", this.$(".cstats"));                                               
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaigns selected');
+                            this.$(".total-count .rp-selected").html('campaigns selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaign selected');
+                            this.$(".total-count .rp-selected").html('campaign selected');
                         }
-                        var _campaigns = $.map(this.$(".checkedadded"), function (el) {
-                            return el.id;
+                        var _campaigns = $.map(this.modelArray, function (el) {
+                            return el.get("campNum.encode");
                         }).join(",");
                         this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
                             , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
@@ -666,49 +652,50 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
                             var _data = [
+                                ['Sent', this.chart_data["sentCount"]],
                                 ['Opens', this.chart_data["openCount"]],
-                                ['Clicks', this.chart_data["clickCount"]],
                                 ['Page Views', this.chart_data["pageViewsCount"]],
+                                ['Clicks', this.chart_data["clickCount"]],                                
                                 ['Conversions', this.chart_data["conversionCount"]]
                             ];
 
                             this.chartPage.createChart(_data);
                             this.app.showLoading(false, this.$(".cstats"));
-                            _.each(this.chart_data, function (val, key) {
+                            /*_.each(this.chart_data, function (val, key) {
                                 this.$(".col-2 ." + key).html(this.app.addCommas(val));
                                 if(parseInt(val)!==0){
                                     this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
                                 }else{
                                     this.$(".col-2 ." + key+"Per").html("0%");
                                 }
-                            }, this);
+                            }, this);*/
 
                         }, this));
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                        
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('campaigns selected');                        
                     }
                     this.saveSettings();
 
                 },
                 loadCampaignsSummary: function () {
-                    if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
+                    if (this.modelArray.length) {                        
                         this.$(".bmsgrid").show();
                         this.showHideChartArea(true);
-                        var _grid = this.$("#_grid tbody");
-                        _grid.children().remove();
                         var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaigns selected');
+                            this.$(".total-count .rp-selected").html('campaigns selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaign selected');
-                        }                                              
+                            this.$(".total-count .rp-selected").html('campaign selected');
+                        }
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();                        
                         _.each(this.modelArray, function (val, index) {
-                            var campRow = new this.campRow({model: val, sub: this, showSummaryChart: true});
+                            var campRow = new reportBlock({model: val, page: this, type: "campaign","expandedView":true});
                             _grid.append(campRow.$el);
                             this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("campNum.checksum")));
                             var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=summaryDailyBreakUp";
@@ -733,7 +720,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         var summaries =  summary_json.summaries[0];
                                         var _d = 1;    
                                         if(days_report<=30){
-                                            for(var d=0;d<days_report;d++){
+                                            for(var d=0;d<=days_report;d++){
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
@@ -783,19 +770,19 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         }
                                         
                                         var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3', '#ffb864', '#8b9ca5']});
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
-                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            this.$("#stats-" + val.get("campNum.checksum") + " ." + key).html(this.app.addCommas(v));
+                                            //this.$("#stats-" + val.get("campNum.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
 
                                     //}, this));
                                 }
                                 else {
-                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for campaign <i>"' + val.get("name") + '"</i> </p></div>');
+                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for campaign </p></div>');
                                 }
                             }, this));
 
@@ -808,15 +795,15 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         return false;
                     }
                     if (flag) {
-                        this.$(".cols").removeClass("col1");
-                        this.$(".col-2").hide();
-                        this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
+                        this.$(".rpt-campign-listing").hide();
+                        this.$(".rpt-expand").show();
+                        //this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
                     }
                     else {
-                        this.$(".cols").addClass("col1");
-                        this.$(".col-2").show();
-                        this.$(".template-container").css({"overflow-y": 'auto', height: '420px'});
-                        this.$(".parent-container").removeAttr("style");
+                        this.$(".rpt-campign-listing").show();
+                        this.$(".rpt-expand").hide();
+                        //this.$(".template-container").css({"overflow-y": 'auto', height: '420px'});
+                        //this.$(".parent-container").removeAttr("style");
                     }
                 }
                 ,
@@ -868,38 +855,38 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createAutobots: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        var _grid = this.$("#_grid tbody");
-                        var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                         if(this.doDraw){
+                           this.sub.$(".report-empty").hide();
+                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.doDraw = false;
+                       }    
+                        var _grid = this.$(".rpt-block-area");                           
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var botRow = new this.botRow({model: val, sub: this, page: this, showCheckbox: true, maxWidth: _maxWidth});
-                            _grid.append(botRow.$el);
+                            var rpBlock = new reportBlock({model: val, page: this, type: "autobot"});
+                           _grid.append(rpBlock.$el);
                         }, this);
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createAutobotChart();
-                        //}, this));
+                                                
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#8b9ca6', '#ffba55', '#5c62b8','#67a1d1','#44c7a7']});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "370px"});
+                        this.createAutobotChart();
+                        
                     }
                 },
                 createAutobotChart: function () {
-                    if (this.$(".checkedadded").length) {
+                    if (this.modelArray.length) {
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_pages_selected = this.$(".checkedadded").length;
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                            this.$(".total-count .rp-selected").html('autobots selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                            this.$(".total-count .rp-selected").html('autobot selected');
                         }
-                        var _bots = $.map(this.$(".checkedadded"), function (el) {
-                            return el.id;
+                        var _bots = $.map(this.modelArray, function (el) {
+                            return el.get("botId.encode");
                         }).join(",");
                         this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
                             , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
@@ -925,6 +912,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
                             var _data = [
+                                 ['Sent', this.chart_data["sentCount"]],
                                 ['Opens', this.chart_data["openCount"]],
                                 ['Clicks', this.chart_data["clickCount"]],
                                 ['Page Views', this.chart_data["pageViewsCount"]],
@@ -933,7 +921,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
 
                             this.chartPage.createChart(_data);
                             this.app.showLoading(false, this.$(".cstats"));
-                            _.each(this.chart_data, function (val, key) {
+                            /*_.each(this.chart_data, function (val, key) {
                                 this.$(".col-2 ." + key).html(this.app.addCommas(val));        
                                 if(parseInt(val)!==0){
                                     this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
@@ -941,34 +929,33 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                 else{
                                     this.$(".col-2 ." + key+"Per").html("0%");
                                 }
-                            }, this);
+                            }, this);*/
 
                         }, this));
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                        
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('autobots selected');                        
                     }
                     this.saveSettings();
 
                 },
                 loadAutobotsSummary: function () {
-                    if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
+                    if (this.modelArray.length) {                        
                         this.showHideChartArea(true);
                         var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                            this.$(".total-count .rp-selected").html('autobots selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                            this.$(".total-count .rp-selected").html('autobot selected');
                         }
-                        var _grid = this.$("#_grid tbody");
+                        var _grid = this.$(".rpt-expand");
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var autobotRow = new this.botRow({model: val, page: this, sub: this, showSummaryChart: true});
+                            var autobotRow = new reportBlock({model: val, page: this, type: "autobot","expandedView":true});
                             _grid.append(autobotRow.$el);
                             this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("botId.checksum")));
                             var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=summaryDailyBreakUp";
@@ -1041,19 +1028,19 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                             }, this);
                                         }
                                         var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3', '#ffb864', '#8b9ca5']});
 
                                         this.$("#chart-" + val.get("botId.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
-                                            this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            this.$("#stats-" + val.get("botId.checksum") + " ." + key).html(this.app.addCommas(v));
+                                            //this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
                                     //}, this));
                                 }
                                 else {
-                                    this.$("#chart-" + val.get("botId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for autobot <i>"' + val.get("label") + '"</i> </p></div>');
+                                    this.$("#chart-" + val.get("botId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for autobot.</p></div>');
                                 }
                             }, this));
 
@@ -1063,7 +1050,26 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 //////********************* Signup Forms  *****************************************//////
                 loadSignupforms: function () {
-
+                    this.app.showLoading("Loading selection...", this.$el);
+                    var formIds = this.objects.map(function (index) {
+                        return index.id
+                    }).join()
+                    var URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
+                    var post_data = {formId_csv: formIds};
+                    this.modelArray = [];
+                    this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                        this.app.showLoading(false, this.$el);
+                        var _json = jQuery.parseJSON(data);
+                        _.each(_json.forms[0], function (val) {
+                            this.modelArray.push(new Backbone.Model(val[0]));
+                        }, this);                        
+                        if(this.toDate && this.fromDate){
+                            this.setDateRange();
+                        }
+                        else{
+                            this.createSignupForms();
+                        }
+                    }, this))
                 },
                 openSignupFormsDialog: function () {
                     var _width = $(document.documentElement).width() - 60;
@@ -1089,59 +1095,138 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createSignupForms: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        var _grid = this.$("#_grid tbody");
-                        var _maxWidth = this.$(".col1 .template-container").width() * .5;
-                        _grid.children().remove();
+                        if(this.doDraw){
+                           this.sub.$(".report-empty").hide();
+                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.doDraw = false;
+                       }    
+                       var _grid = this.$(".rpt-block-area");                       
+                       _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var formRow = new this.formRow({model: val, sub: this, page: this, showCheckbox: true, maxWidth: _maxWidth});
-                            _grid.append(formRow.$el);
-                        }, this);
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                            //this.chartPage = new barChartPage({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
-                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408']});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createSignupFormChart();
-                            this.app.showLoading(false, this.$(".cstats"));
-                        //}, this));
+                            var rpBlock = new reportBlock({model: val, page: this, type: "form"});
+                           _grid.append(rpBlock.$el);
+                        }, this);                        
+                        
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#39c8a9']});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "370px"});
+                        this.createSignupFormChart();                        
+                        
                     }
                 },
                 createSignupFormChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_pages_selected = this.$(".checkedadded").length;
+                    if (this.modelArray.length) {                        
+                        
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> signup forms selected');
+                            this.$(".total-count .rp-selected").html('forms selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> signup form selected');
+                            this.$(".total-count .rp-selected").html('form selected');
                         }
                         this.chart_data = {submitCount: 0};
-                        _.each(this.modelArray, function (val, index) {
-                            if (this.$("[id='" + val.get("formId.encode") + "']").hasClass("checkedadded")) {
-                                this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));
-                            }
+                        _.each(this.modelArray, function (val, index) {                            
+                            this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));                            
                         }, this);
 
                         var _data = [                            
                             ['Submission', this.chart_data["submitCount"]]
                         ];
                         this.chartPage.createChart(_data);
-                        _.each(this.chart_data, function (val, key) {
+                        /*_.each(this.chart_data, function (val, key) {
                             this.$(".col-2 ." + key).html(this.app.addCommas(val));
-                        }, this);
+                        }, this);*/
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                        
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> signup forms selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('forms selected');                        
                     }
                     this.saveSettings();
 
+                },
+                loadSignupformsSummary: function(){
+                    if (this.modelArray.length) {
+                        this.showHideChartArea(true);
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count .rp-selected").html('forms selected');
+                        }
+                        else {
+                            this.$(".total-count .rp-selected").html('form selected');
+                        }
+                        var _grid = this.$(".rpt-expand");
+                         _grid.children().remove();   
+                        _.each(this.modelArray, function (val, index) {
+                            var formRow = new reportBlock({model: val, page: this, type: "form","expandedView":true});
+                            _grid.append(formRow.$el);
+                            this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("formId.checksum")));
+                            var URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=getSignupFormSummaryCount";
+                            var formNum = val.get("formId.encode");
+                            var post_data = {formId: formNum, toDate: this.toDate, fromDate: this.fromDate}
+                            $.post(URL, post_data).done(_.bind(function (sJson) {
+                                var summary_json = jQuery.parseJSON(sJson);
+                                if (summary_json[0] == "err") {
+                                    this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                    return false;
+                                }
+                                if (summary_json.count !== "0") {                                    
+                                        var submitData = [];
+                                        var categories = [];
+                                        this.chart_data = {submitCount: 0};                                        
+                                        
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.summaries[0];
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                            for(var d=0;d<=days_report;d++){
+                                                var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                categories.push(c_date);
+                                                var sVal = summaries["summary"+_d];
+                                                if(sVal && c_date == moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM")){                                                
+                                                                                                        
+                                                    submitData.push(parseInt(sVal[0].submitCount));
+                                                                                                        
+                                                    this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
+                                                    _d = _d + 1;
+                                                }
+                                                else{                                                                                                        
+                                                    submitData.push(0);                                                    
+                                                }
+                                            }
+                                        }
+                                        else{
+                                            _.each(summary_json.summaries[0], function (sVal) {
+                                                categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));                                                                                                
+                                                submitData.push(parseInt(sVal[0].submitCount));
+                                                                                                
+                                                this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
+                                            }, this);
+                                        }
+                                        
+                                        var _data = [{"name": "Submissions", "data": submitData}];
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#39c8a9']});
+                                        this.$("#chart-" + val.get("formId.checksum")).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
+                                        this.chartPage.createChart(_data);
+                                        _.each(this.chart_data, function (v, key) {
+                                            this.$("#stats-" + val.get("formId.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
+                                            //this.$("#stats-" + val.get("pageId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                        }, this);
+                                    
+                                }
+                                else {
+                                    this.$("#chart-" + val.get("formId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for webform. </p></div>');
+                                }
+                            }, this));
+
+                        }, this);
+
+                    }
                 },
                 //////********************* Nurture Tracks  *****************************************//////
                 loadNurtureTracks: function () {
@@ -1187,16 +1272,27 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     }, this));
                 },
                 createNurtureTrack: function () {
-                    if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        if (this.modelArray.length == 1) {
-                            var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
-                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' ' + msgCountText + '</b>');
+                    if (this.modelArray.length) {                        
+                        if(this.doDraw){
+                           this.sub.$(".report-empty").hide();
+                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.doDraw = false;
+                       }          
+                        this.$(".nt-name").html(this.modelArray[0].get("name"));
+                        if(this.modelArray[0].get("status")=="D"){
+                            this.$(".nt-status").html("Paused");
+                            this.$(".nt-status")[0].className="cstatus pclr1 nt-status";
                         }
-                        else {
-                            this.$(".total-count").html('<strong class="badge">0</strong> nurture tracks selected');
+                        else if(this.modelArray[0].get("status")=="P" || this.modelArray[0].get("status")=="Q"){
+                            this.$(".nt-status").html("Pending");
+                            this.$(".nt-status")[0].className="cstatus pclr6 nt-status";
                         }
+                        else{
+                            this.$(".nt-status").html("Playing");
+                            this.$(".nt-status")[0].className="cstatus pclr18 nt-status";
+                        }
+                        this.$(".nt-msg-count").html('<i class="rpicon rpicon-two rp-msg-icon"></i>'+this.modelArray[0].get("msgCount"));
+                        
                         if (this.modelArray[0].get("messages")) {
                             this.getCampaignsFromNurtureTrack(this.modelArray[0].get("messages")[0]);
                         }
@@ -1217,9 +1313,8 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     }
                 },
                 getCampaignsFromNurtureTrack: function (messages, loadCampaigns) {
-                    var _grid = this.$("#_grid tbody");
-                    _grid.children().remove();
-                    var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                     var _grid = this.$(".rpt-block-area");
+                    _grid.children().remove();                    
                     this.checkSumArray = [];                    
                     var campNums = $.map(messages, _.bind(function (el) {
                         this.checkSumArray.push(el[0]["campNum.checksum"]);
@@ -1246,7 +1341,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                     val.set("trackId.encode", this.modelArray[0].get("trackId.encode"));
                                     val.set("order", order_no);
                                     order_no = order_no + 1;
-                                    var msgRow = new this.trackRow({model: val, sub: this, showMessage: true, maxWidth: _maxWidth});
+                                    var msgRow = new reportBlock({model: val, page: this, type: "nurturetrack"});
                                     _grid.append(msgRow.$el);
                                 }                                
                             }, this);
@@ -1254,26 +1349,19 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         if(loadCampaigns){
                             this.loadNTSummary();
                         }
-                        else{
-                            this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                            //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                                this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
-                                this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                                this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                                this.createNurtureTrackChart();
-                            //}, this));
+                        else{                                                        
+                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3', '#ffb864', '#8b9ca5']});
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                            this.chartPage.$el.css({"width": "100%", "height": "370px"});
+                            this.createNurtureTrackChart(campNums);                            
                         }
 
                     }, this));
                 },
-                createNurtureTrackChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var _campaigns = $.map(this.$(".checkedadded"), function (el) {
-                            return el.id;
-                        }).join(",");
+                createNurtureTrackChart: function (campNums) {
+                    if (campNums) {
+                        this.app.showLoading("Creating Chart...", this.$(".cstats"));                        
+                        var _campaigns = campNums;
                         this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
                             , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
                             twitterCount: 0, unSubscribeCount: 0};
@@ -1298,6 +1386,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
                             var _data = [
+                                ['Sent', this.chart_data["sentCount"]],
                                 ['Opens', this.chart_data["openCount"]],
                                 ['Clicks', this.chart_data["clickCount"]],
                                 ['Page Views', this.chart_data["pageViewsCount"]],
@@ -1318,10 +1407,8 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
 
                         }, this));
                     }
-                    else {
-                        this.$(".start-message").show();
-                        this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> message selected');
+                    else {                        
+                        this.$(".col-2 .campaign-chart").hide();                        
                     }
                     this.saveSettings();
                 },                
@@ -1336,24 +1423,15 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     }
                 },
                 loadNTSummary: function () {
-                    if (this.campArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        this.showHideChartArea(true);
-                        if (this.modelArray.length == 1) {
-                            var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
-                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' ' + msgCountText + '</b>');
-                        }
-                        else {
-                            this.$(".total-count").html('<strong class="badge">0</strong> nurture tracks selected');
-                        }
-                        var _grid = this.$("#_grid tbody");
+                    if (this.campArray.length) {                        
+                        this.showHideChartArea(true);                        
+                        var _grid = this.$(".rpt-expand");
                         _grid.children().remove();
                         var order_no = 1;
                         for(var i=0;i<this.checkSumArray.length;i++){
                         _.each(this.campArray, function (val, index) {
                             if(this.checkSumArray[i]==val.get("campNum.checksum")){
-                                var msgRow = new this.trackRow({model: val, sub: this, showSummaryChart: true});
+                                var msgRow = new reportBlock({model: val, page: this, type: "nurturetrack","expandedView":true});
                                 _grid.append(msgRow.$el);
                                 this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("campNum.checksum")));
                                 var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=summaryDailyBreakUp";
@@ -1428,15 +1506,14 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                                 }, this);
                                             }
                                             var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
-                                            this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+                                            this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3', '#ffb864', '#8b9ca5']});
 
                                             //this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
                                             this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
-                                            this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                            this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                             this.chartPage.createChart(_data);
                                             _.each(this.chart_data, function (v, key) {
-                                                this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
-                                                this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(this.chart_data["sentCount"]) * 100).toFixed(2) + "%");
+                                                this.$("#stats-" + val.get("campNum.checksum") + " ." + key).html(this.app.addCommas(v));                                                
                                             }, this);
                                         //}, this));
                                     }
@@ -1514,39 +1591,38 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 //////********************* Tags  *****************************************//////
                 ,
                 loadTags: function () {
-                    if (this.modelArray.length && this.$(".tagslist ul").children().length) {
+                    /*if (this.modelArray.length && this.$(".tagslist ul").children().length) {
                         this.$("#copy-camp-listing").show();
                         this.$(".tags-charts").remove();
                         this.createTags();
                     } else {                        
                         this.$("#copy-camp-listing").show();
                         this.$(".tags-charts").remove();
-                        this.$(".table-area .template-container").css("height","");
-                        this.app.showLoading("Loading selection...", this.$el);
-                        var tags_array = this.objects.map(function (index) {
-                            return index.id
-                        });
-                        this.modelArray = [];
-                        var post_data = {};
-                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";
-                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
-                            this.app.showLoading(false, this.$el);
-                            var _json = jQuery.parseJSON(data);
-                            _.each(_json.tagList[0], function (val) {
-                                if (tags_array.indexOf(val[0].tag) > -1) {
-                                    this.modelArray.push(new Backbone.Model(val[0]));
-                                }
-                            }, this);             
-                            this.createTags();
-                            /*if(this.toDate && this.fromDate){
-                                this.setDateRange();
+                        this.$(".table-area .template-container").css("height","");                       
+                    }*/
+                    this.app.showLoading("Loading selection...", this.$el);
+                    var tags_array = this.objects.map(function (index) {
+                        return index.id
+                    });
+                    this.modelArray = [];
+                    var post_data = {};
+                    var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";
+                    this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                        this.app.showLoading(false, this.$el);
+                        var _json = jQuery.parseJSON(data);
+                        _.each(_json.tagList[0], function (val) {
+                            if (tags_array.indexOf(val[0].tag) > -1) {
+                                this.modelArray.push(new Backbone.Model(val[0]));
                             }
-                            else{
-                                this.createTags();
-                            }*/
-                            
-                        }, this))
-                    }
+                        }, this);                                                             
+                        if(this.toDate && this.fromDate){
+                            this.setDateRange();
+                        }
+                        else{
+                            this.createTags();                            
+                        }
+
+                    }, this));
                 },
                 openTagsDialog: function () {
                     var _width = 1200;
@@ -1572,34 +1648,37 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createTags: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".tagslist").show().parent().parent().css("background", "#eaf4f9");
-                        this.$(".tags-charts").remove();
-                        var _grid = this.$(".tagslist ul");
-
+                        if(this.doDraw){
+                           this.sub.$(".report-empty").hide();
+                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.doDraw = false;
+                       } 
+                        var _grid = this.$(".rpt-block-area");
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, key) {
-                            var tagLi = $('<li class="action" id="row_' + key + '" checksum="' + this.app.encodeHTML(val.get("tag")) + '"><a class="tag"><span>' + this.app.encodeHTML(val.get("tag")) + '</span><i  class="icon percent showtooltip" data-name ="' + this.app.encodeHTML(val.get("tag")) + '" title="Click to see responsiveness of this tag" ></i><strong class="badge">' + val.get("subCount") + '</strong></a> </li>');
-                            _grid.append(tagLi);
+                            val.set("cno",(key+1))
+                            var tagLi = new reportBlock({model: val, page: this, type: "tag"});
+                            _grid.append(tagLi.$el);
                         }, this);
                         _grid.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                                                 
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            var loadFirstTime = this.loadReport;
-                            this.createTagsChart();
-                            if (this.toDate && this.fromDate) {
-                                this.loadReport = loadFirstTime;
-                                this.setDateRange();                                
-                            }
-                            else{
-                                this.$(".chart-types,.tagsexpand").hide();
-                                this.$(".tagsexpand").attr("data-expand","0").html("View Growth Stats").remove("stats-hide");
-                            }
-                        //}, this));
+                        
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "370px"});
+                        var loadFirstTime = this.loadReport;
+                        this.createTagsChart();
+                        
+                        /*if (this.toDate && this.fromDate) {
+                            this.loadReport = loadFirstTime;
+                            this.setDateRange();                                
+                        }
+                        else{
+                            this.$(".chart-types,.tagsexpand").hide();
+                            this.$(".tagsexpand").attr("data-expand","0").html("View Growth Stats").remove("stats-hide");
+                        }*/
+                        
                         
                     }
                 },
@@ -1648,31 +1727,31 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 createTagsChart: function () {
                     if (this.modelArray.length) {
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_selected = this.modelArray.length;
-                        if (total_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tags selected');
+                                                
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count .rp-selected").html('tags selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tag selected');
+                            this.$(".total-count .rp-selected").html('tag selected');
                         }
+                        
                         this.chart_data = {subCount: 0};
                         var _data = [
-                        ];
-                        var liWidth = 100 / this.modelArray.length;
+                        ];                        
                         this.$("ul.socpc li").remove();
                         _.each(this.modelArray, function (val) {
                             _data.push([val.get("tag"), parseInt(val.get("subCount"))]);
-                            this.$("ul.socpc").append($('<li class="clr3" style="width:' + liWidth + '%"><span>' + this.app.encodeHTML(val.get("tag")) + ' <strong class="tagCount">' + val.get("subCount") + '</strong></span></li>'))
+                            //this.$("ul.socpc").append($('<li class="clr3" style="width:' + liWidth + '%"><span>' + this.app.encodeHTML(val.get("tag")) + ' <strong class="tagCount">' + val.get("subCount") + '</strong></span></li>'))
                         }, this);
                         this.chartPage.createChart(_data);
                         this.app.showLoading(false, this.$(".cstats"));
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                     
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('tags selected');
                     }
                     this.saveSettings();
                 },
@@ -1690,30 +1769,28 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     }
                 },
                 loadTagsSummary: function () {
-                    if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$("#copy-camp-listing").hide();
-                        var chartsDiv = $("<div class='tags-charts summary-chart'> </div>");
-                        if (this.$(".tags-charts").length) {
-                            this.$(".tags-charts").remove();
-                        }
-                        this.$(".parent-container").append(chartsDiv);
-                        var total_selected = this.modelArray.length;
-                        if (total_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tags selected');
+                    if (this.modelArray.length) {                        
+                        this.showHideChartArea(true);                        
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count .rp-selected").html('tags selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tag selected');
+                            this.$(".total-count .rp-selected").html('tag selected');
                         }
                         _.each(this.modelArray, function (val, index) {
 
                             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagStatDayByDay";
                             var tag = val.get("tag");
                             var post_data = {tag: tag, toDate: this.toDate, fromDate: this.fromDate}
-
-                            var tagClass = tag.replace(/ /g, "_").replace(/</g, "_").replace(/>/g, "_").replace(/\//g, "_").replace(/\\/g, "_");
-                            chartsDiv.append("<div class='tag-chart'><div class='tag-header'>" + tag + "</div><div class='tag-area " + tagClass + "'></div><div class=\"stats-panel\"><div><ul class=\"socpc\"></ul><div class=\"clearfix\"></div></div></div></div>");
-                            this.app.showLoading("Loading Summary Chart...", this.$("." + tagClass));
+                            val.set("cno",index);
+                            var tagRow = new reportBlock({model: val, page: this, type: "tag","expandedView":true});                            
+                             _grid.append(tagRow.$el);
+                             
+                            this.app.showLoading("Loading Summary Chart...", this.$(".tag-" +index));
                             $.post(URL, post_data).done(_.bind(function (sJson) {
                                 var summary_json = jQuery.parseJSON(sJson);
                                 if (summary_json[0] == "err") {
@@ -1766,17 +1843,17 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                             }
                                         var _data = [{"name": "Decrease", "data": decreaseCount}, {"name": "Increase", "data": increaseCount}];
                                         this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#97d61d']});
-                                        this.$("." + tagClass).html(this.chartPage.$el);
-                                        var liHTML = '<li class="clr6" style="width:33.33%"><span>Increase <strong class="Increase">' + this.app.addCommas(this.chart_data['addCount']) + '</strong></span></li>';
-                                        liHTML += '<li class="clr7" style="width:33.33%"><span>Decrease <strong class="Decrease">' + this.app.addCommas(this.chart_data['removeCount']) + '</strong></span></li>';
-                                        liHTML += '<li class="clr1" style="width:33.33%"><span>Net Growth <strong class="growth">' + this.app.addCommas(this.chart_data['addCount'] - this.chart_data['removeCount']) + '</strong></span></li>';
-                                        this.$(".tag-area." + tagClass).next().find(".socpc").html(liHTML);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                        this.$("#chart-tag-" + index).html(this.chartPage.$el);
+                                        this.$("#stats-tag-" + index +" .subIncrease").html(increaseCount);
+                                        this.$("#stats-tag-" + index +" .subDecrease").html(decreaseCount);
+                                        this.$("#stats-tag-" + index +" .subGrowth").html(increaseCount-decreaseCount);
+                                        
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
                                     //}, this));
                                 }
                                 else {
-                                    this.$("." + tagClass).html('<div class="loading nodata"><p style="background:none">No data found for <i>Tag "' + tag + '"</i></p></div>');
+                                    this.$("#chart-tag-" + index).html('<div class="loading nodata"><p style="background:none">No data found for tag.</p></div>');
                                 }
 
                             }, this));
@@ -1966,19 +2043,29 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.createWebstats();
                 },
                 createWebstats: function (fromLoadData) {
-                    if (this.modelArray.length) {                        
+                    if (this.modelArray.length) {   
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        }
                         var _type = this.modelArray[0].id?this.modelArray[0].id:this.modelArray[0];
+                        this.$(".rpt-campign-listing").show();
+                        this.$(".rpt-expand").hide();
+                        this.$(".rpt-threepanel,.stats-selection").hide();
                         if(this.modelArray[0].id){
                             var _subtype = this.modelArray[0].subtype;
                             if (_subtype == "top-charts") {
-                                this.$(".total-count").html("Top Charts");
+                                this.$(".total-count .rp-selected").html('Top Charts');
                                 this.drawMixChart();
                             }
                             else if (_subtype == "general-stats") {
+                                this.$(".rpt-threepanel").show();
+                                this.$(".total-count .rp-selected").html('General Stats');
                                 this.drawMultiCharts();
                             }
-                            else if (_subtype == "online-campaigns") {
-                                this.$(".total-count").html("Online Campaigns");
+                            else if (_subtype == "online-campaigns") {                                
+                                this.$(".total-count .rp-selected").html('Online Campaigns');
                                 this.drawOnlineCampaigns();
                             }
                         }
@@ -1998,17 +2085,14 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 drawMultiCharts: function () {
                     this.dataArray = [];                    
-                    this.callsData = this.modelArray[0].id?this.modelArray[0].id.split(","):this.modelArray[0].split(",");
-                    this.$(".parent-container .template-container").css({"background": "#f4f9fc", "height": "420px"} );
-                    this.$(".add-msg-report,.total-count").hide();
                     this.$(".stats-selection,.icons-bar-chart").show();
-                    
-                    this.$(".webstats-chart,.webstats-table").remove();
+                    this.callsData = this.modelArray[0].id?this.modelArray[0].id.split(","):this.modelArray[0].split(",");                                                            
+                    this.$(".rpt-threepanel div").hide();
                     for (var c = 0; c < this.callsData.length; c++) {
                         this.$("[value='"+this.callsData[c]+"']").iCheck('check');
+                        this.$(".count-block-"+this.callsData[c]).show();
                         this.callGeneralStats(this.callsData[c]);
-                    }
-                    
+                    }                    
                     if(!this.fromClick){
                         this.fromClick = true;
                     }
@@ -2059,7 +2143,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 drawGeneralStats:function(chartType){
                    var dateLabelObject = this.getDateText(this.fromDate, this.toDate);
-                   this.$(".webstats-chart,.webstats-table").remove();
+                   //this.$(".webstats-chart,.webstats-table").remove();
                    var chart_type = chartType ? chartType:'column';
                    this.app.showLoading("Loading Chart...", this.$el);
                    var that = this;
@@ -2068,7 +2152,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                        this.app.showLoading(false, this.$el);                       
                        var options ={
                                     chart: {                                                  
-                                        backgroundColor: "#f4f9fc"
+                                        backgroundColor: "transparent"
                                     },                                            
                                     title: {
                                         text: '',
@@ -2138,12 +2222,19 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         style: {
                                             "color": this.webstats[val[0]].barColor
                                         },
-                                        text:this.webstats[val[0]].title
+                                        text:''
                                     }                                             
                                 });
-                        },this)        
-                       var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
-                       this.$(".camp_reports").append(chartDiv);
+                            var count = 0;
+                            _.each(val[1],function(v){
+                                count = count + parseInt(v[1]);
+                            },this);
+                            this.$(".count-"+val[0]).html(this.app.addCommas(count));
+                            
+                        },this);
+                       this.$(".webstats-chart").remove();
+                       var chartDiv = $("<div style='height:250;width:100%' class='webstats-chart'></div>");
+                       this.$(".campaign-chart").append(chartDiv);
                        this.chartPage.createChart(options, chartDiv);
 
                    },this)) 
@@ -2188,7 +2279,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                 var options = {
                                     chart: {
                                         type: chart_Type,
-                                        backgroundColor: "#f4f9fc"
+                                        backgroundColor: "transparent"
                                     },
                                     plotOptions: {
                                         series: {colorByPoint: this.webstats[_type].multipColrs}
@@ -2276,8 +2367,9 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                             }
                                         }]
                                 }
+                                this.$(".campaign-chart").children().remove();
                                 var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
-                                this.$(".camp_reports").append(chartDiv);
+                                this.$(".campaign-chart").append(chartDiv);
                                 this.chartPage.createChart(options, chartDiv)
 
                                 if (_type == "seo" || _type == "lcdetail" || _type == "ref" || _type == "pp") {
@@ -2285,32 +2377,32 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                     this.$(".table-area .template-container").css({"max-height": "none"});
                                     var _dataTable = [];
                                     if (_type == "seo") {
-                                        _dataTable.push(['Keyword Text', 'Count', 'Source']);
+                                        _dataTable.push(['No.','Keyword Text', 'Count', 'Source']);
                                         _.each(this.webStatData, function (val, index) {
-                                            _dataTable.push([val[0], parseInt(val[1]), val[2]]);
+                                            _dataTable.push([(index+1),val[0], parseInt(val[1]), val[2]]);
                                         }, this)
 
                                     } else if (_type == "lcdetail") {
-                                        _dataTable.push(['Company', 'Page Views', 'Date', 'Traffic Source', 'Country', 'Telephone']);
+                                        _dataTable.push(['No.','Company', 'Page Views', 'Date', 'Traffic Source', 'Country', 'Telephone']);
                                         _.each(this.webStatData, function (val, index) {
-                                            _dataTable.push([val[0], parseInt(val[1]), val[2], val[3], val[7], val[8]]);
+                                            _dataTable.push([(index+1),val[0], parseInt(val[1]), val[2], val[3], val[7], val[8]]);
                                         }, this)
                                     } else if (_type == "ref") {
-                                        _dataTable.push(['Referral Link', 'Count']);
+                                        _dataTable.push(['No.','Referral Link', 'Count']);
                                         _.each(this.webStatData, function (val, index) {
-                                            _dataTable.push([val[0], parseInt(val[1])]);
+                                            _dataTable.push([(index+1),val[0], parseInt(val[1])]);
                                         }, this)
 
                                     } else if (_type == "pp") {
-                                        _dataTable.push(['Page Name', 'Page Views', 'Unique Views', 'Page URL']);
+                                        _dataTable.push(['No.','Page Name', 'Page Views', 'Unique Views', 'Page URL']);
                                         _.each(this.webStatData, function (val, index) {
-                                            _dataTable.push([val[0], parseInt(val[1]), parseInt(val[2]), val[3]]);
+                                            _dataTable.push([(index+1),val[0], parseInt(val[1]), parseInt(val[2]), val[3]]);
                                         }, this)
 
                                     }
 
-                                    var tabletDiv = $("<div style='height:420;width:100%;margin-top:20px;' class='webstats-table'></div>");
-                                    this.$(".camp_reports").append(tabletDiv);
+                                    var tabletDiv = $("<div style='height:420;width:100%;margin:20px 0px 20px 10px;' class='webstats-table'></div>");
+                                    this.$(".campaign-chart").append(tabletDiv);
                                     this.chartPage.createTable(_dataTable, tabletDiv[0]);
                                 }
                             }, this));
@@ -2351,17 +2443,18 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     return {label: textDate, days: _days};
                 },
                 drawOnlineCampaigns:function(){
-                    var campArray = this.modelArray[0].id.split(",");                    
-                    this.$(".add-msg-report").hide();      
-                    this.$(".online-campaign-area").remove();
-                    this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
-                    if(campArray.length>1){
-                        this.$(".target-listing").addClass("summary-chart");
-                    }
+                    var campArray = this.modelArray[0].id.split(",");                                                            
+                    this.$(".rpt-campign-listing").hide();
+                    this.$(".rpt-expand").show();
+                    var _grid = this.$(".rpt-expand");
+                    _grid.children().remove();
                     _.each(campArray, function (val, index) {
                             var campId = val;        
                             var chartTitle = this.modelArray[0].campMapping?this.modelArray[0].campMapping[campId]:"" 
-                            this.$(".camp_reports").append($("<div class='online-campaign-area' id='"+campId+"'></div>"))
+                            var model = new Backbone.Model({name:chartTitle,campNum:campId});
+                            var onlineCampaignRow = new reportBlock({model: model, page: this, type: "ocampaign","expandedView":true});                            
+                            _grid.append(onlineCampaignRow.$el);
+                            
                             this.app.showLoading("Loading Data...", this.$("#" + campId));
                             var bms_token = this.app.get('bms_token');
                             var queryString = (this.fromDate && this.toDate) ? "&daterange=y&fromDate=" + moment(this.fromDate, 'M/D/YYYY').format("MM/DD/YYYY") + "&toDate=" + moment(this.toDate, 'M/D/YYYY').format("MM/DD/YYYY") : "&span=7"
@@ -2373,10 +2466,8 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                     this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
                                     return false;
                                 }
-                                if (summary_json.count !== "0") {
-                                    //require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                                if (summary_json.count !== "0") {                                    
                                         var  viewData = [], clickCount = [], conversionData = [], bounceData = [];
-
                                         var categories = [];
                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
                                             , openCount: 0, sentCount: 0, socialCount: 0};
@@ -2390,23 +2481,117 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                             this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[5]);
                                             this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[3]);
                                             this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(sVal[6]);                                                                                        
-                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[5]);
+                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[4]);
                                         }, this);
                                         var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Conversion", "data": conversionData}, {"name": "View", "data": viewData}, {"name": "Click", "data": clickCount}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true,title:chartTitle, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6']});
-                                        this.$("#" + campId).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "420px"});
-                                        this.chartPage.createChart(_data);
-                                        
-
-                                    //}, this));
+                                        this.chartPage = new barChartPage({page: this, isStacked: true,title:chartTitle, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3']});
+                                        this.$("#chart-" + campId).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "230px"});
+                                        this.chartPage.createChart(_data);                                      
+                                        _.each(this.chart_data, function (v, key) {
+                                                this.$("#stats-" + campId + " ." + key).html(this.app.addCommas(v));                                                
+                                            }, this);
                                 }
                                 else {
-                                    this.$("#" + campId).html('<div class="loading nodata"><p style="background:none">No data found for this campaign </p></div>');
+                                    this.$("#chart-" + campId).html('<div class="loading nodata"><p style="background:none">No data found.</p></div>');
                                 }
                             }, this));
 
                         }, this);
+                },
+                //////************************** End Web Stats  *****************************************//////
+                //////************************** Funnel  ***********************************************//////
+                loadFunnel:function(){
+                    if(this.objects.length){                        
+                        for (var i =0;i<this.objects.length;i++){
+                            var _l = [];
+                             _.each(this.objects[i]["level"+i],function(val,key){ 
+                                _l.push(new Backbone.Model(val));
+                            },this);
+                            this.modelArray.push(_l)
+                        }
+                        
+                       this.createFunnel();
+                    }
+                                                
+                    
+                },
+                openFunnelDialog: function () {
+                    var _width = 1200;
+                    var _height = 415;
+                    var dialog_object = {title: 'Funnel Selection',
+                        css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
+                        bodyCss: {"min-height": _height + "px"},
+                        saveCall: '',
+                        headerIcon: 'tagw'
+                    }
+                    var selectedLevel = this.$(".funnel-tabs-btns li.active").attr("data-tab");
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Tags...", dialog.getBody());
+                    require(["tags/funnel"], _.bind(function (page) {
+                        var _page = new page({page: this, dialog: dialog, dialogHeight: _height - 103,selectedLevel:selectedLevel});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.init();
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));
+                    }, this));
+                },
+                createFunnel: function() {
+                    if(this.doDraw){
+                        this.sub.$(".report-empty").hide();
+                        this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                        this.doDraw = false;
+                    }
+                    
+                    var levels = this.modelArray;
+                    var levelCount = [0,0,0,0];
+                    for(var i=0; i<levels.length;i++){
+                        var tabLevel = this.$(".tab-"+(i+1));
+                        tabLevel.children().remove();
+                        var lCount =0;
+                         _.each(levels[i], function (val, index) {
+                            val.set("cno",index+1);
+                            var rpBlock = new reportBlock({model: val, page: this, type: "funnel"});
+                            tabLevel.append(rpBlock.$el);
+                            lCount = lCount + parseInt(val.get("subCount"));
+                        }, this);  
+                        levelCount[i] = lCount;
+                    }
+                    this.$(".rpt-level-one p").html(levelCount[0]);
+                    this.$(".rpt-level-two p").html(levelCount[1]);
+                    this.$(".rpt-level-three p").html(levelCount[2]);
+                    this.$(".rpt-level-four p").html(levelCount[3]);
+                    this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f8b563','#00b0e9','#39c8a9','#7e5cb1']});
+                    this.$(".col-2 .funnel-chart").html(this.chartPage.$el);
+                    this.chartPage.$el.css({"width": "350px", "height": "370px"});
+                    
+                    var _data = [{
+                        name: 'Subscribers',
+                        data: [
+                            ['Level 1', levelCount[0]],
+                            ['Level 2', levelCount[1]],
+                            ['Level 3', levelCount[2]],
+                            ['Level 4', levelCount[3]]
+                        ]
+                    }]
+                    this.chartPage.createFunnelChart(_data);
+                    this.saveSettings();
+                },
+                changeLevel: function(e){
+                   var level = $.getObj(e, "li"); 
+                   if(!level.hasClass("active")){
+                       level.parent().find(".active").removeClass("active");
+                       level.addClass("active");
+                       var selectedLevel = level.attr("data-tab");
+                       this.$(".rpt-block-area").hide();
+                       this.$(".tab-"+selectedLevel).show();
+                       
+                   }
                 }
+                
+                
             });
         });

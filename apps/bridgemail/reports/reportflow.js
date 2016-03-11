@@ -63,8 +63,15 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                     var objects = (obj) ? obj[obj.type]:null;
                     var row_view = new reportRow({reportType:rType,sub:this,row_obj:obj,objects:objects,loadReport:loadReport});
                     this.models.push(row_view);
-                    row_view.orderNo = this.models.length;
-                    row_view.$el.insertBefore(this.$(".addbar"));
+                    row_view.orderNo = this.models.length;                    
+                    if(loadReport){
+                        this.$(".report-empty").hide();
+                        row_view.$el.insertBefore(this.$(".add-panel"));                        
+                    }
+                    else{
+                        row_view.openSelectionDialog();
+                        row_view.doDraw = true;
+                    }
                 },
                 saveSettings:function(){
                     var URL = "/pms/io/user/customReports/?BMS_REQ_TK="+this.app.get('bms_token');                    
@@ -102,7 +109,9 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                 var page_json = jQuery.parseJSON(this.app.decodeHTML(_json.p_json));
                                 if(page_json.length){
                                     for(var i=0;i<page_json.length;i++){
-                                        this.addReport(page_json[i].type,page_json[i],true);
+                                        //if(page_json[i].type!=="webstats"){
+                                            this.addReport(page_json[i].type,page_json[i],true);
+                                        //}
                                     }
                                 }
                             }else{
@@ -135,11 +144,20 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                id = r_val.get("trackId.encode"); 
                             }else if(type=="tags"){
                                id = r_val.get("tag"); 
+                            }else if(type=="webforms"){
+                               id = r_val.get("formId.encode"); 
                             }else if(type=="webstats"){
                                id = r_val.id; 
                                selected_obj['subtype'] =r_val.subtype;
                                selected_obj['campMapping'] =r_val.campMapping;
-                            }                              
+                            }else if(type=="funnel"){
+                                id = r_index;
+                                selected_obj['level'+r_index] = [];
+                                _.each(r_val,function(f_val){
+                                    selected_obj['level'+r_index].push({"tag":f_val.get("tag"),"subCount":f_val.get("subCount")});
+                                },this);
+                            }
+                            
                             selected_obj['id'] = id;
                             if(type=="nurturetracks"){
                                 selected_obj['checked'] =true;
@@ -164,6 +182,9 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 },
                 removeMode:function(no){
                     this.models.splice(no-1,1);
+                    if(this.models.length==0){
+                        this.$(".report-empty").fadeIn();
+                    }
                 },
                 showHideTitle:function(show,isNew){
                     if(this.editable==false){
@@ -242,6 +263,7 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 checkBridgeStats:function(){
                      if(this.app.get("bridgestatz") && this.app.get("bridgestatz").id){
                          this.$("li[data-type='webstats']").show();
+                         this.$(".no-webstats").removeClass("no-webstats");
                      }
                      else{
                         var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=bridgestatz";
@@ -253,6 +275,7 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                             if(_json.id){
                                 this.app.set("bridgestatz", _json);
                                 this.$("li[data-type='webstats']").show();
+                                this.$(".no-webstats").removeClass("no-webstats");
                             }                            
                             
                         }, this));

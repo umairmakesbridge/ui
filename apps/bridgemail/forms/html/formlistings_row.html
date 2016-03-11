@@ -26,7 +26,40 @@
         </div>        
     </div>
 </td>
-
+<% } else if(this.showSummaryChart){ %>
+<td width="100%" style="padding:0px;background-color: #fff;">
+    <table cellpading="0" cellspacing="0" width="100%" class="chart-tile">
+        <tr class="header">
+            <td>
+                 <div>
+                    <div class="name-type">              
+                           <h3>                    
+                            <a class="form-name edit-form showtooltip" title="Click to view"> <%= this.model.get('name')%> </a>
+                           </h3>                              
+                    </div>
+               </div>
+            </td>                        
+        </tr>
+        <tr>
+            <td class="s-chart">
+                <div style="height: 250px" id="chart-<%-this.model.get('formId.checksum')%>">
+                    
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:0px" id="stats-<%-this.model.get('formId.checksum')%>">
+                <div class="stats-panel">
+                    <div>
+                        <ul class="socpc">                            
+                            <li style="width:100%" class="clr-open"><span>Submissions <strong class="submitCount">-</strong></span></li>                               
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</td>
 <% } else if(this.showCheckbox){ %>
 <td style="padding:0px;width:40px">
     <a class="checkedadded check-box" id="<%-this.model.get('formId.encode')%>" style="margin:0px;position:relative"><i class="icon check"></i></a>    
