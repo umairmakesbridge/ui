@@ -979,7 +979,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         var summaries =  summary_json.summaries[0];
                                         var _d = 1;    
                                         if(days_report<=30){
-                                            for(var d=0;d<days_report;d++){
+                                            for(var d=0;d<=days_report;d++){
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
@@ -1457,7 +1457,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         var summaries =  summary_json.summaries[0];
                                         var _d = 1;    
                                         if(days_report<=30){
-                                            for(var d=0;d<days_report;d++){
+                                            for(var d=0;d<=days_report;d++){
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
@@ -1813,7 +1813,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         var summaries =  summary_json.stats[0];
                                         var _d = 1;    
                                         if(days_report<=30){
-                                                for(var d=0;d<days_report;d++){
+                                                for(var d=0;d<=days_report;d++){
                                                     var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                     categories.push(c_date);
                                                     var sVal = summaries["stat"+_d];
@@ -1844,9 +1844,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         var _data = [{"name": "Decrease", "data": decreaseCount}, {"name": "Increase", "data": increaseCount}];
                                         this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#97d61d']});
                                         this.$("#chart-tag-" + index).html(this.chartPage.$el);
-                                        this.$("#stats-tag-" + index +" .subIncrease").html(increaseCount);
-                                        this.$("#stats-tag-" + index +" .subDecrease").html(decreaseCount);
-                                        this.$("#stats-tag-" + index +" .subGrowth").html(increaseCount-decreaseCount);
+                                        this.$("#stats-tag-" + index +" .subIncrease").html(this.chart_data['addCount']);
+                                        this.$("#stats-tag-" + index +" .subDecrease").html(this.chart_data['removeCount']);
+                                        this.$("#stats-tag-" + index +" .subGrowth").html(this.chart_data['addCount']-this.chart_data['removeCount']);
                                         
                                         this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
@@ -2470,7 +2470,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         var  viewData = [], clickCount = [], conversionData = [], bounceData = [];
                                         var categories = [];
                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
-                                            , openCount: 0, sentCount: 0, socialCount: 0};
+                                            , openCount: 0, sentCount: 0, socialCount: 0,conversionCount:0};
                                         _.each(summary_json, function (sVal) {
                                             categories.push(moment(sVal[0], 'YYYY-M-D').format("DD MMM"));                                            
                                             clickCount.push(parseInt(sVal[3]));
