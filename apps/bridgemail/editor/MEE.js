@@ -1559,6 +1559,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find(".textcontent").removeAttr("spellcheck");
 
                                     oHtml.find(".MEEFORMCONTAINER .editformpanel").remove();
+                                    oHtml.find('.MEEFORMCONTAINER').removeClass('MEEFORMSTYLE');
                                     oHtml.find("div.ui-resizable-e").remove();
                                     oHtml.find("div.ui-resizable-s").remove();
                                     oHtml.find("div.ui-resizable-se").remove();
@@ -1918,12 +1919,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         SelectedElementForStyle = null;
                                         
                                         oInitDestroyEvents.InitializePluginsEvents(meeIframe);
-                                        
+                                        meeIframe.find('.MEEFORMCONTAINER').removeClass('MEEFORMSTYLE');
 
                                     }
                                     else {
                                         oInitDestroyEvents.DestroyPluginsEvents(meeIframe);
                                         meeIframe.find('.mce-edit-focus').removeClass('mce-edit-focus');
+                                        meeIframe.find('.MEEFORMCONTAINER').addClass('MEEFORMSTYLE');
                                         IsStyleActivated = true;
                                         meeIframe.find(".csHaveData td, .csHaveData div").unbind("click");
                                         
@@ -5746,7 +5748,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         meeIframe.find(".mainContentHtml").removeClass("show-droppables")
                                         var ui = {draggable: null};
                                         ui.draggable = mee.dragElementIframe ? mee.dragElementIframe : mee.dragElement;                                        
-                                        if (!$(this).hasClass("myDroppable") || ui.draggable.data("type") === "droppedImage") {
+                                        if (!$(this).hasClass("myDroppable") ) { //|| ui.draggable.data("type") === "droppedImage"
                                             //DO NOTHING
                                             return;
                                         }
@@ -5817,7 +5819,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var oControl = new Object();
                                             // -------------- Building Block Controls[Better way] --------------//
 
-                                            if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock" || typeOfDraggingControl == "formBlock") {
+                                            if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock") {
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
                                                 $(this).before(CreateDroppableWithAllFunctions());
                                                 $(this).after(CreateDroppableWithAllFunctions());
@@ -5864,6 +5866,24 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                 }
                                             }
+                                            else if (typeOfDraggingControl == "droppedImage") {
+                                                //INSERT DROPPABLE BEFORE AND AFTER            
+                                                $(this).before(CreateDroppableWithAllFunctions());
+                                                $(this).after(CreateDroppableWithAllFunctions());
+                                                ///////
+                                                                                                
+                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");                                                
+                                                var ui = {draggable: null};
+                                                ui.draggable = mee.dragElement;
+                                                var argsThis = {
+                                                    droppedElement: $(this).find(".drapableImageContainer"),
+                                                    event: event,
+                                                    ui: ui
+                                                };
+                                                OnImageDropped(argsThis);                                                
+                                                oInitDestroyEvents.InitAll($(this));
+                                                mee.dragElement = null;
+                                            }
                                             else if (typeOfDraggingControl == "formBlock") {
 
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
@@ -5873,10 +5893,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             
                                                 
                                                   var oControl = new Object();
-                                                    var controlID = ui.draggable.data("id");
+                                                  var controlID = ui.draggable.data("id");
 
-                                                    var isNew = ui.draggable.data("isnew");                                                    
+                                                  var isNew = ui.draggable.data("isnew");                                                    
                                                     //need to apply each for this and then search on each [0]
+                                                    
+                                                  if(!args.droppedElement.hasClass("MEEFORMCONTAINER") && meeIframe.find(".MEEFORMCONTAINER").length==0)  {
+                                                      args.droppedElement.append("<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>");
+                                                      oInitDestroyEvents.InitAll(args.droppedElement);
+                                                      args.droppedElement = args.droppedElement.find(".MEEFORMCONTAINER");
+                                                  }
 
                                                     if(!isNew){                                                                
                                                         args.FormId = controlID;
@@ -6256,12 +6282,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         event.originalEvent.dataTransfer.setData("text", "dragging");
                                         mee.dragElement = $(this);
                                         var draggedControlType = $(this).data("type");
-                                        if (draggedControlType === "droppedImage" ) {
+                                        /*if (draggedControlType === "droppedImage" ) {
                                             return;
-                                        }                                        
+                                        }*/                                       
                                         RemovePopups();                                        
 
-                                        if (draggedControlType != "droppedImage" && (draggedControlType !="formBlock" || meeIframe.find(".MEEFORMCONTAINER").length==0) ) {
+                                        if ( meeIframe.find(".MEEFORMCONTAINER").length==0 ) {
                                             ShowDroppables(meeIframe);
                                             if (meeIframe.find(".mainContentHtml li.myDroppable").length > 1) {
                                                 meeIframe.find(".mainContentHtml").addClass("show-droppables")
@@ -6281,14 +6307,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             });
                                         }
-                                        else if(draggedControlType =="formBlock"){
-                                            
+                                        else if(draggedControlType =="formBlock"){                                            
                                             meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #94CF1E"});
-                                            meeIframe.find(".editformpanel,.drop-here").show();
-                                            
-                                            meeIframe.find(".editformpanel .edit-form").hide();
-                                            
-                                            
+                                            meeIframe.find(".editformpanel,.drop-here").show();                                            
+                                            meeIframe.find(".editformpanel .edit-form").hide();                                                                                        
                                         }
 
                                     }).on('dragend', function (event) {

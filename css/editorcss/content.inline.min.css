@@ -2131,6 +2131,17 @@ i.icon{
     display: none;
     background: url("../images/drop-form2.png") no-repeat scroll center 44% rgba(255, 255, 255, 0.6);
 }
+.MEEFORMSTYLE .editformpanel{
+    position: absolute;
+    top:0px;left:0px;
+    width:100%;
+    height:100%;
+    display: block !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+.MEEFORMSTYLE .edit-form, .MEEFORMSTYLE .drop-here {
+    display: none !important;
+}
 .MEEFORMCONTAINER .editformpanel div,.MEEVIDEOCONTAINER .editvideopanel div{
     text-align: center;
     color:#0d7298;
@@ -2144,6 +2155,7 @@ i.icon{
     font-family: 'PT Sans', sans-serif;
     
 }
+
 
 .MEEFORMCONTAINER .editformpanel button,.MEEVIDEOCONTAINER .editvideopanel button{
     font-family: 'PT Sans', sans-serif;
