@@ -618,7 +618,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         
                                         
                                         meeIframe.find(".mainTable").css("width",emailWidth+"px");
-                                        
+                                        // For Toolbar Test Purpose Abdullah 
+                                        meeIframe.find(".mainTable").css("margin-top","45px");
+                                        myElement.find('.editortoolbar').css('margin-bottom','0');
+                                        // Ends Abdullah test
                                         mainObj.html(innerHTML);                          
                                         if(!options.landingPage && emailWidth){
                                             myElement.find(".email-width input.btnContainerSize").removeClass("active");
@@ -5063,7 +5066,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 theme: "modern",                                                
                                                 paste_enable_default_filters: false,
                                                 paste_preprocess: function(plugin, args) {
-                                                    console.log(args.content);                                                    
+                                                    if(args.content !== "text" && args.content !== "dragging"){
+                                                        console.log(args.content);   
+                                                    }else{
+                                                        args.content = "";
+                                                    }
+                                                                                              
                                                 },
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
@@ -5132,6 +5140,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                               $(val).css({top:scrollPosition+"px","left":"0"});
                                                                             }else{
                                                                                         $(val).css({top:"0px","left":"0"}); 
+                                                                                        setTimeout(function(){
+                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
+                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
+                                                                                        }, 10);
+                                                                                        
                                                                             }
                                                                     setTimeout(function(){ $(val).addClass('fixed-panel'); }, 50);
                                                                     
