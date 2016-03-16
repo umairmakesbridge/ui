@@ -716,6 +716,13 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                 } else if (scrollTop <= (this.navTop + 12) && this.isFixed) {
                                     this.isFixed = 0
                                     this.$nav.removeClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');
+                                    if(this.$nav.find('.disabled-toolbar').css('visibility')=='hidden'){
+                                        this.$nav.css("margin-bottom", "0");
+                                         this.$el.find('#mee-iframe').contents().find('.mainTable').css('margin-top','45px');
+                                    }else{
+                                        this.$nav.css("margin-bottom", "45px");
+                                        this.$el.find('#mee-iframe').contents().find('.mainTable').css('margin-top','0');
+                                    }
                                     this.$nav.css("top", "7px");
                                     this.$tools.css("top", "0px");
                                     this.$nav.css("width", "100%");
@@ -748,6 +755,8 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         if (scrollTop >= (this.navTop - 270) && scrollTop > 0) {
                             this.$editorarea.removeClass('editor-panel-zero-padding');
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', scrollTop + 'px');
+                            this.$el.find('.editortoolbar').css('margin-bottom','0');
+                            this.$el.find('#mee-iframe').contents().find(".mainTable").css("margin-top","45px");
                         } else if (this.$tools.hasClass('editor-lefttoolbar-fixed')) {
                             this.$editorarea.addClass('editor-panel-zero-padding');
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '48px');

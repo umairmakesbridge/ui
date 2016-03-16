@@ -97,7 +97,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.app.showInfo(this.$el.find('#lblReplyto'), appMsgs.CAMP_replyto_info);
 
                 },
-                cleanNonPrintableCharacters: function(obj){
+                 cleanNonPrintableCharacters: function(obj){
                     var _input = $(obj.target);                                        
                     setTimeout(_.bind(function(){_input.val(this.app.replaceNonPrintableChar(_input.val()));}, this), 100);
                     
@@ -774,7 +774,15 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     this.scrollfixPanel();
                                 } else if (scrollTop <= this.navTop && this.isFixed) {
                                     this.isFixed = 0
+                                    
                                     this.$nav.removeClass('editor-toptoolbar-fixed editor-toptoolbar-fixed-border');
+                                    if(this.$nav.find('.disabled-toolbar').css('visibility')=='hidden'){
+                                        this.$nav.css("margin-bottom", "0");
+                                         this.$el.find('#mee-iframe').contents().find('.mainTable').css('margin-top','45px');
+                                    }else{
+                                        this.$nav.css("margin-bottom", "45px");
+                                        this.$el.find('#mee-iframe').contents().find('.mainTable').css('margin-top','0');
+                                    }
                                     this.$nav.css("width", "100%");
                                     this.$tools.removeClass('editor-lefttoolbar-fixed');
                                     this.$editorarea.removeClass('editor-panel-fixed-camp');
@@ -814,6 +822,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         
                         if (scrollPosition < 0) {
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '0');
+                            this.$el.find('.editortoolbar').css('margin-bottom','0');
+                            this.$el.find('#mee-iframe').contents().find(".mainTable").css("margin-top","45px");
                         } else {
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', scrollPosition + 'px');
                         }
