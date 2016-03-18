@@ -15,7 +15,8 @@ define(['text!reports/html/report_block.html'],
                 events: {
                   "click .show-detail" : "previewCampaign",
                   "click .rp-detail-report" : "reportShow",
-                  "click .rpclose" : "removeFromReport"
+                  "click .rpclose" : "removeFromReport",
+                  "click #triangle-bottomleft": "addRemoveRow"
                 },
                 /**
                  * Initialize view - backbone
@@ -25,7 +26,10 @@ define(['text!reports/html/report_block.html'],
                     this.sub = this.options.page
                     this.app = this.sub.app;
                     this.type = this.options.type;
-                    this.expandedView = this.options.expandedView ? true : false;                    
+                    this.subType = this.options.subType ? this.options.subType :'';
+                    this.addClass= this.options.addClass ? this.options.addClass :'';
+                    this.expandedView = this.options.expandedView ? true : false;    
+                    this.isAddRemove = this.options.isAddRemove?true:false;
                     this.render();                  
                 },
                 /**
@@ -49,6 +53,10 @@ define(['text!reports/html/report_block.html'],
                     this.initControls();
                 },
                 removeFromReport: function(){
+                   if(this.isAddRemove){
+                       this.addRemoveRow();
+                       return false;
+                   } 
                    var delIndex = -1; 
                    if(this.type=="campaign"){
                     _.each(this.sub.modelArray, function (val, index) {
@@ -338,6 +346,21 @@ define(['text!reports/html/report_block.html'],
                     }
                     if (this.sub.createCampaignChart) {
                         this.sub.createCampaignChart();
+                    }
+                },
+                addRemoveRow: function(){
+                    if(!this.isAddRemove){ return false;}
+                    if (this.addClass) {
+                        this.$el.fadeOut("fast", _.bind(function () {
+                            this.sub.addToCol2(this.model);
+                            this.$el.hide();
+                        }, this));
+                    }
+                    else{
+                        this.$el.fadeOut("fast", _.bind(function () {
+                            this.sub.adToCol1(this.model);
+                            this.$el.remove();
+                        }, this));
                     }
                 }
 

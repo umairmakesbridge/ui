@@ -17,12 +17,12 @@
             <i class="rpicon rpicon-two rp-pichart showtooltip" title="Click to see detail report"></i>
         </span>
         
-        <div id="triangle-bottomleft">
-            <a class="rpicon rpclose showtooltip" title="Remove from report"></a>
+        <div id="triangle-bottomleft" class="<%- this.addClass %>">
+            <a class="rpicon rpclose showtooltip" title="<% if(this.addClass){ print('Add') } else { print('Remove') } %>"></a>
         </div>         
     </div>
 </div>
-<% } else if(this.type=="page") { %>
+<% } else if( this.type=="page") { %>
     <div data-checksum="<%-this.model.get('pageId.checksum')%>">
     <div class="name-type">              
         <h3>                    
@@ -32,8 +32,8 @@
     <div class="rpt-details">
         <span class="lastSaveInfo"><i class="icon time"></i><%= this.getPageTimeShow().dateTime %></span>
         <span class="landingpage"><i class="icon lp"></i><%= this.app.addCommas(this.model.get('viewCount')) %></span>                        
-        <div id="triangle-bottomleft">
-            <a class="rpicon rpclose showtooltip" title="Remove from report"></a>
+        <div id="triangle-bottomleft" class="<%- this.addClass %>">
+            <a class="rpicon rpclose showtooltip" title="<% if(this.addClass){ print('Add') } else { print('Remove') } %>"></a>
         </div>         
     </div>
    </div>
@@ -48,8 +48,8 @@
     <div class="rpt-details">
         <span class="lastSaveInfo"><i class="icon time"></i><%= this.getFormsDate() %></span>
         <span class="formview"><i class="icon formview"></i><%= this.app.addCommas(this.model.get('submitCount')) %></span>        
-        <div id="triangle-bottomleft">
-            <a class="rpicon rpclose showtooltip" title="Remove from report"></a>
+        <div id="triangle-bottomleft" class="<%- this.addClass %>">
+            <a class="rpicon rpclose showtooltip" title="<% if(this.addClass){ print('Add') } else { print('Remove') } %>"></a>
         </div>         
     </div>
    </div>
@@ -71,8 +71,8 @@
         <span class="lastSaveInfo"><i class="icon time"></i><%= this.getPlayedOn() %></span>                     
         <span class="subscribers"><i class="icon subscribers"></i><%= this.app.addCommas(this.model.get('sentCount')) %></span>                        
                         
-        <div id="triangle-bottomleft">
-            <a class="rpicon rpclose showtooltip" title="Remove from report"></a>
+        <div id="triangle-bottomleft" class="<%- this.addClass %>">
+            <a class="rpicon rpclose showtooltip" title="<% if(this.addClass){ print('Add') } else { print('Remove') } %>"></a>
         </div>         
     </div>
    </div>
@@ -100,11 +100,13 @@
         <div class="rpt-details">
 
                 <span class="rpt-tag-pclr"><i class="pclr<%= this.model.get('cno')%>"></i><%= this.app.addCommas(this.model.get('subCount')) %></span>
-                <div style="display:block" class="icons-bar-chart">
-                          <div class="rpbarthinchart rpicon rpicon-two showtooltip" title="Click to see bar chart"></div>
-                     </div>
+                <% if(this.type!=="funnel") { %>
+                    <div style="display:block" class="icons-bar-chart">
+                         <div class="rpbarthinchart rpicon rpicon-two showtooltip" title="Click to see bar chart"></div>
+                    </div>
+                <% } %>
                 <div id="triangle-bottomleft">
-                     <a  class="rpicon rpclose showtooltip" title="Remove tag"></a>
+                     <a  class="rpicon rpclose showtooltip" title="Remove"></a>
                 </div>         
         </div>
 

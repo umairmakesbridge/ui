@@ -171,7 +171,7 @@ function (template) {
                var options = {
                     chart: {
                         type: 'funnel',
-                        marginRight: 80
+                        marginRight: 50
                     },
                     title: {
                         text: this.title,
@@ -181,7 +181,7 @@ function (template) {
                     plotOptions: {
                         series: {
                             dataLabels: {
-                                enabled: true,
+                                enabled: false,
                                 format: '<b>{point.name}</b> ({point.y:,.0f})',
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
                                 softConnector: true

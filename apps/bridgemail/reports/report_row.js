@@ -52,7 +52,8 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     this.fromClick=false;
                     this.row_obj = this.options.row_obj;
                     this.reportType = this.options.reportType;
-                    this.template = _.template(template);          
+                    this.template = _.template(template);       
+                    this.subType = this.row_obj?this.row_obj.subType:"tag";
                                         
                     Highcharts.setOptions({
                         lang: {
@@ -289,7 +290,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
 
 
                 },
-                openSelectionDialog: function () {
+                openSelectionDialog: function () {                    
                     if (this.reportType == "landingpages") {
                         this.openLandingPagesDialog();
                     } else if (this.reportType == "campaigns") {
@@ -307,7 +308,17 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     } else if (this.reportType == "webstats") {
                         this.openWebStatsDialog();
                     } else if (this.reportType == "funnel") {
-                        this.openFunnelDialog();
+                        if(arguments[0]){
+                            if(this.subType=="tag"){
+                                this.openFunnelTagDialg();
+                            }
+                            else{
+                                this.openFunnelObjDialog(this.subType);
+                            }
+                        }
+                        else{
+                            this.openFunnelDialog();
+                        }
                     }
 
                 },
@@ -2517,13 +2528,68 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     
                 },
                 openFunnelDialog: function () {
+                    var _html = '<div class="overlay"> <div style="margin-left: -287.5px; width: 575px;" class="modal in moda-v2">';
+                        _html += '<div style="min-height: 240px;" class="modal-body"><div class="sd_common no-tilt">';
+                        _html += '<a class="closebtn"></a><div class="watermark_tilt"></div>';
+                        _html += '<h2>Select Funnel Type</h2>';
+                        _html += '<div class="add-panel select-funnel-type"><div class="addbar">';
+                        _html += '<ul>';
+                        _html += '<li class="rpt-li-tags" data-type="tag"><a><span class="rpicon rpicon-fifty rptags"></span>Tags</a></li>';
+                        _html += '<li class="rpt-li-landingpages" data-type="page"><a><span class="rpicon rpicon-fifty rplppage"></span>Landing Pages</a></li>';
+                        _html += '<li class="rpt-li-webforms" data-type="form"><a><span class="rpicon rpicon-fifty rpform30"></span>Webforms</a></li>';
+                        _html += '</ul>';
+                        _html += '</div></div></div></div>';
+                        _html += '<br></div></div>';
+                        var selection_dialog = $(_html);      
+                        selection_dialog.find(".closebtn").click(_.bind(function(e){
+                            var target = $(e.target);
+                            target.parents(".overlay").remove();
+                        },this));
+                        selection_dialog.find(".select-funnel-type li").click(_.bind(function(e){
+                            var liObj = $.getObj(e, "li");
+                            selection_dialog.remove();
+                            this.subType =  liObj.attr("data-type");
+                            if(liObj.attr("data-type")==="tag"){
+                                this.openFunnelTagDialg();
+                            }
+                            else {                                
+                                this.openFunnelObjDialog(liObj.attr("data-type"));
+                            }
+                        },this));
+                        $("body").append(selection_dialog);
+                  
+                },
+                openFunnelObjDialog: function(dType){
                     var _width = 1200;
                     var _height = 415;
                     var dialog_object = {title: 'Funnel Selection',
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
-                        headerIcon: 'tagw'
+                        headerIcon: 'dl-funnel'
+                    }
+                    var selectedLevel = this.$(".funnel-tabs-btns li.active").attr("data-tab");
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading...", dialog.getBody());
+                    require(["reports/select_dialog"], _.bind(function (page) {
+                        var _page = new page({page: this, dialog: dialog, selectedLevel:selectedLevel, type:dType});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.init();
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));
+                    }, this));  
+                },
+                openFunnelTagDialg: function(){
+                    var _width = 1200;
+                    var _height = 415;
+                    var dialog_object = {title: 'Funnel Selection',
+                        css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
+                        bodyCss: {"min-height": _height + "px"},
+                        saveCall: '',
+                        headerIcon: 'dl-funnel'
                     }
                     var selectedLevel = this.$(".funnel-tabs-btns li.active").attr("data-tab");
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -2537,7 +2603,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
                         this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
                         dialog.saveCallBack(_.bind(_page.saveCall, _page));
-                    }, this));
+                    }, this));  
                 },
                 createFunnel: function() {
                     if(this.doDraw){
@@ -2554,9 +2620,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         var lCount =0;
                          _.each(levels[i], function (val, index) {
                             val.set("cno",index+1);
-                            var rpBlock = new reportBlock({model: val, page: this, type: "funnel"});
+                            var rpBlock = new reportBlock({model: val, page: this, type: "funnel",subType:this.subType});
                             tabLevel.append(rpBlock.$el);
-                            lCount = lCount + parseInt(val.get("subCount"));
+                            lCount = lCount + parseInt(val.get(this.getLabelCount()));
                         }, this);  
                         levelCount[i] = lCount;
                     }
@@ -2571,14 +2637,24 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     var _data = [{
                         name: 'Subscribers',
                         data: [
-                            ['Level 1', levelCount[0]],
-                            ['Level 2', levelCount[1]],
-                            ['Level 3', levelCount[2]],
-                            ['Level 4', levelCount[3]]
+                            ['New', levelCount[0]],
+                            ['MQL', levelCount[1]],
+                            ['SQL', levelCount[2]],
+                            ['Closed', levelCount[3]]
                         ]
                     }]
                     this.chartPage.createFunnelChart(_data);
                     this.saveSettings();
+                },
+                getLabelCount: function(){
+                  var countKey = "subCount";
+                  /*if(this.subType=="page"){
+                    countKey="submitCount";
+                  }
+                  else if(this.subType=="form"){
+                    countKey="submitCount";  
+                  }*/
+                  return countKey;
                 },
                 changeLevel: function(e){
                    var level = $.getObj(e, "li"); 

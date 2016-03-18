@@ -1,4 +1,4 @@
-define(['text!forms/html/selectform.html', 'forms/collections/formlistings', 'forms/formlistings_row','bms-shuffle'],
+define(['text!forms/html/selectform.html', 'forms/collections/formlistings',  'forms/formlistings_row','bms-shuffle'],
 function (template, FormsCollection, formRowView) {
         'use strict';
         return Backbone.View.extend({  

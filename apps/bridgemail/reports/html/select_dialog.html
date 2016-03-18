@@ -1,0 +1,44 @@
+<div class="soruces clearfix" id="area_choose" style=" height:410px;">
+    <div class="col1">
+        <h2 class="header-list"><strong class="left" id="total_templates"><%- this.mapping[this.type].label %></strong>                                   
+            <div class="input-append search" id="pagesearch"> 
+                <a class="refresh_btn showtooltip" data-original-title="Refresh listing" style="margin:0 0 0 5px;"><i>Refresh</i></a>
+                <span class="icon sforms"></span><input type="text" style="width:200px;" class="search-control show-image" placeholder="Search <%- this.mapping[this.type].label %>" id="form-search"><a style="display: none;right: 80px;" id="clearsearch" class="close-icon form-search" ></a><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"> 				  </span></button></div>
+            </div>
+            
+        </h2>
+        <div class="template-container leftcol" style="margin-right:5px">
+            <div class="funnel-levels">
+                <ul  class="funnel-tabs-btns clearfix">
+                    <li class="bg-level1" data-tab="1"><a>1</a></li>
+                    <li class="bg-level2" data-tab="2"><a>2</a></li>
+                    <li class="bg-level3" data-tab="3"><a>3</a></li>
+                    <li class="bg-level4" data-tab="4"><a>4</a></li>
+                </ul>
+                <div class="funnel-tab-contents">
+                    <div class="tab-1">
+                        <div class="rpt-block-area">
+                            
+                         </div>
+                    </div>
+                </div>
+            </div>  
+            <!--<div class="target-listing" id="targets">
+                <table cellpadding="0" cellspacing="0" width="100%" id="forms_grid"><tbody></tbody></table>
+            </div>-->
+        </div>
+        <!-- template-container  --> 
+    </div>
+    <!-- col1  -->
+
+    <div class="col2">
+        <h2 class="header-list">Selected <%- this.mapping[this.type].label %></h2>
+        <div class="template-container rightcol" style="margin-left:5px">
+            <div class="rpt-block-area">
+                            
+            </div>
+         </div>
+    </div>
+    <!-- col2 --> 
+
+</div>

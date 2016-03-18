@@ -10383,11 +10383,11 @@ Report Graph Changes
     width: 53%;
     border:none;
 }
-.report-panel .rpt-block-area{
+.rpt-block-area{
     max-height: 312px;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
-.report-panel .rept-data-box {
+.rept-data-box {
     background: #EFF7FA none repeat scroll 0 0;
     border-radius: 2px;
     float: left;
@@ -10412,47 +10412,50 @@ Report Graph Changes
      display:block;
 }
 
-.report-panel .rept-data-box:nth-child(even){
+.rept-data-box:nth-child(even){
     margin-right: 0;
 }
-.report-panel .rept-data-box .name-type {
+.rept-data-box .name-type {
     max-width: 88%;
     padding: 2px 0 2px 5px;
     position: relative;
 }
 
-.report-panel .rept-data-box .name-type h3{
+.rept-data-box .name-type h3{
       white-space: nowrap;
      vertical-align: top;
      overflow:hidden;
      font-weight: normal;
      line-height: 30px;
 }
-.report-panel .rept-data-box.rept-data-nt .name-type h3 {
+.rept-data-box.rept-data-nt .name-type h3 {
     line-height: 20px;
 }
-.report-panel .rept-data-box .name-type h3 a{
+.rept-data-box .name-type h3 a{
     color:#607586;
      font-family: proxima_nova_semibold;
     font-size: 14px;
 }
-.report-panel .rept-data-tagbox .name-type h3 a,.report-panel .rept-data-nt .name-type h3 a{
+.rept-data-tagbox .name-type h3 a,.rept-data-nt .name-type h3 a{
     color:#7DA6BA;
 }
-.report-panel .rpt-details .pclr18 {
+.rpt-details .pclr18 {
     background-color: #fea376 !important;
     color: #fff !important;
     font-family: proxima_nova_regular;
     margin: 1px 0 0 10px;
 }
-.report-panel .lastSaveInfo{
+.rpt-details .lastSaveInfo{
     color: #607586;
     line-height: 20px;
     left:0;
     font-size: 12px;
     float:left;
+    display: inline-block;
+    text-align: center;
+    width: auto;
 }
-.report-panel .lastSaveInfo i{
+.rpt-details .lastSaveInfo i{
     float:left;
     height:20px;
 }
@@ -10461,7 +10464,7 @@ Report Graph Changes
     height: 16px;
     width: 28px;
 }
-.report-panel .rpt-details .formview, .report-panel .rpt-details .landingpage,.report-title span{
+.rpt-details .formview, .rpt-details .landingpage,.report-title span{
     color: #607586;
     float: left;
     font-size: 12px;
@@ -10475,14 +10478,14 @@ Report Graph Changes
 .report-title span i{
     float:left;
 }
-.report-panel .rpt-details .formview i.formview,.report-title .formview i.formview{
+.rpt-details .formview i.formview,.report-title .formview i.formview{
     background: rgba(0, 0, 0, 0) url("../img/formicon.png") no-repeat scroll 10px 0;
 }
-.report-panel .rpt-details .landingpage i.lp,.report-title .landingpage i.lp{
+.rpt-details .landingpage i.lp,.report-title .landingpage i.lp{
     background: rgba(0, 0, 0, 0) url("../img/pgviewicon.png") no-repeat scroll 10px 0;
     float: left;
 }
-.report-panel .rpt-details .subscribers{
+.rpt-details .subscribers{
     color: #607586;
     line-height: 20px;
     font-size: 12px;
@@ -10490,7 +10493,7 @@ Report Graph Changes
     margin-left: 10px;
     height:20px;
 }
-.report-panel .rpt-details {
+.rpt-details {
     position: relative;
     padding-bottom: 10px;
     clear:both;    
@@ -10511,6 +10514,10 @@ Report Graph Changes
     display:none;
     
 }
+#triangle-bottomleft.add-rpt{
+    border-top: 45px solid #7bcb4e;
+}
+
 .report-panel #triangle-bottomleft .close{
     opacity: 0.9;
     position: absolute;
@@ -10552,7 +10559,7 @@ Report Graph Changes
 .report-panel .rpt-activityPanelHide.rept-activities  .temp-filters {
     padding: 0 0 7px;
 }
-.report-panel  .rpt-tag-pclr i{
+.rpt-tag-pclr i{
      border-radius: 50%;
     display: inline-block;
     height: 10px;
@@ -10560,14 +10567,14 @@ Report Graph Changes
     position: relative;
     width: 10px;
 }
-.report-panel .rpt-tag-pclr{
+.rpt-tag-pclr{
     color: #7DA6BA;
     float: left;
     font-size: 14px;
     line-height: 16px;
     margin: 0 5px;
 }
-.report-panel .rept-data-tagbox .icons-bar-chart{
+.rept-data-tagbox .icons-bar-chart{
    left: 58px;
     top: -4px;
 }
@@ -10663,7 +10670,7 @@ Report Graph Changes
 .report-panel .rpblue-delete:hover{
     background-position: -330px -132px;
 }
-.report-panel .rpclose {
+.rpclose {
     background-position: -14px -222px;
     display: block;
     height: 15px;
@@ -10671,6 +10678,9 @@ Report Graph Changes
     right: 3px;
     top: -32px;
     width: 16px;
+}
+#triangle-bottomleft.add-rpt .rpclose{
+    background-position: 0 -222px;
 }
 .report-panel .rpt-nurturetra .rpclose {
     right: 3px;
@@ -11074,7 +11084,7 @@ right: 66px;
     margin-left: 5px;
 }
 .report-panel .temp-filters .since{
-    margin-right: 20px !important;
+    margin-right: 0px !important;
 }
 .rpt-showgrowth-icon{
     background-position: -62px -164px;    
@@ -11252,4 +11262,27 @@ right: 66px;
     margin-top:-8px;
     width:100px !important;
     
+}
+.select-funnel-type {
+    border:0px; 
+    width: 460px;
+    margin: 5px auto;
+}
+.select-funnel-type .addbar ul li{
+    width:143px;
+}
+.dl-funnel{
+   background: url("../images/reports-icons.png") no-repeat scroll -360px -60px transparent;  
+}
+.select-view .leftcol,.select-view .rightcol{    
+    background:#eaf4f9;
+    padding:5px;
+}
+.select-view .funnel-tab-contents {
+    width:543px;
+}
+.select-view .rpt-block-area{
+    height:335px;
+    background:#fff;
+    max-height: 335px;
 }

@@ -152,9 +152,14 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                selected_obj['campMapping'] =r_val.campMapping;
                             }else if(type=="funnel"){
                                 id = r_index;
-                                selected_obj['level'+r_index] = [];
+                                selected_obj['level'+r_index] = [];                                                                
                                 _.each(r_val,function(f_val){
-                                    selected_obj['level'+r_index].push({"tag":f_val.get("tag"),"subCount":f_val.get("subCount")});
+                                    var obj_json = {"tag":f_val.get("tag"),"subCount":f_val.get("subCount")};
+                                    if(val.subType!=="tag"){
+                                        obj_json['id'] = f_val.get("id");
+                                        obj_json['checkSum'] = f_val.get("checkSum");
+                                    }
+                                    selected_obj['level'+r_index].push(obj_json);
                                 },this);
                             }
                             
@@ -168,6 +173,9 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                             
                             report_obj[type].push(selected_obj);          
                         },this);       
+                        if(type=="funnel"){
+                            report_obj['subType'] = val.subType;
+                        }
                         if(val.toDate){
                             report_obj['toDate'] = val.toDate;
                         }
