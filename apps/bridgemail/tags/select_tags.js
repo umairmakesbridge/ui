@@ -95,7 +95,7 @@ define(['text!tags/html/select_tags.html', 'bms-mapping'],
                          },this);   
                          this.parent.modelArray = this.tagsModelArray;                        
                          this.parent.objects = objectArray;
-                         this.dialog.hide();
+                         this.dialog.hide(true);
                          this.parent.createTags();
                         }
                         else{

@@ -73,7 +73,7 @@ define(['text!reports/html/select_stats.html', 'jquery.icheck'],
                         this.selectedTypes.push({id:selectedStates,subtype:selected_tab,campMapping:campMapping});
                         this.parent.modelArray = this.selectedTypes;
                         this.parent.objects = objectArray;
-                        this.dialog.hide();
+                        this.dialog.hide(true);
                         this.parent.createWebstats();
                     }
                     else {

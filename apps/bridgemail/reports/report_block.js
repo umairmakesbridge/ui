@@ -127,6 +127,18 @@ define(['text!reports/html/report_block.html'],
                     else{
                         this.sub.createTags();
                     }
+                  }else if(this.type=="funnel"){
+                     var selectedLevel = this.sub.$(".funnel-tabs-btns .active").attr("data-tab");
+                     selectedLevel = parseInt(selectedLevel) - 1;
+                     _.each(this.sub.modelArray[selectedLevel], function (val, index) {
+                        if(val.get("tag")==this.model.get("tag")){
+                            delIndex = index;                                                      
+                        }                       
+                    },this);                     
+                    if(delIndex>-1){
+                        this.sub.modelArray[selectedLevel].splice(delIndex,1);                                        
+                        this.sub.createFunnel();                    
+                    }
                   }
                 },
                 /*
@@ -255,8 +267,27 @@ define(['text!reports/html/report_block.html'],
                     } else {
                         this.$(".taglink").highlight($.trim(this.sub.tagTxt));
                     }
+                    
+                    this.$(".check-obj").iCheck({
+                          checkboxClass: 'checkpanelinput reportcheck',
+                          insert: '<div class="icheck_line-icon" style="margin: 25px 0 0 10px;"></div>'
+                    });                    
+                    this.$(".check-obj").on('ifChecked', _.bind(this.refreshReport,this));
+                    this.$(".check-obj").on('ifUnchecked', _.bind(this.refreshReport,this));
 
-
+                },
+                refreshReport:function(){                    
+                    if(this.type=="campaign"){                                        
+                        this.sub.createCampaignChart();                    
+                    }
+                    else if(this.type=="autobot"){
+                        this.sub.createAutobotChart();
+                    }
+                    else if(this.type=="page"){
+                        this.sub.createPageChart();
+                    }else if(this.type=="form"){
+                        this.sub.createSignupFormChart();
+                    }
                 },
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
@@ -316,7 +347,9 @@ define(['text!reports/html/report_block.html'],
                 },
                 reportShow: function () {
                     var camp_id = this.model.get('campNum.encode');
-                    this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id}, type: '', title: 'Loading...', url: 'reports/summary/summary', workspace_id: 'summary_' + this.model.get('campNum.checksum'), tab_icon: 'campaign-summary-icon'});
+                    if(camp_id){
+                        this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id}, type: '', title: 'Loading...', url: 'reports/summary/summary', workspace_id: 'summary_' + this.model.get('campNum.checksum'), tab_icon: 'campaign-summary-icon'});
+                    }
                 },
                 showEllipsis: function () {
                     var totalTagsWidth = 0;

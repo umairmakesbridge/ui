@@ -5,7 +5,8 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 tags: 'div',
                 className:'content-inner',
                 events: {                    
-                     'click .addbar li':'addReport'
+                     'click .addbar li':'addReport',
+                     'click .help-video':'showVideo'
                 },
                 initialize: function () {
                     this.app = this.options.app;     
@@ -188,12 +189,15 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                         
                     return JSON.stringify(report_json);
                 },
-                removeMode:function(no){
+                removeMode:function(no){                    
                     this.models.splice(no-1,1);
                     if(this.models.length==0){
                         this.$(".report-empty").fadeIn();
                     }
                 },
+                removeUndrawModel:function(no){                    
+                    this.models.splice(no-1,1);                    
+                },                
                 showHideTitle:function(show,isNew){
                     if(this.editable==false){
                         return false;
@@ -288,6 +292,25 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                             
                         }, this));
                      }
+                },
+                showVideo: function(){                    
+                    var dialog_title = "Reports Help Video";
+                    var dialog = this.app.showDialog({title: dialog_title,
+                        css: {"width": "580px", "margin-left": "-290px"},
+                        bodyCss: {"min-height": "325px"}
+                    });
+                    dialog.getBody().html('<iframe width="560" height="315" src="https://www.youtube.com/embed/uyRu_a8yCQM" frameborder="0" allowfullscreen></iframe>');
+                },
+                refreshWorkSpace: function(options){
+                    var highChartsArray = this.$("[data-highcharts-chart]");
+                    _.each(highChartsArray,function(val,key){
+                        if(val){
+                          var _index = $(val).data("highcharts-chart");
+                          if(Highcharts && Highcharts.charts && Highcharts.charts[_index]){
+                             Highcharts.charts[_index].reflow();
+                          }
+                        }
+                    },this);
                 }
 
             });

@@ -256,7 +256,7 @@ function (template, AutobotCollection, botRowView) {
                              this.parent.modelArray = this.botsModelArray;
                              this.parent.pagesArray = pagesArray;
                              this.parent.objects = objectArray;
-                             this.dialog.hide();
+                             this.dialog.hide(true);
                              this.parent.createAutobots();
                         }
                         else{

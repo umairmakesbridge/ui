@@ -2,7 +2,8 @@
 <% if(this.expandedView==false) { %>
 
 <% if(this.type=="campaign"){ %>
-<div data-checksum="<%-this.model.get('campNum.checksum')%>">
+<input class="check-obj" type="checkbox" value="<%-this.model.get('campNum.encode')%>" data-checksum="<%-this.model.get('campNum.checksum')%>" checked="checked" />
+<div data-checksum="<%-this.model.get('campNum.checksum')%>" class="block-container">
     <div class="name-type">              
         <h3>                    
             <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview"><%= this.model.get('name')%></a>                    
@@ -23,7 +24,8 @@
     </div>
 </div>
 <% } else if( this.type=="page") { %>
-    <div data-checksum="<%-this.model.get('pageId.checksum')%>">
+    <input class="check-obj" type="checkbox" value="<%-this.model.get('pageId.encode')%>" data-checksum="<%-this.model.get('pageId.checksum')%>" checked="checked" />
+    <div data-checksum="<%-this.model.get('pageId.checksum')%>" class="block-container">
     <div class="name-type">              
         <h3>                    
             <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview"><%= this.model.get('name')%></a>                    
@@ -39,7 +41,8 @@
    </div>
 
 <% } else if(this.type=="form") { %>
-    <div data-checksum="<%-this.model.get('formId.checksum')%>">
+    <input class="check-obj" type="checkbox" value="<%-this.model.get('formId.encode')%>" data-checksum="<%-this.model.get('formId.checksum')%>" checked="checked" />
+    <div data-checksum="<%-this.model.get('formId.checksum')%>" class="block-container">
     <div class="name-type">              
         <h3>                    
             <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview"><%= this.model.get('name')%></a>                    
@@ -55,7 +58,8 @@
    </div>
 
 <% } else if(this.type=="autobot") { %>
-    <div data-checksum="<%-this.model.get('botId.checksum')%>">
+    <input class="check-obj" type="checkbox" value="<%-this.model.get('botId.encode')%>" data-checksum="<%-this.model.get('botId.checksum')%>" checked="checked" />
+    <div data-checksum="<%-this.model.get('botId.checksum')%>" class="block-container">
     <div class="name-type">              
         <h3>                    
             <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview">
@@ -127,7 +131,7 @@
                 </h3> 
                 <a class="cstatus <%=this.getFlagClass().flag_class%>"><%= this.getCampStatus().status %></a>
                 <div class="icons-bar-chart" style="display:block">
-                    <div data-original-title="Click to see detail report" class="rpbarchart rpicon rpicon-two showtooltip"></div>
+                    <div data-original-title="Click to see detail report" class="rpbarchart rpicon rpicon-two rp-detail-report showtooltip"></div>
                 </div>                
                 <span class="subscribers"><i class="icon subscribers"></i><%= this.app.addCommas(this.model.get('sentCount')) %></span>        
             </div>
@@ -192,26 +196,32 @@
                 <div class="rpt-camp-sent">
                     <h3>Sent</h3>
                     <p class="sentCount">0</p>
+                    <i class="stats-percentage sentCountPer">0%</i>
                 </div>
                 <div class="rpt-camp-open">
                     <h3>Open</h3>
                     <p class="openCount">0</p>
+                    <i class="stats-percentage openCountPer">0%</i>
                 </div>
                 <div class="rpt-camp-click">
                     <h3>Click</h3>
                     <p class="clickCount">0</p>
+                    <i class="stats-percentage clickCountPer">0%</i>
                 </div>
                 <div class="rpt-camp-pv">
                     <h3>Views</h3>
                     <p class="pageViewsCount">0</p>
+                    <i class="stats-percentage pageViewsCountPer">0%</i>
                 </div>
                 <div class="rpt-camp-conv">
                     <h3>Social</h3>
                     <p class="socialCount">0</p>
+                    <i class="stats-percentage socialCountPer">0%</i>
                 </div>
                 <div class="rpt-camp-bounced">
                     <h3>Bounced</h3>
                     <p class="bounceCount">0</p>
+                    <i class="stats-percentage bounceCountPer">0%</i>
                 </div>
             </div>              
             <% } else if(this.type=="page") { %>

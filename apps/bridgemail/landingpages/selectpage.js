@@ -250,7 +250,7 @@ function (template, PagesCollection, pageRowView) {
                              },this);   
                              this.parent.modelArray = this.pagesModelArray;
                              this.parent.pagesArray = pagesArray;
-                             this.dialog.hide();
+                             this.dialog.hide(true);
                              this.parent.createPages();
                         }
                         else{

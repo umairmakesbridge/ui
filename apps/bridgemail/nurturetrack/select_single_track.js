@@ -201,7 +201,7 @@ function (template, TracksCollection, trackRowView) {
                      this.parent.modelArray = this.tracksModelArray;
                      this.parent.pagesArray = tracksArray;
                      this.parent.objects = objectArray;
-                     this.dialog.hide();
+                     this.dialog.hide(true);
                      this.parent.createNurtureTrack();
                     
                 },

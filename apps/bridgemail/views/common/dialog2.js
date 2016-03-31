@@ -150,7 +150,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                           $("#header,#activities").hide();
                           $("body").css("overflow-y","hidden");
                         },
-                        hide:function(){
+                        hide:function(closeOnly){
                             var length = this.app.dialogArray.length;
                             var showElement = length-1; 
                             var currView = this.app.dialogArray[showElement].currentView;
@@ -169,7 +169,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                    }
                                },100);
                               }
-                           if(this.option.closeCallBack){
+                           if(this.option.closeCallBack && !closeOnly){
                                this.option.closeCallBack();
                            }
                            if(this.CloseCall){

@@ -394,6 +394,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": "1200px", "margin-left": "-600px"},
                         bodyCss: {"min-height": "423px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'lppage'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -426,6 +427,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         _.each(this.modelArray, function (val, index) {
                             var rpBlock = new reportBlock({model: val, page: this, type: "page"});
                            _grid.append(rpBlock.$el);
+                           
                         }, this);                        
                         this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#39c8a9', '#66a2cd']});
                         this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
@@ -435,8 +437,14 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                 },
                 createPageChart: function () {
                     if (this.modelArray.length) {                        
-                        
-                        var total_pages_selected = this.modelArray.length;
+                        var that = this;                        
+                        var _pages = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("pageId.checksum")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el;
+                            }
+                        });
+                        var total_pages_selected = _pages.length;
                         this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
                             this.$(".total-count .rp-selected").html('landing pages selected');
@@ -446,7 +454,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         }
                         this.chart_data = {submitCount: 0, viewCount: 0};
                         
-                        _.each(this.modelArray, function (val, index) {                            
+                        _.each(_pages, function (val, index) {                            
                             this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));
                             this.chart_data['viewCount'] = this.chart_data['viewCount'] + parseFloat(val.get("viewCount"));
                             
@@ -590,6 +598,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10px"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'campaigndlg'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -628,7 +637,14 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                 createCampaignChart: function () {
                     if (this.modelArray.length) {
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));                                               
-                        var total_pages_selected = this.modelArray.length;
+                        var total_pages_selected = 0;
+                        var that = this;                        
+                        var _campaigns = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("campNum.checksum")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el.get("campNum.encode");
+                            }
+                        }).join(",");
                         this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
                             this.$(".total-count .rp-selected").html('campaigns selected');
@@ -636,9 +652,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         else {
                             this.$(".total-count .rp-selected").html('campaign selected');
                         }
-                        var _campaigns = $.map(this.modelArray, function (el) {
-                            return el.get("campNum.encode");
-                        }).join(",");
+                        
                         this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
                             , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
                             twitterCount: 0, unSubscribeCount: 0};
@@ -787,7 +801,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("campNum.checksum") + " ." + key).html(this.app.addCommas(v));
-                                            //this.$("#stats-" + val.get("campNum.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            this.$("#stats-" + val.get("campNum.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
 
                                     //}, this));
@@ -812,7 +826,8 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     }
                     else {
                         this.$(".rpt-campign-listing").show();
-                        this.$(".rpt-expand").hide();
+                        this.$(".rpt-expand").children().remove();
+                        this.$(".rpt-expand").hide();                        
                         //this.$(".template-container").css({"overflow-y": 'auto', height: '420px'});
                         //this.$(".parent-container").removeAttr("style");
                     }
@@ -849,6 +864,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10px"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'bot'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -888,7 +904,14 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                 createAutobotChart: function () {
                     if (this.modelArray.length) {
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        var total_pages_selected = this.modelArray.length;
+                        var total_pages_selected = 0;
+                        var that = this;
+                         var _bots = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("botId.checksum")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el.get("botId.encode");
+                            }
+                        }).join(",");
                         this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
                             this.$(".total-count .rp-selected").html('autobots selected');
@@ -896,9 +919,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         else {
                             this.$(".total-count .rp-selected").html('autobot selected');
                         }
-                        var _bots = $.map(this.modelArray, function (el) {
-                            return el.get("botId.encode");
-                        }).join(",");
+                       
                         this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
                             , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
                             twitterCount: 0, unSubscribeCount: 0};
@@ -1046,7 +1067,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("botId.checksum") + " ." + key).html(this.app.addCommas(v));
-                                            //this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
                                     //}, this));
                                 }
@@ -1089,6 +1110,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10px"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'dlgformwizard'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -1127,8 +1149,14 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                 },
                 createSignupFormChart: function () {
                     if (this.modelArray.length) {                        
-                        
-                        var total_pages_selected = this.modelArray.length;
+                        var that = this;
+                         var _forms = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("formId.checksum")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el;
+                            }
+                        });
+                        var total_pages_selected =_forms.length;
                         this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
                             this.$(".total-count .rp-selected").html('forms selected');
@@ -1137,7 +1165,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                             this.$(".total-count .rp-selected").html('form selected');
                         }
                         this.chart_data = {submitCount: 0};
-                        _.each(this.modelArray, function (val, index) {                            
+                        _.each(_forms, function (val, index) {                            
                             this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));                            
                         }, this);
 
@@ -1267,6 +1295,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10px"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'nurturedlg'
                     }
                     //dialog_object["buttons"]= {saveBtn:{text:'Done'} }  ;                      
@@ -1524,7 +1553,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                             this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                             this.chartPage.createChart(_data);
                                             _.each(this.chart_data, function (v, key) {
-                                                this.$("#stats-" + val.get("campNum.checksum") + " ." + key).html(this.app.addCommas(v));                                                
+                                                this.$("#stats-" + val.get("campNum.checksum") + " ." + key).html(this.app.addCommas(v));     
+                                                this.$("#stats-" + val.get("campNum.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(this.chart_data["sentCount"]) * 100).toFixed(2) + "%");
+                                                
                                             }, this);
                                         //}, this));
                                     }
@@ -1642,6 +1673,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'tagw'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -2029,6 +2061,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'setting2'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -2534,9 +2567,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         _html += '<h2>Select Funnel Type</h2>';
                         _html += '<div class="add-panel select-funnel-type"><div class="addbar">';
                         _html += '<ul>';
-                        _html += '<li class="rpt-li-tags" data-type="tag"><a><span class="rpicon rpicon-fifty rptags"></span>Tags</a></li>';
-                        _html += '<li class="rpt-li-landingpages" data-type="page"><a><span class="rpicon rpicon-fifty rplppage"></span>Landing Pages</a></li>';
-                        _html += '<li class="rpt-li-webforms" data-type="form"><a><span class="rpicon rpicon-fifty rpform30"></span>Webforms</a></li>';
+                        _html += '<li class="rpt-li-tags" data-type="tag"><a><span class="rpicon rpicon-fifty rpfunnel"></span>B2B Sales</a></li>';
+                        _html += '<li class="rpt-li-landingpages" data-type="page"><a><span class="rpicon rpicon-fifty rpfunnel"></span>Landing Pages</a></li>';
+                        _html += '<li class="rpt-li-webforms" data-type="form"><a><span class="rpicon rpicon-fifty rpfunnel"></span>Webforms</a></li>';
                         _html += '</ul>';
                         _html += '</div></div></div></div>';
                         _html += '<br></div></div>';
@@ -2544,6 +2577,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         selection_dialog.find(".closebtn").click(_.bind(function(e){
                             var target = $(e.target);
                             target.parents(".overlay").remove();
+                            this.closeDialog();
                         },this));
                         selection_dialog.find(".select-funnel-type li").click(_.bind(function(e){
                             var liObj = $.getObj(e, "li");
@@ -2566,6 +2600,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'dl-funnel'
                     }
                     var selectedLevel = this.$(".funnel-tabs-btns li.active").attr("data-tab");
@@ -2589,6 +2624,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'dl-funnel'
                     }
                     var selectedLevel = this.$(".funnel-tabs-btns li.active").attr("data-tab");
@@ -2637,7 +2673,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     var _data = [{
                         name: 'Subscribers',
                         data: [
-                            ['New', levelCount[0]],
+                            ['New Leads', levelCount[0]],
                             ['MQL', levelCount[1]],
                             ['SQL', levelCount[2]],
                             ['Closed', levelCount[3]]
@@ -2666,6 +2702,11 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                        this.$(".tab-"+selectedLevel).show();
                        
                    }
+                },
+                closeDialog:function(){
+                    if(this.doDraw){
+                        this.sub.removeUndrawModel(this.orderNo);
+                    }
                 }
                 
                 

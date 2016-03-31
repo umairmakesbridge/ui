@@ -17,7 +17,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                                                        
                         };
                         this.levelExplain = {
-                            "1":{"text":"Showing Moderate Interest (Example:  people who have clicked several times on email)","cssClass":"one","label":"New"},
+                            "1":{"text":"Showing Moderate Interest (Example:  people who have clicked several times on email)","cssClass":"one","label":"New Leads"},
                             "2":{"text":"Marketing Qualified (Example: has requested a product trial or demo)","cssClass":"two","label":"MQL"},
                             "3":{"text":"Sales Qualified (Example: Meets your minimum engagement standard for sales follow up)","cssClass":"three","label":"SQL"},
                             "4":{"text":"Negotiations / Ready to Close (Example: Your in the top spot and in pricing discussions)","cssClass":"four","label":"Closed"}
@@ -38,27 +38,13 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                 },
 
                 render: function () {                       
-                        this.$el.html(this.template({}));       
-                        
+                     this.$el.html(this.template({}));                               
                 },
-                init:function(){
-                  this.$('div#recpssearch').searchcontrol({
-                            id:'form-recps-search',
-                            width:'220px',
-                            height:'22px',
-                            placeholder: 'Search selection...',
-                            gridcontainer: this.$('#area_choose_forms .col2'),
-                            showicon: 'yes',
-                            iconsource: this.mapping[this.type].iconClass
-                     });                   
-                     
-                    
-                    
-                    
-                    //this.scrollElement = this.$(".leftcol .bDiv");
+                init:function(){                                      
+                    this.scrollElement = this.$(".leftcol .rpt-block-area");
                     this.loadRows();
-                    //this.scrollElement.scroll(_.bind(this.liveLoading,this));
-                    //this.scrollElement.resize(_.bind(this.liveLoading,this));
+                    this.scrollElement.scroll(_.bind(this.liveLoading,this));
+                    this.scrollElement.resize(_.bind(this.liveLoading,this));
                     this.$(".col1 #form-search").on("keyup",_.bind(this.search,this));
                     this.$(".col1 #clearsearch").on("click",_.bind(this.clearSearch,this));
                     this.$('.refresh_btn').click(_.bind(function(){                        
@@ -67,6 +53,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                     this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     this.$(".funnel-tabs-btns li[data-tab='"+this.selectedLevel+"']").addClass("active");
                     this.drawExplain();
+                    this.fillLevels();
                 },
                 changeLevel:function(e,obj){
                    var level = $.getObj(e, "li"); 
@@ -100,18 +87,18 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                     }                    
                     _data['bucket'] = 20;
                                         
-                    this.$('.leftcol .load-row').remove();
+                    this.$('.leftcol .loadmore').remove();
                     if(this.type=="form"){
                         this.objectCollection = new FormsCollection();
                     }
                     else if(this.type=="page"){
                         this.objectCollection = new pagesCollection();
                     }
-                    
+                    this.$(".leftcol .rpt-block-area").append('<div class="loadmore rpt-loadmore" style=""><img alt="" src="img/loading.gif"><p>Please wait, loading...</p></div>');
                     this.request = this.objectCollection.fetch({data: _data,
                         success: _.bind(function (data1, collection) {
                             // Display items
-                            this.$('.leftcol .load-row').remove();
+                            this.$('.leftcol .loadmore').remove();
                             if (this.app.checkError(data1)) {
                                 return false;
                             }
@@ -121,19 +108,59 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                             //this.showTotalCount(collection.totalCount);                            
                             _.each(data1.models, _.bind(function (model) {
                                 var row = new reportBlock({model: model, page: this, type: this.type, addClass:'add-rpt',isAddRemove:true});
-                                this.$('.leftcol .rpt-block-area').append(row.$el);                                                                
+                                this.$('.leftcol .rpt-block-area').append(row.$el);        
+                                //hide selected items
+                                for(var i=0;i<this.levels["level"+this.selectedLevel].length;i++){
+                                    if(this.levels["level"+this.selectedLevel][i].get(this.getCheckSum())===model.get(this.getCheckSum())){
+                                        row.$el.hide();
+                                        break;
+                                    }
+                                }
                             }, this));
                                                                                     
                             if (this.total_fetch < parseInt(collection.totalCount)) {
                                 this.$(".leftcol .rept-data-box").last().attr("data-load", "true");
-                            }
-                            this.$('.leftcol .load-row').remove();                            
+                            }                            
 
                         }, this),
                         error: function (collection, resp) {
 
                         }
                     });   
+                },
+                fillLevels:function(){
+                    if(this.parent.modelArray.length){
+                        this.$(".rightcol .rpt-block-area").append('<div class="loadmore rpt-loadmore" style=""><img alt="" src="img/loading.gif"><p>Please wait, loading selection...</p></div>');
+                        for(var i=0;i<this.parent.modelArray.length;i++){
+                            var objIds = this.parent.modelArray[i].map(function (index) {
+                                return index.id
+                            }).join();
+                            
+                            var URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
+                            var post_data = {pageId_csv: objIds};                            
+                            if(this.type=="form"){
+                                URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
+                                post_data = {formId_csv: objIds};
+                            }
+                            $.post(URL, post_data).done(_.bind(function (_i, data) {                                
+                                var _json = jQuery.parseJSON(data);
+                                var objs = null;
+                                if(this.type=="form"){
+                                    objs = _json.forms?_json.forms[0]:[];
+                                }
+                                else {
+                                    objs = _json.pages?_json.pages[0]:[];
+                                }
+                                _.each(objs, function (val) {
+                                    this.levels["level"+_i].push(new Backbone.Model(val[0]));
+                                }, this);                        
+                                if(_i==this.selectedLevel){
+                                    this.$(".rightcol .rpt-block-area .loadmore").remove();
+                                    this.showSelectedLevel();
+                                }
+                            }, this,(i+1)));
+                        }
+                    }                    
                 },
                 getCheckSum: function(){
                     var checkSumKey = "";
@@ -180,8 +207,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                     this.$(".leftcol div[data-checksum='"+model.get(this.getCheckSum())+"']").parent().show();
                 },
                 search: function(ev) {
-                    this.searchTxt = '';
-                    this.searchTags = '';
+                    this.searchTxt = '';                    
                     var that = this;
                     var code = ev.keyCode ? ev.keyCode : ev.which;
                     var nonKey = [17, 40, 38, 37, 39, 16];
@@ -190,16 +216,13 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                     }
                     if ($.inArray(code, nonKey) !== -1)
                         return;
-                    var text = $(ev.target).val();
-                    text = text.replace('Tag:', '');
-
+                    var text = $(ev.target).val();                    
 
                     if (code == 13 || code == 8) {
                         that.$el.find('.col1 #clearsearch').show();
                         this.searchTxt = text;
                         that.loadRows();
                     } else if (code == 8 || code == 46) {
-
                         if (!text) {
                             that.$el.find('.col1 #clearsearch').hide();
                             this.searchTxt = text;
@@ -212,28 +235,21 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                             if (text.length < 2)
                                 return;
                             that.searchTxt = text;
-                            that.loadCampaigns();
+                            that.loadRows();
                         }, 500); // 2000ms delay, tweak for faster/slower
                     }
                 }, clearSearch: function(ev) {
-                    $(ev.target).hide();
-                    this.$(".col1 .search-control").val('');
+                    $(ev.target).hide();                    
                     this.total = 0;
-                    this.searchTxt = '';
-                    this.searchTags = '';
-                    this.total_fetch = 0;
-                    this.$("#total_targets span").html("Campaign(s) found");    
-                    this.loadCampaigns();
-                },
-                showSearchFilters: function(text, total) {
-                    this.$("#total_targets .badge").html(total);
-                    this.$("#total_targets span").html("Campaign(s) found for  <b>\"" + text + "\" </b>");
+                    this.searchTxt = '';                    
+                    this.total_fetch = 0;                    
+                    this.loadRows();
                 },
                 liveLoading: function(where) {
-                    var $w = $(window);
+                    var $w = this.scrollElement;
                     var th = 200;
 
-                    var inview = this.$el.find('table#forms_grid tbody tr:last').filter(function() {
+                    var inview = this.$el.find('.rpt-block-area div.rept-data-box:last').filter(function() {
                         var $e = $(this),
                                 wt = $w.scrollTop(),
                                 wb = wt + $w.height(),
@@ -243,7 +259,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                     });
                     if (inview.length && inview.attr("data-load") && this.$el.height() > 0) {
                         inview.removeAttr("data-load");
-                        this.loadCampaigns(this.offsetLength);
+                        this.loadRows(this.offsetLength);
                     }
                 },
                 saveCall:function(){                   
@@ -262,7 +278,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
 
                     },this);          
                     this.parent.modelArray = this.objectsModelArray;                            
-                    this.dialog.hide();
+                    this.dialog.hide(true);
                     this.parent.createFunnel();                        
                 },
                 showSelectedLevel : function(){                           

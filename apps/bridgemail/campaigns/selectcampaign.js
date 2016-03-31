@@ -256,7 +256,7 @@ function (template, CampaignsCollection, campRowView) {
                         this.parent.modelArray = this.campaignsModelArray;
                         this.parent.pagesArray = pagesArray;
                         this.parent.objects = objectArray;
-                        this.dialog.hide();
+                        this.dialog.hide(true);
                         this.parent.createCampaigns();
                         }
                         else{

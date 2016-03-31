@@ -92,7 +92,7 @@
       
       
     }
-  , addBasicFilter:function(obj,e,params){
+  , addBasicFilter:function(obj,e,params){      
       var filter = $(this.options.filterRow)
       filter.addClass("filter darkblue")
       var list_div = '';
@@ -143,7 +143,8 @@
       //filter.find(".filter-cont").append('<span class="timelinelabel">Basic Filter</span>');  
       //Chosen with fields
       var self = this;
-      filter.find(".fields").chosen({width:'320px'}).change(function(){
+      
+      filter.find(".fields").chosen({width:'320px'}).change(function(){          
           if($(this).val()=="{{SUBSCRIPTION_DATE}}"){
               self.subListObj['parentFilter']=filter;
               filter.find(".sub-date-container").hide();
@@ -165,7 +166,7 @@
               filter.find('#basic-filter-options option:nth-child(4)').hide().trigger("chosen:updated");
                filter.find('#basic-filter-options option:nth-child(8)').hide().trigger("chosen:updated");
           }
-          else{
+          else{              
               filter.find(".formats-container").hide()
               filter.find('#basic-filter-options option:nth-child(3)').show().trigger("chosen:updated");
               filter.find('#basic-filter-options option:nth-child(4)').show().trigger("chosen:updated");
@@ -270,9 +271,48 @@
       //Loading Rules, basic fields and formats
         var URL = ""
         var self = this        
-        if(this.basicFields.length===0){
+        if(this.basicFields.length===0){            
             URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=fields_all";
-            jQuery.getJSON(URL,  function(tsv, state, xhr){
+            $.ajax({
+                dataType: "json",
+                url: URL,
+                async:  false,
+                success: function (tsv, state, xhr) {
+                    if (xhr && xhr.responseText) {                        
+                        var fields_json = jQuery.parseJSON(xhr.responseText);                                
+                        if(self.options.app.checkError(fields_json)){
+                            return false;
+                        }       
+                       var bas_field_html ='<option value=""></option>'
+                           bas_field_html +='<optgroup label="Basic Fields">'                            
+                       var cust_field_html = '<optgroup label="Custom Fields">'                        
+                       $.each(fields_json,function(key,val){
+                           selected_field = (params && params.fieldName==val[0]) ? "selected" : ""
+                           if(val[2]=="true"){                            
+                               self.basicFields.push(val)                            
+                               bas_field_html +='<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'                           
+                           }
+                           else{
+                               self.customFields.push(val)
+                               cust_field_html += '<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'
+                           }
+                       });
+                       bas_field_html +='</optgroup>'
+                       cust_field_html +='</optgroup>'                    
+                       filter.find(".fields").html(bas_field_html+cust_field_html).prop("disabled",false).trigger("chosen:updated")
+                       
+                        // Hide the fields for Birthday and Subscriber \
+                        if(params){
+                            if( params.fieldName=="{{SUBSCRIPTION_DATE}}" || params.fieldName=="{{BIRTH_DATE}}"){
+                               filter.find('#basic-filter-options option:nth-child(3)').hide().trigger("chosen:updated");
+                               filter.find('#basic-filter-options option:nth-child(4)').hide().trigger("chosen:updated");
+                               filter.find('#basic-filter-options option:nth-child(8)').hide().trigger("chosen:updated");
+                            }
+                        }
+                    }
+                }
+            });
+            /*jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){                        
                      var fields_json = jQuery.parseJSON(xhr.responseText);                                
                      if(self.options.app.checkError(fields_json)){
@@ -294,7 +334,7 @@
                     });
                     bas_field_html +='</optgroup>'
                     cust_field_html +='</optgroup>'                    
-                    filter.find(".fields").html(bas_field_html+cust_field_html).prop("disabled",false).trigger("chosen:updated")
+                    filter.find(".fields").html(bas_field_html+cust_field_html).prop("disabled",false).trigger("chosen:updated")                    
                      // Hide the fields for Birthday and Subscriber \
                      if(params){
                          if( params.fieldName=="{{SUBSCRIPTION_DATE}}" || params.fieldName=="{{BIRTH_DATE}}"){
@@ -305,9 +345,9 @@
                      }
                     
                 }
-          }).fail(function() { console.log( "error in loading fields" ); });
+          }).fail(function() { console.log( "error in loading fields" ); });*/
       }
-      else{
+      else{          
           var fields_array =this.basicFields
             var filter_html ='<option value=""></option>'
             filter_html +='<optgroup label="Basic Fields">'
@@ -327,7 +367,27 @@
       }
       if(this.rules.length===0){
         URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=rules";
-          jQuery.getJSON(URL,  function(tsv, state, xhr){
+        $.ajax({
+                dataType: "json",
+                url: URL,
+                async: false,
+                success: function (tsv, state, xhr) {
+                    if (xhr && xhr.responseText) {
+                       var rules_json = jQuery.parseJSON(xhr.responseText);                                
+                        if(self.options.app.checkError(rules_json)){
+                            return false;
+                        }                                     
+                        var filter_html =''
+                        $.each(rules_json,function(k,val){
+                             selected_rule = (params && params.rule==val[0]) ? "selected" : ""
+                             filter_html +='<option value="'+val[0]+'" '+selected_rule+'>'+val[1]+'</option>'
+                             self.rules.push(val)
+                        });                   
+                        filter.find(".selectbox.rules").html(filter_html).prop("disabled",false).trigger("chosen:updated") 
+                    }
+                }
+         });
+        /*jQuery.getJSON(URL,  function(tsv, state, xhr){
               if(xhr && xhr.responseText){                        
                    var rules_json = jQuery.parseJSON(xhr.responseText);                                
                    if(self.options.app.checkError(rules_json)){
@@ -341,9 +401,10 @@
                    });                   
                    filter.find(".selectbox.rules").html(filter_html).prop("disabled",false).trigger("chosen:updated")
               }
-        }).fail(function() { console.log( "error in loading rules" ); });
+        }).fail(function() { console.log( "error in loading rules" ); });*/
       }
       else{
+          
             var filter_html = ''
             $.each(this.rules,function(k,val){
                 selected_rule = (params && params.rule==val[0]) ? "selected" : ""
@@ -354,7 +415,28 @@
       }
       if(this.formats.length===0){
         URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=formats";
-          jQuery.getJSON(URL,  function(tsv, state, xhr){
+        $.ajax({
+                dataType: "json",
+                url: URL,
+                async: false,
+                success: function (tsv, state, xhr) {
+                    if (xhr && xhr.responseText) {
+                       var formats_json = jQuery.parseJSON(xhr.responseText);                                
+                        if(self.options.app.checkError(formats_json)){
+                            return false;
+                        }
+
+                        var filter_html =''
+                        $.each(formats_json,function(k,val){
+                             selected_formats = (params && params.dateFormat==val[0]) ? "selected" : ""
+                             filter_html +='<option value="'+val[0]+'" '+selected_formats+'>'+val[1]+'</option>'
+                             self.formats.push(val)
+                        });                   
+                        filter.find(".selectbox.formats").html(filter_html).prop("disabled",false).trigger("chosen:updated")
+                    }
+                }
+         });
+          /*jQuery.getJSON(URL,  function(tsv, state, xhr){
               if(xhr && xhr.responseText){                        
                    var formats_json = jQuery.parseJSON(xhr.responseText);                                
                    if(self.options.app.checkError(formats_json)){
@@ -370,9 +452,9 @@
                    filter.find(".selectbox.formats").html(filter_html).prop("disabled",false).trigger("chosen:updated")
                   
               }
-        }).fail(function() { console.log( "error in loading formats" ); });
+        }).fail(function() { console.log( "error in loading formats" ); });*/
       }
-      else{
+      else{          
           var filter_html = ''
             $.each(this.formats,function(k,val){
                 selected_formats = (params && params.dateFormat==val[0]) ? "selected" : ""

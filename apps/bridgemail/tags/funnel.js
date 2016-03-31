@@ -21,20 +21,21 @@ define(['text!tags/html/funnel.html', 'bms-mapping'],
                     this.app = this.parent.app;            
                     this.dialog = this.options.dialog;
                     this.levelExplain = {
-                        "1":{"text":"Showing Moderate Interest (Example:  people who have clicked several times on email)","cssClass":"one","label":"Cold"},
-                        "2":{"text":"Marketing Qualified (Example: has requested a product trial or demo)","cssClass":"two","label":"Warm"},
-                        "3":{"text":"Sales Qualified (Example: Meets your minimum engagement standard for sales follow up)","cssClass":"three","label":"Hot"},
-                        "4":{"text":"Negotiations / Ready to Close (Example: Your in the top spot and in pricing discussions)","cssClass":"four","label":"Converted"}
+                        "1":{"text":"Showing Moderate Interest (Example:  people who have clicked several times on email)","cssClass":"one","label":"New Leads"},
+                        "2":{"text":"Marketing Qualified (Example: has requested a product trial or demo)","cssClass":"two","label":"MQL"},
+                        "3":{"text":"Sales Qualified (Example: Meets your minimum engagement standard for sales follow up)","cssClass":"three","label":"SQL"},
+                        "4":{"text":"Negotiations / Ready to Close (Example: Your in the top spot and in pricing discussions)","cssClass":"four","label":"Closed"}
                     }
                     this.$el.html(this.template({}));
                 },
                 init: function(){
                     if(this.parent.modelArray.length){
-                        for(var i=0;i<this.parent.modelArray.length;i++){
-                            _.each(this.parent.modelArray[i],function(val){
-                                this.levels["level"+(i+1)].push({"id":val.get("tag"),"count":val.get("subCount")});
-                            },this)
-                            
+                        for(var i=0;i<4;i++){
+                            if(this.parent.modelArray[i]){
+                                _.each(this.parent.modelArray[i],function(val){
+                                    this.levels["level"+(i+1)].push({"id":val.get("tag"),"count":val.get("subCount")});
+                                },this)
+                            }                            
                         }
                     }
                     this.$(".funnel-tabs-btns li[data-tab='"+this.selectedLevel+"']").addClass("active");
@@ -88,6 +89,7 @@ define(['text!tags/html/funnel.html', 'bms-mapping'],
                 },
                 saveCall:function(){
                     var level = this.levels;
+                    this.tagsModelArray = [];
                     _.each(level,function(val,key){                                                      
                        var _l = [];
                         _.each(level[key],function(val,key){ 
@@ -97,7 +99,7 @@ define(['text!tags/html/funnel.html', 'bms-mapping'],
 
                     },this);          
                     this.parent.modelArray = this.tagsModelArray;
-                    this.dialog.hide();
+                    this.dialog.hide(true);
                     this.parent.createFunnel();
                    
                 },

@@ -253,7 +253,7 @@ function (template, FormsCollection, formRowView) {
                             },this);   
                             this.parent.modelArray = this.formsModelArray;
                             this.parent.pagesArray = pagesArray;
-                            this.dialog.hide();
+                            this.dialog.hide(true);
                             this.parent.createSignupForms();
                         }
                         else{
