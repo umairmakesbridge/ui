@@ -1696,7 +1696,9 @@ ol.campaign_progress li.s4:before {content:""; background-image: url("../img/ico
 /*----------
     Abdullah Changes 
  -----------*/	
-
+#tiles .tile-shortcuts ul li.report-flow span,#tiles .tile-shortcuts ul li.bridge-statz span{
+    margin:5px 0;
+}
 .bms-input-tags {
     padding-right: 67px !important;
     width: 244px;
@@ -2195,7 +2197,7 @@ left:70px;
     padding: 5px 6px;
     position: absolute;
     top: 50px;
-    width: 886px;
+    width: 990px;
 	overflow:hidden;
     z-index: 999;
 	-webkit-border-radius: 2px 2px;
@@ -2253,7 +2255,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd > ul > li ul {
     margin: 0;
     overflow: hidden;
-    width: 200px;
+    width: 230px;
 }
 .slidenav-dd > ul > li ul li {
     background-color: #fbfcff;
@@ -2370,7 +2372,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 
 
 
-.slidenav-dd > ul:first-child { float:right; width:630px; }
+.slidenav-dd > ul:first-child { float:right; width:725px; }
 
 
 

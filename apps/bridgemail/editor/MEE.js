@@ -1488,7 +1488,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if (lengthHTML > 1) {
                                         for (var i = 1; i < lengthHTML; i++) {
                                             var obj = $(oHtml[i]);
-
+                                            if(obj[0]){
+                                               
                                             if (obj[0].nodeName == "DIV") {
 
                                                 if (obj.children().length > 1) {
@@ -1510,6 +1511,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 newHtml.append(obj);
                                                 oHtml = $(newHtml);
                                             }
+                                         }
                                         }
 
                                     }
@@ -1577,6 +1579,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find('.preloadGif').remove();
                                     // Remove Highlight 
                                     oHtml.find('.csHaveData').removeClass('mce-highlight-div');
+                                    oHtml.find('.myDroppable').css('visibility','hidden');
+                                    oHtml.find('.MEE_DROPPABLE').attr('style','');
                                     oHtml.find('.mce-edit-focus').removeClass('mce-edit-focus');
                                     //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
                                     oHtml.find(".drapableImageContainer").each(function (index, object) {
@@ -5076,7 +5080,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
-                                                toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist",
+                                                toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist | LineHeight",
                                                 fontsize_formats: "8pt 10pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 36pt",
                                                 setup: function (editor) {
                                                     if (meeIframe.find("#" + editor.id).data('tinymce') == undefined) {
@@ -5366,6 +5370,46 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         onPostRender: function () {
                                                                     
                                                         },
+                                                    });
+                                                    editor.addButton('LineHeight', {
+                                                        type: 'listbox',
+                                                        title: 'Line Height',
+                                                        text: 'Line Height',
+                                                        icon: false,
+                                                        values: [
+                                                            {text:"8px", value:"8px"},
+                                                            {text:"10px", value:"10px"},
+                                                            {text:"12px", value:"12px"},
+                                                            {text:"13px", value:"13px"},
+                                                            {text:"14px", value:"14px"},
+                                                            {text:"15px", value:"15px"},
+                                                            {text:"16px", value:"16px"},
+                                                            {text:"18px", value:"18px"},
+                                                            {text:"20px", value:"20px"},
+                                                            {text:"22px", value:"22px"},
+                                                            {text:"24px", value:"24px"},
+                                                            {text:"26px", value:"26px"},
+                                                            {text:"28px", value:"28px"},
+                                                            {text:"30px", value:"30px"},
+                                                            {text:"32px", value:"32px"},
+                                                            {text:"36px", value:"36px"},
+                                                           ],
+                                                        fixedWidth: true,
+                                                        onPostRender: function () {
+                                                                  this.value('9px');
+                                                                  var self = this;
+                                                                  editor.on('nodeChange', function(e) {
+                                                                      $.each(e.parents,function(key,val){
+                                                                          if(val.nodeName === "SPAN" && $(val).css('line-height') != ""){
+                                                                             self.value($(val).css('line-height'));
+                                                                             makeCloneAndRegister();
+                                                                          }
+                                                                      })
+                                                                  });
+                                                        },
+                                                        onselect: function (e) {
+                                                            $(editor.selection.getNode()).css('line-height',this.value());
+                                                          },
                                                     });
                                                 },
                                                 //theme_modern_buttons2: "exapmle Mybutton",
@@ -6299,8 +6343,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             return;
                                         }*/                                       
                                         RemovePopups();                                        
-
-                                        if ( meeIframe.find(".MEEFORMCONTAINER").length==0 ) {
+                                        if (draggedControlType !=="formBlock" ||  meeIframe.find(".MEEFORMCONTAINER").length==0) {
                                             ShowDroppables(meeIframe);
                                             if (meeIframe.find(".mainContentHtml li.myDroppable").length > 1) {
                                                 meeIframe.find(".mainContentHtml").addClass("show-droppables")
@@ -6319,6 +6362,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     SetLastElementHeight($(this));
                                                 }
                                             });
+                                        
+                                            
                                         }
                                         else if(draggedControlType =="formBlock"){                                            
                                             meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #94CF1E"});
@@ -6968,9 +7013,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find(".formDroppable").show();
                                         }
                                     }
-                                    myElement.find(".form-footer-loading").hide();
-                                    
-
+                                    myElement.find(".form-footer-loading").hide();                                    
                                 }
 
                                 

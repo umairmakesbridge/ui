@@ -723,7 +723,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                         this.$nav.css("margin-bottom", "45px");
                                         this.$el.find('#mee-iframe').contents().find('.mainTable').css('margin-top','0');
                                     }
-                                    this.$nav.css("top", "7px");
+                                    this.$nav[0].style.removeProperty("top");
                                     this.$tools.css("top", "0px");
                                     this.$nav.css("width", "100%");
                                     this.$tools.removeClass('editor-lefttoolbar-fixed');
