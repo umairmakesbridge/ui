@@ -34,7 +34,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                         height: '22px',
                         searchFunc: _.bind(this.searchReports, this),
                         clearFunc: _.bind(this.clearsearchReports, this),
-                        placeholder: 'Search Reports',
+                        placeholder: 'Search performance dashboards',
                         showicon: 'yes',
                         iconsource: 'reports'
                     });
@@ -72,11 +72,11 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'Start with choosing a name for your Report',
+                      heading : 'Start with choosing a name for performance dashboard',
                       buttnText: 'Create',
                       bgClass :'no-tilt',
-                      plHolderText : 'Enter report name here',
-                      emptyError : 'Report name can\'t be empty',
+                      plHolderText : 'Enter performance dashboard name here',
+                      emptyError : 'Dashboard name can\'t be empty',
                       createURL : '/pms/io/user/customReports/',
                       fieldKey : "reportName",
                       postData : {type:'add',BMS_REQ_TK:this.app.get('bms_token')},
@@ -160,7 +160,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                     });   
                 },
                 showTotalCount: function ( count ){                    
-                    var _text = parseInt(count) <= "1" ? "Report" : "Reports";                    
+                    var _text = parseInt(count) <= "1" ? "Report & Performance Dashboard" : "Reports & Performance Dashboards";                    
                     
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong>';
 

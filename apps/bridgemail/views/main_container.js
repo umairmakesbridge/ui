@@ -670,7 +670,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', title: 'Email Send Analytics', sub_title: 'Analytics', url: 'reports/performanceanalytics', workspace_id: 'performanceanalytics', 'addAction': false, tab_icon: 'performance', noTags: true});
                 },
                 reportFlow: function(){
-                    this.addWorkSpace({type: '', title: 'Reports', sub_title: 'Analytics', url: 'reports/reports', workspace_id: 'reports', 'addAction': true, tab_icon: 'reportslisting', noTags: true});
+                    this.addWorkSpace({type: '', title: 'Reports & Performance Dashboard', sub_title: 'Analytics', url: 'reports/reports', workspace_id: 'reports', 'addAction': true, tab_icon: 'reportslisting', noTags: true});
                 },
                 exportsubscribers: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'contacts/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
