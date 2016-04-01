@@ -48,14 +48,14 @@ function (template) {
                 }));         
                 this.$bodyInner = this.$(".accordion_messagebody-inner"); 
                 this.$settingInner = this.$(".accordion_setting-inner"); 
-                if(this.parent.$el.parents('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontsizeselect_menu').length > 0){
-                        this.parent.$el.parents('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontsizeselect_menu').remove();
+                if($('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontsizeselect_menu').length > 0){
+                        $('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontsizeselect_menu').remove();
                     }
-                    if(this.parent.$el.parents('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontselect_menu').length > 0){
-                        this.parent.$el.parents('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontselect_menu').remove();
+                    if($('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontselect_menu').length > 0){
+                        $('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontselect_menu').remove();
                     }
-                    if(this.parent.$el.parents('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_formatselect_menu').length > 0){
-                        this.parent.$el.parents('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_formatselect_menu').remove();
+                    if($('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_formatselect_menu').length > 0){
+                        $('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_formatselect_menu').remove();
                     }
                 
                 this.initControls();
