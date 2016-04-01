@@ -1269,18 +1269,21 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
                             var select_html = '<option value=""></option>'
                             if (_json.count !== "0") {
                                 var i = 0;
-                                $.each(_json.forms[0], function (index, val) {
-                                    i = i + 1;
-                                    var _value = val[0]["formId.encode"]
-                                    select_form = (that.forms['formNumber.checksum'] == val[0]["formId.checksum"]) ? "selected" : ""
-                                    if ((!that.forms['formNumber.checksum'] || typeof that.forms['formNumber.checksum'] == "undefined") && i == 1) {
-                                        select_form = "selected";
-                                    }
-                                    select_html += '<option value="' + _value + '" ' + select_form + ' webform_checksum="' + val[0]["formId.checksum"] + '">' + val[0].name + '</option>'
-                                    select_form = "";
-                                    //self.webforms.push({"id":_value,"name":val[0].name,checksum:val[0]["formId.checksum"]})
+                                if(_json.forms){
+                                        $.each(_json.forms[0], function (index, val) {
+                                                i = i + 1;
+                                                var _value = val[0]["formId.encode"]
+                                                select_form = (that.forms['formNumber.checksum'] == val[0]["formId.checksum"]) ? "selected" : ""
+                                                if ((!that.forms['formNumber.checksum'] || typeof that.forms['formNumber.checksum'] == "undefined") && i == 1) {
+                                                    select_form = "selected";
+                                                }
+                                                select_html += '<option value="' + _value + '" ' + select_form + ' webform_checksum="' + val[0]["formId.checksum"] + '">' + val[0].name + '</option>'
+                                                select_form = "";
+                                                //self.webforms.push({"id":_value,"name":val[0].name,checksum:val[0]["formId.checksum"]})
 
-                                })
+                                            })
+                                }
+                                
 
                             }
                             filter.find("#ddlformsubmission").html(select_html).prop("disabled", false).trigger("chosen:updated")
