@@ -24,7 +24,7 @@
     </div>
 </div>
 <% } else if( this.type=="page") { %>
-    <input class="check-obj" type="checkbox" value="<%-this.model.get('pageId.encode')%>" data-checksum="<%-this.model.get('pageId.checksum')%>" checked="checked" />
+<input class="check-obj" type="checkbox" value="<%-this.model.get('pageId.encode')%>" data-checksum="<%-this.model.get('pageId.checksum')%>" checked="checked" />
     <div data-checksum="<%-this.model.get('pageId.checksum')%>" class="block-container">
     <div class="name-type">              
         <h3>                    
@@ -93,9 +93,14 @@
        </div>
    </div>
 
-<% } else if (this.type=="funnel" || this.type=="tag") { %>    
-  
-    <div>
+<% } else if (this.type=="funnel" || this.type=="tag") { %>   
+    <% if(this.type=="tag") { %>
+        <input class="check-obj" type="checkbox" value="<%-this.model.get('tag')%>" data-checksum="<%-this.model.get('tag')%>" checked="checked" />
+        <div class="block-container">
+    <% } else { %>
+        <div>
+    <% } %>
+    
             <div class="name-type">              
                    <h3>                    
                        <a style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip">  <%= this.model.get('tag')%> </a>                    

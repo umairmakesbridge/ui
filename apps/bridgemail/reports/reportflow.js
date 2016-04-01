@@ -169,7 +169,7 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                 selected_obj['checked'] =true;
                             }
                             else{
-                                selected_obj['checked'] =val.$("[id='"+id+"'] .check").length?true:false;
+                                selected_obj['checked'] = true;//val.$("[value='"+id+"']").is(":checked")?true:false;
                             }
                             
                             report_obj[type].push(selected_obj);          

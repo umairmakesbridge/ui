@@ -141,6 +141,12 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                             this.setDateRange(true);
                         }
                     }
+                    if(this.reportType==="funnel"){
+                        this.$(".srt-div").hide();
+                    }
+                    else{
+                        this.$(".srt-div").show();
+                    }
                     this.loadRows();
 
                 }, /*---------- Calender functions---------------*/
@@ -368,7 +374,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                 //////********************* Landing pages *****************************************//////
                 loadLandingPages: function () {
                     this.app.showLoading("Loading selection...", this.$el);
+                    var mapObjects = {};
                     var pageIds = this.objects.map(function (index) {
+                        //mapObjects[index.id] = index.checked;
                         return index.id
                     }).join()
                     var URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
@@ -378,7 +386,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         this.app.showLoading(false, this.$el);
                         var _json = jQuery.parseJSON(data);
                         _.each(_json.pages[0], function (val) {
-                            this.modelArray.push(new Backbone.Model(val[0]));
+                            var _model = new Backbone.Model(val[0]);
+                            //_model.set("isChecked",mapObjects[_model.get("pageId.encode")]);
+                            this.modelArray.push(_model);
                         }, this);                        
                         if(this.toDate && this.fromDate){
                             this.setDateRange();
@@ -452,19 +462,24 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         else {
                             this.$(".total-count .rp-selected").html('landing page selected');
                         }
-                        this.chart_data = {submitCount: 0, viewCount: 0};
-                        
-                        _.each(_pages, function (val, index) {                            
-                            this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));
-                            this.chart_data['viewCount'] = this.chart_data['viewCount'] + parseFloat(val.get("viewCount"));
-                            
-                        }, this);
-                                                
+                        if(total_pages_selected!==0){
+                            this.showChart();
+                            this.chart_data = {submitCount: 0, viewCount: 0};                        
+                            _.each(_pages, function (val, index) {                            
+                                this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));
+                                this.chart_data['viewCount'] = this.chart_data['viewCount'] + parseFloat(val.get("viewCount"));
 
-                        var _data = [                           
-                            ['Page Views', this.chart_data["viewCount"]],
-                            ['Submission', this.chart_data["submitCount"]]
-                        ];
+                            }, this);
+
+
+                            var _data = [                           
+                                ['Page Views', this.chart_data["viewCount"]],
+                                ['Submission', this.chart_data["submitCount"]]
+                            ];
+                        }
+                        else{
+                            this.showChart(true);
+                        }
                         
                         this.chartPage.createChart(_data);
                         /*_.each(this.chart_data, function (val, key) {
@@ -479,6 +494,16 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     }
 
                     this.saveSettings();
+                },
+                showChart: function(hide){
+                    if(hide){
+                        this.$(".campaign-chart").hide();
+                        this.$(".cstats").append('<div class="loading nodata"><p style="background: transparent none repeat scroll 0% 0%; padding-top: 10px;">Select '+this.mapping[this.reportType].label.toLowerCase()+' to see chart</p></div>');
+                    }
+                    else{
+                        this.$(".cstats .nodata").remove();
+                        this.$(".campaign-chart").show();
+                    }
                 },
                 loadPagesSummary: function () {
                     if (this.modelArray.length) {
@@ -635,8 +660,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     }
                 },
                 createCampaignChart: function () {
-                    if (this.modelArray.length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));                                               
+                    if (this.modelArray.length) {                                                             
                         var total_pages_selected = 0;
                         var that = this;                        
                         var _campaigns = $.map(this.modelArray, function (el) {
@@ -652,50 +676,57 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         else {
                             this.$(".total-count .rp-selected").html('campaign selected');
                         }
-                        
-                        this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
-                            , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
-                            twitterCount: 0, unSubscribeCount: 0};
-                        var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
-                        var post_data = {campNums: _campaigns}
-                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
-                            var camp_json = jQuery.parseJSON(data);
-                            _.each(camp_json.campaigns[0], function (val) {
-                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
-                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
-                                this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
-                                this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
-                                this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
-                                this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
-                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
-                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
-                                this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
-                                this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
-                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
-                                this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
-                                this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
-                                this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
-                            }, this);
-                            var _data = [
-                                ['Sent', this.chart_data["sentCount"]],
-                                ['Opens', this.chart_data["openCount"]],
-                                ['Page Views', this.chart_data["pageViewsCount"]],
-                                ['Clicks', this.chart_data["clickCount"]],                                
-                                ['Conversions', this.chart_data["conversionCount"]]
-                            ];
+                                              
+                       if(total_pages_selected!==0){
+                            this.app.showLoading("Creating Chart...", this.$(".cstats"));          
+                            this.showChart();                        
+                            this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
+                                , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
+                                twitterCount: 0, unSubscribeCount: 0};
+                            var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
+                            var post_data = {campNums: _campaigns}
+                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                                var camp_json = jQuery.parseJSON(data);
+                                _.each(camp_json.campaigns[0], function (val) {
+                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
+                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
+                                    this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
+                                    this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
+                                    this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
+                                    this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
+                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
+                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
+                                    this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
+                                    this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
+                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
+                                    this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
+                                    this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
+                                    this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
+                                }, this);
+                                var _data = [
+                                    ['Sent', this.chart_data["sentCount"]],
+                                    ['Opens', this.chart_data["openCount"]],
+                                    ['Page Views', this.chart_data["pageViewsCount"]],
+                                    ['Clicks', this.chart_data["clickCount"]],                                
+                                    ['Conversions', this.chart_data["conversionCount"]]
+                                ];
 
-                            this.chartPage.createChart(_data);
-                            this.app.showLoading(false, this.$(".cstats"));
-                            /*_.each(this.chart_data, function (val, key) {
-                                this.$(".col-2 ." + key).html(this.app.addCommas(val));
-                                if(parseInt(val)!==0){
-                                    this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
-                                }else{
-                                    this.$(".col-2 ." + key+"Per").html("0%");
-                                }
-                            }, this);*/
+                                this.chartPage.createChart(_data);
+                                this.app.showLoading(false, this.$(".cstats"));
+                                /*_.each(this.chart_data, function (val, key) {
+                                    this.$(".col-2 ." + key).html(this.app.addCommas(val));
+                                    if(parseInt(val)!==0){
+                                        this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
+                                    }else{
+                                        this.$(".col-2 ." + key+"Per").html("0%");
+                                    }
+                                }, this);*/
 
-                        }, this));
+                            }, this));
+                        }
+                        else{
+                            this.showChart(true);
+                        }
                     }
                     else {                        
                         this.$(".col-2 .campaign-chart").hide();
@@ -703,6 +734,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         this.$(".total-count .rp-selected").html('campaigns selected');                        
                     }
                     this.saveSettings();
+                    
 
                 },
                 loadCampaignsSummary: function () {
@@ -902,8 +934,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     }
                 },
                 createAutobotChart: function () {
-                    if (this.modelArray.length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
+                    if (this.modelArray.length) {                        
                         var total_pages_selected = 0;
                         var that = this;
                          var _bots = $.map(this.modelArray, function (el) {
@@ -920,50 +951,57 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                             this.$(".total-count .rp-selected").html('autobot selected');
                         }
                        
-                        this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
-                            , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
-                            twitterCount: 0, unSubscribeCount: 0};
-                        var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=mailBotStats_csv";
-                        var post_data = {botId_csv: _bots}
-                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
-                            var camp_json = jQuery.parseJSON(data);
-                            _.each(camp_json.autobots[0], function (val) {
-                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
-                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
-                                this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
-                                this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
-                                this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
-                                this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
-                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
-                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
-                                this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
-                                this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
-                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
-                                this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
-                                this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
-                                this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
-                            }, this);
-                            var _data = [
-                                 ['Sent', this.chart_data["sentCount"]],
-                                ['Opens', this.chart_data["openCount"]],
-                                ['Clicks', this.chart_data["clickCount"]],
-                                ['Page Views', this.chart_data["pageViewsCount"]],
-                                ['Conversions', this.chart_data["conversionCount"]]
-                            ];
+                        if(total_pages_selected!==0){
+                            this.showChart();
+                            this.app.showLoading("Creating Chart...", this.$(".cstats"));
+                            this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
+                                , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
+                                twitterCount: 0, unSubscribeCount: 0};
+                            var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=mailBotStats_csv";
+                            var post_data = {botId_csv: _bots}
+                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                                var camp_json = jQuery.parseJSON(data);
+                                _.each(camp_json.autobots[0], function (val) {
+                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
+                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
+                                    this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
+                                    this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
+                                    this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
+                                    this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
+                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
+                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
+                                    this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
+                                    this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
+                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
+                                    this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
+                                    this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
+                                    this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
+                                }, this);
+                                var _data = [
+                                     ['Sent', this.chart_data["sentCount"]],
+                                    ['Opens', this.chart_data["openCount"]],
+                                    ['Clicks', this.chart_data["clickCount"]],
+                                    ['Page Views', this.chart_data["pageViewsCount"]],
+                                    ['Conversions', this.chart_data["conversionCount"]]
+                                ];
 
-                            this.chartPage.createChart(_data);
-                            this.app.showLoading(false, this.$(".cstats"));
-                            /*_.each(this.chart_data, function (val, key) {
-                                this.$(".col-2 ." + key).html(this.app.addCommas(val));        
-                                if(parseInt(val)!==0){
-                                    this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
-                                }
-                                else{
-                                    this.$(".col-2 ." + key+"Per").html("0%");
-                                }
-                            }, this);*/
+                                this.chartPage.createChart(_data);
+                                this.app.showLoading(false, this.$(".cstats"));
+                                /*_.each(this.chart_data, function (val, key) {
+                                    this.$(".col-2 ." + key).html(this.app.addCommas(val));        
+                                    if(parseInt(val)!==0){
+                                        this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
+                                    }
+                                    else{
+                                        this.$(".col-2 ." + key+"Per").html("0%");
+                                    }
+                                }, this);*/
 
-                        }, this));
+                            }, this));
+                        }
+                        else{
+                            this.showChart(true);
+                        }
                     }
                     else {                        
                         this.$(".col-2 .campaign-chart").hide();
@@ -1164,15 +1202,21 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         else {
                             this.$(".total-count .rp-selected").html('form selected');
                         }
-                        this.chart_data = {submitCount: 0};
-                        _.each(_forms, function (val, index) {                            
-                            this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));                            
-                        }, this);
+                        if(total_pages_selected!==0){
+                            this.showChart();
+                            this.chart_data = {submitCount: 0};
+                            _.each(_forms, function (val, index) {                            
+                                this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));                            
+                            }, this);
 
-                        var _data = [                            
-                            ['Submission', this.chart_data["submitCount"]]
-                        ];
-                        this.chartPage.createChart(_data);
+                            var _data = [                            
+                                ['Submission', this.chart_data["submitCount"]]
+                            ];
+                            this.chartPage.createChart(_data);
+                        }
+                        else{
+                            this.showChart(true);
+                        }
                         /*_.each(this.chart_data, function (val, key) {
                             this.$(".col-2 ." + key).html(this.app.addCommas(val));
                         }, this);*/
@@ -1704,8 +1748,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                             _grid.append(tagLi.$el);
                         }, this);
                         _grid.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                                                
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
+                                                                        
                         
                         this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
                         this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
@@ -1768,10 +1811,15 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     }
                 },
                 createTagsChart: function () {
-                    if (this.modelArray.length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                                                
-                        var total_pages_selected = this.modelArray.length;
+                    if (this.modelArray.length) {                        
+                        var that = this;
+                        var _tags = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("tag")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el;
+                            }
+                        });
+                        var total_pages_selected = _tags.length;
                         this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
                             this.$(".total-count .rp-selected").html('tags selected');
@@ -1779,17 +1827,21 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         else {
                             this.$(".total-count .rp-selected").html('tag selected');
                         }
+                        if( total_pages_selected!==0 ){
+                            this.showChart();
+                            this.chart_data = {subCount: 0};
+                            var _data = [
+                            ];                        
+                            this.$("ul.socpc li").remove();
+                            _.each(_tags, function (val) {
+                                _data.push([val.get("tag"), parseInt(val.get("subCount"))]);                            
+                            }, this);
+                            this.chartPage.createChart(_data);                            
+                        }
+                        else{
+                            this.showChart(true);
+                        }                        
                         
-                        this.chart_data = {subCount: 0};
-                        var _data = [
-                        ];                        
-                        this.$("ul.socpc li").remove();
-                        _.each(this.modelArray, function (val) {
-                            _data.push([val.get("tag"), parseInt(val.get("subCount"))]);
-                            //this.$("ul.socpc").append($('<li class="clr3" style="width:' + liWidth + '%"><span>' + this.app.encodeHTML(val.get("tag")) + ' <strong class="tagCount">' + val.get("subCount") + '</strong></span></li>'))
-                        }, this);
-                        this.chartPage.createChart(_data);
-                        this.app.showLoading(false, this.$(".cstats"));
                     }
                     else {                     
                         this.$(".col-2 .campaign-chart").hide();

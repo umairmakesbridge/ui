@@ -34,7 +34,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                         height: '22px',
                         searchFunc: _.bind(this.searchReports, this),
                         clearFunc: _.bind(this.clearsearchReports, this),
-                        placeholder: 'Search performance dashboards',
+                        placeholder: 'Search business intelligence dashboards',
                         showicon: 'yes',
                         iconsource: 'reports'
                     });
@@ -72,10 +72,10 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'Start with choosing a name for performance dashboard',
+                      heading : 'Start with choosing a name for business intelligence dashboard',
                       buttnText: 'Create',
                       bgClass :'no-tilt',
-                      plHolderText : 'Enter performance dashboard name here',
+                      plHolderText : 'Enter dashboard name here',
                       emptyError : 'Dashboard name can\'t be empty',
                       createURL : '/pms/io/user/customReports/',
                       fieldKey : "reportName",
@@ -103,7 +103,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                     }
                     else {
                         this.offset = parseInt(this.offset) + this.offsetLength;
-                        this.$("#reports_grid tbody").append('<tr class="loading-reports"><td colspan="4"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more reports..</p></div></td></tr>');
+                        this.$("#reports_grid tbody").append('<tr class="loading-reports"><td colspan="4"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more dashboards..</p></div></td></tr>');
                     }
                     if (this.reports_request)
                     {
@@ -149,8 +149,8 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                                 if (this.searchTxt) {
                                     search_message += " containing '" + this.searchTxt + "'";
                                 }
-                                this.$('#total_reports').html('<p class="notfound nf_overwrite">No Reports found' + search_message + '</p>');
-                                this.$('#reports_grid tbody').before('<p class="notfound">No Reports found' + search_message + '</p>');
+                                this.$('#total_reports').html('<p class="notfound nf_overwrite">No dashboards found' + search_message + '</p>');
+                                this.$('#reports_grid tbody').before('<p class="notfound">No dashboards found' + search_message + '</p>');
                             }
 
                         }, this),
@@ -160,7 +160,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                     });   
                 },
                 showTotalCount: function ( count ){                    
-                    var _text = parseInt(count) <= "1" ? "Report & Performance Dashboard" : "Reports & Performance Dashboards";                    
+                    var _text = parseInt(count) <= "1" ? "Business Intelligence Dashboard" : "Business Intelligence Dashboards";                    
                     
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong>';
 

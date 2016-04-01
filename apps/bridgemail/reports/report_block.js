@@ -288,6 +288,9 @@ define(['text!reports/html/report_block.html'],
                     }else if(this.type=="form"){
                         this.sub.createSignupFormChart();
                     }
+                    else if(this.type=="tag"){
+                        this.sub.createTagsChart();
+                    }
                 },
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
