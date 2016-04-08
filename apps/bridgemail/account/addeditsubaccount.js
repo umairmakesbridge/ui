@@ -31,6 +31,9 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                    this.$('.btnunchecked input#o-sam').on('ifUnchecked', _.bind(function(){
                         this.$("#select-sam-users").hide();
                    },this));                    
+                   if(!this.user_id){
+                       this.$(".subacc-fromEmail").prop("readonly",false);
+                   }
                 },
                 init: function () {      
                    this.$(".subacc-userid").focus();

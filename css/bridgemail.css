@@ -10791,6 +10791,17 @@ Report Graph Changes
 .report-panel .rpt-campaign-stats.rpt-campaign-six div h3{
     font-size: 12px;
 }
+.report-panel .rpt-campaign-stats.rpt-campaign-five div h3{
+    font-size: 13px;
+}
+.report-panel .cstats .rpt-campaign-stats div{
+     padding: 0 7px;
+}
+.report-panel .cstats .rpt-campaign-stats div p{
+    margin-bottom: 5px;
+}
+
+
 .report-panel .rpt-campaign-stats div p{
     font-family: proxima_nova_regular;
     font-size: 16px;
@@ -10812,7 +10823,7 @@ Report Graph Changes
 .report-panel .rpt-camp-pv p, .pageViewsCountPer{
     color:#66A2CD;
 }
-.report-panel .rpt-camp-conv p, .socialCountPer{
+.report-panel .rpt-camp-conv p, .socialCountPer, .submitCountPer{
     color:#39C8A9;
 }
 .report-panel .rpt-camp-bounced p, .bounceCountPer{
@@ -11249,6 +11260,9 @@ right: 66px;
 }
 .report-panel .rpt-campaign-stats.rpt-campaign-four div{    
     width: 20%;
+}
+.report-panel .rpt-campaign-stats.rpt-campaign-five div{    
+    width: 15%;
 }
 .funnel-dialog .tagslist{
     height:335px;

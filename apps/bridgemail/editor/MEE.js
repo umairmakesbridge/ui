@@ -5074,14 +5074,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         console.log(args.content);   
                                                     }else{
                                                         args.content = "";
-                                                    }
-                                                                                              
+                                                    }                                                                                              
                                                 },
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
                                                 toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist | LineHeight",
                                                 fontsize_formats: "8pt 10pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 36pt",
+                                                formats:{
+                                                     underline: {inline : 'span', 'classes' : 'underline', exact : true}
+                                                },
                                                 setup: function (editor) {
                                                     if (meeIframe.find("#" + editor.id).data('tinymce') == undefined) {
                                                         meeIframe.find("#" + editor.id).data('tinymce', true);

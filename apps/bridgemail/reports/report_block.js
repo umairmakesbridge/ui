@@ -291,6 +291,9 @@ define(['text!reports/html/report_block.html'],
                     else if(this.type=="tag"){
                         this.sub.createTagsChart();
                     }
+                    else if (this.type=="nurturetrack"){
+                        this.sub.createNurtureTrackChart();
+                    }
                 },
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');

@@ -81,7 +81,8 @@
     </div>
    </div>
 <% } else if (this.type=="nurturetrack") { %>    
-    <div data-checksum="<%-this.model.get('campNum.checksum')%>">
+    <input class="check-obj" type="checkbox" value="<%-this.model.get('campNum.encode')%>" data-checksum="<%-this.model.get('campNum.checksum')%>" checked="checked" />
+    <div data-checksum="<%-this.model.get('campNum.checksum')%>" class="block-container">
     <div class="rpt-details">
         <a class="cstatus pclr18">Message <b><%= this.model.get('order') %></b></a>
         <span class="rp-pi-message"><i class="rpicon rpicon-two rp-pichart"></i></span>                     
@@ -235,11 +236,12 @@
                 <div id="stats-<%-this.model.get('pageId.checksum')%>" class="rpt-campaign-stats rpt-campaign-two">
                 <div class="rpt-camp-pv">
                     <h3>Page Views</h3>
-                    <p class="viewCount">0</p>
+                    <p class="viewCount">0</p>                    
                 </div>
                 <div class="rpt-camp-conv">
                     <h3>Submit</h3>
                     <p class="submitCount">0</p>
+                     <i class="stats-percentage submitCountPer">0%</i>
                 </div>
                 </div>
             <% } else if(this.type=="form") { %>
@@ -276,19 +278,22 @@
                <div id="stats-<%-this.model.get('campNum')%>" class="rpt-campaign-stats rpt-campaign-four">
                     <div class="rpt-camp-click">
                         <h3>Click</h3>
-                        <p class="clickCount">0</p>
+                        <p class="clickCount">0</p>                       
                     </div>
                     <div class="rpt-camp-pv">
                         <h3>Page Views</h3>
                         <p class="pageViewsCount">0</p>
+                        <i class="stats-percentage pageViewsCountPer">0%</i>
                     </div>
                     <div class="rpt-camp-conv">
                         <h3>Converted</h3>
                         <p class="conversionCount">0</p>
+                        <i class="stats-percentage conversionCountPer">0%</i>
                     </div>
                     <div class="rpt-camp-bounced">
                         <h3>Bounced</h3>
                         <p class="bounceCount">0</p>
+                        <i class="stats-percentage bounceCountPer">0%</i>
                     </div>
 
                 </div>
