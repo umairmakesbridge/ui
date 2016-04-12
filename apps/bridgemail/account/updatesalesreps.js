@@ -27,7 +27,7 @@ define(['text!account/html/updatesalesreps.html','account/collections/salesrep',
                 loadSalesRep:function(){
                     var remove_cache = false;      
                     this.offset = 0;
-                    var _data = {offset:this.offset,type:'allSalesreps'}; 
+                    var _data = {offset:this.offset,type:'allSalesreps', bucket:1000}; 
                     this.$salesrepContainer.html('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading salesrep...</p></div></td></tr>');
                     this.salesrepRequest.fetch({data:_data,remove: remove_cache,
                     success: _.bind(function (collection, response) {                                
