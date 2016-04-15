@@ -210,7 +210,7 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                 loadSalesRep:function(){
                     var remove_cache = false;      
                     this.offset = 0;
-                    var _data = {offset:this.offset,type:'allSalesreps'};                                        
+                    var _data = {offset:this.offset,type:'allSalesreps',bucket:1000};                                        
                     this.app.showLoading("Loading Salesrep...", this.$el.parents(".modal"));
                     this.salesrepRequest.fetch({data:_data,remove: remove_cache,
                     success: _.bind(function (collection, response) {                                
