@@ -24,8 +24,10 @@
     </div>
 </div>
 <% } else if( this.type=="page") { %>
-<input class="check-obj" type="checkbox" value="<%-this.model.get('pageId.encode')%>" data-checksum="<%-this.model.get('pageId.checksum')%>" checked="checked" />
-    <div data-checksum="<%-this.model.get('pageId.checksum')%>" class="block-container">
+<% if(!this.hideCheckbox){ %>
+    <input class="check-obj" type="checkbox" value="<%-this.model.get('pageId.encode')%>" data-checksum="<%-this.model.get('pageId.checksum')%>" checked="checked" />
+<% } %>
+    <div data-checksum="<%-this.model.get('pageId.checksum')%>" <% if(!this.hideCheckbox){ %> class="block-container" <% } %>>
     <div class="name-type">              
         <h3>                    
             <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview"><%= this.model.get('name')%></a>                    
@@ -41,8 +43,10 @@
    </div>
 
 <% } else if(this.type=="form") { %>
+    <% if(!this.hideCheckbox){ %>
     <input class="check-obj" type="checkbox" value="<%-this.model.get('formId.encode')%>" data-checksum="<%-this.model.get('formId.checksum')%>" checked="checked" />
-    <div data-checksum="<%-this.model.get('formId.checksum')%>" class="block-container">
+    <% } %>
+    <div data-checksum="<%-this.model.get('formId.checksum')%>" <% if(!this.hideCheckbox){ %> class="block-container" <% } %>>
     <div class="name-type">              
         <h3>                    
             <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview"><%= this.model.get('name')%></a>                    
@@ -239,7 +243,7 @@
                     <p class="viewCount">0</p>                    
                 </div>
                 <div class="rpt-camp-conv">
-                    <h3>Submit</h3>
+                    <h3>Form Submissions</h3>
                     <p class="submitCount">0</p>
                      <i class="stats-percentage submitCountPer">0%</i>
                 </div>

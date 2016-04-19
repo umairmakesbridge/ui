@@ -204,9 +204,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;
                                             $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                          
-
-                                            console.log('iframe loaded');
-                                            mee.getActionScript();
+                                            
+                                            if (options.landingPage) {
+                                                mee.getActionScript();
+                                            }
                                         })
                                         
                                     }
@@ -5049,7 +5050,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             });
                                         }
-                                        if (options.landingPage && options._app.testUsers.indexOf(options._app.get("user").userId)>-1) {
+                                        if (options.landingPage) {
                                             if (meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable) {
                                                 mee.setColResize(element);                                                
                                             }

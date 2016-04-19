@@ -26,6 +26,7 @@ define(['text!reports/html/report_block.html'],
                     this.sub = this.options.page
                     this.app = this.sub.app;
                     this.type = this.options.type;
+                    this.hideCheckbox = this.options.hideCheckbox ? this.options.hideCheckbox : false;
                     this.subType = this.options.subType ? this.options.subType :'';
                     this.addClass= this.options.addClass ? this.options.addClass :'';
                     this.expandedView = this.options.expandedView ? true : false;    

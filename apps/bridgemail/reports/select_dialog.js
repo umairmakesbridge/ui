@@ -107,7 +107,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                                                         
                             //this.showTotalCount(collection.totalCount);                            
                             _.each(data1.models, _.bind(function (model) {
-                                var row = new reportBlock({model: model, page: this, type: this.type, addClass:'add-rpt',isAddRemove:true});
+                                var row = new reportBlock({model: model, page: this, type: this.type, addClass:'add-rpt',isAddRemove:true,hideCheckbox:true });
                                 this.$('.leftcol .rpt-block-area').append(row.$el);        
                                 //hide selected items
                                 for(var i=0;i<this.levels["level"+this.selectedLevel].length;i++){
@@ -193,7 +193,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                     return checkSumKey;
                 },
                 addToCol2:function(model){                    
-                    var _view = new reportBlock({model: model, page: this, type: this.type,isAddRemove:true});
+                    var _view = new reportBlock({model: model, page: this, type: this.type,isAddRemove:true,hideCheckbox:true});
                     this.$(".rightcol .rpt-block-area").append(_view.$el);
                     this.levels["level"+this.selectedLevel].push(model);                                          
                 },
@@ -286,7 +286,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                     this.$(".leftcol .rpt-block-area > div").show();
                     for(var i=0;i<this.levels["level"+this.selectedLevel].length;i++){
                         var model = this.levels["level"+this.selectedLevel][i];
-                        var _view = new reportBlock({model:model , page: this, type: this.type,isAddRemove:true});
+                        var _view = new reportBlock({model:model , page: this, type: this.type,isAddRemove:true,hideCheckbox:true});
                         this.$(".rightcol .rpt-block-area").append(_view.$el);
                         this.$(".leftcol div[data-checksum='"+model.get(this.getCheckSum())+"']").parent().hide();
                     }         

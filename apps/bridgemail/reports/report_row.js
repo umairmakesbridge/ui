@@ -1370,6 +1370,8 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                            this.doDraw = false;
                        }          
                         this.$(".nt-name").html(this.modelArray[0].get("name"));
+                        var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
+                        this.$(".rpt-nt-detail").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong>  <b> nurture track selected having <strong class="badge" style="float:none">' + this.modelArray[0].get("msgCount") + '</strong> ' + msgCountText + '</b>');
                         if(this.modelArray[0].get("status")=="D"){
                             this.$(".nt-status").html("Paused");
                             this.$(".nt-status")[0].className="cstatus pclr1 nt-status";
@@ -1458,7 +1460,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                 return el.get("campNum.encode");
                             }
                         }).join(",");     
-                        this.$(".total-count .badge").html(total_pages_selected);
+                        this.$(".rpt-nt-detail").hide();
+                        this.$(".rpt-nt-init").show();
+                        this.$(".total-count .rpt-nt-init .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
                             this.$(".total-count .rp-selected").html('messages selected');
                         }
@@ -1531,7 +1535,11 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                 },
                 loadNTSummary: function () {
                     if (this.campArray.length) {                        
-                        this.showHideChartArea(true);                        
+                        this.showHideChartArea(true);                                   
+                        var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
+                        this.$(".rpt-nt-detail").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong>  <b> nurture track selected having <strong class="badge" style="float:none">' + this.modelArray[0].get("msgCount") + '</strong> ' + msgCountText + '</b>');
+                        this.$(".rpt-nt-detail").show();
+                        this.$(".rpt-nt-init").hide();
                         var _grid = this.$(".rpt-expand");
                         _grid.children().remove();
                         var order_no = 1;
@@ -2730,6 +2738,15 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     
                     var levels = this.modelArray;
                     var levelCount = [0,0,0,0];
+                    if(this.subType=="page"){
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click to add landing pages');
+                    }
+                    else if(this.subType=="form"){
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click to add  webforms');
+                    }
+                    else{
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click here to add tags');
+                    }
                     for(var i=0; i<levels.length;i++){
                         var tabLevel = this.$(".tab-"+(i+1));
                         tabLevel.children().remove();
