@@ -191,7 +191,7 @@ function (template) {
                 var _a_href = anchorObj.attr("href").toLowerCase();
                 var actual_href = anchorObj.attr("href");
                 var actual_target = anchorObj.attr("target");
-                if(anchorObj.css("text-decoration")=="underline"){
+                if(anchorObj.parent().hasClass("underline")){
                     this.$(".underline-checkbox input").prop("checked",true);
                     this.$(".right_columnLinkGUI textarea").css("text-decoration","underline");
                 }
@@ -327,8 +327,8 @@ function (template) {
                 this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
                 var selected_node = this.tiny_editor_selection.getNode();
                 var selected_color = 'color:inherit';
-                var selected_text_decoration = this.$("input.checkinput:checked").length?'text-decoration:underline;':'';
-                
+                //var selected_text_decoration = this.$("input.checkinput:checked").length?'text-decoration:underline;':'';
+                var selected_text_decoration = '';
                 if(selected_node){
                     if(selected_node.style && selected_node.style.color){
                         selected_color = "color:"+selected_node.style.color+";";
@@ -368,13 +368,19 @@ function (template) {
                         selected_node.innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
                     }
                     if(this.$("input.checkinput:checked").length){
-                        selected_node.style.textDecoration = "underline";
+                        //selected_node.style.textDecoration = "underline";
+                        $(selected_node).wrap('<span class="underline"></span>');
                     }
                     else{
-                        selected_node.style.textDecoration = "none";
+                        //selected_node.style.textDecoration = "none";
+                        $(selected_node).unwrap();
                     }
                 }
-                else {                    
+                else { 
+                    if(this.$("input.checkinput:checked").length){
+                        myTextLink = '<span class="underline">'+myTextLink+'</span>';
+                    }
+                    
                     this.tiny_editor_selection.setContent(myTextLink);
                 }
                 //tinymce.activeEditor.focus();               

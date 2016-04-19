@@ -14,41 +14,6 @@
 </div>
 
 
-<div id="imageToolbar" class="imageToolbar-menu">
-    <ul>
-        <li title="Set Link" class="ImageToolbarLinkClass">
-            <a >
-                <i class="mce-ico mce-i-link" style="margin-top: -5px;"></i>
-            </a>
-        </li>
-        <li title="Remove Link" class="ImageToolbarUnLinkClass" style="display: none">
-            <a >
-                <i class="mce-ico mce-i-unlink" style="margin-top: -5px;"></i>
-            </a>
-        </li>
-        <li title="Left Align" class="ImageToolbarLeftAlignClass">
-            <a >
-                <img src="css/images/Image-align-left-icon.png" />
-            </a>
-        </li>
-        <li title="Center Align" class="ImageToolbarCenterAlignClass">
-            <a >
-                <img src="css/images/Image-align-center-icon.png" />
-            </a>
-        </li>
-        <li title="Right Align" class="ImageToolbarRightAlignClass">
-            <a >
-                <img src="css/images/Image-align-right-icon.png" />
-            </a>
-        </li>
-        <li title="Set Title" class="ImageToolbarTitleSetClass">
-            <a >
-                <img src="css/images/Adobe_Premiere_Pro_Title.png" />
-            </a>
-        </li>
-    </ul>
-</div>
-
 <% if(options.landingPage) { %>
 <div id="videoToolbar" class="videoToolbar-menu imageToolbar-menu">
     <ul>
@@ -789,18 +754,55 @@
                         <i class="icon setpagetitle"></i><span>Set Page Title</span>
                     </a>
                  </li>
-                 <% if(options._app.testUsers.indexOf(options._app.get("user").userId) > -1){ %>
+                 
                  <li class="MenuLoadScriptBox" style="float:right">
                     <a  class="btn-blue">
                         <i class="icon setactionscript"></i><span>Tracking Snippets</span>
                     </a>
                  </li>
-                 <% } %>
+                 
                  
             <% } %>
             <span class="lastSaveInfo"></span>
         </ul>
             <div class="disabled-toolbar"></div> 
+            
+ <!-- Image Style Toolbar -->
+<div id="imageToolbar" class="imageToolbar-menu">
+    <ul>
+        <li title="Set Link" class="ImageToolbarLinkClass">
+            <a >
+                <i class="mce-ico mce-i-link" style="margin-top: -5px;"></i>
+            </a>
+        </li>
+        <li title="Remove Link" class="ImageToolbarUnLinkClass" style="display: none">
+            <a >
+                <i class="mce-ico mce-i-unlink" style="margin-top: -5px;"></i>
+            </a>
+        </li>
+        <li title="Left Align" class="ImageToolbarLeftAlignClass">
+            <a >
+                <img src="css/images/Image-align-left-icon.png" />
+            </a>
+        </li>
+        <li title="Center Align" class="ImageToolbarCenterAlignClass">
+            <a >
+                <img src="css/images/Image-align-center-icon.png" />
+            </a>
+        </li>
+        <li title="Right Align" class="ImageToolbarRightAlignClass">
+            <a >
+                <img src="css/images/Image-align-right-icon.png" />
+            </a>
+        </li>
+        <li title="Set Title" class="ImageToolbarTitleSetClass">
+            <a >
+                <img src="css/images/Adobe_Premiere_Pro_Title.png" />
+            </a>
+        </li>
+    </ul>
+</div>
+            <!-- Image Style Toolbar -->
     </div>
     <!--  tools  -->
 

@@ -204,10 +204,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;
                                             $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                          
-                                            
-                                            if (options.landingPage) {
-                                                mee.getActionScript();
+                                            if(options.landingPage){
+                                                 mee.getActionScript();
                                             }
+                                           
                                         })
                                         
                                     }
@@ -3251,20 +3251,29 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 var OnClickedOnElement = function (event) {
                                     myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
+                                    meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
                                     myElement.find("#linkTrack").data("linkObject", "image");
                                     myElement.find("#imageToolbar").addClass("imageToolbar-menu");
                                     myElement.find("#imageToolbar").show();
+                                    
                                     if ($(event.target).parent().prop("tagName").toLowerCase() == "a") {
-                                        myElement.find("#imageToolbar").css("width", "366px");
+                                        //myElement.find("#imageToolbar").css("width", "366px");
                                         myElement.find("#imageToolbar .ImageToolbarUnLinkClass").show();
+                                        
                                     }
                                     else {
                                         myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
-                                        myElement.find("#imageToolbar").css("width", "310px");
+                                        if($(event.target).parent().hasClass('resizableImage')){
+                                            $(event.target).parent().addClass("mce-edit-focus");
+                                        }
+                                       // myElement.find("#imageToolbar").css("width", "310px");
                                     }
+                                    if($(event.target).closest('div').hasClass('resizableImage')){
+                                            $(event.target).closest('div').addClass("mce-edit-focus");
+                                        }
                                     myElement.find("#imageToolbar").css({
-                                        top: $(event.target).offset().top + 19 + topPlus,
-                                        left: $(event.target).offset().left + 292 + leftPlus
+                                       // top: $(event.target).offset().top + 19 + topPlus,
+                                       // left: $(event.target).offset().left + 292 + leftPlus
                                     });
 
                                 }
@@ -5082,8 +5091,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
                                                 toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist | LineHeight",
                                                 fontsize_formats: "8pt 10pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 36pt",
+
                                                 formats:{
                                                      underline: {inline : 'span', 'classes' : 'underline', exact : true}
+
+
                                                 },
                                                 setup: function (editor) {
                                                     if (meeIframe.find("#" + editor.id).data('tinymce') == undefined) {
@@ -5100,6 +5112,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         editor.on("LoadContent", function (e) {
                                                             mee.isHTMLSet = true;                                                            
                                                         });
+                                                        
                                                         editor.on("mouseUp", function (e) {
                                                             myElement.find(".alertButtons").hide();
                                                             var tiny_editor_selection = editor.selection;
@@ -5156,6 +5169,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     setTimeout(function(){ $(val).addClass('fixed-panel'); }, 50);
                                                                     
                                                                     setTimeout(function(){ myElement.find('.disabled-toolbar').css('visibility','hidden');}, 100);
+                                                                  
                                                                 }
                                                             })
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A" || currentNode.parentNode.nodeName == "A" || currentNode.parentNode.nodeName == "a") {
@@ -5164,8 +5178,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
                                                                 isElementClicked = true;
                                                             }
-                                                        });
-                                                        
+                                                         });
                                                         editor.on('blur', function () {
                                                             //$(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").hide();
                                                             //console.log('Hitting');
@@ -5424,6 +5437,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
                                             //}
                                         });
+                                        
+                                    
                                     }
                                     ////
 
@@ -6298,6 +6313,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 var RemovePopups = function () {
                                     myElement.find("#imageToolbar").hide();
+                                    meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
                                     myElement.find("#videoToolbar").hide();
                                 }
 
@@ -6925,7 +6941,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if (selected_anchor.tagName.toLowerCase() == "a") {
                                         var $selected_anchor = $(selected_anchor);
                                         var _html = $selected_anchor.html();
-                                        $selected_anchor.replaceWith(_html);
+                                        if($selected_anchor.parent().hasClass('underline')){
+                                            $selected_anchor.parent().replaceWith(_html);
+                                        }else{
+                                            $selected_anchor.replaceWith(_html);
+                                        }
+                                        
                                     }else if(selected_anchor.parentNode.tagName.toLowerCase()=="a"){
                                         var $selectedtag = $(selected_anchor)
                                         var $clonedtag = $selectedtag.clone()

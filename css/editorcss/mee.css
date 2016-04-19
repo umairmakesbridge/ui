@@ -1992,8 +1992,26 @@ div.mce-tinymce-inline {
     left:-2px;
     z-index:1000;
 }
+.MEE_EDITOR #imageToolbar{
+    width: 99.8%;
+    border-radius: 5px;
+    left:1px;
+    top:47px;
+}
+.MEE_EDITOR .imageToolbar-menu ul{
+    background: #1D3C49 !important;
+    border-radius: 3px;
+}
+.MEE_EDITOR #imageToolbar ul li{
+    height: 26px;
+    width:50px;
+    padding: 0 0 8px;
+}
 .MEE_EDITOR .videoToolbar-menu{
     width:185px; 
+}
+.MEE_EDITOR .editor-toptoolbar-fixed-border #imageToolbar{
+    top:50px !important;
 }
 .MEE_EDITOR .imageToolbar-menu ul{list-style-type: none; display: inline-block; padding: 0; margin: 0; width: 370px; height: 34px;}
 .MEE_EDITOR .imageToolbar-menu ul li{width: 60px; height: 27px; border-right: 1px solid #222; float: left; text-align: center; padding-top: 6px;}

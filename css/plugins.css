@@ -2639,7 +2639,7 @@ body .ui-tooltip {
 	background: #F0F8FD;
 }
 .fc-calendar .fc-row > div.selected{
-    background: #4FC8F5;
+    background: #4FC8F5 !important;
     color:#fff;
     font-weight: bold;
 }
@@ -2769,7 +2769,7 @@ border-color: #0096FF #0096FF transparent transparent;
 }
 
 .fc-calendar .fc-row > div.fc-today {
-	background: #4fc8f5; 
+	background: #a9c2d5; 
 }
 
 .fc-calendar .fc-row > div.fc-today > span.fc-date {
