@@ -2737,16 +2737,8 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     }
                     
                     var levels = this.modelArray;
-                    var levelCount = [0,0,0,0];
-                    if(this.subType=="page"){
-                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click to add landing pages');
-                    }
-                    else if(this.subType=="form"){
-                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click to add  webforms');
-                    }
-                    else{
-                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click here to add tags');
-                    }
+                    var levelCount = [0,0,0,0];                    
+                    
                     for(var i=0; i<levels.length;i++){
                         var tabLevel = this.$(".tab-"+(i+1));
                         tabLevel.children().remove();
@@ -2759,6 +2751,32 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         }, this);  
                         levelCount[i] = lCount;
                     }
+                    var graph_data =[
+                            ['New Leads', levelCount[0]],
+                            ['MQL', levelCount[1]],
+                            ['SQL', levelCount[2]],
+                            ['Closed', levelCount[3]]
+                        ];
+                    if(this.subType=="page"){
+                        graph_data =[
+                            ['Level 1', levelCount[0]],
+                            ['Level 2', levelCount[1]],
+                            ['Level 3', levelCount[2]],
+                            ['Level 4', levelCount[3]]
+                        ];                        
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click to add landing pages');
+                    }
+                    else if(this.subType=="form"){
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click to add  webforms');
+                    }
+                    else{
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click here to add tags');
+                    }
+                    this.$(".rpt-level-one h3").html(graph_data[0][0]);
+                    this.$(".rpt-level-two h3").html(graph_data[1][0]);
+                    this.$(".rpt-level-three h3").html(graph_data[2][0]);
+                    this.$(".rpt-level-four h3").html(graph_data[3][0]);
+
                     this.$(".rpt-level-one p").html(levelCount[0]);
                     this.$(".rpt-level-two p").html(levelCount[1]);
                     this.$(".rpt-level-three p").html(levelCount[2]);
@@ -2769,12 +2787,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     
                     var _data = [{
                         name: 'Subscribers',
-                        data: [
-                            ['New Leads', levelCount[0]],
-                            ['MQL', levelCount[1]],
-                            ['SQL', levelCount[2]],
-                            ['Closed', levelCount[3]]
-                        ]
+                        data: graph_data
                     }]
                     this.chartPage.createFunnelChart(_data);
                     this.saveSettings();

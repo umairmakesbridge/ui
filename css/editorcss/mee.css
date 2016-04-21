@@ -3698,6 +3698,11 @@ input[type="text"].txtContSize {
     width: 80px;
 }
 
+select.selectEmailSize{
+    width:55px;
+    border:2px solid #eaf4f9;
+}
+
 .addToMyColors,.removeMyColors {
     background: none repeat scroll 0 0 #94CF1E;
     border: 0 none;

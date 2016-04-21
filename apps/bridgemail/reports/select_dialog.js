@@ -17,10 +17,18 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                                                        
                         };
                         this.levelExplain = {
-                            "1":{"text":"Showing Moderate Interest (Example:  people who have clicked several times on email)","cssClass":"one","label":"New Leads"},
-                            "2":{"text":"Marketing Qualified (Example: has requested a product trial or demo)","cssClass":"two","label":"MQL"},
-                            "3":{"text":"Sales Qualified (Example: Meets your minimum engagement standard for sales follow up)","cssClass":"three","label":"SQL"},
-                            "4":{"text":"Negotiations / Ready to Close (Example: Your in the top spot and in pricing discussions)","cssClass":"four","label":"Closed"}
+                            "page":{
+                                "1":{"text":"","cssClass":"one","label":"Level 1"},
+                                "2":{"text":"","cssClass":"two","label":"Level 2"},
+                                "3":{"text":"","cssClass":"three","label":"Level 3"},
+                                "4":{"text":"","cssClass":"four","label":"Level 4"}
+                            },
+                            "form":{
+                                "1":{"text":"Showing Moderate Interest (Example:  people who have clicked several times on email)","cssClass":"one","label":"New Leads"},
+                                "2":{"text":"Marketing Qualified (Example: has requested a product trial or demo)","cssClass":"two","label":"MQL"},
+                                "3":{"text":"Sales Qualified (Example: Meets your minimum engagement standard for sales follow up)","cssClass":"three","label":"SQL"},
+                                "4":{"text":"Negotiations / Ready to Close (Example: Your in the top spot and in pricing discussions)","cssClass":"four","label":"Closed"}
+                            }
                         }
                         this.parent = this.options.page;
                         this.app = this.parent.app ;
@@ -296,7 +304,7 @@ function (template, pagesCollection, FormsCollection, reportBlock) {
                     if(this.dialog.$(".modal-footer .level-define").length){
                         this.dialog.$(".modal-footer .level-define").remove();
                     }
-                    var _html = $('<div class="left level-define" style="display:none"> <div class="left level-text '+this.levelExplain[this.selectedLevel].cssClass+'">'+this.levelExplain[this.selectedLevel].label+'</div></a> <div class="left level-desc">'+this.levelExplain[this.selectedLevel].text+'</div></div>');
+                    var _html = $('<div class="left level-define" style="display:none"> <div class="left level-text '+this.levelExplain[this.type][this.selectedLevel].cssClass+'">'+this.levelExplain[this.type][this.selectedLevel].label+'</div></a> <div class="left level-desc">'+this.levelExplain[this.type][this.selectedLevel].text+'</div></div>');
                     this.dialog.$(".modal-footer").prepend(_html);
                     this.dialog.$(".modal-footer .level-define").fadeIn(400);
                 }

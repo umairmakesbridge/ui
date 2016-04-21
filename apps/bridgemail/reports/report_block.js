@@ -141,6 +141,21 @@ define(['text!reports/html/report_block.html'],
                         this.sub.createFunnel();                    
                     }
                   }
+                  else if(this.type=="ocampaign"){                      
+                      var oCampaigns = this.sub.modelArray[0].id.split(",");                      
+                      _.each(oCampaigns, function (val, index) {
+                        if(val==this.model.get("campNum")){
+                            delIndex = index;                                                      
+                        }                       
+                    },this);
+                    if(delIndex>-1){
+                        oCampaigns.splice(delIndex,1);
+                        delete this.sub.modelArray[0].campMapping[this.model.get("campNum")];
+                        this.sub.modelArray[0].id = oCampaigns.join(",");
+                        this.sub.saveSettings();
+                        this.$el.remove();
+                    }
+                  }
                 },
                 /*
                  * 

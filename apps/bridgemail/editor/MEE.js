@@ -509,8 +509,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             pageBorderBottomProp = '';
                                         }
                                     }
-                                    
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgleftborder='"+pageBorderLeftProp+"' data-bgrightborder='"+pageBorderRightProp+"' data-bgtopborder='"+pageBorderTopProp+"' data-bgbottomborder='"+pageBorderBottomProp+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    var emailWidthScale = (emailWidth.indexOf("%")>-1)?"%":"";
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='"+parseFloat(emailWidth)+emailWidthScale+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgleftborder='"+pageBorderLeftProp+"' data-bgrightborder='"+pageBorderRightProp+"' data-bgtopborder='"+pageBorderTopProp+"' data-bgbottomborder='"+pageBorderBottomProp+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+emailWidthScale+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
 
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
@@ -558,7 +558,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     this.find('#mee-iframe').contents().find('.mainContentHtmlGrand').attr('style',outerCss);
                                     if(!emailWidth){
                                         var mainTable = this.find("#mee-iframe").contents().find(".mainTable");
-                                        emailWidth = parseFloat(mainTable.css("width"));
+                                        emailWidth = mainTable.css("width");
                                     }
                                     options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
@@ -617,20 +617,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             meeIframe.find("head").append($("<title>"+pageTitle+"</title>"));
                                         }
                                         
-                                        
-                                        meeIframe.find(".mainTable").css("width",emailWidth+"px");
+                                        var emailWidthScale = (emailWidth.indexOf("%")>-1)?"%":"px";
+                                        var _emailWidth = parseFloat(emailWidth);
+                                        meeIframe.find(".mainTable").css("width",_emailWidth+emailWidthScale);
                                         // For Toolbar Test Purpose Abdullah 
                                         meeIframe.find(".mainTable").css("margin-top","45px");
                                         myElement.find('.editortoolbar').css('margin-bottom','0');
                                         // Ends Abdullah test
-                                        mainObj.html(innerHTML);                          
-                                        if(!options.landingPage && emailWidth){
+                                        mainObj.html(innerHTML);     
+                                        
+                                        if(!options.landingPage && _emailWidth){
                                             myElement.find(".email-width input.btnContainerSize").removeClass("active");
-                                            if( myElement.find(".email-width input.btnContainerSize#"+emailWidth).length ){                                            
-                                                myElement.find(".email-width input.btnContainerSize#"+emailWidth).addClass("active");
+                                            if( myElement.find(".email-width input.btnContainerSize#"+_emailWidth).length && emailWidthScale=="px"){                                            
+                                                myElement.find(".email-width input.btnContainerSize#"+_emailWidth).addClass("active");
                                             }
                                             else{
-                                                 myElement.find(".email-width input.txtContSize").val(emailWidth)
+                                                 myElement.find(".email-width input.txtContainerSize").val(_emailWidth);
+                                                 myElement.find(".email-width select.selectEmailSize").val(emailWidthScale);
                                             }
                                         }
                                         IsStyleActivated = false;
@@ -2283,11 +2286,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
 
                                             myElement.find(".txtContainerSize").keyup(function (e) {
-                                                meeIframe.find(".mainTable").css("width", $(this).val() + "px");
-                                                emailWidth = $(this).val() + "px";
-                                                // undoManager.registerAction(mainContentHtmlGrand.html());
-                                                makeCloneAndRegister();
+                                               var emailWidthScale = myElement.find(".selectEmailSize").val();
+                                                var _emailWidth = $(this).val();
+                                                if(emailWidthScale=="%" && _emailWidth>100){
+                                                    _emailWidth = 100;
+                                                    $(this).val(100);
+                                                }
+                                                meeIframe.find(".mainTable").css("width", _emailWidth + emailWidthScale);
+                                                emailWidth = _emailWidth + emailWidthScale;                                                
+                                                makeCloneAndRegister();                                               
                                             });
+                                            
+                                            myElement.find(".selectEmailSize").change(function(e){
+                                                var _emailWidth = myElement.find(".txtContainerSize").val();
+                                                if(_emailWidth){                                                    
+                                                    var emailWidthScale = myElement.find(".selectEmailSize").val();                                                    
+                                                    if(emailWidthScale=="%" && _emailWidth>100){
+                                                        _emailWidth = 100;
+                                                        myElement.find(".txtContainerSize").val(100);
+                                                    }
+                                                    meeIframe.find(".mainTable").css("width", _emailWidth + emailWidthScale);
+                                                    emailWidth = _emailWidth + emailWidthScale;                                                
+                                                    makeCloneAndRegister();                                               
+                                                }
+                                            })
                                             ///////////////////////
 
 
