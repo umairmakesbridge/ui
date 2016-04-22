@@ -8083,14 +8083,20 @@ ul.rightnav > li.logout:hover i.logout, ul.rightnav > li.logout i.logout.active 
 ul.rightnav > li.logout:hover span { display:block !important;}
 
 ul.rightnav > li.logout .lo-confirm {
-	position:fixed; right:-250px; top:50px; height:62px; width:220px;
+	position:fixed; right:-250px; top:50px; height:80px; width:230px;
  	background:#294957;
 	padding:10px;
 	box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
 	-webkit-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);}
 
-ul.rightnav > li.logout .lo-confirm p { color:#fff; font-size:13px; line-height:16px;}
+ul.rightnav > li.logout .lo-confirm p { color:#fff; font-size:13px; line-height:16px; margin-bottom: 0;}
+ul.rightnav > li.logout .lo-confirm i { clear: both;
+    color: rgb(238, 238, 238);
+    float: left;
+    font-size: 11px;
+    line-height: 15px;
+    margin-bottom: 10px;}
 ul.rightnav > li.logout .lo-confirm  a {  
 	background: none repeat scroll 0 0 #7996a8;
     border: 0 none;
