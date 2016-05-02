@@ -4424,6 +4424,7 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     height:34px;
     padding:2px;
     margin-left:21px;
+    position: relative;
 }
 .input-wrapper label{
     min-width: 55px;

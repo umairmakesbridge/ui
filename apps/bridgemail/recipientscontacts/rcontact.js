@@ -15,13 +15,17 @@ function (template) {
             },
             initialize: function () {
                 this.app = this.options.app;
+                this.parent = this.options.parent;
                 this.template = _.template(template);	
                 this.render();
             },
             render: function () {
               this.$el.html(this.template(this.model.toJSON())); 
               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
-            }   ,
+              if (this.parent && this.parent.searchText) {
+                this.$(".view-profile").highlight($.trim(this.parent.searchText));                        
+              } 
+            },
             getFullName:function(){
                 if(this.model.get('firstName') || this.model.get('lastName'))
                     return this.model.get('firstName') + ' ' + this.model.get('lastName');
@@ -69,11 +73,16 @@ function (template) {
                         });
                 
             },dateSetting:function(sentDate, sep){
-               if(sep =="/") 
-                    var _date =  moment(sentDate,'MM/DD/YYYY');
-                if(sep =="-")
-                    var _date =  moment(sentDate,'YYYY-MM-DD');
-                
+                var _date = ""
+               if(sep =="/"){ 
+                    _date =  moment(sentDate,'MM/DD/YYYY');
+                }
+                else if(sep =="-") {
+                   _date =  moment(sentDate,'YYYY-MM-DD');
+                }                    
+                else {
+                    _date =  moment(sentDate,sep);
+                }
                 return _date.format("DD MMM YYYY");
              },
              getFullDate:function(date){

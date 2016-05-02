@@ -14,10 +14,29 @@
         </div>
     </div>
 </td>
-<%if(this.options.type != "autobots"){ %>
-<td width="90px">
-    
+<% if(this.options.type == "autobots") { var data = this.model.get('autobotData')[0];%>
+  <td width="120px">
      
+        <div class="colico   recur showtooltip " data-original-title="How many time action repeated">
+            <strong><span><em>Match</em><%=this.options.app.addCommas(data.recurCount)%> times</span></strong> 
+        </div>
+     
+</td>
+   
+<% }else if(this.options.type == "webform") { %>
+
+<td width="120px">     
+    <div>
+        <div style="width:105px" class="time show">
+            
+            <strong><span><em>Submitted on</em><%=this.dateSetting(this.model.get('subscriptionData')[0].submissionDateTime,"MM-DD-YY")%></span></strong> 
+            
+        </div>
+    </div>     
+</td>
+
+<% } else {%>
+<td width="90px">         
     <div>
         <div class="colico open showtooltip" data-original-title="Unique campaigns open count">
             <strong><span><em>Opens</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].openCount)%></span></strong>
@@ -50,15 +69,6 @@
         </div>
     </div>
 </td>
-<%}else{ var data = this.model.get('autobotData')[0];%>
-  <td width="120px">
-     
-        <div class="colico   recur showtooltip " data-original-title="How many time action repeated">
-            <strong><span><em>Match</em><%=this.options.app.addCommas(data.recurCount)%> times</span></strong> 
-        </div>
-     
-</td>
-   
 <%}%>
 
 <% if(this.options.type != "tag") { %>

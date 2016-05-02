@@ -21,7 +21,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     this.app = this.options.app;
                     this.template = _.template(template);
                     this.status = "S",
-                            this.searchText = "";
+                    this.searchText = "";
                     this.offset = 0;
                     this.listNum = this.options.listNum;
                     this.isRequestRunning = null;
@@ -72,20 +72,26 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     _data['type'] = this.type;
                     if (this.options.type == "tag") {
                         _data['tag'] = this.listNum;
-                        this.objRContacts.url = '/pms/io/user/getTagPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        this.objRContacts.url = '/pms/io/user/getTagPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');                        
                     } else if (this.options.type == "target") {
                         _data['filterNumber'] = this.listNum;
-                        this.objRContacts.url = '/pms/io/filters/getTargetPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        this.objRContacts.url = '/pms/io/filters/getTargetPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');                        
                     } else if (this.options.type == "autobots") {
                         this.objRContacts.url = '/pms/io/trigger/getAutobotPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
                         _data['botId'] = this.options.botId;
-                        _data['status'] = this.options.status;
+                        _data['status'] = this.options.status;                        
+                    } else if (this.options.type == "webform") {
+                        this.objRContacts.url = '/pms/io/form/getSignUpFormData/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        _data['formId'] = this.options.listNum;   
+                        _data['type'] = "getSubmissions";                           
                     } else {
                         _data['listNum'] = this.listNum;
                         _data['status'] = this.status;
+                        
                     }
-                    _data['searchText'] = this.searchText;
                     _data['offset'] = this.offset;
+                    _data['searchText'] = this.searchText;
+                    
                     this.$el.find('#table_pageviews tbody .load-tr').remove();
                     this.$el.find('#table_pageviews tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:20px;padding-left:43%;'>No contacts founds!</div><div class='loading-contacts' style='margin-top:45px'></div></td></tr>");
                     this.options.app.showLoading("&nbsp;", this.$el.find('#table_pageviews tbody').find('.loading-contacts'));
@@ -93,7 +99,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                             that.offsetLength = contacts.length;
                             that.total_fetch = that.total_fetch + contacts.length;
                             _.each(contacts.models, function(model) {
-                                that.$el.find('#table_pageviews tbody').append(new rContact({model: model, app: that.options.app,isSubscriber:that.options.isSubscriber, listNum: that.options.listNum, type: that.options.type, sentAt: that.options.sentAt}).el);
+                                that.$el.find('#table_pageviews tbody').append(new rContact({model: model, app: that.options.app,parent: that ,isSubscriber:that.options.isSubscriber, listNum: that.options.listNum, type: that.options.type, sentAt: that.options.sentAt}).el);
                             });
                             if (that.searchText != '') {
                                 that.showSearchFilters(that.searchText, that.options.app.addCommas(that.objRContacts.total), that.searchText);

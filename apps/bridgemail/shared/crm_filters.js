@@ -313,7 +313,8 @@
       var self = this
       var selected_field = ""
       if(this.fields.length===0){
-          URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=filterFields";
+          var filter_type = (this.options.filter_type=="contact" || this.options.filter_type=="lead")?"&fetchTypeSF="+this.options.filter_type:"";
+          URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=filterFields"+filter_type;
           jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){                        
                      var fields_json = jQuery.parseJSON(xhr.responseText);                                
@@ -743,6 +744,7 @@
   , filterRow : '<div class="filter-row _row"><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
   , adv_option : '<div class="advncfilter"><div class="inputlabel" style="position:relative"><input type="checkbox" id="campaign_isFooterText" class="checkinput" ><label for="campaign_isFooterText">Advanced Filter</label><span style="display: block;" class="fieldinfo"><i class="icon"></i><em style="z-index: 108;width:280px;line-height:14px">Click to set precedence if you are using more than 2 filters. e.g (1 AND 2) OR 3</em></span></div><div class="filter-cont"><input type="text" value="" class="advance-option" style="margin-left:10px" /></div></div>'
   , filterFor : 'S'
+  ,filter_type:''
   , title: ''
   , app:null
   ,maxFilter:8,

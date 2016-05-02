@@ -21,7 +21,8 @@ define(['text!forms/html/formlistings_row.html','forms/copyform'],
                     "click .delete-form": 'deleteFormDialog',
                     'click .row-move': 'addRowToCol2',
                     'click .row-remove': 'removeRowToCol2',
-                    'click .check-box': 'checkUncheck'
+                    'click .check-box': 'checkUncheck',
+                    'click .submissionview':'showformSubmits',
                 },
                 /**
                  * Initialize view - backbone
@@ -234,6 +235,37 @@ define(['text!forms/html/formlistings_row.html','forms/copyform'],
                     if (this.parent.createSignupFormChart) {
                         this.parent.createSignupFormChart();
                     }
-                }
+                },
+                showformSubmits:function(ev){
+                    var that = this;
+                    var dialog_title = "Submissions of '"+this.model.get("name")+"'";
+                    var formId = this.model.get('formId.encode');
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = that.app.showDialog({
+                                      title:dialog_title,
+                                      css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                      headerEditable:false,
+                                      headerIcon : 'population',
+                                      wrapDiv : 'rcontacts-view',
+                                      bodyCss:{"min-height":dialog_height+"px"},
+                                      //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                            });     
+                    this.app.showLoading("Loading...",dialog.getBody());
+                    require(["recipientscontacts/rcontacts"],function(Contacts){
+                      var objContacts = new Contacts({app:that.app,listNum:formId,type:'webform',dialogHeight:dialog_height});
+                      var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                        dialog.getBody().append(objContacts.$el);
+                        that.app.showLoading(false, objContacts.$el.parent());
+                        objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        objContacts.$el.find('#contacts_close').remove();
+                        objContacts.$el.find('.temp-filters').removeAttr('style');
+                       //Autobots
+                              if(that.options.type == "autobots_listing"){
+                                  dialog.$el.find('.modal-header .cstatus').remove();
+                                  dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                              }
+                    });
+               }
             });
         });
