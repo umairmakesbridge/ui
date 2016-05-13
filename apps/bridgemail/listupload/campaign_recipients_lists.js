@@ -164,6 +164,15 @@ function (template, ListsCollection, ListsView,moment) {
                     }
                     this.col1.find("tr[_checksum='"+model.get("listNumber.checksum")+"']").show();
                 },
+                deleteCol2:function(model){
+                    for(var i=0;i<this.listsModelArray.length;i++){
+                        if(this.listsModelArray[i].get("listNumber.checksum")==model.get("listNumber.checksum")){
+                            this.listsModelArray.splice(i,1);
+                            this.listsIdArray.splice(i,1);
+                            break;
+                        }
+                    }
+                },
                createRecipients:function(lists){
                    var collection = new Backbone.Collection(lists);
                     for(var i=0;i<collection.length;i++){

@@ -127,6 +127,7 @@ function (template) {
                                           that.options.app.showLoading(false,$(ev.target).parents('tr'));   
                                            var _json = jQuery.parseJSON(data);
                                            if(_json[0]!=='err'){
+                                               that.parent.deleteCol2(that.model);  
                                                $(ev.target).parents('tr').fadeOut('slow');
                                               
                                              }
