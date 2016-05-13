@@ -1871,7 +1871,7 @@ ol.progressbar li.active a { color:#94CF1E; }
     background: url("../img/search.png") no-repeat scroll center center rgba(0, 0, 0, 0);
     display: block;
     height: 24px;
-    /*margin: 0 5px;*/
+    margin-left:5px;
     width: 24px;
 }
 .searchbtn .icon.search {
@@ -10772,7 +10772,7 @@ Report Graph Changes
 }
 .stats-percentage{
     position:absolute;
-    bottom:6px;
+    bottom:-5px;
     right:5px;
     font-size:10px;
     font-style:normal;

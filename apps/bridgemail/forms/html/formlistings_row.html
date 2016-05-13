@@ -97,7 +97,7 @@
 <td width="90px">
     <div>                
         <div class="colico  form ">
-            <strong><span><em>Form Submissions</em><% if(this.model.get('submitCount')!="0") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('submitCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('submitCount')))} %></span></strong>
+            <strong><span><em>Form Submissions</em><% if(this.model.get('submitCount')=="$") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('submitCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('submitCount')))} %></span></strong>
         </div>          
     </div>
 </td>

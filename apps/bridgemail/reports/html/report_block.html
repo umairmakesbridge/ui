@@ -36,6 +36,7 @@
     <div class="rpt-details">
         <span class="lastSaveInfo"><i class="icon time"></i><%= this.getPageTimeShow().dateTime %></span>
         <span class="landingpage"><i class="icon lp"></i><%= this.app.addCommas(this.model.get('viewCount')) %></span>                        
+        <span class="formview"><i class="icon formview"></i><% if(this.model.get('submitCount')=="$") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('submitCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('submitCount')))} %></span>
         <div id="triangle-bottomleft" class="<%- this.addClass %>">
             <a class="rpicon rpclose showtooltip" title="<% if(this.addClass){ print('Add') } else { print('Remove') } %>"></a>
         </div>         
@@ -54,7 +55,7 @@
     </div>
     <div class="rpt-details">
         <span class="lastSaveInfo"><i class="icon time"></i><%= this.getFormsDate() %></span>
-        <span class="formview"><i class="icon formview"></i><%= this.app.addCommas(this.model.get('submitCount')) %></span>        
+        <span class="formview"><i class="icon formview"></i><% if(this.model.get('submitCount')=="$") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('submitCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('submitCount')))} %></span>        
         <div id="triangle-bottomleft" class="<%- this.addClass %>">
             <a class="rpicon rpclose showtooltip" title="<% if(this.addClass){ print('Add') } else { print('Remove') } %>"></a>
         </div>         
@@ -89,7 +90,7 @@
     <div data-checksum="<%-this.model.get('campNum.checksum')%>" class="block-container">
     <div class="rpt-details">
         <a class="cstatus pclr18">Message <b><%= this.model.get('order') %></b></a>
-        <span class="rp-pi-message"><i class="rpicon rpicon-two rp-pichart"></i></span>                     
+        <span class="rp-pi-message showtooltip rp-ntdetail-report" title="Click to view detail report"><i class="rpicon rpicon-two rp-pichart"></i></span>                     
     </div>
     <div class="name-type">              
             <h3>                    
@@ -108,12 +109,18 @@
     
             <div class="name-type">              
                    <h3>                    
-                       <a style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip">  <%= this.model.get('tag')%> </a>                    
+                       <a style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis" class="campname showtooltip">  <%= this.model.get('tag')%> </a>                    
                    </h3>                   
             </div>
         <div class="rpt-details">
 
-                <span class="rpt-tag-pclr"><i class="pclr<%= this.model.get('cno')%>"></i><%= this.app.addCommas(this.model.get('subCount')) %></span>
+                <span class="rpt-tag-pclr"><i class="pclr<%= this.model.get('cno')%>"></i>
+                    <% if(this.subType=="form") { %>
+                        <% if(this.model.get('subCount')!="0") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('subCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('subCount')))} %>
+                    <% } else {
+                        print(this.app.addCommas(this.model.get('subCount')))
+                    } %>
+                </span>
                 <% if(this.type!=="funnel") { %>
                     <div style="display:block" class="icons-bar-chart">
                          <div class="rpbarthinchart rpicon rpicon-two showtooltip" title="Click to see bar chart"></div>
@@ -151,6 +158,7 @@
                         <a data-original-title="Click to preview" class="campname show-detail showtooltip" style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis"><%= this.model.get('name')%> </a>                    
                     </h3>                                             
                     <span class="landingpage"><i class="icon lp"></i><%= this.app.addCommas(this.model.get('viewCount')) %></span>
+                    <span class="formview"><i class="icon formview"></i><% if(this.model.get('submitCount')=="$") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('submitCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('submitCount')))} %></span>
                 </div>
              </div>
            <% } else if(this.type=="form") { %>
@@ -158,7 +166,7 @@
                     <h3>                    
                         <a  class="campname show-detail" style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis"><%= this.model.get('name')%> </a>                    
                     </h3>                                             
-                    <span class="formview"><i class="icon formview"></i><%= this.app.addCommas(this.model.get('submitCount')) %></span>
+                    <span class="formview"><i class="icon formview"></i><% if(this.model.get('submitCount')=="$") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('submitCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('submitCount')))} %></span>
                 </div>
            <% } else if(this.type=="autobot") { %>
                  <div class="name-type">              
@@ -183,7 +191,7 @@
            <% } else if(this.type=="tag") { %>
                  <div class="name-type">              
                     <h3>                    
-                        <a  class="campname show-detail" style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis"><%= this.model.get('tag')%> </a>                    
+                        <a  class="campname" style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis"><%= this.model.get('tag')%> </a>                    
                     </h3>                                             
                     <span class="subscribers"><i class="icon subscribers"></i><%= this.app.addCommas(this.model.get('subCount')) %></span>                        
                 </div>            

@@ -66,8 +66,8 @@ define(['text!autobots/html/score.html', 'target/views/recipients_target', 'bms-
                         checkboxClass: 'checkpanelinput',
                         insert: '<div class="icheck_line-icon"></div>'
                     });
-                    this.$el.find('#wrap_recipients').mergefields({app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'alertemails', placeholder_text: 'Recipients'});
-                    this.$el.find('#wrap_email').mergefields({app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'alertmessage', placeholder_text: '{{LASTNAME}}'});
+                    //this.$el.find('#wrap_recipients').mergefields({app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'alertemails', placeholder_text: 'Recipients'});
+                    //this.$el.find('#wrap_email').mergefields({app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'alertmessage', placeholder_text: '{{LASTNAME}}'});
                     if (this.options.type == "edit") {
                         this.getTargets();
                         this.$el.find("#ddlIsRecur").val(this.model.get('isRecur'));

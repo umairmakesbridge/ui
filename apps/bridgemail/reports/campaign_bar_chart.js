@@ -31,6 +31,7 @@ function (template) {
                this.yAxis = this.options.yAxis;
                this.title = this.options.title ?this.options.title:'';
                this.isStacked = this.options.isStacked;
+               this.clickEvent = this.options.clickEvent;
                this.colors = this.options.colors?this.options.colors:['#454F88','#2F93E5','#62ABE6','#0C73C2','#3b5998','#bb0000'];               
             }
             /**
@@ -127,7 +128,7 @@ function (template) {
                                 this.series.name + ': ' + that.app.addCommas(this.y) + '<br/>' 
                                 //'Total: ' + that.app.addCommas(this.point.stackTotal);
                         }
-                    };
+                    };                    
                     options.plotOptions = {column:{
                         stacking: 'normal',
                         dataLabels: {
@@ -138,6 +139,21 @@ function (template) {
                             }
                         }
                     }}
+                    
+                   if(this.clickEvent){
+                       options.plotOptions = {
+                           series : {
+                               cursor:'pointer',
+                               point: {
+                                   events: {
+                                       click: function(){
+                                          that.clickEvent(this)
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   } 
                 }
                 else{
                   options.series = [  {

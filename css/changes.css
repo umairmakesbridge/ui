@@ -1010,6 +1010,10 @@ ul.tabs-btns li.active a{
 .wtab-reportslisting{
     background-position:-60px 0px;
 }
+.wtab-population{
+     background-position: 0px -150px;
+
+}
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
     border : 1px dashed #bb2b2b !important;
@@ -9406,4 +9410,7 @@ sup.beta {
     opacity: 1;
     position: absolute;
     top: 0;
+}
+.ws-content .rcontacts-view .temp-filters{
+    margin-right: 0px !important;
 }

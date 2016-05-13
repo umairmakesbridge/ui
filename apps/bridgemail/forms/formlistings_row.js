@@ -236,11 +236,13 @@ define(['text!forms/html/formlistings_row.html','forms/copyform'],
                         this.parent.createSignupFormChart();
                     }
                 },
-                showformSubmits:function(ev){
-                    var that = this;
+                showformSubmits:function(ev){                                        
                     var dialog_title = "Submissions of '"+this.model.get("name")+"'";
                     var formId = this.model.get('formId.encode');
-                    var dialog_width = $(document.documentElement).width()-60;
+                    var formCheckSum = this.model.get('formId.checksum');
+                    this.app.mainContainer.openPopulation({formId:formId,ws_title:dialog_title,formCheckSum:formCheckSum});
+                    
+                    /*var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
                     var dialog = that.app.showDialog({
                                       title:dialog_title,
@@ -265,7 +267,7 @@ define(['text!forms/html/formlistings_row.html','forms/copyform'],
                                   dialog.$el.find('.modal-header .cstatus').remove();
                                   dialog.$el.find('.modal-footer').find('.btn-play').hide();
                               }
-                    });
+                    });*/
                }
             });
         });

@@ -13,10 +13,12 @@ define(['text!reports/html/report_block.html'],
                  * Attach events on elements in view.
                  */
                 events: {
-                  "click .show-detail" : "previewCampaign",
+                  "click .show-detail" : "previewObject",
                   "click .rp-detail-report" : "reportShow",
                   "click .rpclose" : "removeFromReport",
-                  "click #triangle-bottomleft": "addRemoveRow"
+                  "click #triangle-bottomleft": "addRemoveRow",
+                  "click .submissionview": "showformSubmits",
+                  "click .rp-ntdetail-report": "ntReportShow"
                 },
                 /**
                  * Initialize view - backbone
@@ -311,6 +313,17 @@ define(['text!reports/html/report_block.html'],
                         this.sub.createNurtureTrackChart();
                     }
                 },
+                previewObject: function(){
+                    if(this.type=="campaign" || this.type=="autobot" || this.type=="nurturetrack"){                                        
+                        this.previewCampaign();
+                    }
+                    else if(this.type=="page"){
+                        this.previewPage();
+                    }
+                    else if(this.type=="form"){
+                        this.previewForm();
+                    }
+                },
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
                     var camp_obj = this.sub;
@@ -318,7 +331,24 @@ define(['text!reports/html/report_block.html'],
                     //var appMsgs = this.app.messages[0];				
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
-                    var dialog = camp_obj.app.showDialog({title: 'Campaign Preview of &quot;' + this.model.get('name') + '&quot;',
+                    var dialogTitle = "Preview";
+                        if(this.type=="campaign"){
+                            dialogTitle = 'Campaign Preview of &quot;' + this.model.get('name') + '&quot;';
+                        }
+                        else if(this.type=="nurturetrack"){
+                            dialogTitle = 'Message Preview of &quot;' + this.model.get('subject') + '&quot;';
+                        }
+                        else if(this.type=="autobot"){
+                            var label="";
+                            if (this.model.get('isPreset') == "Y") {
+                                label = this.model.get('presetLabel');
+                            }else{
+                                label = this.model.get('label');
+                            }
+                            dialogTitle = 'Autobot Preview of &quot;' + label + '&quot;';
+                            camp_id = this.model.get('actionData')[0]['campNum.encode'];
+                        }
+                    var dialog = camp_obj.app.showDialog({title: dialogTitle,
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
                         headerIcon: 'dlgpreview',
@@ -328,6 +358,48 @@ define(['text!reports/html/report_block.html'],
                     var preview_url = "https://" + this.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + camp_id;
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: camp_id, isText: isTextOnly}); // isText to Dynamic
+                        dialog.getBody().html(tmPr.$el);
+                        tmPr.init();
+                    }, this));
+                },
+                previewPage: function(){
+                    var camp_obj = this.sub;                                        
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = camp_obj.app.showDialog({title: 'Preview of landing page &quot;' + this.model.get('name') + '&quot;',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'dlgpreview',
+                        bodyCss: {"min-height": dialog_height + "px"}
+                    });
+                    this.app.showLoading("Loading Page...", dialog.getBody());
+                    var preview_url =  this.app.decodeHTML(this.model.get('previewURL')).replace("http","https");
+                    require(["common/templatePreview"], _.bind(function (templatePreview) {
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
+                        dialog.getBody().html(tmPr.$el);
+                        tmPr.init();
+                    }, this));
+                    dialog.$el.find(".pointy").remove();
+                    if(this.model.get("status")=="D"){
+                        var publishButton = $(' <div class="pointy" style="display:inline-block !important;opacity:1;position:absolute;margin-left:10px"> <a class="icon play24 showtooltip" title="Publish Landing Page" ></a> </div>');
+                        dialog.$el.find("#dialog-title").append(publishButton);
+                        publishButton.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                        publishButton.find(".play24").click(_.bind(this.publishPage,this,dialog));
+                    }
+                },
+                previewForm: function (){
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = this.app.showDialog({title: 'Preview of form &quot;' + this.model.get('name') + '&quot;',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'dlgpreview',
+                        bodyCss: {"min-height": dialog_height + "px"}
+                    });
+                    this.app.showLoading("Loading Form...", dialog.getBody());
+                    var preview_url = this.app.decodeHTML(this.model.get('formPreviewURL'))+"?preview=Y";
+                    require(["common/templatePreview"], _.bind(function (templatePreview) {
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         dialog.getBody().html(tmPr.$el);
                         tmPr.init();
                     }, this));
@@ -372,6 +444,10 @@ define(['text!reports/html/report_block.html'],
                     if(camp_id){
                         this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id}, type: '', title: 'Loading...', url: 'reports/summary/summary', workspace_id: 'summary_' + this.model.get('campNum.checksum'), tab_icon: 'campaign-summary-icon'});
                     }
+                },
+                ntReportShow:function(){
+                    var camp_id=this.model.get('campNum.encode');
+                    this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.order,trackName:this.options.page.modelArray[0].get("name"),trackId:this.options.page.modelArray[0].get("trackId.encode")},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});
                 },
                 showEllipsis: function () {
                     var totalTagsWidth = 0;
@@ -418,6 +494,41 @@ define(['text!reports/html/report_block.html'],
                         }, this));
                     }
                 }
+                ,
+                showformSubmits:function(ev){
+                    var that = this;
+                    var formName = this.model.get("name")?this.model.get("name"):this.model.get("tag");
+                    var dialog_title = "Submissions of '"+formName+"'";
+                    var formId = this.model.get('formId.encode')?this.model.get('formId.encode'):this.model.get('id');
+                    var formCheckSum = this.model.get('formId.checksum')?this.model.get('formId.encode'):this.model.get('checkSum');
+                    this.app.mainContainer.openPopulation({formId:formId,ws_title:dialog_title,formCheckSum:formCheckSum});
+                    /*var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = that.app.showDialog({
+                                      title:dialog_title,
+                                      css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                      headerEditable:false,
+                                      headerIcon : 'population',
+                                      wrapDiv : 'rcontacts-view',
+                                      bodyCss:{"min-height":dialog_height+"px"},
+                                      //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                            });     
+                    this.app.showLoading("Loading...",dialog.getBody());
+                    require(["recipientscontacts/rcontacts"],function(Contacts){
+                      var objContacts = new Contacts({app:that.app,listNum:formId,type:'webform',dialogHeight:dialog_height});
+                      var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                        dialog.getBody().append(objContacts.$el);
+                        that.app.showLoading(false, objContacts.$el.parent());
+                        objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        objContacts.$el.find('#contacts_close').remove();
+                        objContacts.$el.find('.temp-filters').removeAttr('style');
+                       //Autobots
+                              if(that.options.type == "autobots_listing"){
+                                  dialog.$el.find('.modal-header .cstatus').remove();
+                                  dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                              }
+                    });*/
+               }
 
             });
         });

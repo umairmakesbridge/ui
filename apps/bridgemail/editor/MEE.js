@@ -509,7 +509,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             pageBorderBottomProp = '';
                                         }
                                     }
-                                    var emailWidthScale = (emailWidth.indexOf("%")>-1)?"%":"";
+                                    var emailWidthScale = (emailWidth && emailWidth.indexOf("%")>-1)?"%":"";
                                     var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='"+parseFloat(emailWidth)+emailWidthScale+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgleftborder='"+pageBorderLeftProp+"' data-bgrightborder='"+pageBorderRightProp+"' data-bgtopborder='"+pageBorderTopProp+"' data-bgbottomborder='"+pageBorderBottomProp+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+emailWidthScale+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
 
                                     
@@ -617,7 +617,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             meeIframe.find("head").append($("<title>"+pageTitle+"</title>"));
                                         }
                                         
-                                        var emailWidthScale = (emailWidth.indexOf("%")>-1)?"%":"px";
+                                        var emailWidthScale = (emailWidth && emailWidth.indexOf("%")>-1)?"%":"px";
                                         var _emailWidth = parseFloat(emailWidth);
                                         meeIframe.find(".mainTable").css("width",_emailWidth+emailWidthScale);
                                         // For Toolbar Test Purpose Abdullah 

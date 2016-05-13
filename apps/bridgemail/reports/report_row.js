@@ -581,7 +581,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         }
                                         
                                         var _data = [{"name": "Views", "data": viewData}, {"name": "Submissions", "data": submitData}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#39c8a9', '#66a2cd']});
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#39c8a9', '#66a2cd'],clickEvent:_.bind(this.openPopulationDetail,this)});
                                         this.$("#chart-" + val.get("pageId.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
@@ -599,6 +599,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         }, this);
 
                     }                    
+                },
+                openPopulationDetail: function(e){
+                    console.log(this);
                 },
                 //////********************* Campaigns *****************************************//////
                 loadCampaigns: function () {
@@ -1112,7 +1115,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("botId.checksum") + " ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            this.$("#stats-" + val.get("botId.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
                                     //}, this));
                                 }

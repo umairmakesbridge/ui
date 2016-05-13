@@ -458,6 +458,23 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
                 }
                 ,
+                openPopulation: function (opt) {
+                    var formId = opt.formId ? opt.formId : 0;
+                    var formCheckSum = opt.formCheckSum ? opt.formCheckSum : 0;
+                    var ws_title = opt.ws_title?opt.ws_title:"Population";
+                    this.addWorkSpace({type: '',
+                        title: ws_title,
+                        sub_title: 'Population',
+                        tab_icon: 'population',
+                        workspace_id: 'population_' + formCheckSum,
+                        url: 'recipientscontacts/rcontacts',
+                        addAction: false,
+                        noTags: true,
+                        params: {app:app,listNum:formId,type:'webform'}
+
+                    });
+                }
+                ,
                 openReport: function (opt) {
                     var report_id = opt.id ? opt.id : 0;
                     var report_checksum = opt.checksum ? opt.checksum : 0;
@@ -857,7 +874,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         headerIcon: 'template',
                         bodyCss: {"min-height": dialog_height + "px"},
                         tagRegen: true,
-                        buttons: {saveBtn: {text: 'Save'}}
+                        buttons: {saveBtn: {text: 'Save Template'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
                     this.$el.parents('body').find("#template_search_menu li:first-child").removeClass("active").click();
@@ -869,7 +886,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         _this.app.showLoading(false, mPage.$el.parent());
                         mPage.init();
                         mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage));
+                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage, true));
                         _this.app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
                         _this.app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
                         _this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveTemplateCall, mPage); // New Dialog

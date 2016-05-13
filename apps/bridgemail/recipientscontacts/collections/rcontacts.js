@@ -25,7 +25,7 @@ define(['recipientscontacts/models/rcontact','app','backbone'], function (Modelr
                 var result = [];
                 if(!app.checkError(response) && response.totalCount!=="0"){
                     _.each(response.subscribers[0],function(val,key){
-                        val[0]._id = val[0]['subNum.encode'];
+                        val[0]._id = res.data.offset + parseInt(key.substring(10));
                         result.push(val[0]);
                     })                    
                 }

@@ -696,9 +696,7 @@ function (template,contactsView) {
                     }
                 },
                 previewCallback: function(){
-                   
-                   
-                 			
+                                   
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
                 var dialog = this.app.showDialog({title:'Message Preview' ,
@@ -708,14 +706,26 @@ function (template,contactsView) {
                                   bodyCss:{"min-height":dialog_height+"px"}
                 });	
                 this.app.showLoading("Loading Message HTML...",dialog.getBody());									
-                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?msgId="+this.msgID+"&subNo="+this.subNum;
-
+                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewmsg.jsp?msgId="+this.msgID+"&subNo="+this.subNum;
+                var tmPrParams = {frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:this.msgID};
+                if(this.msgID===''){               
+                    var iframeHTML = this.$("#mee_editor").getMEEHTML();   
+                    preview_url ="about:blank";
+                    tmPrParams = {frameSrc:preview_url,app:this.app,frameHeight:dialog_height,tempNum:this.msgID};
+                }
+                
+                
                 require(["common/templatePreview"],_.bind(function(MessagePreview){
-
-                var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:this.msgID}); // isText to Dynamic
+                    
+                var tmPr =  new MessagePreview(tmPrParams); // isText to Dynamic
                  dialog.getBody().append(tmPr.$el);
                  this.app.showLoading(false, tmPr.$el.parent());
                  tmPr.init();
+                 if(this.msgID===''){
+                    dialog.getBody().find("iframe#email-template-iframe").load(_.bind(function(){
+                        dialog.getBody().find("iframe#email-template-iframe").contents().find("html").html(iframeHTML);                        
+                    },this))
+                 }
                  var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                  tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                  dialog.$el.find('#dialog-title .preview').remove();

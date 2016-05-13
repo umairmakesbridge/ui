@@ -89,7 +89,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     if (this.options.prevFlag === 'C') {
                         this.setiFrameSrc();
                     } else {
-                        this.$('#email-template-iframe').attr('src', this.options.frameSrc).css('height', this.options.frameHeight);
+                       this.$('#email-template-iframe').attr('src', this.options.frameSrc).css('height', this.options.frameHeight);
                     }
                 },
                 setiFrameSrc: function () { // HTML & Text Tab Click
@@ -110,7 +110,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         }
                         if (this.options.isText && this.options.isText == 'Y') {
                             this.html = 'N';
-                        }
+                        }                        
                         frame = this.options.frameSrc + "&html=" + this.html + "&original=" + this.original;
                         /*Check if Contact is selected or not*/
                         if (this.subNum !== null) {
@@ -132,7 +132,13 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     else {
                         newFrameheight = this.options.frameHeight;
                     }
-                    this.$('#email-template-iframe').attr('src', frame).css('height', newFrameheight);
+                    if(this.options.frameSrc=="about:blank"){
+                        this.$('#email-template-iframe').css('height', newFrameheight);    
+                    }
+                    else{
+                        this.$('#email-template-iframe').attr('src', frame).css('height', newFrameheight);
+                    }
+                    
                 },
                 loadPrevTemplates: function () {
                     this.$('.previewbtns').hide();
