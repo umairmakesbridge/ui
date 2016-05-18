@@ -126,7 +126,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         else
                             newFrameheight = this.options.frameHeight - 170;
                     }
-                    else if (this.options.prevFlag === 'T'){
+                    else if (this.options.prevFlag === 'T' || this.options.prevFlag === 'E'){
                         newFrameheight = this.options.frameHeight - 50;
                     }
                     else {
@@ -142,7 +142,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                 },
                 loadPrevTemplates: function () {
                     this.$('.previewbtns').hide();
-                    if (this.options.prevFlag === 'T') {                        
+                    if (this.options.prevFlag === 'T' || this.options.prevFlag === 'E') {                        
                         this.setiFrameSrc();
                         this.$('#prev-email').focus();
                     } else if (this.options.prevFlag === 'C') {
@@ -160,6 +160,10 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         this.$('#temp-camp-previewbar').removeAttr('style');
                         this.dynamicRequest();
                         var post_val = this.$('#sendtemp-preview').serialize();
+                        if(this.options.postParams){
+                            post_val = this.options.postParams;
+                            post_val["toEmails"] = this.$('#prev-email').val();
+                        }
                         this.$('#send-template-preview').addClass('loading-preview');
                         this.$('#prev-email').attr('disabled', 'disabled');
                         $.post(this.url, post_val)
@@ -235,6 +239,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     this.tempNum = this.options.tempNum;
                     if (this.options.prevFlag === 'T') {
                         this.url = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.bms_token + "&type=email&templateNumber=" + this.tempNum;
+                    }
+                    if (this.options.prevFlag === 'E') {
+                        this.url = "/pms/io/subscriber/saveSingleEmailData/?BMS_REQ_TK=" + this.bms_token + "&&msgId=" + this.tempNum;                        
                     }
                     else if (this.options.prevFlag === 'C') {
                         if (this.$('.show-original').is(':checked')) {

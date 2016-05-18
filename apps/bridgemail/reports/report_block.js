@@ -13,12 +13,13 @@ define(['text!reports/html/report_block.html'],
                  * Attach events on elements in view.
                  */
                 events: {
-                  "click .show-detail" : "previewObject",
-                  "click .rp-detail-report" : "reportShow",
-                  "click .rpclose" : "removeFromReport",
-                  "click #triangle-bottomleft": "addRemoveRow",
-                  "click .submissionview": "showformSubmits",
-                  "click .rp-ntdetail-report": "ntReportShow"
+                    "click .show-detail": "previewObject",
+                    "click .rp-detail-report": "reportShow",
+                    "click .rpclose": "removeFromReport",
+                    "click #triangle-bottomleft": "addRemoveRow",
+                    "click .submissionview": "showformSubmits",
+                    "click .rp-ntdetail-report": "ntReportShow",
+                    "click .showresponsivesstag":"showPercentDiv"
                 },
                 /**
                  * Initialize view - backbone
@@ -29,11 +30,11 @@ define(['text!reports/html/report_block.html'],
                     this.app = this.sub.app;
                     this.type = this.options.type;
                     this.hideCheckbox = this.options.hideCheckbox ? this.options.hideCheckbox : false;
-                    this.subType = this.options.subType ? this.options.subType :'';
-                    this.addClass= this.options.addClass ? this.options.addClass :'';
-                    this.expandedView = this.options.expandedView ? true : false;    
-                    this.isAddRemove = this.options.isAddRemove?true:false;
-                    this.render();                  
+                    this.subType = this.options.subType ? this.options.subType : '';
+                    this.addClass = this.options.addClass ? this.options.addClass : '';
+                    this.expandedView = this.options.expandedView ? true : false;
+                    this.isAddRemove = this.options.isAddRemove ? true : false;
+                    this.render();
                 },
                 /**
                  * Render view on page.
@@ -42,122 +43,111 @@ define(['text!reports/html/report_block.html'],
                     this.$el.html(this.template({
                         model: this.model
                     }));
-                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});                    
-                    if(this.expandedView){
+                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    if (this.expandedView) {
                         this.$el[0].className = "rpt-campign-listing rpt-campaign-blocks";
                     }
-                    if(this.type=="nurturetrack" && this.expandedView===false){
+                    if (this.type == "nurturetrack" && this.expandedView === false) {
                         this.$el.addClass("rept-data-nt");
-                    }
-                    else if(this.type=="funnel"){
+                    } else if (this.type == "funnel") {
                         this.$el.addClass("rept-data-tagbox");
                     }
-                    
+
                     this.initControls();
                 },
-                removeFromReport: function(){
-                   if(this.isAddRemove){
-                       this.addRemoveRow();
-                       return false;
-                   } 
-                   var delIndex = -1; 
-                   if(this.type=="campaign"){
-                    _.each(this.sub.modelArray, function (val, index) {
-                        if(val.get("campNum.checksum")==this.model.get("campNum.checksum")){
-                            delIndex = index;                                                      
-                        }                       
-                    },this);                                     
-                    this.sub.modelArray.splice(delIndex,1);
-                    if(this.expandedView) {    
-                        this.sub.loadCampaignsSummary();
+                removeFromReport: function () {
+                    if (this.isAddRemove) {
+                        this.addRemoveRow();
+                        return false;
                     }
-                    else{
-                        this.sub.createCampaigns();
+                    var delIndex = -1;
+                    if (this.type == "campaign") {
+                        _.each(this.sub.modelArray, function (val, index) {
+                            if (val.get("campNum.checksum") == this.model.get("campNum.checksum")) {
+                                delIndex = index;
+                            }
+                        }, this);
+                        this.sub.modelArray.splice(delIndex, 1);
+                        if (this.expandedView) {
+                            this.sub.loadCampaignsSummary();
+                        } else {
+                            this.sub.createCampaigns();
+                        }
+                    } else if (this.type == "page") {
+                        _.each(this.sub.modelArray, function (val, index) {
+                            if (val.get("pageId.checksum") == this.model.get("pageId.checksum")) {
+                                delIndex = index;
+                            }
+                        }, this);
+                        this.sub.modelArray.splice(delIndex, 1);
+                        if (this.expandedView) {
+                            this.sub.loadPagesSummary();
+                        } else {
+                            this.sub.createPages();
+                        }
+                    } else if (this.type == "form") {
+                        _.each(this.sub.modelArray, function (val, index) {
+                            if (val.get("formId.checksum") == this.model.get("formId.checksum")) {
+                                delIndex = index;
+                            }
+                        }, this);
+                        this.sub.modelArray.splice(delIndex, 1);
+                        if (this.expandedView) {
+                            this.sub.loadSignupformsSummary();
+                        } else {
+                            this.sub.createSignupForms();
+                        }
+                    } else if (this.type == "autobot") {
+                        _.each(this.sub.modelArray, function (val, index) {
+                            if (val.get("botId.checksum") == this.model.get("botId.checksum")) {
+                                delIndex = index;
+                            }
+                        }, this);
+                        this.sub.modelArray.splice(delIndex, 1);
+                        if (this.expandedView) {
+                            this.sub.loadAutobotsSummary();
+                        } else {
+                            this.sub.createAutobots();
+                        }
+                    } else if (this.type == "tag") {
+                        _.each(this.sub.modelArray, function (val, index) {
+                            if (val.get("tag") == this.model.get("tag")) {
+                                delIndex = index;
+                            }
+                        }, this);
+                        this.sub.modelArray.splice(delIndex, 1);
+                        if (this.expandedView) {
+                            this.sub.loadTagsSummary();
+                        } else {
+                            this.sub.createTags();
+                        }
+                    } else if (this.type == "funnel") {
+                        var selectedLevel = this.sub.$(".funnel-tabs-btns .active").attr("data-tab");
+                        selectedLevel = parseInt(selectedLevel) - 1;
+                        _.each(this.sub.modelArray[selectedLevel], function (val, index) {
+                            if (val.get("tag") == this.model.get("tag")) {
+                                delIndex = index;
+                            }
+                        }, this);
+                        if (delIndex > -1) {
+                            this.sub.modelArray[selectedLevel].splice(delIndex, 1);
+                            this.sub.createFunnel();
+                        }
+                    } else if (this.type == "ocampaign") {
+                        var oCampaigns = this.sub.modelArray[0].id.split(",");
+                        _.each(oCampaigns, function (val, index) {
+                            if (val == this.model.get("campNum")) {
+                                delIndex = index;
+                            }
+                        }, this);
+                        if (delIndex > -1) {
+                            oCampaigns.splice(delIndex, 1);
+                            delete this.sub.modelArray[0].campMapping[this.model.get("campNum")];
+                            this.sub.modelArray[0].id = oCampaigns.join(",");
+                            this.sub.saveSettings();
+                            this.$el.remove();
+                        }
                     }
-                  }
-                  else if(this.type=="page"){
-                     _.each(this.sub.modelArray, function (val, index) {
-                        if(val.get("pageId.checksum")==this.model.get("pageId.checksum")){
-                            delIndex = index;                                                      
-                        }                       
-                    },this);                                     
-                    this.sub.modelArray.splice(delIndex,1);                    
-                    if(this.expandedView) {    
-                        this.sub.loadPagesSummary();
-                    }
-                    else{
-                        this.sub.createPages();
-                    }
-                  }
-                  else if(this.type=="form"){
-                     _.each(this.sub.modelArray, function (val, index) {
-                        if(val.get("formId.checksum")==this.model.get("formId.checksum")){
-                            delIndex = index;                                                      
-                        }                       
-                    },this);                                     
-                    this.sub.modelArray.splice(delIndex,1);                    
-                    if(this.expandedView) {    
-                        this.sub.loadSignupformsSummary();
-                    }
-                    else{
-                        this.sub.createSignupForms();
-                    }
-                  }
-                  else if(this.type=="autobot"){
-                     _.each(this.sub.modelArray, function (val, index) {
-                        if(val.get("botId.checksum")==this.model.get("botId.checksum")){
-                            delIndex = index;                                                      
-                        }                       
-                    },this);                                     
-                    this.sub.modelArray.splice(delIndex,1);                    
-                    if(this.expandedView) {    
-                        this.sub.loadAutobotsSummary();
-                    }
-                    else{
-                        this.sub.createAutobots();
-                    }
-                  }
-                  else if(this.type=="tag"){
-                     _.each(this.sub.modelArray, function (val, index) {
-                        if(val.get("tag")==this.model.get("tag")){
-                            delIndex = index;                                                      
-                        }                       
-                    },this);                                     
-                    this.sub.modelArray.splice(delIndex,1);                    
-                    if(this.expandedView) {    
-                        this.sub.loadTagsSummary();
-                    }
-                    else{
-                        this.sub.createTags();
-                    }
-                  }else if(this.type=="funnel"){
-                     var selectedLevel = this.sub.$(".funnel-tabs-btns .active").attr("data-tab");
-                     selectedLevel = parseInt(selectedLevel) - 1;
-                     _.each(this.sub.modelArray[selectedLevel], function (val, index) {
-                        if(val.get("tag")==this.model.get("tag")){
-                            delIndex = index;                                                      
-                        }                       
-                    },this);                     
-                    if(delIndex>-1){
-                        this.sub.modelArray[selectedLevel].splice(delIndex,1);                                        
-                        this.sub.createFunnel();                    
-                    }
-                  }
-                  else if(this.type=="ocampaign"){                      
-                      var oCampaigns = this.sub.modelArray[0].id.split(",");                      
-                      _.each(oCampaigns, function (val, index) {
-                        if(val==this.model.get("campNum")){
-                            delIndex = index;                                                      
-                        }                       
-                    },this);
-                    if(delIndex>-1){
-                        oCampaigns.splice(delIndex,1);
-                        delete this.sub.modelArray[0].campMapping[this.model.get("campNum")];
-                        this.sub.modelArray[0].id = oCampaigns.join(",");
-                        this.sub.saveSettings();
-                        this.$el.remove();
-                    }
-                  }
                 },
                 /*
                  * 
@@ -170,8 +160,7 @@ define(['text!reports/html/report_block.html'],
                     if (this.model.get('status') == 'D' || this.model.get('status') == 'S')
                     {
                         tooltipMsg = "Click to edit";
-                    }
-                    else
+                    } else
                     {
                         tooltipMsg = "Click to preview";
                     }
@@ -189,21 +178,18 @@ define(['text!reports/html/report_block.html'],
                     {
                         dtHead = 'Schedule Date';
                         datetime = this.model.get('scheduledDate');
-                    }
-                    else if (this.model.get('status') == 'C')
+                    } else if (this.model.get('status') == 'C')
                     {
                         dtHead = 'Sent Date';
                         datetime = this.model.get('scheduledDate');
-                    }
-                    else if (this.model.get('status') == 'D')
+                    } else if (this.model.get('status') == 'D')
                     {
                         dtHead = 'Last Edited';
                         if (this.model.get('updationDate'))
                             datetime = this.model.get('updationDate');
                         else
                             datetime = this.model.get('creationDate');
-                    }
-                    else {
+                    } else {
                         dtHead = 'Last Edited';
                         if (this.model.get('updationDate'))
                             datetime = this.model.get('updationDate');
@@ -217,8 +203,7 @@ define(['text!reports/html/report_block.html'],
                         if (this.model.get('status') == 'S' || this.model.get('status') == 'P') {
                             dateFormat = date.format("DD MMM, YYYY<br/>hh:mm A");
                         }
-                    }
-                    else {
+                    } else {
                         dateFormat = '';
                     }
                     return {dtHead: dtHead, dateTime: dateFormat}
@@ -235,8 +220,7 @@ define(['text!reports/html/report_block.html'],
                     {
                         dtHead = 'Publish Date';
                         datetime = this.model.get('updationDate');
-                    }                                      
-                    else {
+                    } else {
                         dtHead = 'Last Edited';
                         if (this.model.get('updationDate'))
                             datetime = this.model.get('updationDate');
@@ -250,8 +234,7 @@ define(['text!reports/html/report_block.html'],
                         if (this.model.get('status') == 'S' || this.model.get('status') == 'P') {
                             dateFormat = date.format("DD MMM, YYYY");
                         }
-                    }
-                    else {
+                    } else {
                         dateFormat = '';
                     }
                     return {dtHead: dtHead, dateTime: dateFormat}
@@ -260,15 +243,15 @@ define(['text!reports/html/report_block.html'],
                  * 
                  * @returns Time Show for signup forms
                  */
-                getFormsDate:function(){
-                  var datetime = this.model.get('updationDate') ? this.model.get('updationDate') : this.model.get('creationDate');
-                  var date = moment(this.app.decodeHTML(datetime), 'MM-DD-YY');
-                  return date.format("DD MMM, YYYY") == "Invalid date" ? "&nbsp;" : date.format("DD MMM, YYYY");  
+                getFormsDate: function () {
+                    var datetime = this.model.get('updationDate') ? this.model.get('updationDate') : this.model.get('creationDate');
+                    var date = moment(this.app.decodeHTML(datetime), 'MM-DD-YY');
+                    return date.format("DD MMM, YYYY") == "Invalid date" ? "&nbsp;" : date.format("DD MMM, YYYY");
                 },
-                getPlayedOn: function() {
-                    var playedOn = this.model.get('lastPlayedTime');                    
+                getPlayedOn: function () {
+                    var playedOn = this.model.get('lastPlayedTime');
                     if (playedOn && this.model.get('status') != "D") {
-                        var _date = moment(playedOn, 'MM-DD-YY');                        
+                        var _date = moment(playedOn, 'MM-DD-YY');
                         return _date.format("DD MMM YYYY");
                     } else {
                         var _date = moment(this.model.get('updationTime'), 'MM-DD-YY');
@@ -285,42 +268,36 @@ define(['text!reports/html/report_block.html'],
                     } else {
                         this.$(".taglink").highlight($.trim(this.sub.tagTxt));
                     }
-                    
+
                     this.$(".check-obj").iCheck({
-                          checkboxClass: 'checkpanelinput reportcheck',
-                          insert: '<div class="icheck_line-icon" style="margin: 25px 0 0 10px;"></div>'
-                    });                    
-                    this.$(".check-obj").on('ifChecked', _.bind(this.refreshReport,this));
-                    this.$(".check-obj").on('ifUnchecked', _.bind(this.refreshReport,this));
+                        checkboxClass: 'checkpanelinput reportcheck',
+                        insert: '<div class="icheck_line-icon" style="margin: 25px 0 0 10px;"></div>'
+                    });
+                    this.$(".check-obj").on('ifChecked', _.bind(this.refreshReport, this));
+                    this.$(".check-obj").on('ifUnchecked', _.bind(this.refreshReport, this));
 
                 },
-                refreshReport:function(){                    
-                    if(this.type=="campaign"){                                        
-                        this.sub.createCampaignChart();                    
-                    }
-                    else if(this.type=="autobot"){
+                refreshReport: function () {
+                    if (this.type == "campaign") {
+                        this.sub.createCampaignChart();
+                    } else if (this.type == "autobot") {
                         this.sub.createAutobotChart();
-                    }
-                    else if(this.type=="page"){
+                    } else if (this.type == "page") {
                         this.sub.createPageChart();
-                    }else if(this.type=="form"){
+                    } else if (this.type == "form") {
                         this.sub.createSignupFormChart();
-                    }
-                    else if(this.type=="tag"){
+                    } else if (this.type == "tag") {
                         this.sub.createTagsChart();
-                    }
-                    else if (this.type=="nurturetrack"){
+                    } else if (this.type == "nurturetrack") {
                         this.sub.createNurtureTrackChart();
                     }
                 },
-                previewObject: function(){
-                    if(this.type=="campaign" || this.type=="autobot" || this.type=="nurturetrack"){                                        
+                previewObject: function () {
+                    if (this.type == "campaign" || this.type == "autobot" || this.type == "nurturetrack") {
                         this.previewCampaign();
-                    }
-                    else if(this.type=="page"){
+                    } else if (this.type == "page") {
                         this.previewPage();
-                    }
-                    else if(this.type=="form"){
+                    } else if (this.type == "form") {
                         this.previewForm();
                     }
                 },
@@ -332,22 +309,20 @@ define(['text!reports/html/report_block.html'],
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
                     var dialogTitle = "Preview";
-                        if(this.type=="campaign"){
-                            dialogTitle = 'Campaign Preview of &quot;' + this.model.get('name') + '&quot;';
+                    if (this.type == "campaign") {
+                        dialogTitle = 'Campaign Preview of &quot;' + this.model.get('name') + '&quot;';
+                    } else if (this.type == "nurturetrack") {
+                        dialogTitle = 'Message Preview of &quot;' + this.model.get('subject') + '&quot;';
+                    } else if (this.type == "autobot") {
+                        var label = "";
+                        if (this.model.get('isPreset') == "Y") {
+                            label = this.model.get('presetLabel');
+                        } else {
+                            label = this.model.get('label');
                         }
-                        else if(this.type=="nurturetrack"){
-                            dialogTitle = 'Message Preview of &quot;' + this.model.get('subject') + '&quot;';
-                        }
-                        else if(this.type=="autobot"){
-                            var label="";
-                            if (this.model.get('isPreset') == "Y") {
-                                label = this.model.get('presetLabel');
-                            }else{
-                                label = this.model.get('label');
-                            }
-                            dialogTitle = 'Autobot Preview of &quot;' + label + '&quot;';
-                            camp_id = this.model.get('actionData')[0]['campNum.encode'];
-                        }
+                        dialogTitle = 'Autobot Preview of &quot;' + label + '&quot;';
+                        camp_id = this.model.get('actionData')[0]['campNum.encode'];
+                    }
                     var dialog = camp_obj.app.showDialog({title: dialogTitle,
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
@@ -362,8 +337,8 @@ define(['text!reports/html/report_block.html'],
                         tmPr.init();
                     }, this));
                 },
-                previewPage: function(){
-                    var camp_obj = this.sub;                                        
+                previewPage: function () {
+                    var camp_obj = this.sub;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
                     var dialog = camp_obj.app.showDialog({title: 'Preview of landing page &quot;' + this.model.get('name') + '&quot;',
@@ -373,21 +348,21 @@ define(['text!reports/html/report_block.html'],
                         bodyCss: {"min-height": dialog_height + "px"}
                     });
                     this.app.showLoading("Loading Page...", dialog.getBody());
-                    var preview_url =  this.app.decodeHTML(this.model.get('previewURL')).replace("http","https");
+                    var preview_url = this.app.decodeHTML(this.model.get('previewURL')).replace("http", "https");
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         dialog.getBody().html(tmPr.$el);
                         tmPr.init();
                     }, this));
                     dialog.$el.find(".pointy").remove();
-                    if(this.model.get("status")=="D"){
+                    if (this.model.get("status") == "D") {
                         var publishButton = $(' <div class="pointy" style="display:inline-block !important;opacity:1;position:absolute;margin-left:10px"> <a class="icon play24 showtooltip" title="Publish Landing Page" ></a> </div>');
                         dialog.$el.find("#dialog-title").append(publishButton);
-                        publishButton.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                        publishButton.find(".play24").click(_.bind(this.publishPage,this,dialog));
+                        publishButton.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                        publishButton.find(".play24").click(_.bind(this.publishPage, this, dialog));
                     }
                 },
-                previewForm: function (){
+                previewForm: function () {
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
                     var dialog = this.app.showDialog({title: 'Preview of form &quot;' + this.model.get('name') + '&quot;',
@@ -397,7 +372,7 @@ define(['text!reports/html/report_block.html'],
                         bodyCss: {"min-height": dialog_height + "px"}
                     });
                     this.app.showLoading("Loading Form...", dialog.getBody());
-                    var preview_url = this.app.decodeHTML(this.model.get('formPreviewURL'))+"?preview=Y";
+                    var preview_url = this.app.decodeHTML(this.model.get('formPreviewURL')) + "?preview=Y";
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         dialog.getBody().html(tmPr.$el);
@@ -430,24 +405,22 @@ define(['text!reports/html/report_block.html'],
                     if (this.model.get('status') == 'D' || this.model.get('status') == 'S')
                     {
                         this.openCampaign();
-                    }
-                    else if (this.model.get('status') == 'C' || this.model.get('status') == 'P')
+                    } else if (this.model.get('status') == 'C' || this.model.get('status') == 'P')
                     {
                         this.previewCampaign();
-                    }
-                    else {
+                    } else {
                         this.openCampaign();
                     }
                 },
                 reportShow: function () {
                     var camp_id = this.model.get('campNum.encode');
-                    if(camp_id){
+                    if (camp_id) {
                         this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id}, type: '', title: 'Loading...', url: 'reports/summary/summary', workspace_id: 'summary_' + this.model.get('campNum.checksum'), tab_icon: 'campaign-summary-icon'});
                     }
                 },
-                ntReportShow:function(){
-                    var camp_id=this.model.get('campNum.encode');
-                    this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.order,trackName:this.options.page.modelArray[0].get("name"),trackId:this.options.page.modelArray[0].get("trackId.encode")},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});
+                ntReportShow: function () {
+                    var camp_id = this.model.get('campNum.encode');
+                    this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id, messageNo: this.model.get("order"), trackName: this.options.page.modelArray[0].get("name"), trackId: this.options.page.modelArray[0].get("trackId.encode")}, type: '', title: 'Loading...', url: 'reports/summary/summary', workspace_id: 'summary_' + this.model.get('campNum.checksum'), tab_icon: 'campaign-summary-icon'});
                 },
                 showEllipsis: function () {
                     var totalTagsWidth = 0;
@@ -471,23 +444,23 @@ define(['text!reports/html/report_block.html'],
                     var addBtn = $.getObj(obj, "a");
                     if (addBtn.hasClass("unchecked")) {
                         addBtn.removeClass("unchecked").addClass("checkedadded");
-                    }
-                    else {
+                    } else {
                         addBtn.removeClass("checkedadded").addClass("unchecked");
                     }
                     if (this.sub.createCampaignChart) {
                         this.sub.createCampaignChart();
                     }
                 },
-                addRemoveRow: function(){
-                    if(!this.isAddRemove){ return false;}
+                addRemoveRow: function () {
+                    if (!this.isAddRemove) {
+                        return false;
+                    }
                     if (this.addClass) {
                         this.$el.fadeOut("fast", _.bind(function () {
                             this.sub.addToCol2(this.model);
                             this.$el.hide();
                         }, this));
-                    }
-                    else{
+                    } else {
                         this.$el.fadeOut("fast", _.bind(function () {
                             this.sub.adToCol1(this.model);
                             this.$el.remove();
@@ -495,40 +468,92 @@ define(['text!reports/html/report_block.html'],
                     }
                 }
                 ,
-                showformSubmits:function(ev){
+                showformSubmits: function (ev) {
                     var that = this;
-                    var formName = this.model.get("name")?this.model.get("name"):this.model.get("tag");
-                    var dialog_title = "Submissions of '"+formName+"'";
-                    var formId = this.model.get('formId.encode')?this.model.get('formId.encode'):this.model.get('id');
-                    var formCheckSum = this.model.get('formId.checksum')?this.model.get('formId.encode'):this.model.get('checkSum');
-                    this.app.mainContainer.openPopulation({formId:formId,ws_title:dialog_title,formCheckSum:formCheckSum});
+                    var formName = this.model.get("name") ? this.model.get("name") : this.model.get("tag");
+                    var dialog_title = "Submissions of '" + formName + "'";
+                    var formId = this.model.get('formId.encode') ? this.model.get('formId.encode') : this.model.get('id');
+                    var formCheckSum = this.model.get('formId.checksum') ? this.model.get('formId.encode') : this.model.get('checkSum');
+                    this.app.mainContainer.openPopulation({formId: formId, ws_title: dialog_title, formCheckSum: formCheckSum});
                     /*var dialog_width = $(document.documentElement).width()-60;
-                    var dialog_height = $(document.documentElement).height()-182;
-                    var dialog = that.app.showDialog({
-                                      title:dialog_title,
-                                      css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                                      headerEditable:false,
-                                      headerIcon : 'population',
-                                      wrapDiv : 'rcontacts-view',
-                                      bodyCss:{"min-height":dialog_height+"px"},
-                                      //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
-                            });     
-                    this.app.showLoading("Loading...",dialog.getBody());
-                    require(["recipientscontacts/rcontacts"],function(Contacts){
-                      var objContacts = new Contacts({app:that.app,listNum:formId,type:'webform',dialogHeight:dialog_height});
-                      var dialogArrayLength = that.app.dialogArray.length; // New Dialog
-                        dialog.getBody().append(objContacts.$el);
-                        that.app.showLoading(false, objContacts.$el.parent());
-                        objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                        objContacts.$el.find('#contacts_close').remove();
-                        objContacts.$el.find('.temp-filters').removeAttr('style');
-                       //Autobots
-                              if(that.options.type == "autobots_listing"){
-                                  dialog.$el.find('.modal-header .cstatus').remove();
-                                  dialog.$el.find('.modal-footer').find('.btn-play').hide();
-                              }
-                    });*/
-               }
+                     var dialog_height = $(document.documentElement).height()-182;
+                     var dialog = that.app.showDialog({
+                     title:dialog_title,
+                     css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                     headerEditable:false,
+                     headerIcon : 'population',
+                     wrapDiv : 'rcontacts-view',
+                     bodyCss:{"min-height":dialog_height+"px"},
+                     //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                     });     
+                     this.app.showLoading("Loading...",dialog.getBody());
+                     require(["recipientscontacts/rcontacts"],function(Contacts){
+                     var objContacts = new Contacts({app:that.app,listNum:formId,type:'webform',dialogHeight:dialog_height});
+                     var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                     dialog.getBody().append(objContacts.$el);
+                     that.app.showLoading(false, objContacts.$el.parent());
+                     objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                     objContacts.$el.find('#contacts_close').remove();
+                     objContacts.$el.find('.temp-filters').removeAttr('style');
+                     //Autobots
+                     if(that.options.type == "autobots_listing"){
+                     dialog.$el.find('.modal-header .cstatus').remove();
+                     dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                     }
+                     });*/
+                },
+                showPercentDiv: function (ev) {
+                    ev.stopPropagation();
+                    var target = $(ev.target);
+
+                    var tag = this.model.get("tag");
+                    if ($('body > .percent_stats').length > 0){                        
+                        $('body > .percent_stats').remove();
+                    }
+                    
+                    $("body").append('<div class="percent_stats" style="position:absolute;z-index:101"></div>');
+                    var that = this;
+                    var offset = target.offset();
+                    if ((offset.left + 350) > $(window).width()) {
+                        $('body > .percent_stats').find('.pstats').addClass('right-side')
+                        $('body > .percent_stats').css({left: offset.left-307, top: offset.top});
+                    } else {
+                        $('body > .percent_stats').find('.pstats').addClass('left-side')
+                        $('body > .percent_stats').css({left: offset.left-11, top: offset.top});
+                    }
+
+
+                    that.showLoadingWheel(true, $('body > .percent_stats'));
+
+                    var bms_token = that.app.get('bms_token');
+                    var URL = "/pms/io/user/getTagPopulation/?BMS_REQ_TK=" + bms_token + "&tag=" + tag + "&type=stats";
+
+                    jQuery.getJSON(URL, function (tsv, state, xhr) {
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        if (that.app.checkError(data)) {
+                            return false;
+                        }
+                        var percentDiv = " <div class='pstats' style='display:block'><ul><li class='openers'><strong>" + that.app.addCommas(data.openers) + "<sup>%</sup></strong><span>Openers</span></li>";
+                        percentDiv = percentDiv + "<li class='clickers'><strong>" + that.app.addCommas(data.clickers) + "<sup>%</sup></strong><span>Clickers</span></li>";
+                        percentDiv = percentDiv + "<li class='visitors'><strong>" + that.app.addCommas(data.pageviewers) + "<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
+                        that.showLoadingWheel(false, $('body > .percent_stats'));
+                        $('body > .percent_stats').append(percentDiv);
+                        if ((offset.left + 350) > $(window).width()) {
+                            $('body > .percent_stats .pstats').addClass('right-side')
+                        } else {
+                            $('body > .percent_stats .pstats').addClass('left-side')
+                        }
+                    });
+                    that.app.showLoading(false, $('body > .percent_stats'));
+                },
+                showLoadingWheel: function (isShow, target) {
+                    if (isShow)
+                        target.append("<div class='pstats' style='display:block; background:#01AEEE;'><div class='loading-wheel right' style='margin-left:-10px;margin-top: -5px;position: inherit!important;'></div></div></div>")
+                    else {
+                        var ele = target.find(".loading-wheel");
+                        ele.remove();
+                    }
+                }
 
             });
         });
