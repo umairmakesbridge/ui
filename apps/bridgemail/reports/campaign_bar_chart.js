@@ -32,6 +32,7 @@ function (template) {
                this.title = this.options.title ?this.options.title:'';
                this.isStacked = this.options.isStacked;
                this.clickEvent = this.options.clickEvent;
+               this.checkSum = this.options.checkSum?this.options.checkSum:"";
                this.colors = this.options.colors?this.options.colors:['#454F88','#2F93E5','#62ABE6','#0C73C2','#3b5998','#bb0000'];               
             }
             /**
@@ -124,8 +125,9 @@ function (template) {
                         formatter: function () {
                             var tooltip_rect = that.$('.highcharts-tooltip path:nth-child(4)');
                             tooltip_rect.attr("fill",this.series.color);
+                            var clickTo = this.series.name.toLowerCase()=="submissions"?"Click to view contacts":"";
                             return '<b>' + this.x + '</b><br/>' +
-                                this.series.name + ': ' + that.app.addCommas(this.y) + '<br/>' 
+                                this.series.name + ': ' + that.app.addCommas(this.y) + '<br/>' +clickTo
                                 //'Total: ' + that.app.addCommas(this.point.stackTotal);
                         }
                     };                    
@@ -147,7 +149,7 @@ function (template) {
                                point: {
                                    events: {
                                        click: function(){
-                                          that.clickEvent(this)
+                                          that.clickEvent(this,that.checkSum)
                                        }
                                    }
                                }

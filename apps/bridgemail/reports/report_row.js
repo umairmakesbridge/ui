@@ -525,12 +525,14 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         }
                         var _grid = this.$(".rpt-expand");
                         _grid.children().remove();                                                                      
+                        this.custom_data = {};
                         _.each(this.modelArray, function (val, index) {
                             var lpRow = new reportBlock({model: val, page: this, type: "page","expandedView":true});
                             _grid.append(lpRow.$el);
                             this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("pageId.checksum")));
                             var URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=getLandingPagesSummaryCount";
                             var pageNum = val.get("pageId.encode");
+                            this.custom_data[val.get("pageId.checksum")]={model:val,_date:[]};
                             var post_data = {pageId: pageNum, toDate: this.toDate, fromDate: this.fromDate,formId:val.get("formId.encode")}
                             $.post(URL, post_data).done(_.bind(function (sJson) {
                                 var summary_json = jQuery.parseJSON(sJson);
@@ -544,9 +546,10 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         this.chart_data = {viewCount: 0, submitCount: 0};                                        
                                         
                                         var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
-                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');                                        
                                         var days_report = date1.diff(date2, 'days');
                                         var summaries =  summary_json.summaries[0];
+                                        
                                         var _d = 1;    
                                         if(days_report<=30){
                                             for(var d=0;d<=days_report;d++){
@@ -567,6 +570,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                                     viewData.push(0);
                                                     submitData.push(0);                                                    
                                                 }
+                                                this.custom_data[val.get("pageId.checksum")]._date.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("MM-DD-YY"));
                                             }
                                         }
                                         else{
@@ -577,17 +581,20 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                                 
                                                 this.chart_data["viewCount"] = this.chart_data["viewCount"] + parseInt(sVal[0].viewCount);
                                                 this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
+                                                this.custom_data[val.get("pageId.checksum")]._date.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("MM-DD-YY"));
                                             }, this);
                                         }
                                         
                                         var _data = [{"name": "Views", "data": viewData}, {"name": "Submissions", "data": submitData}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#39c8a9', '#66a2cd'],clickEvent:_.bind(this.openPopulationDetail,this)});
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#66a2cd','#39c8a9'],clickEvent:_.bind(this.openPopulationDetail,this),checkSum:val.get("pageId.checksum")});
                                         this.$("#chart-" + val.get("pageId.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("pageId.checksum") + " ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("pageId.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("viewCount")) * 100).toFixed(2) + "%");
+                                            if(parseInt(val.get("viewCount"))){
+                                                this.$("#stats-" + val.get("pageId.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("viewCount")) * 100).toFixed(2) + "%");
+                                            }
                                         }, this);
                                     
                                 }
@@ -600,8 +607,15 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
 
                     }                    
                 },
-                openPopulationDetail: function(e){
-                    console.log(this);
+                openPopulationDetail: function(chart,key){                    
+                    if(chart.series.name.toLowerCase()=="submissions"){
+                        var model = this.custom_data[key].model;
+                        var populationDate = this.custom_data[key]._date[chart.index];
+                        var dialog_title = "Submissions of '"+model.get("name")+"' on "+ moment(populationDate, 'MM-DD-YY').format("DD MMM YYYY");
+                        var formId = model.get('formId.encode');
+                        var formCheckSum = model.get('formId.checksum');
+                        this.app.mainContainer.openPopulation({formId:formId,ws_title:dialog_title,formCheckSum:formCheckSum+populationDate,fromDate:populationDate});
+                    }
                 },
                 //////********************* Campaigns *****************************************//////
                 loadCampaigns: function () {
@@ -843,7 +857,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("campNum.checksum") + " ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("campNum.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            if(parseInt(val.get("sentCount"))){
+                                                this.$("#stats-" + val.get("campNum.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            }
                                         }, this);
 
                                     //}, this));
@@ -1111,11 +1127,13 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                         this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3', '#ffb864', '#8b9ca5']});
 
                                         this.$("#chart-" + val.get("botId.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                        this.chartPage.$el.css({"width": "100%", "height": "230px"});
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("botId.checksum") + " ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("botId.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            if(parseInt(val.get("sentCount"))){
+                                                this.$("#stats-" + val.get("botId.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            }
                                         }, this);
                                     //}, this));
                                 }
@@ -1252,6 +1270,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         }
                         var _grid = this.$(".rpt-expand");
                          _grid.children().remove();   
+                         this.custom_data = {};
                         _.each(this.modelArray, function (val, index) {
                             var formRow = new reportBlock({model: val, page: this, type: "form","expandedView":true});
                             _grid.append(formRow.$el);
@@ -1259,6 +1278,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                             var URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=getSignupFormSummaryCount";
                             var formNum = val.get("formId.encode");
                             var post_data = {formId: formNum, toDate: this.toDate, fromDate: this.fromDate}
+                            this.custom_data[val.get("formId.checksum")]={model:val,_date:[]};
                             $.post(URL, post_data).done(_.bind(function (sJson) {
                                 var summary_json = jQuery.parseJSON(sJson);
                                 if (summary_json[0] == "err") {
@@ -1290,6 +1310,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                                 else{                                                                                                        
                                                     submitData.push(0);                                                    
                                                 }
+                                                this.custom_data[val.get("formId.checksum")]._date.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("MM-DD-YY"));
                                             }
                                         }
                                         else{
@@ -1298,11 +1319,12 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                                                 submitData.push(parseInt(sVal[0].submitCount));
                                                                                                 
                                                 this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
+                                                this.custom_data[val.get("formId.checksum")]._date.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("MM-DD-YY"));
                                             }, this);
                                         }
                                         
                                         var _data = [{"name": "Submissions", "data": submitData}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#39c8a9']});
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#39c8a9'],clickEvent:_.bind(this.openPopulationDetail,this),checkSum:val.get("formId.checksum")});
                                         this.$("#chart-" + val.get("formId.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);

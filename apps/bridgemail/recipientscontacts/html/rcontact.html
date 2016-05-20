@@ -29,7 +29,7 @@
     <div>
         <div style="width:105px" class="time show">
             
-            <strong><span><em>Submitted on</em><%=this.dateSetting(this.model.get('subscriptionData')[0].submissionDateTime,"MM-DD-YY")%></span></strong> 
+            <strong class="showtooltip" title='<%=this.getFullDateSubmission(this.model.get("subscriptionData")[0].submissionDateTime)%>'><span><em>Submitted on</em><%=this.dateSetting(this.model.get('subscriptionData')[0].submissionDateTime,"MM-DD-YY")%></span></strong> 
             
         </div>
     </div>     

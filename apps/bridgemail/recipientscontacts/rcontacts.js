@@ -45,12 +45,21 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     this.total = 0;
                     this.timer = 0;
                     this.dialogHeight = this.options.dialogHeight;
+                    this.disableCalender = false;
                     
                     this.render();
                 },
                 render: function() {
                     this.$el.html(this.template());
-
+                    if(this.options.fromDate){
+                        this.fromDate =this.options.fromDate;
+                        this.toDate = this.options.fromDate;
+                        var fromDate = moment($.trim(this.fromDate), 'MM-DD-YY');
+                        var toDate = moment($.trim(this.toDate), 'MM-DD-YY');
+                        this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
+                        this.$("#daterange").prop("disabled",true);
+                        this.disableCalender = true;
+                    }
                     this.loadRContacts();
                     if(!this.inWorkSpace){
                         this.$scrollElement = this.$(".stats_listing");
@@ -69,7 +78,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange, this));
                         this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
                     }
-
+                    
 
                 },
                 loadRContacts: function(offset) {
@@ -281,6 +290,9 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     this.loadRContacts();
                 },
                 showDatePickerFromClick: function () {
+                    if(this.disableCalender){
+                        return false;
+                    }
                     this.$('#daterange').click();
                     return false;
                 },

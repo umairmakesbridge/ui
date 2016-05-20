@@ -470,7 +470,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         url: 'recipientscontacts/rcontacts',
                         addAction: false,
                         noTags: true,
-                        params: {app:app,listNum:formId,type:'webform'}
+                        params: {app:app,listNum:formId,type:'webform',fromDate:opt.fromDate}
 
                     });
                 }

@@ -34,10 +34,14 @@ function (template) {
             },
             openContact:function(){
                 //this.$el.parents('.modal').find('.close').click();
-                if(this.options.isSubscriber){
-                    this.$el.parents('.modal').find('.close').click();
+                try{
+                    if(this.options.isSubscriber){
+                        this.$el.parents('.modal').find('.close').click();
+                    }
+                    this.app.removeDialogs();
                 }
-                this.app.removeDialogs();
+                catch(e){}
+                
                 this.options.app.mainContainer.openSubscriber(this.model.get('subNum.encode'));
             },
             showPageView:function(ev){
@@ -87,12 +91,18 @@ function (template) {
              },
              getFullDate:function(date){
                   var date = moment(this.options.app.decodeHTML(date),'MM/DD/YYYY H:m');														
-				var dateFormat = date.format("DD MMM, YYYY");
-                                        if(this.options.sentAt == 'Scheduled on'){
-                                            dateFormat = date.format("DD MMM, YYYY<br/> hh:mm A");
-                                        }else{
-                                            dateFormat = date.format("DD MMM, YYYY");
-                                        }
+                  var dateFormat = date.format("DD MMM, YYYY");
+                  if(this.options.sentAt == 'Scheduled on'){
+                    dateFormat = date.format("DD MMM, YYYY<br/> hh:mm A");
+                  }else{
+                    dateFormat = date.format("DD MMM, YYYY");
+                  }
+                                        
+                 return dateFormat;
+             },
+             getFullDateSubmission:function(date){
+                  var date = moment(this.options.app.decodeHTML(date),'MM-DD-YY H:m:s');														
+                  var dateFormat = date.format("DD MMM, YYYY <br/> hh:mm A");
                                         
                  return dateFormat;
              }
