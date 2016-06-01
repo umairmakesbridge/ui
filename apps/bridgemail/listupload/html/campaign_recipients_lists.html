@@ -1,6 +1,10 @@
 <div id='choose_lists'>
     <div class="col1">
-       <div class="temp-filters clearfix" style="margin-top:20px; ">
+        <% if(this.source=="report") { %>
+        <div class="temp-filters clearfix">
+       <% } else { %>     
+        <div class="temp-filters clearfix" style="margin-top:20px; ">
+       <% } %>
     <h2 id="total_lists"><strong class="badge"></strong> <span>List(s) found</span> </h2>
       
       <div style="top:3px;" class="iconpointy">
@@ -26,8 +30,14 @@
     <!-- col1  -->
 
      <div class="col2">
-            <h2 class="header-list">Recipients<!--<span id="recpcount" class="recpscount"><span>0</span> Records Found</span>-->
-                <label class="step2-lists" style="position:absolute;"><span class="fieldinfo" style="display: block;"><i class="icon"></i><em>Don't worry about duplicates. Only one message will be sent to each contact.</em></span></label>
+            <h2 class="header-list">
+                <% if(this.source=="") { %>
+                Recipients<!--<span id="recpcount" class="recpscount"><span>0</span> Records Found</span>-->
+                 
+                    <label class="step2-lists" style="position:absolute;"><span class="fieldinfo" style="display: block;"><i class="icon"></i><em>Don't worry about duplicates. Only one message will be sent to each contact.</em></span></label>
+                <% }  else { %>
+                    Selected Lists
+                <% } %>
                 <div id="listrecpssearch" class="input-append search"> </div>
             </h2>
             <div class="template-container rightcol" style="margin-left:5px">

@@ -270,6 +270,9 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.manageaccount-w {
     background: url("../img/manageaccount-w.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+.icon.wficon{
+    background: url("../img/workflow30.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
 
 
 /* ================================================Start style.css================================================ */
@@ -10103,7 +10106,7 @@ ul.funnel-tabs-btns li.active a {
     background:url("../images/reports-icons.png") no-repeat scroll -255px -259px;   
 }
 .add-panel .addbar.no-webstats ul li {
-    width: 13.37%;    
+    width: 10.3%;    
 }
 
 
@@ -10119,9 +10122,8 @@ ul.funnel-tabs-btns li.active a {
     
 }
 .rpicon {
-    background: rgba(0, 0, 0, 0) url("../images/reports-icons.png") no-repeat scroll 0 0;
-    display: block;
-    
+    background: rgba(0, 0, 0, 0) url("../images/reports-icons-1.png") no-repeat scroll 0 0;
+    display: block;    
 }
 
 .rpicon-fifty{
@@ -10165,6 +10167,12 @@ ul.funnel-tabs-btns li.active a {
 .rpblue-funnel{
     background-position: -208px -102px;
 }
+.rpblue-workflow{
+    background-position: -420px -102px;
+}
+.rpblue-lists{
+    background-position: -390px -102px;
+}
 .report-empty {
     background:#e9edf6;        
     margin: 20px 0 15px;
@@ -10175,7 +10183,7 @@ ul.funnel-tabs-btns li.active a {
     -webkit-border-radius: 2px;
 }
 .report-empty .csvpng{
-    background: rgba(0, 0, 0, 0) url("../images/reports-icons.png") no-repeat scroll -294px -254px;
+    background: rgba(0, 0, 0, 0) url("../images/reports-icons-1.png") no-repeat scroll -294px -254px;
     height: 110px;
     width: 110px;
 }
@@ -10223,7 +10231,7 @@ ul.funnel-tabs-btns li.active a {
     overflow: hidden;
     position: relative;
     text-align: center;
-    width: 11.6%;
+    width: 9.20%;
 }
 .add-panel .addbar ul li:hover {
 	background:#75CB60;
@@ -10256,6 +10264,12 @@ ul.funnel-tabs-btns li.active a {
 }
 .rptags{
     background-position: -50px 0;
+}
+.rpworkflow{
+    background-position: -450px 0;
+}
+.rplist{
+    background-position: -400px 0;
 }
 .add-panel .addbar ul li:hover .rptags{
     background-position: -50px -50px;
@@ -10296,6 +10310,12 @@ ul.funnel-tabs-btns li.active a {
 .add-panel .addbar ul li:hover .rpfunnel{
     background-position: -350px -50px;
 }
+.add-panel .addbar ul li:hover .rpworkflow{
+    background-position: -450px -50px;
+}
+.add-panel .addbar ul li:hover .rplist{
+    background-position: -400px -50px;
+}
 
 .rpt-li-campaigns,.report-panel .rpt-campaign{
     border-top: 2px solid #2e9cd3;
@@ -10320,6 +10340,12 @@ ul.funnel-tabs-btns li.active a {
 }
 .rpt-li-funnel,.report-panel .rpt-funnel{
     border-top: 2px solid #7a8ea0;
+}
+.rpt-li-workflows,.report-panel .rpt-workflow{
+    border-top: 2px solid #80c000;
+}
+.rpt-li-lists,.report-panel .rpt-list{
+    border-top: 2px solid #d90e0e;
 }
 
 /*===============
@@ -10876,6 +10902,12 @@ Report Graph Changes
     margin-right: 1.4%;
     width: 48%;
 }
+.report-panel .rpt-row {
+    margin-bottom: 1.5%;
+    margin-right: 1.4%;
+    width: 99%;
+}
+
 .report-panel .rpt-campaign-blocks:nth-child(even){
     margin-right: 0;
 }
@@ -10895,7 +10927,13 @@ Report Graph Changes
     top: -37px;
 }
 .report-panel .rpt-campaign-area:hover #triangle-bottomleft{
-     display:block;
+     display:block;    
+}
+.report-panel .rpt-row:hover #triangle-bottomleft{
+     z-index: 100;
+     top:0px;
+     right:0px;
+     display:block;  
 }
 .report-panel .rpt-campaign-area .icons-bar-chart {
      right: -16px;
@@ -11311,7 +11349,7 @@ right: 66px;
     width:143px;
 }
 .dl-funnel{
-   background: url("../images/reports-icons.png") no-repeat scroll -360px -60px transparent;  
+   background: url("../images/reports-icons-1.png") no-repeat scroll -360px -60px transparent;  
 }
 .select-view .leftcol,.select-view .rightcol{    
     background:#eaf4f9;
@@ -11342,4 +11380,21 @@ right: 66px;
 }
 .block-container{
     padding-left: 45px;
+}
+.step-chart{
+    width:100%;
+    height:430px;
+    padding-bottom:10px;
+    position: relative;
+}
+.rpt-row{
+    position: relative;
+}
+.wfchart{    
+    height:430px;
+    width:100%;
+}
+.report-panel .report-title a.showContacts {
+    color:#01aeee;
+    font-size:14px;
 }

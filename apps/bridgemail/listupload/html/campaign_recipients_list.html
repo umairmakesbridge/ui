@@ -39,7 +39,24 @@
 
                 </div>    
                 <%}else{%>
-                <div class="slide-btns three s-clr4" style="width:;">
+                
+                <% if(this.showUseButton || this.showRemoveButton) {%>
+                     <div class="slide-btns one s-clr2" style="width:;">
+
+                        <span  class="icon setting"></span>
+                        <div>
+                             <% if(this.showUseButton) {%>
+                                        <a class="icon check clr1 row-move" ><span>Use</span></a>
+                                    <% } %>  
+                                    <% if(this.showRemoveButton) {%>
+                                        <a class="icon remove clr1 row-remove" ><span>Remove</span></a>
+                                    <% } %>  
+                            
+                        </div> <!-- slide-btns two  -->
+
+                    </div>               
+                <% } else {%>
+                <div class="slide-btns two s-clr3" style="width:;">
 
                     <span  class="icon setting"></span>
                     <div>
@@ -55,7 +72,7 @@
                     </div> <!-- slide-btns two  -->
 
                 </div>    
-                    <%}%>
+                    <% } }%>
              
 
 

@@ -163,6 +163,13 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                     selected_obj['level'+r_index].push(obj_json);
                                 },this);
                             }
+                            else if(type=="workflows"){
+                                id = r_val.get("workflowId"); 
+                                selected_obj['checkSum'] =r_val.get("workflowId.checksum");
+                            }
+                            else if(type=="lists"){
+                                id = r_val.get("listNumber.encode"); 
+                            }
                             
                             selected_obj['id'] = id;
                             if(type=="nurturetracks"){

@@ -198,7 +198,17 @@
                     <div style="display:inline-block" class="icons-bar-chart">
                          <div class="rpbarthinchart rpicon rpicon-two showtooltip showresponsivesstag" title="Click to see responsiveness of this tag"></div>
                     </div>
-                </div>            
+                </div> 
+            <% } else if(this.type=="list") { %>
+                 <div class="name-type">              
+                    <h3>                    
+                        <a  class="campname" style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis"><%= this.model.get('name')%> </a>                    
+                    </h3>                                             
+                    <span class="subscribers"><i class="icon subscribers"></i><%if(this.model.get('subscriberCount') !="0"){%><a class="showContacts showtooltip" title="Click to view population detail"  data-id="<%=this.model.get('listNumber.encode')%>"><%=this.app.addCommas(this.model.get('subscriberCount'))%></a><%}else{%><%=subscriberCount%><%}%></span>     
+                    <div style="display:inline-block" class="icons-bar-chart">
+                         <div class="rpbarthinchart rpicon rpicon-two showtooltip showresponsivesstag" title="Click to see responsiveness of this list"></div>
+                    </div>
+                </div> 
            <% } %>
         </div>
     </div>
@@ -273,6 +283,26 @@
                 <div class="rpt-detail-chart" id="chart-tag-<%= this.model.get('cno')%>">                
                 </div>
                 <div class="rpt-campaign-stats rpt-campaign-three" id="stats-tag-<%= this.model.get('cno')%>">
+                    <div class="rpt-tag-inc">
+                        <h3>Increase</h3>
+                        <p class="subIncrease">0</p>
+                        <i class="rpicon rpicon-two rpiconinc"></i>
+                    </div>
+                    <div class="rpt-tag-dec">
+                        <h3>Decrease</h3>
+                        <p class="subDecrease">0</p>
+                        <i class="rpicon rpicon-two rpicondec"></i>
+                    </div>
+                    <div class="rpt-tag-ng">
+                        <h3>Net Growth</h3>
+                        <p class="subGrowth">0</p>
+                    </div>
+
+                </div>
+              <% } else if(this.type=="list") { %>
+                <div class="rpt-detail-chart" id="chart-<%-this.model.get('listNumber.checksum')%>">                
+                </div>
+                <div class="rpt-campaign-stats rpt-campaign-three" id="stats-<%-this.model.get('listNumber.checksum')%>">
                     <div class="rpt-tag-inc">
                         <h3>Increase</h3>
                         <p class="subIncrease">0</p>

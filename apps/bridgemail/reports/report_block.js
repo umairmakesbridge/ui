@@ -19,11 +19,14 @@ define(['text!reports/html/report_block.html'],
                     "click #triangle-bottomleft": "addRemoveRow",
                     "click .submissionview": "showformSubmits",
                     "click .rp-ntdetail-report": "ntReportShow",
-                    "click .showresponsivesstag":"showPercentDiv"
+                    "click .showresponsivesstag":"showPercentDiv",
+                    "click .showContacts":"showPopulation"
                 },
                 /**
-                 * Initialize view - backbone
+                 * Initialize view - backbone 
+                 * @returns {undefined}
                  */
+                                                     
                 initialize: function () {
                     this.template = _.template(template);
                     this.sub = this.options.page
@@ -147,6 +150,16 @@ define(['text!reports/html/report_block.html'],
                             this.sub.saveSettings();
                             this.$el.remove();
                         }
+                    } else if (this.type == "list") {
+                        _.each(this.sub.modelArray, function (val, index) {
+                            if (val.get("listNumber.checksum") == this.model.get("listNumber.checksum")) {
+                                delIndex = index;
+                            }
+                        }, this);
+                        this.sub.modelArray.splice(delIndex, 1);
+                        if (this.expandedView) {
+                           this.sub.loadListsSummary(true);
+                        } 
                     }
                 },
                 /*
@@ -474,39 +487,17 @@ define(['text!reports/html/report_block.html'],
                     var dialog_title = "Submissions of '" + formName + "'";
                     var formId = this.model.get('formId.encode') ? this.model.get('formId.encode') : this.model.get('id');
                     var formCheckSum = this.model.get('formId.checksum') ? this.model.get('formId.encode') : this.model.get('checkSum');
-                    this.app.mainContainer.openPopulation({formId: formId, ws_title: dialog_title, formCheckSum: formCheckSum});
-                    /*var dialog_width = $(document.documentElement).width()-60;
-                     var dialog_height = $(document.documentElement).height()-182;
-                     var dialog = that.app.showDialog({
-                     title:dialog_title,
-                     css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                     headerEditable:false,
-                     headerIcon : 'population',
-                     wrapDiv : 'rcontacts-view',
-                     bodyCss:{"min-height":dialog_height+"px"},
-                     //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
-                     });     
-                     this.app.showLoading("Loading...",dialog.getBody());
-                     require(["recipientscontacts/rcontacts"],function(Contacts){
-                     var objContacts = new Contacts({app:that.app,listNum:formId,type:'webform',dialogHeight:dialog_height});
-                     var dialogArrayLength = that.app.dialogArray.length; // New Dialog
-                     dialog.getBody().append(objContacts.$el);
-                     that.app.showLoading(false, objContacts.$el.parent());
-                     objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                     objContacts.$el.find('#contacts_close').remove();
-                     objContacts.$el.find('.temp-filters').removeAttr('style');
-                     //Autobots
-                     if(that.options.type == "autobots_listing"){
-                     dialog.$el.find('.modal-header .cstatus').remove();
-                     dialog.$el.find('.modal-footer').find('.btn-play').hide();
-                     }
-                     });*/
+                    this.app.mainContainer.openPopulation({objId: formId, ws_title: dialog_title, objCheckSum: formCheckSum,type:"webform"});                    
+                },
+                showPopulation: function (ev) {                    
+                    var dialog_title = "Population '"+this.model.get("name")+"'";
+                    var listId = this.model.get('listNumber.encode');
+                    var listCheckSum = this.model.get('listNumber.checksum');
+                    this.app.mainContainer.openPopulation({objId: listId, ws_title: dialog_title, objCheckSum: listCheckSum});                                        
                 },
                 showPercentDiv: function (ev) {
                     ev.stopPropagation();
-                    var target = $(ev.target);
-
-                    var tag = this.model.get("tag");
+                    var target = $(ev.target);                    
                     if ($('body > .percent_stats').length > 0){                        
                         $('body > .percent_stats').remove();
                     }
@@ -526,7 +517,13 @@ define(['text!reports/html/report_block.html'],
                     that.showLoadingWheel(true, $('body > .percent_stats'));
 
                     var bms_token = that.app.get('bms_token');
-                    var URL = "/pms/io/user/getTagPopulation/?BMS_REQ_TK=" + bms_token + "&tag=" + tag + "&type=stats";
+                    var URL ="";
+                    if (this.type == "tag") {
+                        URL = "/pms/io/user/getTagPopulation/?BMS_REQ_TK=" + bms_token + "&tag=" + this.model.get("tag") + "&type=stats";
+                    }
+                    else if (this.type == "list") {
+                        URL = "/pms/io/list/getListPopulation/?BMS_REQ_TK="+bms_token+"&listNum="+this.model.get("listNumber.encode")+"&type=stats";
+                    }
 
                     jQuery.getJSON(URL, function (tsv, state, xhr) {
                         var data = jQuery.parseJSON(xhr.responseText);

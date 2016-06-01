@@ -1,5 +1,5 @@
-define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/campaign_bar_chart'],
-        function (template, reportBlock ,barChartPage) {
+    define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/campaign_bar_chart', 'reports/workflow_chart'],
+        function (template, reportBlock ,barChartPage, workflowBlock) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',
@@ -27,7 +27,9 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         webforms: {label: 'Signup Forms', colorClass: 'rpt-webforms', iconClass: 'rpblue-webforms'},
                         targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'},
                         webstats: {label: 'Web Stats', colorClass: 'rpt-webstats', iconClass: 'rpblue-webstats'},
-                        funnel: {label: 'Funnel', colorClass: 'rpt-funnel', iconClass: 'rpblue-funnel'}
+                        funnel: {label: 'Funnel', colorClass: 'rpt-funnel', iconClass: 'rpblue-funnel'},
+                        workflows: {label: 'Workflows', colorClass: 'rpt-workflow', iconClass: 'rpblue-workflow'},
+                        lists: {label: 'Lists', colorClass: 'rpt-list', iconClass: 'rpblue-lists'}
 
                     };
                     this.webstats = {
@@ -244,6 +246,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                 removeReport: function () {
                     this.$el.remove();
                     this.sub.removeMode(this.orderNo);
+                    this.loadReport = false;
                     this.saveSettings();
                 },
                 loadRows: function () {
@@ -292,6 +295,15 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         if (this.objects.length) {
                             this.loadFunnel();
                         }
+                    }else if (this.reportType == "workflows") {
+                        if (this.objects.length) {
+                            this.loadWorkflows();
+                        }
+                    }
+                    else if (this.reportType == "lists") {
+                        if (this.objects.length) {
+                            this.loadLists();
+                        }
                     }
 
 
@@ -326,6 +338,11 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                             this.openFunnelDialog();
                         }
                     }
+                    else if (this.reportType == "workflows") {
+                        this.openWorkflowsDialog();
+                    }else if (this.reportType == "lists") {
+                        this.openListsDialog();
+                    }
 
                 },
                 loadReports: function () {
@@ -348,6 +365,12 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     else if (this.reportType == "funnel") {
                         this.loadFunnel();
                     }
+                    else if (this.reportType == "workflows") {
+                        this.loadWorkflows();
+                    }
+                     else if (this.reportType == "lists") {
+                        this.loadLists();
+                    }
 
                 },
                 loadSummaryReports: function () {
@@ -366,6 +389,11 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         this.loadTagsSummary();
                     } else if (this.reportType == "webstats") {
                         this.createWebstats();
+                    }else if (this.reportType == "workflows") {
+                        this.createWorkflow();
+                    }
+                     else if (this.reportType == "lists") {
+                        this.loadListsSummary();
                     }
                     
                     this.saveSettings();
@@ -614,7 +642,7 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                         var dialog_title = "Submissions of '"+model.get("name")+"' on "+ moment(populationDate, 'MM-DD-YY').format("DD MMM YYYY");
                         var formId = model.get('formId.encode');
                         var formCheckSum = model.get('formId.checksum');
-                        this.app.mainContainer.openPopulation({formId:formId,ws_title:dialog_title,formCheckSum:formCheckSum+populationDate,fromDate:populationDate});
+                        this.app.mainContainer.openPopulation({objId:formId,ws_title:dialog_title,objCheckSum:formCheckSum+populationDate,fromDate:populationDate,type:"webform"});                        
                     }
                 },
                 //////********************* Campaigns *****************************************//////
@@ -2842,8 +2870,280 @@ define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/ca
                     if(this.doDraw){
                         this.sub.removeUndrawModel(this.orderNo);
                     }
+                },
+                //////********************* Workflows *****************************************//////
+                loadWorkflows: function () {
+                    if(this.modelArray.length==0){
+                        this.app.showLoading("Loading selection...", this.$el);                                                
+                        var workflowChecksum = this.objects.map(function (index) {                                                        
+                            return index.checkSum
+                        })
+                      
+                        var URL = "/pms/trigger/WorkflowList.jsp?BMS_REQ_TK=" + this.app.get("bms_token") + "&isJson=Y";                        
+                        this.modelArray = [];
+                        this.states_call = $.post(URL, {}).done(_.bind(function (data) {
+                            this.app.showLoading(false, this.$el);
+                            var _json = jQuery.parseJSON(data);
+                            _.each(_json.workflows[0], function (val) {
+                                if(workflowChecksum.indexOf(val[0]["workflowId.checksum"]) > -1){
+                                    var _model = new Backbone.Model(val[0]);                                
+                                    this.modelArray.push(_model);
+                                }
+                            }, this);                        
+                            this.createWorkflow(true);
+                        }, this));
+                    }
+                    else{
+                        this.createWorkflow();
+                    }
+                },
+                openWorkflowsDialog: function () {
+                    this.targetsModelArray = [];
+                    var dialog_object = {title: 'Select Workflows',
+                        css: {"width": "1200px", "margin-left": "-600px"},
+                        bodyCss: {"min-height": "423px"},
+                        saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
+                        headerIcon: 'wficon'
+                    }
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading workflows...", dialog.getBody());
+                    require(["workflow/selectworkflow"], _.bind(function (page) {
+                        var _page = new page({page: this, dialog: dialog, editable: this.editable});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.$el.find('#targets_grid').addClass('targets_grid_table');
+                        _page.$el.find('.col-2 .template-container').addClass('targets_grid_table_right');
+                        _page.$el.find('.step2-lists').css({'top': '0'});
+                        _page.$el.find('.step2-lists span').css({'left': '70px'});
+                        _page.init();
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));
+                        _page.createRecipients(this.targetsModelArray);
+                    }, this));
+                },
+                createWorkflow: function(fromOpenDialog){                    
+                    if (this.modelArray.length) {
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        } 
+                        
+                        var total_wf_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_wf_selected);
+                        if (total_wf_selected > 1) {
+                            this.$(".total-count .rp-selected").html('workflows selected');
+                        }
+                        else {
+                            this.$(".total-count .rp-selected").html('workflow selected');
+                        }
+                        
+                        if(!this.toDate && !this.fromDate){
+                            /*var currentDate =  moment(new Date());
+                            var fromDate =  currentDate.subtract(7, 'days');
+                            var toDate = moment(new Date());
+                            this.fromDate = fromDate.format("MM-DD-YYYY");
+                            this.toDate = toDate.format("MM-DD-YYYY");
+                            this.dateRange = 7;
+                            this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));*/
+                            
+                        }
+                        this.$(".rpt-campign-listing").hide();
+                        this.$(".rpt-expand").show();
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();                       
+                        _.each(this.modelArray, function (val, index) {                                
+                                var chartDiv = $("<div class='rpt-campign-listing rpt-row'><div id='triangle-bottomleft'><a class='rpicon rpclose showtooltip' title='Remove from report'></a></div><div id='"+val.get("workflowId.checksum")+"' class='wfchart'></div></div>")
+                               _grid.append(chartDiv);        
+                               chartDiv.find(".rpclose").click(_.bind(this.removeWFChart,this,val.get("workflowId.checksum")));
+                               this.app.showLoading("Loading Chart...", chartDiv);
+                               var wfBlock = new workflowBlock({model: val, page: this, chartElement:chartDiv,toDate:this.toDate,fromDate:this.fromDate});
+                               chartDiv.find(".wfchart").html(wfBlock.$el);
+                               wfBlock.createChart();
+
+                        }, this);  
+                        _grid.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                        
+                        if(fromOpenDialog){
+                            this.saveSettings();
+                        }
+                    }
+                    
+                },
+                removeWFChart:function(checkSum){
+                     var delIndex = -1;
+                    _.each(this.modelArray, function (val, index) {
+                        if (val.get("workflowId.checksum") == checkSum) {
+                            delIndex = index;
+                        }
+                    }, this);
+                    if(delIndex!=-1){
+                        this.modelArray.splice(delIndex, 1);
+                        this.createWorkflow(true);
+                    }
+                    
+
+                },
+                //////********************* Lists Growth *****************************************//////
+                loadLists: function(){                    
+                    this.app.showLoading("Loading selection...", this.$el);                        
+                    var listIds = this.objects.map(function (index) {                            
+                        return index.id
+                    }).join()
+                    var URL = "/pms/io/list/getListData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=list_csv";                    
+                    var post_data = {listNum_csv: listIds};
+                    this.modelArray = [];
+                    this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                        this.app.showLoading(false, this.$el);
+                        var _json = jQuery.parseJSON(data);
+                        _.each(_json.lists[0], function (val) {
+                            var _model = new Backbone.Model(val[0]);                                
+                            this.modelArray.push(_model);
+                        }, this);                        
+
+                        this.loadListsSummary(true);
+                    }, this));                    
+                },
+                openListsDialog:function() {
+                    this.targetsModelArray = [];
+                    var dialog_object = {title: 'Select Lists',
+                        css: {"width": "1200px", "margin-left": "-600px"},
+                        bodyCss: {"min-height": "423px"},
+                        saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
+                        headerIcon: 'mlist2'
+                    }
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Lists...", dialog.getBody());
+                    require(["listupload/campaign_recipients_lists"], _.bind(function (page) {
+                        var _page = new page({ params: {type: "batches", recipientType: ''},parent: this, dialog: dialog, editable: this.editable,app: this.app,source:'report'});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.$el.find('#targets_grid').addClass('targets_grid_table');
+                        _page.$el.find('.col-2 .template-container').addClass('targets_grid_table_right');
+                        _page.$el.find('.step2-lists').css({'top': '0'});
+                        _page.$el.find('.step2-lists span').css({'left': '70px'});
+                        
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));                        
+                    }, this));
+                },
+                loadListsSummary: function(fromOpenDialog){   
+                    if (this.modelArray.length) {
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        } 
+                        
+                        var total_lists_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_lists_selected);
+                        if (total_lists_selected > 1) {
+                            this.$(".total-count .rp-selected").html('lists selected');
+                        }
+                        else {
+                            this.$(".total-count .rp-selected").html('list selected');
+                        }
+                        
+                        if(!this.toDate && !this.fromDate){
+                            var currentDate =  moment(new Date());
+                            var fromDate =  currentDate.subtract(7, 'days');
+                            var toDate = moment(new Date());
+                            this.fromDate = fromDate.format("MM-DD-YYYY");
+                            this.toDate = toDate.format("MM-DD-YYYY");
+                            this.dateRange = 7;
+                            this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
+                        }
+                        this.$(".rpt-campign-listing").hide();
+                        this.$(".rpt-expand").show();
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();
+                        _.each(this.modelArray, function (val, index) {
+                                var model = val;                                
+                                var listRow = new reportBlock({model: model, page: this, type: "list","expandedView":true});                            
+                                _grid.append(listRow.$el);
+
+                                this.app.showLoading("Loading Data...",  this.$("#chart-" + val.get("listNumber.checksum")));
+                                var bms_token = this.app.get('bms_token');
+                                var queryString = (this.fromDate && this.toDate) ? "&fromDate=" + moment(this.fromDate, 'M/D/YYYY').format("MM-DD-YYYY") + "&toDate=" + moment(this.toDate, 'M/D/YYYY').format("MM-DD-YYYY") : ""
+                                var URL = "/pms/io/list/getListData/?BMS_REQ_TK=" + bms_token + "&breakupType=daily&type=getListSummaryCount&listNum=" + model.get("listNumber.encode") + queryString;                            
+                                var post_data = {};
+                                $.post(URL, post_data).done(_.bind(function (sJson) {
+                                    var summary_json = jQuery.parseJSON(sJson);
+                                    if (summary_json[0] == "err") {
+                                        this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                        return false;
+                                    }
+                                    if (summary_json.count && summary_json.count !== "0") {                                    
+                                        var _data = [
+                                            ['Genre', 'Decrease', 'Increase', {role: 'annotation'}]
+                                        ];
+
+                                        var increaseCount = [], decreaseCount = [];
+                                        var categories = [];
+                                        this.chart_data = {addCount: 0, removeCount: 0};
+                                        
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.summaries[0];
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                                for(var d=0;d<=days_report;d++){
+                                                    var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                    categories.push(c_date);
+                                                    var sVal = summaries["summary"+_d];
+                                                    if(sVal && c_date == moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM")){                                                                                                        
+                                                        increaseCount.push(parseInt(sVal[0].addCount));
+                                                        decreaseCount.push(parseInt(sVal[0].removeCount));
+                                                        
+                                                        this.chart_data['addCount'] = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
+                                                        this.chart_data['removeCount'] = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
+                                                        _d = _d + 1;
+                                                    }
+                                                    else{
+                                                        increaseCount.push(0);
+                                                        decreaseCount.push(0);
+                                                    }
+                                                }
+                                            }
+                                            else{  
+                                                _.each(summary_json.summaries[0], function (sVal) {
+                                                    categories.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM"));
+                                                    increaseCount.push(parseInt(sVal[0].addCount));
+                                                    decreaseCount.push(parseInt(sVal[0].removeCount));
+                                                    
+                                                    this.chart_data['addCount'] = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
+                                                    this.chart_data['removeCount'] = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
+                                                }, this);
+                                            }
+                                        var _data = [{"name": "Decrease", "data": decreaseCount}, {"name": "Increase", "data": increaseCount}];
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#97d61d']});
+                                        this.$("#chart-" + val.get("listNumber.checksum")).html(this.chartPage.$el);
+                                        this.$("#stats-" + val.get("listNumber.checksum") +" .subIncrease").html(this.chart_data['addCount']);
+                                        this.$("#stats-" + val.get("listNumber.checksum") +" .subDecrease").html(this.chart_data['removeCount']);
+                                        this.$("#stats-" + val.get("listNumber.checksum") +" .subGrowth").html(this.chart_data['addCount']-this.chart_data['removeCount']);
+                                        
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
+                                        this.chartPage.createChart(_data);
+                                    
+                                }
+                                else {
+                                    this.$("#chart-" + val.get("listNumber.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for list.</p></div>');
+                                }
+                                }, this));
+
+                            }, this);
+                            if(fromOpenDialog){
+                                this.saveSettings();
+                            }
+                    }
                 }
-                
                 
             });
         });

@@ -459,18 +459,19 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 }
                 ,
                 openPopulation: function (opt) {
-                    var formId = opt.formId ? opt.formId : 0;
-                    var formCheckSum = opt.formCheckSum ? opt.formCheckSum : 0;
+                    var id = opt.objId ? opt.objId : 0;
+                    var checksum = opt.objCheckSum ? opt.objCheckSum : 0;
+                    var type = opt.type ?opt.type:"";
                     var ws_title = opt.ws_title?opt.ws_title:"Population";
                     this.addWorkSpace({type: '',
                         title: ws_title,
                         sub_title: 'Population',
                         tab_icon: 'population',
-                        workspace_id: 'population_' + formCheckSum,
+                        workspace_id: 'population_' + checksum,
                         url: 'recipientscontacts/rcontacts',
                         addAction: false,
                         noTags: true,
-                        params: {app:app,listNum:formId,type:'webform',fromDate:opt.fromDate}
+                        params: {app:app,listNum:id,type:type,fromDate:opt.fromDate}
 
                     });
                 }

@@ -194,10 +194,11 @@ function (template) {
                 //$('#div_pageviews').css({top:offset.top-290});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:listNum,dialogHeight:dialog_height});
-                    dialog.getBody().html(objContacts.$el);
+                    dialog.getBody().append(objContacts.$el);                    
                     objContacts.$el.find('#contacts_close').remove();
                     objContacts.$el.find('.temp-filters').removeAttr('style');
-                   
+                    var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                    objContacts.$el.addClass('dialogWrap-'+dialogArrayLength);
                 });
                 
                   /*require(["text!listupload/html/editlist.html"],function(list){
