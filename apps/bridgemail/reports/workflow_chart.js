@@ -443,7 +443,7 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                         url: '/pms/trigger/workflowToJSON.jsp',
                         dataType: 'json',
                         data: 'BMS_REQ_TK='+ token + '&workflowId=' + workflowId + '&stepId=' + stepId + '&isSAM=' + isSAM  + "&fromDate=" + fromDate + "&toDate=" + toDate,
-                        async: true,
+                        async: false,
                         cache: false,
                         success: function(response){
                             try{

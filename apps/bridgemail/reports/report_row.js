@@ -16,7 +16,8 @@
                     "click .percent": 'showPercentDiv',
                     "click .icons-bar-chart .icons":'changeChart',
                     "click .tagsexpand":"expandCollapseTags",
-                    'click .funnel-tabs-btns li':'changeLevel'
+                    'click .funnel-tabs-btns li':'changeLevel',
+                    "click .nt-name":"editNurtureTrack"
                 },
                 initialize: function () {
                     this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'rpt-campaign', iconClass: 'rpblue-campagin'},
@@ -1415,6 +1416,13 @@
                         dialog.saveCallBack(_.bind(_page.saveCall, _page));
                     }, this));
                 },
+                editNurtureTrack:function(){
+                    var editable = true;
+                    if(this.modelArray[0].get("status")!=="D"){
+                        editable = false;
+                    }                
+                    this.app.mainContainer.openNurtureTrack({"id":this.modelArray[0].get("trackId.encode"),"checksum":this.modelArray[0].get("trackId.checksum"),"parent":this.sub,editable:editable});
+                },
                 createNurtureTrack: function () {
                     if (this.modelArray.length) {                        
                         if(this.doDraw){
@@ -1590,7 +1598,8 @@
                     if (this.campArray.length) {                        
                         this.showHideChartArea(true);                                   
                         var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
-                        this.$(".rpt-nt-detail").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong>  <b> nurture track selected having <strong class="badge" style="float:none">' + this.modelArray[0].get("msgCount") + '</strong> ' + msgCountText + '</b>');
+                        this.$(".rpt-nt-detail").html('<strong class="badge nt-name showtooltip" title="Click to open"><a>' + this.modelArray[0].get("name") + '</a></strong>  <b> nurture track selected having <strong class="badge" style="float:none">' + this.modelArray[0].get("msgCount") + '</strong> ' + msgCountText + '</b>');
+                        this.$(".rpt-nt-detail").find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                         this.$(".rpt-nt-detail").show();
                         this.$(".rpt-nt-init").hide();
                         var _grid = this.$(".rpt-expand");
