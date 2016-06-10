@@ -604,7 +604,7 @@
                                         }
                                         else{
                                             _.each(summary_json.summaries[0], function (sVal) {
-                                                categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));                                                
+                                                categories.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM"));                                                
                                                 viewData.push(parseInt(sVal[0].viewCount));
                                                 submitData.push(parseInt(sVal[0].submitCount));
                                                 
@@ -1344,7 +1344,7 @@
                                         }
                                         else{
                                             _.each(summary_json.summaries[0], function (sVal) {
-                                                categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));                                                                                                
+                                                categories.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM"));                                                                                                
                                                 submitData.push(parseInt(sVal[0].submitCount));
                                                                                                 
                                                 this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
@@ -2697,18 +2697,81 @@
                 //////************************** Funnel  ***********************************************//////
                 loadFunnel:function(){
                     if(this.objects.length){                        
-                        for (var i =0;i<this.objects.length;i++){
-                            var _l = [];
-                             _.each(this.objects[i]["level"+i],function(val,key){ 
-                                _l.push(new Backbone.Model(val));
-                            },this);
-                            this.modelArray.push(_l)
+                        var post_data = {};
+                        var URL = "";
+                        var funnel_ids ="";
+                        if(this.subType=="tag"){
+                            URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";
+                        } else if(this.subType=="page"){
+                            var page_id = [];
+                            for (var i =0;i<this.objects.length;i++){                                
+                                 _.each(this.objects[i]["level"+i],function(val,key){ 
+                                    if(page_id.indexOf(val.id)==-1){ 
+                                        page_id.push(val.id);
+                                    }
+                                },this);                             
+                            }
+                            funnel_ids = page_id.join(",");
+                            URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
+                            post_data = {pageId_csv: funnel_ids};
+                        }else if(this.subType=="form"){
+                            var form_id = [];
+                            for (var i =0;i<this.objects.length;i++){                                
+                                 _.each(this.objects[i]["level"+i],function(val,key){ 
+                                    if(form_id.indexOf(val.id)==-1){ 
+                                        form_id.push(val.id);
+                                    }
+                                },this);                             
+                            }
+                            funnel_ids = form_id.join(",");
+                            URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
+                            post_data = {formId_csv: funnel_ids};
                         }
                         
-                       this.createFunnel();
+                        
+                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                            this.app.showLoading(false, this.$el);
+                            this._json = jQuery.parseJSON(data);           
+                            this.loadUpdatedFunnel();
+                        }, this));                                              
+                    }                                                                    
+                },
+                loadUpdatedFunnel: function(){
+                      for (var i =0;i<this.objects.length;i++){
+                        var _l = [];
+                         _.each(this.objects[i]["level"+i],function(val,key){ 
+                            _l.push(new Backbone.Model(this.getUpdatedCount(val)));
+                        },this);
+                        this.modelArray.push(_l)
+                     }                        
+                     this.createFunnel();
+                },
+                getUpdatedCount: function(valObj){
+                    var returnVal = valObj;
+                    if(this.subType=="tag"){
+                       _.each(this._json.tagList[0], function (val) {
+                            if (valObj.tag==val[0].tag) {
+                                returnVal = {tag:valObj.tag,subCount:val[0].subCount};
+                                return;
+                            }
+                        }, this);  
                     }
-                                                
-                    
+                    else if(this.subType=="page"){
+                         _.each(this._json.pages[0], function (val) {
+                            if (valObj.checkSum==val[0]["pageId.checksum"]) {
+                                returnVal = {tag:val[0].name,subCount:val[0].viewCount,id:val[0]["pageId.encode"],checkSum:val[0]["pageId.checksum"]};
+                                return;
+                            }
+                        }, this);  
+                    }else if(this.subType=="form"){
+                         _.each(this._json.forms[0], function (val) {
+                            if (valObj.checkSum==val[0]["formId.checksum"]) {
+                                returnVal = {tag:val[0].name,subCount:val[0].submitCount,id:val[0]["formId.encode"],checkSum:val[0]["formId.checksum"]};
+                                return;
+                            }
+                        }, this);  
+                    }
+                    return returnVal;
                 },
                 openFunnelDialog: function () {
                     var _html = '<div class="overlay"> <div style="margin-left: -287.5px; width: 575px;" class="modal in moda-v2">';

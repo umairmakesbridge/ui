@@ -10143,6 +10143,13 @@ ul.funnel-tabs-btns li.active a {
     width: 23px;
     float:left;
 }
+.rpt-goto-icon {
+    height:20px;
+    width:20px;
+    display:inline-block;
+    background: rgba(0, 0, 0, 0) url("../img/goto.png") no-repeat scroll 0 0;
+    float:right;
+}
 .rpblue-campagin{
     background-position: 0 -102px;
 }

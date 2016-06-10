@@ -313,6 +313,13 @@ define(['text!reports/html/report_block.html'],
                     } else if (this.type == "form") {
                         this.previewForm();
                     }
+                    else if (this.type == "funnel") {
+                        if (this.subType == "page") {
+                            this.previewPage();
+                        } else if (this.subType == "form") {
+                            this.previewForm();
+                        }
+                    }
                 },
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
@@ -354,14 +361,22 @@ define(['text!reports/html/report_block.html'],
                     var camp_obj = this.sub;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
-                    var dialog = camp_obj.app.showDialog({title: 'Preview of landing page &quot;' + this.model.get('name') + '&quot;',
+                    var landing_name = this.model.get('name')?this.model.get('name'):this.model.get('tag');
+                    var dialog = camp_obj.app.showDialog({title: 'Preview of landing page &quot;' + landing_name + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
                         headerIcon: 'dlgpreview',
                         bodyCss: {"min-height": dialog_height + "px"}
                     });
                     this.app.showLoading("Loading Page...", dialog.getBody());
-                    var preview_url = this.app.decodeHTML(this.model.get('previewURL')).replace("http", "https");
+                    var preview_url = ""
+                    if(this.model.get('previewURL')){
+                        preview_url = this.app.decodeHTML(this.model.get('previewURL')).replace("http", "https");
+                    }
+                    else {
+                        preview_url = "https://"+this.app.get("content_domain")+"/pms/vlanding/"+this.model.get('id')+"/?preview=Y"
+                    }
+                    
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         dialog.getBody().html(tmPr.$el);
@@ -378,14 +393,22 @@ define(['text!reports/html/report_block.html'],
                 previewForm: function () {
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
-                    var dialog = this.app.showDialog({title: 'Preview of form &quot;' + this.model.get('name') + '&quot;',
+                    var form_name = this.model.get('name')?this.model.get('name'):this.model.get('tag');
+                    var dialog = this.app.showDialog({title: 'Preview of form &quot;' + form_name + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
                         headerIcon: 'dlgpreview',
                         bodyCss: {"min-height": dialog_height + "px"}
                     });
                     this.app.showLoading("Loading Form...", dialog.getBody());
-                    var preview_url = this.app.decodeHTML(this.model.get('formPreviewURL')) + "?preview=Y";
+                    var preview_url = ""
+                    if(this.model.get('formPreviewURL')){
+                        preview_url = this.app.decodeHTML(this.model.get('formPreviewURL')) + "?preview=Y";
+                    }
+                    else {
+                        preview_url = "https://"+this.app.get("content_domain")+"/pms/vform/"+this.model.get('id')+"/?preview=Y"
+                    }
+                   
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         dialog.getBody().html(tmPr.$el);

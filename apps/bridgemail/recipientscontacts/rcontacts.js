@@ -172,6 +172,9 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                                 }
                             }
                             that.$el.find('#table_pageviews tbody').find('.tag').on('click', function() {
+                                if(that.options.type=="webform"){
+                                    return false;
+                                }
                                 var html = $(this).html();
                                 that.searchText = $.trim(html);
                                 that.$el.find(".search-control").val(that.searchText);

@@ -118,14 +118,9 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                                     point:{
                                         events:{
                                             click: function(){
-                                                that.stepId = that.ids[this.category];
+                                                that.stepId = that.ids[this.category];                                                
+                                                that.SecondChart(that.ids[this.category],this.category);
                                                 
-                                                that.SecondChart(that.ids[this.category]);
-                                                if(that.chart2 && that.chart2.setTitle){
-                                                    that.chart2.setTitle({
-                                                        text: this.category
-                                                    });
-                                                }
                                             }
                                         }
                                     }
@@ -426,7 +421,7 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                  * @param {type} stepId
                  * @returns 
                  */
-                SecondChart: function(stepId){
+                SecondChart: function(stepId,chartTitle){
                     var token = this.BMS_TOKEN;
                     var workflowId = this.model.get("workflowId");;
                     var isSAM = false;
@@ -443,7 +438,7 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                         url: '/pms/trigger/workflowToJSON.jsp',
                         dataType: 'json',
                         data: 'BMS_REQ_TK='+ token + '&workflowId=' + workflowId + '&stepId=' + stepId + '&isSAM=' + isSAM  + "&fromDate=" + fromDate + "&toDate=" + toDate,
-                        async: false,
+                        async: true,
                         cache: false,
                         success: function(response){
                             try{
@@ -453,6 +448,11 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                                 that.chart2.showLoading();
                                 that.SetCategories(response.options,'Option',that.chart2);                                
                                 that.chart2.hideLoading();
+                                if(that.chart2 && that.chart2.setTitle){
+                                    that.chart2.setTitle({
+                                        text: chartTitle
+                                    });
+                                }
                             } catch(e){
                                 that.element.find(".step-chart").remove();
                                 var errorMessage = e.message;

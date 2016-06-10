@@ -6,9 +6,11 @@
             <%if(this.model.get('salesStatus') !=""){%> <a class="statusdd color2 salestatus showtooltip" data-original-title="Click to view contacts with same sale status"><%=this.model.get('salesStatus')%> </a><%}%>
             <div class="tags tagscont">
                 <ul>
-                    <% _.each(this.model.get('tags').split(","),function(t){ %>  
-                    <li><a  class="tag showtooltip" data-original-title="Click to view contacts with same tag"><%- this.app.decodeHTML(t) %></a> </li>
-                    <% },this)%> 
+                    <% _.each(this.model.get('tags').split(","),function(t){  if(this.options.type=="webform") { %>  
+                        <li><a  class="tag" style="cursor:default"><%- this.app.decodeHTML(t) %></a> </li>
+                    <% } else { %> 
+                        <li><a  class="tag showtooltip" title="Click to view contacts with same tag"><%- this.app.decodeHTML(t) %></a> </li>
+                    <% } },this)%> 
                 </ul>
             </div>
         </div>

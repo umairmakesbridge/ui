@@ -6,7 +6,7 @@
 <div data-checksum="<%-this.model.get('campNum.checksum')%>" class="block-container">
     <div class="name-type">              
         <h3>                    
-            <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview"><%= this.model.get('name')%></a>                    
+            <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview"><%= this.model.get('name')%></a>                                
         </h3>                   
     </div>
     <div class="rpt-details">
@@ -33,7 +33,7 @@
             <a style="max-width:auto;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview"><%= this.model.get('name')%></a>                    
         </h3>                   
     </div>
-    <div class="rpt-details">
+    <div class="rpt-details">        
         <span class="lastSaveInfo"><i class="icon time"></i><%= this.getPageTimeShow().dateTime %></span>
         <span class="landingpage"><i class="icon lp"></i><%= this.app.addCommas(this.model.get('viewCount')) %></span>                        
         <span class="formview"><i class="icon formview"></i><% if(this.model.get('submitCount')!="0") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('submitCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('submitCount')))} %></span>
@@ -100,16 +100,15 @@
    </div>
 
 <% } else if (this.type=="funnel" || this.type=="tag") { %>   
-    <% if(this.type=="tag") { %>
-        <input class="check-obj" type="checkbox" value="<%-this.model.get('tag')%>" data-checksum="<%-this.model.get('tag')%>" checked="checked" />
-        <div class="block-container">
-    <% } else { %>
-        <div>
-    <% } %>
-    
+            <% if(this.type=="tag") { %>
+                <input class="check-obj" type="checkbox" value="<%-this.model.get('tag')%>" data-checksum="<%-this.model.get('tag')%>" checked="checked" />
+                <div class="block-container">
+            <% } else { %>
+                <div>
+            <% } %>    
             <div class="name-type">              
                    <h3>                    
-                       <a style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis" class="campname showtooltip">  <%= this.model.get('tag')%> </a>                    
+                       <a style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis" class="campname show-detail showtooltip" title="Click to preview">  <%= this.model.get('tag')%> </a>                    
                    </h3>                   
             </div>
         <div class="rpt-details">
