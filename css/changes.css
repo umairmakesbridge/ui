@@ -2063,6 +2063,9 @@ i.contact-name-prev {
 .since{
    line-height: 35px !important;
 }
+.sch-note label{
+    text-align: left !important; 
+}
 #copy_camps_grid{
     overflow: hidden;
 }/*later must be checked*/
@@ -2979,7 +2982,7 @@ text-align:center;
     left: 50%;
     position: fixed;
     top: 50%;
-    width: 560px;
+    min-width: 280px;
     z-index: 999;
 }
 .schedule-panel h1 {
@@ -3021,7 +3024,22 @@ text-align:center;
     padding: 10px;
     position: relative;
 }
-
+.schedule-panel-nh {
+    height: 492px;
+    padding-top: 15px;
+}
+.disabled-sch-wrap{
+  background-color: #fff;
+    height: 373px;
+    opacity: 0.6;
+    overflow: hidden;
+    position: absolute;
+    width: 99.3%;
+    z-index: 9;
+}
+.calendar-wraps{
+    position:relative;
+}
 .schedule-container > .span6:first-child {
     float: none;
     margin-right: 580px;
@@ -3040,17 +3058,54 @@ text-align:center;
     text-align: center;
     width: 260px;
 }
+.schedule-panel .col2.adjwidth-col2 {
+    width: 275px;
+}
+.adjwidth-col2 .schedule-detail {
+    width: 250px;
+}
+.schedule-panel .sch-btn-sm {
+   
+    display: block;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 45px;
+    margin: 10px auto 0;
+    padding: 0;
+    position: relative;
+    text-align: center;
+    width: 132px;
+}
+.schedule-panel .sch-btn-sm span{
+    padding: 5px 15px 0;
+}
  .schedule-panel .col2 {
     width: 260px;
 }
 .schedule-panel .col1{
     width : 262px;
+    margin-right:15px;
 }
 .ListsViewWrap{
     overflow:hidden;
 }
+.adjcal-for-step4 {
+   border-bottom: 2px solid #eaf4f9;
+    border-left: 2px solid #eaf4f9;
+    border-right: 2px solid #eaf4f9;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 6px;
+    
+}
+.adjcal-for-step4 .col1 {
+    margin-right: 5px;
+}
 #contacts_count{
     position:relative;
+}
+#schedule-panel-1 .ui-accordion:nth-child(2) {
+    margin: 6px 0;
 }
 /*Gallery Section styling*/
 .gallery-action-btns a:nth-child(1) {
