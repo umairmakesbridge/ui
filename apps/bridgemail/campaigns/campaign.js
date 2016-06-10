@@ -1552,6 +1552,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     }
                                     camp_obj.states.step3.change = false;
                                     camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
+                                    camp_obj.refreshCampaignList();
+                                    
                                     if (camp_obj.states.step3.recipientType == "Salesforce") {
                                         camp_obj.saveSalesForceDetails(true);
                                     }
