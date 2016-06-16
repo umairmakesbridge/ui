@@ -2,57 +2,7 @@ define([
     'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment','jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker'
 ], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog, moment) {
     'use strict';
-    var App = Backbone.Model.extend({
-        messages: [{'CAMP_subject_empty_error': 'Subject cannot be empty',
-                'CAMP_subject_length_error': 'Subject limit is 100 characters',
-                'CAMP_fromname_empty_error': 'From name cannot be empty',
-                'CAMP_replyto_empty_error': 'Reply field cannot be empty',
-                'CAMP_replyto_format_error': 'Please enter correct email address format',
-                'CAMP_fromemail_format_error': 'Please enter correct email address format',
-                'CAMP_fromemail_default_format_error': 'Please enter correct email address format',
-                'CAMP_defaultreplyto_format_error': 'Please enter correct email address format',
-                'CAMP_defaultreplyto_empty_error': 'Reply field cannot be empty',
-                'CAMP_defaultfromname_empty_error': 'From name cannot be empty',
-                'CAMP_draft_success_msg': 'Campaign status is Draft',
-                'CAMP_copy_success_msg': 'Campaign copy is complete',
-                'CAMP_subject_info': 'Subject of the email',
-                'CAMP_femail_info': 'From email of the email',
-                'CAMP_fname_info': 'From name of the email',
-                'CAMP_replyto_info': 'Reply to email of the email',
-                'SF_userid_empty_error': 'User ID cannot be empty',
-                'SF_userid_format_error': 'Invalid User ID. Hint: IDs are in an email format',
-                'SF_pwd_empty_error': 'Enter password',
-                'SF_email_format_error': 'Please enter correct email address format',
-                'NS_userid_empty_error': 'User ID cannot be empty',
-                'NS_userid_format_error': 'Invalid User ID. Hint: IDs are in an email format',
-                'NS_pwd_empty_error': 'Enter password',
-                'NS_accid_empty_error': 'Account id cannot be empty',
-                'NS_email_format_error': 'Please enter correct email format',
-                'CT_copyname_empty_error': 'Name cannot be empty',
-                'CSVUpload_wrong_filetype_error': 'CSV format only. Watch video on how to save an excel file to CSV.',
-                'CSVUpload_cancel_msg': 'Your CSV upload has been cancelled',
-                'MAPDATA_newlist_empty_error': 'Enter a list name',
-                'MAPDATA_newlist_exists_error': 'List name already exists',
-                'MAPDATA_extlist_empty_error': 'Choose a list',
-                'MAPDATA_email_format_error': 'Please enter correct email address format',
-                'MAPDATA_bmsfields_empty_error': 'Match your CSV columns to fields. Columns that you do not match will not be uploaded',
-                'MAPDATA_bmsfields_email_error': 'Please select atleast Email address as a mapping column',
-                'MAPDATA_bmsfields_duplicate_error': 'Your have duplicate field names. Field names must be unique',
-                'MAPDATA_customfield_placeholder': 'New custom field',
-                'TRG_basic_no_field': 'Select a field',
-                'TRG_basic_no_matchvalue': 'Please provide match field value',
-                'TRG_score_novalue': 'Enter a score value',
-                'TRG_form_noform': 'Choose a form',
-                'CRT_tarname_empty_error': 'Target name cannot be empty',
-                'CAMPS_campname_empty_error': 'Campaign name cannot be empty',
-                'CAMPS_delete_confirm_error': 'Are you sure you want to delete?',
-                'CAMPS_name_empty_error': 'No campaign found',
-                'CAMPS_html_empty_error': 'Campaign has not content',
-                'CAMPS_delete_success_msg': 'Campaign deleted',
-                'SUB_updated': 'Subscriber updated successfully',
-                'CAMPS_templatename_empty_error': 'Template name can not be empty',
-                'MAPDATA_importlist_empty_error': 'Enter an import name',
-            }],
+    var App = Backbone.Model.extend({        
         showbacktooltip: false,
         initialize: function () {
             //Load config or use defaults
@@ -235,7 +185,10 @@ define([
 
             //Ajax Error handling
             $(document).ajaxError(function (event, jqxhr, settings, exception) {
-                console.log(event + "\n-Jxhr Object=" + jqxhr + "\n-Setttings=" + settings + -"\n-Exception=" + exception);
+                console.log(event);
+                console.log(jqxhr);
+                console.log(settings);
+                console.log(exception);
             });
             //Cache Clear time set
             this.clearCache();

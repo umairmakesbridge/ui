@@ -2034,9 +2034,9 @@
                                         var _data = [{"name": "Decrease", "data": decreaseCount}, {"name": "Increase", "data": increaseCount}];
                                         this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#97d61d']});
                                         this.$("#chart-tag-" + index).html(this.chartPage.$el);
-                                        this.$("#stats-tag-" + index +" .subIncrease").html(this.chart_data['addCount']);
-                                        this.$("#stats-tag-" + index +" .subDecrease").html(this.chart_data['removeCount']);
-                                        this.$("#stats-tag-" + index +" .subGrowth").html(this.chart_data['addCount']-this.chart_data['removeCount']);
+                                        this.$("#stats-tag-" + index +" .subIncrease").html(this.app.addCommas(this.chart_data['addCount']));
+                                        this.$("#stats-tag-" + index +" .subDecrease").html(this.app.addCommas(this.chart_data['removeCount']));
+                                        this.$("#stats-tag-" + index +" .subGrowth").html(this.app.addCommas(this.chart_data['addCount']-this.chart_data['removeCount']));
                                         
                                         this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
@@ -2902,10 +2902,10 @@
                     this.$(".rpt-level-three h3").html(graph_data[2][0]);
                     this.$(".rpt-level-four h3").html(graph_data[3][0]);
 
-                    this.$(".rpt-level-one p").html(levelCount[0]);
-                    this.$(".rpt-level-two p").html(levelCount[1]);
-                    this.$(".rpt-level-three p").html(levelCount[2]);
-                    this.$(".rpt-level-four p").html(levelCount[3]);
+                    this.$(".rpt-level-one p").html(this.app.addCommas(levelCount[0]));
+                    this.$(".rpt-level-two p").html(this.app.addCommas(levelCount[1]));
+                    this.$(".rpt-level-three p").html(this.app.addCommas(levelCount[2]));
+                    this.$(".rpt-level-four p").html(this.app.addCommas(levelCount[3]));
                     this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f8b563','#00b0e9','#39c8a9','#7e5cb1']});
                     this.$(".col-2 .funnel-chart").html(this.chartPage.$el);
                     this.chartPage.$el.css({"width": "350px", "height": "370px"});
@@ -2966,7 +2966,7 @@
                         }, this));
                     }
                     else{
-                        this.createWorkflow();
+                        this.createWorkflow(true);
                     }
                 },
                 openWorkflowsDialog: function () {
@@ -3023,6 +3023,10 @@
                             this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));*/
                             
                         }
+                        else{
+                            this.$('#clearcal').show();
+                        }
+                        
                         this.$(".rpt-campign-listing").hide();
                         this.$(".rpt-expand").show();
                         var _grid = this.$(".rpt-expand");

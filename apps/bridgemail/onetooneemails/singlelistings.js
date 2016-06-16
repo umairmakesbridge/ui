@@ -24,8 +24,7 @@ define([ 'text!onetooneemails/html/singlelistings.html', 'onetooneemails/collect
                         this.headBadge();
                     },
                     "click .stattype": function (obj) {
-                        var camp_obj = this;
-                        var appMsgs = this.app.messages[0];
+                        var camp_obj = this;                        
                         var target = $.getObj(obj, "a");
                         var prevStatus = this.searchTxt;
                         this.searchBadgeTxt = target.attr('search');
@@ -129,8 +128,7 @@ define([ 'text!onetooneemails/html/singlelistings.html', 'onetooneemails/collect
               
                 findEmails: function (obj)
                 {
-                    var olist_obj = this;
-                    var appMsgs = this.app.messages[0];
+                    var olist_obj = this;                    
                     var target = $.getObj(obj, "a");
                     var prevStatus = this.status;
                     if (target.html() != 'Date Range')

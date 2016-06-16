@@ -319,15 +319,13 @@
          return isImage;
      },
      valideCSV: function(file){
-         var isCSV = true;
-         var appMsgs = this.app.messages[0];
-         
+         var isCSV = true;                  
          var extension = file.name.split(".")[file.name.split(".").length - 1].toLowerCase();
          this.fileName = file.name;
          if(extension!=="csv"){
                 $('.messagebox .closebtn').click();
                 if (this.errMessage == 0) {
-                    this.app.showAlert(appMsgs.CSVUpload_wrong_filetype_error,$("body"),{fixed:true})
+                    this.app.showAlert("CSV format only. Watch video on how to save an excel file to CSV.",$("body"),{fixed:true})
                     isCSV = false;
                     ++this.errMessage
                 }

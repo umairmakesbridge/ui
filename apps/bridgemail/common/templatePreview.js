@@ -187,7 +187,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     } else {
                         this.$('#temp-camp-previewbar').css({'padding-bottom': '14px', 'padding-top': '25px'});
                         this.$('#prev-email').parent().addClass('error');
-                        this.$('#prev-email').parent().append('<span class="errortext"><i class="erroricon"></i><em>' + this.options.app.messages[0].CAMP_fromemail_format_error + '</em></span>');
+                        this.$('#prev-email').parent().append('<span class="errortext"><i class="erroricon"></i><em>' + "Please enter correct email address format" + '</em></span>');
                     }
 
                 },

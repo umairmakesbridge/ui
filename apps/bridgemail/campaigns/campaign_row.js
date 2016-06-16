@@ -166,8 +166,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
                     var camp_obj = this.sub;
-                    var isTextOnly = this.model.get('isTextOnly');
-                    //var appMsgs = this.app.messages[0];				
+                    var isTextOnly = this.model.get('isTextOnly');                    			
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
                     var dialog = camp_obj.app.showDialog({title: 'Campaign Preview of &quot;' + this.model.get('name') + '&quot;',
@@ -220,12 +219,11 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                     }
                 },
                 deleteCampaginDialoge: function () {
-                    var camp_obj = this.sub;
-                    var appMsgs = camp_obj.app.messages[0];
+                    var camp_obj = this.sub;                    
                     var camp_id = this.model.get('campNum.encode')
                     if (camp_id) {
                         this.app.showAlertDetail({heading: 'Confirm Deletion',
-                            detail: appMsgs.CAMPS_delete_confirm_error,
+                            detail: "Are you sure you want to delete?",
                             callback: _.bind(function () {
                                 camp_obj.$el.parents(".ws-content.active").find(".overlay").remove();
                                 this.deleteCampaign();
@@ -240,8 +238,6 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                 deleteCampaign: function ()
                 {
                     var camp_obj = this.sub;
-
-                    var appMsgs = this.app.messages[0];
                     var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK=' + camp_obj.app.get('bms_token');
                     camp_obj.app.showLoading("Deleting Campaign...", camp_obj.$el.parents(".ws-content.active"), {fixed: 'fixed'});
                     $.post(URL, {type: 'delete', campNum: this.model.get('campNum.encode')})
@@ -252,7 +248,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                                  return false;
                                  }*/
                                 if (del_camp_json[0] !== "err") {
-                                    this.app.showMessge(appMsgs.CAMPS_delete_success_msg);
+                                    this.app.showMessge("Campaign deleted");
                                     //camp_obj.$el.find("#area_copy_campaign .bmsgrid").remove();
                                     this.app.removeCache("campaigns");
                                     camp_obj.total_fetch = 0;
@@ -298,9 +294,8 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                                     this.app.showAlert(camp_json[1], camp_obj.$el.parents(".ws-content.active"));
                                 }
                                 else
-                                {
-                                    var appMsgs = this.app.messages[0];
-                                    this.app.showMessge(appMsgs.CAMP_draft_success_msg);
+                                {                                    
+                                    this.app.showMessge("Campaign status is Draft");
                                     camp_obj.total_fetch;
                                     camp_obj.getallcampaigns();
                                     camp_obj.headBadge();

@@ -51,13 +51,12 @@ define(['text!./html/copytemplate.html'],
                     var page = this.options.templ;
                     var _current = this.options._current;
                     var app = this.options.app;
-                    var el = curview.$el;
-                    var appMsgs = app.messages[0];
+                    var el = curview.$el;                    
                     var templateName = el.find('#template_name').val();
                     if (!templateName) {
                         app.showError({
                             control: el.find('.templatename-container'),
-                            message: appMsgs.CAMPS_templatename_empty_error
+                            message: "Template name can not be empty"
                         });
                     }
                     else {

@@ -60,6 +60,13 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         this.$("#daterange").prop("disabled",true);
                         this.disableCalender = true;
                     }
+                    if(this.options.params && this.options.params.toDate && this.options.params.toDate){
+                        this.fromDate = this.options.params.fromDate;
+                        this.toDate = this.options.params.toDate;
+                        var fromDate = moment($.trim(this.fromDate), 'MM-DD-YY');
+                        var toDate = moment($.trim(this.toDate), 'MM-DD-YY');
+                        this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));                        
+                    }
                     this.loadRContacts();
                     if(!this.inWorkSpace){
                         this.$scrollElement = this.$(".stats_listing");
@@ -115,6 +122,12 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         this.objRContacts.url = '/pms/io/form/getSignUpFormData/?BMS_REQ_TK=' + this.options.app.get('bms_token');
                         _data['formId'] = this.options.listNum;   
                         _data['type'] = "getSubmissions";                           
+                    }else if (this.options.type == "workflow") {
+                        this.objRContacts.url = '/pms/trigger/viewWorkflowSubscribers.jsp?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        _data['workflowId'] = this.options.listNum;   
+                        _.each(this.options.params,function(val,key){
+                            _data[key]=val;
+                        },this);  
                     } else {
                         _data['listNum'] = this.listNum;
                         _data['status'] = this.status;

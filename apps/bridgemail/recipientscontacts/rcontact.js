@@ -105,7 +105,18 @@ function (template) {
                   var dateFormat = date.format("DD MMM, YYYY <br/> hh:mm A");
                                         
                  return dateFormat;
-             }
+             },
+             getFullDateAction:function(date){
+                  var date = moment(this.options.app.decodeHTML(date),'YYYY-MM-DD H:m');														
+                  var dateFormat = date.format("DD MMM, YYYY <br/> hh:mm A");
+                                        
+                 return dateFormat;
+             },
+            truncateURL:function(url){
+                if(url.length > 45) 
+                    return url = url.substring(0,45);
+                else return url;
+            }
              
         });    
 });

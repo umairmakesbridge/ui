@@ -112,13 +112,12 @@ function (template) {
                 validateLoginFields: function(isTest) {
                         var el = this.$el;
                         var isValid = true;
-                        var app = this.app;
-                        var appMsgs = this.app.messages[0];
+                        var app = this.app;                        
                         if((el.find('#sf_userid').val() == ''))
                         {						
                             app.showError({
                                 control:el.find('.uid-container'),
-                                message:appMsgs.SF_userid_empty_error
+                                message:"User ID cannot be empty"
                             });
                             isValid = false;
                         }
@@ -126,7 +125,7 @@ function (template) {
                         {						
                             app.showError({
                                 control:el.find('.uid-container'),
-                                message:appMsgs.SF_userid_format_error
+                                message:"Invalid User ID. Hint: IDs are in an email format"
                             });
                             isValid = false;
                         }
@@ -145,13 +144,12 @@ function (template) {
                 validatePassword:function(){
                     var el = this.$el;
                     var isValid = true;
-                    var app = this.app;
-                    var appMsgs = this.app.messages[0];
+                    var app = this.app;                    
                     if(el.find('#sf_pwd').val() == '')
                         {						
                         app.showError({
                                 control:el.find('.pwd-container'),
-                                message:appMsgs.SF_pwd_empty_error
+                                message:"Enter password"
                         });
                         isValid = false;
                     }
@@ -164,8 +162,7 @@ function (template) {
                 validateEmail:function(){
                     var el = this.$el;
                     var isValid = true;
-                    var app = this.app;
-                    var appMsgs = this.app.messages[0];
+                    var app = this.app;                    
                     if(el.find('#sf_email').val() == ''){
                         app.showError({
                                 control:el.find('.email-container'),
@@ -177,7 +174,7 @@ function (template) {
                     {						
                         app.showError({
                                 control:el.find('.email-container'),
-                                message:appMsgs.SF_email_format_error
+                                message:"Please enter correct email address format"
                         });
                         isValid = false;
                     }

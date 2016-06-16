@@ -374,14 +374,14 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                     {
                         this.app.showError({
                             control: this.$('.subject-container'),
-                            message: this.app.messages[0].CAMP_subject_empty_error
+                            message: "Subject cannot be empty"
                         });
                         isValid = false;
                     } else if (this.$('#campaign_subject').val().length > 100)
                     {
                         this.app.showError({
                             control: this.$('.subject-container'),
-                            message: this.app.messages[0].CAMP_subject_empty_error
+                            message: "Subject cannot be empty"
                         });
                         isValid = false;
                     } else
@@ -392,7 +392,7 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                     {
                         this.app.showError({
                             control: this.$('.fname-container'),
-                            message: this.app.messages[0].CAMP_fromname_empty_error
+                            message: "From name cannot be empty"
                         });
                         isValid = false;
                     } else if (this.$('#campaign_from_name').val().indexOf("{{") && this.$('#campaign_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/) == -1)
@@ -410,7 +410,7 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                     {
                         this.app.showError({
                             control: this.$('.fnamedefault-container'),
-                            message: this.app.messages[0].CAMP_defaultfromname_empty_error
+                            message: "From name cannot be empty"
                         });
                         isValid = false;
                     } else if (this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/) == -1) {
@@ -428,7 +428,7 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                     {
                         this.app.showError({
                             control: this.$('.fromeEmail-container'),
-                            message: this.app.messages[0].CAMP_fromemail_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     } else
@@ -440,7 +440,7 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                     {
                         this.app.showError({
                             control: this.$('.femail-default-container'),
-                            message: this.app.messages[0].CAMP_fromemail_default_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     } else
@@ -453,7 +453,7 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                     {
                         this.app.showError({
                             control: this.$('.replyto-container'),
-                            message: this.app.messages[0].CAMP_replyto_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     } else
@@ -465,14 +465,14 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                     {
                         this.app.showError({
                             control: this.$('.replyto-container'),
-                            message: this.app.messages[0].CAMP_defaultreplyto_empty_error
+                            message: "Reply field cannot be empty"
                         });
                         isValid = false;
                     } else if (replyto !== '' && !this.app.validateEmail(replyto))
                     {
                         this.app.showError({
                             control: this.$('.replyto-container'),
-                            message: this.app.messages[0].CAMP_defaultreplyto_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     } else
@@ -493,7 +493,7 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                         if (!validFlag) {
                             this.app.showError({
                                 control: this.$('.bcc-container'),
-                                message: this.app.messages[0].CAMP_defaultreplyto_format_error
+                                message: "Please enter correct email address format"
                             });
                         } else
                         {
@@ -518,14 +518,14 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                     {
                         this.app.showError({
                             control: this.$('.replyemail-container'),
-                            message: this.app.messages[0].CAMP_defaultreplyto_empty_error
+                            message: "Reply field cannot be empty"
                         });
                         isValid = false;
                     } else if (this.$('#campaign_reply_to_default').css('display') == 'block' && !this.app.validateEmail(email_addr))
                     {
                         this.app.showError({
                             control: this.$('.replyemail-container'),
-                            message: this.app.messages[0].CAMP_defaultreplyto_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     } else
@@ -759,7 +759,7 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
                         if (!validFlag) {
                             this.app.showError({
                                 control: this.$('.bcc-container'),
-                                message: this.app.messages[0].CAMP_defaultreplyto_format_error
+                                message: "Please enter correct email address format"
                             });
                         } else
                         {

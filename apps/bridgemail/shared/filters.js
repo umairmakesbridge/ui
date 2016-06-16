@@ -1955,7 +1955,7 @@
             if(filter.find(".fields").val()==""){
                 this.options.app.showError({
                     control:filter.find(".field-container"),
-                    message:this.options.app.messages[0].TRG_basic_no_field
+                    message:"Select a field"
                 })
                 isError = true
             }
@@ -1966,7 +1966,7 @@
             if(filter.find(".value-container").css("display")=="block" && filter.find(".matchValue").val()==""){
                  this.options.app.showError({
                     control:filter.find(".value-container"),
-                    message:this.options.app.messages[0].TRG_basic_no_matchvalue
+                    message:"Please provide match field value"
                 })
                 isError = true
             }
@@ -1979,7 +1979,7 @@
               if(filter.find(".scoreValue").val()==""){
                 this.options.app.showError({
                     control:filter.find(".scoreValue-container"),
-                    message:this.options.app.messages[0].TRG_score_novalue
+                    message:"Enter a score value"
                 })
                 isError = true
             }
@@ -1992,7 +1992,7 @@
              if(filter.find(".forms-box").val()==""){
                 this.options.app.showError({
                     control:filter.find(".webforms-container"),
-                    message:this.options.app.messages[0].TRG_form_noform
+                    message:"Choose a form"
                 })
                 isError = true
             }

@@ -37,7 +37,41 @@
     </div>     
 </td>
 
-<% } else {%>
+<% } else if(this.options.type == "workflow") {  %>
+    <% if(this.model.get('subscriptionData')[0].actionDate) { %>
+        <td width="132px">         
+            <div>
+                <div class="time show">
+                    <strong><span><em>Action Taken on</em><%=this.getFullDateAction(this.model.get('subscriptionData')[0].actionDate) %></span></strong> 
+                </div>
+            </div>
+        </td>    
+    <% } %>
+    
+    <% if(this.model.get('subscriptionData')[0].emailLink) { %>
+        <td width="90px">         
+            <div>
+                <div class="colico link">
+                    <strong><span><em>Link</em><a  class="showtooltip" title="<%=this.model.get('subscriptionData')[0].emailLink %>" href="<%=this.model.get('subscriptionData')[0].emailLink%>" target='_blank'><%=this.truncateURL(this.model.get('subscriptionData')[0].emailLink)%></a></span></strong>
+                </div>
+            </div>
+        </td>    
+    <% } %>        
+    
+    <% if(this.model.get('subscriptionData')[0].pageViews) { %>
+        <td width="90px">         
+            <div>
+                <div class="colico pgview">
+                    <strong><span><em>Page Views</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViews)%></span></strong>
+                </div>
+            </div>
+        </td>    
+    <% } %>
+    
+    
+
+<% } else {  %>
+
 <td width="90px">         
     <div>
         <div class="colico open showtooltip" data-original-title="Unique campaigns open count">
@@ -71,7 +105,7 @@
         </div>
     </div>
 </td>
-<%}%>
+<%  }%>
 
 <% if(this.options.type != "tag") { %>
 <% if(this.options.type != "target") { %>

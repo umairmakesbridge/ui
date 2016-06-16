@@ -240,8 +240,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                             }
                         },this))
                 },
-                editImport: function(dialog) {
-                    var appMsgs = this.app.messages[0];
+                editImport: function(dialog) {                    
                     var el = this.$el;
                     var importName = dialog.find("#import_name").val();
                     if(importName){
@@ -250,7 +249,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                         }else{
                             this.app.showError({
                             control: el.parents('body').find('.modal-open'),
-                            message: appMsgs.MAPDATA_importlist_empty_error
+                            message: "Enter an import name"
                             });
                         }
                    }

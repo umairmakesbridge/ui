@@ -123,13 +123,12 @@ define(['text!crm/netsuite/html/login.html'],
                 var campview = this;
                 var el = this.$el;
                 var isValid = true;
-                var app = this.app;
-                var appMsgs = campview.app.messages[0];
+                var app = this.app;                
                 if((el.find('#ns_userid').val() == ''))
                 {						
                     app.showError({
                         control:el.find('.uid-container'),
-                        message:appMsgs.NS_userid_empty_error
+                        message:"User ID cannot be empty"
                     });
                     isValid = false;
                 }					
@@ -137,7 +136,7 @@ define(['text!crm/netsuite/html/login.html'],
                 {						
                     app.showError({
                         control:el.find('.uid-container'),
-                        message:appMsgs.NS_userid_format_error
+                        message:"Invalid User ID. Hint: IDs are in an email format"
                     });
                     isValid = false;
                 }
@@ -154,7 +153,7 @@ define(['text!crm/netsuite/html/login.html'],
                     {						
                         app.showError({
                             control:el.find('.pwd-container'),
-                            message:appMsgs.SF_pwd_empty_error
+                            message:"Enter password"
                         });
                         isValid = false;
                     }
@@ -169,7 +168,7 @@ define(['text!crm/netsuite/html/login.html'],
                 {						
                     app.showError({
                         control:el.find('.accid-container'),
-                        message:appMsgs.SF_email_format_error
+                        message:"Please enter correct email address format"
                     });
                     isValid = false;
                 }
@@ -186,8 +185,7 @@ define(['text!crm/netsuite/html/login.html'],
                 var campview = this;
                 var el = this.$el;
                 var isValid = true;
-                var app = this.app;
-                var appMsgs = campview.app.messages[0];
+                var app = this.app;                
                 if(el.find('#ns_email').val() == ''){
                     app.showError({
                             control:el.find('.email-container'),
@@ -199,7 +197,7 @@ define(['text!crm/netsuite/html/login.html'],
                 {						
                     app.showError({
                         control:el.find('.email-container'),
-                        message:appMsgs.SF_email_format_error
+                        message:"Please enter correct email address format"
                     });
                     isValid = false;
                 }

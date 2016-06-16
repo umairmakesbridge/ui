@@ -21,17 +21,16 @@ function (template) {
 					var campview = curview.options.camp;
 					var editview = curview.options.editview;
                                         var camp_parent_obj = curview.options.camp_parent_obj;
-                   var target_id = curview.target_id;
+                                    var target_id = curview.target_id;
 				   var el = curview.$el;
-				   var app = curview.app;
-				   var appMsgs = curview.app.messages[0];
+				   var app = curview.app;				   
 				   var copydialog = curview.options.copydialog;
 				   var source = curview.options.source;
 				   	if(el.find('#copy_name').val() == '')
 					{						
 						app.showError({
 							control:el.find('.cname-container'),
-							message:appMsgs.CT_copyname_empty_error
+							message:"Name cannot be empty"
 						});
 					}
 					else

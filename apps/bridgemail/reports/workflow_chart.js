@@ -474,9 +474,8 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                  * @param {String} campNum
                  * @returns {false}
                  */
-                viewSubs: function(stepId, optionNumber, series, campNum){
-                    var token = this.BMS_TOKEN;
-                    var workflowId = this.model.get("workflowId");;
+                viewSubs: function(stepId, optionNumber, series, campNum){                    
+                    var workflowId = this.model.get("workflowId");                                                            
                     var isSAM = false;
                     var fromDate = this.fromDate;
                     var toDate = this.toDate;
@@ -503,7 +502,11 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                             break;
                         default:
                     }
-                    if (viewType == 'WV'){
+                    var checkSum =  this.model.get("workflowId.checksum")+viewType;
+                    var ws_title = series +" Population" 
+                    var params = {stepId:stepId,optionNumber:optionNumber,viewType:viewType,actionType:'E',toDate:toDate,fromDate:fromDate,isJson:'Y'};
+                    this.app.mainContainer.openPopulation({objId: workflowId, ws_title: ws_title, objCheckSum: checkSum,type:"workflow",params:params});
+                    /*if (viewType == 'WV'){
                         window.open('/pms/report/ViewWebActivityForCampaign.jsp?BMS_REQ_TK='+token+'&campNum='+campNum+"&fromDate="+fromDate+"&toDate="+toDate
                             ,'_blank', 'width=900,height=650,top=100,left=100,screenX=100,screenY=100,scrollbars=yes,status=yes,resizable=yes');
 
@@ -516,7 +519,7 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                         window.open('/pms/trigger/viewWorkflowSubscribers.jsp?BMS_REQ_TK='+token+'&workflowId='+workflowId
                             +'&stepId='+stepId+'&optionNumber='+optionNumber+'&actionType=E&viewType='+viewType+"&fromDate="+fromDate+"&toDate="+toDate
                             ,'_blank', 'width=900,height=650,top=100,left=100,screenX=100,screenY=100,scrollbars=yes,status=yes,resizable=yes');
-                    }
+                    }*/
                 }
             });
         });

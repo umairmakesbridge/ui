@@ -462,6 +462,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     var id = opt.objId ? opt.objId : 0;
                     var checksum = opt.objCheckSum ? opt.objCheckSum : 0;
                     var type = opt.type ?opt.type:"";
+                    var params = opt.params ? opt.params : null;
                     var ws_title = opt.ws_title?opt.ws_title:"Population";
                     this.addWorkSpace({type: '',
                         title: ws_title,
@@ -471,7 +472,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         url: 'recipientscontacts/rcontacts',
                         addAction: false,
                         noTags: true,
-                        params: {app:app,listNum:id,type:type,fromDate:opt.fromDate}
+                        params: {app:app,listNum:id,type:type,fromDate:opt.fromDate,params:params}
 
                     });
                 }

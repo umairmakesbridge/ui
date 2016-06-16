@@ -11328,6 +11328,7 @@ right: 66px;
    font-family: proxima_nova_regular;
    font-size: 14px;
    margin-left: 15px;
+   position:relative;
 }
 .rp-upr span{
    padding-left:10px;

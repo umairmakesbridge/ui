@@ -89,12 +89,11 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     };
                     this.bmseditor = new editorView({opener: this, wp_id: this.wp_id});
                     this.render();
-                    this.meeView = null;
-                    var appMsgs = this.app.messages[0];
-                    this.app.showInfo(this.$el.find('#lblSubject'), appMsgs.CAMP_subject_info);
-                    this.app.showInfo(this.$el.find('#lblFromemail'), appMsgs.CAMP_femail_info);
-                    this.app.showInfo(this.$el.find('#lblFromname'), appMsgs.CAMP_fname_info);
-                    this.app.showInfo(this.$el.find('#lblReplyto'), appMsgs.CAMP_replyto_info);
+                    this.meeView = null;                    
+                    this.app.showInfo(this.$el.find('#lblSubject'), "Subject of the email");
+                    this.app.showInfo(this.$el.find('#lblFromemail'), "From email of the email");
+                    this.app.showInfo(this.$el.find('#lblFromname'), "From name of the email");
+                    this.app.showInfo(this.$el.find('#lblReplyto'), "Reply to email of the email");
 
                 },
                  cleanNonPrintableCharacters: function(obj){
@@ -552,8 +551,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             active_ws.find("#save_campaign_btn").click();
                         }
                     });
-                    var camp_obj = this;
-                    var appMsgs = camp_obj.app.messages[0];
+                    var camp_obj = this;                    
 
                     copyIconCampaign.click(function (e) {
                         camp_obj.copyCamp();
@@ -589,7 +587,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     deleteIconCampaign.click(function () {
                         //if(confirm('Are you sure you want to delete this campaign?')){
                         camp_obj.app.showAlertDetail({heading: 'Confirm Deletion',
-                            detail: appMsgs.CAMPS_delete_confirm_error,
+                            detail: "Are you sure you want to delete?",
                             callback: _.bind(function () {
                                 camp_obj.$el.parents(".ws-content.active").find(".overlay").remove();
                                 camp_obj.deleteCampaign(camp_obj.camp_id);
@@ -665,9 +663,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                      "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
                      "key":"campaigns"
                      });*/
-                    this.refreshCampaignList();
-                    var appMsgs = camp_obj.app.messages[0];
-                    camp_obj.app.showMessge(appMsgs.CAMP_copy_success_msg);
+                    this.refreshCampaignList();                    
+                    camp_obj.app.showMessge("Campaign copy is complete");
                 },
                 copyCamp: function ()
                 {
@@ -1133,7 +1130,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.subject-container'),
-                            message: camp_obj.app.messages[0].CAMP_subject_empty_error
+                            message: "Subject cannot be empty"
                         });
                         isValid = false;
                     }
@@ -1141,7 +1138,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.subject-container'),
-                            message: camp_obj.app.messages[0].CAMP_subject_empty_error
+                            message: "Subject cannot be empty"
                         });
                         isValid = false;
                     }
@@ -1153,7 +1150,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.fname-container'),
-                            message: camp_obj.app.messages[0].CAMP_fromname_empty_error
+                            message: "From name cannot be empty"
                         });
                         isValid = false;
                     }
@@ -1172,7 +1169,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.fnamedefault-container'),
-                            message: camp_obj.app.messages[0].CAMP_defaultfromname_empty_error
+                            message: "From name cannot be empty"
                         });
                         isValid = false;
                     }
@@ -1192,7 +1189,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.fromeEmail-container'),
-                            message: camp_obj.app.messages[0].CAMP_fromemail_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     }
@@ -1205,7 +1202,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.femail-default-container'),
-                            message: camp_obj.app.messages[0].CAMP_fromemail_default_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     }
@@ -1219,7 +1216,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.replyto-container'),
-                            message: camp_obj.app.messages[0].CAMP_replyto_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     }
@@ -1231,7 +1228,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.replyemail-container'),
-                            message: camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error
+                            message: "Reply field cannot be empty"
                         });
                         isValid = false;
                     }
@@ -1239,7 +1236,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.replyemail-container'),
-                            message: camp_obj.app.messages[0].CAMP_defaultreplyto_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     }
@@ -2597,8 +2594,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 },
                 checkCSVUploaded: function ()
                 {
-                    var camp_obj = this;
-                    var appMsgs = this.app.messages[0];
+                    var camp_obj = this;                    
                     var csvupload = camp_obj.states.step3.csvupload;
                     var mapdataview = camp_obj.states.step3.mapdataview;
                     if (csvupload && csvupload.fileuploaded == true)
@@ -2609,7 +2605,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     var list_json = jQuery.parseJSON(data);
                                     if (list_json[0] == 'success')
                                     {
-                                        camp_obj.app.showAlert(appMsgs.CSVUpload_cancel_msg, camp_obj.$el, {type: 'caution'});
+                                        camp_obj.app.showAlert("Your CSV upload has been cancelled", camp_obj.$el, {type: 'caution'});
                                         csvupload.$el.find("#dropped-files").children().remove();
                                         csvupload.$el.find("#drop-files .middle").css("display", "block");
                                         csvupload.dataArray = [];

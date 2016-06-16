@@ -91,11 +91,8 @@ function (template) {
             
             
              previewEmail:function(){
-                                //var msg_id = this.model.get('campNum.encode');
-                                //var subNum = this.model.get('isTextOnly');
-                                var email_obj = this.parent;
-                               // var isTextOnly = this.model.get('isTextOnly');
-				//var appMsgs = this.app.messages[0];
+                                
+                                var email_obj = this.parent;                               
                                 var isPreviewEmail = true; 
 				var dialog_width = $(document.documentElement).width()-60;
 				var dialog_height = $(document.documentElement).height()-182;

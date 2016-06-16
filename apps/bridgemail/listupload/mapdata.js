@@ -75,8 +75,7 @@ function (template) {
 		   var curview = campview?campview.states.step3.csvupload:this.csv;
 		   var app = this.app;
 		   var mapview = this;
-                   var that = this;
-		   var appMsgs = app.messages[0];
+                   var that = this;		   
 		   var el = this.$el;
 		   var actid = el.find('.map-toggle .active').attr('id');
 		   var newlist = '';
@@ -92,7 +91,7 @@ function (template) {
                     {				  
                            app.showError({
                                    control:el.find('.list-container'),
-                                   message:appMsgs.MAPDATA_newlist_empty_error
+                                   message:"Enter a list name"
                            });
                            isValid = false;				  
                     }			   
@@ -112,7 +111,7 @@ function (template) {
                                 {
                                         app.showError({
                                                 control:el.find('.list-container'),
-                                                message:appMsgs.MAPDATA_newlist_exists_error
+                                                message:"List name already exists"
                                         });
                                         isValid = false;
                                 }
@@ -130,7 +129,7 @@ function (template) {
 			  {				  
 				  app.showError({
 					  control:el.find('.list-container'),
-					  message:appMsgs.MAPDATA_extlist_empty_error
+					  message:"Please enter correct email address format"
 				  });
 				  isValid = false;
 			  }
@@ -145,7 +144,7 @@ function (template) {
 			{				
 				app.showError({
 					  control:el.find('.email-container'),
-					  message:appMsgs.MAPDATA_email_format_error
+					  message:"Please enter correct email address format"
 				  });
 				isValid = false;
 			}
@@ -181,7 +180,7 @@ function (template) {
                         /* Check if map data exists in Layout map */
 			if(layout_map == '' || layout_map.split(',').length < 1)
 			{
-				app.showAlert(appMsgs.MAPDATA_bmsfields_empty_error,el);
+				app.showAlert("Match your CSV columns to fields. Columns that you do not match will not be uploaded",el);
 				isValid = false;
 			}
                         else{
@@ -193,14 +192,14 @@ function (template) {
                                 }
                             }
                             if(email_flag!==1){
-                                 app.showAlert(appMsgs.MAPDATA_bmsfields_email_error,el);
+                                 app.showAlert("Please select atleast Email address as a mapping column",el);
                                 isValid = false;
                             }
                             layout_map = layout_map.join();
                         }
 			if(dup > 0)			
 			{
-                            app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
+                            app.showAlert("Please select atleast Email address as a mapping column",el);
                             isValid = false;						
 			}
 			  
@@ -355,7 +354,7 @@ function (template) {
                    }else{
                       this.rows =  curview.options.rows
                    }
-		   var appMsgs = app.messages[0];
+		   
 		   this.filllistsdropdown();
 		   curview.$el.find('.tabel-div').children().remove();
 		   var mappingHTML = curview.createMappingTable(this.rows);
@@ -370,7 +369,7 @@ function (template) {
 		   curview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
 		   curview.$el.find(".add-custom-field").addbox({app:app,
                         addCallBack:_.bind(curview.addCustomField,curview),
-                        placeholder_text:appMsgs.MAPDATA_customfield_placeholder
+                        placeholder_text:"New custom field"
 		   });
 		   var curview = this;
                    this.isSupressListFlag = this.$el.parents(".ws-content.active").find('.camp_header').hasClass('orange-head');

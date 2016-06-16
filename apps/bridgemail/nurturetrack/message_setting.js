@@ -77,8 +77,7 @@ function (template) {
                 
             },
             previewCampaign:function(){
-                var camp_id = this.camp_id;                
-                //var appMsgs = this.app.messages[0];				
+                var camp_id = this.camp_id;                                	
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
                 var dialog = this.app.showDialog({title:'Message Preview' ,

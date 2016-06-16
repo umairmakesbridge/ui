@@ -410,7 +410,7 @@ define(['text!editor/DC/html/filters.html'],
                       if(filter.find(".fields").val()==""){
                           this.app.showError({
                               control:filter.find(".field-container"),
-                              message:this.app.messages[0].TRG_basic_no_field
+                              message:"Select a field"
                           })
                           isError = true
                       }

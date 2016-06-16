@@ -222,13 +222,12 @@ define(['text!crm/google/html/login.html'],
                     var campview = this;
                     var el = this.$el;
                     var isValid = true;
-                    var app = this.app;
-                    var appMsgs = campview.app.messages[0];
+                    var app = this.app;                    
                     if (el.find('#google_email').val() != '' && !app.validateEmail(el.find('#google_email').val()))
                     {
                         app.showError({
                             control: el.find('.email-container'),
-                            message: appMsgs.SF_email_format_error
+                            message: "Please enter correct email address format"
                         });
                         isValid = false;
                     }
