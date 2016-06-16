@@ -2985,6 +2985,29 @@ text-align:center;
     min-width: 280px;
     z-index: 999;
 }
+.reschedule-dialog-wrap .recepient_type{
+    margin-bottom:2px;
+    background:#fff;
+}
+.reschedule-dialog-wrap.schedule-confirm-dialog-wrap{
+    height: auto !important;
+}
+.schedule-confirm-dialog-wrap .btns{
+    margin-bottom: 10px;
+}
+.schdate-span {
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 23px;
+    margin-left: 10px;
+    color: #6494af;
+}
+.icon.schedulesn {
+    background: rgba(0, 0, 0, 0) url("../img/scheduledicon.png") no-repeat scroll center center;
+}
+.icon.salesforceSD {
+    background: rgba(0, 0, 0, 0) url("../img/salesforce_24x24.png") no-repeat scroll center center;
+}
 .schedule-panel h1 {
     color: #6494AF;
     font-size: 20px;

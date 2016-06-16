@@ -5,8 +5,8 @@
  * Description:this view is called from contacts/recipients, so changing this may cause problem in recipients list.
  **/
 
-define(['text!listupload/html/recipients_list.html','listupload/collections/recipients_lists','listupload/views/recipient_list','listupload/models/recipient_list','app'],
-function (template,recipientsCollection,recipientView,listModel,app) {
+define(['text!listupload/html/recipients_list.html','listupload/collections/recipients_lists','listupload/views/recipient_list','listupload/models/recipient_list','app','contacts/multipleadd'],
+function (template,recipientsCollection,recipientView,listModel,app,addContactView) {
         'use strict';
         return Backbone.View.extend({
             className: 'recipients_lists',
@@ -28,6 +28,8 @@ function (template,recipientsCollection,recipientView,listModel,app) {
                 this.total_fetch  = 0;
                 this.total = 0;
                 this.offsetLength = 0;
+                this.listChecksum = '';
+                this.addContactView =null;
                 this.render();
             },
             render:function (search) {
@@ -78,8 +80,8 @@ function (template,recipientsCollection,recipientView,listModel,app) {
                         that.$el.find('#list_grid tbody').append(new recipientView({model:model,app:app,parent:that}).el);
                      });
                       /*-----Remove loading------*/
-                    that.app.removeSpinner(that.$el);
-                   /*------------*/
+                        that.app.removeSpinner(that.$el);
+                    /*------------*/
                       if(that.searchText){
                        that.showSearchFilters(that.searchText,that.objRecipients.total);
                       }else{
@@ -183,11 +185,13 @@ function (template,recipientsCollection,recipientView,listModel,app) {
                 
             },
             addlist : function(fieldText, _json){
+               
                 this.newList = _json[1];
+                this.listChecksum = _json[2]
                 this.appendlist(fieldText);
             },
             appendlist:function(listName,ele){                    
-                  
+                            this.confirmationDialog(listName);
                             var newModel = new listModel({
                                 campaignSentCount:0,
                                 "listNumber.encode": this.newList,
@@ -221,6 +225,28 @@ function (template,recipientsCollection,recipientView,listModel,app) {
                    inview.removeAttr("data-load");
                     this.loadLists(this.offsetLength);
                 }  
+            },
+            confirmationDialog:function(listName){
+                 this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap modal-body"></div></div>');
+                 this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-190px', 'margin-top': '-223px', 'max-height': '455px','height':'170px','width':'420px'});
+                var appendHtml = '<div class="schedule-panel" id="contacts-caddDialog" style="height:110px"><h3>Add Contacts to List</h3><a class="closebtn" style="display:none;"></a><p style="padding-top: 8px;text-align:left;" class="note sch-note">Do you want to add contact to list ‘'+listName+'’ ?</p><p class="note sch-note"style="text-align:left;"> Press ‘Yes’ to add contacts to your new list.</p><div class="clearfix"></div><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>&nbsp;&nbsp;&nbsp;No&nbsp;&nbsp;</span><i class="icon cross"></i></a></div></div>';
+                this.$el.parents('body').find('.reschedule-dialog-wrap').append(appendHtml);
+                
+                this.$el.parents('body').find('#contacts-caddDialog .btn-run').click(_.bind(function(){
+                    this.$el.parents('body').find('.sch-overlay').remove();
+                    $("body #new_autobot").remove();
+                   $("body .autobots-modal-in").remove();
+                   $('body').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
+                   $("body").append("<div id='new_autobot' style='width: 710px;  top: 120px;left:50%' class='modal in'><div class='modal-body' style='min-height: 300px;'></div></div>");
+                   $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
+                   this.app.showLoading("Loading....",$("body #new_autobot .modal-body"));
+                   this.addContactView = new addContactView({ sub:this ,app:this.app,listobj:{newList:this.newList,listName:listName,listChecksum:this.listChecksum}}); 
+                  // var addContactView = new addContactView({ sub:this ,app:this.app});  
+                   $("body #new_autobot").html(this.addContactView.el);
+                },this));
+                this.$el.parents('body').find('#contacts-caddDialog .closebtn-2,#contacts-caddDialog .closebtn').click(_.bind(function(){
+                    this.$el.parents('body').find('.sch-overlay').remove();
+                },this))
             }
             
         });    

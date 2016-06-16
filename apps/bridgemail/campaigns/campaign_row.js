@@ -339,7 +339,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                 schOpenCampaign: function (ev) {                   
                     this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap modal-body" ></div></div>');
                     this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-170px', 'margin-top': '-223px', 'max-height': '455px'});
-
+                    this.app.showLoading("Loading Calender...",this.$el.parents('body').find(".reschedule-dialog-wrap"));
                     var camp_id = this.model.get('campNum.encode');
                     console.log(this.model);
                     var campstates = {"init": true, datetime: {day: 0, month: 0, year: 0, hour: 0, min: 0, sec: 0}, cal: null, camp_status: 'D', sch_date: ''};

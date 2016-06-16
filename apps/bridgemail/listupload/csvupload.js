@@ -63,7 +63,10 @@ define(['app', 'text!listupload/html/csvupload.html', 'fileuploader', 'bms-dragf
                                     }
                                     else {
                                         app.showLoading("Getting mapping fields...", curview.$el);
-                                        mapPage = new mapdataPage({csv: this, app: app, rows: rows});
+                                        mapPage = new mapdataPage({csv: this, app: app, rows: rows,listChecksum:this.listNum});
+                                        if(this.listNum){
+                                             //   mapPage.$el.find('#existing_lists option[data-checksum="'+this.listNum+'"]').prop('selected',true).trigger("chosen:updated")
+                                        }
                                     }
 
                                 }, this));
@@ -97,6 +100,7 @@ define(['app', 'text!listupload/html/csvupload.html', 'fileuploader', 'bms-dragf
                     this.errMessage = 0;
                     this.iThumbnail = this.$(".drop-files");
                     this.camp_obj = this.options.camp;
+                    this.listNum = (this.options.params) ? this.options.params.listNum :'';
                     jQuery.event.props.push('dataTransfer');
                     this.dragCSVSetting();
                 },
