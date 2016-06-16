@@ -724,8 +724,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 camapignReport: function () {
                     this.addWorkSpace({type: '', title: 'Reports', sub_title: 'Analytic', url: 'reports/campaign_report', workspace_id: 'camp_reports', tab_icon: 'reports', noTags: true});
                 },
-                csvUpload: function () {
-                    this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload'});
+                csvUpload: function (listNum) {
+                    var listNum = (listNum)?listNum:'';
+                    this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload',params: {listNum:listNum}});
                 },
                 supressList: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload To Suppress List', sub_title: 'Show Supress List', url: 'listupload/csvupload', workspace_id: 'supress_list', tab_icon: 'csvupload',headerObj:{headerclass:'orange-head'}});

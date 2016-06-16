@@ -211,7 +211,8 @@ function (template,jqueryui) {
                         _this.app.showLoading("Create Multiple Subscribers...",dialog.$el);
                         var URL = "/pms/io/subscriber/setData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=addByEmailOnly";
                         var serializedData = this.$("#sub_fields_viaEmails_form").serialize();
-                        serializedData = serializedData+"&listNum="+dialog.$el.find('#import-list-grid .selected').attr('id').split('_')[1];
+                        var listNum = (_this.options.listNum) ? _this.options.listNum : dialog.$el.find('#import-list-grid .selected').attr('id').split('_')[1];
+                        serializedData = serializedData+"&listNum="+listNum;
                         $.post(URL,  serializedData)
                         .done(function(data) {  
                         
@@ -224,8 +225,13 @@ function (template,jqueryui) {
                              }else{
                                  _this.app.showMessge("Subscribers Updated Successfully!");
                              }
-                            _this.subscriber.ws_header.find('.tcount').html("0")
+                             if(!_this.options.listNum){
+                                 _this.subscriber.ws_header.find('.tcount').html("0")
                               _this.refreshContactList();
+                             }else{
+                                 _this.options.sub.loadLists()
+                             }
+                            
                               dialog.hide();                              
                         }else{
                              _this.app.showLoading(false,dialog.$el);
@@ -246,7 +252,8 @@ function (template,jqueryui) {
                 _this.app.showLoading("Create Subscriber Fields...",dialog.$el);
                 var URL = "/pms/io/subscriber/setData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=addSubscriber";
                 var serializedData = this.$("#sub_fields_form").serialize();
-                serializedData = serializedData+"&listNum="+dialog.$el.find('#import-list-grid .selected').attr('id').split('_')[1];
+                var listNum = (_this.options.listNum) ? _this.options.listNum : dialog.$el.find('#import-list-grid .selected').attr('id').split('_')[1];
+                serializedData = serializedData+"&listNum="+listNum;
                 $.post(URL, serializedData)
                 .done(function(data) {  
                         
@@ -258,7 +265,8 @@ function (template,jqueryui) {
                              // _this.subscriber.showFields();
                              //  _this.updateSubscriberLetter();
                              _this.app.showMessge("New Subscriber Created Successfully!"); 
-                             _this.subscriber.ws_header.find('.tcount').html("0")
+                             if(!_this.options.listNum){
+                                 _this.subscriber.ws_header.find('.tcount').html("0")
                               _this.refreshContactList();
                               var contactVal = dialog.$el.find('#import-list-grid .selected .lists_subscribers span').text();
                               contactVal = parseInt(contactVal.substring(8,10)) + 1;
@@ -272,6 +280,11 @@ function (template,jqueryui) {
                               dialog.$el.find('.btn-save').removeClass('btn-save').addClass('btn-update').click(function(){
                                   _this.updateSubscriberDetail(dialog);
                               })
+                             }else{
+                                 _this.options.page.options.sub.loadLists();
+                                 dialog.hide();
+                             }
+                             
                              // dialog.hide();
                         }else{
                              _this.app.showLoading(false,dialog.$el);

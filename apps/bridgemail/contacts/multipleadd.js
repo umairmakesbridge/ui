@@ -18,16 +18,30 @@ define(['text!contacts/html/multipleadd.html', 'app', "contacts/subscriber_field
                     this.dialogStyles = {};
                     this.showPageList = false;
                     this.subsType = null;
+                    this.subsriberObj = {};
+                    this.listNum = (this.options.listobj) ? this.options.listobj.newList : "";
+                    this.listChecksum = (this.options.listobj) ? this.options.listobj.listChecksum : '';
                     this.render();
                 },
                 events: {
                     'click .close-choose-bot': 'closeDialog',
                     'click .single-sub': function () {
-                        this.chooseList('singlesub')
+                        if(this.listNum){
+                            this.isListSelected = true;
+                            this.createDialog('singlesub');
+                        }else{
+                            this.chooseList('singlesub')
+                        }
+                        
                     },
                     'click .opencsv': 'opeCSV',
                     'click .multisub-email': function () {
+                        if(this.listNum){
+                            this.isListSelected = true;
+                            this.createDialog('multiEmails');
+                        }else{
                         this.chooseList('multiEmails')
+                        }
                     },
                 },
                 render: function () {
@@ -40,6 +54,34 @@ define(['text!contacts/html/multipleadd.html', 'app', "contacts/subscriber_field
                     $('.autobots-modal-in').remove();
                 },
                 /*====================================================
+                 * Creates the Dialog
+                 ====================================================*/
+                createDialog : function(substype){
+                    
+                    this.editable=true;
+                    var dialog_width = 1000;
+                    var dialog_height = $(document.documentElement).height() - 192;
+                    var btn_prp = {title: (this.editable) ? 'Add Contact' : 'View Profile',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'account',
+                        bodyCss: {"min-height": dialog_height + "px"}
+
+                    }
+
+                    if (this.editable) {
+                        btn_prp['buttons'] = {saveBtn: {text: 'Save', btnicon: 'save'}};
+                    }
+                    this.dialog = this.app.showDialog(btn_prp);
+                    this.closeDialog();
+                    if(substype=='singlesub'){
+                           this.addSubscriber();
+                    }else if(substype=='multiEmails'){
+                        this.subDetail = new sub_detail({sub: this.parent, page: this, isSalesforceUser: false, isAddFlag: true, emailsFlag: true,listNum:this.listNum});
+                        this.multiEmails();
+                    }
+                },
+                /*====================================================
                  * 
                  * Lists viw loading
                  * 
@@ -49,7 +91,6 @@ define(['text!contacts/html/multipleadd.html', 'app', "contacts/subscriber_field
                     this.subsType = substype;
                     var _this = this;
                     var dialog_width = 1000;
-                    this.subsriberObj = {};
                     this.editable = true;
 
                     var dialog_height = $(document.documentElement).height() - 192;
@@ -335,9 +376,11 @@ define(['text!contacts/html/multipleadd.html', 'app', "contacts/subscriber_field
                 showPageViews: function (ev) {
 
                     var that = this;
-
-                    var dialog_title = "Population '" + $(ev.target).parents('tr').find('h3').text() + "'";
-                    var listNum = $(ev.target).data('id');
+                    if(ev){
+                        var dialog_title = "Population '" + $(ev.target).parents('tr').find('h3').text() + "'";
+                    }
+                    
+                    var listNum = (this.listNum)? this.listNum : $(ev.target).data('id');
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
                     var dialog = this.app.showDialog({title: dialog_title,
@@ -399,7 +442,7 @@ define(['text!contacts/html/multipleadd.html', 'app', "contacts/subscriber_field
 
                         //require(["contacts/subscriber_fields"], function(sub_detail) {
                         var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
-                        var page = new sub_detail({sub: _this.parent, page: _this, isSalesforceUser: false, isAddFlag: true});
+                        var page = new sub_detail({sub: _this.parent, page: _this, listNum:_this.listNum,isSalesforceUser: false, isAddFlag: true});
                         _this.dialog.getBody().append(page.$el);
                         page.$el.addClass('dialogWrap-' + dialogArrayLength);
                         _this.app.showLoading(false, page.$el.parent());
@@ -418,7 +461,12 @@ define(['text!contacts/html/multipleadd.html', 'app', "contacts/subscriber_field
                  ======================================================*/
                 opeCSV: function () {
                     this.closeDialog();
-                    this.app.mainContainer.csvUpload();
+                    if(this.listNum){
+                      this.app.mainContainer.csvUpload(this.listChecksum);  
+                    }else{
+                        this.app.mainContainer.csvUpload();
+                    }
+                    
                 },
                 /*====================================================
                  * 

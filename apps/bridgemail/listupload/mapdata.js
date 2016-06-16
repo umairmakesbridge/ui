@@ -225,6 +225,7 @@ function (template) {
                                            }
                                            else{
                                                app.showMessge("Your contacts in CSV file updated successfully.You can upload other CSV file as well.");
+                                               
                                                  if(typeof(mapview.options.params) !="undefined"){
                                                     app.showLoading(false,mapview.$el);
                                                     //that.$el.hide();
@@ -234,6 +235,7 @@ function (template) {
                                                       //  mapview.$el.find('#mapdata').show();
                                                         mapview.$el.parents(".ws-content").find("#drop-files").show();
                                                         mapview.$el.parents(".ws-content").find(".csvpng").show();
+                                                        
                                                     });
                                                 }else{
                                                   app.showLoading(false,curview.$el);
@@ -243,6 +245,10 @@ function (template) {
                                                   mapview.$el.parents(".ws-content").find("#drop-files").show();
                                                   mapview.$el.parents(".ws-content").find(".csvpng").show();
                                                   mapview.$el.parents(".ws-content").find("#progress").remove();
+                                                  if(that.listChecksum){
+                                                           var listView = mapview.$el.parents('body').find("[workspace_id='recipients']").data("viewObj");
+                                                          listView.listingView.loadLists();
+                                                        }
                                                   mapview.csv.fileuploaded = false;
                                                }
                                                
@@ -301,13 +307,13 @@ function (template) {
                                                         * ========*/    
                                                          if (curview.isSupressListFlag) {
                                                                     if (val[0].isSupressList === "true") {
-                                                                        list_html += "<option value='" + val[0]["listNumber.encode"] + "'>" + val[0].name + "</option>";
+                                                                        list_html += "<option value='" + val[0]["listNumber.encode"] + "' data-checksum='"+val[0]["listNumber.checksum"]+"'>" + val[0].name + "</option>";
                                                                         $i++; // count total supress list
                                                                     }
                                                                 }
                                                           if(!curview.isSupressListFlag){
                                                               if (val[0].isSupressList == "false" && val[0].isBounceSupressList == "false") {
-                                                                        list_html += "<option value='" + val[0]["listNumber.encode"] + "'>" + val[0].name + "</option>";
+                                                                        list_html += "<option value='" + val[0]["listNumber.encode"] + "' data-checksum='"+val[0]["listNumber.checksum"]+"'>" + val[0].name + "</option>";
                                                                     } else {
                                                                         $i++; // count total supress list
                                                                     }
@@ -329,6 +335,7 @@ function (template) {
                                                 }else{
                                                    if(total_count != 0){
                                                                 curview.$el.find("#existing_lists").html(list_html);
+                                                                curview.$el.find('#existing_lists option[data-checksum="'+curview.listChecksum+'"]').prop('selected',true).trigger("chosen:updated")
                                                             }else{
                                                               curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
                                                             }	 
@@ -347,7 +354,7 @@ function (template) {
 		   var curview = this;
 		   var app = this.app;
   
-                  
+                   this.listChecksum = this.options.listChecksum;
 		   var campview = this.options.camp;
                    if(typeof(this.options.params) != 'undefined' ){
                        this.rows = curview.options.params.rows

@@ -26,6 +26,7 @@ function (template,app) {
                 this.template = _.template(template);                
                 this.type = this.options.params.type;
                 this.active = 0;
+                this.listingView =null;
                 this.render();
             },
             render: function (search) {
@@ -53,8 +54,8 @@ function (template,app) {
                 this.app.showLoading('Loading Lists...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['listupload/recipients_list'],function(viewLists){
-                    var objViewLists = new viewLists({params:that.options.params});
-                   that.$el.find(".template-container").html(objViewLists.el);
+                    that.listingView = new viewLists({params:that.options.params});
+                   that.$el.find(".template-container").html(that.listingView.el);
                    
                    that.app.showLoading(false, that.$el.find(".template-container"));
                 });
@@ -77,8 +78,8 @@ function (template,app) {
                 this.app.showLoading('Loading Targets...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['target/recipients_targets'],function(viewTargets){
-                    var objViewTargets = new viewTargets();
-                   that.$el.find(".template-container").html(objViewTargets.el);
+                    that.listingView = new viewTargets();
+                   that.$el.find(".template-container").html(that.listingView.el);
                    that.app.showLoading(false, that.$el.find(".template-container"));
                 });
                 this.$el.find(".template-container").css('background','transparent');
@@ -101,8 +102,8 @@ function (template,app) {
                 this.app.showLoading('Loading Tags...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['tags/recipients_tags'],function(viewTags){
-                    var objViewTags = new viewTags();
-                   that.$el.find(".template-container").html(objViewTags.el);
+                    that.listingView = new viewTags();
+                   that.$el.find(".template-container").html(that.listingView.el);
                    that.app.showLoading(false, that.$el.find(".template-container"));
                 });
                 this.$el.find(".template-container").css('background','#EAF4F9');
