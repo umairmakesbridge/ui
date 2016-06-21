@@ -60,6 +60,10 @@ function (template,PageView,ViewsCollection) {
                         if(this.options.article){
                              _data['articleNum'] = this.options.article;
                         }
+                        if(this.options.fromDate && this.options.toDate){
+                            _data['fromDate'] = this.options.fromDate;
+                            _data['toDate'] = this.options.toDate ;
+                        }
                         _data['campNum'] = this.options.campNum;
                         this.$el.find('.pageviews-listing table tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:15px;padding-left:43%;'>No contacts founds!</div><div class='loading-contacts' style='margin-top:45px'></div></td></tr>");
                          this.options.app.showLoading("&nbsp;",this.$el.find('.pageviews-listing table').find('.loading-contacts'));

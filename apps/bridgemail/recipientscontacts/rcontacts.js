@@ -86,7 +86,16 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
                     }
                     
+                    
+                    
 
+                },
+                init:function(){
+                  if (this.options.type == "workflow") {
+                        this.active_ws = this.$el.parents(".ws-content");
+                        this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("<ul><li style='color:#fff'><span class='workflow-header'></span>&nbsp;"+this.options.params.wfName+" </li></ul>");
+                        this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> Option <b>"+ this.options.params.optionNumber +"</b>  </strong>")
+                    }
                 },
                 loadRContacts: function(offset) {
                     if (typeof this.options.sentAt != "undefined") {
@@ -123,11 +132,20 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         _data['formId'] = this.options.listNum;   
                         _data['type'] = "getSubmissions";                           
                     }else if (this.options.type == "workflow") {
-                        this.objRContacts.url = '/pms/trigger/viewWorkflowSubscribers.jsp?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        this.objRContacts.url = this.options.params.url+'?BMS_REQ_TK=' + this.options.app.get('bms_token');
                         _data['workflowId'] = this.options.listNum;   
                         _.each(this.options.params,function(val,key){
-                            _data[key]=val;
+                            if(key!="url"){
+                                _data[key]=val;
+                            }
                         },this);  
+                        if(!this.options.params.viewType){ //handling date form for web visits
+                            var fromDate = moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                            var toDate = moment($.trim(this.toDate), 'MM-DD-YYYY');
+                            this.fromDate = fromDate.format("MM-DD-YY");
+                            this.toDate = toDate.format("MM-DD-YY");
+                        }
+                        
                     } else {
                         _data['listNum'] = this.listNum;
                         _data['status'] = this.status;

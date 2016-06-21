@@ -7413,6 +7413,13 @@ position:relative;
    width: 24px;
 height: 16px;
 }
+.camp_header .workflow-header {
+    background:url('../img/workflow2.png') no-repeat scroll center center transparent;
+    display: inline-block;
+    font-size: 0px;
+    width: 24px;
+    height: 16px;
+}
 .percent_stats {
    float: left;
    margin: 0 0 0 10px;}

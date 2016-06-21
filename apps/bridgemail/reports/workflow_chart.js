@@ -480,31 +480,47 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                     var fromDate = this.fromDate;
                     var toDate = this.toDate;
                     var viewType = "";
-
+                    var ws_title_part = "";
+                    var responderURL = "/pms/trigger/viewWorkflowSubscribers.jsp";
+                    var params = {stepId:stepId,optionNumber:optionNumber,viewType:'',actionType:'E',toDate:toDate,fromDate:fromDate,isJson:'Y',wfName:this.model.get("name"),
+                                  stepNumber:this.chart2.title.textStr,campNum:campNum};
                     switch(series){
                         case 'Sent Count':
-                            viewType = 'S'
+                            viewType = 'S';
+                            ws_title_part = "Sent Subscribers";                            
                             break;
                         case 'Pending Count':
                             viewType = 'P'
+                            ws_title_part = "Pending Subscribers";
                             break;
                         case 'Opens Count':
-                            viewType = 'OP'
+                            viewType = 'OP';
+                            ws_title_part = "Opened Subscribers";
                             break;
                         case 'Clicks':
-                            viewType = 'CK'
+                            viewType = 'CK';
+                            ws_title_part = "Clicked Subscribers";
                             break;
                         case 'Web Visits':
-                            viewType = 'WV'
+                            viewType = 'WV';
+                            ws_title_part = "Email Responders Web Activity";
+                            responderURL = "/pms/io/campaign/getResponders/";
+                            params = {responderType:'WV',type:'campaignResponders',campNum:campNum,wfName:this.model.get("name"),
+                                  stepNumber:this.chart2.title.textStr,stepId:stepId,optionNumber:optionNumber,toDate:toDate,fromDate:fromDate};
                             break;
                         case 'Converted':
-                            viewType = 'CONV'
+                            viewType = 'CONV';
+                            ws_title_part = "Converted Subscribers";
                             break;
                         default:
                     }
-                    var checkSum =  this.model.get("workflowId.checksum")+viewType;
-                    var ws_title = series +" Population" 
-                    var params = {stepId:stepId,optionNumber:optionNumber,viewType:viewType,actionType:'E',toDate:toDate,fromDate:fromDate,isJson:'Y'};
+                     params['url'] = responderURL;
+                    if(viewType!=="WV"){
+                        params['viewType'] = viewType;
+                    }
+                    
+                    var checkSum =  this.model.get("workflowId.checksum")+viewType+optionNumber;
+                    var ws_title =  this.chart2.title.textStr + " - <i><u>"+ ws_title_part+"</u></i>";                    
                     this.app.mainContainer.openPopulation({objId: workflowId, ws_title: ws_title, objCheckSum: checkSum,type:"workflow",params:params});
                     /*if (viewType == 'WV'){
                         window.open('/pms/report/ViewWebActivityForCampaign.jsp?BMS_REQ_TK='+token+'&campNum='+campNum+"&fromDate="+fromDate+"&toDate="+toDate

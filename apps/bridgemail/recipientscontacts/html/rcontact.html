@@ -38,36 +38,70 @@
 </td>
 
 <% } else if(this.options.type == "workflow") {  %>
-    <% if(this.model.get('subscriptionData')[0].actionDate) { %>
-        <td width="132px">         
-            <div>
-                <div class="time show">
-                    <strong><span><em>Action Taken on</em><%=this.getFullDateAction(this.model.get('subscriptionData')[0].actionDate) %></span></strong> 
+
+    <% if(this.model.get('subscriptionData')) { %>
+        <% if(this.model.get('subscriptionData')[0].actionDate) { %>
+            <td width="132px">         
+                <div>
+                    <div class="time show">
+                        <strong><span><em>Action Taken on</em><%=this.getFullDateAction(this.model.get('subscriptionData')[0].actionDate,'YYYY-MM-DD H:m') %></span></strong> 
+                    </div>
                 </div>
-            </div>
-        </td>    
+            </td>    
+        <% } %>
+
+        <% if(this.model.get('subscriptionData')[0].emailLink) { %>
+            <td width="90px">         
+                <div>
+                    <div class="colico link">
+                        <strong><span><em>Link</em><a  class="showtooltip" title="<%=this.model.get('subscriptionData')[0].emailLink %>" href="<%=this.model.get('subscriptionData')[0].emailLink%>" target='_blank'><%=this.truncateURL(this.model.get('subscriptionData')[0].emailLink)%></a></span></strong>
+                    </div>
+                </div>
+            </td>    
+        <% } %>        
+
+        <% if(this.model.get('subscriptionData')[0].pageViews) { %>
+            <td width="90px">         
+                <div>
+                    <div class="colico pgview">
+                        <strong><span><em>Page Views</em>
+                                <% if(this.model.get('subscriptionData')[0].pageViews!="0") { %> <a class="page-views showtooltip" title="Click to view page views" ><%=this.app.addCommas(this.model.get('subscriptionData')[0].pageViews)%></a> <% } else { print(this.app.addCommas(this.model.get('subscriptionData')[0].pageViews))} %>
+                            </span></strong>
+                    </div>
+                </div>
+            </td>    
+        <% } %>
+     <% } else if(this.model.get('activityData')) { %>
+            <% if(this.model.get('activityData')[0].firstOpenDate) { %>
+               <td width="132px">         
+                   <div>
+                       <div class="time show">
+                           <strong><span><em>Action Taken on</em><%=this.getFullDateAction(this.model.get('activityData')[0].firstOpenDate,'MM/DD/YYYY hh:mm A') %></span></strong> 
+                       </div>
+                   </div>
+               </td>    
+           <% } else { %>
+                 <td width="132px">         
+                   <div>
+                       <div class="time show">
+                           <strong><span><em>Action Taken on</em>&nbsp;</span></strong> 
+                       </div>
+                   </div>
+               </td>    
+           <% } %>
+           <% if(this.model.get('activityData')[0].pageViewCount) { %>
+               <td width="90px">         
+                   <div>
+                       <div class="colico pgview">
+                           <strong><span><em>Page Views</em>
+                                   
+                                <% if(this.model.get('activityData')[0].pageViewCount!="0") { %> <a class="page-views showtooltip" title="Click to view page views" ><%=this.app.addCommas(this.model.get('activityData')[0].pageViewCount)%></a> <% } else { print(this.app.addCommas(this.model.get('activityData')[0].pageViewCount))} %>
+                               </span></strong>
+                       </div>
+                   </div>
+               </td>    
+           <% } %>
     <% } %>
-    
-    <% if(this.model.get('subscriptionData')[0].emailLink) { %>
-        <td width="90px">         
-            <div>
-                <div class="colico link">
-                    <strong><span><em>Link</em><a  class="showtooltip" title="<%=this.model.get('subscriptionData')[0].emailLink %>" href="<%=this.model.get('subscriptionData')[0].emailLink%>" target='_blank'><%=this.truncateURL(this.model.get('subscriptionData')[0].emailLink)%></a></span></strong>
-                </div>
-            </div>
-        </td>    
-    <% } %>        
-    
-    <% if(this.model.get('subscriptionData')[0].pageViews) { %>
-        <td width="90px">         
-            <div>
-                <div class="colico pgview">
-                    <strong><span><em>Page Views</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViews)%></span></strong>
-                </div>
-            </div>
-        </td>    
-    <% } %>
-    
     
 
 <% } else {  %>

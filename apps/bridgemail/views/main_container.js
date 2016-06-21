@@ -471,7 +471,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         workspace_id: 'population_' + checksum,
                         url: 'recipientscontacts/rcontacts',
                         addAction: false,
-                        noTags: true,
+                        noTags: type=="workflow"?false:true,
                         params: {app:app,listNum:id,type:type,fromDate:opt.fromDate,params:params}
 
                     });
