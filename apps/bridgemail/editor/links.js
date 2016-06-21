@@ -329,6 +329,16 @@ function (template) {
                 var selected_color = 'color:inherit';
                 //var selected_text_decoration = this.$("input.checkinput:checked").length?'text-decoration:underline;':'';
                 var selected_text_decoration = '';
+                //console.log(selected_node);
+                //console.log($(this.tiny_editor_selection.getStart()).children().length);
+                if(($(this.tiny_editor_selection.getStart()).children().length > 0) && (this.tiny_editor_selection.getStart().nodeName.toLowerCase() !== "span" && this.tiny_editor_selection.getStart().nodeName.toLowerCase() !=="a")){
+                    
+                    //if($(this.tiny_editor_selection.getStart()).find('a').text()==this.$("."+this.activeTab+"Div textarea.linkTextArea").val().trim()){
+                       if($(this.tiny_editor_selection.getStart()).find('a')) {
+                           selected_node = $(this.tiny_editor_selection.getStart()).find('a')[0];
+                       }
+                    //}
+                }
                 if(selected_node){
                     if(selected_node.style && selected_node.style.color){
                         selected_color = "color:"+selected_node.style.color+";";
@@ -343,6 +353,7 @@ function (template) {
                     }
                 }
                  if(!postBackupLink){return false}
+                 
                  myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
@@ -368,12 +379,20 @@ function (template) {
                         selected_node.innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
                     }
                     if(this.$("input.checkinput:checked").length){
-                        //selected_node.style.textDecoration = "underline";
-                        $(selected_node).wrap('<span class="underline"></span>');
+                      if(selected_node.parentNode.nodeName.toLowerCase()=="span"){
+                            $(selected_node.parentNode).addClass('underline');
+                        }else{
+                            selected_node.style.textDecoration = "underline";
+                        }
+                        
                     }
                     else{
-                        //selected_node.style.textDecoration = "none";
-                        $(selected_node).unwrap();
+                      
+                          $(selected_node.parentNode).removeClass('underline');
+                          selected_node.style.textDecoration = "none";  
+                       
+                        
+                        //$(selected_node).unwrap();
                     }
                 }
                 else { 
