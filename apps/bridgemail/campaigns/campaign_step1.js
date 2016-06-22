@@ -426,7 +426,7 @@ function (template) {
                                         replyTo :this.$("#campaign_reply_to").val(),
                                         defaultReplyToEmail :defaultReplyToEmail,                                        
                                         tellAFriend :this.$("#campaign_tellAFriend")[0].checked?'Y':'N',
-                                        subInfoUpdate :this.$("#campaign_profileUpdate")[0].checked?'Y':'N',
+                                        subInfoUpdate :'N',
                                         unsubscribe :this.$("#campaign_unSubscribeType").val(),
                                         provideWebVersionLink :this.$("#campaign_isWebVersion")[0].checked?'Y':'N',
                                         isFooterText : this.$("#campaign_isFooterText")[0].checked?'Y':'N',
