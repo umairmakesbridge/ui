@@ -99,11 +99,13 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                                 if(that.notificationText === 'All'){
                                     $(that.el).find('h4').find('span').html('new messages');
                                 }else{
+                                    
                                      $(that.el).find('h4').find('span').html(that.notificationText+' messages');
                                 }
                                 $(that.el).find('h4').find('.badge').html(objNotifications.unreadCount);
                                 $('.messagesbtn sup').show().html(objNotifications.unreadCount);
                             }else{
+                                that.$el.find('.markread').addClass('disabled-btn');
                                 $(that.el).find('h4').find('span').html(that.notificationText+' messages');
                                 $(that.el).find('h4').find('.badge').html(objNotifications.total);
                                 $('.messagesbtn sup').hide();
@@ -222,20 +224,23 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                     $("#div_pageviews").hide();
                 },
                 markedRead:function(){
-                    var URL = "/pms/io/user/notification/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=markRead&markAll=read";
-                    var that = this;
-                    this.app.showLoading("Marking all messages as read",this.$el.find(".notification-container"));
-                    jQuery.getJSON(URL,  function(tsv, state, xhr){
-                        var data = jQuery.parseJSON(xhr.responseText);
-                        if(app.checkError(data)){return false;}
-                        console.log(data);
-                        that.app.showLoading(false,that.$el.find(".notification-container"));
-                        if(data[0]=="success"){
-                            that.$el.find('.notification-container div.alertmsg').removeClass("new");
-                            that.$el.parents('body').find('#dashnav .messagesbtn sup').html('0').hide();
-                            that.$el.find('.mr-mur-notify').fadeOut('slow');
-                        }
-                    });
+                    if(!this.$el.find('.markread').hasClass('disabled-btn')){
+                        var URL = "/pms/io/user/notification/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=markRead&markAll=read";
+                        var that = this;
+                        this.app.showLoading("Marking all messages as read",this.$el.find(".notification-container"));
+                        jQuery.getJSON(URL,  function(tsv, state, xhr){
+                            var data = jQuery.parseJSON(xhr.responseText);
+                            if(app.checkError(data)){return false;}
+                            console.log(data);
+                            that.app.showLoading(false,that.$el.find(".notification-container"));
+                            if(data[0]=="success"){
+                                that.$el.find('.notification-container div.alertmsg').removeClass("new");
+                                that.$el.parents('body').find('#dashnav .messagesbtn sup').html('0').hide();
+                                that.$el.find('.mr-mur-notify').fadeOut('slow');
+                            }
+                        });
+                    }
+                    
                 },
                 markedUnRead:function(){
                     alert('Hit Marked Unread');
