@@ -221,11 +221,9 @@ function (template,calendario) {
                    this.$el.parents('body').find("#schedule-panel-1 .col1").delay(400).show("slide", { direction: "right" }, 1000);
                 },
                 scheduleCampNow: function(event){
-                  console.log(event.currentTarget);
                   if(!$(event.currentTarget).hasClass('disabled-btn')){
                       this.sendNow = true;  
-                      this.getScheduleDate();
-                      
+                      this.getScheduleDate();   
                   }
                   
                 },
@@ -318,7 +316,8 @@ function (template,calendario) {
                         this.$el.parents('body').find('.reschedule-dialog-wrap').find('.closebtn,.btn-cancel').click(_.bind(function(){
                             this.$el.parents('body').find('.sch-overlay').remove();
                         },this));
-                        this.$el.parents('body').find('.reschedule-dialog-wrap').find('.btn-run').click(_.bind(function(){
+                        this.$el.parents('body').find('.reschedule-dialog-wrap').find('.btn-run').click(_.bind(function(event){
+                               
                                 this.scheduledCampaign('S',"Scheduling Campaign...");   
                                 this.$el.parents('body').find('.sch-overlay').remove();
                         },this));
@@ -751,16 +750,10 @@ function (template,calendario) {
                   $.post(url)
                     .done(_.bind(function(data) {                              
                        var data = jQuery.parseJSON(data);
-                       //var serverDated = moment(this.app.decodeHTML(data[0]),"MMMM DD, YYYY HH:mm");
+                       
                         this.snServerDate = this.app.decodeHTML(data[0]);
                         this.scheduleCamp();
-                        //console.log(serverDated)
-                        /*this.createCalender(new Date(serverDated.format("MMMM DD, YYYY HH:mm")));  
-                        this.currentState.datetime['day'] = this.currentState.cal.today.getDate();
-                        this.currentState.datetime['month'] = this.currentState.cal.today.getMonth()+1 
-                        this.currentState.datetime['year'] = this.currentState.cal.today.getFullYear();
-                        var hour = this.currentState.cal.today.getHours();
-                        var min = this.currentState.cal.today.getMinutes();*/
+                        
                    },this));
               },
                scheduledCampaign:function(flag,message){
@@ -801,8 +794,15 @@ function (template,calendario) {
                                 camp_obj.currentState.camp_status = 'P';
                                 //camp_obj.scheduleStateCamp();
                                 //camp_obj.setScheduleArea();
-                                camp_obj.showScheduleBox();
-                                camp_obj.app.showMessge("Campaign Scheduled Successfully!");
+                                if(camp_obj.sendNow){
+                                    camp_obj.$el.find('.sch-btn-sm').addClass('disabled-btn');
+                                    //camp_obj.$el.find('.draft-sn-campaign').show()
+                                    camp_obj.app.showMessge("Campaign Scheduled and Send Successfully!");
+                                }else{
+                                    camp_obj.showScheduleBox();
+                                    camp_obj.app.showMessge("Campaign Scheduled Successfully!");
+                                }
+                                
                            }
                            else{
                                 //camp_obj.$(".schedule-camp").show(); 
