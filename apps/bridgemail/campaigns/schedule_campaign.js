@@ -221,7 +221,7 @@ function (template,calendario) {
                    this.$el.parents('body').find("#schedule-panel-1 .col1").delay(400).show("slide", { direction: "right" }, 1000);
                 },
                 scheduleCampNow: function(event){
-                  if(!$(event.currentTarget).hasClass('disabled-btn')){
+                  if(!$(event.currentTarget).hasClass('disabled-btn') && !$(event.currentTarget).hasClass('send-confirm')){
                       this.sendNow = true;  
                       this.getScheduleDate();   
                   }
@@ -795,7 +795,7 @@ function (template,calendario) {
                                 //camp_obj.scheduleStateCamp();
                                 //camp_obj.setScheduleArea();
                                 if(camp_obj.sendNow){
-                                    camp_obj.$el.find('.sch-btn-sm').addClass('disabled-btn');
+                                    camp_obj.$el.find('.sch-btn-sm').addClass('disabled-btn send-confirm');
                                     //camp_obj.$el.find('.draft-sn-campaign').show()
                                     camp_obj.app.showMessge("Campaign Scheduled and Send Successfully!");
                                 }else{

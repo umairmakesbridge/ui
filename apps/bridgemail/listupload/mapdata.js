@@ -224,7 +224,13 @@ function (template) {
                                                  app.showLoading(false,mapview.$el);
                                            }
                                            else{
-                                               app.showMessge("Your contacts in CSV file updated successfully.You can upload other CSV file as well.");
+                                               // Add request from Lists
+                                               if(that.listChecksum){
+                                                   app.showMessge("Your contacts in CSV file updated successfully.You can upload other CSV file as well.<br/>Import process may take a while.");
+                                               }else{
+                                                   app.showMessge("Your contacts in CSV file updated successfully.You can upload other CSV file as well.");
+                                               }
+                                               
                                                
                                                  if(typeof(mapview.options.params) !="undefined"){
                                                     app.showLoading(false,mapview.$el);

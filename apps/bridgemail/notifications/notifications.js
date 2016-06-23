@@ -236,7 +236,7 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                             if(data[0]=="success"){
                                 that.$el.find('.notification-container div.alertmsg').removeClass("new");
                                 that.$el.parents('body').find('#dashnav .messagesbtn sup').html('0').hide();
-                                that.$el.find('.mr-mur-notify').fadeOut('slow');
+                                that.$el.find('.markread').addClass('disabled-btn');
                             }
                         });
                     }

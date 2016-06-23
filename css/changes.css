@@ -4527,7 +4527,7 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 .filter-row .filter-cont .errortext em{
     line-height: 14px;
 }
-.disabled-btn {
+.disabled-btn,.send-confirm {
 	opacity:0.5;
 	cursor: not-allowed !important;
 }
