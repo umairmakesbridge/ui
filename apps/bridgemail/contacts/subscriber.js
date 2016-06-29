@@ -1,5 +1,5 @@
-define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline"],
-        function(template, timelinePage) {
+define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","contacts/listviewonly"],
+        function(template, timelinePage,listView) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber detail page view depends on search control, chosen , date library moment and tags control
@@ -531,15 +531,14 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline"],
                     }
                     this.dialog = this.app.showDialog(btn_prp);
                     this.app.showLoading("Loading...", this.dialog.getBody());
-                     require(["contacts/listviewonly"], _.bind(function (sub_detail) {
-                            var page = new sub_detail({sub: this, model: this.modelTemplate.model,dialog:this.dialog});
+                     
+                            var page = new listView({sub: this, model: this.modelTemplate.model,dialog:this.dialog});
                             this.dialog.getBody().html(page.$el);
                             page.dialogStyles['height'] = dialog_height;
                             page.dialogStyles['width'] = dialog_width;
                             page.dialogStyles['top'] = '10px';
                             page.init();
                             this.dialog.saveCallBack(_.bind(page.addSubscriber, page, this.dialog));
-                        },this));
                        
                     
                         //if (this.subsType === 'multiEmails') {
