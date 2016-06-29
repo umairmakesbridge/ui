@@ -49,7 +49,7 @@ define([ 'text!contacts/html/listviewonly.html','app'],
                     
                 },
                 getLists: function () {
-                   
+                   this.app.showLoading("Loading Lists...", this.dialog.getBody());
                     this.app.getData({
                         "URL": "/pms/io/list/getListData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=all",
                         "key": "lists",
