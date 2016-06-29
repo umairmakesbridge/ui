@@ -22,7 +22,8 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline"],
                     'click .oto-sendmail': 'sendEmail',
                     'click .manage-lists': 'manageLists',
                     'click .suppress-sub' : 'suppressDialog',
-                    'click .coursecorrect-sub':'courseCorrectDialog'
+                    'click .coursecorrect-sub':'courseCorrectDialog',
+                    'click .add-to-lists':'add2list'
                 },
                 /**
                  * Initialize view - backbone
@@ -503,6 +504,50 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline"],
                 firstLetterContact : function(){
                     //console.log('id : '+ this.sub_id + ' name : '+ this.sub_name);
                     this.app.mainContainer.SubscriberName(this.sub_id,this.sub_name);
+                },
+                //////////////////////////
+                /// Add 2 Lists
+                /////////////////////////
+                add2list : function(){
+                  //this.subsType = substype;
+                    var _this = this;
+                    var dialog_width = 1000;
+                    this.editable = true;
+
+                    var dialog_height = $(document.documentElement).height() - 192;
+                    var btn_prp = {title: 'Add Contact into List',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'account',
+                        bodyCss: {"min-height": dialog_height + "px"}
+
+                    }
+
+                    if (this.editable) {
+                        btn_prp['buttons'] = {saveBtn: {text: 'Add', btnicon: 'plus'}};
+                        // if (this.sub_fields["conLeadId"]) {
+                        //     btn_prp['newButtons'] = [{'btn_name': 'Update at Salesforce'}];
+                        // }
+                    }
+                    this.dialog = this.app.showDialog(btn_prp);
+                    this.app.showLoading("Loading...", this.dialog.getBody());
+                     require(["contacts/listviewonly"], _.bind(function (sub_detail) {
+                            var page = new sub_detail({sub: this, model: this.modelTemplate.model,dialog:this.dialog});
+                            this.dialog.getBody().html(page.$el);
+                            page.dialogStyles['height'] = dialog_height;
+                            page.dialogStyles['width'] = dialog_width;
+                            page.dialogStyles['top'] = '10px';
+                            page.init();
+                            this.dialog.saveCallBack(_.bind(page.addSubscriber, page, this.dialog));
+                        },this));
+                       
+                    
+                        //if (this.subsType === 'multiEmails') {
+                        //    this.dialog.getBody().css('overflow', 'hidden');
+                        //}
+                        //this.subDetail = new sub_detail({sub: this.parent, page: this, isSalesforceUser: false, isAddFlag: true, emailsFlag: true});
+                    
+                    
                 }
 
             });

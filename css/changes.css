@@ -9553,3 +9553,16 @@ Notifications
 .icon.markread {
     background: rgba(0, 0, 0, 0) url("../img/mark-read.png") no-repeat scroll center center;
 }
+
+/*===========================================
+Contacts Card
+===========================================*/
+.action-four a{
+    width:25%;
+}
+a.add-list{
+    background: #7b929f url("../img/act-list-add-w.png") no-repeat scroll center center;
+}
+a.add-to-lists > i.add-list {
+    background: #7b929f url("../img/act-list-add-w_24x24.png") no-repeat scroll center center;
+}
