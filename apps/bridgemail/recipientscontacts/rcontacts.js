@@ -129,7 +129,10 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         _data['status'] = this.options.status;                        
                     } else if (this.options.type == "webform") {
                         this.objRContacts.url = '/pms/io/form/getSignUpFormData/?BMS_REQ_TK=' + this.options.app.get('bms_token');
-                        _data['formId'] = this.options.listNum;   
+                        _data['formId'] = this.options.listNum;
+                        if(this.options.params && this.options.params.pageId){
+                            _data['pageId'] = this.options.params.pageId;
+                        }
                         _data['type'] = "getSubmissions";                           
                     }else if (this.options.type == "workflow") {
                         this.objRContacts.url = this.options.params.url+'?BMS_REQ_TK=' + this.options.app.get('bms_token');

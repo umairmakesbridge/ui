@@ -643,7 +643,7 @@
                         var dialog_title = "Submissions of '"+model.get("name")+"' on "+ moment(populationDate, 'MM-DD-YY').format("DD MMM YYYY");
                         var formId = model.get('formId.encode');
                         var formCheckSum = model.get('formId.checksum');
-                        this.app.mainContainer.openPopulation({objId:formId,ws_title:dialog_title,objCheckSum:formCheckSum+populationDate,fromDate:populationDate,type:"webform"});                        
+                        this.app.mainContainer.openPopulation({objId:formId,ws_title:dialog_title,objCheckSum:formCheckSum+populationDate,fromDate:populationDate,type:"webform",params:{pageId:model.get('pageId.encode')}});                        
                     }
                 },
                 //////********************* Campaigns *****************************************//////

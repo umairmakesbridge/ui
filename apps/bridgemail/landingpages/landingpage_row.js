@@ -358,7 +358,7 @@ define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylanding
                     var dialog_title = "Submissions of '"+this.model.get("name")+"'";
                     var formId = this.model.get('formId.encode');
                     var formCheckSum = this.model.get('formId.checksum');
-                    this.app.mainContainer.openPopulation({objId: formId, ws_title: dialog_title, objCheckSum: formCheckSum,type:"webform"});                    
+                    this.app.mainContainer.openPopulation({objId: formId, ws_title: dialog_title, objCheckSum: formCheckSum,type:"webform",params:{pageId:this.model.get('pageId.encode')}});                    
                }
 
             });
