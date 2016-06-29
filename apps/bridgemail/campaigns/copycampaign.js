@@ -50,12 +50,11 @@ function (template) {
                         //var copydialog = this.options.copycampdialog;
                         var campview = this.options.camp;
                         var app = this.options.app;
-                        var el = curview.$el;
-                        var appMsgs = app.messages[0];
+                        var el = curview.$el;                        
                         if(el.find('#camp_name').val() == ''){						
                                 app.showError({
                                         control:el.find('.campname-container'),
-                                        message:appMsgs.CAMPS_campname_empty_error
+                                        message:"Campaign name cannot be empty"
                                 });
                         }
                         else{
@@ -78,7 +77,7 @@ function (template) {
                                                         curview.options.copycampdialog.hide();
                                                         campview.getcampaigns();                                                         
                                                 }				
-                                                app.mainContainer.openCampaign(res[1],res[2]);
+                                                app.mainContainer.openCampaign({campid:res[1],camp_wsid:res[2]});
                                         }
                                 });
                         }

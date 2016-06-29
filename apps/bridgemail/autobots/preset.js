@@ -5,7 +5,7 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/preset.html', 'bms-tags'],
+define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
         function (template) {
             'use strict';
             return Backbone.View.extend({
@@ -979,7 +979,7 @@ define(['text!autobots/html/preset.html', 'bms-tags'],
                             if (filter.find(".fields").val() == "") {
                                 this.options.app.showError({
                                     control: filter.find(".field-container"),
-                                    message: this.options.app.messages[0].TRG_basic_no_field
+                                    message: "Select a field"
                                 })
                                 isError = true
                             }
@@ -990,7 +990,7 @@ define(['text!autobots/html/preset.html', 'bms-tags'],
                             if (filter.find(".value-container").css("display") == "block" && filter.find(".matchValue").val() == "") {
                                 this.options.app.showError({
                                     control: filter.find(".value-container"),
-                                    message: this.options.app.messages[0].TRG_basic_no_matchvalue
+                                    message: "Please provide match field value"
                                 })
                                 isError = true
                             }
@@ -1003,7 +1003,7 @@ define(['text!autobots/html/preset.html', 'bms-tags'],
                             if (filter.find(".scoreValue").val() == "") {
                                 this.options.app.showError({
                                     control: filter.find(".scoreValue-container"),
-                                    message: this.options.app.messages[0].TRG_score_novalue
+                                    message: "Enter a score value"
                                 })
                                 isError = true
                             }
@@ -1016,7 +1016,7 @@ define(['text!autobots/html/preset.html', 'bms-tags'],
                             if (filter.find(".forms-box").val() == "") {
                                 this.options.app.showError({
                                     control: filter.find(".forms-box-container"),
-                                    message: this.options.app.messages[0].TRG_form_noform
+                                    message: "Choose a form"
                                 })
                                 isError = true
                             }
@@ -1269,18 +1269,21 @@ define(['text!autobots/html/preset.html', 'bms-tags'],
                             var select_html = '<option value=""></option>'
                             if (_json.count !== "0") {
                                 var i = 0;
-                                $.each(_json.forms[0], function (index, val) {
-                                    i = i + 1;
-                                    var _value = val[0]["formId.encode"]
-                                    select_form = (that.forms['formNumber.checksum'] == val[0]["formId.checksum"]) ? "selected" : ""
-                                    if ((!that.forms['formNumber.checksum'] || typeof that.forms['formNumber.checksum'] == "undefined") && i == 1) {
-                                        select_form = "selected";
-                                    }
-                                    select_html += '<option value="' + _value + '" ' + select_form + ' webform_checksum="' + val[0]["formId.checksum"] + '">' + val[0].name + '</option>'
-                                    select_form = "";
-                                    //self.webforms.push({"id":_value,"name":val[0].name,checksum:val[0]["formId.checksum"]})
+                                if(_json.forms){
+                                        $.each(_json.forms[0], function (index, val) {
+                                                i = i + 1;
+                                                var _value = val[0]["formId.encode"]
+                                                select_form = (that.forms['formNumber.checksum'] == val[0]["formId.checksum"]) ? "selected" : ""
+                                                if ((!that.forms['formNumber.checksum'] || typeof that.forms['formNumber.checksum'] == "undefined") && i == 1) {
+                                                    select_form = "selected";
+                                                }
+                                                select_html += '<option value="' + _value + '" ' + select_form + ' webform_checksum="' + val[0]["formId.checksum"] + '">' + val[0].name + '</option>'
+                                                select_form = "";
+                                                //self.webforms.push({"id":_value,"name":val[0].name,checksum:val[0]["formId.checksum"]})
 
-                                })
+                                            })
+                                }
+                                
 
                             }
                             filter.find("#ddlformsubmission").html(select_html).prop("disabled", false).trigger("chosen:updated")

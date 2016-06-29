@@ -26,7 +26,8 @@ define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylanding
                     'click .draf-badge' : 'draftBadgeClick',
                     "click .row-move":"addRowToCol2",
                     "click .row-remove":"removeRowToCol2",
-                    "click .check-box":'checkUncheck'
+                    "click .check-box":'checkUncheck',
+                    'click .submissionview':'showformSubmits'
                 },
                 /**
                  * Initialize view - backbone
@@ -39,6 +40,7 @@ define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylanding
                     this.showUseButton = this.options.showUse;
                     this.showRemoveButton = this.options.showRemove;
                     this.showCheckbox = this.options.showCheckbox;
+                    this.showSummaryChart = this.options.showSummaryChart;
                     this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.render();
                     //this.model.on('change',this.renderRow,this);
@@ -51,10 +53,11 @@ define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylanding
                     this.$el.html(this.template({
                         model: this.model
                     }));
-                    if(this.showUseButton){
+                    if(this.showUseButton || this.showSummaryChart){
                         this.$el.attr("data-checksum",this.model.get("pageId.checksum"))
                     }
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    
                     this.initControls();
 
                 },
@@ -350,7 +353,13 @@ define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylanding
                     if(this.sub.createPageChart){
                         this.sub.createPageChart();
                     }
-                }
+                },
+                showformSubmits:function(ev){                    
+                    var dialog_title = "Submissions of '"+this.model.get("name")+"'";
+                    var formId = this.model.get('formId.encode');
+                    var formCheckSum = this.model.get('formId.checksum');
+                    this.app.mainContainer.openPopulation({objId: formId, ws_title: dialog_title, objCheckSum: formCheckSum,type:"webform",params:{pageId:this.model.get('pageId.encode')}});                    
+               }
 
             });
         });

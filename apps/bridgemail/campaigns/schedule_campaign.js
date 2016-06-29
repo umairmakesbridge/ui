@@ -16,16 +16,9 @@ function (template,calendario) {
             events: {
                  'click .scheduled-campaign': 'scheduleCamp',
                  'click .draft-campaign':'setDraftCampaign',
+                 'click .sch-btn-later':'showCalendar',
+                 'click .sch-btn-now':'scheduleCampNow',
                  'click .closebtn':'closeDialog',
-//               "click .preview-camp":'previewCampaign',
-//               'click  a.campname': 'campaignStateOpen',
-//               "click .schedule-camp, .reschedule-camp":'schOpenCampaign',
-//               'click .delete-camp':'deleteCampaginDialoge',
-//               'click .taglink':'tagClick',
-//               'click .report':'reportShow',
-//               'click .draft-camp':'draftBtnClick',
-//               'click .cflag':'classFlagClick'
-               /*'click .tag':'tagSearch'*/
             },
             /**
              * Initialize view - backbone
@@ -40,6 +33,9 @@ function (template,calendario) {
                     this.rescheduled = this.options.rescheduled
                     this.hidecalender = this.options.hidecalender
                     this.scheduleFlag = this.options.scheduleFlag;
+                    this.recipientDetial = "";
+                    this.sendNow = false;
+                    this.snServerDate = "";
                     this.tagTxt = '';
                     this.render();
                     //this.model.on('change',this.renderRow,this);
@@ -62,8 +58,27 @@ function (template,calendario) {
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
-                this.loadCampgin();
                 this.app.showLoading("Loading Calender...",this.$(".schedule-panel")); 
+                this.loadCampgin();
+                
+                if(this.scheduleFlag !== 'reschedule' && this.scheduleFlag !== 'schedule'){
+                    this.$('input.radiopanel').iCheck({
+                        radioClass: 'radiopanelinput',
+                        insert: '<div class="icheck_radio-icon"></div>'
+                    });
+                    this.$('input.radiopanel').on('ifChecked', _.bind(function(event){
+                        if($(event.target).val()=="SL"){
+                            this.$el.find('.sch-btn-now').addClass('disabled-btn');
+                             this.sendNow = false; 
+                            this.$('.disabled-sch-wrap').hide();
+                        }else{
+                             this.$el.find('.sch-btn-now').removeClass('disabled-btn');
+                             this.sendNow = true; 
+                            this.$('.disabled-sch-wrap').show();
+                        }
+                      },this));
+
+                }
 
             },
            loadCampgin:function(){
@@ -196,10 +211,551 @@ function (template,calendario) {
                             cal.gotoPreviousMonth( updateMonthYear );
                     } );
                 },
+                showCalendar:function(){
+                    this.$el.find('.col2').removeClass('adjwidth-col2');
+                    this.$el.parents('body').find('.reschedule-dialog-wrap').css({'width':'560px','margin-left':'-280px'});
+                   
+                   this.sendNow = false; 
+                   this.$el.find('.greenbtn-wrap-outer').hide();
+                    this.$el.find('.greenbtn-wrap').fadeIn();
+                   this.$el.parents('body').find("#schedule-panel-1 .col1").delay(400).show("slide", { direction: "right" }, 1000);
+                },
+                scheduleCampNow: function(event){
+                  if(!$(event.currentTarget).hasClass('disabled-btn') && !$(event.currentTarget).hasClass('send-confirm')){
+                      this.sendNow = true;  
+                      this.getScheduleDate();   
+                  }
+                  
+                },
                scheduleCamp:function(){
+                   
+                   this.app.showLoading("Confirmation Dialog...",this.$(".schedule-panel")); 
                    this.draftstate = false; 
-                   this.scheduledCampaign('S',"Scheduling Campaign...");  
+                   var URL = '';
+                   
+                    if(this.parent.model){ // Call From campaign listings
+                        if(this.parent.model.get('recipientType')=="Salesforce"){
+                           URL = "/pms/io/salesforce/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
+                       }else if(this.parent.model.get('recipientType')=="Netsuite"){
+                           URL = "/pms/io/netsuite/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
+                       }else if(this.parent.model.get('recipientType')=="Highrise"){
+                           URL = "/pms/io/highrise/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
+                       }else if(this.parent.model.get('recipientType')=="Google"){
+                           URL = "/pms/io/google/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
+                       }
+                       else {
+                           URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=recipientType";
+                       }
+                       this.getReciepientsEncodes(URL);
+                       
+                   }else{ // Call with in campagin
+                        var helpingText = '';
+                        
+                        this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap schedule-confirm-dialog-wrap modal-body"></div></div>');
+                        if(this.sendNow){
+                                this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px', 'margin-top': '-223px', 'max-height': '455px','height':'190px','width':'560px'});
+
+                        }else{
+                                this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px', 'margin-top': '-223px', 'max-height': '455px','height':'230px','width':'560px'}); 
+                        }
+                   
+                        var recipients = this.parent.$el.find('.recipients-inner .recipient-details').html();
+                        var frecipients='';
+                        var contactCount = 0;
+                        if(this.parent.states.step3.recipientType=="List"){
+                            
+                            $.each(this.parent.RecListsPage.listsModelArray,_.bind(function(key,val){
+                                contactCount = contactCount + parseInt(val.get("subscriberCount"));
+                            },this));
+                           
+                        }else if(this.parent.states.step3.recipientType=="Target"){
+                            $.each(this.parent.RecTargetPage.targetsModelArray,_.bind(function(key,val){
+                                contactCount = contactCount + parseInt(val.get("populationCount"));
+                            },this));
+                        }else if(this.parent.states.step3.recipientType=="Tags"){
+                            $.each($(this.parent.states.step3.tags.el).find('#tagsrecpslist li'),function(key,val){
+                                contactCount = contactCount + parseInt($(val).find('.badge').text());
+                            });
+                        }else if(this.parent.states.step3.recipientType=="Google"){
+                            var type = this.parent.$el.find('#google_import_container .radiopanelinput.checked input').val();
+                            if(type=="sheet"){
+                               recipients = this.parent.$el.find('#ddlspreadsheet_chosen .chosen-single span').text();
+                               helpingText = 'Spreadsheet';
+                            }else{
+                                recipients = 'All Contacts';
+                            }
+                            contactCount = "Selected";
+                        }
+                        else if(this.parent.states.step3.recipientType=="Salesforce" || this.parent.states.step3.recipientType=="Highrise" || this.parent.states.step3.recipientType=="Netsuite" ){
+                            if(this.parent.states.step3.recipientType=="Salesforce" && this.parent.$el.find('#sf_accordion .radiopanelinput.checked input').val()=="campaign"){helpingText = 'Campaign';}
+                            if(this.parent.states.step3.recipientType=="Netsuite" && this.parent.$el.find('#netsuite_setup .radiopanelinput.checked input').val()=="group"){helpingText = 'Campaign';}
+                            if(this.parent.states.step3.recipientType=="Highrise" && this.parent.$el.find('#highrise_import_container .radiopanelinput.checked input').val()=="tags"){helpingText = 'Tags';}
+                            contactCount = "Selected";
+                            recipients = this.parent.$el.find('.recipients-inner .recipient-details').find('label').html();
+                        }
+                        var dayDate = this.$el.parents('body').find('#calendar .fc-body .selected .fc-date').text();
+                        if(parseInt(dayDate) <= 9){
+                            dayDate = "0"+dayDate;
+                        }
+                        recipients = recipients.replace(/,\s*$/, "");
+                        $.each(recipients.split(','),_.bind(function(key,val){
+                            if(frecipients){
+                                          frecipients += "<li class='recepient_type'><i class='icon "+this.parent.states.step3.recipientType.toLowerCase()+"'></i>"+val+"</li>";
+                                      }else{
+                                          frecipients = "<li class='recepient_type'><i class='icon "+this.parent.states.step3.recipientType.toLowerCase()+"'></i>"+val+"</li>";
+                                      } 
+                        },this));
+                        if(this.sendNow){
+                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Campaign Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4><ul>'+frecipients+'</ul><div class="clearfix"></div><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>'; 
+                        }else{
+                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Schedule Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4>  <ul>'+frecipients+'</ul><div class="clearfix"></div><p class="note" style="padding-top: 0px; text-align: left; margin-top: 10px; margin-bottom: 5px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><p class="note" style="padding-top: 8px; text-align: left; float: left;">* The time is according to Pacific Standard Time  </p><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>';
+                        }
+                        this.$el.parents('body').find('.reschedule-dialog-wrap').html(appendHtml);
+                        this.$el.parents('body').find('.reschedule-dialog-wrap .fluidlabel label').css({'width':'34%','font-size':'12px'});
+                        this.app.showLoading(false,this.$(".schedule-panel")); 
+                        this.$el.parents('body').find('.reschedule-dialog-wrap').find('.closebtn,.btn-cancel').click(_.bind(function(){
+                            this.$el.parents('body').find('.sch-overlay').remove();
+                        },this));
+                        this.$el.parents('body').find('.reschedule-dialog-wrap').find('.btn-run').click(_.bind(function(event){
+                               
+                                this.scheduledCampaign('S',"Scheduling Campaign...");   
+                                this.$el.parents('body').find('.sch-overlay').remove();
+                        },this));
+                        
+                   }
                },
+               /*
+                * 
+                * @ Get Encode value of Recipienst 
+                * 
+                */
+               getReciepientsEncodes : function(URL){
+                   var camp_obj = this;
+                   var source_type = this.parent.model.get('recipientType').toLowerCase();
+                    jQuery.getJSON(URL, function (tsv, state, xhr) {
+                        camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
+                        if (xhr && xhr.responseText) {
+                            var rec_josn = jQuery.parseJSON(xhr.responseText);
+                            if (camp_obj.app.checkError(rec_josn)) {
+                                return false;
+                            }
+                            if (source_type == "highrise") {
+                                if(rec_josn.filterType =="tag"){
+                                    camp_obj.gethrTagName(rec_josn);
+                                }else{
+                                  camp_obj.confirmationDialog(rec_josn,false,'crm');  
+                                }
+                                
+                            }
+                            if (source_type == "google") {
+                              if(rec_josn.filterType =="sheet"){
+                                 camp_obj.getgoTagName(rec_josn);
+                              }else{
+                                 camp_obj.confirmationDialog(rec_josn,false,'crm');
+                              }
+                                
+                            }
+
+                            camp_obj.recipientDetial = rec_josn;
+
+                            if (rec_josn.type) {
+                                if (rec_josn.type.toLowerCase() == "list") {
+
+                                    if (rec_josn.count !== "0") {
+                                        camp_obj.showRecList(rec_josn);
+                                        /*$.each(rec_josn.listNumbers[0], function(index, val) { 
+                                         camp_obj.$(".step3 #area_choose_lists .col1 tr[checksum='"+val[0].checksum+"'] .move-row").click();
+                                         })*/
+                                    }
+                                    else
+                                    {
+                                        camp_obj.app.showLoading(false,camp_obj.$(".schedule-panel"));
+                                        camp_obj.app.showAlert('No reciepients found',$("body"),{fixed:true});
+                                    }
+                                }
+                                else if (rec_josn.type.toLowerCase() == "target") {
+                                    if (rec_josn.count !== "0") {
+                                        camp_obj.showRecTarget(rec_josn);
+                                        /* $.each(rec_josn.filterNumbers[0], function(index, val) { 
+                                         camp_obj.$(".step3 #area_choose_targets .col1 tr[checksum='"+val[0].checksum+"'] .move-row").click();
+                                         })*/
+                                    }
+                                    else
+                                    {
+                                        camp_obj.app.showLoading(false,camp_obj.$(".schedule-panel"));
+                                        camp_obj.app.showAlert('No reciepients found',$("body"),{fixed:true});
+                                       // camp_obj.$(".step3 #area_choose_targets .rightcol tbody").append('<div style="padding: 20px;" class="recp_empty_info"> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email address</p></div></div>');
+                                    }
+                                }
+                                else if (rec_josn.type.toLowerCase() == "tags") {
+                                    var tags = rec_josn.targetTags.split(',');
+                                    camp_obj.getCampTags(tags,rec_josn.targetTags);
+                                    for (var i = 0; i < tags.length; i++) {
+                                       // camp_obj.$(".step3 #area_choose_tags .col1 li[checksum='" + tags[i] + "'] .move-row").click();
+                                    }
+                                }
+                            }
+                            else {
+                                if (source_type == "salesforce") {
+                                    
+                                    if(rec_josn.sfCampaignId){
+                                        camp_obj.getsfCampName(rec_josn);
+                                    }else{
+                                        camp_obj.confirmationDialog(rec_josn,false,'crm');
+                                    }
+                                    //camp_obj.setSalesForceData();
+                                }
+                                else if (source_type == "netsuite") {
+                                    if(rec_josn.nsGroupId){
+                                        camp_obj.getnsCampName(rec_josn);
+                                    }else{
+                                    camp_obj.confirmationDialog(rec_josn,false,'crm');
+                                    }
+                                    //camp_obj.setNetSuiteData();
+                                }
+                            }
+                            
+                        }
+                    }).fail(function () {
+                        console.log("Receipts data load failed");
+                    });
+               },
+               /*
+                * 
+                * Generate Lists Recipients 
+                */
+               showRecList : function(lists){
+                   var listArray = [];
+                    var recipientArray = [];
+                    var offset = 0;
+                    
+                    $.each(lists.listNumbers[0], function(index, val) { 
+                                           listArray.push(val[0].encode);
+                                         });
+                      //console.log(listArray.toString());
+                    //this.createRecipients(listArray)                     
+                    //console.log(listArray.join());
+                   var that = this;
+                   var remove_cache = true;
+                   //var _data = {offset:offset,type:'list_csv',listNum_csv:listArray.join()};
+                   var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list_csv&listNum_csv="+listArray.join();
+                   $.get( URL, function( data ) {
+                    var rec_json = jQuery.parseJSON(data); 
+                     $.each(rec_json.lists[0], function(index, val) { 
+                                           recipientArray.push(val[0]);
+                                         });
+                       that.confirmationDialog(recipientArray);
+                     //that.createRecipients(recipientArray) ;
+                    });
+                    
+              },
+               /*
+                * 
+                * Generate Targets Recipients 
+                */
+              showRecTarget : function(lists){
+                   var _targetsArray = [];
+                   var recipientArray = [];
+                    var offset = 0;
+                    $.each(lists.filterNumbers[0], function(index, val) { 
+                                           _targetsArray.push(val[0].encode);
+                                         });
+                   var that = this;
+                   var remove_cache = true;
+                   //var _data = {offset:offset,type:'list_csv',filterNumber_csv:_targetsArray.join()};
+                   
+                   var URL = "/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list_csv&filterNumber_csv="+_targetsArray.join();
+                   $.get( URL, function( data ) {
+                    var rec_json = jQuery.parseJSON(data); 
+                     $.each(rec_json.filters[0], function(index, val) { 
+                                           recipientArray.push(val[0]);
+                                         });
+                            //console.log(recipientArray);             
+                       that.confirmationDialog(recipientArray);
+                     //that.createRecipients(recipientArray) ;
+                    });
+              },
+               /*
+               * Get all Tags of Campaign
+               * 
+               */
+              getCampTags:function(tags,targetTags){
+                  var _tagsArray = [];
+
+                  var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=subscriberTagCountList";
+                   $.get( URL, _.bind(function( data ) {
+                    var rec_json = jQuery.parseJSON(data); 
+                    for(var i=0;i<tags.length;i++){
+                        $.each(rec_json.tagList[0], function(index, val) { 
+                                           //recipientArray.push(val[0]);
+                                           if(tags[i]==val[0].tag){
+                                               _tagsArray.push(val[0]);
+                                           }
+                                           
+                                         });
+                    } 
+                    //console.log(_tagsArray);
+                    this.confirmationDialog(_tagsArray,targetTags); 
+                      //console.log(recipientArray);             
+                       //that.confirmationDialog(recipientArray);
+                     //that.createRecipients(recipientArray) ;
+                    },this));
+              },
+              /*
+               * Get Campagin Name of Salesforce
+               * 
+               * 
+               */
+              getsfCampName:function(sfId){
+                  var  _sfArray = {};
+                  var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=sfCampaignList";
+                   $.get( URL, _.bind(function( data ) {
+                    var rec_json = jQuery.parseJSON(data); 
+                    
+                        $.each(rec_json.campList[0], function(index, val) { 
+                                           //recipientArray.push(val[0]);
+                                           if(sfId.sfCampaignId==val[0].sfCampaignID){
+                                              _sfArray['sfObject'] = val[0].name;
+                                              _sfArray['camp']='Campaign';
+                                           }
+                                           
+                                         });
+                     
+                    
+                    this.confirmationDialog(_sfArray,false,'crm');
+                    //this.confirmationDialog(_tagsArray,targetTags); 
+                      //console.log(recipientArray);             
+                       //that.confirmationDialog(recipientArray);
+                     //that.createRecipients(recipientArray) ;
+                    },this));
+              },
+              /*
+               * Get Netsuit Group Name
+               * 
+               */
+              getnsCampName : function(nsId){
+                  var  _sfArray = {};
+                  var URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=nsGroupList";
+                   $.get( URL, _.bind(function( data ) {
+                    var rec_json = jQuery.parseJSON(data); 
+                    
+                        $.each(rec_json.groupList[0], function(index, val) { 
+                                           //recipientArray.push(val[0]);
+                                           if(nsId.nsGroupId==val[0].id){
+                                              _sfArray['nsObject'] = val[0].name;
+                                              _sfArray['camp']='Campaign';
+                                           }
+                                           
+                                         });
+                     
+                    
+                    this.confirmationDialog(_sfArray,false,'crm');
+                    //this.confirmationDialog(_tagsArray,targetTags); 
+                      //console.log(recipientArray);             
+                       //that.confirmationDialog(recipientArray);
+                     //that.createRecipients(recipientArray) ;
+                    },this));
+              },
+              /*
+               * Get Highrise Tage Name
+               * 
+               */
+              gethrTagName:function(hrID){
+                   var  _sfArray = {};
+                  var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=hrTagList";
+                   $.get( URL, _.bind(function( data ) {
+                    var rec_json = jQuery.parseJSON(data); 
+                    
+                        $.each(rec_json.groupList[0], function(index, val) { 
+                                           //recipientArray.push(val[0]);
+                                           if(hrID.filterQuery==val[0].id){
+                                              _sfArray['hrObject'] = val[0].name;
+                                              _sfArray['camp']='Tag';
+                                           }
+                                           
+                                         });
+                     
+                    
+                    this.confirmationDialog(_sfArray,false,'crm');
+                  
+                    },this));
+              },
+              /*
+               * Get Google Tage Name
+               * 
+               */
+              getgoTagName:function(sheetID){
+                   var  _sfArray = {};
+                  var URL = "/pms/io/google/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=spreadsheetList";
+                   $.get( URL, _.bind(function( data ) {
+                    var rec_json = jQuery.parseJSON(data); 
+                    
+                        $.each(rec_json.spreadsheetList[0], function(index, val) { 
+                                           //recipientArray.push(val[0]);
+                                           if(sheetID.spreadsheetId==val[0].id){
+                                              _sfArray['filterType'] = val[0].title;
+                                              _sfArray['camp']='Spreadsheet';
+                                           }
+                                           
+                                         });
+                     
+                    
+                    this.confirmationDialog(_sfArray,false,'crm');
+                  
+                    },this));
+              },
+              /*
+               * Create Confirmation Dialog;
+               * 
+               */
+              confirmationDialog:function(recipientArray,targetTags,type){
+                  this.app.showLoading(false,this.$(".schedule-panel")); 
+                  var recipients = '';
+                  var icontype = '';
+                  var isCrmId=false;
+                  var contactCount = 0;
+                            if(type=="crm"){
+                                    if(this.parent.model.get('recipientType').toLowerCase()=="salesforce"){
+                                       icontype='salesforceSD';
+                                       recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>"+recipientArray.sfObject+"</li>";
+                                       
+                                       if(recipients == "both"){
+                                            recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>Leads & Contacts<li>";
+                                        }
+                                       if(recipientArray.camp){
+                                            isCrmId = true;
+                                        }
+                                       contactCount = "Selected";
+                                    }else if(this.parent.model.get('recipientType').toLowerCase()=="highrise"){
+                                        icontype='highrise';
+                                        recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>"+recipientArray.hrObject+"</li>";
+                                        
+                                        if(recipients == "People"){
+                                            recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>Import all my records</li>";
+                                        }
+                                        if(recipientArray.camp){
+                                            isCrmId = true;
+                                        }
+                                       contactCount = "Selected";
+                                    }
+                                    else if(this.parent.model.get('recipientType').toLowerCase()=="netsuite"){
+                                        icontype='netsuite';
+                                        recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>"+recipientArray.nsObject+"</li>";
+                                        if(recipientArray.camp){
+                                            isCrmId = true;
+                                        }
+                                       contactCount = "Selected";
+                                    }
+                                    else if(this.parent.model.get('recipientType').toLowerCase()=="google"){
+                                         icontype='google';
+                                        recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>"+recipientArray.filterType+"</li>";
+                                        if(recipients == 'all'){
+                                         recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>Import all google contacts</li>";   
+                                        }
+                                        contactCount = "Selected";
+                                    }
+                                }else{
+                                 $.each(recipientArray,_.bind(function(key,val){
+                                if(this.parent.model.get('recipientType')=="List"){
+                                            contactCount =contactCount + parseInt(val.subscriberCount);
+                                            icontype = 'list';
+                                        }else if(this.parent.model.get('recipientType')=="Target"){
+                                            contactCount =contactCount + parseInt(val.populationCount);
+                                            icontype='target'
+                                        }else if(this.parent.model.get('recipientType')=="Tags"){
+                                            contactCount =contactCount + parseInt(val.subCount);
+                                        }
+
+                                      if(this.parent.model.get('recipientType')!=="Tags"){  
+                                      if(recipients){
+                                          recipients += "<li class='recepient_type'><i class='icon "+icontype+"'></i>"+val.name+"</li>";
+                                      }else{
+                                          recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>"+val.name+"</li>";
+                                      }
+                                  }
+                                  },this));
+                                  
+                                  if(this.parent.model.get('recipientType')=="Tags"){
+                                     var icontype ='tag';
+                                     $.each(targetTags.split(','),function(key,val){
+                                        if(recipients){
+                                          recipients += "<li class='recepient_type'><i class='icon "+icontype+"'></i>"+val+"</li>";
+                                      }else{
+                                          recipients = "<li class='recepient_type'><i class='icon "+icontype+"'></i>"+val+"</li>";
+                                      } 
+                                     })
+                                     //recipients = targetTags;
+                                  }
+                            }
+                           
+                        
+                  
+                  this.$el.find('#schedule-panel-1').hide();
+                  if(!recipientArray.camp){
+                    recipientArray['camp'] = ''
+                   }else{
+                      recipientArray['camp'] = recipientArray.camp;
+                  }
+                  //console.log(contactCount);
+                  
+                  //console.log(recipients)
+                  //recipients = recipients.replace(/,\s*$/, "");
+                  this.$el.parents('body').find('.reschedule-dialog-wrap').addClass('schedule-confirm-dialog-wrap');
+                  this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-top': '-223px', 'max-height': '455px','min-height':'210px'});
+                  var dayDate = this.$el.parents('body').find('#calendar .fc-body .selected .fc-date').text();
+                        if(parseInt(dayDate) <= 9){
+                            dayDate = "0"+dayDate;
+                        }
+                  if(this.sendNow){
+                       this.$el.parents('body').find('.reschedule-dialog-wrap').css({'width':'560px','margin-left':'-280px'});
+                       var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Campaign Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><div class="clearfix"></div><div class="btns right" style="margin:10px 0"><a class="btn-green btn-run" ><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
+                      }else{
+                       var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Schedule Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><hr><div class="clearfix"></div><p class="note" style="padding-top: 0px;text-align:left;margin-top:10px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><p style="padding-top: 8px; text-align: left; float: left;padding-right:5px;" class="note">* The time is according to Pacific Standard Time  </p><div class="btns right" style="margin:0 0 10px;"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
+                      }
+                   
+                  this.$el.parents('body').find('.reschedule-dialog-wrap').append(appendHtml);
+                  this.$el.find('btn-run').click(_.bind(function(){
+                        this.scheduledCampaign('S',"Scheduling Campaign...");   
+                        this.$el.find('#schedule-panel-1').show();
+                        this.$el.find('#schedule-panel-2').remove();
+                  },this));
+                  this.$el.parents('body').find('.reschedule-dialog-wrap .btn-run').click(_.bind(function(){
+                      
+                      this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-top': '-223px', 'max-height': '455px','min-height':'455px'});
+                        this.scheduledCampaign('S',"Scheduling Campaign...");   
+                        this.$el.parents('body').find('.reschedule-dialog-wrap #schedule-panel-1').show();
+                        this.$el.parents('body').find('.reschedule-dialog-wrap #schedule-panel-2').remove();
+                        if(this.sendNow){
+                           this.$el.parents('body').find('.reschedule-dialog-wrap').css({'width':'auto','margin-left':'-170px','margin-top': '-223px', 'max-height': '455px','min-height':'455px'});
+                        }else{
+                           this.$el.parents('body').find('.reschedule-dialog-wrap').css({'width':'auto','margin-left':'-170px','margin-top': '-223px', 'max-height': '455px','min-height':'455px'});
+                        }
+                  },this));
+                  this.$el.parents('body').find('.reschedule-dialog-wrap .closebtn-2').click(_.bind(function(){
+                      if(this.sendNow){
+                           this.$el.parents('body').find('.reschedule-dialog-wrap').css({'width':'auto','margin-left':'-170px','margin-top': '-223px', 'max-height': '455px','min-height':'455px'});
+                        }else{
+                           this.$el.parents('body').find('.reschedule-dialog-wrap').css({'width':'auto','margin-left':'-280px','margin-top': '-223px', 'max-height': '455px','min-height':'455px'});
+                        }
+                      this.$el.parents('body').find('.reschedule-dialog-wrap #schedule-panel-1').show();
+                      this.$el.parents('body').find('.reschedule-dialog-wrap #schedule-panel-2').remove();
+                  },this));
+              },
+              /*
+               * 
+               * Schedule Date 
+               */
+              getScheduleDate:function(){
+                  var url = "/pms/io/getMetaData/?type=time&BMS_REQ_TK="+this.app.get('bms_token');
+                  $.post(url)
+                    .done(_.bind(function(data) {                              
+                       var data = jQuery.parseJSON(data);
+                       
+                        this.snServerDate = this.app.decodeHTML(data[0]);
+                        this.scheduleCamp();
+                        
+                   },this));
+              },
                scheduledCampaign:function(flag,message){
                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                    var step4_obj = this.currentState.datetime;
@@ -218,7 +774,12 @@ function (template,calendario) {
                                     }
                    if(flag=='S'){
                        post_data["scheduleType"] = "scheduled";
-                       post_data["scheduleDate"] =_date+" "+time;                                    
+                       if(this.snServerDate){
+                           post_data["scheduleDate"] =this.snServerDate;
+                       }else{
+                           post_data["scheduleDate"] =_date+" "+time;   
+                       }
+                                                        
                    }                 
                    var _message = message?message:'Changing mode...';
                    this.app.showLoading(_message,this.$el.parents(".ws-content"));  
@@ -233,8 +794,15 @@ function (template,calendario) {
                                 camp_obj.currentState.camp_status = 'P';
                                 //camp_obj.scheduleStateCamp();
                                 //camp_obj.setScheduleArea();
-                                camp_obj.showScheduleBox();
-                                camp_obj.app.showMessge("Campaign Scheduled Successfully!");
+                                if(camp_obj.sendNow){
+                                    camp_obj.$el.find('.sch-btn-sm').addClass('disabled-btn send-confirm');
+                                    //camp_obj.$el.find('.draft-sn-campaign').show()
+                                    camp_obj.app.showMessge("Campaign Scheduled and Send Successfully!");
+                                }else{
+                                    camp_obj.showScheduleBox();
+                                    camp_obj.app.showMessge("Campaign Scheduled Successfully!");
+                                }
+                                
                            }
                            else{
                                 //camp_obj.$(".schedule-camp").show(); 

@@ -303,7 +303,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         } else {
                             this.meeView.autoSaveFlag = true;
                         }
-                        if ((button && button.hasClass("disabled-btn")) || this.meeView.autoSaveFlag == false) {
+                        if (button && button.hasClass("disabled-btn")) {
                             return false;
                         }
                     }else {
@@ -711,17 +711,34 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                     this.$nav.attr("style", "top:90px !important");
                                     this.$tools.attr("style", "top:90px !important");
                                     this.$nav.css("width", this.$(".editorpanel").width());
-                                    this.scrollfixPanel();
+                                    this.scrollfixPanel();                                    
+                                    this.$("#mee_editor").setAccordian(0);
                                 } else if (scrollTop <= (this.navTop + 12) && this.isFixed) {
                                     this.isFixed = 0
                                     this.$nav.removeClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');
-                                    this.$nav.css("top", "7px");
+                                    if(this.$nav.find('.disabled-toolbar').css('visibility')=='hidden'){
+                                        this.$nav.css("margin-bottom", "0");
+                                         this.$el.find('#mee-iframe').contents().find('.mainTable').css('margin-top','45px');
+                                    }else{
+                                        this.$nav.css("margin-bottom", "45px");
+                                        this.$el.find('#mee-iframe').contents().find('.mainTable').css('margin-top','0');
+                                    }
+                                    this.$nav[0].style.removeProperty("top");
                                     this.$tools.css("top", "0px");
                                     this.$nav.css("width", "100%");
                                     this.$tools.removeClass('editor-lefttoolbar-fixed');
                                     this.$editorarea.removeClass('editor-panel-fixed');
+                                    var lessBy = this.navTop - scrollTop;
+                                    this.$("#mee_editor").setAccordian(lessBy);
+                                    
                                 }
+                                
+                                var lessBy = this.navTop - scrollTop;
+                                if(lessBy>0){
+                                    this.$("#mee_editor").setAccordian(lessBy);
+                                }                                
                             }
+                            
                         }
                     }, this);
                     this.processScroll();
@@ -738,6 +755,8 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         if (scrollTop >= (this.navTop - 270) && scrollTop > 0) {
                             this.$editorarea.removeClass('editor-panel-zero-padding');
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', scrollTop + 'px');
+                            this.$el.find('.editortoolbar').css('margin-bottom','0');
+                            this.$el.find('#mee-iframe').contents().find(".mainTable").css("margin-top","45px");
                         } else if (this.$tools.hasClass('editor-lefttoolbar-fixed')) {
                             this.$editorarea.addClass('editor-panel-zero-padding');
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '48px');

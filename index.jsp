@@ -59,6 +59,7 @@ String _path = "/pms/umair/";
             
     </style>
     <link rel="shortcut icon" href="img/favicon.ico">        
+    <link href="<%= _path %>font/fonts.css" rel="stylesheet">
     <link href="<%= _path %>css/bootstrap.css?bust=1.362" rel="stylesheet" type="text/css" >
     <link href="<%= _path %>css/bridgemail.css?bust=1.362" rel="stylesheet" type="text/css" >   
     <link href="<%= _path %>css/plugins.css?bust=1.362" rel="stylesheet" />        

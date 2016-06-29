@@ -1992,6 +1992,27 @@ div.mce-tinymce-inline {
     left:-2px;
     z-index:1000;
 }
+.MEE_EDITOR #imageToolbar{
+    width: 99.8%;
+    border-radius: 5px;
+    left:1px;
+    top:47px;
+}
+.MEE_EDITOR .imageToolbar-menu ul{
+    background: #1D3C49 !important;
+    border-radius: 3px;
+}
+.MEE_EDITOR #imageToolbar ul li{
+    height: 26px;
+    width:50px;
+    padding: 0 0 8px;
+}
+.MEE_EDITOR .videoToolbar-menu{
+    width:185px; 
+}
+.MEE_EDITOR .editor-toptoolbar-fixed-border #imageToolbar{
+    top:50px !important;
+}
 .MEE_EDITOR .imageToolbar-menu ul{list-style-type: none; display: inline-block; padding: 0; margin: 0; width: 370px; height: 34px;}
 .MEE_EDITOR .imageToolbar-menu ul li{width: 60px; height: 27px; border-right: 1px solid #222; float: left; text-align: center; padding-top: 6px;}
 .MEE_EDITOR .imageToolbar-menu ul li:last-child{border-right:none;}
@@ -2619,6 +2640,16 @@ a,
 .MEE_EDITOR .icon.delete  { background: url("../images/delete.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.move  { background: url("../images/move.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.dcitems { background: url("../images/dynamic-content.png") no-repeat scroll center center; }
+.MEE_EDITOR .icon.setpagetitle { background-position: -390px 0px; }
+.MEE_EDITOR .icon.setactionscript { background-position: -390px -30px; }
+.header-icon .pagetitleicon {
+    background: url("../images/meeicons.png") no-repeat -360px -118px;
+    height: 30px;
+}
+.header-icon .actionScripicon {
+    background: rgba(0, 0, 0, 0) url("../images/meeicons.png") no-repeat scroll -410px -118px;
+    height: 30px;
+}
 .MEE_EDITOR .icon.cross {
     background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
@@ -2746,7 +2777,7 @@ a,
     color: #1d91bc;
     font-size: 14px;
     font-weight: normal;
-    margin: 0;
+    margin: 30px 0 0;
     letter-spacing:0;
     padding: 5px;
 }
@@ -3048,7 +3079,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     -moz-border-radius: 2px 2px 0 0;
     border-radius:  2px 2px 0 0; 
     top:7px;
-     margin-bottom: 0px;
+     margin-bottom: 45px;
      background: #fff;
 } 
 
@@ -3095,6 +3126,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     -webkit-border-radius: 2px 2px;
     -moz-border-radius: 2px 2px;
     border-radius: 2px 2px; 
+    padding-top:10px;
 }
 
 
@@ -3285,6 +3317,153 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     right: 0px;
     top: 0px;
 }
+/*------------------------Backgorund Image-----------------------------------*/
+.MEE_EDITOR .bgimg-thumb_imgwrap .removeThumb {
+    background: url("../images/closeicon.png") no-repeat scroll center center #fff;
+    display: block;
+    height: 18px;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    width: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.bgimg-thumb{
+  margin: 15px 0 0;
+}
+.bgimg-thumb_imgwrap{
+    display: block;
+    float: left;
+    margin: 0 12%;
+    background: #f8fdff none repeat scroll 0 0;
+    border-radius: 2px;
+    padding: 10px;
+    
+}
+.bgimg-thumb_imgwrap .droppanel {
+    border: 2px dashed #eaf4f9;
+    border-radius: 2px;
+    color: #666666;
+    font-size: 12px;
+    margin: 0;
+    position: relative;
+    text-align: center;
+    background: #fff none repeat scroll 0 0;
+    height: 165px;
+    width: 145px;
+    overflow: visible;
+}
+.bgimg-thumb_imgwrap .droppanel h4{
+    font-size: 12px;
+       margin: 35px 10px 0;
+       line-height: 14px;
+}
+.bgimg-thumb_imgwrap .SI-FILES-STYLIZED i.upload {
+    background: rgba(0, 0, 0, 0) url("../images/upload.png") no-repeat scroll center center;
+     height: 35px;
+    width: 30px;
+}
+.bgimage-properties li{
+    width: 49%;
+    float: left;
+}
+.bgimage-properties li label{
+    width: 50%;
+}
+.image-repeat-icons {
+    float: left;
+    margin: 3px 6px 3px 45px;
+    font-weight: bold;
+}
+.bgimage-setposition h5 {
+    color: #6494af;
+    float: left;
+    width: 50%;
+}
+.bgimage-setposition .bg-leftpos, .bgimage-setposition .bg-toppos{
+    clear:none;
+    width: 112px;
+    margin-top: 3px; 
+    margin-bottom: 2px; 
+}
+.bgimage-setposition .bg-leftpos{
+    margin-right: 2px;
+}
+.bgimage-setposition input.bg-leftpos_input[type="text"],.bgimage-setposition input.bg-toppos_input[type="text"]{
+    width: 60px;
+    margin-right: 5px;
+}
+.bgimage-setposition label {
+    background: #eaf4f9 none repeat scroll 0 0;
+    border-radius: 2px;
+    color: #336670;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: normal;
+    height: 36px;
+    line-height: 36px;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+}
+
+.img-posiotion-li .radiopanelinput.checked .icheck_radio-icon {
+    margin: 7px 0 0 7px !important;
+    width: 35px  !important;
+}
+.img-posiotion-li .radiopanelinput.checked {
+    max-width: 35px;
+}
+.bgimage-properties li.img-posiotion-li {
+    width: 100%;
+}
+.img-posiotion-li .radiopanelinput .icheck_radio-icon {
+    margin: 6px 0 0 6px;
+}
+.bgimage-repeatposition {
+    margin-bottom: 0px;
+    overflow: hidden;
+    border: 2px solid #6494af;
+    padding:5px;
+}
+.img-position-ul{
+    margin: 0 0 3px !important;
+    overflow: hidden;
+}
+input.openUpGallery[type="button"] {
+    width: 229px !important;
+    font-size: 14px !important;
+}
+.bgimage-properties .bgimage-repeat-h4{
+    background: #6494af none repeat scroll 0 0;
+    color: #fff;
+    margin: 8px 0 0;
+    padding-left: 3px;
+}
+.bgimage-repeatposition .socialbtns{
+     margin: 5px 0px;
+}
+.bgimage-repeatposition > ul.socialbtns li {
+    margin: 0 0 5px 2%;
+}
+.bgimage-repeatposition > ul.socialbtns li:first-child {
+    margin-left: 0;
+}
+#loadingbgimg {
+    border: 2px solid #079cd3;
+    border-radius: 2px;
+    box-shadow: 1px 1px 5px 0 #cad5dd;
+    margin: 10px auto;
+    max-width: 145px;
+    position: relative;
+    text-align: center;
+}
+#loadingbgimg img{
+  margin: 25px 0 6px !important;
+}
+
 /* --------------------------------------------- */
 
 
@@ -3519,7 +3698,12 @@ input[type="text"].txtContSize {
     width: 80px;
 }
 
-.addToMyColors {
+select.selectEmailSize{
+    width:55px;
+    border:2px solid #eaf4f9;
+}
+
+.addToMyColors,.removeMyColors {
     background: none repeat scroll 0 0 #94CF1E;
     border: 0 none;
     border-radius: 2px;
@@ -3536,7 +3720,10 @@ input[type="text"].txtContSize {
     text-align: center;
 }
 
-
+ .removeMyColors{
+    background: #E03A3A none repeat scroll 0 0;
+    float:left;
+}
 
 ul.color-box {
     display: inline-block;
@@ -4027,6 +4214,8 @@ input[type="button"].small-button {
 
 
 .c-name h2 i.icon.link { background:url("../images/link.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);}
+.c-name h2 i.icon.emvideo { background:url("../images/play_icon_30x30.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);}
+
 .spacer-ele{background:url("../images/_spacer.png") repeat transparent;}
 
 
@@ -4330,9 +4519,10 @@ ul.aligncol li i.alignbottom { background: url("../images/alignbottom.png") no-r
     width: auto;}
 
 .grey-col {
-    color: #1D91BC;
+    color: #1D91BC !important;
     margin:0;
     padding:0;
+    text-align: left !important;
 }
 #CustomColorPicker .selectedFontColor , .mycolorFontPicker .selectedFontColor
 {  border-radius: 2px;
@@ -4776,6 +4966,7 @@ body > .draggableControl{
 .mce-i-unlink {background-position: -330px -0px;}
 .mce-i-link {background-position: -300px -0px;}
 .droppedFormBlock i.icon,.signupform{background:url("../images/drop-form1.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;}
+.embedvideo{background:url("../images/play_icon.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;}
 .draggableControl.disabled {opacity: 0.4;}
 /* ================================================End editorstyle.css================================================ */
 .editor-panel-zero-padding{
@@ -4822,4 +5013,44 @@ body > .draggableControl{
     position: relative;
     text-align: center;
     width: auto;
+}
+/*=========================================================
+Stickybar accordian
+=========================================================*/
+.stickybar {
+    background: #d6ebf6 none repeat scroll 0 0;
+    box-shadow: 0 2px 4px rgba(93, 162, 190, 0.7);
+    display: block;
+    left: 0;
+    min-height: 40px;
+    padding: 0 !important;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 99;
+}
+.stickybar > a.icon {
+    display: block;
+    float: left;
+    height: 40px;
+    width: 25%;
+    margin:0;
+}
+.stickybar a.icon.columns {
+    background: rgba(0, 0, 0, 0) url("../images/columns.png") no-repeat scroll center center;
+}
+.stickybar a.icon.items {
+    background: rgba(0, 0, 0, 0) url("../images/items.png") no-repeat scroll center center;
+}
+.stickybar a.icon.spacers {
+    background: rgba(0, 0, 0, 0) url("../images/spacers.png") no-repeat scroll center center;
+}
+.stickybar a.icon.blocks {
+    background: rgba(0, 0, 0, 0) url("../images/blocks.png") no-repeat scroll center center;
+}
+.stickybar a:hover, .stickybar a.active {
+    background-color: #b4d7e6 !important;
+}
+.bb-scrollarea-wrapper{
+    overflow: hidden !important;
 }

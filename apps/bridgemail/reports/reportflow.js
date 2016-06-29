@@ -5,7 +5,8 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 tags: 'div',
                 className:'content-inner',
                 events: {                    
-                     'click .addbar li':'addReport'
+                     'click .addbar li':'addReport',
+                     'click .help-video':'showVideo'
                 },
                 initialize: function () {
                     this.app = this.options.app;     
@@ -63,8 +64,15 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                     var objects = (obj) ? obj[obj.type]:null;
                     var row_view = new reportRow({reportType:rType,sub:this,row_obj:obj,objects:objects,loadReport:loadReport});
                     this.models.push(row_view);
-                    row_view.orderNo = this.models.length;
-                    row_view.$el.insertBefore(this.$(".addbar"));
+                    row_view.orderNo = this.models.length;                    
+                    if(loadReport){
+                        this.$(".report-empty").hide();
+                        row_view.$el.insertBefore(this.$(".add-panel"));                        
+                    }
+                    else{
+                        row_view.openSelectionDialog();
+                        row_view.doDraw = true;
+                    }
                 },
                 saveSettings:function(){
                     var URL = "/pms/io/user/customReports/?BMS_REQ_TK="+this.app.get('bms_token');                    
@@ -102,15 +110,17 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                 var page_json = jQuery.parseJSON(this.app.decodeHTML(_json.p_json));
                                 if(page_json.length){
                                     for(var i=0;i<page_json.length;i++){
-                                        this.addReport(page_json[i].type,page_json[i],true);
+                                        //if(page_json[i].type!=="webstats"){
+                                            this.addReport(page_json[i].type,page_json[i],true);
+                                        //}
                                     }
                                 }
                             }else{
-                                this.addReport('campaigns');
+                               // this.addReport('campaigns');
                             }
                         }
                         else{
-                            this.addReport('campaigns');
+                            //this.addReport('campaigns');
                         }
                         
                     },this));
@@ -135,21 +145,45 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                id = r_val.get("trackId.encode"); 
                             }else if(type=="tags"){
                                id = r_val.get("tag"); 
+                            }else if(type=="webforms"){
+                               id = r_val.get("formId.encode"); 
                             }else if(type=="webstats"){
                                id = r_val.id; 
                                selected_obj['subtype'] =r_val.subtype;
                                selected_obj['campMapping'] =r_val.campMapping;
-                            }                              
+                            }else if(type=="funnel"){
+                                id = r_index;
+                                selected_obj['level'+r_index] = [];                                                                
+                                _.each(r_val,function(f_val){
+                                    var obj_json = {"tag":f_val.get("tag"),"subCount":f_val.get("subCount")};
+                                    if(val.subType!=="tag"){
+                                        obj_json['id'] = f_val.get("id");
+                                        obj_json['checkSum'] = f_val.get("checkSum");
+                                    }
+                                    selected_obj['level'+r_index].push(obj_json);
+                                },this);
+                            }
+                            else if(type=="workflows"){
+                                id = r_val.get("workflowId"); 
+                                selected_obj['checkSum'] =r_val.get("workflowId.checksum");
+                            }
+                            else if(type=="lists"){
+                                id = r_val.get("listNumber.encode"); 
+                            }
+                            
                             selected_obj['id'] = id;
                             if(type=="nurturetracks"){
                                 selected_obj['checked'] =true;
                             }
                             else{
-                                selected_obj['checked'] =val.$("[id='"+id+"'] .check").length?true:false;
+                                selected_obj['checked'] = true;//val.$("[value='"+id+"']").is(":checked")?true:false;
                             }
                             
                             report_obj[type].push(selected_obj);          
                         },this);       
+                        if(type=="funnel"){
+                            report_obj['subType'] = val.subType;
+                        }
                         if(val.toDate){
                             report_obj['toDate'] = val.toDate;
                         }
@@ -162,9 +196,15 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                         
                     return JSON.stringify(report_json);
                 },
-                removeMode:function(no){
+                removeMode:function(no){                    
                     this.models.splice(no-1,1);
+                    if(this.models.length==0){
+                        this.$(".report-empty").fadeIn();
+                    }
                 },
+                removeUndrawModel:function(no){                    
+                    this.models.splice(no-1,1);                    
+                },                
                 showHideTitle:function(show,isNew){
                     if(this.editable==false){
                         return false;
@@ -242,6 +282,7 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 checkBridgeStats:function(){
                      if(this.app.get("bridgestatz") && this.app.get("bridgestatz").id){
                          this.$("li[data-type='webstats']").show();
+                         this.$(".no-webstats").removeClass("no-webstats");
                      }
                      else{
                         var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=bridgestatz";
@@ -253,10 +294,30 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                             if(_json.id){
                                 this.app.set("bridgestatz", _json);
                                 this.$("li[data-type='webstats']").show();
+                                this.$(".no-webstats").removeClass("no-webstats");
                             }                            
                             
                         }, this));
                      }
+                },
+                showVideo: function(){                    
+                    var dialog_title = "Reports Help Video";
+                    var dialog = this.app.showDialog({title: dialog_title,
+                        css: {"width": "580px", "margin-left": "-290px"},
+                        bodyCss: {"min-height": "325px"}
+                    });
+                    dialog.getBody().html('<iframe width="560" height="315" src="https://www.youtube.com/embed/uyRu_a8yCQM" frameborder="0" allowfullscreen></iframe>');
+                },
+                refreshWorkSpace: function(options){
+                    var highChartsArray = this.$("[data-highcharts-chart]");
+                    _.each(highChartsArray,function(val,key){
+                        if(val){
+                          var _index = $(val).data("highcharts-chart");
+                          if(Highcharts && Highcharts.charts && Highcharts.charts[_index]){
+                             Highcharts.charts[_index].reflow();
+                          }
+                        }
+                    },this);
                 }
 
             });

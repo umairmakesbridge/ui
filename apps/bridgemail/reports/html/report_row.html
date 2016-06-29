@@ -1,128 +1,205 @@
-<div class="filt_cont">
-    <div class="temp-filters clearfix" id="contacts_count">
-        <!--<input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" checked="checked" />-->
-        <% if(this.reportType!=="webstats"){ %>  
-            <h2 class="total-count"><strong class="badge">0</strong> <%- rType.toLowerCase() %> selected</h2>            
+<div class="rept-activities rpt-activityPanelHide">
+    <div id="contacts_count" class="temp-filters clearfix">
+        
+        <% if(this.reportType!=="webstats"){ %> 
+        
+            <h2 class="total-count">
+             <span class="rpicon rpicon-thirty <%- rIcon %>"></span>   
+            <% if(this.reportType=="nurturetracks"){ %> 
+                <span class="rpt-nt-init"><b>&nbsp;&nbsp;Nurture Track - </b> 
+                    <strong class="badge">0</strong> <b class="rp-selected">Messages Selected</b> 
+                </span>
+                <span class="rpt-nt-detail" style="display: none">
+                    <strong class="badge">Nurture Track</strong>
+                    <b>having</b><strong class="badge">0</strong> <b>messages</b>
+                </span>
+            <% } else if(this.reportType=="funnel") { %>    
+                <b>&nbsp;&nbsp;Funnel</b>
+            <% } else { %>
+                 <strong class="badge">0</strong> <b class="rp-selected"><%- rType.toLowerCase() %> Selected</b> 
+            <% } %>
+            <span title="Click to edit" class="rpicon rpicon-thirty rpblue-edit showtooltip"></span><span title="Click to remove" class="rpicon rpicon-thirty rpblue-delete showtooltip"></span>
+            </h2>
         <% } else {%>
-            <h2 class="total-count"><%- rType %> </h2>
-            <div class="stats-selection" style="display: none">
-                <div class="inputlabel" style="position:relative"><input type="checkbox" class="checkinput" value="uv"><label>Unique Visitors</label></div>
-                <div class="inputlabel" style="position:relative"><input type="checkbox" class="checkinput" value="pv"><label>Page Views</label></div>
-                <div class="inputlabel" style="position:relative"><input type="checkbox" class="checkinput" value="rv"><label>Return Visitors</label></div>
-            </div> 
+            <h2 class="total-count">
+             <span class="rpicon rpicon-thirty <%- rIcon %>"></span>   
+             <b class="rp-selected"><%- rType.toLowerCase() %></b> 
+             <span title="Click to edit" class="rpicon rpicon-thirty rpblue-edit showtooltip"></span><span title="Click to remove" class="rpicon rpicon-thirty rpblue-delete showtooltip"></span>
+            </h2>
         <% } %>    
-       <% if(this.reportType=="tags"){ %>  
-           <a class="tagsexpand showtooltip" style="display:none;position: absolute;top:7px;right:340px;" title="Click to view growth details" data-expand="0"> View Growth Stats </a>
-       <% } %>    
+        <% if(this.reportType=="tags"){ %>  
+            <a class="tagsexpand showtooltip" style="display:none;position: absolute;top:7px;right:340px;" title="Click to view growth details" data-expand="0"> View Growth Stats </a>
+        <% } %>    
         <div style=" " class="srt-div">          
             <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
                 <input type="text" id="daterange" placeholder="Select date range" style="width:230px"/>
                 <a style="" id="clearcal" class="close-icon"></a>
-            </div>    
-            <!--<div class="input-append search listsearch"></div>-->      
+            </div>                
         </div>
     </div>
-    <div class="template-container parent-container">
-        <div class="target-listing copy_camp" id="copy-camp-listing">            
+       <div class="template-container parent-container">                 
+            <% if(this.reportType=="campaigns" || this.reportType=="landingpages" || this.reportType=="webforms" || this.reportType=="autobots" || this.reportType=="nurturetracks" || this.reportType=="tags"){ %>  
+                <div class="rpt-campign-listing">  
+                <div class="col-2 col-cstats c-reports">
+                    <div style="height:390px" class="cstats"> 
+                        <div style="margin-top: 0px;" class="chart campaign-chart"></div>
 
-            <% if(this.reportType!=="webstats"){ %>  
-            <div class="col-2 col-cstats c-reports">
-                <div class="cstats" style="height:320px"> 
-                    <div class="mask start-message"><div class="init-message add-msg-report"><a>Click here to add <%- rType %></a></div></div>  
-                    <div class="icons-bar-chart chart-types" style="display:none">
-                        <div class="barchart icons active showtooltip" title="Click to see bar chart"></div>
-                        <div class="linechart icons showtooltip"  title="Click to see line chart"></div>
-                    </div>
-
-                    <div class="chart campaign-chart" style="margin-top:0px">
-
-                    </div>          
-                    <% if(this.reportType=="landingpages"){ %>  
-                    <div class="stats-panel">                
-                        <div>
-                            <ul class="socpc">                        
-                                <li class="clr4" style="width:50%"><span>Page Views <strong class="viewCount">0</strong></span></li>                        
-                                <li class="clr2" style="width:50%"><span>Submission <strong class="submitCount">0</strong></span></li>                                               
-                            </ul>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>  
-                    <% } else if(this.reportType=="campaigns" || this.reportType=="autobots" || this.reportType=="nurturetracks") { %>
-                    <div class="stats-panel">                    
-                        <div>
-                            <ul class="socpc">
-                                <li class="clr-sent"><span>Sent <em class="sentCountPer">0%</em><strong class="sentCount">0</strong></span></li>
-                                <li class="clr-open"><span>Open <em class="openCountPer">0%</em><strong class="openCount">0</strong></span></li>
-                                <li class="clr-click"><span>Click  <em class="clickCountPer">0%</em><strong class="clickCount">0</strong></span></li>
-                                <li class="clr-view"><span>Page Views  <em class="pageViewsCountPer">0%</em><strong class="pageViewsCount">0</strong></span></li>
-                                <li class="clr-social"><span>Conversion  <em class="conversionCountPer">0%</em><strong class="conversionCount">0</strong></span></li>
-                            </ul>
-                            <ul class="s-u-b" >                
-                                <li ><span>Unsubscribed <strong class="unSubscribeCount">0</strong></span></li>
-                                <li ><span>Supressed <strong class="supressCount">0</strong></span></li>
-                                <li ><span>Bounced <strong class="bounceCount">0</strong></span></li>
-                            </ul>
-                            <ul class="ftipg">
-                                <li ><i class="social-icon-color fb"></i><span class="facebookCount textCount">0</span></li>
-                                <li ><i class="social-icon-color tw"></i><span class="twitterCount textCount">0</span></li>
-                                <li ><i class="social-icon-color in"></i><span class="linkedInCount textCount">0</span></li>
-                                <li ><i class="social-icon-color pi"></i><span class="googlePlusCount textCount">0</span></li>
-                                <li ><i class="social-icon-color gp"></i><span class="pinterestCount textCount">0</span></li>
-                            </ul>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                    <% } if(this.reportType==="tags") { %>
-                    <div class="stats-panel"><div><ul class="socpc"></ul><div class="clearfix"></div></div></div>  
-
-                    <% } %>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-            <% } %>
-            
-            <div class="table-area">
-                <div class="template-container" style="margin:0px;background:none">
-                    <div class="camp_listing camp_reports">     
-                        <div class="icons-bar-chart" style="display:none">
-                            <div class="barchart icons active showtooltip" title="Click to see bar chart"></div>
-                            <div class="linechart icons showtooltip"  title="Click to see line chart"></div>
-                        </div>
-                        <div class="init-message add-msg-report"><a>Click here to add <%- rType %></a></div>
-                        <div class="bmsgrid" style="display:none">
-                            <div class="hDiv"><div class="hDivBox campaings-hDiv"><table cellspacing="0" cellpadding="0"></table></div></div>
-                            <div style="height: " class="bDiv">
-                                <table cellpadding="0" cellspacing="0" width="100%" id="_grid">
-                                    <tbody></tbody>
-                                </table>
-                                <div style="display: none;" class="iDiv"></div>
+                        <% if(this.reportType=="campaigns" || this.reportType=="autobots" || this.reportType=="nurturetracks"){ %>  
+                        <div  class="rpt-campaign-stats rpt-campaign-five">                        
+                            <div class="rpt-camp-sent">
+                                <h3>Sent</h3>
+                                <p class="sentCount">0</p>                                
                             </div>
-                        </div>  
-
-                        <div id="tagslist" class="tagscont tagslist" style="display: none">
-                            <ul>
-
-                            </ul>                
+                            <div class="rpt-camp-open">
+                                <h3>Open</h3>
+                                <p class="openCount">0</p>
+                                <i class="stats-percentage openCountPer">0%</i>
+                            </div>
+                            <div class="rpt-camp-click">
+                                <h3>Click</h3>
+                                <p class="clickCount">0</p>
+                                <i class="stats-percentage clickCountPer">0%</i>
+                            </div>
+                            <div class="rpt-camp-pv">
+                                <h3>Views</h3>
+                                <p class="pageViewsCount">0</p>
+                                <i class="stats-percentage pageViewsCountPer">0%</i>
+                            </div>
+                            <div class="rpt-camp-conv">
+                                <h3>Conversions</h3>
+                                <p class="conversionCount">0</p>
+                                <i class="stats-percentage conversionCountPer">0%</i>
+                            </div>                            
+                        </div>    
+                        <% } else if( this.reportType=="landingpages") { %>
+                        <div  class="rpt-campaign-stats rpt-campaign-two">                        
+                            <div class="rpt-camp-pv">
+                                <h3>Page Views</h3>
+                                <p class="viewCount">0</p>                                
+                            </div>
+                            <div class="rpt-camp-conv">
+                                <h3>Form Submissions</h3>
+                                <p class="submitCount">0</p>
+                                 <i class="stats-percentage submitCountPer">0%</i>
+                            </div>
                         </div>
-
+                        <% } %>
                     </div>
-
-                </div>
-                <!-- template-container  --> 
+                    
+                    
+                    <div class="table-area">
+                        <% if(this.reportType=="nurturetracks") { %>
+                        <div class="report-title">
+                            <div>
+                                <div class="name-type">              
+                                    <h3>                    
+                                        <a  class="campname show-detail nt-name showtooltip" style="max-width:autopx;overflow-x:hidden;text-overflow: ellipsis" title="Click to open">Nurture Track </a>                    
+                                    </h3>                                                                             
+                                     <a class="cstatus pclr1 nt-status">Paused </a>                                        
+                                </div>
+                                <div class="rpt-details">
+                                    <!--<span class="lastSaveInfo"><i class="icon time"></i>21 Feb 2014</span>-->                                    
+                                    <span class="rp-pi-message nt-msg-count"><i class="rpicon rpicon-two rp-msg-icon"></i>0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                        
+                        <div style="margin:0px;background:none" class="template-container">
+                            <div class="rpt-block-area">     
+                            </div>
+                        </div>
+                         <% if(this.reportType!=="nurturetracks") { %>
+                        <div style="" class="rpt-add-report">                     
+                            <a><i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click here to add <%- rType %></a>
+                        </div>
+                        <% } %>                                    
+                    </div>    
+                </div>                        
             </div>
-            
+        <% } else if(this.reportType=="funnel"){ %>                                                    
+                <ul  class="funnel-tabs-btns clearfix">
+                    <li class="bg-level1 active" data-tab="1"><a>1</a></li>
+                    <li class="bg-level2" data-tab="2"><a>2</a></li>
+                    <li class="bg-level3" data-tab="3"><a>3</a></li>
+                    <li class="bg-level4" data-tab="4"><a>4</a></li>
+                </ul>                    
+                <div class="rpt-campign-listing">            
+
+              
+                <div class="col-2 col-cstats c-reports">
+                    <div class="cstats" style="height:390px; width: 42%;"> 
+                        <div class="chart funnel-chart" style="margin-top: 0px;float: left;width:350px">                        
+                        </div>
+                        <div class="rpt-funnel-stats">
+                                <div class="rpt-level-one">
+                                    <h3>New Leads</h3>
+                                    <p>0</p>
+                                </div>
+                                <div class="rpt-level-two">
+                                    <h3>MQL</h3>
+                                    <p>0</p>
+                                </div>
+                                <div class="rpt-level-three">
+                                    <h3>SQL</h3>
+                                    <p>0</p>
+                                </div>
+                                <div class="rpt-level-four">
+                                    <h3>Closed</h3>
+                                    <p>0</p>
+                                </div>                           
+                         </div>
+                    </div>
+                    <div class="table-area">
+                        <div class="template-container" style="margin:0px;background:none">
+                            <div class="rpt-block-area tab-1"></div>                    
+                            <div class="rpt-block-area tab-2" style="display: none"></div>                    
+                            <div class="rpt-block-area tab-3" style="display: none"></div>                    
+                            <div class="rpt-block-area tab-4" style="display: none"></div>                                        
+                        </div>   
+                        <div style="" class="rpt-add-report">                     
+                             <a><i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click here to add tags</a>
+                        </div>    
+                    </div>                
+                </div> <!-- Col-2 c-reports -->            
+        </div>
+        <% } else if(this.reportType=="webstats"){ %>
+            <div class="rpt-campign-listing">                          
+                <div class="col-2 col-cstats c-reports">
+                    <div class="rpweb-icons" style="display:none">
+                        <i class="rpicon rpicon-two rpbarthinchart"></i>
+                        <i class="rpicon rpicon-two rpbarincchart"></i>                        
+                    </div> 
+                    <div class="campaign-chart" style="min-height:270px;width:98%;"> 
+                        
+                    </div>                
+                    <div class="rpt-threepanel">
+                        <div class="rpt-pb01 count-block-uv">
+                            <h3>Unique Visitors</h3>
+                            <p class="count-uv">0</p>
+                        </div>
+                        <div class="rpt-pb04  count-block-pv">
+                            <h3>Page Views</h3>
+                            <p class="count-pv">0</p>
+                        </div>
+                        <div class="rpt-pb03 count-block-rv">
+                            <h3>Return Visitors</h3>
+                            <p class="count-rv">0</p>
+                        </div>                                                       
+                    </div>
+                    <div class="rp-upr-wrap right stats-selection" style="display:none">
+                        <div class="rp-upr left"><input name="checkbox" type="checkbox" class="icheckbox" value="uv" /><span>Unique Visitors</span></div>
+                        <div class="rp-upr left"><input name="checkbox" type="checkbox" class="icheckbox" value="pv" /><span>Page Views</span></div>
+                        <div class="rp-upr left"><input name="checkbox" type="checkbox" class="icheckbox" value="rv" /><span>Return Visitors</span></div>
+                    </div>
+                </div> <!-- Col-2 c-reports -->
+            </div>
+        <% } %>
+        <div class="rpt-expand clearfix" style="display:none">            
         </div>
     </div>
 </div>    
 
-<div class="btm-bar ">
-    <div class="filter_type">
-        <span class=""><%- rType %></span>
-    </div> 
-    <a class="icon delete showtooltip" title="Remove <%- rType %>"></a>                
-    <a class="icon edit showtooltip" title="Change Selection"></a>
-</div> 
 
 
 

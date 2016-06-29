@@ -15,13 +15,25 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     'click .stats-scroll': 'scrollToTop',
                     'click .sortoption': 'openSortDiv',
                     "click .refresh_autobots": "render",
-                    "click #template_search_menu": "changeSortBy"
+                    "click #template_search_menu": "changeSortBy",
+                    "keyup #daterange": 'showDatePicker',                    
+                    "click #clearcal": 'hideDatePicker',
+                    "click .calendericon": 'showDatePickerFromClick',
                 },
-                initialize: function() {
+                initialize: function() {                    
+                    if (this.options.params) {
+                        _.each(this.options.params,function(val,key){
+                            this.options[key]=val;
+                        },this)                        
+                        this.$scrollElement = $(window);
+                        this.inWorkSpace = true;
+                    }
                     this.app = this.options.app;
                     this.template = _.template(template);
                     this.status = "S",
-                            this.searchText = "";
+                    this.searchText = "";
+                    this.toDate =null;
+                    this.fromDate = null;
                     this.offset = 0;
                     this.listNum = this.options.listNum;
                     this.isRequestRunning = null;
@@ -33,22 +45,57 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     this.total = 0;
                     this.timer = 0;
                     this.dialogHeight = this.options.dialogHeight;
+                    this.disableCalender = false;
+                    
                     this.render();
                 },
                 render: function() {
                     this.$el.html(this.template());
-
+                    if(this.options.fromDate){
+                        this.fromDate =this.options.fromDate;
+                        this.toDate = this.options.fromDate;
+                        var fromDate = moment($.trim(this.fromDate), 'MM-DD-YY');
+                        var toDate = moment($.trim(this.toDate), 'MM-DD-YY');
+                        this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
+                        this.$("#daterange").prop("disabled",true);
+                        this.disableCalender = true;
+                    }
+                    if(this.options.params && this.options.params.toDate && this.options.params.toDate){
+                        this.fromDate = this.options.params.fromDate;
+                        this.toDate = this.options.params.toDate;
+                        var fromDate = moment($.trim(this.fromDate), 'MM-DD-YY');
+                        var toDate = moment($.trim(this.toDate), 'MM-DD-YY');
+                        this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));                        
+                    }
                     this.loadRContacts();
-                    this.$el.find(".stats_listing").scroll(_.bind(this.liveLoading, this));
-                    this.$el.find(".stats_listing").resize(_.bind(this.liveLoading, this));
+                    if(!this.inWorkSpace){
+                        this.$scrollElement = this.$(".stats_listing");
+                    }
+                    this.$scrollElement.scroll(_.bind(this.liveLoading, this));
+                    this.$scrollElement.resize(_.bind(this.liveLoading, this));
                     if (typeof this.options.sentAt != "undefined") {
                         this.$el.find("#contacts_close").remove();
                         this.$el.find(".input-append").css("margin-right", "-45px");
                         this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
                         this.$el.parents('.modal').find('#dialog-title .percent_stats').remove();
                     }
+                    
+                    if(this.$('#daterange').length){
+                        this.dateRangeControl = this.$('#daterange').daterangepicker();
+                        this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange, this));
+                        this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
+                    }
+                    
+                    
+                    
 
-
+                },
+                init:function(){
+                  if (this.options.type == "workflow") {
+                        this.active_ws = this.$el.parents(".ws-content");
+                        this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("<ul><li style='color:#fff'><span class='workflow-header'></span>&nbsp;"+this.options.params.wfName+" </li></ul>");
+                        this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> Option <b>"+ this.options.params.optionNumber +"</b>  </strong>")
+                    }
                 },
                 loadRContacts: function(offset) {
                     if (typeof this.options.sentAt != "undefined") {
@@ -72,28 +119,57 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     _data['type'] = this.type;
                     if (this.options.type == "tag") {
                         _data['tag'] = this.listNum;
-                        this.objRContacts.url = '/pms/io/user/getTagPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        this.objRContacts.url = '/pms/io/user/getTagPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');                        
                     } else if (this.options.type == "target") {
                         _data['filterNumber'] = this.listNum;
-                        this.objRContacts.url = '/pms/io/filters/getTargetPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        this.objRContacts.url = '/pms/io/filters/getTargetPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');                        
                     } else if (this.options.type == "autobots") {
                         this.objRContacts.url = '/pms/io/trigger/getAutobotPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
                         _data['botId'] = this.options.botId;
-                        _data['status'] = this.options.status;
+                        _data['status'] = this.options.status;                        
+                    } else if (this.options.type == "webform") {
+                        this.objRContacts.url = '/pms/io/form/getSignUpFormData/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        _data['formId'] = this.options.listNum;
+                        if(this.options.params && this.options.params.pageId){
+                            _data['pageId'] = this.options.params.pageId;
+                        }
+                        _data['type'] = "getSubmissions";                           
+                    }else if (this.options.type == "workflow") {
+                        this.objRContacts.url = this.options.params.url+'?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                        _data['workflowId'] = this.options.listNum;   
+                        _.each(this.options.params,function(val,key){
+                            if(key!="url"){
+                                _data[key]=val;
+                            }
+                        },this);  
+                        if(!this.options.params.viewType){ //handling date form for web visits
+                            var fromDate = moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                            var toDate = moment($.trim(this.toDate), 'MM-DD-YYYY');
+                            this.fromDate = fromDate.format("MM-DD-YY");
+                            this.toDate = toDate.format("MM-DD-YY");
+                        }
+                        
                     } else {
                         _data['listNum'] = this.listNum;
                         _data['status'] = this.status;
+                                                
                     }
-                    _data['searchText'] = this.searchText;
+                    if(this.toDate && this.fromDate){
+                        _data['toDate'] = this.toDate;
+                        _data['fromDate'] = this.fromDate;
+                    }
                     _data['offset'] = this.offset;
+                    _data['searchText'] = this.searchText;
+                    
                     this.$el.find('#table_pageviews tbody .load-tr').remove();
                     this.$el.find('#table_pageviews tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:20px;padding-left:43%;'>No contacts founds!</div><div class='loading-contacts' style='margin-top:45px'></div></td></tr>");
                     this.options.app.showLoading("&nbsp;", this.$el.find('#table_pageviews tbody').find('.loading-contacts'));
                     this.objRContacts.fetch({data: _data, success: function(contacts) {
+                            that.app.removeSpinner(that.$el);
                             that.offsetLength = contacts.length;
                             that.total_fetch = that.total_fetch + contacts.length;
                             _.each(contacts.models, function(model) {
-                                that.$el.find('#table_pageviews tbody').append(new rContact({model: model, app: that.options.app,isSubscriber:that.options.isSubscriber, listNum: that.options.listNum, type: that.options.type, sentAt: that.options.sentAt}).el);
+                                that.$el.find('#table_pageviews tbody').append(new rContact({model: model, app: that.options.app,parent: that ,isSubscriber:that.options.isSubscriber, listNum: that.options.listNum, type: that.options.type, sentAt: that.options.sentAt}).el);
                             });
                             if (that.searchText != '') {
                                 that.showSearchFilters(that.searchText, that.options.app.addCommas(that.objRContacts.total), that.searchText);
@@ -113,21 +189,26 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                             }
 
                             var height = that.$el.find(".stats_listing").outerHeight(true);
-                            if (height < 360) {
-                                that.$el.find(".stats_listing").css({"height": "300px", "overflow-y": "auto"});
-                            } else {
-                                if (that.objRContacts.models.length != 0)
-                                    if (that.dialogHeight) {
-                                        that.$el.find(".stats_listing").css({"height": that.dialogHeight - 70 + "px", "overflow-y": "auto"});
-                                    } else {
-                                        that.$el.find(".stats_listing").css({"height": "357px", "overflow-y": "auto"});
+                            if(!that.inWorkSpace){
+                                if (height < 360) {
+                                    that.$el.find(".stats_listing").css({"height": "300px", "overflow-y": "auto"});
+                                } else {
+                                    if (that.objRContacts.models.length != 0)
+                                        if (that.dialogHeight) {
+                                            that.$el.find(".stats_listing").css({"height": that.dialogHeight - 70 + "px", "overflow-y": "auto"});
+                                        } else {
+                                            that.$el.find(".stats_listing").css({"height": "357px", "overflow-y": "auto"});
+                                        }
+                                    if (height > 375) {
+                                        that.$el.find(".stats_listing").find('.stats-scroll').remove();
+                                        that.$el.find(".stats_listing").append("<button class='stats-scroll ScrollToTop' type='button' style='display: none; position:absolute;bottom:5px;right:20px;'></button>");
                                     }
-                                if (height > 375) {
-                                    that.$el.find(".stats_listing").find('.stats-scroll').remove();
-                                    that.$el.find(".stats_listing").append("<button class='stats-scroll ScrollToTop' type='button' style='display: none; position:absolute;bottom:5px;right:20px;'></button>");
                                 }
                             }
                             that.$el.find('#table_pageviews tbody').find('.tag').on('click', function() {
+                                if(that.options.type=="webform"){
+                                    return false;
+                                }
                                 var html = $(this).html();
                                 that.searchText = $.trim(html);
                                 that.$el.find(".search-control").val(that.searchText);
@@ -195,7 +276,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     this.total = 0;
                     this.searchText = '';
                     this.searchTags = '';
-                    this.total_fetch = 0;
+                    this.total_fetch = 0;                    
                     this.loadRContacts();
                 }, badgeText: function(margin_left) {
                     var search = "<div class='temp-filters clearfix' style='display:inline-block;padding:4px 0px;" + margin_left + "'>";
@@ -232,6 +313,55 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                 changeSortBy: function(ev) {
                     this.$el.find("#template_search_menu").slideUp();
                     this.$el.find(".sortoption span").html($(ev.target).html());
+                }, /*---------- Calender functions---------------*/
+                showDatePicker: function () {
+                    this.$('#clearcal').show();
+                    return false;
+                },
+                hideDatePicker: function () {
+                    this.$('#clearcal').hide();
+                    this.fromDate = "";
+                    this.toDate = "";                                          
+                    this.total_fetch = 0;
+                    this.$('#daterange').val('');                    
+                    this.loadRContacts();
+                },
+                showDatePickerFromClick: function () {
+                    if(this.disableCalender){
+                        return false;
+                    }
+                    this.$('#daterange').click();
+                    return false;
+                },
+                setDateRange: function () {
+                    var val = this.$("#daterange").val();
+                    if ($.trim(val)) {
+                        this.$('#clearcal').show();
+                        var _dateRange = val.split("-");
+                        var toDate = "", fromDate = "";
+                        if (_dateRange[0]) {
+                            fromDate = moment($.trim(_dateRange[0]), 'M/D/YYYY');
+                        }
+                        if ($.trim(_dateRange[1])) {
+                            toDate = moment($.trim(_dateRange[1]), 'M/D/YYYY');
+                        }
+                        if (fromDate) {
+                            this.fromDate = fromDate.format("MM-DD-YY");
+                        }
+                        if (toDate) {
+                            this.toDate = toDate.format("MM-DD-YY");
+                        } else {
+                            this.toDate = fromDate.format("MM-DD-YY");
+                        }
+                        
+                        this.loadRContacts();
+                    }
+                },
+                setDateRangeLi: function (obj) {
+                    var target = $.getObj(obj, "li");
+                    if (!target.hasClass("ui-daterangepicker-dateRange")) {                        
+                        this.setDateRange();
+                    }
                 }
 
             });

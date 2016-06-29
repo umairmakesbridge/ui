@@ -22,8 +22,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         this.headBadge();
                     },
                     "click .stattype": function (obj) {
-                        var camp_obj = this;
-                        var appMsgs = this.app.messages[0];
+                        var camp_obj = this;                        
                         var target = $.getObj(obj, "a");
                         var prevStatus = this.searchTxt;
                         if (target.parent().hasClass('active')) {
@@ -101,8 +100,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                 },
                 findCampaigns: function (obj)
                 {
-                    var camp_obj = this;
-                    var appMsgs = this.app.messages[0];
+                    var camp_obj = this;                    
                     var target = $.getObj(obj, "a");
                     var prevStatus = this.status;
                     if (target.html() != 'Date Range')
@@ -542,7 +540,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                        this.total_fetch = 0;
                        this.getallcampaigns();
                     }
-                    this.app.mainContainer.createCampaign(fieldText, _json);
+                    this.app.mainContainer.createCampaign(fieldText, _json,this);
                }
 
             });

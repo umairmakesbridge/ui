@@ -89,7 +89,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     if (this.options.prevFlag === 'C') {
                         this.setiFrameSrc();
                     } else {
-                        this.$('#email-template-iframe').attr('src', this.options.frameSrc).css('height', this.options.frameHeight);
+                       this.$('#email-template-iframe').attr('src', this.options.frameSrc).css('height', this.options.frameHeight);
                     }
                 },
                 setiFrameSrc: function () { // HTML & Text Tab Click
@@ -110,7 +110,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         }
                         if (this.options.isText && this.options.isText == 'Y') {
                             this.html = 'N';
-                        }
+                        }                        
                         frame = this.options.frameSrc + "&html=" + this.html + "&original=" + this.original;
                         /*Check if Contact is selected or not*/
                         if (this.subNum !== null) {
@@ -126,17 +126,23 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         else
                             newFrameheight = this.options.frameHeight - 170;
                     }
-                    else if (this.options.prevFlag === 'T'){
+                    else if (this.options.prevFlag === 'T' || this.options.prevFlag === 'E'){
                         newFrameheight = this.options.frameHeight - 50;
                     }
                     else {
                         newFrameheight = this.options.frameHeight;
                     }
-                    this.$('#email-template-iframe').attr('src', frame).css('height', newFrameheight);
+                    if(this.options.frameSrc=="about:blank"){
+                        this.$('#email-template-iframe').css('height', newFrameheight);    
+                    }
+                    else{
+                        this.$('#email-template-iframe').attr('src', frame).css('height', newFrameheight);
+                    }
+                    
                 },
                 loadPrevTemplates: function () {
                     this.$('.previewbtns').hide();
-                    if (this.options.prevFlag === 'T') {                        
+                    if (this.options.prevFlag === 'T' || this.options.prevFlag === 'E') {                        
                         this.setiFrameSrc();
                         this.$('#prev-email').focus();
                     } else if (this.options.prevFlag === 'C') {
@@ -154,25 +160,34 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         this.$('#temp-camp-previewbar').removeAttr('style');
                         this.dynamicRequest();
                         var post_val = this.$('#sendtemp-preview').serialize();
+                        if(this.options.postParams){
+                            post_val = this.options.postParams;
+                            post_val["toEmails"] = this.$('#prev-email').val();
+                        }
                         this.$('#send-template-preview').addClass('loading-preview');
                         this.$('#prev-email').attr('disabled', 'disabled');
                         $.post(this.url, post_val)
                                 .done(_.bind(function (data) {
-                                    data = JSON.parse(data);
+                                    this.$('#send-template-preview').removeClass('loading-preview');
+                                    this.$('#prev-email').removeAttr('disabled');
+                                    data = JSON.parse(data);                                    
                                     if (data[0] == "success") {
                                         this.$('#prev-email').val("");
-                                        this.app.showMessge('Template Preview Sent Successfully');
-                                        this.$('#send-template-preview').removeClass('loading-preview');
-                                        this.$('#prev-email').removeAttr('disabled');
+                                        this.app.showMessge('Template Preview Sent Successfully');                                        
                                         this.$('.contact-name').text('');
                                         this.$('#contact-name-prev').hide();
                                         this.subNum = null;
+                                    }
+                                    else if (data[0] == "err") {
+                                        if(data[1]){
+                                            this.app.showAlert(data[1]);
+                                        }
                                     }
                                 }, this));
                     } else {
                         this.$('#temp-camp-previewbar').css({'padding-bottom': '14px', 'padding-top': '25px'});
                         this.$('#prev-email').parent().addClass('error');
-                        this.$('#prev-email').parent().append('<span class="errortext"><i class="erroricon"></i><em>' + this.options.app.messages[0].CAMP_fromemail_format_error + '</em></span>');
+                        this.$('#prev-email').parent().append('<span class="errortext"><i class="erroricon"></i><em>' + "Please enter correct email address format" + '</em></span>');
                     }
 
                 },
@@ -224,6 +239,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     this.tempNum = this.options.tempNum;
                     if (this.options.prevFlag === 'T') {
                         this.url = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.bms_token + "&type=email&templateNumber=" + this.tempNum;
+                    }
+                    if (this.options.prevFlag === 'E') {
+                        this.url = "/pms/io/subscriber/saveSingleEmailData/?BMS_REQ_TK=" + this.bms_token + "&&msgId=" + this.tempNum;                        
                     }
                     else if (this.options.prevFlag === 'C') {
                         if (this.$('.show-original').is(':checked')) {

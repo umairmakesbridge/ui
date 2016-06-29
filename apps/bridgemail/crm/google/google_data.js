@@ -74,8 +74,7 @@ function (template,chosen,addbox) {
 		   var campview = this.camp_obj;
 		   var curview = campview?campview.states.step3.csvupload:this.csv;
 		   var app = this.options.app;
-		   var mapview = this;
-		   var appMsgs = app.messages[0];
+		   var mapview = this;		   
 		   var el = this.$el;
 		   var actid = el.find('.map-toggle .active').attr('id');
 		   var newlist = '';
@@ -122,7 +121,7 @@ function (template,chosen,addbox) {
                         /* Check if map data exists in Layout map */
 			if(layout_map == '' || layout_map.split(',').length < 1)
 			{
-				app.showAlert(appMsgs.MAPDATA_bmsfields_email_error,el);
+				app.showAlert("Please select atleast Email address as a mapping column",el);
 				isValid = false;
 			}
                         else{
@@ -134,14 +133,14 @@ function (template,chosen,addbox) {
                                 }
                             }
                             if(email_flag!==1){
-                                 app.showAlert(appMsgs.MAPDATA_bmsfields_email_error,el);
+                                 app.showAlert("Please select atleast Email address as a mapping column",el);
                                 isValid = false;
                             }
                             layout_map = layout_map.join();
                         }
 			if(dup > 0)			
 			{
-                            app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
+                            app.showAlert("Please select atleast Email address as a mapping column",el);
                             isValid = false;						
 			}
 			   if(isValid == false)
@@ -217,8 +216,7 @@ function (template,chosen,addbox) {
 		   this.render();
 		   var curview = this;
 		   var app = this.options.app;
-		   var campview = this.options.camp;
-		   var appMsgs = app.messages[0];
+		   var campview = this.options.camp;		   
 		   this.filllistsdropdown();
 		   curview.$el.find('.tabel-div').children().remove();
 		   var mappingHTML = curview.createMappingTable(curview.options.rows);
@@ -230,7 +228,7 @@ function (template,chosen,addbox) {
 		   curview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
 		   curview.$el.find(".add-custom-field").addbox({app:app,
                         addCallBack:_.bind(curview.addCustomField,curview),
-                        placeholder_text:appMsgs.MAPDATA_customfield_placeholder
+                        placeholder_text:"New custom field"
 		   });
 		   var curview = this;
 		   curview.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});

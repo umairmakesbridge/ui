@@ -401,8 +401,7 @@ function (template) {
             {   
                     var target = $.getObj(obj,"span");
                     var camp_id=target.parents("tr").attr("id").split("_")[1],camp_name=target.text();
-                    var camp_obj = this;
-                    var appMsgs = this.app.messages[0];				
+                    var camp_obj = this;                    			
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
                     var dialog = camp_obj.app.showDialog({title:'Campaign Preview of &quot;' + camp_name + '&quot;' ,

@@ -83,8 +83,7 @@ function (template) {
                             this.$("input[name='options_sf']").eq(4).iCheck('check');                           
                             this.$("#sfcamp_list_grid tr[id='row_"+recipient_obj.sfCampaignId+"']").addClass("selected");    
                         }
-                        else if(recipient_obj.filterType==="filter" && recipient_obj.sfObject!=="both"){
-                            
+                        else if(recipient_obj.filterType==="filter" && recipient_obj.sfObject!=="both"){                            
                             if(recipient_obj.sfObject=="lead"){
                                 this.$("input[name='options_sf']").eq(1).iCheck('check');
                                 parent_accordion = this.$("input[name='options_sf']").eq(1).parents("h3");
@@ -93,8 +92,7 @@ function (template) {
                                 this.$("input[name='options_sf']").eq(2).iCheck('check');
                                 parent_accordion = this.$("input[name='options_sf']").eq(2).parents("h3");
                             }
-                            
-                            
+                                                        
                         }
                         else if(recipient_obj.filterType==="opportunity"){
                                 this.$("input[name='options_sf']").eq(3).iCheck('check');

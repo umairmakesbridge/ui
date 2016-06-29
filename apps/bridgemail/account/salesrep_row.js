@@ -1,5 +1,5 @@
 define(['text!account/html/salesrep_row.html'],
-function (template,moment) {
+function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Sal Rep Row View to show on salesrep listing (Sub Account Management)

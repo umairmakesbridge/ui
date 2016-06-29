@@ -468,7 +468,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                 deleteIconCampaign.click(function(){
                         
                         that.options.app.showAlertDetail({heading:'Confirm Deletion',
-                        detail: that.options.app.messages[0].CAMPS_delete_confirm_error,                                                
+                        detail: "Are you sure you want to delete?",                                                
                         callback: _.bind(function(){
                                 that.$el.parents(".ws-content").find(".overlay").remove();
                                 that.deleteCampaign(that.campNum);

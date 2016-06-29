@@ -13,7 +13,7 @@ function (template) {
              * Attach events on elements in view.
             */
             events: {
-              'click .previewmsg':'messagePreview',
+              'click .previewmsg':'campDetails',
               'click .report':'reportShow'
             },
             /**
@@ -37,7 +37,24 @@ function (template) {
             initControls:function(){
               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
             },
-            messagePreview:function(e){
+            campDetails:function(e){
+               //?BMS_REQ_TK=QxwRFLs31lNbcAKSEI8r94ttY4wQ51&campNum=zdTyioHn17Lo20Ln21Oh30Si33zdTyio&type=basic
+                var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=basic&campNum="+this.model.get("campNum.encode");
+                var _this = this;
+                    jQuery.getJSON(URL, function (tsv, state, xhr) {
+                        if (xhr && xhr.responseText) {
+                            var defaults_json = jQuery.parseJSON(xhr.responseText);
+                            if (_this.app.checkError(defaults_json)) {
+                                return false;
+                            }
+                            _this.messagePreview(defaults_json);
+                        }
+                    }).fail(function () {
+                        console.log("error in detauls");
+                    });
+                  e.stopPropagation();
+            },
+            messagePreview:function(defaults_json){
                 var camp_id = this.model.get("campNum.encode");                                		
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
@@ -51,11 +68,10 @@ function (template) {
                 this.app.showLoading("Loading Message HTML...",dialog.getBody());									
                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                 require(["common/templatePreview"],_.bind(function(templatePreview){
-                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
+                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:defaults_json.isTextOnly}); // isText to Dynamic
                  dialog.getBody().html(tmPr.$el);
                  tmPr.init();
                },this));
-               e.stopPropagation();
             },
             reportShow:function(){                
                 //this.parent.closeView();

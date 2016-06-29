@@ -77,6 +77,9 @@
             filter_html +='<div class="btn-group rules-container"><select data-placeholder="Choose Match Type" class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
             filter_html +='</select></div>'                              
           }
+          if(matchValue == "n0ne"){
+              matchValue = "";
+          }
           filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:140px;" />'
           filter_html += '<select data-placeholder="Choose value" class="selectbox matchValueSelect" disabled="disabled"><option value="">Loading...</option>'                      
           filter_html +='</select></div>'
@@ -111,9 +114,16 @@
            }
       })
       filter.find(".rules").chosen({disable_search: "true",width:'170px'}).change(function(){
+          var attrType = filter.find(".fields option:selected").attr("field_type").toLowerCase();
+          
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
           self.updateAdvanceFilter()
+          if(attrType=="reference" && $(this).val()=="none"){
+              filter.find(".matchValueSelect").val('n0ne').prop("disabled",true).trigger("chosen:updated");
+          }else{
+              filter.find(".matchValueSelect").prop("disabled",false).trigger("chosen:updated");
+          }
           if(filter.find(".fields").val().toLowerCase()=="createddate" || filter.find(".fields").val().toLowerCase()=="lastmodifieddate"){
               if(self.checkDateTimeCheck(filter,params)){
                      filter.find(".matchValue").hide();                     
@@ -173,6 +183,7 @@
         var self=this;
         var rule_html = ""
         var attr_type = filter.find(".fields option:selected").attr("field_type").toLowerCase()	
+        var attr_value = filter.find('.fields option:selected').val();
         if(attr_type=="id"){attr_type="double"}
                 $.each(self.rules,function(key,val){
                      if(attr_type==val.type.toLowerCase()){
@@ -207,6 +218,9 @@
                          filter.find(".rules").val(condition).trigger("chosen:updated");                                                  
                          params.paramsApplied = true;
                      }
+                }else if(attr_type=="reference" && attr_value.split('.')[1]=="Name" && attr_value.split('.')[0]!="Owner"){
+                    
+                    self.reqRefernce(filter,params)
                 }
                 else{
                     filter.find(".matchValueSelect").next().hide();
@@ -215,6 +229,70 @@
                 
                 self.updateAdvanceFilter()
                 
+   },
+   reqRefernce: function(filter,params){
+       var self=this;
+        if(filter.find(".matchValue").val()!==""){
+            var matchVal = filter.find(".matchValue").val();
+        }
+        filter.find(".matchValue").hide();
+        filter.find(".matchValueSelect").html('<option>Loading...</option>').next().show();
+        filter.find(".matchValueSelect").prop("disabled",true).trigger("chosen:updated")
+        var attr_sftype = filter.find(".fields option:selected").attr("sfObj_type").toLowerCase()	
+        var attr_value = filter.find('.fields option:selected').val();
+        if(self.options.app.getAppData(attr_value)){
+            var picklist_html = "<option value='n0ne'>Select...</option>";
+            $.each(self.options.app.getAppData(attr_value),function(key,val){                                
+                                               picklist_html +='<option value="'+val+'">'+val+'</option>'                                                                    
+                                          });
+             if(filter.find(".rules option:selected").val()=="none"){
+                 filter.find(".matchValueSelect").html(picklist_html).prop("disabled",true).trigger("chosen:updated");
+             }else{
+                 filter.find(".matchValueSelect").html(picklist_html).prop("disabled",false).trigger("chosen:updated");
+             }
+             
+             if(matchVal){
+                           filter.find(".matchValueSelect").val(matchVal).trigger("chosen:updated");
+                         }
+        }else{
+            var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=getListForReferenceField&fieldName="+attr_value+"&contactType="+attr_sftype;
+                $.ajax({
+                    dataType: "json",
+                    url: URL,
+                    async: false,
+                    data: {},
+                    success: function(responseText){
+                                    var fields_json =responseText;                                
+                                    if(self.options.app.checkError(fields_json)){
+                                        return false;
+                                    }       
+                                   var field_html ='<option value="n0ne">Select...</option>'                                            
+                                   var updateRules = false;
+//                                   console.log(fields_json);
+                                   
+                                   if(fields_json.pickList.length > 0){
+                                       self.options.app.setAppData(attr_value,fields_json.pickList);
+                                     
+                                       $.each(fields_json.pickList,function(key,val){                                
+                                               field_html +='<option value="'+val+'">'+val+'</option>'                                                                    
+                                          });
+                                       if(filter.find(".rules option:selected").val()=="none"){
+                                           filter.find(".matchValueSelect").html(field_html).prop("disabled",true).trigger("chosen:updated")
+                                       }else{
+                                          filter.find(".matchValueSelect").html(field_html).prop("disabled",false).trigger("chosen:updated"); 
+                                       }
+                                       
+                                       if(matchVal){
+                                           filter.find(".matchValueSelect").val(matchVal).trigger("chosen:updated");
+                                       }
+                                   }else{
+                                       filter.find(".matchValueSelect").html('<option>No match record found</option>').trigger("chosen:updated");
+                                   }
+                    }
+                  });
+        }
+       
+     
    },
    checkDateTimeCheck: function(filter,params){
        var isDateTime = false;
@@ -235,7 +313,8 @@
       var self = this
       var selected_field = ""
       if(this.fields.length===0){
-          URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=filterFields";
+          var filter_type = (this.options.filter_type=="contact" || this.options.filter_type=="lead")?"&fetchTypeSF="+this.options.filter_type:"";
+          URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=filterFields"+filter_type;
           jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){                        
                      var fields_json = jQuery.parseJSON(xhr.responseText);                                
@@ -250,8 +329,8 @@
                             if(selected_field){
                                 updateRules = (val[0].type!=="string" )?true:false;
                             }
-                            self.fields.push(val[0])                                  
-                            field_html +='<option value="'+val[0].name+'" '+selected_field+' field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
+                            self.fields.push(val[0])  
+                            field_html +='<option value="'+val[0].name+'" '+selected_field+' sfObj_type="'+val[0].sfObject+'" field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
                         }
                         
                     });
@@ -267,7 +346,7 @@
           var field_html ='<option value=""></option>'                                            
           $.each(this.fields,function(key,val){
                 selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                
-                field_html +='<option value="'+val.name+'" '+selected_field+' field_type="'+val.type+'">'+val.label+'</option>'                           
+                field_html +='<option value="'+val.name+'" '+selected_field+' sfObj_type="'+val.sfObject+'" field_type="'+val.type+'">'+val.label+'</option>'                           
 
             })
         filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
@@ -294,7 +373,7 @@
                                 isPicklist = val[0].type=="picklist"?true:false;
                             }
                             self.filterFields.push(val[0])                                  
-                            field_html +='<option value="'+val[0].name+'" '+selected_field+' field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
+                            field_html +='<option value="'+val[0].name+'" '+selected_field+' sfObj_type="'+val[0].sfObject+'" field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
                         }
                         
                     });                    
@@ -310,7 +389,7 @@
           var field_html ='<option value=""></option>'                                            
           $.each(this.filterFields,function(key,val){
                 selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                
-                field_html +='<option value="'+val.name+'" '+selected_field+' field_type="'+val.type+'">'+val.label+'</option>'                           
+                field_html +='<option value="'+val.name+'" '+selected_field+' sfObj_type="'+val.sfObject+'" field_type="'+val.type+'">'+val.label+'</option>'                           
 
             })
         filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
@@ -332,9 +411,16 @@
                     self.rules = [];
                     $.each(fields_json.fldList[0],function(key,val){
                         selected_field = (params && params.fieldCondition==val[0].name) ? "selected" : ""                        
-                        self.rules.push(val[0])                            
+                        if((val[0].type==="reference" && val[0].name==="none") || (val[0].type==="reference" && val[0].name==="notequal")){
+                               return;
+                             }
+                             else{
+                                 self.rules.push(val[0])   
+                             }
                         if(val[0].type=="string"){
-                            rule_html +='<option value="'+val[0].name+'" '+selected_field+' rule_type="'+val[0].type+'">'+val[0].label+'</option>'                           
+                            
+                                  rule_html +='<option value="'+val[0].name+'" '+selected_field+' rule_type="'+val[0].type+'">'+val[0].label+'</option>'                           
+                            
                         }
                         
                     });                    
@@ -658,6 +744,7 @@
   , filterRow : '<div class="filter-row _row"><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
   , adv_option : '<div class="advncfilter"><div class="inputlabel" style="position:relative"><input type="checkbox" id="campaign_isFooterText" class="checkinput" ><label for="campaign_isFooterText">Advanced Filter</label><span style="display: block;" class="fieldinfo"><i class="icon"></i><em style="z-index: 108;width:280px;line-height:14px">Click to set precedence if you are using more than 2 filters. e.g (1 AND 2) OR 3</em></span></div><div class="filter-cont"><input type="text" value="" class="advance-option" style="margin-left:10px" /></div></div>'
   , filterFor : 'S'
+  ,filter_type:''
   , title: ''
   , app:null
   ,maxFilter:8,

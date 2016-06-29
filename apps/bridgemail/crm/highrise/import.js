@@ -146,17 +146,23 @@ function (template) {
                                        colWidth : ['97%','3%']
                                });
                             }
+                            else{
+                                self.setHighriseData();
+                            }
                         }
                         else{
-                          self.app.showAlert(highrise_groups[1],$("body"),{fixed:true});  
+                            self.app.showAlert(highrise_groups[1],$("body"),{fixed:true});  
                         }
-                     self.$("#hsgroup_list_grid .action .use").click(function(){
-                                   self.$("#hsgroup_list_grid tr.selected").removeClass("selected");    
-                                    self.$("input[name='options_ns']").eq(3).iCheck('check');
-                                     //self.$(":radio[value=tags]").parents('h3').click();
-                                        self.$(":radio[value=tags]").iCheck('check');                               
-                                   $(this).parents("tr").addClass("selected");
-                     });   
+                        if(self.$("#hsgroup_list_grid .action .use").length){   
+                            self.$("#hsgroup_list_grid .action .use").click(function(){
+                                          self.$("#hsgroup_list_grid tr.selected").removeClass("selected");    
+                                           self.$("input[name='options_ns']").eq(3).iCheck('check');
+                                            //self.$(":radio[value=tags]").parents('h3').click();
+                                               self.$(":radio[value=tags]").iCheck('check');                               
+                                          $(this).parents("tr").addClass("selected");
+                            });
+                        }
+                        
                     }).fail(function() { console.log( "error net highrise group listing" ); });
                    
                    this.app.showLoading(false,this.$("#hrTagsList"));

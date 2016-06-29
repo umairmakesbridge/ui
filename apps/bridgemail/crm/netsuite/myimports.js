@@ -238,8 +238,7 @@ function (template,MyImports,moment) {
                         },this))
                 },
                 editImport:function(dialog){
-                    var importName = dialog.find("#import_name").val();
-                    var appMsgs = this.app.messages[0];
+                    var importName = dialog.find("#import_name").val();                    
                     var el = this.$el;
                     if(importName){
                     dialog.remove();
@@ -247,7 +246,7 @@ function (template,MyImports,moment) {
                     }else{
                         this.app.showError({
                             control: el.parents('body').find('.modal-open'),
-                            message: appMsgs.MAPDATA_importlist_empty_error
+                            message: "Enter an import name"
                             });
                     }
                 }

@@ -273,6 +273,13 @@
      },
      valideImage:function(file){
             var isImage = true;
+//            console.log(file);
+            var str = file.name;
+            if(/^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                //alert('your file name contain illegal character');
+                this.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true})
+                isImage = false;
+            }
             if(file.type.indexOf("image") < 0){
              this.app.showAlert("Please select a image with extension jpeg,jpg,png or gif.",$("body"),{fixed:true})
              isImage = false;
@@ -280,15 +287,13 @@
          return isImage;
      },
      valideCSV: function(file){
-         var isCSV = true;
-         var appMsgs = this.app.messages[0];
-         
+         var isCSV = true;                  
          var extension = file.name.split(".")[file.name.split(".").length - 1].toLowerCase();
          this.fileName = file.name;
          if(extension!=="csv"){
                 $('.messagebox .closebtn').click();
                 if (this.errMessage == 0) {
-                    this.app.showAlert(appMsgs.CSVUpload_wrong_filetype_error,$("body"),{fixed:true})
+                    this.app.showAlert("CSV format only. Watch video on how to save an excel file to CSV.",$("body"),{fixed:true})
                     isCSV = false;
                     ++this.errMessage
                 }
@@ -315,6 +320,7 @@
          }
          return isCSV;
     }
+    
   }
 
  /* DRAGFILE PLUGIN DEFINITION

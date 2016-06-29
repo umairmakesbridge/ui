@@ -57,7 +57,10 @@
                 var tr_obj = $(obj.target).parents("tr");
             else
                 var tr_obj = $(obj.target).parents("li");
-            //alert(tr_obj);      
+            //alert(tr_obj);   
+            if(this.options.addCallBack){
+                this.options.addCallBack(tr_obj);
+            }
             tr_obj.fadeOut("fast", function () {
                 var tr_copy = tr_obj.clone();
                 $(this).remove();
@@ -109,7 +112,9 @@
                 var tr_obj = $(obj.target).parents("tr");
             else
                 var tr_obj = $(obj.target).parents("li");
-
+            if(this.options.removeCallBack){
+                this.options.removeCallBack(tr_obj);
+            }
             tr_obj.fadeOut("fast", function () {
                 var tr_copy = tr_obj.clone();
                 $(this).remove();

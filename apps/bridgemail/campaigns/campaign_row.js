@@ -141,7 +141,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                 openCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
                     var camp_wsid = this.model.get('campNum.checksum');
-                    this.app.mainContainer.openCampaign(camp_id, camp_wsid);
+                    this.app.mainContainer.openCampaign({campid:camp_id, camp_wsid:camp_wsid,parent:this.sub});
 
                 },
                 copyCampaign: function ()
@@ -166,8 +166,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
                     var camp_obj = this.sub;
-                    var isTextOnly = this.model.get('isTextOnly');
-                    //var appMsgs = this.app.messages[0];				
+                    var isTextOnly = this.model.get('isTextOnly');                    			
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
                     var dialog = camp_obj.app.showDialog({title: 'Campaign Preview of &quot;' + this.model.get('name') + '&quot;',
@@ -220,12 +219,11 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                     }
                 },
                 deleteCampaginDialoge: function () {
-                    var camp_obj = this.sub;
-                    var appMsgs = camp_obj.app.messages[0];
+                    var camp_obj = this.sub;                    
                     var camp_id = this.model.get('campNum.encode')
                     if (camp_id) {
                         this.app.showAlertDetail({heading: 'Confirm Deletion',
-                            detail: appMsgs.CAMPS_delete_confirm_error,
+                            detail: "Are you sure you want to delete?",
                             callback: _.bind(function () {
                                 camp_obj.$el.parents(".ws-content.active").find(".overlay").remove();
                                 this.deleteCampaign();
@@ -240,8 +238,6 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                 deleteCampaign: function ()
                 {
                     var camp_obj = this.sub;
-
-                    var appMsgs = this.app.messages[0];
                     var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK=' + camp_obj.app.get('bms_token');
                     camp_obj.app.showLoading("Deleting Campaign...", camp_obj.$el.parents(".ws-content.active"), {fixed: 'fixed'});
                     $.post(URL, {type: 'delete', campNum: this.model.get('campNum.encode')})
@@ -252,7 +248,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                                  return false;
                                  }*/
                                 if (del_camp_json[0] !== "err") {
-                                    this.app.showMessge(appMsgs.CAMPS_delete_success_msg);
+                                    this.app.showMessge("Campaign deleted");
                                     //camp_obj.$el.find("#area_copy_campaign .bmsgrid").remove();
                                     this.app.removeCache("campaigns");
                                     camp_obj.total_fetch = 0;
@@ -298,13 +294,12 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                                     this.app.showAlert(camp_json[1], camp_obj.$el.parents(".ws-content.active"));
                                 }
                                 else
-                                {
-                                    var appMsgs = this.app.messages[0];
-                                    this.app.showMessge(appMsgs.CAMP_draft_success_msg);
+                                {                                    
+                                    this.app.showMessge("Campaign status is Draft");
                                     camp_obj.total_fetch;
                                     camp_obj.getallcampaigns();
                                     camp_obj.headBadge();
-                                    this.app.mainContainer.openCampaign(camp_id);
+                                    this.app.mainContainer.openCampaign({campid:camp_id});
                                 }
                             }, this));
                 },
@@ -337,10 +332,11 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                     camp_obj.getallcampaigns();
                 },
                 schOpenCampaign: function (ev) {                   
-                    this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap modal-body"></div></div>');
-                    this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px', 'margin-top': '-223px', 'max-height': '455px'});
-
+                    this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap modal-body" ></div></div>');
+                    this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-170px', 'margin-top': '-223px', 'max-height': '455px'});
+                    this.app.showLoading("Loading Calender...",this.$el.parents('body').find(".reschedule-dialog-wrap"));
                     var camp_id = this.model.get('campNum.encode');
+                    console.log(this.model);
                     var campstates = {"init": true, datetime: {day: 0, month: 0, year: 0, hour: 0, min: 0, sec: 0}, cal: null, camp_status: 'D', sch_date: ''};
                     require(["campaigns/schedule_campaign"], _.bind(function (reschedulePage) {
                         var mPage = new reschedulePage({app: this.app, parent: this, currentStates: campstates, campNum: camp_id, rescheduled: false, hidecalender: this.hidecalender, scheduleFlag: 'schedule'});
@@ -350,7 +346,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                 },
                 reschOpenCampaign: function (ev) {
                     this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap modal-body"></div></div>');
-                    this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px', 'margin-top': '-223px', 'max-height': '455px'});
+                    this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-170px', 'margin-top': '-223px', 'max-height': '455px'});
 
                     var camp_id = this.model.get('campNum.encode');
                     var campstates = {"init": true, datetime: {day: 0, month: 0, year: 0, hour: 0, min: 0, sec: 0}, cal: null, camp_status: 'D', sch_date: ''};

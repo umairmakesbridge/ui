@@ -14,41 +14,43 @@
 </div>
 
 
-<div id="imageToolbar" class="imageToolbar-menu">
+<% if(options.landingPage) { %>
+<div id="videoToolbar" class="videoToolbar-menu imageToolbar-menu">
     <ul>
-        <li title="Set Link" class="ImageToolbarLinkClass">
+<!--        <li title="Set Link" class="ImageToolbarLinkClass">
             <a >
                 <i class="mce-ico mce-i-link" style="margin-top: -5px;"></i>
             </a>
         </li>
-        <li title="Remove Link" class="ImageToolbarUnLinkClass" style="display: none">
+        <li title="Remove Link" class="VideoToolbarUnLinkClass" style="display: none">
             <a >
                 <i class="mce-ico mce-i-unlink" style="margin-top: -5px;"></i>
             </a>
-        </li>
-        <li title="Left Align" class="ImageToolbarLeftAlignClass">
+        </li>-->
+        <li title="Left Align" class="VideoToolbarLeftAlignClass">
             <a >
                 <img src="css/images/Image-align-left-icon.png" />
             </a>
         </li>
-        <li title="Center Align" class="ImageToolbarCenterAlignClass">
+        <li title="Center Align" class="VideoToolbarCenterAlignClass">
             <a >
                 <img src="css/images/Image-align-center-icon.png" />
             </a>
         </li>
-        <li title="Right Align" class="ImageToolbarRightAlignClass">
+        <li title="Right Align" class="VideoToolbarRightAlignClass">
             <a >
                 <img src="css/images/Image-align-right-icon.png" />
             </a>
         </li>
-        <li title="Set Title" class="ImageToolbarTitleSetClass">
+<!--        <li title="Set Title" class="ImageToolbarTitleSetClass">
             <a >
                 <img src="css/images/Adobe_Premiere_Pro_Title.png" />
             </a>
-        </li>
+        </li>-->
     </ul>
 </div>
-
+<div id="videoDataSavingObject" style="display:none;"></div>
+<% } %>
 <div id="currTinyMCE" style="display:none;"></div>
 <div id="linkTrack" style="display:none;"></div>
 <div id="imageDataSavingObject" style="display:none;"></div>
@@ -77,12 +79,22 @@
             <h3 class="active">
                 Building Blocks
             </h3>
-            <div class="scrollarea">                
+            
+            <div class="bb-scrollarea-wrapper" style="position:relative;">  
+                 
+                <div class="scrollarea" style="overflow-y:hidden;">
+                    <div class="stickybar">
+					<a class="icon columns showtooltip " data-original-title="Click to view row elements" id="rows" ></a>
+					<a class="icon items showtooltip active" data-original-title="Click to view item elements" id="items"></a>
+					<a class="icon spacers showtooltip" data-original-title="Click to view spacer elements" id="spacers"></a>
+					<a class="icon blocks showtooltip" data-original-title="Click to view content block elements" id="cblocks" ></a>
+				</div>
                 <div class="accordian-content ">                                        
-                    
-                    <div class="clearfix">
-                        <h4 class="">Rows</h4>
+                   
+                    <div class="clearfix first-accordian" style="display:none;" data-element="rows">
+                        <h4 style="margin-top:40px;">Rows</h4>
                         <ul class="b-blocks">
+                            
                             <li class="draggableControl ui-draggable" data-type="oneColumnContainer" draggable="true">
                                 <i class="icon col1"></i>
                                 <a >
@@ -109,13 +121,13 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="clearfix">
+                    <div class="clearfix first-accordian" style="display: none;" data-element="cblocks">
                         <h4 class="">Content Blocks</h4>
                         <ul class="b-blocks content-block">
                             
                         </ul>
                     </div>
-                    <div class="clearfix">
+                    <div class="clearfix first-accordian" data-element="items">
                         <h4 class="">Items</h4>
                         <ul class="b-blocks">
                             <li class="draggableControl ui-draggable" data-type="text" draggable="true">
@@ -149,10 +161,16 @@
                                     <span class=" font_75">SignUp Form</span>
                                 </a>
                             </li>
+                            <li class="draggableControl ui-draggable" data-type="embedvideo" draggable="true">
+                                <i class="icon embedvideo"></i>
+                                <a>
+                                    <span class=" font_75">Embed Video</span>
+                                </a>
+                            </li>
                             <% } %>
                         </ul>
                     </div>
-                     <div class="clearfix">
+                     <div class="clearfix first-accordian" style="display: none;" data-element="spacers">
                         <h4 class="">Spacer</h4>
                         <ul class="b-blocks">
                             <li class="draggableControl ui-draggable" data-type="spacer5" draggable="true">
@@ -182,13 +200,14 @@
                         </ul>
                     </div>
                 </div>
+                </div>
             </div>
             <!--  accordian-content  -->
 
             <h3>
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>My Building Blocks
             </h3>
-            <div class="scrollarea">
+            <div class="scrollarea dropblock-accordian">
                  <div class="dropblockpanel divLoading divBuildingBlockLoading buildingBlockDroppableOverlay" style="display: none;">
                     <div class="blockdrop">
                         <h3>Drop Block Here</h3>
@@ -227,7 +246,7 @@
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
                 Dynamic Content Blocks
             </h3>
-            <div class="scrollarea" style="dispaly:none">
+            <div class="scrollarea dynamicblock-accordian" style="dispaly:none">
                 <div class="accordian-content active DCCC">
                     <div class="accordianbar">
                         <div>
@@ -318,11 +337,11 @@
             <div class="scrollarea images-accordion">
                 <div id="HTML5FileUploader">
                     <div class="accordian-content active">
-                        <!--<div class="dropblockpanel divLoading divBuildingBlockLoadingImages buildingBlockDroppableOverlay" style="display: none;">
+                        <div class="dropblockpanel divLoading divBuildingBlockLoadingImages " style="display: none;">
                             <div class="blockdrop">
-                                <h3>Drop Image Here</h3>
+                                <h3 style="top: 15%;">Drop Image Here</h3>
                             </div>
-                        </div>                -->
+                        </div>    
                         <div class="accordianbar">
                             <div class="search" style="width:190px;">
                                 <input class="searchimg-text" type="text" value="" name="" style="width:170px;" id="searchImg" />
@@ -373,12 +392,12 @@
             <h3 class="">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>Background Color
             </h3>
-            <div class="scrollarea">
+            <div class="scrollarea color-accordion">
                 <div class="accordian-content ">
 
                     <div class="clearfix"  style="padding:5px;">
                         <h4 class="">Parent Layers</h4>
-                        <select class="nosearch ddlBackgroundLayers" data-placeholder="Select Parent Layer">
+                        <select class="nosearch ddlBackgroundLayers ddlBackgroundColorLayers" data-placeholder="Select Parent Layer">
                             <option value=""></option>
                         </select>
                         <br class="clearfix"/> <br/>
@@ -389,6 +408,8 @@
                         </div>
                         <input type="text" maxlength="15" size="15" class="txtColorCode acco-input">
                         <input type="button" style="float:right; margin:0;" value="Add to my Colors" class="addToMyColors">
+                        <br/>
+                        <input type="button" style="margin:0;" value="Remove color" class="removeMyColors">
                     </div>
                     <div class="clearfix">
                         <h4 class="">Template Colors</h4>
@@ -409,10 +430,105 @@
                 </div>
             </div>
             <!--  accordian-content  -->
+            
+            <h3>
+                Background Image
+            </h3>
+            
+            <div class="scrollarea images-accordion">
+                <div class="clearfix"  style="padding:5px;">
+                        <h4 class="" style="margin: 10px 0px 15px;">Parent Layers</h4>
+                        <select class="nosearch ddlBackgroundLayers ddlBackgroundImgLayers" data-placeholder="Select Parent Layer">
+                            <option value=""></option>
+                        </select>
+                        
+                        <div class="clearfix"></div>
+                        <div id="loadingbgimg" style="min-height: 90px;display:none;">
+                            <img alt="" src="<%- options._app.get('path')%>img/recurring2.gif">
+                            <h4>Loading...</h4>
+                        </div> 
+
+<!--                        <div class="bgimg-thumb_imgwrap">
+                            <img alt="" src="<%- options._app.get('path')%>img/imgiconb-w.png">
+                            <h4></h4>  
+                            
+                        </div>-->
+                        <div class="templateimg bgimg-thumb_imgwrap">
+                                <div class="droppanel"><h4><img src="/pms/abdullah/img/imgiconb-w.png" alt=""><br class="clearfix">Select Image or Paste URL</h4><img style="width:150px;height:150px;display:none" src="">
+                                    <div style="display:inline-block;position:relative;" class="SI-FILES-STYLIZED">
+                                        <!--<label style="width:154px;" class="cabinet">
+                                             <input type="button" id="file_control" name="file" class="file">
+                                           </label>
+                                           <a href="" class="btn-blue g-btn" id="list_file_upload"><span>Browse Photo </span><i class="icon update"></i></a>-->
+                                        <a style="display: inline;position: relative;top: 10px;width: 135px;" class="btn btn-blue openUpGallery right">
+                                            <span style="font-size: 13px; padding: 0px 7px;">Browse Images</span>
+                                            <i class="icon upload" style="width: 30px;"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        <div class="clearfix"></div>
+                        <input type="text" class="urlCode acco-input" placeholder="Enter Image URL" id="bgUrlCode">
+                <!--<input type="button" class="acco-button medium-button active openUpGallery" value="Open Gallery">-->
+                 <div class="clearfix"></div>
+                    <div class="bgimage-properties">
+                        <h4 class="bgimage-repeat-h4">Repeat Background</h4>  
+                        <div class="bgimage-repeatposition"> <ul class="socialbtns">
+                                    <li class="rpeatx">
+                                        <input type="checkbox" id="bgimg_repeatx" class="radiopanel" value="repeat-x" name="bgimg_repeatx"  />
+                                        <label for="bgimg_repeatx"><span class="image-repeat-icons">Horizontal</span></label>
+                                    </li>
+                                    <li class="rpeaty">
+                                        <input type="checkbox" id="bgimg_repeaty"  class="radiopanel" value="repeat-y" name="bgimg_repeaty" />
+                                        <label for="bgimg_repeaty"><span class="image-repeat-icons">Veritcal</span></label>
+                                    </li>
+                                </ul> </div>
+                        <h4 class="bgimage-repeat-h4" style="margin: 20px 0px 0px;">Image Position</h4>
+                        <div class="bgimage-setposition bgimage-repeatposition">
+                            <ul class="socialbtns" style="display:none;">
+                                    <li class="img-posiotion-li">
+                                        <input type="radio" id="bgimg_position_percent" class="radiopanel_percent" value="bg_img_percent" name="bg_img_percent"  checked="checked"  />
+                                        <label for="bgimg_position_percent"><span class="image-repeat-icons">Horizontal or Vertical</span></label>
+                                    </li>
+                            </ul>
+                                <select class="bg-leftpos acco-select margin_20 width_140 fl" id="bg-leftpos">
+                                        <option value="0%">Left</option>
+                                        <option value="50%">Center</option>
+                                        <option value="100%">Right</option>
+                                    </select>
+                            
+                            <select class="bg-toppos acco-select margin_20 width_140 fl" id="bg-toppos">
+                                        <option value="0%">Top</option>
+                                        <option value="50%">Center</option>
+                                        <option value="100%">Bottom</option>
+                                    </select>
+                            <div class="clearfix"></div>
+                            <ul class="socialbtns img-position-ul" style="display:none;">
+                                    <li class="img-posiotion-li">
+                                        <input type="radio" id="bg_img_pixel" class="radiopanel_percent" value="bg_img_pixel" name="bg_img_percent" />
+                                        <label for="bg_img_pixel"><span class="image-repeat-icons">Pixel Selection</span></label>
+                                    </li>
+                                    <div class="clearfix"></div>
+                            <input type="text" disabled="disabled" maxlength="15" size="15" value="0" class="bg-leftpos_input txtContSize acco-input " id="bg-leftpos_input"><span>px</span>
+                            <input type="text" disabled="disabled" maxlength="15" size="15" value="0" class="bg-toppos_input txtContSize acco-input " id="bg-toppos_input"><span>px</span>
+                            </ul>
+                            
+                        </div>
+                    </div> 
+                 
+                  <div class="clearfix"></div>
+                    </div>
+               
+            </div>
+            
+            <!--  accordian-content  -->
             <h3 class="active">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> Borders & Paddings
             </h3>
-            <div class="scrollarea">
+            <div class="scrollarea border-accordion">
                 <div class="accordian-content active">
                     <div class="clearfix">
                         <h4 class="">Borders</h4>
@@ -554,7 +670,11 @@
                             <input type="button" id="500" value="SMALL (500px)" data-value="500" class="small-button acco-button btnContainerSize">
 
                             <label class="acco-label grey-col fl width_140 ">Custom width</label>
-                            <input type="text" class="txtContSize txtContainerSize acco-input " size="15" maxlength="15"> pixels
+                            <input type="text" class="txtContSize txtContainerSize acco-input " size="15" maxlength="15"> 
+                            <select class="selectEmailSize">
+                                <option value="px">px</option>
+                                <option value="%">%</option>
+                            </select>
                         </div>
                     </div>
 
@@ -631,15 +751,67 @@
             </li>
             <% } %>
             
+            <% } 
+            if(options.landingPage) { %>
+                <li class="MenuSetTitle" style="float:right">
+                    <a  class="btn-green">
+                        <i class="icon setpagetitle"></i><span>Set Page Title</span>
+                    </a>
+                 </li>
+                 
+                 <li class="MenuLoadScriptBox" style="float:right">
+                    <a  class="btn-blue">
+                        <i class="icon setactionscript"></i><span>Tracking Snippets</span>
+                    </a>
+                 </li>
+                 
+                 
             <% } %>
             <span class="lastSaveInfo"></span>
         </ul>
             <div class="disabled-toolbar"></div> 
+            
+ <!-- Image Style Toolbar -->
+<div id="imageToolbar" class="imageToolbar-menu">
+    <ul>
+        <li title="Set Link" class="ImageToolbarLinkClass">
+            <a >
+                <i class="mce-ico mce-i-link" style="margin-top: -5px;"></i>
+            </a>
+        </li>
+        <li title="Remove Link" class="ImageToolbarUnLinkClass" style="display: none">
+            <a >
+                <i class="mce-ico mce-i-unlink" style="margin-top: -5px;"></i>
+            </a>
+        </li>
+        <li title="Left Align" class="ImageToolbarLeftAlignClass">
+            <a >
+                <img src="css/images/Image-align-left-icon.png" />
+            </a>
+        </li>
+        <li title="Center Align" class="ImageToolbarCenterAlignClass">
+            <a >
+                <img src="css/images/Image-align-center-icon.png" />
+            </a>
+        </li>
+        <li title="Right Align" class="ImageToolbarRightAlignClass">
+            <a >
+                <img src="css/images/Image-align-right-icon.png" />
+            </a>
+        </li>
+        <li title="Set Title" class="ImageToolbarTitleSetClass">
+            <a >
+                <img src="css/images/Adobe_Premiere_Pro_Title.png" />
+            </a>
+        </li>
+    </ul>
+</div>
+            <!-- Image Style Toolbar -->
     </div>
     <!--  tools  -->
 
     <div class="editorbox content" style="height: 1000px;">
-        <iframe class="mee-iframe" id="mee-iframe" frameborder="0" style="position: relative" src="<% if(options._app.get('complied')==0){ print('apps/bridgemail/')}else{print(options._app.get('s_path'))} %>editor/html/MEE_AREA.html?bust=1.464_9"></iframe>        
+        <iframe class="mee-iframe" id="mee-iframe" frameborder="0" style="position: relative" src="<% if(options._app.get('complied')==0){ print('apps/bridgemail/')}else{print(options._app.get('s_path'))} %>editor/html/MEE_AREA.html?bust=1.471"></iframe>        
     </div>
     <!--  editorpanel  -->
 

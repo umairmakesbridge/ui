@@ -1,36 +1,42 @@
-define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
-        function (template, barChartPage) {
+    define(['text!reports/html/report_row.html', 'reports/report_block', 'reports/campaign_bar_chart', 'reports/workflow_chart'],
+        function (template, reportBlock ,barChartPage, workflowBlock) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',
-                className: 'act_row',
+                className: 'rpt_detail-wrap',
                 events: {
-                    'click .delete': 'removeReport',
+                    'click .rpblue-delete': 'removeReport',
                     'click .add-msg-report': 'openSelectionDialog',
-                    'click .edit': 'openSelectionDialog',
+                    'click .rpt-add-report': 'openSelectionDialog',
+                    'click .rpblue-edit': 'openSelectionDialog',
                     "keyup #daterange": 'showDatePicker',
                     "mouseup #daterange" : 'showSelected',
                     "click #clearcal": 'hideDatePicker',
                     "click .calendericon": 'showDatePickerFromClick',
                     "click .percent": 'showPercentDiv',
                     "click .icons-bar-chart .icons":'changeChart',
-                    "click .tagsexpand":"expandCollapseTags"
+                    "click .tagsexpand":"expandCollapseTags",
+                    'click .funnel-tabs-btns li':'changeLevel',
+                    "click .nt-name":"editNurtureTrack"
                 },
                 initialize: function () {
-                    this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'darkblue', iconClass: 'open'},
-                        landingpages: {label: 'Landing Pages', colorClass: 'yellow', iconClass: 'form2'},
-                        nurturetracks: {label: 'Nurture Tracks', colorClass: 'blue', iconClass: 'track'},
-                        autobots: {label: 'Autobots', colorClass: 'grey', iconClass: 'autobot'},
-                        tags: {label: 'Tags', colorClass: 'green', iconClass: 'tags'},
-                        webforms: {label: 'Signup Forms', colorClass: '', iconClass: 'form'},
+                    this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'rpt-campaign', iconClass: 'rpblue-campagin'},
+                        landingpages: {label: 'Landing Pages', colorClass: 'rpt-landingpages', iconClass: 'rpblue-lp'},
+                        nurturetracks: {label: 'Nurture Tracks', colorClass: 'rpt-nt', iconClass: 'rpblue-nt'},
+                        autobots: {label: 'Autobots', colorClass: '.rpt-autobots', iconClass: 'rpblue-autobots'},
+                        tags: {label: 'Tags', colorClass: 'rpt-tag', iconClass: 'rpblue-tag'},
+                        webforms: {label: 'Signup Forms', colorClass: 'rpt-webforms', iconClass: 'rpblue-webforms'},
                         targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'},
-                        webstats: {label: 'Web Stats', colorClass: 'yellow', iconClass: 'webstats'}
+                        webstats: {label: 'Web Stats', colorClass: 'rpt-webstats', iconClass: 'rpblue-webstats'},
+                        funnel: {label: 'Funnel', colorClass: 'rpt-funnel', iconClass: 'rpblue-funnel'},
+                        workflows: {label: 'Workflows', colorClass: 'rpt-workflow', iconClass: 'rpblue-workflow'},
+                        lists: {label: 'Lists', colorClass: 'rpt-list', iconClass: 'rpblue-lists'}
 
                     };
                     this.webstats = {
-                        "uv": {title: "Unique Visitors", subtitle: "", yAxisText: "Unique Visits", xAxisText: "", barColor: "#93be4c"},
-                        "pv": {title: "Page Views", subtitle: "", yAxisText: "Page Views", xAxisText: "", barColor: "#2f93e5"},
-                        "rv": {title: "Return Visitors", subtitle: "", yAxisText: "Return Visitor Count", xAxisText: "", barColor: "#dfaa2c"},
+                        "uv": {title: "Unique Visitors", subtitle: "", yAxisText: "Unique Visits", xAxisText: "", barColor: "#44c875"},
+                        "pv": {title: "Page Views", subtitle: "", yAxisText: "Page Views", xAxisText: "", barColor: "#ffb149"},
+                        "rv": {title: "Return Visitors", subtitle: "", yAxisText: "Return Visitor Count", xAxisText: "", barColor: "#5b9ecb"},
                         "seo": {title: "Top Keywords", subtitle: "", yAxisText: "Keywords count", xAxisText: "Top Keywords", xAxisLabelDisabled: true, multipColrs: true},
                         "lcdetail": {title: "Top Companies", subtitle: "", yAxisText: "Views Count", xAxisText: "Top Companies Visited", xAxisLabelDisabled: true, multipColrs: true},
                         "ref": {title: "Top Referral Links", subtitle: "", yAxisText: "Count", xAxisText: "Top Referral Links", xAxisLabelDisabled: true, multipColrs: true},
@@ -44,11 +50,13 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.fromDate = null;
                     this.toDate = null;
                     this.dateRange = 0;
+                    this.doDraw = false;
                     this.loadReport = this.options.loadReport;
                     this.fromClick=false;
                     this.row_obj = this.options.row_obj;
                     this.reportType = this.options.reportType;
-                    this.template = _.template(template);          
+                    this.template = _.template(template);       
+                    this.subType = this.row_obj?this.row_obj.subType:"tag";
                                         
                     Highcharts.setOptions({
                         lang: {
@@ -66,7 +74,8 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     var mapObj = this.mapping[this.reportType];
                     this.$el.html(this.template({
                         rType: mapObj.label,
-                        rIcon: mapObj.iconClass
+                        rIcon: mapObj.iconClass,
+                        modelArray: this.modelArray
                     }));
                     this.$el.addClass(mapObj.colorClass);
 
@@ -83,21 +92,21 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.dateRangeControl = this.$('#daterange').daterangepicker();
                     this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange, this));
                     this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
-                    this.$('input.checkinput').iCheck({
+                    this.$('input.icheckbox').iCheck({
                         checkboxClass: 'checkinput'
                     });
-                    this.$('input.checkinput').on('ifChecked', _.bind(function(event){
-                        if(this.fromClick){
-                            var selectedStates = $.map( this.$("input.checkinput:checked"), function( val, i ) {
+                    this.$('input.icheckbox').on('ifChecked', _.bind(function(event){                        
+                        if(this.fromClick){                                                    
+                            var selectedStates = $.map( this.$("input.icheckbox:checked"), function( val, i ) {                                
                                 return val.value;
                            }).join();
                            this.modelArray[0].id = selectedStates;
                            this.drawMultiCharts();
                       }
                     },this));
-                     this.$('input.checkinput').on('ifUnchecked', _.bind(function(event){
-                        if(this.fromClick){ 
-                            var selectedStates = $.map( this.$("input.checkinput:checked"), function( val, i ) {
+                     this.$('input.icheckbox').on('ifUnchecked', _.bind(function(event){
+                        if(this.fromClick){                                                         
+                            var selectedStates = $.map( this.$("input.icheckbox:checked"), function( val, i ) {                                
                                 return val.value;
                            }).join();
                            this.modelArray[0].id = selectedStates;
@@ -131,6 +140,15 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                             }                            
                             this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
                         }
+                        if (this.reportType == "webstats") {
+                            this.setDateRange(true);
+                        }
+                    }
+                    if(this.reportType==="funnel"){
+                        this.$(".srt-div").hide();
+                    }
+                    else{
+                        this.$(".srt-div").show();
                     }
                     this.loadRows();
 
@@ -152,7 +170,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.$('#daterange').click();
                     return false;
                 },
-                setDateRange: function () {
+                setDateRange: function (setDateVars) {
                     var val = this.$("#daterange").val();
                     if ($.trim(val)) {
                         this.$('#clearcal').show();
@@ -172,7 +190,9 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         } else {
                             this.toDate = fromDate.format("MM-DD-YYYY");
                         }
-                        this.loadSummaryReports();
+                        if(typeof(setDateVars)!=="boolean"){
+                            this.loadSummaryReports();
+                        }
                     }
                 },
                 showSelected: function(setSelected){                    
@@ -227,54 +247,32 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 removeReport: function () {
                     this.$el.remove();
                     this.sub.removeMode(this.orderNo);
+                    this.loadReport = false;
                     this.saveSettings();
                 },
                 loadRows: function () {
-                    if (this.reportType == "landingpages") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["landingpages/landingpage_row"], _.bind(function (lpRow) {
-                            this.lpRow = lpRow;
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadLandingPages();
-                            }
-                        }, this));
-                    } else if (this.reportType == "campaigns") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["campaigns/campaign_row"], _.bind(function (campRow) {
-                            this.campRow = campRow;
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadCampaigns();
-                            }
-                        }, this));
-                    } else if (this.reportType == "autobots") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["autobots/autobot"], _.bind(function (botRow) {
-                            this.botRow = botRow;
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadAutobots();
-                            }
-                        }, this));
-                    } else if (this.reportType == "webforms") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["forms/formlistings_row"], _.bind(function (formRow) {
-                            this.formRow = formRow;
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadSignupforms();
-                            }
-                        }, this));
-                    } else if (this.reportType == "nurturetracks") {
-                        this.app.showLoading('Loading...', this.$el);
-                        require(["nurturetrack/track_row"], _.bind(function (trackRow) {
-                            this.trackRow = trackRow;                            
-                            this.app.showLoading(false, this.$el);
-                            if (this.objects.length) {
-                                this.loadNurtureTracks();
-                            }
-                        }, this));
+                    if (this.reportType == "landingpages") {                                                                            
+                        if (this.objects.length) {
+                            this.loadLandingPages();
+                        }
+                        
+                    } else if (this.reportType == "campaigns") {                                                                                                
+                        if (this.objects.length) {
+                            this.loadCampaigns();
+                        }
+                        
+                    } else if (this.reportType == "autobots") {                        
+                        if (this.objects.length) {
+                            this.loadAutobots();
+                        }
+                    } else if (this.reportType == "webforms") {                        
+                        if (this.objects.length) {
+                            this.loadSignupforms();
+                        }
+                    } else if (this.reportType == "nurturetracks") {                        
+                        if (this.objects.length) {
+                            this.loadNurtureTracks();
+                        }                        
                     }
                     else if (this.reportType == "targets") {
                         this.app.showLoading('Loading...', this.$el);
@@ -294,11 +292,24 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         if (this.objects.length) {
                             this.loadWebStats();
                         }
+                    }else if (this.reportType == "funnel") {
+                        if (this.objects.length) {
+                            this.loadFunnel();
+                        }
+                    }else if (this.reportType == "workflows") {
+                        if (this.objects.length) {
+                            this.loadWorkflows();
+                        }
+                    }
+                    else if (this.reportType == "lists") {
+                        if (this.objects.length) {
+                            this.loadLists();
+                        }
                     }
 
 
                 },
-                openSelectionDialog: function () {
+                openSelectionDialog: function () {                    
                     if (this.reportType == "landingpages") {
                         this.openLandingPagesDialog();
                     } else if (this.reportType == "campaigns") {
@@ -315,19 +326,36 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         this.openTagsDialog();
                     } else if (this.reportType == "webstats") {
                         this.openWebStatsDialog();
+                    } else if (this.reportType == "funnel") {
+                        if(arguments[0]){
+                            if(this.subType=="tag"){
+                                this.openFunnelTagDialg();
+                            }
+                            else{
+                                this.openFunnelObjDialog(this.subType);
+                            }
+                        }
+                        else{
+                            this.openFunnelDialog();
+                        }
+                    }
+                    else if (this.reportType == "workflows") {
+                        this.openWorkflowsDialog();
+                    }else if (this.reportType == "lists") {
+                        this.openListsDialog();
                     }
 
                 },
                 loadReports: function () {
                     this.$(".target-listing").removeClass("summary-chart");
                     if (this.reportType == "landingpages") {
-                        //this.openLandingPagesDialog();
+                        this.loadLandingPages();
                     } else if (this.reportType == "campaigns") {
                         this.loadCampaigns();
                     } else if (this.reportType == "autobots") {
                         this.loadAutobots();
                     } else if (this.reportType == "webforms") {
-                        //this.openSignupFormsDialog();
+                        this.loadSignupforms();
                     } else if (this.reportType == "nurturetracks") {
                         this.loadNurtureTracks();
                     } else if (this.reportType == "tags") {
@@ -335,24 +363,38 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     } else if (this.reportType == "webstats") {
                         this.loadWebStats();
                     }
+                    else if (this.reportType == "funnel") {
+                        this.loadFunnel();
+                    }
+                    else if (this.reportType == "workflows") {
+                        this.loadWorkflows();
+                    }
+                     else if (this.reportType == "lists") {
+                        this.loadLists();
+                    }
 
                 },
                 loadSummaryReports: function () {
                     this.$(".target-listing").addClass("summary-chart");
                     if (this.reportType == "landingpages") {
-                        //this.openLandingPagesDialog();
+                        this.loadPagesSummary();
                     } else if (this.reportType == "campaigns") {
                         this.loadCampaignsSummary();
                     } else if (this.reportType == "autobots") {
                         this.loadAutobotsSummary();
                     } else if (this.reportType == "webforms") {
-                        //this.openSignupFormsDialog();
+                        this.loadSignupformsSummary();
                     } else if (this.reportType == "nurturetracks") {
                         this.loadNurtureTrackSummary();
                     } else if (this.reportType == "tags") {
-                        this.drawTagsInOne();
+                        this.loadTagsSummary();
                     } else if (this.reportType == "webstats") {
                         this.createWebstats();
+                    }else if (this.reportType == "workflows") {
+                        this.createWorkflow();
+                    }
+                     else if (this.reportType == "lists") {
+                        this.loadListsSummary();
                     }
                     
                     this.saveSettings();
@@ -361,18 +403,28 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 //////********************* Landing pages *****************************************//////
                 loadLandingPages: function () {
                     this.app.showLoading("Loading selection...", this.$el);
+                    var mapObjects = {};
                     var pageIds = this.objects.map(function (index) {
+                        //mapObjects[index.id] = index.checked;
                         return index.id
                     }).join()
                     var URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
-                    var post_data = {pageId_csv: pageIds}
+                    var post_data = {pageId_csv: pageIds};
+                    this.modelArray = [];
                     this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
                         this.app.showLoading(false, this.$el);
                         var _json = jQuery.parseJSON(data);
                         _.each(_json.pages[0], function (val) {
-                            this.modelArray.push(new Backbone.Model(val[0]));
-                        }, this);
-                        this.createPages();
+                            var _model = new Backbone.Model(val[0]);
+                            //_model.set("isChecked",mapObjects[_model.get("pageId.encode")]);
+                            this.modelArray.push(_model);
+                        }, this);                        
+                        if(this.toDate && this.fromDate){
+                            this.setDateRange();
+                        }
+                        else{
+                            this.createPages();
+                        }
                     }, this))
                 },
                 openLandingPagesDialog: function () {
@@ -381,6 +433,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         css: {"width": "1200px", "margin-left": "-600px"},
                         bodyCss: {"min-height": "423px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'lppage'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -403,68 +456,202 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createPages: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        var _grid = this.$("#_grid tbody");
-                        var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        }                                                
+                        var _grid = this.$(".rpt-block-area");                                                
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var pageRow = new this.lpRow({model: val, sub: this, showCheckbox: true, maxWidth: _maxWidth});
-                            _grid.append(pageRow.$el);
-                        }, this);
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                            this.chartPage = new barChartPage({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createPageChart();
-                            this.app.showLoading(false, this.$(".cstats"));
-                        //}, this));
+                            var rpBlock = new reportBlock({model: val, page: this, type: "page"});
+                           _grid.append(rpBlock.$el);
+                           
+                        }, this);                        
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#39c8a9', '#66a2cd']});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "320px"});
+                        this.createPageChart();                                                
                     }
                 },
                 createPageChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_pages_selected = this.$(".checkedadded").length;
+                    if (this.modelArray.length) {                        
+                        var that = this;                        
+                        var _pages = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("pageId.checksum")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el;
+                            }
+                        });
+                        var total_pages_selected = _pages.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> landing pages selected');
+                            this.$(".total-count .rp-selected").html('landing pages selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> landing page selected');
+                            this.$(".total-count .rp-selected").html('landing page selected');
                         }
-                        this.chart_data = {submitCount: 0, viewCount: 0};
-                        _.each(this.modelArray, function (val, index) {
-                            if (this.$("[id='" + val.get("pageId.encode") + "']").hasClass("checkedadded")) {
+                        if(total_pages_selected!==0){
+                            this.showChart();
+                            this.chart_data = {submitCount: 0, viewCount: 0};                        
+                            _.each(_pages, function (val, index) {                            
                                 this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));
                                 this.chart_data['viewCount'] = this.chart_data['viewCount'] + parseFloat(val.get("viewCount"));
-                            }
-                        }, this);
 
-                        var _data = [
-                            ['Action', 'Count'],
-                            ['Page Views', this.chart_data["viewCount"]],
-                            ['Submission', this.chart_data["submitCount"]]
-                        ];
+                            }, this);
+
+
+                            var _data = [                           
+                                ['Page Views', this.chart_data["viewCount"]],
+                                ['Submission', this.chart_data["submitCount"]]
+                            ];
+                        }
+                        else{
+                            this.showChart(true);
+                        }
+                        
                         this.chartPage.createChart(_data);
                         _.each(this.chart_data, function (val, key) {
                             this.$(".col-2 ." + key).html(this.app.addCommas(val));
+                            if(parseInt(this.chart_data["viewCount"])){
+                                this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data["viewCount"]) * 100).toFixed(2) + "%");
+                            }
                         }, this);
+                        
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                        
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> landing pages selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('landing pages selected');                        
                     }
 
                     this.saveSettings();
+                },
+                showChart: function(hide){
+                    if(hide){
+                        this.$(".campaign-chart").hide();
+                        var obj_label = this.mapping[this.reportType].label.toLowerCase();
+                        if(obj_label==="nurture tracks"){
+                            obj_label = "messages";
+                        }                            
+                        this.$(".cstats").append('<div class="loading nodata"><p style="background: transparent none repeat scroll 0% 0%; padding-top: 10px;">Select '+obj_label+' to see chart</p></div>');
+                    }
+                    else{
+                        this.$(".cstats .nodata").remove();
+                        this.$(".campaign-chart").show();
+                    }
+                },
+                loadPagesSummary: function () {
+                    if (this.modelArray.length) {
+                        this.showHideChartArea(true);
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count .rp-selected").html('landing pages selected');
+                        }
+                        else {
+                            this.$(".total-count .rp-selected").html('landing page selected');
+                        }
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();                                                                      
+                        this.custom_data = {};
+                        _.each(this.modelArray, function (val, index) {
+                            var lpRow = new reportBlock({model: val, page: this, type: "page","expandedView":true});
+                            _grid.append(lpRow.$el);
+                            this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("pageId.checksum")));
+                            var URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=getLandingPagesSummaryCount";
+                            var pageNum = val.get("pageId.encode");
+                            this.custom_data[val.get("pageId.checksum")]={model:val,_date:[]};
+                            var post_data = {pageId: pageNum, toDate: this.toDate, fromDate: this.fromDate,formId:val.get("formId.encode")}
+                            $.post(URL, post_data).done(_.bind(function (sJson) {
+                                var summary_json = jQuery.parseJSON(sJson);
+                                if (summary_json[0] == "err") {
+                                    this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                    return false;
+                                }
+                                if (summary_json.count !== "0") {                                    
+                                        var viewData = [], submitData = [];
+                                        var categories = [];
+                                        this.chart_data = {viewCount: 0, submitCount: 0};                                        
+                                        
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');                                        
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.summaries[0];
+                                        
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                            for(var d=0;d<=days_report;d++){
+                                                var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                categories.push(c_date);
+                                                var sVal = summaries["summary"+_d];
+                                                if(sVal && c_date == moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM")){                                                
+                                                    
+                                                    viewData.push(parseInt(sVal[0].viewCount));
+                                                    submitData.push(parseInt(sVal[0].submitCount));
+                                                    
+
+                                                    this.chart_data["viewCount"] = this.chart_data["viewCount"] + parseInt(sVal[0].viewCount);
+                                                    this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
+                                                    _d = _d + 1;
+                                                }
+                                                else{                                                    
+                                                    viewData.push(0);
+                                                    submitData.push(0);                                                    
+                                                }
+                                                this.custom_data[val.get("pageId.checksum")]._date.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("MM-DD-YY"));
+                                            }
+                                        }
+                                        else{
+                                            _.each(summary_json.summaries[0], function (sVal) {
+                                                categories.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM"));                                                
+                                                viewData.push(parseInt(sVal[0].viewCount));
+                                                submitData.push(parseInt(sVal[0].submitCount));
+                                                
+                                                this.chart_data["viewCount"] = this.chart_data["viewCount"] + parseInt(sVal[0].viewCount);
+                                                this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
+                                                this.custom_data[val.get("pageId.checksum")]._date.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("MM-DD-YY"));
+                                            }, this);
+                                        }
+                                        
+                                        var _data = [{"name": "Views", "data": viewData}, {"name": "Submissions", "data": submitData}];
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#66a2cd','#39c8a9'],clickEvent:_.bind(this.openPopulationDetail,this),checkSum:val.get("pageId.checksum")});
+                                        this.$("#chart-" + val.get("pageId.checksum")).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
+                                        this.chartPage.createChart(_data);
+                                        _.each(this.chart_data, function (v, key) {
+                                            this.$("#stats-" + val.get("pageId.checksum") + " ." + key).html(this.app.addCommas(v));
+                                            if(parseInt(val.get("viewCount"))){
+                                                this.$("#stats-" + val.get("pageId.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("viewCount")) * 100).toFixed(2) + "%");
+                                            }
+                                        }, this);
+                                    
+                                }
+                                else {
+                                    this.$("#chart-" + val.get("pageId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for Landing page </p></div>');
+                                }
+                            }, this));
+
+                        }, this);
+
+                    }                    
+                },
+                openPopulationDetail: function(chart,key){                    
+                    if(chart.series.name.toLowerCase()=="submissions"){
+                        var model = this.custom_data[key].model;
+                        var populationDate = this.custom_data[key]._date[chart.index];
+                        var dialog_title = "Submissions of '"+model.get("name")+"' on "+ moment(populationDate, 'MM-DD-YY').format("DD MMM YYYY");
+                        var formId = model.get('formId.encode');
+                        var formCheckSum = model.get('formId.checksum');
+                        this.app.mainContainer.openPopulation({objId:formId,ws_title:dialog_title,objCheckSum:formCheckSum+populationDate,fromDate:populationDate,type:"webform",params:{pageId:model.get('pageId.encode')}});                        
+                    }
                 },
                 //////********************* Campaigns *****************************************//////
                 loadCampaigns: function () {
                     this.app.showLoading("Loading selection...", this.$el);
                     var campNums = this.objects.map(function (index) {
                         return index.id
-                    }).join()
+                    }).join();
                     var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=list_csv";
                     var post_data = {campNum_csv: campNums};
                     this.modelArray = [];
@@ -489,6 +676,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10px"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'campaigndlg'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -506,106 +694,118 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createCampaigns: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        var _grid = this.$("#_grid tbody");
-                        var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        }                                                
+                        var _grid = this.$(".rpt-block-area");                        
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var campRow = new this.campRow({model: val, sub: this, showCheckbox: true, maxWidth: _maxWidth});
-                            _grid.append(campRow.$el);
+                            var rpBlock = new reportBlock({model: val, page: this, type: "campaign"});
+                            _grid.append(rpBlock.$el);
                         }, this);
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createCampaignChart();
-                        //}, this));
+                        this.app.showLoading("Creating Chart...", this.$(".cstats"));                        
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#8b9ca6', '#ffba55', '#5c62b8','#67a1d1','#44c7a7']});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "320px"});
+                        this.createCampaignChart();                       
                     }
                 },
                 createCampaignChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_pages_selected = this.$(".checkedadded").length;
+                    if (this.modelArray.length) {                                                             
+                        var total_pages_selected = 0;
+                        var that = this;                        
+                        var _campaigns = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("campNum.checksum")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el.get("campNum.encode");
+                            }
+                        }).join(",");
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaigns selected');
+                            this.$(".total-count .rp-selected").html('campaigns selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaign selected');
+                            this.$(".total-count .rp-selected").html('campaign selected');
                         }
-                        var _campaigns = $.map(this.$(".checkedadded"), function (el) {
-                            return el.id;
-                        }).join(",");
-                        this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
-                            , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
-                            twitterCount: 0, unSubscribeCount: 0};
-                        var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
-                        var post_data = {campNums: _campaigns}
-                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
-                            var camp_json = jQuery.parseJSON(data);
-                            _.each(camp_json.campaigns[0], function (val) {
-                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
-                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
-                                this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
-                                this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
-                                this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
-                                this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
-                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
-                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
-                                this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
-                                this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
-                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
-                                this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
-                                this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
-                                this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
-                            }, this);
-                            var _data = [
-                                ['Opens', this.chart_data["openCount"]],
-                                ['Clicks', this.chart_data["clickCount"]],
-                                ['Page Views', this.chart_data["pageViewsCount"]],
-                                ['Conversions', this.chart_data["conversionCount"]]
-                            ];
+                                              
+                       if(total_pages_selected!==0){
+                            this.app.showLoading("Creating Chart...", this.$(".cstats"));          
+                            this.showChart();                        
+                            this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
+                                , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
+                                twitterCount: 0, unSubscribeCount: 0};
+                            var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
+                            var post_data = {campNums: _campaigns}
+                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                                var camp_json = jQuery.parseJSON(data);
+                                _.each(camp_json.campaigns[0], function (val) {
+                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
+                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
+                                    this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
+                                    this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
+                                    this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
+                                    this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
+                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
+                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
+                                    this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
+                                    this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
+                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
+                                    this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
+                                    this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
+                                    this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
+                                }, this);
+                                var _data = [
+                                    ['Sent', this.chart_data["sentCount"]],
+                                    ['Opens', this.chart_data["openCount"]],
+                                    ['Page Views', this.chart_data["pageViewsCount"]],
+                                    ['Clicks', this.chart_data["clickCount"]],                                
+                                    ['Conversions', this.chart_data["conversionCount"]]
+                                ];
 
-                            this.chartPage.createChart(_data);
-                            this.app.showLoading(false, this.$(".cstats"));
-                            _.each(this.chart_data, function (val, key) {
-                                this.$(".col-2 ." + key).html(this.app.addCommas(val));
-                                if(parseInt(val)!==0){
-                                    this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
-                                }else{
-                                    this.$(".col-2 ." + key+"Per").html("0%");
-                                }
-                            }, this);
+                                this.chartPage.createChart(_data);
+                                this.app.showLoading(false, this.$(".cstats"));
+                                _.each(this.chart_data, function (val, key) {
+                                    this.$(".col-2 ." + key).html(this.app.addCommas(val));
+                                    if(parseInt(val)!==0){
+                                        this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
+                                    }else{
+                                        this.$(".col-2 ." + key+"Per").html("0%");
+                                    }
+                                }, this);
 
-                        }, this));
+                            }, this));
+                        }
+                        else{
+                            this.showChart(true);
+                        }
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                        
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('campaigns selected');                        
                     }
                     this.saveSettings();
+                    
 
                 },
                 loadCampaignsSummary: function () {
-                    if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
+                    if (this.modelArray.length) {                        
                         this.$(".bmsgrid").show();
                         this.showHideChartArea(true);
-                        var _grid = this.$("#_grid tbody");
-                        _grid.children().remove();
                         var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaigns selected');
+                            this.$(".total-count .rp-selected").html('campaigns selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaign selected');
-                        }                                              
+                            this.$(".total-count .rp-selected").html('campaign selected');
+                        }
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();                        
                         _.each(this.modelArray, function (val, index) {
-                            var campRow = new this.campRow({model: val, sub: this, showSummaryChart: true});
+                            var campRow = new reportBlock({model: val, page: this, type: "campaign","expandedView":true});
                             _grid.append(campRow.$el);
                             this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("campNum.checksum")));
                             var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=summaryDailyBreakUp";
@@ -630,7 +830,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         var summaries =  summary_json.summaries[0];
                                         var _d = 1;    
                                         if(days_report<=30){
-                                            for(var d=0;d<days_report;d++){
+                                            for(var d=0;d<=days_report;d++){
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
@@ -680,19 +880,21 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         }
                                         
                                         var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3', '#ffb864', '#8b9ca5']});
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
-                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            this.$("#stats-" + val.get("campNum.checksum") + " ." + key).html(this.app.addCommas(v));
+                                            if(parseInt(val.get("sentCount"))){
+                                                this.$("#stats-" + val.get("campNum.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            }
                                         }, this);
 
                                     //}, this));
                                 }
                                 else {
-                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for campaign <i>"' + val.get("name") + '"</i> </p></div>');
+                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for campaign </p></div>');
                                 }
                             }, this));
 
@@ -705,15 +907,16 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         return false;
                     }
                     if (flag) {
-                        this.$(".cols").removeClass("col1");
-                        this.$(".col-2").hide();
-                        this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
+                        this.$(".rpt-campign-listing").hide();
+                        this.$(".rpt-expand").show();
+                        //this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
                     }
                     else {
-                        this.$(".cols").addClass("col1");
-                        this.$(".col-2").show();
-                        this.$(".template-container").css({"overflow-y": 'auto', height: '420px'});
-                        this.$(".parent-container").removeAttr("style");
+                        this.$(".rpt-campign-listing").show();
+                        this.$(".rpt-expand").children().remove();
+                        this.$(".rpt-expand").hide();                        
+                        //this.$(".template-container").css({"overflow-y": 'auto', height: '420px'});
+                        //this.$(".parent-container").removeAttr("style");
                     }
                 }
                 ,
@@ -748,6 +951,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10px"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'bot'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -765,107 +969,118 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createAutobots: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        var _grid = this.$("#_grid tbody");
-                        var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                         if(this.doDraw){
+                           this.sub.$(".report-empty").hide();
+                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.doDraw = false;
+                       }    
+                        var _grid = this.$(".rpt-block-area");                           
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var botRow = new this.botRow({model: val, sub: this, page: this, showCheckbox: true, maxWidth: _maxWidth});
-                            _grid.append(botRow.$el);
+                            var rpBlock = new reportBlock({model: val, page: this, type: "autobot"});
+                           _grid.append(rpBlock.$el);
                         }, this);
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createAutobotChart();
-                        //}, this));
+                                                
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#8b9ca6', '#ffba55', '#5c62b8','#67a1d1','#44c7a7']});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "320px"});
+                        this.createAutobotChart();
+                        
                     }
                 },
                 createAutobotChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_pages_selected = this.$(".checkedadded").length;
+                    if (this.modelArray.length) {                        
+                        var total_pages_selected = 0;
+                        var that = this;
+                         var _bots = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("botId.checksum")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el.get("botId.encode");
+                            }
+                        }).join(",");
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                            this.$(".total-count .rp-selected").html('autobots selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                            this.$(".total-count .rp-selected").html('autobot selected');
                         }
-                        var _bots = $.map(this.$(".checkedadded"), function (el) {
-                            return el.id;
-                        }).join(",");
-                        this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
-                            , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
-                            twitterCount: 0, unSubscribeCount: 0};
-                        var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=mailBotStats_csv";
-                        var post_data = {botId_csv: _bots}
-                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
-                            var camp_json = jQuery.parseJSON(data);
-                            _.each(camp_json.autobots[0], function (val) {
-                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
-                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
-                                this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
-                                this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
-                                this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
-                                this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
-                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
-                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
-                                this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
-                                this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
-                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
-                                this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
-                                this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
-                                this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
-                            }, this);
-                            var _data = [
-                                ['Opens', this.chart_data["openCount"]],
-                                ['Clicks', this.chart_data["clickCount"]],
-                                ['Page Views', this.chart_data["pageViewsCount"]],
-                                ['Conversions', this.chart_data["conversionCount"]]
-                            ];
+                       
+                        if(total_pages_selected!==0){
+                            this.showChart();
+                            this.app.showLoading("Creating Chart...", this.$(".cstats"));
+                            this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
+                                , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
+                                twitterCount: 0, unSubscribeCount: 0};
+                            var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=mailBotStats_csv";
+                            var post_data = {botId_csv: _bots}
+                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                                var camp_json = jQuery.parseJSON(data);
+                                _.each(camp_json.autobots[0], function (val) {
+                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
+                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
+                                    this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
+                                    this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
+                                    this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
+                                    this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
+                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
+                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
+                                    this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
+                                    this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
+                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
+                                    this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
+                                    this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
+                                    this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
+                                }, this);
+                                var _data = [
+                                     ['Sent', this.chart_data["sentCount"]],
+                                    ['Opens', this.chart_data["openCount"]],
+                                    ['Clicks', this.chart_data["clickCount"]],
+                                    ['Page Views', this.chart_data["pageViewsCount"]],
+                                    ['Conversions', this.chart_data["conversionCount"]]
+                                ];
 
-                            this.chartPage.createChart(_data);
-                            this.app.showLoading(false, this.$(".cstats"));
-                            _.each(this.chart_data, function (val, key) {
-                                this.$(".col-2 ." + key).html(this.app.addCommas(val));        
-                                if(parseInt(val)!==0){
-                                    this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
-                                }
-                                else{
-                                    this.$(".col-2 ." + key+"Per").html("0%");
-                                }
-                            }, this);
+                                this.chartPage.createChart(_data);
+                                this.app.showLoading(false, this.$(".cstats"));
+                                _.each(this.chart_data, function (val, key) {
+                                    this.$(".col-2 ." + key).html(this.app.addCommas(val));        
+                                    if(parseInt(val)!==0){
+                                        this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
+                                    }
+                                    else{
+                                        this.$(".col-2 ." + key+"Per").html("0%");
+                                    }
+                                }, this);
 
-                        }, this));
+                            }, this));
+                        }
+                        else{
+                            this.showChart(true);
+                        }
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                        
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('autobots selected');                        
                     }
                     this.saveSettings();
 
                 },
                 loadAutobotsSummary: function () {
-                    if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
+                    if (this.modelArray.length) {                        
                         this.showHideChartArea(true);
                         var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                            this.$(".total-count .rp-selected").html('autobots selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                            this.$(".total-count .rp-selected").html('autobot selected');
                         }
-                        var _grid = this.$("#_grid tbody");
+                        var _grid = this.$(".rpt-expand");
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var autobotRow = new this.botRow({model: val, page: this, sub: this, showSummaryChart: true});
+                            var autobotRow = new reportBlock({model: val, page: this, type: "autobot","expandedView":true});
                             _grid.append(autobotRow.$el);
                             this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("botId.checksum")));
                             var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=summaryDailyBreakUp";
@@ -889,7 +1104,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         var summaries =  summary_json.summaries[0];
                                         var _d = 1;    
                                         if(days_report<=30){
-                                            for(var d=0;d<days_report;d++){
+                                            for(var d=0;d<=days_report;d++){
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
@@ -938,19 +1153,21 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                             }, this);
                                         }
                                         var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3', '#ffb864', '#8b9ca5']});
 
                                         this.$("#chart-" + val.get("botId.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                        this.chartPage.$el.css({"width": "100%", "height": "230px"});
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
-                                            this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            this.$("#stats-" + val.get("botId.checksum") + " ." + key).html(this.app.addCommas(v));
+                                            if(parseInt(val.get("sentCount"))){
+                                                this.$("#stats-" + val.get("botId.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            }
                                         }, this);
                                     //}, this));
                                 }
                                 else {
-                                    this.$("#chart-" + val.get("botId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for autobot <i>"' + val.get("label") + '"</i> </p></div>');
+                                    this.$("#chart-" + val.get("botId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for autobot.</p></div>');
                                 }
                             }, this));
 
@@ -960,7 +1177,26 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 //////********************* Signup Forms  *****************************************//////
                 loadSignupforms: function () {
-
+                    this.app.showLoading("Loading selection...", this.$el);
+                    var formIds = this.objects.map(function (index) {
+                        return index.id
+                    }).join()
+                    var URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
+                    var post_data = {formId_csv: formIds};
+                    this.modelArray = [];
+                    this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                        this.app.showLoading(false, this.$el);
+                        var _json = jQuery.parseJSON(data);
+                        _.each(_json.forms[0], function (val) {
+                            this.modelArray.push(new Backbone.Model(val[0]));
+                        }, this);                        
+                        if(this.toDate && this.fromDate){
+                            this.setDateRange();
+                        }
+                        else{
+                            this.createSignupForms();
+                        }
+                    }, this))
                 },
                 openSignupFormsDialog: function () {
                     var _width = $(document.documentElement).width() - 60;
@@ -969,6 +1205,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10px"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'dlgformwizard'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -986,59 +1223,154 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createSignupForms: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        var _grid = this.$("#_grid tbody");
-                        var _maxWidth = this.$(".col1 .template-container").width() * .5;
-                        _grid.children().remove();
+                        if(this.doDraw){
+                           this.sub.$(".report-empty").hide();
+                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.doDraw = false;
+                       }    
+                       var _grid = this.$(".rpt-block-area");                       
+                       _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
-                            var formRow = new this.formRow({model: val, sub: this, page: this, showCheckbox: true, maxWidth: _maxWidth});
-                            _grid.append(formRow.$el);
-                        }, this);
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                            this.chartPage = new barChartPage({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createSignupFormChart();
-                            this.app.showLoading(false, this.$(".cstats"));
-                        //}, this));
+                            var rpBlock = new reportBlock({model: val, page: this, type: "form"});
+                           _grid.append(rpBlock.$el);
+                        }, this);                        
+                        
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#39c8a9']});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "370px"});
+                        this.createSignupFormChart();                        
+                        
                     }
                 },
                 createSignupFormChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_pages_selected = this.$(".checkedadded").length;
+                    if (this.modelArray.length) {                        
+                        var that = this;
+                         var _forms = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("formId.checksum")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el;
+                            }
+                        });
+                        var total_pages_selected =_forms.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
                         if (total_pages_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> signup forms selected');
+                            this.$(".total-count .rp-selected").html('forms selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> signup form selected');
+                            this.$(".total-count .rp-selected").html('form selected');
                         }
-                        this.chart_data = {submitCount: 0};
-                        _.each(this.modelArray, function (val, index) {
-                            if (this.$("[id='" + val.get("formId.encode") + "']").hasClass("checkedadded")) {
-                                this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));
-                            }
-                        }, this);
+                        if(total_pages_selected!==0){
+                            this.showChart();
+                            this.chart_data = {submitCount: 0};
+                            _.each(_forms, function (val, index) {                            
+                                this.chart_data['submitCount'] = this.chart_data['submitCount'] + parseFloat(val.get("submitCount"));                            
+                            }, this);
 
-                        var _data = [
-                            ['Action', 'Count'],
-                            ['Submission', this.chart_data["submitCount"]]
-                        ];
-                        this.chartPage.createChart(_data);
-                        _.each(this.chart_data, function (val, key) {
+                            var _data = [                            
+                                ['Submission', this.chart_data["submitCount"]]
+                            ];
+                            this.chartPage.createChart(_data);
+                        }
+                        else{
+                            this.showChart(true);
+                        }
+                        /*_.each(this.chart_data, function (val, key) {
                             this.$(".col-2 ." + key).html(this.app.addCommas(val));
-                        }, this);
+                        }, this);*/
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                        
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> signup forms selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('forms selected');                        
                     }
                     this.saveSettings();
 
+                },
+                loadSignupformsSummary: function(){
+                    if (this.modelArray.length) {
+                        this.showHideChartArea(true);
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count .rp-selected").html('forms selected');
+                        }
+                        else {
+                            this.$(".total-count .rp-selected").html('form selected');
+                        }
+                        var _grid = this.$(".rpt-expand");
+                         _grid.children().remove();   
+                         this.custom_data = {};
+                        _.each(this.modelArray, function (val, index) {
+                            var formRow = new reportBlock({model: val, page: this, type: "form","expandedView":true});
+                            _grid.append(formRow.$el);
+                            this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("formId.checksum")));
+                            var URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=getSignupFormSummaryCount";
+                            var formNum = val.get("formId.encode");
+                            var post_data = {formId: formNum, toDate: this.toDate, fromDate: this.fromDate}
+                            this.custom_data[val.get("formId.checksum")]={model:val,_date:[]};
+                            $.post(URL, post_data).done(_.bind(function (sJson) {
+                                var summary_json = jQuery.parseJSON(sJson);
+                                if (summary_json[0] == "err") {
+                                    this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                    return false;
+                                }
+                                if (summary_json.count !== "0") {                                    
+                                        var submitData = [];
+                                        var categories = [];
+                                        this.chart_data = {submitCount: 0};                                        
+                                        
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.summaries[0];
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                            for(var d=0;d<=days_report;d++){
+                                                var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                categories.push(c_date);
+                                                var sVal = summaries["summary"+_d];
+                                                if(sVal && c_date == moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM")){                                                
+                                                                                                        
+                                                    submitData.push(parseInt(sVal[0].submitCount));
+                                                                                                        
+                                                    this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
+                                                    _d = _d + 1;
+                                                }
+                                                else{                                                                                                        
+                                                    submitData.push(0);                                                    
+                                                }
+                                                this.custom_data[val.get("formId.checksum")]._date.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("MM-DD-YY"));
+                                            }
+                                        }
+                                        else{
+                                            _.each(summary_json.summaries[0], function (sVal) {
+                                                categories.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM"));                                                                                                
+                                                submitData.push(parseInt(sVal[0].submitCount));
+                                                                                                
+                                                this.chart_data["submitCount"] = this.chart_data["submitCount"] + parseInt(sVal[0].submitCount);                                                    
+                                                this.custom_data[val.get("formId.checksum")]._date.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("MM-DD-YY"));
+                                            }, this);
+                                        }
+                                        
+                                        var _data = [{"name": "Submissions", "data": submitData}];
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#39c8a9'],clickEvent:_.bind(this.openPopulationDetail,this),checkSum:val.get("formId.checksum")});
+                                        this.$("#chart-" + val.get("formId.checksum")).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
+                                        this.chartPage.createChart(_data);
+                                        _.each(this.chart_data, function (v, key) {
+                                            this.$("#stats-" + val.get("formId.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
+                                            //this.$("#stats-" + val.get("pageId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                        }, this);
+                                    
+                                }
+                                else {
+                                    this.$("#chart-" + val.get("formId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for webform. </p></div>');
+                                }
+                            }, this));
+
+                        }, this);
+
+                    }
                 },
                 //////********************* Nurture Tracks  *****************************************//////
                 loadNurtureTracks: function () {
@@ -1068,6 +1400,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10px"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'nurturedlg'
                     }
                     //dialog_object["buttons"]= {saveBtn:{text:'Done'} }  ;                      
@@ -1083,17 +1416,37 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         dialog.saveCallBack(_.bind(_page.saveCall, _page));
                     }, this));
                 },
+                editNurtureTrack:function(){
+                    var editable = true;
+                    if(this.modelArray[0].get("status")!=="D"){
+                        editable = false;
+                    }                
+                    this.app.mainContainer.openNurtureTrack({"id":this.modelArray[0].get("trackId.encode"),"checksum":this.modelArray[0].get("trackId.checksum"),"parent":this.sub,editable:editable});
+                },
                 createNurtureTrack: function () {
-                    if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        if (this.modelArray.length == 1) {
-                            var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
-                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' ' + msgCountText + '</b>');
+                    if (this.modelArray.length) {                        
+                        if(this.doDraw){
+                           this.sub.$(".report-empty").hide();
+                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.doDraw = false;
+                       }          
+                        this.$(".nt-name").html(this.modelArray[0].get("name"));
+                        var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
+                        this.$(".rpt-nt-detail").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong>  <b> nurture track selected having <strong class="badge" style="float:none">' + this.modelArray[0].get("msgCount") + '</strong> ' + msgCountText + '</b>');
+                        if(this.modelArray[0].get("status")=="D"){
+                            this.$(".nt-status").html("Paused");
+                            this.$(".nt-status")[0].className="cstatus pclr1 nt-status";
                         }
-                        else {
-                            this.$(".total-count").html('<strong class="badge">0</strong> nurture tracks selected');
+                        else if(this.modelArray[0].get("status")=="P" || this.modelArray[0].get("status")=="Q"){
+                            this.$(".nt-status").html("Pending");
+                            this.$(".nt-status")[0].className="cstatus pclr6 nt-status";
                         }
+                        else{
+                            this.$(".nt-status").html("Playing");
+                            this.$(".nt-status")[0].className="cstatus pclr18 nt-status";
+                        }
+                        this.$(".nt-msg-count").html('<i class="rpicon rpicon-two rp-msg-icon"></i>'+this.modelArray[0].get("msgCount"));
+                        
                         if (this.modelArray[0].get("messages")) {
                             this.getCampaignsFromNurtureTrack(this.modelArray[0].get("messages")[0]);
                         }
@@ -1114,9 +1467,8 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     }
                 },
                 getCampaignsFromNurtureTrack: function (messages, loadCampaigns) {
-                    var _grid = this.$("#_grid tbody");
-                    _grid.children().remove();
-                    var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                     var _grid = this.$(".rpt-block-area");
+                    _grid.children().remove();                    
                     this.checkSumArray = [];                    
                     var campNums = $.map(messages, _.bind(function (el) {
                         this.checkSumArray.push(el[0]["campNum.checksum"]);
@@ -1143,7 +1495,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                     val.set("trackId.encode", this.modelArray[0].get("trackId.encode"));
                                     val.set("order", order_no);
                                     order_no = order_no + 1;
-                                    var msgRow = new this.trackRow({model: val, sub: this, showMessage: true, maxWidth: _maxWidth});
+                                    var msgRow = new reportBlock({model: val, page: this, type: "nurturetrack"});
                                     _grid.append(msgRow.$el);
                                 }                                
                             }, this);
@@ -1151,75 +1503,85 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         if(loadCampaigns){
                             this.loadNTSummary();
                         }
-                        else{
-                            this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                            //require(["reports/campaign_bar_chart"], _.bind(function (barChartPage) {
-                                this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
-                                this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                                this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                                this.createNurtureTrackChart();
-                            //}, this));
+                        else{                                                        
+                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#8b9ca6', '#ffba55', '#5c62b8','#67a1d1','#44c7a7']});
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                            this.chartPage.$el.css({"width": "100%", "height": "320px"});
+                            this.createNurtureTrackChart(campNums);                            
                         }
 
                     }, this));
                 },
-                createNurtureTrackChart: function () {
-                    if (this.$(".checkedadded").length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var _campaigns = $.map(this.$(".checkedadded"), function (el) {
-                            return el.id;
-                        }).join(",");
-                        this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
-                            , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
-                            twitterCount: 0, unSubscribeCount: 0};
-                        var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
-                        var post_data = {campNums: _campaigns}
-                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
-                            var camp_json = jQuery.parseJSON(data);
-                            _.each(camp_json.campaigns[0], function (val) {
-                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
-                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
-                                this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
-                                this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
-                                this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
-                                this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
-                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
-                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
-                                this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
-                                this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
-                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
-                                this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
-                                this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
-                                this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
-                            }, this);
-                            var _data = [
-                                ['Opens', this.chart_data["openCount"]],
-                                ['Clicks', this.chart_data["clickCount"]],
-                                ['Page Views', this.chart_data["pageViewsCount"]],
-                                ['Conversions', this.chart_data["conversionCount"]]
-                            ];
+                createNurtureTrackChart: function (campNums) {                    
+                         var that = this;
+                         var total_pages_selected = 0;
+                         var _campaigns = $.map(this.campArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("campNum.checksum")+"']")[0].checked){                                
+                                total_pages_selected = total_pages_selected + 1;
+                                return el.get("campNum.encode");
+                            }
+                        }).join(",");     
+                        this.$(".rpt-nt-detail").hide();
+                        this.$(".rpt-nt-init").show();
+                        this.$(".total-count .rpt-nt-init .badge").html(total_pages_selected);
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count .rp-selected").html('messages selected');
+                        }
+                        else {
+                            this.$(".total-count .rp-selected").html('message selected');
+                        }
+                        if(_campaigns){
+                            this.app.showLoading("Creating Chart...", this.$(".cstats"));      
+                            this.showChart();
+                            this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
+                                , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
+                                twitterCount: 0, unSubscribeCount: 0};
+                            var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
+                            var post_data = {campNums: _campaigns}
+                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                                var camp_json = jQuery.parseJSON(data);
+                                _.each(camp_json.campaigns[0], function (val) {
+                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
+                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
+                                    this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
+                                    this.chart_data["facebookCount"] = this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
+                                    this.chart_data["googlePlusCount"] = this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
+                                    this.chart_data["linkedInCount"] = this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
+                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
+                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
+                                    this.chart_data["pendingCount"] = this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
+                                    this.chart_data["pinterestCount"] = this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
+                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
+                                    this.chart_data["supressCount"] = this.chart_data["supressCount"] + parseInt(val[0].supressCount);
+                                    this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
+                                    this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
+                                }, this);
+                                var _data = [
+                                    ['Sent', this.chart_data["sentCount"]],
+                                    ['Opens', this.chart_data["openCount"]],
+                                    ['Clicks', this.chart_data["clickCount"]],
+                                    ['Page Views', this.chart_data["pageViewsCount"]],
+                                    ['Conversions', this.chart_data["conversionCount"]]
+                                ];
 
-                            this.chartPage.createChart(_data);
-                            this.app.showLoading(false, this.$(".cstats"));
-                            _.each(this.chart_data, function (val, key) {
-                                this.$(".col-2 ." + key).html(this.app.addCommas(val));
-                                if(parseInt(val)!==0){
-                                    this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
-                                }
-                                else{
-                                    this.$(".col-2 ." + key+"Per").html("0%");
-                                }
-                            }, this);
+                                this.chartPage.createChart(_data);
+                                this.app.showLoading(false, this.$(".cstats"));
+                                _.each(this.chart_data, function (val, key) {
+                                    this.$(".col-2 ." + key).html(this.app.addCommas(val));
+                                    if(parseInt(val)!==0){
+                                        this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
+                                    }
+                                    else{
+                                        this.$(".col-2 ." + key+"Per").html("0%");
+                                    }
+                                }, this);
 
-                        }, this));
-                    }
-                    else {
-                        this.$(".start-message").show();
-                        this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> message selected');
-                    }
+                            }, this));
+                        }
+                        else{
+                            this.showChart(true);
+                        }
+                    
                     this.saveSettings();
                 },                
                 loadNurtureTrackSummary:function(){
@@ -1233,24 +1595,20 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     }
                 },
                 loadNTSummary: function () {
-                    if (this.campArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".bmsgrid").show();
-                        this.showHideChartArea(true);
-                        if (this.modelArray.length == 1) {
-                            var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
-                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' ' + msgCountText + '</b>');
-                        }
-                        else {
-                            this.$(".total-count").html('<strong class="badge">0</strong> nurture tracks selected');
-                        }
-                        var _grid = this.$("#_grid tbody");
+                    if (this.campArray.length) {                        
+                        this.showHideChartArea(true);                                   
+                        var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
+                        this.$(".rpt-nt-detail").html('<strong class="badge nt-name showtooltip" title="Click to open"><a>' + this.modelArray[0].get("name") + '</a></strong>  <b> nurture track selected having <strong class="badge" style="float:none">' + this.modelArray[0].get("msgCount") + '</strong> ' + msgCountText + '</b>');
+                        this.$(".rpt-nt-detail").find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                        this.$(".rpt-nt-detail").show();
+                        this.$(".rpt-nt-init").hide();
+                        var _grid = this.$(".rpt-expand");
                         _grid.children().remove();
                         var order_no = 1;
                         for(var i=0;i<this.checkSumArray.length;i++){
                         _.each(this.campArray, function (val, index) {
                             if(this.checkSumArray[i]==val.get("campNum.checksum")){
-                                var msgRow = new this.trackRow({model: val, sub: this, showSummaryChart: true});
+                                var msgRow = new reportBlock({model: val, page: this, type: "nurturetrack","expandedView":true});
                                 _grid.append(msgRow.$el);
                                 this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("campNum.checksum")));
                                 var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=summaryDailyBreakUp";
@@ -1276,7 +1634,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         var summaries =  summary_json.summaries[0];
                                         var _d = 1;    
                                         if(days_report<=30){
-                                            for(var d=0;d<days_report;d++){
+                                            for(var d=0;d<=days_report;d++){
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
@@ -1325,15 +1683,18 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                                 }, this);
                                             }
                                             var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
-                                            this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+                                            this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3', '#ffb864', '#8b9ca5']});
 
                                             //this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
                                             this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
-                                            this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                            this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                             this.chartPage.createChart(_data);
                                             _.each(this.chart_data, function (v, key) {
-                                                this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
-                                                this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(this.chart_data["sentCount"]) * 100).toFixed(2) + "%");
+                                                this.$("#stats-" + val.get("campNum.checksum") + " ." + key).html(this.app.addCommas(v));     
+                                                if(parseInt(this.chart_data["sentCount"])){
+                                                    this.$("#stats-" + val.get("campNum.checksum") + " ." + key+"Per").html((parseInt(v)/parseInt(this.chart_data["sentCount"]) * 100).toFixed(2) + "%");
+                                                }
+                                                
                                             }, this);
                                         //}, this));
                                     }
@@ -1411,39 +1772,38 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 //////********************* Tags  *****************************************//////
                 ,
                 loadTags: function () {
-                    if (this.modelArray.length && this.$(".tagslist ul").children().length) {
+                    /*if (this.modelArray.length && this.$(".tagslist ul").children().length) {
                         this.$("#copy-camp-listing").show();
                         this.$(".tags-charts").remove();
                         this.createTags();
                     } else {                        
                         this.$("#copy-camp-listing").show();
                         this.$(".tags-charts").remove();
-                        this.$(".table-area .template-container").css("height","");
-                        this.app.showLoading("Loading selection...", this.$el);
-                        var tags_array = this.objects.map(function (index) {
-                            return index.id
-                        });
-                        this.modelArray = [];
-                        var post_data = {};
-                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";
-                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
-                            this.app.showLoading(false, this.$el);
-                            var _json = jQuery.parseJSON(data);
-                            _.each(_json.tagList[0], function (val) {
-                                if (tags_array.indexOf(val[0].tag) > -1) {
-                                    this.modelArray.push(new Backbone.Model(val[0]));
-                                }
-                            }, this);             
-                            this.createTags();
-                            /*if(this.toDate && this.fromDate){
-                                this.setDateRange();
+                        this.$(".table-area .template-container").css("height","");                       
+                    }*/
+                    this.app.showLoading("Loading selection...", this.$el);
+                    var tags_array = this.objects.map(function (index) {
+                        return index.id
+                    });
+                    this.modelArray = [];
+                    var post_data = {};
+                    var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";
+                    this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                        this.app.showLoading(false, this.$el);
+                        var _json = jQuery.parseJSON(data);
+                        _.each(_json.tagList[0], function (val) {
+                            if (tags_array.indexOf(val[0].tag) > -1) {
+                                this.modelArray.push(new Backbone.Model(val[0]));
                             }
-                            else{
-                                this.createTags();
-                            }*/
-                            
-                        }, this))
-                    }
+                        }, this);                                                             
+                        if(this.toDate && this.fromDate){
+                            this.setDateRange();
+                        }
+                        else{
+                            this.createTags();                            
+                        }
+
+                    }, this));
                 },
                 openTagsDialog: function () {
                     var _width = 1200;
@@ -1452,6 +1812,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'tagw'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -1469,34 +1830,36 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 createTags: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$(".tagslist").show().parent().parent().css("background", "#eaf4f9");
-                        this.$(".tags-charts").remove();
-                        var _grid = this.$(".tagslist ul");
-
+                        if(this.doDraw){
+                           this.sub.$(".report-empty").hide();
+                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.doDraw = false;
+                       } 
+                        var _grid = this.$(".rpt-block-area");
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, key) {
-                            var tagLi = $('<li class="action" id="row_' + key + '" checksum="' + this.app.encodeHTML(val.get("tag")) + '"><a class="tag"><span>' + this.app.encodeHTML(val.get("tag")) + '</span><i  class="icon percent showtooltip" data-name ="' + this.app.encodeHTML(val.get("tag")) + '" title="Click to see responsiveness of this tag" ></i><strong class="badge">' + val.get("subCount") + '</strong></a> </li>');
-                            _grid.append(tagLi);
+                            val.set("cno",(key+1))
+                            var tagLi = new reportBlock({model: val, page: this, type: "tag"});
+                            _grid.append(tagLi.$el);
                         }, this);
                         _grid.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                                                
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        //require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            var loadFirstTime = this.loadReport;
-                            this.createTagsChart();
-                            if (this.toDate && this.fromDate) {
-                                this.loadReport = loadFirstTime;
-                                this.setDateRange();                                
-                            }
-                            else{
-                                this.$(".chart-types,.tagsexpand").hide();
-                                this.$(".tagsexpand").attr("data-expand","0").html("View Growth Stats").remove("stats-hide");
-                            }
-                        //}, this));
+                                                                        
+                        
+                        this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
+                        this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                        this.chartPage.$el.css({"width": "100%", "height": "370px"});
+                        var loadFirstTime = this.loadReport;
+                        this.createTagsChart();
+                        
+                        /*if (this.toDate && this.fromDate) {
+                            this.loadReport = loadFirstTime;
+                            this.setDateRange();                                
+                        }
+                        else{
+                            this.$(".chart-types,.tagsexpand").hide();
+                            this.$(".tagsexpand").attr("data-expand","0").html("View Growth Stats").remove("stats-hide");
+                        }*/
+                        
                         
                     }
                 },
@@ -1543,33 +1906,42 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     }
                 },
                 createTagsChart: function () {
-                    if (this.modelArray.length) {
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        this.$(".start-message").hide();
-                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
-                        var total_selected = this.modelArray.length;
-                        if (total_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tags selected');
+                    if (this.modelArray.length) {                        
+                        var that = this;
+                        var _tags = $.map(this.modelArray, function (el) {
+                            if(that.$(".check-obj[data-checksum='"+el.get("tag")+"']")[0].checked){
+                                total_pages_selected = total_pages_selected + 1;
+                                return el;
+                            }
+                        });
+                        var total_pages_selected = _tags.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count .rp-selected").html('tags selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tag selected');
+                            this.$(".total-count .rp-selected").html('tag selected');
                         }
-                        this.chart_data = {subCount: 0};
-                        var _data = [
-                        ];
-                        var liWidth = 100 / this.modelArray.length;
-                        this.$("ul.socpc li").remove();
-                        _.each(this.modelArray, function (val) {
-                            _data.push([val.get("tag"), parseInt(val.get("subCount"))]);
-                            this.$("ul.socpc").append($('<li class="clr3" style="width:' + liWidth + '%"><span>' + this.app.encodeHTML(val.get("tag")) + ' <strong class="tagCount">' + val.get("subCount") + '</strong></span></li>'))
-                        }, this);
-                        this.chartPage.createChart(_data);
-                        this.app.showLoading(false, this.$(".cstats"));
+                        if( total_pages_selected!==0 ){
+                            this.showChart();
+                            this.chart_data = {subCount: 0};
+                            var _data = [
+                            ];                        
+                            this.$("ul.socpc li").remove();
+                            _.each(_tags, function (val) {
+                                _data.push([val.get("tag"), parseInt(val.get("subCount"))]);                            
+                            }, this);
+                            this.chartPage.createChart(_data);                            
+                        }
+                        else{
+                            this.showChart(true);
+                        }                        
+                        
                     }
-                    else {
-                        this.$(".start-message").show();
+                    else {                     
                         this.$(".col-2 .campaign-chart").hide();
-                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
+                        this.$(".total-count .badge").html(0);
+                        this.$(".total-count .rp-selected").html('tags selected');
                     }
                     this.saveSettings();
                 },
@@ -1587,30 +1959,28 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     }
                 },
                 loadTagsSummary: function () {
-                    if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();
-                        this.$("#copy-camp-listing").hide();
-                        var chartsDiv = $("<div class='tags-charts summary-chart'> </div>");
-                        if (this.$(".tags-charts").length) {
-                            this.$(".tags-charts").remove();
-                        }
-                        this.$(".parent-container").append(chartsDiv);
-                        var total_selected = this.modelArray.length;
-                        if (total_selected > 1) {
-                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tags selected');
+                    if (this.modelArray.length) {                        
+                        this.showHideChartArea(true);                        
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();
+                        var total_pages_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_pages_selected);
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count .rp-selected").html('tags selected');
                         }
                         else {
-                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tag selected');
+                            this.$(".total-count .rp-selected").html('tag selected');
                         }
                         _.each(this.modelArray, function (val, index) {
 
                             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagStatDayByDay";
                             var tag = val.get("tag");
                             var post_data = {tag: tag, toDate: this.toDate, fromDate: this.fromDate}
-
-                            var tagClass = tag.replace(/ /g, "_").replace(/</g, "_").replace(/>/g, "_").replace(/\//g, "_").replace(/\\/g, "_");
-                            chartsDiv.append("<div class='tag-chart'><div class='tag-header'>" + tag + "</div><div class='tag-area " + tagClass + "'></div><div class=\"stats-panel\"><div><ul class=\"socpc\"></ul><div class=\"clearfix\"></div></div></div></div>");
-                            this.app.showLoading("Loading Summary Chart...", this.$("." + tagClass));
+                            val.set("cno",index);
+                            var tagRow = new reportBlock({model: val, page: this, type: "tag","expandedView":true});                            
+                             _grid.append(tagRow.$el);
+                             
+                            this.app.showLoading("Loading Summary Chart...", this.$(".tag-" +index));
                             $.post(URL, post_data).done(_.bind(function (sJson) {
                                 var summary_json = jQuery.parseJSON(sJson);
                                 if (summary_json[0] == "err") {
@@ -1633,7 +2003,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         var summaries =  summary_json.stats[0];
                                         var _d = 1;    
                                         if(days_report<=30){
-                                                for(var d=0;d<days_report;d++){
+                                                for(var d=0;d<=days_report;d++){
                                                     var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                     categories.push(c_date);
                                                     var sVal = summaries["stat"+_d];
@@ -1663,17 +2033,17 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                             }
                                         var _data = [{"name": "Decrease", "data": decreaseCount}, {"name": "Increase", "data": increaseCount}];
                                         this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#97d61d']});
-                                        this.$("." + tagClass).html(this.chartPage.$el);
-                                        var liHTML = '<li class="clr6" style="width:33.33%"><span>Increase <strong class="Increase">' + this.app.addCommas(this.chart_data['addCount']) + '</strong></span></li>';
-                                        liHTML += '<li class="clr7" style="width:33.33%"><span>Decrease <strong class="Decrease">' + this.app.addCommas(this.chart_data['removeCount']) + '</strong></span></li>';
-                                        liHTML += '<li class="clr1" style="width:33.33%"><span>Net Growth <strong class="growth">' + this.app.addCommas(this.chart_data['addCount'] - this.chart_data['removeCount']) + '</strong></span></li>';
-                                        this.$(".tag-area." + tagClass).next().find(".socpc").html(liHTML);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                        this.$("#chart-tag-" + index).html(this.chartPage.$el);
+                                        this.$("#stats-tag-" + index +" .subIncrease").html(this.app.addCommas(this.chart_data['addCount']));
+                                        this.$("#stats-tag-" + index +" .subDecrease").html(this.app.addCommas(this.chart_data['removeCount']));
+                                        this.$("#stats-tag-" + index +" .subGrowth").html(this.app.addCommas(this.chart_data['addCount']-this.chart_data['removeCount']));
+                                        
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
                                         this.chartPage.createChart(_data);
                                     //}, this));
                                 }
                                 else {
-                                    this.$("." + tagClass).html('<div class="loading nodata"><p style="background:none">No data found for <i>Tag "' + tag + '"</i></p></div>');
+                                    this.$("#chart-tag-" + index).html('<div class="loading nodata"><p style="background:none">No data found for tag.</p></div>');
                                 }
 
                             }, this));
@@ -1838,6 +2208,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
                         bodyCss: {"min-height": _height + "px"},
                         saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
                         headerIcon: 'setting2'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
@@ -1863,19 +2234,29 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.createWebstats();
                 },
                 createWebstats: function (fromLoadData) {
-                    if (this.modelArray.length) {                        
+                    if (this.modelArray.length) {   
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        }
                         var _type = this.modelArray[0].id?this.modelArray[0].id:this.modelArray[0];
+                        this.$(".rpt-campign-listing").show();
+                        this.$(".rpt-expand").hide();
+                        this.$(".rpt-threepanel,.stats-selection").hide();
                         if(this.modelArray[0].id){
                             var _subtype = this.modelArray[0].subtype;
                             if (_subtype == "top-charts") {
-                                this.$(".total-count").html("Top Charts");
+                                this.$(".total-count .rp-selected").html('Top Charts');
                                 this.drawMixChart();
                             }
                             else if (_subtype == "general-stats") {
+                                this.$(".rpt-threepanel").show();
+                                this.$(".total-count .rp-selected").html('General Stats');
                                 this.drawMultiCharts();
                             }
-                            else if (_subtype == "online-campaigns") {
-                                this.$(".total-count").html("Online Campaigns");
+                            else if (_subtype == "online-campaigns") {                                
+                                this.$(".total-count .rp-selected").html('Online Campaigns');
                                 this.drawOnlineCampaigns();
                             }
                         }
@@ -1895,17 +2276,14 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 drawMultiCharts: function () {
                     this.dataArray = [];                    
-                    this.callsData = this.modelArray[0].id?this.modelArray[0].id.split(","):this.modelArray[0].split(",");
-                    this.$(".parent-container .template-container").css({"background": "#f4f9fc", "height": "420px"} );
-                    this.$(".add-msg-report,.total-count").hide();
                     this.$(".stats-selection,.icons-bar-chart").show();
-                    
-                    this.$(".webstats-chart,.webstats-table").remove();
+                    this.callsData = this.modelArray[0].id?this.modelArray[0].id.split(","):this.modelArray[0].split(",");                                                            
+                    this.$(".rpt-threepanel div").hide();
                     for (var c = 0; c < this.callsData.length; c++) {
                         this.$("[value='"+this.callsData[c]+"']").iCheck('check');
+                        this.$(".count-block-"+this.callsData[c]).show();
                         this.callGeneralStats(this.callsData[c]);
-                    }
-                    
+                    }                    
                     if(!this.fromClick){
                         this.fromClick = true;
                     }
@@ -1956,7 +2334,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                 },
                 drawGeneralStats:function(chartType){
                    var dateLabelObject = this.getDateText(this.fromDate, this.toDate);
-                   this.$(".webstats-chart,.webstats-table").remove();
+                   //this.$(".webstats-chart,.webstats-table").remove();
                    var chart_type = chartType ? chartType:'column';
                    this.app.showLoading("Loading Chart...", this.$el);
                    var that = this;
@@ -1965,7 +2343,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                        this.app.showLoading(false, this.$el);                       
                        var options ={
                                     chart: {                                                  
-                                        backgroundColor: "#f4f9fc"
+                                        backgroundColor: "transparent"
                                     },                                            
                                     title: {
                                         text: '',
@@ -2035,12 +2413,19 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                         style: {
                                             "color": this.webstats[val[0]].barColor
                                         },
-                                        text:this.webstats[val[0]].title
+                                        text:''
                                     }                                             
                                 });
-                        },this)        
-                       var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
-                       this.$(".camp_reports").append(chartDiv);
+                            var count = 0;
+                            _.each(val[1],function(v){
+                                count = count + parseInt(v[1]);
+                            },this);
+                            this.$(".count-"+val[0]).html(this.app.addCommas(count));
+                            
+                        },this);
+                       this.$(".webstats-chart").remove();
+                       var chartDiv = $("<div style='height:250;width:100%' class='webstats-chart'></div>");
+                       this.$(".campaign-chart").append(chartDiv);
                        this.chartPage.createChart(options, chartDiv);
 
                    },this)) 
@@ -2085,7 +2470,7 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                 var options = {
                                     chart: {
                                         type: chart_Type,
-                                        backgroundColor: "#f4f9fc"
+                                        backgroundColor: "transparent"
                                     },
                                     plotOptions: {
                                         series: {colorByPoint: this.webstats[_type].multipColrs}
@@ -2173,8 +2558,9 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                             }
                                         }]
                                 }
+                                this.$(".campaign-chart").children().remove();
                                 var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
-                                this.$(".camp_reports").append(chartDiv);
+                                this.$(".campaign-chart").append(chartDiv);
                                 this.chartPage.createChart(options, chartDiv)
 
                                 if (_type == "seo" || _type == "lcdetail" || _type == "ref" || _type == "pp") {
@@ -2182,32 +2568,32 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                     this.$(".table-area .template-container").css({"max-height": "none"});
                                     var _dataTable = [];
                                     if (_type == "seo") {
-                                        _dataTable.push(['Keyword Text', 'Count', 'Source']);
+                                        _dataTable.push(['No.','Keyword Text', 'Count', 'Source']);
                                         _.each(this.webStatData, function (val, index) {
-                                            _dataTable.push([val[0], parseInt(val[1]), val[2]]);
+                                            _dataTable.push([(index+1),val[0], parseInt(val[1]), val[2]]);
                                         }, this)
 
                                     } else if (_type == "lcdetail") {
-                                        _dataTable.push(['Company', 'Page Views', 'Date', 'Traffic Source', 'Country', 'Telephone']);
+                                        _dataTable.push(['No.','Company', 'Page Views', 'Date', 'Traffic Source', 'Country', 'Telephone']);
                                         _.each(this.webStatData, function (val, index) {
-                                            _dataTable.push([val[0], parseInt(val[1]), val[2], val[3], val[7], val[8]]);
+                                            _dataTable.push([(index+1),val[0], parseInt(val[1]), val[2], val[3], val[7], val[8]]);
                                         }, this)
                                     } else if (_type == "ref") {
-                                        _dataTable.push(['Referral Link', 'Count']);
+                                        _dataTable.push(['No.','Referral Link', 'Count']);
                                         _.each(this.webStatData, function (val, index) {
-                                            _dataTable.push([val[0], parseInt(val[1])]);
+                                            _dataTable.push([(index+1),val[0], parseInt(val[1])]);
                                         }, this)
 
                                     } else if (_type == "pp") {
-                                        _dataTable.push(['Page Name', 'Page Views', 'Unique Views', 'Page URL']);
+                                        _dataTable.push(['No.','Page Name', 'Page Views', 'Unique Views', 'Page URL']);
                                         _.each(this.webStatData, function (val, index) {
-                                            _dataTable.push([val[0], parseInt(val[1]), parseInt(val[2]), val[3]]);
+                                            _dataTable.push([(index+1),val[0], parseInt(val[1]), parseInt(val[2]), val[3]]);
                                         }, this)
 
                                     }
 
-                                    var tabletDiv = $("<div style='height:420;width:100%;margin-top:20px;' class='webstats-table'></div>");
-                                    this.$(".camp_reports").append(tabletDiv);
+                                    var tabletDiv = $("<div style='height:420;width:100%;margin:20px 0px 20px 10px;' class='webstats-table'></div>");
+                                    this.$(".campaign-chart").append(tabletDiv);
                                     this.chartPage.createTable(_dataTable, tabletDiv[0]);
                                 }
                             }, this));
@@ -2248,17 +2634,18 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     return {label: textDate, days: _days};
                 },
                 drawOnlineCampaigns:function(){
-                    var campArray = this.modelArray[0].id.split(",");                    
-                    this.$(".add-msg-report").hide();      
-                    this.$(".online-campaign-area").remove();
-                    this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
-                    if(campArray.length>1){
-                        this.$(".target-listing").addClass("summary-chart");
-                    }
+                    var campArray = this.modelArray[0].id.split(",");                                                            
+                    this.$(".rpt-campign-listing").hide();
+                    this.$(".rpt-expand").show();
+                    var _grid = this.$(".rpt-expand");
+                    _grid.children().remove();
                     _.each(campArray, function (val, index) {
                             var campId = val;        
                             var chartTitle = this.modelArray[0].campMapping?this.modelArray[0].campMapping[campId]:"" 
-                            this.$(".camp_reports").append($("<div class='online-campaign-area' id='"+campId+"'></div>"))
+                            var model = new Backbone.Model({name:chartTitle,campNum:campId});
+                            var onlineCampaignRow = new reportBlock({model: model, page: this, type: "ocampaign","expandedView":true});                            
+                            _grid.append(onlineCampaignRow.$el);
+                            
                             this.app.showLoading("Loading Data...", this.$("#" + campId));
                             var bms_token = this.app.get('bms_token');
                             var queryString = (this.fromDate && this.toDate) ? "&daterange=y&fromDate=" + moment(this.fromDate, 'M/D/YYYY').format("MM/DD/YYYY") + "&toDate=" + moment(this.toDate, 'M/D/YYYY').format("MM/DD/YYYY") : "&span=7"
@@ -2270,13 +2657,11 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                     this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
                                     return false;
                                 }
-                                if (summary_json.count !== "0") {
-                                    //require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                                if (summary_json.count !== "0") {                                    
                                         var  viewData = [], clickCount = [], conversionData = [], bounceData = [];
-
                                         var categories = [];
                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
-                                            , openCount: 0, sentCount: 0, socialCount: 0};
+                                            , openCount: 0, sentCount: 0, socialCount: 0,conversionCount:0};
                                         _.each(summary_json, function (sVal) {
                                             categories.push(moment(sVal[0], 'YYYY-M-D').format("DD MMM"));                                            
                                             clickCount.push(parseInt(sVal[3]));
@@ -2287,23 +2672,554 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                                             this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[5]);
                                             this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[3]);
                                             this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(sVal[6]);                                                                                        
-                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[5]);
+                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[4]);
                                         }, this);
                                         var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Conversion", "data": conversionData}, {"name": "View", "data": viewData}, {"name": "Click", "data": clickCount}];
-                                        this.chartPage = new barChartPage({page: this, isStacked: true,title:chartTitle, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6']});
-                                        this.$("#" + campId).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "420px"});
-                                        this.chartPage.createChart(_data);
-                                        
-
-                                    //}, this));
+                                        this.chartPage = new barChartPage({page: this, isStacked: true,title:chartTitle, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#39c8a9', '#66a2cd', '#5e63b3']});
+                                        this.$("#chart-" + campId).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "230px"});
+                                        this.chartPage.createChart(_data);                                      
+                                        _.each(this.chart_data, function (v, key) {
+                                                this.$("#stats-" + campId + " ." + key).html(this.app.addCommas(v));           
+                                                if(parseInt(this.chart_data["clickCount"])){
+                                                    this.$("#stats-" + campId + " ." + key+"Per").html((parseInt(v)/parseInt(this.chart_data["clickCount"]) * 100).toFixed(2) + "%");
+                                                }
+                                            }, this);
                                 }
                                 else {
-                                    this.$("#" + campId).html('<div class="loading nodata"><p style="background:none">No data found for this campaign </p></div>');
+                                    this.$("#chart-" + campId).html('<div class="loading nodata"><p style="background:none">No data found.</p></div>');
                                 }
                             }, this));
 
                         }, this);
+                },
+                //////************************** End Web Stats  *****************************************//////
+                //////************************** Funnel  ***********************************************//////
+                loadFunnel:function(){
+                    if(this.objects.length){                        
+                        var post_data = {};
+                        var URL = "";
+                        var funnel_ids ="";
+                        if(this.subType=="tag"){
+                            URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";
+                        } else if(this.subType=="page"){
+                            var page_id = [];
+                            for (var i =0;i<this.objects.length;i++){                                
+                                 _.each(this.objects[i]["level"+i],function(val,key){ 
+                                    if(page_id.indexOf(val.id)==-1){ 
+                                        page_id.push(val.id);
+                                    }
+                                },this);                             
+                            }
+                            funnel_ids = page_id.join(",");
+                            URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
+                            post_data = {pageId_csv: funnel_ids};
+                        }else if(this.subType=="form"){
+                            var form_id = [];
+                            for (var i =0;i<this.objects.length;i++){                                
+                                 _.each(this.objects[i]["level"+i],function(val,key){ 
+                                    if(form_id.indexOf(val.id)==-1){ 
+                                        form_id.push(val.id);
+                                    }
+                                },this);                             
+                            }
+                            funnel_ids = form_id.join(",");
+                            URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=get_csv";
+                            post_data = {formId_csv: funnel_ids};
+                        }
+                        
+                        
+                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                            this.app.showLoading(false, this.$el);
+                            this._json = jQuery.parseJSON(data);           
+                            this.loadUpdatedFunnel();
+                        }, this));                                              
+                    }                                                                    
+                },
+                loadUpdatedFunnel: function(){
+                      for (var i =0;i<this.objects.length;i++){
+                        var _l = [];
+                         _.each(this.objects[i]["level"+i],function(val,key){ 
+                            _l.push(new Backbone.Model(this.getUpdatedCount(val)));
+                        },this);
+                        this.modelArray.push(_l)
+                     }                        
+                     this.createFunnel();
+                },
+                getUpdatedCount: function(valObj){
+                    var returnVal = valObj;
+                    if(this.subType=="tag"){
+                       _.each(this._json.tagList[0], function (val) {
+                            if (valObj.tag==val[0].tag) {
+                                returnVal = {tag:valObj.tag,subCount:val[0].subCount};
+                                return;
+                            }
+                        }, this);  
+                    }
+                    else if(this.subType=="page"){
+                         _.each(this._json.pages[0], function (val) {
+                            if (valObj.checkSum==val[0]["pageId.checksum"]) {
+                                returnVal = {tag:val[0].name,subCount:val[0].viewCount,id:val[0]["pageId.encode"],checkSum:val[0]["pageId.checksum"]};
+                                return;
+                            }
+                        }, this);  
+                    }else if(this.subType=="form"){
+                         _.each(this._json.forms[0], function (val) {
+                            if (valObj.checkSum==val[0]["formId.checksum"]) {
+                                returnVal = {tag:val[0].name,subCount:val[0].submitCount,id:val[0]["formId.encode"],checkSum:val[0]["formId.checksum"]};
+                                return;
+                            }
+                        }, this);  
+                    }
+                    return returnVal;
+                },
+                openFunnelDialog: function () {
+                    var _html = '<div class="overlay"> <div style="margin-left: -287.5px; width: 575px;" class="modal in moda-v2">';
+                        _html += '<div style="min-height: 240px;" class="modal-body"><div class="sd_common no-tilt">';
+                        _html += '<a class="closebtn"></a><div class="watermark_tilt"></div>';
+                        _html += '<h2>Select Funnel Type</h2>';
+                        _html += '<div class="add-panel select-funnel-type"><div class="addbar">';
+                        _html += '<ul>';
+                        _html += '<li class="rpt-li-tags" data-type="tag"><a><span class="rpicon rpicon-fifty rpfunnel"></span>B2B Sales</a></li>';
+                        _html += '<li class="rpt-li-landingpages" data-type="page"><a><span class="rpicon rpicon-fifty rpfunnel"></span>Landing Pages</a></li>';
+                        _html += '<li class="rpt-li-webforms" data-type="form"><a><span class="rpicon rpicon-fifty rpfunnel"></span>Webforms</a></li>';
+                        _html += '</ul>';
+                        _html += '</div></div></div></div>';
+                        _html += '<br></div></div>';
+                        var selection_dialog = $(_html);      
+                        selection_dialog.find(".closebtn").click(_.bind(function(e){
+                            var target = $(e.target);
+                            target.parents(".overlay").remove();
+                            this.closeDialog();
+                        },this));
+                        selection_dialog.find(".select-funnel-type li").click(_.bind(function(e){
+                            var liObj = $.getObj(e, "li");
+                            selection_dialog.remove();
+                            this.subType =  liObj.attr("data-type");
+                            if(liObj.attr("data-type")==="tag"){
+                                this.openFunnelTagDialg();
+                            }
+                            else {                                
+                                this.openFunnelObjDialog(liObj.attr("data-type"));
+                            }
+                        },this));
+                        $("body").append(selection_dialog);
+                  
+                },
+                openFunnelObjDialog: function(dType){
+                    var _width = 1200;
+                    var _height = 415;
+                    var dialog_object = {title: 'Funnel Selection',
+                        css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
+                        bodyCss: {"min-height": _height + "px"},
+                        saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
+                        headerIcon: 'dl-funnel'
+                    }
+                    var selectedLevel = this.$(".funnel-tabs-btns li.active").attr("data-tab");
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading...", dialog.getBody());
+                    require(["reports/select_dialog"], _.bind(function (page) {
+                        var _page = new page({page: this, dialog: dialog, selectedLevel:selectedLevel, type:dType});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.init();
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));
+                    }, this));  
+                },
+                openFunnelTagDialg: function(){
+                    var _width = 1200;
+                    var _height = 415;
+                    var dialog_object = {title: 'Funnel Selection',
+                        css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
+                        bodyCss: {"min-height": _height + "px"},
+                        saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
+                        headerIcon: 'dl-funnel'
+                    }
+                    var selectedLevel = this.$(".funnel-tabs-btns li.active").attr("data-tab");
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Tags...", dialog.getBody());
+                    require(["tags/funnel"], _.bind(function (page) {
+                        var _page = new page({page: this, dialog: dialog, dialogHeight: _height - 103,selectedLevel:selectedLevel});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.init();
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));
+                    }, this));  
+                },
+                createFunnel: function() {
+                    if(this.doDraw){
+                        this.sub.$(".report-empty").hide();
+                        this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                        this.doDraw = false;
+                    }
+                    
+                    var levels = this.modelArray;
+                    var levelCount = [0,0,0,0];                    
+                    
+                    for(var i=0; i<levels.length;i++){
+                        var tabLevel = this.$(".tab-"+(i+1));
+                        tabLevel.children().remove();
+                        var lCount =0;
+                         _.each(levels[i], function (val, index) {
+                            val.set("cno",index+1);
+                            var rpBlock = new reportBlock({model: val, page: this, type: "funnel",subType:this.subType});
+                            tabLevel.append(rpBlock.$el);
+                            lCount = lCount + parseInt(val.get(this.getLabelCount()));
+                        }, this);  
+                        levelCount[i] = lCount;
+                    }
+                    var graph_data =[
+                            ['New Leads', levelCount[0]],
+                            ['MQL', levelCount[1]],
+                            ['SQL', levelCount[2]],
+                            ['Closed', levelCount[3]]
+                        ];
+                    if(this.subType=="page"){
+                        graph_data =[
+                            ['Level 1', levelCount[0]],
+                            ['Level 2', levelCount[1]],
+                            ['Level 3', levelCount[2]],
+                            ['Level 4', levelCount[3]]
+                        ];                        
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click to add landing pages');
+                    }
+                    else if(this.subType=="form"){
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click to add  webforms');
+                    }
+                    else{
+                        this.$(".rpt-add-report").html('<i class="rpicon rpicon-thirty rpblue-addCampaign"></i> Click here to add tags');
+                    }
+                    this.$(".rpt-level-one h3").html(graph_data[0][0]);
+                    this.$(".rpt-level-two h3").html(graph_data[1][0]);
+                    this.$(".rpt-level-three h3").html(graph_data[2][0]);
+                    this.$(".rpt-level-four h3").html(graph_data[3][0]);
+
+                    this.$(".rpt-level-one p").html(this.app.addCommas(levelCount[0]));
+                    this.$(".rpt-level-two p").html(this.app.addCommas(levelCount[1]));
+                    this.$(".rpt-level-three p").html(this.app.addCommas(levelCount[2]));
+                    this.$(".rpt-level-four p").html(this.app.addCommas(levelCount[3]));
+                    this.chartPage = new barChartPage({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f8b563','#00b0e9','#39c8a9','#7e5cb1']});
+                    this.$(".col-2 .funnel-chart").html(this.chartPage.$el);
+                    this.chartPage.$el.css({"width": "350px", "height": "370px"});
+                    
+                    var _data = [{
+                        name: 'Subscribers',
+                        data: graph_data
+                    }]
+                    this.chartPage.createFunnelChart(_data);
+                    this.saveSettings();
+                },
+                getLabelCount: function(){
+                  var countKey = "subCount";
+                  /*if(this.subType=="page"){
+                    countKey="submitCount";
+                  }
+                  else if(this.subType=="form"){
+                    countKey="submitCount";  
+                  }*/
+                  return countKey;
+                },
+                changeLevel: function(e){
+                   var level = $.getObj(e, "li"); 
+                   if(!level.hasClass("active")){
+                       level.parent().find(".active").removeClass("active");
+                       level.addClass("active");
+                       var selectedLevel = level.attr("data-tab");
+                       this.$(".rpt-block-area").hide();
+                       this.$(".tab-"+selectedLevel).show();
+                       
+                   }
+                },
+                closeDialog:function(){
+                    if(this.doDraw){
+                        this.sub.removeUndrawModel(this.orderNo);
+                    }
+                },
+                //////********************* Workflows *****************************************//////
+                loadWorkflows: function () {
+                    if(this.modelArray.length==0){
+                        this.app.showLoading("Loading selection...", this.$el);                                                
+                        var workflowChecksum = this.objects.map(function (index) {                                                        
+                            return index.checkSum
+                        })
+                      
+                        var URL = "/pms/trigger/WorkflowList.jsp?BMS_REQ_TK=" + this.app.get("bms_token") + "&isJson=Y";                        
+                        this.modelArray = [];
+                        this.states_call = $.post(URL, {}).done(_.bind(function (data) {
+                            this.app.showLoading(false, this.$el);
+                            var _json = jQuery.parseJSON(data);
+                            _.each(_json.workflows[0], function (val) {
+                                if(workflowChecksum.indexOf(val[0]["workflowId.checksum"]) > -1){
+                                    var _model = new Backbone.Model(val[0]);                                
+                                    this.modelArray.push(_model);
+                                }
+                            }, this);                        
+                            this.createWorkflow(true);
+                        }, this));
+                    }
+                    else{
+                        this.createWorkflow(true);
+                    }
+                },
+                openWorkflowsDialog: function () {
+                    this.targetsModelArray = [];
+                    var dialog_object = {title: 'Select Workflows',
+                        css: {"width": "1200px", "margin-left": "-600px"},
+                        bodyCss: {"min-height": "423px"},
+                        saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
+                        headerIcon: 'wficon'
+                    }
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading workflows...", dialog.getBody());
+                    require(["workflow/selectworkflow"], _.bind(function (page) {
+                        var _page = new page({page: this, dialog: dialog, editable: this.editable});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.$el.find('#targets_grid').addClass('targets_grid_table');
+                        _page.$el.find('.col-2 .template-container').addClass('targets_grid_table_right');
+                        _page.$el.find('.step2-lists').css({'top': '0'});
+                        _page.$el.find('.step2-lists span').css({'left': '70px'});
+                        _page.init();
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));
+                        _page.createRecipients(this.targetsModelArray);
+                    }, this));
+                },
+                createWorkflow: function(fromOpenDialog){                    
+                    if (this.modelArray.length) {
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        } 
+                        
+                        var total_wf_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_wf_selected);
+                        if (total_wf_selected > 1) {
+                            this.$(".total-count .rp-selected").html('workflows selected');
+                        }
+                        else {
+                            this.$(".total-count .rp-selected").html('workflow selected');
+                        }
+                        
+                        if(!this.toDate && !this.fromDate){
+                            /*var currentDate =  moment(new Date());
+                            var fromDate =  currentDate.subtract(7, 'days');
+                            var toDate = moment(new Date());
+                            this.fromDate = fromDate.format("MM-DD-YYYY");
+                            this.toDate = toDate.format("MM-DD-YYYY");
+                            this.dateRange = 7;
+                            this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));*/
+                            
+                        }
+                        else{
+                            this.$('#clearcal').show();
+                        }
+                        
+                        this.$(".rpt-campign-listing").hide();
+                        this.$(".rpt-expand").show();
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();                       
+                        _.each(this.modelArray, function (val, index) {                                
+                                var chartDiv = $("<div class='rpt-campign-listing rpt-row'><div id='triangle-bottomleft'><a class='rpicon rpclose showtooltip' title='Remove from report'></a></div><div id='"+val.get("workflowId.checksum")+"' class='wfchart'></div></div>")
+                               _grid.append(chartDiv);        
+                               chartDiv.find(".rpclose").click(_.bind(this.removeWFChart,this,val.get("workflowId.checksum")));
+                               this.app.showLoading("Loading Chart...", chartDiv);
+                               var wfBlock = new workflowBlock({model: val, page: this, chartElement:chartDiv,toDate:this.toDate,fromDate:this.fromDate});
+                               chartDiv.find(".wfchart").html(wfBlock.$el);
+                               wfBlock.createChart();
+
+                        }, this);  
+                        _grid.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                        
+                        if(fromOpenDialog){
+                            this.saveSettings();
+                        }
+                    }
+                    
+                },
+                removeWFChart:function(checkSum){
+                     var delIndex = -1;
+                    _.each(this.modelArray, function (val, index) {
+                        if (val.get("workflowId.checksum") == checkSum) {
+                            delIndex = index;
+                        }
+                    }, this);
+                    if(delIndex!=-1){
+                        this.modelArray.splice(delIndex, 1);
+                        this.createWorkflow(true);
+                    }
+                    
+
+                },
+                //////********************* Lists Growth *****************************************//////
+                loadLists: function(){                    
+                    this.app.showLoading("Loading selection...", this.$el);                        
+                    var listIds = this.objects.map(function (index) {                            
+                        return index.id
+                    }).join()
+                    var URL = "/pms/io/list/getListData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=list_csv";                    
+                    var post_data = {listNum_csv: listIds};
+                    this.modelArray = [];
+                    this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                        this.app.showLoading(false, this.$el);
+                        var _json = jQuery.parseJSON(data);
+                        _.each(_json.lists[0], function (val) {
+                            var _model = new Backbone.Model(val[0]);                                
+                            this.modelArray.push(_model);
+                        }, this);                        
+
+                        this.loadListsSummary(true);
+                    }, this));                    
+                },
+                openListsDialog:function() {
+                    this.targetsModelArray = [];
+                    var dialog_object = {title: 'Select Lists',
+                        css: {"width": "1200px", "margin-left": "-600px"},
+                        bodyCss: {"min-height": "423px"},
+                        saveCall: '',
+                        closeCallBack: _.bind(this.closeDialog,this),
+                        headerIcon: 'mlist2'
+                    }
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Lists...", dialog.getBody());
+                    require(["listupload/campaign_recipients_lists"], _.bind(function (page) {
+                        var _page = new page({ params: {type: "batches", recipientType: ''},parent: this, dialog: dialog, editable: this.editable,app: this.app,source:'report'});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.$el.find('#targets_grid').addClass('targets_grid_table');
+                        _page.$el.find('.col-2 .template-container').addClass('targets_grid_table_right');
+                        _page.$el.find('.step2-lists').css({'top': '0'});
+                        _page.$el.find('.step2-lists span').css({'left': '70px'});
+                        
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));                        
+                    }, this));
+                },
+                loadListsSummary: function(fromOpenDialog){   
+                    if (this.modelArray.length) {
+                        if(this.doDraw){
+                            this.sub.$(".report-empty").hide();
+                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.doDraw = false;
+                        } 
+                        
+                        var total_lists_selected = this.modelArray.length;
+                        this.$(".total-count .badge").html(total_lists_selected);
+                        if (total_lists_selected > 1) {
+                            this.$(".total-count .rp-selected").html('lists selected');
+                        }
+                        else {
+                            this.$(".total-count .rp-selected").html('list selected');
+                        }
+                        
+                        if(!this.toDate && !this.fromDate){
+                            var currentDate =  moment(new Date());
+                            var fromDate =  currentDate.subtract(7, 'days');
+                            var toDate = moment(new Date());
+                            this.fromDate = fromDate.format("MM-DD-YYYY");
+                            this.toDate = toDate.format("MM-DD-YYYY");
+                            this.dateRange = 7;
+                            this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
+                        }
+                        this.$(".rpt-campign-listing").hide();
+                        this.$(".rpt-expand").show();
+                        var _grid = this.$(".rpt-expand");
+                        _grid.children().remove();
+                        _.each(this.modelArray, function (val, index) {
+                                var model = val;                                
+                                var listRow = new reportBlock({model: model, page: this, type: "list","expandedView":true});                            
+                                _grid.append(listRow.$el);
+
+                                this.app.showLoading("Loading Data...",  this.$("#chart-" + val.get("listNumber.checksum")));
+                                var bms_token = this.app.get('bms_token');
+                                var queryString = (this.fromDate && this.toDate) ? "&fromDate=" + moment(this.fromDate, 'M/D/YYYY').format("MM-DD-YYYY") + "&toDate=" + moment(this.toDate, 'M/D/YYYY').format("MM-DD-YYYY") : ""
+                                var URL = "/pms/io/list/getListData/?BMS_REQ_TK=" + bms_token + "&breakupType=daily&type=getListSummaryCount&listNum=" + model.get("listNumber.encode") + queryString;                            
+                                var post_data = {};
+                                $.post(URL, post_data).done(_.bind(function (sJson) {
+                                    var summary_json = jQuery.parseJSON(sJson);
+                                    if (summary_json[0] == "err") {
+                                        this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                        return false;
+                                    }
+                                    if (summary_json.count && summary_json.count !== "0") {                                    
+                                        var _data = [
+                                            ['Genre', 'Decrease', 'Increase', {role: 'annotation'}]
+                                        ];
+
+                                        var increaseCount = [], decreaseCount = [];
+                                        var categories = [];
+                                        this.chart_data = {addCount: 0, removeCount: 0};
+                                        
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.summaries[0];
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                                for(var d=0;d<=days_report;d++){
+                                                    var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                    categories.push(c_date);
+                                                    var sVal = summaries["summary"+_d];
+                                                    if(sVal && c_date == moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM")){                                                                                                        
+                                                        increaseCount.push(parseInt(sVal[0].addCount));
+                                                        decreaseCount.push(parseInt(sVal[0].removeCount));
+                                                        
+                                                        this.chart_data['addCount'] = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
+                                                        this.chart_data['removeCount'] = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
+                                                        _d = _d + 1;
+                                                    }
+                                                    else{
+                                                        increaseCount.push(0);
+                                                        decreaseCount.push(0);
+                                                    }
+                                                }
+                                            }
+                                            else{  
+                                                _.each(summary_json.summaries[0], function (sVal) {
+                                                    categories.push(moment(sVal[0].reportDate, 'MM-DD-YY').format("DD MMM"));
+                                                    increaseCount.push(parseInt(sVal[0].addCount));
+                                                    decreaseCount.push(parseInt(sVal[0].removeCount));
+                                                    
+                                                    this.chart_data['addCount'] = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
+                                                    this.chart_data['removeCount'] = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
+                                                }, this);
+                                            }
+                                        var _data = [{"name": "Decrease", "data": decreaseCount}, {"name": "Increase", "data": increaseCount}];
+                                        this.chartPage = new barChartPage({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#97d61d']});
+                                        this.$("#chart-" + val.get("listNumber.checksum")).html(this.chartPage.$el);
+                                        this.$("#stats-" + val.get("listNumber.checksum") +" .subIncrease").html(this.chart_data['addCount']);
+                                        this.$("#stats-" + val.get("listNumber.checksum") +" .subDecrease").html(this.chart_data['removeCount']);
+                                        this.$("#stats-" + val.get("listNumber.checksum") +" .subGrowth").html(this.chart_data['addCount']-this.chart_data['removeCount']);
+                                        
+                                        this.chartPage.$el.css({"width": "100%", "height": "220px"});
+                                        this.chartPage.createChart(_data);
+                                    
+                                }
+                                else {
+                                    this.$("#chart-" + val.get("listNumber.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for list.</p></div>');
+                                }
+                                }, this));
+
+                            }, this);
+                            if(fromOpenDialog){
+                                this.saveSettings();
+                            }
+                    }
                 }
+                
             });
         });

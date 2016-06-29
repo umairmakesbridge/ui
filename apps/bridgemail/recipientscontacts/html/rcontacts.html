@@ -11,6 +11,12 @@
             <li class=" "><a tabindex="-1" data-search="BN">Bounced</a></li>
           </ul>
         </div>
+      <% if(this.options.type=="webform") { %>  
+        <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
+            <input type="text" id="daterange" placeholder="Select date" />
+            <a style="" id="clearcal" class="close-icon"></a>
+       </div>  
+      <% } %>
       <div class="input-append search" id="">         
       <span class="icon subscribers"></span>
       <input type="text" style="width:;" class="search-control show-image" placeholder="Search contacts" id="contacts_search">
@@ -24,7 +30,6 @@
         <!--  search  --> 
     </div>
 </div>
-<a class="closebtn" id="contacts_close"></a>
 <div class="clearfix"></div>
 <div class="stats_listing">
     <div class="bmsgrid">

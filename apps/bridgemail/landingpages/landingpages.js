@@ -7,12 +7,19 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                     "click .refresh_mypages": 'refreshListing',
                     "click .refresh_templates":'refreshTemplateListing',
                     "click .sortoption_expand": "toggleSortOption",
-                    "click li.stattype": 'filterListing'                    
+                    "click li.stattype": 'filterListing',
+                    "keyup #daterange": 'showDatePicker',
+                    "mouseup #daterange" : 'showSelected',
+                    "click #clearcal": 'hideDatePicker',
+                    "click .calendericon": 'showDatePickerFromClick'
                 },
                 initialize: function () {
                     this.template = _.template(template);
                     this.pagesCollection = new pagesCollection();
                     this.pagesTemplateCollection = new pagesCollection();     
+                    this.fromDate = null;
+                    this.toDate = null;
+                    this.dateRange = 0;
                     this.render();
                 },
                 render: function ()
@@ -33,8 +40,94 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                     this.timeout = false;
                     this.templateLoaded = false;
                     
+                    
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
+                /*---------- Calender functions---------------*/
+                showDatePicker: function () {
+                    this.$('#clearcal').show();
+                    return false;
+                },
+                hideDatePicker: function () {
+                    this.$('#clearcal').hide();
+                    this.fromDate = "";
+                    this.toDate = "";
+                    this.dateRange = 0;
+                    this.$('#daterange').val('');                    
+                    this.getLandingPages();
+                },
+                showDatePickerFromClick: function () {
+                    this.$('#daterange').click();
+                    return false;
+                },
+                setDateRange: function (setDateVars) {
+                    var val = this.$("#daterange").val();
+                    if ($.trim(val)) {
+                        this.$('#clearcal').show();
+                        var _dateRange = val.split("-");
+                        var toDate = "", fromDate = "";
+                        if (_dateRange[0]) {
+                            fromDate = moment($.trim(_dateRange[0]), 'M/D/YYYY');
+                        }
+                        if ($.trim(_dateRange[1])) {
+                            toDate = moment($.trim(_dateRange[1]), 'M/D/YYYY');
+                        }
+                        if (fromDate) {
+                            this.fromDate = fromDate.format("MM-DD-YY");
+                        }
+                        if (toDate) {
+                            this.toDate = toDate.format("MM-DD-YY");
+                        } else {
+                            this.toDate = fromDate.format("MM-DD-YY");
+                        }
+                        if (typeof (setDateVars) !== "boolean") {
+                            this.getLandingPages();
+                        }
+                    }
+                },
+                showSelected: function(setSelected){                    
+                    if(typeof(setSelected)=="boolean"){
+                        if(this.dateRange==1){                        
+                           this.dateRangeControl.panel.find("ul.ui-widget-content .ui-daterangepicker-Today").addClass("ui-state-active");
+                        }
+                        else if(this.dateRange==2){                                                       
+                            this.dateRangeControl.panel.find("ul.ui-widget-content .ui-daterangepicker-Yesterday").addClass("ui-state-active");
+                        }
+                        else if(this.dateRange==7){                                                                             
+                            this.dateRangeControl.panel.find("ul.ui-widget-content .ui-daterangepicker-Last7days").addClass("ui-state-active");
+                        }
+                        else if(this.dateRange==30){                                                                      
+                            this.dateRangeControl.panel.find("ul.ui-widget-content .ui-daterangepicker-Last30Days").addClass("ui-state-active");
+                        }               
+                    }
+                    else{
+                        setTimeout(_.bind(this.showSelected,this,true),100);
+                    }
+                    
+                },
+                setDateRangeLi: function (obj) {
+                    var target = $.getObj(obj, "li");
+                    if (!target.hasClass("ui-daterangepicker-dateRange")) {
+                        var anchorTag = target.find("a");
+                        if(anchorTag.attr("datestart")=="yesterday"){
+                            this.dateRange = 2;
+                        } else if(anchorTag.attr("datestart")=="today"){
+                            this.dateRange = 1;
+                        }
+                        else if(anchorTag.attr("datestart")=="today-7days"){
+                            this.dateRange = 7;
+                        }
+                        else if(anchorTag.attr("datestart")=="Today-30"){
+                            this.dateRange = 30;
+                        }
+                        else{
+                            this.dateRange = 0;
+                        }
+                        this.setDateRange();
+                    }
+                }
+                /*---------- End Calender functions---------------*/
+                ,
                 init: function () {
                     this.addLandingPage();
                     this.headBadge();
@@ -61,6 +154,10 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                         iconsource: 'lpage',
                         countcontainer: 'no_of_camps'
                     });
+                    
+                    this.dateRangeControl = this.$('#daterange').daterangepicker();
+                    this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange, this));
+                    this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
                     
                     this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
                     
@@ -147,6 +244,7 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                     }, this));
                 },
                 createLandingPage: function (  ) {
+                    var templateId = this.app.get("env")!= 'production'?"kzaqwNe26Ii17Mj20kbhui":"zdTyioJp17Eh20Km21zbgFyh";
                     this.app.showAddDialog(
                     {
                       app: this.app,
@@ -157,13 +255,14 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                       emptyError : 'Landing page name can\'t be empty',
                       createURL : '/pms/io/publish/saveLandingPages/',
                       fieldKey : "name",
-                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),category:"Marketing"},
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),category:"Marketing",parentPageId:templateId},
                       saveCallBack :  _.bind(this.createPage,this)
                     });
                 },
                 createPage: function(txt,json){
                     if(json[0]=="success"){
-                        this.app.mainContainer.openLandingPage({"id":json[1],"checksum":json[2],"parent":this,editable:true});        
+                        var templateId = this.app.get("env")!= 'production'?"kzaqwNe26Ii17Mj20kbhui":"zdTyioJp17Eh20Km21zbgFyh";
+                        this.app.mainContainer.openLandingPage({"id":json[1],"checksum":json[2],"parent":this,editable:true,parentPageId:templateId});        
                         this.headBadge();
                         this.getLandingPages();
                     }
@@ -199,6 +298,10 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                     }
                     else {
                         delete  _data['status'];
+                    }
+                    if (this.toDate && this.fromDate) {
+                        _data['fromDate'] = this.fromDate;
+                        _data['toDate'] = this.toDate;
                     }
                     if(this.actionType){
                         _data['searchType'] = this.actionType;                        

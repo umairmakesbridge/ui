@@ -34,7 +34,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                         height: '22px',
                         searchFunc: _.bind(this.searchReports, this),
                         clearFunc: _.bind(this.clearsearchReports, this),
-                        placeholder: 'Search Reports',
+                        placeholder: 'Search business intelligence dashboards',
                         showicon: 'yes',
                         iconsource: 'reports'
                     });
@@ -65,18 +65,18 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                    this.ws_header = active_ws.find(".camp_header .edited"); 
                    this.ws_header.find('.workspace-field').remove();
                    active_ws.find("#campaign_tags").remove();
-                   active_ws.find("#addnew_action").attr("data-original-title", "Add Report").click(_.bind(this.createReportDialog, this));
+                   active_ws.find("#addnew_action").attr("data-original-title", "Add Business Intelligence Dashboard").click(_.bind(this.createReportDialog, this));
                    active_ws.find("div.create_new").click(_.bind(this.createReportDialog, this));  
                 },
                 createReportDialog: function (  ) {
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'Start with choosing a name for your Report',
+                      heading : 'Start with choosing a name for business intelligence dashboard',
                       buttnText: 'Create',
                       bgClass :'no-tilt',
-                      plHolderText : 'Enter report name here',
-                      emptyError : 'Report name can\'t be empty',
+                      plHolderText : 'Enter dashboard name here',
+                      emptyError : 'Dashboard name can\'t be empty',
                       createURL : '/pms/io/user/customReports/',
                       fieldKey : "reportName",
                       postData : {type:'add',BMS_REQ_TK:this.app.get('bms_token')},
@@ -103,7 +103,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                     }
                     else {
                         this.offset = parseInt(this.offset) + this.offsetLength;
-                        this.$("#reports_grid tbody").append('<tr class="loading-reports"><td colspan="4"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more reports..</p></div></td></tr>');
+                        this.$("#reports_grid tbody").append('<tr class="loading-reports"><td colspan="4"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more dashboards..</p></div></td></tr>');
                     }
                     if (this.reports_request)
                     {
@@ -141,7 +141,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                             /*------------*/
                             
                             if (this.total_fetch < parseInt(collection.totalCount)) {
-                                this.$(".landingpage-box").last().attr("data-load", "true");
+                                this.$(".report-box").last().attr("data-load", "true");
                             }
 
                             if (this.offsetLength == 0) {
@@ -149,8 +149,8 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                                 if (this.searchTxt) {
                                     search_message += " containing '" + this.searchTxt + "'";
                                 }
-                                this.$('#total_reports').html('<p class="notfound nf_overwrite">No Reports found' + search_message + '</p>');
-                                this.$('#reports_grid tbody').before('<p class="notfound">No Reports found' + search_message + '</p>');
+                                this.$('#total_reports').html('<p class="notfound nf_overwrite">No dashboards found' + search_message + '</p>');
+                                this.$('#reports_grid tbody').before('<p class="notfound">No dashboards found' + search_message + '</p>');
                             }
 
                         }, this),
@@ -160,7 +160,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                     });   
                 },
                 showTotalCount: function ( count ){                    
-                    var _text = parseInt(count) <= "1" ? "Report" : "Reports";                    
+                    var _text = parseInt(count) <= "1" ? "Business Intelligence Dashboard" : "Business Intelligence Dashboards";                    
                     
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong>';
 

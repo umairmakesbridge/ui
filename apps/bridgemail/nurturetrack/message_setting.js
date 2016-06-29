@@ -35,7 +35,8 @@ function (template) {
                      this.camp_id = this.options.campNum;     
                  else
                      this.camp_id = this.camp_obj['campNum.encode'];     
-                this.app = this.parent.app;                                                
+                this.app = this.parent.app;       
+                this.isSaveCallFromMee = false;
                 this.render();                    
             },
             /**
@@ -47,6 +48,16 @@ function (template) {
                 }));         
                 this.$bodyInner = this.$(".accordion_messagebody-inner"); 
                 this.$settingInner = this.$(".accordion_setting-inner"); 
+                if($('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontsizeselect_menu').length > 0){
+                        $('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontsizeselect_menu').remove();
+                    }
+                    if($('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontselect_menu').length > 0){
+                        $('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_fontselect_menu').remove();
+                    }
+                    if($('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_formatselect_menu').length > 0){
+                        $('body').find('#menu_bmseditor_NT_MESSAGE_bmseditor_NT_MESSAGE_formatselect_menu').remove();
+                    }
+                
                 this.initControls();
                 this.loadStep1();
                 this.loadMessageBody();                
@@ -66,8 +77,7 @@ function (template) {
                 
             },
             previewCampaign:function(){
-                var camp_id = this.camp_id;                
-                //var appMsgs = this.app.messages[0];				
+                var camp_id = this.camp_id;                                	
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
                 var dialog = this.app.showDialog({title:'Message Preview' ,
@@ -79,7 +89,7 @@ function (template) {
                 this.app.showLoading("Loading Message HTML...",dialog.getBody());									
                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                 require(["common/templatePreview"],_.bind(function(MessagePreview){
-
+                    
                 var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:this.camp_json.isTextOnly}); // isText to Dynamic
                  dialog.getBody().append(tmPr.$el);
                  this.app.showLoading(false, tmPr.$el.parent());
@@ -171,11 +181,20 @@ function (template) {
             },
             saveStep2:function(showLoading,htmlText){                                                   
                  var html = "",plain="";                  
-                 var post_data = {type: "saveStep2",campNum:this.camp_id}
+                 var post_data = {type: "saveStep2",campNum:this.camp_id};
+                 var campaign_subject_title = $.trim(this.$("#campaign_subject").val());
                  var selected_li = this.$("#choose_soruce li.selected").attr("id");
                     post_data['isCampaignText'] = 'N';                        
                      if(selected_li=="html_editor"){
                         html= (this.messagebody_page.$(".textdiv").css("display")=="block")?this.messagebody_page.$("#htmlarea").val():_tinyMCE.get('bmseditor_'+this.messagebody_page.wp_id).getContent();
+                        //setting email title;                        
+                        if(campaign_subject_title!==""){                            
+                            var newTitle = '<title>'+campaign_subject_title+'</title>';
+                            if(html.indexOf('<meta property="og:image"')==-1){
+                                newTitle = newTitle + '<meta content="'+campaign_subject_title+'" itemprop="title name" property="og:title" name="twitter:title">';
+                            }
+                            html = html.replace(/<title>(.*?)<\/title>/ig, newTitle);
+                        }
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html; 
                         post_data['plainText'] = plain;                        
@@ -185,9 +204,22 @@ function (template) {
                      }else if(selected_li=="plain_text"){
                         plain = this.$("textarea#plain-text").val();      
                         post_data['plainText'] = plain;
+                        this.camp_json['isTextOnly'] = 'Y';
                         post_data['isCampaignText'] = 'Y';                        
                         post_data['htmlCode'] = '';
+                        
                      }else if(selected_li=="html_editor_mee"){
+                         if(campaign_subject_title!==""){
+                            var newTitle = '<title>'+campaign_subject_title+'</title>';
+                            var meeElement = this.$("#mee-iframe").contents();
+                            if(meeElement.find("head title").length==1){
+                                meeElement.find("head title").html(campaign_subject_title);
+                            }
+                            else{
+                                 meeElement.find("head").append(newTitle);
+                            }
+                            meeElement.find("head meta[property='og:title']").attr("content",campaign_subject_title);
+                        }
                          html =this.$("#mee_editor").getMEEHTML?this.$("#mee_editor").getMEEHTML():"";
                          post_data['htmlCode'] = html;       
                          post_data['plainText'] = this.plainText;
@@ -207,11 +239,14 @@ function (template) {
                             var step1_json = jQuery.parseJSON(data);
                             this.app.showLoading(false,this.dialog.$el);
                             this.$(".save-step2").removeClass("disabled-btn");
+                            this.$(".save-step2,.MenuCallBackSave a").removeClass("saving savingbg");
+                            this.$(".save-step2").css('width','auto');
                             if(step1_json[0]!=="err"){
-                                if(this.messagebody_page.meeView && !this.messagebody_page.meeView.autoSaveFlag){
+                                
+                                if(this.messagebody_page.meeView && !this.messagebody_page.meeView.autoSaveFlag && !this.isSaveCallFromMee){
                                         this.app.showMessge("Message settings saved successfully!");
-                                        }else if(!this.messagebody_page.meeView){
-                                             this.app.showMessge("Step 2 saved successfully!");
+                                        }else if(!this.messagebody_page.meeView && !this.isSaveCallFromMee){
+                                             this.app.showMessge("Message settings saved successfully!");
                                         }
                                         if(this.messagebody_page.meeView){
                                             this.messagebody_page.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));

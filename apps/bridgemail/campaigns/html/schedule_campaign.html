@@ -1,10 +1,33 @@
- <div class="schedule-panel">
+
+<div class="schedule-panel <% if(this.scheduleFlag !== 'reschedule' && this.scheduleFlag !== 'schedule'){ %> schedule-panel-nh <% } %>" id="schedule-panel-1">
+     <% if(this.scheduleFlag !== 'reschedule' && this.scheduleFlag !== 'schedule'){ %>
+                                <div class="ui-accordion">
+                                    <h3 class="ui-accordion-header" role="tab">
+                                      <input type="radio" class="radiopanel " value="SN" name="options_import" checked="checked">
+                                      <span class="left">Send Now </span>   
+                                      <a class="btn-green sch-btn-sm sch-btn-now left" style="width: 110px; float: right ! important; line-height: 26px; margin-right: 0px; margin-top: 5px; position: relative; right: -7px;"> <i class="icon next left" style="background-color: transparent ! important; width: 28px; height: 35px;"></i> <span>Send</span></a>
+                                      <a class="btn-gray draft-campaign draft-sn-campaign" style="float: right ! important; margin-top: 5px;display:none;"><span>Set as Draft</span><i class="icon next"></i></a>
+                                    </h3>
+                                  </div>  
+                                <div class="ui-accordion" style="margin-bottom: 0px; border-left: 2px solid rgb(234, 244, 249); border-right: 2px solid rgb(234, 244, 249); border-top: 2px solid rgb(234, 244, 249);">
+                                <h3 class="ui-accordion-header" role="tab">
+                                    <input type="radio" class="radiopanel " value="SL" name="options_import" >
+                                  <span class="left">Schedule campaign </span>                                             
+                                </h3>
+                              </div> 
+                              <% } %> 
+     <% if(this.scheduleFlag === 'reschedule' || this.scheduleFlag === 'schedule'){ %>
                               <h1>Schedule Campaign</h1>
-                                
-                                <a class="closebtn" style="display:none;"></a>  
-                                <div class="col1">
+                             <% } %>
+                                <a class="closebtn" style="display:none;"></a> 
+                                <div class="calendar-wraps <% if(this.scheduleFlag !== 'reschedule' && this.scheduleFlag !== 'schedule'){ %> adjcal-for-step4 <% } %>"><!-- Starts Wrap -->
+                                    <% if(this.scheduleFlag !== 'reschedule' && this.scheduleFlag !== 'schedule'){ %>
+                                                                <div class="disabled-sch-wrap"></div>
+                                                            <% } %>
+                                <div class="col1" <% if(this.scheduleFlag === 'reschedule' || this.scheduleFlag === 'schedule'){ %> style="display:none;" <% } %>>
                                 <div class="calendar" style=''>
                                         <div class="custom-calendar-wrap">
+                                                            
                                                             <div id="custom-inner" class="custom-inner">
                                                                 <div class="custom-header clearfix">
                                                                     <nav>
@@ -37,7 +60,7 @@
                                 </div> <!-- col1 -->
                                 
                                 	
-                                 <div class="col2 right-col">
+                                 <div class="col2 right-col <% if(this.scheduleFlag === 'reschedule' || this.scheduleFlag === 'schedule'){ %>adjwidth-col2 <% } %>">
                                  
                                  	<div class="schedule-detail reSch schedule-height" style="display:none;">
                                     	<h3  class='camp-sch-name'>John Adams 2014</h3>
@@ -53,14 +76,19 @@
                                         </div>
                                         <a class="btn-gray draft-campaign" style="margin-top:10px"><span>Set as Draft</span><i class="icon next"></i></a>
                                     </div> <!-- schedule-detail -->
-                                 
-                                   <div class="sch-right greenbtn-wrap" style='margin:0px;'>                                                                	
+                                 <% if(this.scheduleFlag === 'reschedule' || this.scheduleFlag === 'schedule'){ %>
+                                    <div class="sch-right greenbtn-wrap-outer" style='margin:0px;'> 
+                                        <a class="btn-green sch-btn-sm sch-btn-now left" style="margin-right:5px;"> <i class="icon next left" style=" background-color: rgba(0, 0, 0, 0) !important; height: 50px;width: 28px;"></i> <span>Send Now </span></a>
+                                         <a class="btn-green sch-btn-sm sch-btn-later left"> <i class="icon schedule left" style=" background-color: rgba(0, 0, 0, 0) !important; height: 50px;width: 28px;"></i> <span>Send Later </span></a>
+                                   </div>
+                                 <% } %>
+                                   <div class="sch-right greenbtn-wrap" <% if(this.scheduleFlag === 'reschedule' || this.scheduleFlag === 'schedule'){ %> style='margin:0px;display:none;' <%}else{%> style='margin:0px;'<% } %> >                                                                	
                                          <a class="btn-green sch-btn left scheduled-campaign"> <i class="icon schedule left" style=" background-color: rgba(0, 0, 0, 0) !important; height: 65px;width: 65px;"></i> <span>Schedule </span></a>
                                    </div>
                                  
                                  
-                                 </div> <!-- col1 -->
-                                
+                                    </div> <!-- col1 -->
+                                 <div> <!-- Wrap -->
                                 
                                 <p class="note" style="padding-top: 8px;">* The time is according to Pacific Standard Time  </p>
                                 

@@ -87,12 +87,11 @@ define(['app', 'text!common/html/quickadd.html','fileuploader','bms-dragfile','s
 			} ,
                         addQuickCampaign:function(){
                             var that = this;
-                             var el = this.$el;
-                             var appMsgs = this.app.messages[0];
+                             var el = this.$el;                             
                             if(el.find('#quick_txtcampaign').val() == '')  {	
                             that.app.showError({
                                       control:el.find('.campaign-container'),
-                                      message:appMsgs.CAMPS_campname_empty_error
+                                      message:"Campaign name cannot be empty"
                               });
                               return false;
                             } else {						
@@ -113,7 +112,7 @@ define(['app', 'text!common/html/quickadd.html','fileuploader','bms-dragfile','s
                                    var isCreateCamp = true;
                                     that.toggleVisibility();
                                     that.$('#quick_txtcampaign').val('');
-                                    that.app.mainContainer.openCampaign(camp_id,camp_wsid,isCreateCamp);
+                                    that.app.mainContainer.openCampaign({campid:camp_id,camp_wsid:camp_wsid,isCreateCamp:isCreateCamp});
                                    
                                 }
                                 else{

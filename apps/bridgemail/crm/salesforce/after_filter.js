@@ -18,8 +18,8 @@ function (template,crm_filters) {
                         this.$el.html(this.template({}));
                         this.savedObject = this.options.savedObject;
                         this.filter_type = this.options.type;
-                        this.$(".lead-filter").crmfilters({app:this.app,object:'lead'});
-                        this.$(".contact-filter").crmfilters({app:this.app,object:'contact'});
+                        this.$(".lead-filter").crmfilters({app:this.app,object:'lead',filter_type:this.filter_type});
+                        this.$(".contact-filter").crmfilters({app:this.app,object:'contact',filter_type:this.filter_type});
                         this.$(".contactbyopp-filter").crmfilters({app:this.app,object:'opportunity'});
                         
                         this.$(".checkpanel").iCheck({

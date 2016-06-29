@@ -123,8 +123,7 @@ function (template,PageView,ViewsCollection) {
                 openCampaign:function(ev){
                 var name = $(ev.target).data('name'); // checksum
                 var camp_id = $(ev.target).data('encode'); //encode
-                                var camp_obj = this;
-				//var appMsgs = this.app.messages[0];				
+                                var camp_obj = this;								
 				var dialog_width = $(document.documentElement).width()-60;
 				var dialog_height = $(document.documentElement).height()-182;
 				var dialog = camp_obj.options.app.showDialog({title:'Campaign Preview of &quot;' + name + '&quot;' ,

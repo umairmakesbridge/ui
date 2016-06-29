@@ -9,7 +9,7 @@
  * * Section8 - Landing page Forms
  ****/
 
-define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors','bms-remote'],
+define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors','bms-remote','editor/editor-dragfile', 'jquery.colresize'],
         function ($, Backbone, _, template, linksPage, blocksPage, filterPage) {
             'use strict';
             return Backbone.View.extend({
@@ -22,6 +22,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
                     this.autoSaveFlag = false;
                     this.timer = false;
+                    this.isRepeatX = false;
+                    this.isRepeatY = false;
                     var mee_view = this;
                     var predefinedControls = [
                         {
@@ -45,6 +47,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             "html": "<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>"
                         },
                         {
+                            "type": "embedvideo",
+                            "html": "<div class='MEEVIDEOCONTAINER'><div class='editvideopanel' style='display:none;'><span class='edit-video'><button >Edit Embed Video</button></span> </div></div>"
+                        },
+                        {
                             "type": "spacer5",
                             "html": '<div style=\'height:5px\' class=\'spacer-ele\'><table class="fullCenter" align="center" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td style="font-size: 1px; line-height: 1px;" height="5">&nbsp;</td></tr></table></div>'
                         },
@@ -66,15 +72,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         },
                         {
                             "type": "twoColumnContainer",
-                            "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none; '></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td></tr></table>"
+                            "html": "<table class='MEE_CONTAINER container COLRESIZEABLE' width='100%'><tr><td><ul class='sortable' style='list-style: none; '></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td></tr></table>"
                         },
                         {
                             "type": "threeColumnContainer",
-                            "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td></tr></table>"
+                            "html": "<table class='MEE_CONTAINER container COLRESIZEABLE' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td></tr></table>"
                         },
                         {
                             "type": "fourColumnContainer",
-                            "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td></tr></table>"
+                            "html": "<table class='MEE_CONTAINER container COLRESIZEABLE' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none;'></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td><td><ul class='sortable' style='list-style: none; '></ul></td></tr></table>"
                         },
                         {
                             "type": "dynamicContentContainer",
@@ -177,7 +183,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             }
                             var mee = this;
                             mee.iframeLoaded = false;
-                            
+                            mee.isActionScriptSet= '';
+                            mee.isActionScriptSetG = '';
                             this.each(function () {
                                 var $this = $(this);
                                 var undoManager = new MakeBridgeUndoRedoManager({
@@ -196,7 +203,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.$el.html(this.my_template({allowedUser: ['admin', 'jayadams', 'demo'], options: options}));
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;
-                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                            
+                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                          
+                                            if(options.landingPage){
+                                                 mee.getActionScript();
+                                            }
+                                           
                                         })
                                         
                                     }
@@ -209,7 +220,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 //$this = element;
                                 $this.html(mainView.el);
                                 var myElement = $this;
- 
+                                 myElement.find(".bgimage-properties li input.radiopanel").iCheck({
+                                                                checkboxClass: 'checkpanelinput',
+                                                                insert: '<div class="icheck_line-icon"></div>'
+                                                            });
+                                 myElement.find(".bgimage-properties input.radiopanel_percent").iCheck({
+                                                                radioClass: 'radiopanelinput',
+                                                                insert: '<div class="icheck_radio-icon"></div>'
+                                                            });
                                 var meeIframe = myElement.find("#mee-iframe").contents();
                                 var meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                 var oInitDestroyEvents = new InitializeAndDestroyEvents();
@@ -223,13 +241,29 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var myColorsFromServiceGlobal = "";
                                 var txtColorCode = myElement.find(".txtColorCode");
                                 var ulMyColors = myElement.find(".myColors");
-                                var personalizedTagsGlobal = new Array();var customTagsGlobal = new Array();var linksTagsGlobal = new Array();var basicTagsGlobal=new Array();
-                                var formBlocksGlobal = "";
+                                var personalizedTagsGlobal = new Array();var customTagsGlobal = new Array();var linksTagsGlobal = new Array();var basicTagsGlobal=new Array();                                
                                 var topPlus = options.topPlus;
                                 var leftPlus = options.leftPlus;
                                 var $element = null;
                                 var emailWidth = options.landingPage? "100%":"600px";                              
                                 var pageBackgroundColor = "#fff";
+                                var pageBorderWidth = '0px';
+                                var pageBorderColor = 'transparent';
+                                var pageBorderType= 'none'; // Style of 
+                                var pageBorderLeft = 'none';
+                                var pageBorderLeftProp = '';
+                                var pageBorderRight = 'none';
+                                var pageBorderRightProp = '';
+                                var pageBorderTop = 'none';
+                                var pageBorderTopProp = '';
+                                var pageBorderBottom = 'none';
+                                var pageBorderBottomProp = '';
+                                var pageTitle = "";
+                                var pageBackgroundimage = "none";
+                                var pageBackgroundimage_repeat = "no-repeat";
+                                var pageBackgroundimage_pos = "0% 0%";
+                                var pageActionScriptSet = '';
+                                var pageActionScriptSetG = '';
                                 var undoredo = true;
                                 var _offset = 0;
                                 var forms_offset = 0;
@@ -299,8 +333,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     mainTable.find("div.ui-resizable-se").remove();
                                     mainTable.find("div.textcontent").removeClass('mce-content-body');                                    
                                     undoManager.registerAction(mainTable);
-                                     mee.resizeHeight();
-                                    
+                                    mee.resizeHeight();                                    
                                     return false;
                                 }
                                 mee.setScrollHeight = function(){                                    
@@ -312,6 +345,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var ul_container = meeIframe.find(".mainContentHtml");
                                     var main_container = myElement.find(".editorbox");
                                     if (ul_container.height() > ($(".tabcontent").height() - 100)) {
+                        
                                         main_container.css("height", (ul_container.height() + 200) + "px");
                                         iframeEle.css("height", (ul_container.height() + 200) + "px");
                                     }
@@ -373,6 +407,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     }
                                 });
+                                myElement.find(".stickybar a").click(function (event) {
+                                    event.preventDefault();
+                                    myElement.find('.first-accordian').hide();
+                                    myElement.find(".stickybar a").removeClass('active');
+                                    $(this).addClass('active');
+                                    myElement.find('div[data-element="' + $(this).attr('id') + '"]').show();
+                                });
+                                
                                 function setIFrameElements() {
                                     meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                     mainContentHtmlGrand = meeIframe.find(".mainContentHtmlGrand");
@@ -421,9 +463,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var parentTd = '';
                                     if(this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style')!==""){
-                                        parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');
-                                        
+                                        parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');                                        
+                                        if(parentTd){
+                                            parentTd = "height:500px;"
+                                        }
                                     }
+                                    
+                                    
                                     mainHTMLELE.find(".bgimage").each(function(){
                                         $(this).attr("mee-style",$(this).attr("style"));
                                         $(this).removeAttr("style");
@@ -436,15 +482,55 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         $(this).attr("style",$(this).attr("mee-style"));
                                         $(this).removeAttr("mee-style");
                                     });
-                                    
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+
+                                    if(!pageBackgroundimage){
+                                        pageBackgroundimage = "none";
+                                    }
+
+                                    if(pageBorderLeft !="none" || pageBorderRight !="none" || pageBorderTop !="none" || pageBorderBottom !="none"){
+                                        if(pageBorderLeft !="none" && pageBorderLeft !=""){
+                                            pageBorderLeftProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
+                                        }else{
+                                            pageBorderLeftProp = '';
+                                        }
+                                         if(pageBorderRight !="none" && pageBorderRight !=""){
+                                            pageBorderRightProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
+                                        }else{
+                                            pageBorderRightProp = '';
+                                        }
+                                        if(pageBorderTop !="none" && pageBorderTop !=""){
+                                            pageBorderTopProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
+                                        }else{
+                                            pageBorderTopProp = '';
+                                        }
+                                        if(pageBorderBottom !="none" && pageBorderBottom !=""){
+                                            pageBorderBottomProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
+                                        }else{
+                                            pageBorderBottomProp = '';
+                                        }
+                                    }
+                                    var emailWidthScale = (emailWidth && emailWidth.indexOf("%")>-1)?"%":"";
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='"+parseFloat(emailWidth)+emailWidthScale+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgleftborder='"+pageBorderLeftProp+"' data-bgrightborder='"+pageBorderRightProp+"' data-bgtopborder='"+pageBorderTopProp+"' data-bgbottomborder='"+pageBorderBottomProp+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+emailWidthScale+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
-                                    header_section.find("link").remove();
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+"</head><body style='background-color:"+pageBackgroundColor+"'>"+outputHTML+"</body></html>";                                    
+                                    header_section.find("link:not([rel='image_src'])").remove();
+                                    
+                                    if(mee.isActionScriptSet){
+                                        pageActionScriptSet = mee.isActionScriptSet;
+                                    }else{
+                                        pageActionScriptSet = "";
+                                    }
+                                    if(mee.isActionScriptSetG){
+                                        pageActionScriptSetG = mee.isActionScriptSetG;
+                                    }else{
+                                        pageActionScriptSetG = "";
+                                    }
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+pageActionScriptSet+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+";border-left:"+pageBorderLeftProp+";border-right:"+pageBorderRightProp+";border-top:"+pageBorderTopProp+";border-bottom:"+pageBorderBottomProp+" ' >"+outputHTML+pageActionScriptSetG+"</body></html>";                                    
                                     
                                      //"" + outputter.outerHTML();
+                                     outputHTML = outputHTML.replace(/&quot;/g,'&#39;')
                                     return outputHTML;
                                 };
 
@@ -456,11 +542,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var outerCss = outerTD.attr('style');
                                     //get background color of body
                                     pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
+                                    if(outerTD.length){
+                                        pageTitle = outerTD.attr("data-pageTitle") ?outerTD.attr("data-pageTitle"):""; 
+                                    }
+
+                                    pageBackgroundimage = outerTD.length ?outerTD.attr("data-bgimg"):"none"; 
+                                    pageBackgroundimage_repeat = outerTD.length ?outerTD.attr("data-bgimgrepeat"):"no-repeat"; 
+                                    pageBackgroundimage_pos = outerTD.length ?outerTD.attr("data-bgimgpos"):"0% 0%"; 
+                                    pageBorderLeftProp = outerTD.length ?outerTD.attr("data-bgleftborder"):"none"; 
+                                    pageBorderRightProp = outerTD.length ?outerTD.attr("data-bgrightborder"):"none"; 
+                                    pageBorderTopProp = outerTD.length ?outerTD.attr("data-bgtopborder"):"none"; 
+                                    pageBorderBottomProp = outerTD.length ?outerTD.attr("data-bgbottomborder"):"none"; 
+                                    
                                     emailWidth = options.landingPage? "100%":outerTD.attr("width");
                                     this.find('#mee-iframe').contents().find('.mainContentHtmlGrand').attr('style',outerCss);
                                     if(!emailWidth){
                                         var mainTable = this.find("#mee-iframe").contents().find(".mainTable");
-                                        emailWidth = parseFloat(mainTable.css("width"));
+                                        emailWidth = mainTable.css("width");
                                     }
                                     options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
@@ -470,6 +568,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 mee.encodeSpecialHTML = function(str){                                    
                                     str = str.replace(/mee-style=/g, "style=");                                                                      
                                     str = str.replace(/\​/g,"");
+                                    str = str.replace(//g, "");
                                     return str;
                                 }
                                 
@@ -481,18 +580,60 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var htmlOBJ = $(oHtml);
                                         var innerHTML = htmlOBJ.find("#__OUTERTD").length? htmlOBJ.find("#__OUTERTD").html() : oHtml;
                                         //Set background color of body
+                                        if(pageBackgroundimage){
+                                            meeIframe.find("body").css('background-image','url(' + pageBackgroundimage + ')');
+                                            meeIframe.find("body").css('background-repeat',pageBackgroundimage_repeat);
+                                            meeIframe.find("body").css('background-position',pageBackgroundimage_pos);
+                                            if(pageBackgroundimage_repeat=="repeat-x"){
+                                              myElement.find('#bgimg_repeatx').iCheck('check');  
+                                            }else if(pageBackgroundimage_repeat=="repeat-y"){
+                                                myElement.find('#bgimg_repeaty').iCheck('check');  
+                                            }else if(pageBackgroundimage_repeat=="no-repeat"){
+                                                myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                            }else{
+                                                myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                                myElement.find('#bgimg_repeatx').iCheck('check');
+                                            }
+                                        }
+                                        if(pageBorderLeftProp){
+                                            meeIframe.find('body').css('border-left',pageBorderLeftProp);
+                                        }
+                                        if(pageBorderRightProp){
+                                            meeIframe.find('body').css('border-right',pageBorderRightProp);
+                                        }
+                                        if(pageBorderTopProp){
+                                            meeIframe.find('body').css('border-top',pageBorderTopProp);
+                                        }
+                                        if(pageBorderBottomProp){
+                                            meeIframe.find('body').css('border-bottom',pageBorderBottomProp);
+                                        }
                                         if(pageBackgroundColor){
                                             meeIframe.find("body").css("background-color",pageBackgroundColor);
+                                        } 
+                                        
+                                        
+                                        if(pageTitle){
+                                            meeIframe.find("head").append($("<title>"+pageTitle+"</title>"));
                                         }
-                                        meeIframe.find(".mainTable").css("width",emailWidth+"px");
-                                        mainObj.html(innerHTML);                          
-                                        if(!options.landingPage && emailWidth){
+                                        
+                                        var emailWidthScale = (emailWidth && emailWidth.indexOf("%")>-1)?"%":"px";
+                                        var _emailWidth = parseFloat(emailWidth);
+                                        meeIframe.find(".mainTable").css("width",_emailWidth+emailWidthScale);
+                                        // For Toolbar Test Purpose Abdullah 
+                                        meeIframe.find(".mainTable").css("margin-top","45px");
+                                        myElement.find('.editortoolbar').css('margin-bottom','0');
+                                        // Ends Abdullah test
+                                        mainObj.html(innerHTML);     
+                                        
+                                        if(!options.landingPage && _emailWidth){
                                             myElement.find(".email-width input.btnContainerSize").removeClass("active");
-                                            if( myElement.find(".email-width input.btnContainerSize#"+emailWidth).length ){                                            
-                                                myElement.find(".email-width input.btnContainerSize#"+emailWidth).addClass("active");
+                                            if( myElement.find(".email-width input.btnContainerSize#"+_emailWidth).length && emailWidthScale=="px"){                                            
+                                                myElement.find(".email-width input.btnContainerSize#"+_emailWidth).addClass("active");
                                             }
                                             else{
-                                                 myElement.find(".email-width input.txtContSize").val(emailWidth)
+                                                 myElement.find(".email-width input.txtContainerSize").val(_emailWidth);
+                                                 myElement.find(".email-width select.selectEmailSize").val(emailWidthScale);
                                             }
                                         }
                                         IsStyleActivated = false;
@@ -515,7 +656,368 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find("[data-type='signupForm']").removeClass("disabled").attr("draggable",true);   
                                     }
                                 }
-                               
+                                mee.openvideoDialog = function(cHtml){
+                                    
+                                    myElement.trigger('click');
+                                   if(cHtml.length && cHtml.hasClass('MEEVIDEOCONTAINER')){
+                                       cHtml.append('<div class="preloadGif" style="display:none;"><img src="'+options._app.get('path')+'/css/images/youtube.gif" /><img src="'+options._app.get('path')+'/css/images/embed_vimeo.gif" /></div>')
+                                       cHtml.addClass('clickEventVideo');
+                                       var dialogOptions = {
+                                            title: "Embed Video",
+                                            css: {
+                                                "width": "800px",
+                                                "margin-left": "-340px",
+                                                "top":"20%"
+                                            },
+                                            bodyCss: {
+                                                "min-height": "90px"
+                                            },
+                                            headerIcon: 'emvideo',
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Insert'
+                                                }
+                                            }
+                                        };
+                                    var dialog = null;  
+                                    dialog = options._app.showStaticDialog(dialogOptions);                                            
+                                    options._app.showLoading("Loading...", dialog.getBody());
+                                    dialog.$el.css("z-index", "99999");
+                                    dialog.$el.find('.dialog-backbtn').hide();
+                                    $(".modal-backdrop").css("z-index", "99998");
+                                    //require(["editor/links"], function (page) {
+                                        
+                                        var iframeval = (cHtml.find('.embedvido-wrap').length) ? cHtml.find('.embedvido-wrap').html() : ""; 
+                                        var yotubeGif = options._app.get('path')+'/css/images/youtube.gif';
+                                        var vimeoGif = options._app.get('path')+'/css/images/embed_vimeo.gif';
+                                        dialog.getBody().append('<div class="embedvideolinkwrap" style="position:relative;">Paste the video url here, from your media (youtube/vimeo) provider<br><span style="float:left">For youtube help&nbsp;</span> <a id="ytube" style="display: block;float:left;" class="bs-docs-popover" data-content="<img src= '+yotubeGif+' class=\'img-responsive\' /> " title="" data-toggle="popover" data-original-title="Help for Youtube" aria-describedby="popover628884">click here.</a><span style="float:left">&nbsp;For vimeo help&nbsp;</span><a id="vtube" style="display: block;float:left" class="bs-docs-popover" data-content="<img src= '+vimeoGif+' class=\'img-responsive\' /> " title="" data-toggle="popover" data-original-title="Help for Vimeo" aria-describedby="popover628884">click here</a><br/><div class="ui-code-area inputcont" style="padding: 4px 0; margin: 6px 0px; "><textarea type="text" class="divVideoCode " style="font-size:12px;width:750px;height:130px;" placeholder="Paste video embed code here">'+iframeval+'</textarea></div></div>');
+                                        dialog.saveCallBack(_.bind(mee.saveVideo,mee,dialog,cHtml));
+                                        mee.openPopup(dialog.getBody());
+                                        options._app.showLoading(false, dialog.getBody());
+                                        dialog.$el.find('.divVideoCode').focus()
+                                        dialog.closeDialogCallBack(_.bind(mee.videocloseCallBack,mee,dialog,cHtml));
+                                    oInitDestroyEvents.InitializeClickEvent(cHtml);  
+                                   }
+                                        
+                                },
+                                mee.openPopup = function(dialog){
+                                    
+                                    $('body').click(function(e) {
+                                        dialog.find('.bs-docs-popover').popover('hide');
+                                    });
+                                    
+                                    dialog.find('.bs-docs-popover').popover({
+                                        html: true,
+                                        trigger: 'manual'
+                                    }).click(function(e) {
+                                        $('.popover').remove();
+                                        $(this).popover('show');
+                                        e.stopPropagation();
+                                    });
+                                    
+                                    //dialog.find('#ytube').popover({html:true}); 
+                                    
+                                },
+                                mee.videocloseCallBack = function(dialog,cHtml){
+                                    var embedvideo = dialog.$el.find('.divVideoCode').val();
+                                    $('.popover').remove();
+                                    if(embedvideo.trim()==""){
+                                        /*cHtml.parent().prev().remove();
+                                        cHtml.parent().next().remove();
+                                        cHtml.parent().remove();*/
+                                        //cHtml.removeClass('clickEventVideo');
+                                        cHtml.find('.embedvido-wrap').remove();
+                                        
+                                        cHtml.removeClass('videoenable');
+                                    }else{
+                                        //cHtml.addClass('clickEventVideo');
+                                        cHtml.addClass('videoenable');
+                                    }
+                                    
+                                },
+                                mee.saveVideo = function(dialog,cHtml){
+                                    $('.popover').remove();
+                                    var embedval = dialog.$el.find('.divVideoCode').val();
+                                    var iframe = '';
+                                    var ytp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                                    //var regVimeo =   /vimeo.*(?:\/|clip_id=)([0-9a-z]*)/i;
+                                    
+                                    var matchlist=embedval.match(/^(<iframe.*? src=")(.*?)(\??)(.*?)(".*)$/mg);
+                                    var ytmatches = embedval.match(ytp);
+                                    //var vmatches = embedval.match(regVimeo);
+                                    var isvalidurl = true;
+                                    /*
+                                     * 
+                                     * else if(){
+                                        var videoid = mee.parseVimeo(embedval);
+                                        isvalidurl = false;
+                                        //console.log('vimeo :'+videoid);
+                                        //iframe = '<iframe src="https://player.vimeo.com/video/'+videoid+'?badge=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+                                    }
+                                     */
+                                    console.log(matchlist);
+                                    if (ytmatches || !matchlist || embedval=="") {
+                                        //var videoid = mee.youtube_parser(embedval);
+                                        isvalidurl = false;
+                                        //iframe = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoid+'" frameborder="0" allowfullscreen></iframe>'
+                                    }
+                                    if(isvalidurl){
+                                        cHtml.addClass('videoenable');
+                                        cHtml.find('.embedvido-wrap').remove();
+                                        cHtml.append('<div class="embedvido-wrap responsive_video" align="center" style="display:none;" >'+embedval+'</div>');
+                                        cHtml.css({width:cHtml.find('.embedvido-wrap iframe').attr('width'),height:cHtml.find('.embedvido-wrap iframe').attr('height')});
+                                        dialog.hide();
+                                        
+                                    }else{
+                                        isvalidurl = false;
+                                         options._app.showError({
+                                            control:dialog.$el.find('.embedvideolinkwrap'),
+                                            message: "We are only supporting youtube and vimeo."
+                                        });
+                                         dialog.$el.find('.embedvideolinkwrap .errortext').css({right:"6px",bottom:"158px"});
+                                         dialog.$el.find('.embedvideolinkwrap .errortext em').show();
+                                        //alert('We are only supporting youtube and vimeo.');
+                                        dialog.$el.find('.divVideoCode').val('');
+                                    }
+                                },
+                                mee.setBorderColor = function(){
+                                    $.each(myElement.find(".sBorderLine"),function(key,val){
+                                                        if($(val).hasClass('borderselected')== true){
+                                                          $(val).removeClass('borderselected').trigger('click');
+                                                        }
+                                                    })
+                                },
+                                mee.setBodyBorders = function(){
+                                   var properties = '';
+                                    $element = myElement.find(".borderControl .ved-edge-inner");
+                                    if(pageBorderTopProp !="none" || pageBorderBottomProp !="none" || pageBorderLeftProp !="none" || pageBorderRightProp !="none"){
+                                        if(pageBorderTopProp !="none" && pageBorderTopProp !=""){
+                                            properties= pageBorderTopProp.split(" "); 
+                                        }else if(pageBorderBottomProp !="none" && pageBorderBottomProp !=""){
+                                            properties = pageBorderBottomProp.split(" ");
+                                        }else if(pageBorderLeftProp !="none" && pageBorderLeftProp !=""){
+                                            properties = pageBorderLeftProp.split(" ");
+                                        }else if(pageBorderRightProp !="none" && pageBorderRightProp !=""){
+                                            properties = pageBorderLeftProp.split(" ");
+                                        }
+                                        myElement.find('.colorPickerBorder').minicolors('value', properties[2])
+                                        myElement.find('.ddlBorderType').val(properties[1]);
+                                        myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
+                                        pageBorderWidth =  properties[0];
+                                        pageBorderType = properties[1] ;
+                                        pageBorderColor = properties[2];
+                                        if(pageBorderTopProp !="none" && pageBorderTopProp !=""){
+                                           var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                           $element.css("border-top", string);
+                                           pageBorderTop = "border-top";
+                                           myElement.find('#topBorder').addClass("borderselected");
+                                        }
+                                        if(pageBorderBottomProp !="none" && pageBorderBottomProp !=""){
+                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                           $element.css("border-bottom", string);
+                                           pageBorderBottom = "border-bottom";
+                                            myElement.find('#bottomBorder').addClass("borderselected");
+                                        }
+                                        if(pageBorderLeftProp !="none" && pageBorderLeftProp !=""){
+                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                            $element.css("border-left", string);
+                                            pageBorderLeft = "border-left";
+                                            myElement.find('#leftBorder').addClass("borderselected");
+                                        }
+                                        if(pageBorderRightProp !="none" && pageBorderRightProp !=""){
+                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                            $element.css("border-right", string);
+                                            pageBorderRight = "border-right";
+                                            myElement.find('#rightBorder').addClass("borderselected");
+                                        }
+                                    }
+                                },
+                                mee.saveActionScript = function(dialog){
+                                 var embedval = dialog.$el.find('.divPixelCode').val();
+                                 var embedvalG = dialog.$el.find('.divPixelCodeGoogle').val();
+                                 var encodeEmbedval = embedval.replace(/(&amp;)/g, "%26amp%3B");
+                                     encodeEmbedval = encodeEmbedval.replace(/(&)/g, "%26");
+                                 var encodeEmbedvalG = embedvalG.replace(/(&amp;)/g, "%26amp%3B");
+                                     encodeEmbedvalG = encodeEmbedvalG.replace(/(&)/g, "%26");
+                                   
+                                   if(encodeEmbedvalG && encodeEmbedval){ 
+                                     var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
+                                     var snippetTypeG  = $(dialog.$el.find('.pixelTab li')[1]).data('snippet'); 
+                                     
+                                   }else{
+                                       var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
+                                   }
+                                 var type = "add"; // needs to be dynamic 
+                                 var userId = options._app.get("user").userId;
+                                 var isScriptTrue = true;
+                                 
+                                 if((embedval.match(/facebook/g) && embedval.match(/facebook/g).length > 0)){
+                                      
+                                      var snippetType = "facebook";
+                                      mee.saveAjaxActionScript({type:type,embedval:embedval,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedval,dialog:dialog,isScriptTrue:true})
+                                 }else if(embedval ==""){
+                                        mee.saveAjaxActionScript({type:type,embedval:embedval,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedval,dialog:dialog,isScriptTrue:true})
+                                 }else{
+                                     isScriptTrue = false;
+                                     mee.saveAjaxActionScript({embedval:embedval,dialog:dialog,userId:userId,snippetType:snippetType,landingPageId:options.pageId,isScriptTrue:false})
+                                 }
+                                 if( (embedvalG.match(/google/g) && embedvalG.match(/google/g).length > 0) && isScriptTrue){
+                                     if(snippetTypeG){
+                                         snippetType = snippetTypeG;
+                                     }
+                                     var snippetType = "google";
+                                     mee.saveAjaxActionScript({type:type,embedval:embedvalG,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedvalG,dialog:dialog,closeDialog:true,isScriptTrue:true})
+                                 }else if(embedvalG =="" && isScriptTrue){
+                                     mee.saveAjaxActionScript({type:type,embedval:embedvalG,userId:userId,snippetType:"google",landingPageId:options.pageId,snippetValue:encodeEmbedvalG,dialog:dialog,closeDialog:true,isScriptTrue:true})
+                                 }else{
+                                     isScriptTrue = false;
+                                     mee.saveAjaxActionScript({embedval:embedvalG,dialog:dialog,userId:userId,snippetType:"google",landingPageId:options.pageId,closeDialog:true,isScriptTrue:isScriptTrue})
+                                 }
+                                 
+                                 
+                                 
+                                },
+                                mee.saveAjaxActionScript = function(embedObj){
+                                    var dialog = embedObj.dialog
+                                    if(embedObj.embedval !="" && embedObj.type=="add" && embedObj.isScriptTrue){
+                                     options._app.showLoading("Saving tracking Snippet...", dialog.getBody());
+                                     var saveUrl = "/pms/events/thirdPartyTrackingSnippet.jsp";
+                                    $.ajax({
+                                           url: saveUrl,
+                                           data: {"type":embedObj.type,"userId":embedObj.userId,"snippetType":embedObj.snippetType,"landingPageId":embedObj.landingPageId,"snippetValue":embedObj.snippetValue},
+                                           type: 'POST',
+                                           success: function (data, textStatus, jqXHR) {                                            
+                                               options._app.showLoading(false, dialog.getBody());
+                                               var result = jQuery.parseJSON(data);
+                                               if (result.result=="success") {
+                                                   options._app.showMessge("Tracking Snippet added successfully", $("body"));
+                                                   if(embedObj.snippetType =="facebook"){
+                                                       mee.isActionScriptSet = embedObj.snippetValue;
+                                                   }
+                                                   if(embedObj.snippetType =="google"){
+                                                      mee.isActionScriptSetG = embedObj.snippetValue; 
+                                                   }
+                                                   if(embedObj.closeDialog){
+                                                       dialog.hide();
+                                                     
+                                                   }
+                                                   
+                                               }
+                                               else {
+                                                   options._app.showAlert("Error while saving", $("body"));
+                                               }
+                                           }
+                                       });
+                                   
+                                 }else if(embedObj.embedval=="" && embedObj.isScriptTrue){
+                                                var type = 'delete';
+                                                  if(embedObj.closeDialog){
+                                                       dialog.hide();
+                                                     
+                                                   }
+                                                 $.ajax({
+                                                        url: '/pms/events/thirdPartyTrackingSnippet.jsp',
+                                                        data: {"type":type,"userId":embedObj.userId,"snippetType":embedObj.snippetType,"landingPageId":embedObj.landingPageId},
+                                                        type: 'POST',
+                                                        success: function (data, textStatus, jqXHR) {                                            
+                                                            options._app.showLoading(false, dialog.getBody());
+                                                            var result = jQuery.parseJSON(data);
+                                                            if (result.result=="success") {
+                                                                if(embedObj.snippetType =="facebook"){
+                                                                    mee.isActionScriptSet = "";
+                                                                }
+                                                                if(embedObj.snippetType =="google"){
+                                                                    mee.isActionScriptSetG = "";
+                                                                }
+                                                                
+                                                               
+                                                                
+                                                            }
+                                                            else {
+                                                                options._app.showAlert("Unfortunetly some error occured", $("body"));
+                                                            }
+                                                        }
+                                                    });
+                                                  
+                                               }
+                                 else{
+                                     options._app.showError({
+                                            control:dialog.$el.find('.divScriptVersion'),
+                                            message: "Please paste a valid script."
+                                        });
+                                         dialog.$el.find('.divScriptVersion .errortext').css({right:"2px",bottom:"485px"});
+                                         dialog.$el.find('.divScriptVersion .errortext em').show();
+                                 }
+                                },
+                                mee.getActionScript = function(){
+                                    var type = "get"; // needs to be dynamic 
+                                    var userId = options._app.get("user").userId;
+                                    var getUrl = "/pms/events/thirdPartyTrackingSnippet.jsp?type="+type+"&userId="+userId+"&landingPageId="+options.pageId;
+                                        $.ajax({
+                                           url: getUrl,
+                                           type: 'POST',
+                                           success: function (data, textStatus, jqXHR) {                                            
+                                               //options._app.showLoading(false, dialog.getBody());
+                                               var result = jQuery.parseJSON(data);
+                                               if (result.result=="success" && result.message != "No data available.") {
+                                                   var myString = result.trackingSnippet[0].snippetValue;
+                                                   if(result.trackingSnippet.length > 1){
+                                                        var myStringF = result.trackingSnippet[0].snippetValue;
+                                                        var decodeEmbedvalF = myStringF.replace(/(%26amp%3B)/g, "&amp;");
+                                                        decodeEmbedvalF = decodeEmbedvalF.replace(/(%26)/g, "&");
+                                                        mee.isActionScriptSet = decodeEmbedvalF;
+                                                        
+                                                        var myStringG = result.trackingSnippet[1].snippetValue;
+                                                        var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
+                                                        decodeEmbedvalG = decodeEmbedvalG.replace(/(%26)/g, "&");
+                                                        mee.isActionScriptSetG = decodeEmbedvalG;
+                                                   }else if(result.trackingSnippet[0].snippetType=="facebook"){
+                                                       var myString = result.trackingSnippet[0].snippetValue;
+                                                       var decodeEmbedval = myString.replace(/(%26amp%3B)/g, "&amp;");
+                                                       decodeEmbedval = decodeEmbedval.replace(/(%26)/g, "&");
+                                                       mee.isActionScriptSet = decodeEmbedval;
+                                                   }else{
+                                                       var myStringG = result.trackingSnippet[0].snippetValue;
+                                                       var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
+                                                       decodeEmbedval = decodeEmbedvalG.replace(/(%26)/g, "&");
+                                                       mee.isActionScriptSetG = decodeEmbedval;
+                                                   }
+                                                   //myString = myString.substring(1, myString.length-1);
+                                                  
+                                               }
+                                               else {
+                                                   mee.isActionScriptSet="";
+                                                   mee.isActionScriptSetG = "";
+                                               }
+                                           }
+                                       });
+                                },
+                                mee.youtube_parser = function (url){
+                                        /*==========Supporting youtube URL ===========*/
+                                      /*http://www.youtube.com/watch?v=0zM3nApSvMg&feature=feedrec_grec_index
+                                        http://www.youtube.com/user/IngridMichaelsonVEVO#p/a/u/1/QdK8U-VIH_o
+                                        http://www.youtube.com/v/0zM3nApSvMg?fs=1&amp;hl=en_US&amp;rel=0
+                                        http://www.youtube.com/watch?v=0zM3nApSvMg#t=0m10s
+                                        http://www.youtube.com/embed/0zM3nApSvMg?rel=0
+                                        http://www.youtube.com/watch?v=0zM3nApSvMg
+                                        http://youtu.be/0zM3nApSvMg*/
+                                        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+                                        var match = url.match(regExp);
+                                        if (match&&match[7].length==11){
+                                            var b=match[7];
+                                            return b;
+                                        }else{
+                                            alert("Url incorrect");
+                                        }
+                                },
+                                mee.parseVimeo = function (url) {
+                                    // embed & link: http://vimeo.com/86164897
+                                    // embed & link: http://vimeo.com/channels/86164897
+
+                                    var re = /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+                                    var matches = re.exec(url);
+                                    return matches && matches[5];
+                                }
                                 $.fn.getIframeStatus = function () {
                                     return mee.iframeLoaded;
                                 }
@@ -525,8 +1027,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
 
                                 $.fn.setAccordian = function (diff) {
-                                    this.find(".builder-panel").css("height", ($(window).height() - 62 - diff) + "px");
-                                    this.find(".style-panel").css("height", ($(window).height() - 62 - diff) + "px");
+
+                                    var accordian_height = 550;
+                                    if(options._app.get("isFromCRM") && options._app.get("isFromCRM").toLowerCase() == "y"){
+                                        accordian_height =550;
+                                    }
+                                    else{
+                                        accordian_height = options.parentWindowobj.height() - 62 - diff;
+                                    }
+                                    this.find(".builder-panel").css("height",  accordian_height + "px");
+                                    this.find(".style-panel").css("height", accordian_height + "px");
+
                                     if (this.find(".style-panel").css("display") !== "none") {
                                         this.find(".style-panel .accordian").accordion("refresh");
                                         this.find(".style-panel").css("height", (this.find(".style-panel").height() + 12) + "px");
@@ -534,6 +1045,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     else {
                                         this.find(".builder-panel .accordian").accordion("refresh");
                                         this.find(".builder-panel").css("height", (this.find(".style-panel").height() + 12) + "px");
+                                        var bbaccord = myElement.find(".builder-panel .bb-scrollarea-wrapper").height();
+                                        myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height":(parseInt(bbaccord)),"overflow-y":"scroll"});
                                     }
                                 };
                                 function setHTML(dialog) {
@@ -562,6 +1075,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 function InitializePreviewControls() {
                                     var lnkPreviewCode = myElement.find(".MenuCallPreview");
                                     var lnkTextVersion = myElement.find(".MenuCallTextVersion");
+                                    var lnkSetTitle = myElement.find(".MenuSetTitle");
+                                    var loadScriptBox = myElement.find(".MenuLoadScriptBox");
                                     var lnkDCItems = myElement.find(".MenuCallDCItems");    
                                     var divPreviewCode = myElement.find(".divPreviewCode");
                                     var lnkHtmlCode = myElement.find(".MenuCallCode");
@@ -645,6 +1160,113 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         iframe.close();
                                         dialog.getBody().find(".divHtmlCode").val(outputHTML);
                                     });
+                                    lnkSetTitle.click(function () {
+                                        //this need to handle for dialog, if landing page editor opens in dialog
+                                        var dialog_width = 500;
+                                        var dialog_height = 130;
+                                        var dialog = options._app.showDialog({
+                                            title: 'Set Page Title',
+                                            css: {
+                                                "width": dialog_width + "px",
+                                                "margin-left": "-" + (dialog_width / 2) + "px",
+                                                "top": "20px"
+                                            },
+                                            bodyCss: {
+                                                "min-height": dialog_height + "px"
+                                            },
+                                            headerEditable: false,                                            
+                                            headerIcon: 'pagetitleicon',
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Set Title'
+                                                }
+                                            }
+                                        });
+                                        var page_title_val = "";
+                                        if(meeIframe.find("head title").length){
+                                            page_title_val = meeIframe.find("head title").text();
+                                        }
+                                        var title_html = '<div style="margin-top:0px;" class="blockname-container"><div class="label-text">Page Title:</div>';                                        
+                                        title_html += '<div class="input-append sort-options blockname-container"><div class="inputcont"><input type="text" style="width:' + (dialog_width - 40) + 'px;" placeholder="Enter page title here" value="'+page_title_val+'"></div></div>';
+                                        title_html += '<div style="font-size: 12px;margin-top:10px"><i>Give your page a title that you will be able to recognize later.</i></div></div>';
+                                        title_html = $(title_html);
+                                        dialog.getBody().append(title_html);
+                                        setTimeout(function(){dialog.getBody().find("input").focus().select()},50);
+                                        var saveTitle = function(obj){
+                                            var page_title = title_html.find("input").val();
+                                            if($.trim(page_title)){
+                                                if(meeIframe.find("head title").length){
+                                                    meeIframe.find("head title").text(page_title);                                                    
+                                                }
+                                                else{
+                                                    meeIframe.find("head").append($("<title>"+page_title+"</title>"));
+                                                }
+                                                pageTitle = page_title;
+                                                changFlag.editor_change = true;
+                                                options._app.showMessge("Page title set successfully. Press save button to save landing page.", $("body"));
+                                                
+                                                return true;
+                                            }
+                                            
+                                        };
+                                        dialog.saveCallBack(_.bind(function(){
+                                            if(saveTitle()){
+                                                dialog.hide();  
+                                            }
+                                        }, this, dialog));  
+                                        dialog.getBody().find("input").keypress(_.bind(function (obj,e){
+                                            if(e.keyCode==13){
+                                               if(saveTitle()){
+                                                    dialog.hide();  
+                                                }
+                                            }                                           
+                                        },this,dialog))
+
+                                    });
+                                   loadScriptBox.click(function(){
+                                        var dialog_width = $(document.documentElement).width() - 60;
+                                        var dialog_height = $(document.documentElement).height() - 182;
+                                        var fbpixel = (mee.isActionScriptSet) ? mee.isActionScriptSet : "";
+                                        var gpixel = (mee.isActionScriptSetG) ? mee.isActionScriptSetG : "";
+                                        var dialog = options._app.showDialog({
+                                            title: 'Add Tracking Snippets',
+                                            css: {
+                                                "width": dialog_width+"px",
+                                                "margin-left": "-"+(dialog_width / 2)+"px",
+                                                "top": "20px"
+                                            },
+                                            bodyCss: {
+                                                "min-height": dialog_height+"px"
+                                            },
+                                            headerEditable: false,
+                                            headerIcon: 'actionScripicon',
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Save'
+                                                }
+                                            }
+                                        });
+                                        
+                                         var preview_html = '<div class="divScriptVersion">';                                        
+                                        preview_html += '<ul  class="pixelTab tabs-btns clearfix"><li class="active" data-snippet="facebook"><a data-toggle="tab" href="#fbpixel">Facebook Pixel</a></li><li data-snippet="google"><a  data-toggle="tab" href="#ganalytics">Google Analytics</a></li></ul><div class="ui-code-area inputcont"><textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 60) + 'px;margin-bottom:0px;" class="divPixelCode" cols="1000" rows="250" placeholder="Paste facebook pixel snippet...."></textarea><textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 60) + 'px;margin-bottom:0px;display:none;" class="divPixelCodeGoogle" cols="1000" rows="250" placeholder="Paste google snippet...."></textarea></div>';
+                                        preview_html += '</div>';
+                                        preview_html = $(preview_html);
+                                        dialog.getBody().append(preview_html);
+                                        dialog.getBody().find('.pixelTab li').click(function(){
+                                           if($(this).data('snippet')=="facebook"){
+                                               dialog.getBody().find('.divPixelCode').show();
+                                               dialog.getBody().find('.divPixelCodeGoogle').hide();
+                                           }else{
+                                               dialog.getBody().find('.divPixelCode').hide();
+                                               dialog.getBody().find('.divPixelCodeGoogle').show();
+                                           }
+                                        })
+                                        dialog.$el.find('.divPixelCode').val(fbpixel);
+                                        dialog.$el.find('.divPixelCodeGoogle').val(gpixel);
+                                        dialog.$el.find('.divPixelCode').focus()
+                                        
+                                        dialog.saveCallBack(_.bind(mee.saveActionScript,mee,dialog));
+                                    })
                                     lnkTextVersion.click(function () {
                                         
                                         var dialog_width = $(document.documentElement).width() - 60;
@@ -667,14 +1289,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             }
                                         });
+                                        
                                         var preview_html = '<div class="divTextVersion">';                                        
-                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 28) + 'px;margin-bottom:0px;border:2px solid #eaf4f9" class="divHtmlCode" cols="1000" rows="250" placeholder="Enter text version....">'+options.textVersion+'</textarea>';
+                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 28) + 'px;margin-bottom:0px;border:2px solid #eaf4f9" class="divHtmlCode" cols="1000" rows="250" placeholder="Enter text version....">'+options._app.decodeHTML(options.textVersion,true)+'</textarea>';
                                         preview_html += '</div>';
                                         preview_html = $(preview_html);
                                         dialog.getBody().append(preview_html);
                                         dialog.saveCallBack(_.bind(function(obj){
                                             options.textVersion = preview_html.find("textarea").val();
                                             options.saveTextVersionCallBack(preview_html.find("textarea").val());
+                                            changFlag.editor_change = true;
                                             if (options.fromDialog) {
                                                 dialog.showPrevious();
                                             }
@@ -839,10 +1463,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                     oHtml.find(".MEEFORMCONTAINER").each(function () {
                                         if($(this).find("iframe").length){
-                                            $(this).append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button data-formid='"+options.formid+"'>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>")
-                                            
+                                            $(this).append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button data-formid='"+options.formid+"'>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>")   
                                         }
                                     });
+                                    if(oHtml.find(".MEEVIDEOCONTAINER").length){
+                                            oHtml.find(".MEEVIDEOCONTAINER .editvideopanel").remove();
+                                            oHtml.find(".MEEVIDEOCONTAINER .embedvido-wrap").hide();
+                                            $.each(oHtml.find(".MEEVIDEOCONTAINER"),function(key,val){
+                                                $(val).css({width: $(val).find(".embedvido-wrap iframe").attr('width'),height: $(val).find(".embedvido-wrap iframe").attr('height')})
+                                            });
+                                            
+                                            oHtml.find(".MEEVIDEOCONTAINER").append("<div class='editvideopanel' style='display:none;'><span class='edit-video'><button >Edit Embed Video</button></span> </div>");
+                                    }
+                                    
+                                    
 
                                     oHtml.find("table").each(function () {
                                         oHtml.find(".container .sortable .csHaveData").each(function () {
@@ -858,7 +1492,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if (lengthHTML > 1) {
                                         for (var i = 1; i < lengthHTML; i++) {
                                             var obj = $(oHtml[i]);
-
+                                            if(obj[0]){
+                                               
                                             if (obj[0].nodeName == "DIV") {
 
                                                 if (obj.children().length > 1) {
@@ -880,6 +1515,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 newHtml.append(obj);
                                                 oHtml = $(newHtml);
                                             }
+                                         }
                                         }
 
                                     }
@@ -932,13 +1568,24 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find(".textcontent").removeAttr("spellcheck");
 
                                     oHtml.find(".MEEFORMCONTAINER .editformpanel").remove();
+                                    oHtml.find('.MEEFORMCONTAINER').removeClass('MEEFORMSTYLE');
                                     oHtml.find("div.ui-resizable-e").remove();
                                     oHtml.find("div.ui-resizable-s").remove();
                                     oHtml.find("div.ui-resizable-se").remove();
-
+                                    
                                     oHtml.find(".space").removeInlineStyle("background");
                                     oHtml.find("*").removeInlineStyle("outline");
 
+                                    // Show the video iframe
+                                    oHtml.find('.embedvido-wrap').parent().removeAttr('style'); //Remove width and height on parent video wrapper
+                                    oHtml.find('.embedvido-wrap').removeAttr('style');
+                                    oHtml.find('.editvideopanel').remove();
+                                    oHtml.find('.preloadGif').remove();
+                                    // Remove Highlight 
+                                    oHtml.find('.csHaveData').removeClass('mce-highlight-div');
+                                    oHtml.find('.myDroppable').css('visibility','hidden');
+                                    oHtml.find('.MEE_DROPPABLE').attr('style','');
+                                    oHtml.find('.mce-edit-focus').removeClass('mce-edit-focus');
                                     //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
                                     oHtml.find(".drapableImageContainer").each(function (index, object) {
                                         var imageContainer = $(object);
@@ -1075,7 +1722,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find("p").css("margin","0px");
                                     oHtml.find("ul,ol").css({"margin-top":"0px","margin-bottom":"0px"});
                                     oHtml.find("li").css({"margin":"0px"});
-                                    
+                                    oHtml.find(".JCLRgrips").remove();
+                                    oHtml.find(".JColResizer").removeAttr("id").removeClass("JColResizer");
 
                                     // oHtml.find("*").not(".DYNAMIC_VARIATION").removeAttr("class");
 
@@ -1143,20 +1791,49 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     myElement.find("#imageTitleDialog").hide();
                                     myElement.find(".accordian").accordion({
                                         heightStyle: "fill",
-                                        collapsible: false
+                                        collapsible: false,
+                                        activate: function (event, ui) {
+                                            
+                                            if($(ui.newPanel[0]).hasClass('images-accordion') == true){
+                                                if(!$(ui.newPanel[0]).data('firstloaded')){
+                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                                    LoadImagesInLibrary();
+                                                }
+                                            }else if($(ui.newPanel[0]).hasClass('dropblock-accordian') == true){
+                                                if(!$(ui.newPanel[0]).data('firstloaded')){
+                                                     $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                                    //Load building blocks from service:
+                                                      mee._LoadBuildingBlocks();
+                                                }
+                                            }else if($(ui.newPanel[0]).hasClass('dynamicblock-accordian')==true){
+                                                if(!$(ui.newPanel[0]).data('firstloaded')){
+                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                                    //Load building blocks from service:
+                                                      _LoadDynamicBlocks();
+                                                }
+                                            }else if($(ui.newPanel[0]).hasClass('forms-accordion')==true){
+                                                if(!$(ui.newPanel[0]).data('firstloaded')){
+                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                                    // Load Form blocks from service
+                                                     mee._LoadFormBlocks();
+                                                }
+                                            }
+                                        }
                                     });
+                                    
                                     myElement.find(".builder-panel").css("height", (myElement.find(".builder-panel").height() + 12) + "px");
-                                    //Load building blocks from service:
-                                    mee._LoadBuildingBlocks();
+                                    var bbaccord = myElement.find(".builder-panel .bb-scrollarea-wrapper").height();
+                                    myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height":(parseInt(bbaccord) - 20),"overflow-y":"scroll"});
+                                    
                                     //////////
                                     _LoadContentBlocks();
-                                    _LoadDynamicBlocks();
+                                    
                                     _LoadPersonalizeTags();
 
 
-                                    if (options.landingPage) {
-                                        mee._LoadFormBlocks();
-                                    }
+                                    //if (options.landingPage) {
+                                       
+                                    //}
 
 
                                     //TODO Styles
@@ -1181,6 +1858,37 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 myElement.find(".style-panel").css("height", (myElement.find(".style-panel").height() + 12) + "px");
                                                 showStyle = true;
                                             }
+                                             
+                                            myElement.find(".style-panel .accordian").on( "accordionactivate", function( event, ui ) {
+                                                     
+                                                    setTimeout(function(){ 
+                                                            myElement.find('.ddlBackgroundLayers').chosen("destroy").chosen();
+                                                            if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && SelectedElementForStyle.prop("tagName") != "BODY"){
+                                                                myElement.find('.bgimg-thumb_imgwrap').show();
+                                                                myElement.find('.ddlBackgroundImgLayers option').eq(1).attr('selected','selected');
+                                                                myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
+                                                                myElement.find('.ddlBackgroundImgLayers').trigger('change');
+                                                            }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
+                                                                myElement.find('.ddlBackgroundColorLayers option').eq(1).attr('selected','selected');
+                                                                myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated")
+                                                            }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
+                                                                SelectedElementForStyle = SelectedElementForStyle;
+                                                                if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
+                                                                    mee.setBodyBorders();
+                                                                }
+                                                            }
+                                                            else{
+
+                                                                myElement.find('.ddlBackgroundLayers').val("body").chosen('update');
+                                                                SelectedElementForStyle = meeIframe.find("body");
+                                                            }
+
+
+
+                                                    }, 500);
+                                                    
+                                                    
+                                                } );
                                             initStyles = true;
                                         }
                                         if (options.fromDialog == false) {
@@ -1195,6 +1903,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 mee.setAccordian(0);
                                             }
                                         }
+                                        
 
                                         InitializeElementsForStyle(initStyles);
 
@@ -1245,23 +1954,26 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         IsStyleActivated = false;
 
                                         SelectedElementForStyle = null;
-
+                                        
                                         oInitDestroyEvents.InitializePluginsEvents(meeIframe);
-
+                                        meeIframe.find('.MEEFORMCONTAINER').removeClass('MEEFORMSTYLE');
 
                                     }
                                     else {
                                         oInitDestroyEvents.DestroyPluginsEvents(meeIframe);
+                                        meeIframe.find('.mce-edit-focus').removeClass('mce-edit-focus');
+                                        meeIframe.find('.MEEFORMCONTAINER').addClass('MEEFORMSTYLE');
                                         IsStyleActivated = true;
-                                        if (undoredo === true) {
+                                        meeIframe.find(".csHaveData td, .csHaveData div").unbind("click");
+                                        
                                             //Selection
-                                            meeIframe.find(".csHaveData td, .csHaveData div").click(function (event) {
+                                            meeIframe.find(".csHaveData td, .csHaveData div").bind("click",function (event) {
                                                 if (IsStyleActivated) {
                                                     event.stopPropagation(); //Stop bubbling
 
                                                     RemoveAllOutline();
 
-                                                    $(this).css("outline", "2px solid #6298be");
+                                                    $(this).css("outline", "2px solid #94CF1E");
 
                                                     SelectedElementForStyle = $(this);
                                                     SetStylesOnSelection(SelectedElementForStyle);
@@ -1304,15 +2016,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         }
 
                                                     });
+                                                   // console.log('i got hit after loop');
                                                     ddlBackgroundLayers.append(
                                                             $('<option value="body">BODY</option>'));
                                                     myElement.find(".ddlBackgroundLayers").trigger("chosen:updated");
+                                                    if(myElement.find('.ddlBackgroundImgLayers').length > 0 && myElement.find('.images-accordion').hasClass('ui-accordion-content-active') == true){
+                                                       
+                                                        myElement.find('.ddlBackgroundImgLayers option').eq(1).attr('selected','selected');
+                                                        myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
+                                                        myElement.find('.ddlBackgroundImgLayers').trigger('change');
+                                                    }else if(myElement.find('.color-accordion').hasClass('ui-accordion-content-active')){
+                                                        myElement.find('.ddlBackgroundColorLayers option').eq(1).attr('selected','selected');
+                                                        myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated")
+                                                    }
+                                                    
                                                     //////////////////////////////////////////////////
 
                                                 }
                                             });
-                                            undoredo = false;
-                                        }
+                                         
                                         //////////////////////
 
                                         if (eventsApplied === false) {
@@ -1331,6 +2053,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         SelectedElementForStyle.removeInlineStyle("border-" + type);
                                                         myElement.find("#" + type + "Border").removeClass('borderselected');
                                                         $element.css("border-" + type, "none");
+                                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                        if(type=='left'){
+                                                                        pageBorderLeft = '';
+                                                                    }
+                                                                    if(type=='top'){
+                                                                        pageBorderTop = '';
+                                                                    }
+                                                                    if(type=='right'){
+                                                                        pageBorderRight = '';
+                                                                    }
+                                                                    if(type=='bottom'){
+                                                                        pageBorderBottom = '';
+                                                                    }
+                                                                }
                                                     }
                                                     else {
 
@@ -1338,6 +2074,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         var borderType = myElement.find(".ddlBorderType").val();
                                                         var borderWidth = myElement.find(".ddlBorderWidth").val();
                                                         SelectedElementForStyle.css("border-" + type, borderWidth + "px " + borderType + " " + borderColor);
+                                                        
                                                         myElement.find("#" + type + "Border").addClass('borderselected');
 
                                                         var string = borderWidth + "px " + borderType + " #000";
@@ -1353,11 +2090,48 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         else {
                                                             $element.css("width", 48 - TotalBorderTopBottom + "px");
                                                         }
+                                                        
+                                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                                    pageBorderWidth = borderWidth+"px";
+                                                                    pageBorderColor = borderColor;
+                                                                    pageBorderType= borderType;
+                                                                    if(type=='left'){
+                                                                        pageBorderLeft = 'border-left';
+                                                                    }
+                                                                    if(type=='top'){
+                                                                        pageBorderTop = 'border-top';
+                                                                    }
+                                                                    if(type=='right'){
+                                                                        pageBorderRight = 'border-right';
+                                                                    }
+                                                                    if(type=='bottom'){
+                                                                        pageBorderBottom = 'border-bottom';
+                                                                    }
+                                                                }
                                                     }
                                                     makeCloneAndRegister();
                                                 }
 
                                             });
+                                            myElement.find(".ddlBorderType").change(function(){
+                                                    var borderType = $(this).val();
+                                                    //var type = $(this).data("type").toLowerCase();
+                                                    $.each(myElement.find(".sBorderLine"),function(key,val){
+                                                        if($(val).hasClass('borderselected')== true){
+                                                          $(val).removeClass('borderselected').trigger('click');
+                                                        }
+                                                    })
+                                            });
+                                            myElement.find(".ddlBorderWidth").change(function(){
+                                                    var borderWidth = $(this).val();
+                                                    //var type = $(this).data("type").toLowerCase();
+                                                    $.each(myElement.find(".sBorderLine"),function(key,val){
+                                                        if($(val).hasClass('borderselected')== true){
+                                                          $(val).removeClass('borderselected').trigger('click');
+                                                        }
+                                                    })
+                                            });
+                                            
                                             //////////////////////
                                             //Vertical Align
                                             myElement.find(".sVerticalAlign").click(function () {
@@ -1414,12 +2188,100 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 if ($(this).find(':selected').val() != "-1") {
                                                     RemoveAllOutline();                                                    
                                                     SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
-                                                    SelectedElementForStyle.css("outline", "2px solid #6298be");                                                    
+                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
                                                     // undoManager.registerAction(mainContentHtmlGrand.html());
                                                     makeCloneAndRegister();
                                                 }
                                             });
-
+                                            var ddlBackgroundLayersImg = myElement.find(".ddlBackgroundImgLayers");
+                                            if(ddlBackgroundLayersImg.length > 0){
+                                                ddlBackgroundLayersImg.on('change', function (event) {
+                                                if ($(this).find(':selected').val() != "-1") {
+                                                    //RemoveAllOutline(); 
+                                                    $(this).parent().find('.bgimg-thumb_imgwrap h4').show();
+                                                    $(this).parent().find('.bgimg-thumb,.removeThumb').remove(); // Remove the thumbnail 
+                                                    $(this).parent().find('#bgUrlCode').val(''); // Empty the input
+                                                    
+                                                    SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
+                                                    if(SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== ""){
+                                                        var bgimage = SelectedElementForStyle.css('background-image').replace(/^url|[\(\)]/g, '');
+                                                        
+                                                        /*=====Repeat Icheck set on change of ======*/
+                                                        if(SelectedElementForStyle.css('background-repeat')=="repeat-x"){
+                                                            myElement.find('#bgimg_repeatx').iCheck('check');
+                                                             myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                        }else if(SelectedElementForStyle.css('background-repeat')=="repeat-y"){
+                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                                             myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                                        }else if(SelectedElementForStyle.css('background-repeat')=="no-repeat"){
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                                        }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('check'); 
+                                                        }
+                                                        // Check background position in px
+                                                        var splitbackground = SelectedElementForStyle.css('background-position').split(" ");
+                                                        if(splitbackground[0].slice(-2)=="px" || splitbackground[1].slice(-2)=="px"){
+                                                            myElement.find('.bg-leftpos_input').val(parseFloat(splitbackground[0], 10))
+                                                            myElement.find('.bg-toppos_input').val(parseFloat(splitbackground[1], 10))
+                                                            myElement.find('#bg_img_pixel').iCheck('check');
+                                                        }
+                                                        else if(SelectedElementForStyle.css('background-position') !=="0% 0%" && SelectedElementForStyle.css('background-position')!=="" && SelectedElementForStyle.css('background-position') !=="0 0"){
+                                                            var splitImgpos = SelectedElementForStyle.css('background-position').split(" ");
+                                                            myElement.find('.bg-leftpos').val(splitImgpos[0]).attr("selected", "selected");
+                                                            myElement.find('.bg-toppos').val(splitImgpos[1]).attr("selected", "selected");
+                                                            
+                                                        }else{
+                                                            myElement.find('.bg-leftpos').val('0%').attr("selected", "selected");
+                                                            myElement.find('.bg-toppos').val('0%').attr("selected", "selected");
+                                                            $(this).parent().find('.bgimg-thumb').remove();
+                                                        }
+                                                        if(bgimage && bgimage !== "" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="none" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="undefined"){
+                                                            $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
+                                                            $(this).parent().find('.bgimg-thumb_imgwrap').find('h4').hide();
+                                                            $(this).parent().find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img class="center-block bgimg-thumb" style="width: 133px; height: 100px;" src='+bgimage+'/>')
+                                                            $(this).parent().find('#bgUrlCode').val(bgimage.replace(/^"(.*)"$/, '$1'));
+                                                            myElement.find(".bgimage-properties").show();
+                                                            
+                                                        }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                        }
+                                                        
+                                                    }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                            $(this).parent().find('.bgimg-thumb').remove();
+                                                            $(this).parent().find('.bgimg-thumb_imgwrap').show();
+                                                            
+                                                    }
+                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E"); 
+                                                     myElement.find('.removeThumb').click(function(){
+                                                         SelectedElementForStyle.css('background-image','none');
+                                                         $(this).parent().parent().parent().find('#bgUrlCode').val('');
+                                                         myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                         myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                         $(this).parent().find('h4').show();
+                                                         $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
+                                                         mee_view.isRepeatY = false;
+                                                         mee_view.isRepeatX = true;
+                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                                    pageBackgroundimage='none';
+                                                            }
+                                                         
+                                                         pageBackgroundimage_repeat = 'no-repeat';
+                                                         pageBackgroundimage_pos = '0% 0%';
+                                                     });
+                                                    // undoManager.registerAction(mainContentHtmlGrand.html());
+                                                    makeCloneAndRegister();
+                                                }
+                                                
+                                                
+                                            });
+                                            
+                                            }
+                                            
                                             ///////////////////////
 
 
@@ -1450,11 +2312,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
 
                                             myElement.find(".txtContainerSize").keyup(function (e) {
-                                                meeIframe.find(".mainTable").css("width", $(this).val() + "px");
-                                                emailWidth = $(this).val() + "px";
-                                                // undoManager.registerAction(mainContentHtmlGrand.html());
-                                                makeCloneAndRegister();
+                                               var emailWidthScale = myElement.find(".selectEmailSize").val();
+                                                var _emailWidth = $(this).val();
+                                                if(emailWidthScale=="%" && _emailWidth>100){
+                                                    _emailWidth = 100;
+                                                    $(this).val(100);
+                                                }
+                                                meeIframe.find(".mainTable").css("width", _emailWidth + emailWidthScale);
+                                                emailWidth = _emailWidth + emailWidthScale;                                                
+                                                makeCloneAndRegister();                                               
                                             });
+                                            
+                                            myElement.find(".selectEmailSize").change(function(e){
+                                                var _emailWidth = myElement.find(".txtContainerSize").val();
+                                                if(_emailWidth){                                                    
+                                                    var emailWidthScale = myElement.find(".selectEmailSize").val();                                                    
+                                                    if(emailWidthScale=="%" && _emailWidth>100){
+                                                        _emailWidth = 100;
+                                                        myElement.find(".txtContainerSize").val(100);
+                                                    }
+                                                    meeIframe.find(".mainTable").css("width", _emailWidth + emailWidthScale);
+                                                    emailWidth = _emailWidth + emailWidthScale;                                                
+                                                    makeCloneAndRegister();                                               
+                                                }
+                                            })
                                             ///////////////////////
 
 
@@ -1479,8 +2360,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 ;
 
                                             });
+                                            myElement.find(".removeMyColors").click(function () {
+                                                SelectedElementForStyle.css('background-color','transparent');
+                                                myElement.find('.txtColorCode').val('');
+                                            });
+                                            myElement.find(".txtColorCode").change(function () {
+                                               SetBackgroundColor($(this).val())
+                                               myElement.find(".divColorPicker").minicolors('value', $(this).val())
+                                            });
+                                            
+
+                                            myElement.find(".txtColorCode").keyup(function (e) {
+                                                if (e.keyCode == 13) {
+                                                    SetBackgroundColor($(this).val())
+                                                    myElement.find(".divColorPicker").minicolors('value', $(this).val())
+                                                }
+                                            });
+
+
                                             eventsApplied = true;
                                         } //End of attached events 
+                                        
                                         var ddlBackgroundLayers = myElement.find(".ddlBackgroundLayers");
                                         ddlBackgroundLayers.find("option").remove();
                                         ddlBackgroundLayers.append($('<option value=""></option>'));                                        
@@ -1783,6 +2683,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     colorPickerBorder.minicolors({
                                         change: function (hex, opacity) {
                                             borderColor = hex;
+                                            setTimeout(function(){ mee.setBorderColor(borderColor)  }, 100);   
                                         },
                                         inline: false,
                                         position: 'top left',
@@ -1814,6 +2715,28 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         SelectedElementForStyle.css("background-color", hex);
                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
                                             pageBackgroundColor = hex;
+                                        }
+                                    }
+                                }
+                                var SetBackgroundImage = function (data) {
+                                    //console.log(data);
+                                    if (IsStyleActivated && SelectedElementForStyle != null) {
+
+                                        SelectedElementForStyle.css({"background-image":"url('"+data+"')","background-repeat":"no-repeat"});
+                                     
+                                         myElement.find('.bgimg-thumb_imgwrap h4').hide();
+                                        //SelectedElementForStyle.css('background-image','url(' + data + ')');
+                                       // SelectedElementForStyle.css('','');
+                                        myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                        myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                        mee_view.isRepeatX = false;
+                                        mee_view.isRepeatY = false;
+                                        changFlag.editor_change = true;
+                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                            
+                                            pageBackgroundimage = data;
+                                            pageBackgroundimage_repeat = 'no-repeat';
+                                            pageBackgroundimage_pos = '0% 0%';
                                         }
                                     }
                                 }
@@ -2235,7 +3158,41 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         _newTitleHTML.find("input#image_title").focus();
                                     }
                                 }
-
+                                 // == Enabling VideoFunctionality before access 
+                                 var videoFunctionality = {
+                                        leftAlign: function (myHtmlInstance, workingObject) {
+                                        //$(workingObject).parents(".myImage");
+                                        
+                                        if($(workingObject).hasClass('videoenable')){
+                                                $(workingObject).parent().css('overflow','hidden');
+                                                $(workingObject).css('float','left');
+                                                $(workingObject).find('.embedvido-wrap').attr("align", "left");
+                                                myHtmlInstance.find('#videoToolbar').hide();
+                                        }else{
+                                            alert('No Embed Video is found');
+                                        }
+                                    },
+                                    centerAlign: function (myHtmlInstance, workingObject) {
+                                        if($(workingObject).hasClass('videoenable')){
+                                                $(workingObject).parent().css('overflow','unset');
+                                                $(workingObject).css('float','none');
+                                                $(workingObject).find('.embedvido-wrap').attr("align", "center");
+                                                myHtmlInstance.find('#videoToolbar').hide();
+                                        }else{
+                                            alert('No Embed Video is found');
+                                        }
+                                    },
+                                    rightAlign: function (myHtmlInstance, workingObject) {
+                                        if($(workingObject).hasClass('videoenable')){
+                                                $(workingObject).parent().css('overflow','hidden');
+                                                $(workingObject).css('float','right');
+                                                $(workingObject).find('.embedvido-wrap').attr("align", "right");
+                                                myHtmlInstance.find('#videoToolbar').hide();
+                                        }else{
+                                            alert('No Embed Video is found');
+                                        }
+                                    },
+                                 }
                                 //========================= End Sohaib Nadeem =====================////
 
                                 var isElementClicked = false;
@@ -2258,7 +3215,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     makeCloneAndRegister();
                                     return false;
                                 });
-
+                                
                                 myElement.find(".ImageToolbarLinkClass").click(function () {
                                     //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     showLinkGUI();
@@ -2284,6 +3241,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     imageFunctionality.setImageTitle(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     makeCloneAndRegister();
+                                    return false;
+                                });
+                                // Video Frame
+                                myElement.find(".VideoToolbarLeftAlignClass").click(function () {
+                                   
+                                    videoFunctionality.leftAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
+                                   // makeCloneAndRegister();
+                                    return false;
+                                });
+                                myElement.find(".VideoToolbarCenterAlignClass").click(function () {
+                                    
+                                    videoFunctionality.centerAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
+                                   // makeCloneAndRegister();
+                                    return false;
+                                });
+                                myElement.find(".VideoToolbarRightAlignClass").click(function () {
+                              
+                                    videoFunctionality.rightAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
+                                    //makeCloneAndRegister();
                                     return false;
                                 });
 
@@ -2323,18 +3299,46 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 var OnClickedOnElement = function (event) {
                                     myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
+                                    meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
                                     myElement.find("#linkTrack").data("linkObject", "image");
                                     myElement.find("#imageToolbar").addClass("imageToolbar-menu");
                                     myElement.find("#imageToolbar").show();
+                                    
                                     if ($(event.target).parent().prop("tagName").toLowerCase() == "a") {
+                                        //myElement.find("#imageToolbar").css("width", "366px");
+                                        myElement.find("#imageToolbar .ImageToolbarUnLinkClass").show();
+                                        
+                                    }
+                                    else {
+                                        myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
+                                        if($(event.target).parent().hasClass('resizableImage')){
+                                            $(event.target).parent().addClass("mce-edit-focus");
+                                        }
+                                       // myElement.find("#imageToolbar").css("width", "310px");
+                                    }
+                                    if($(event.target).closest('div').hasClass('resizableImage')){
+                                            $(event.target).closest('div').addClass("mce-edit-focus");
+                                        }
+                                    myElement.find("#imageToolbar").css({
+                                       // top: $(event.target).offset().top + 19 + topPlus,
+                                       // left: $(event.target).offset().left + 292 + leftPlus
+                                    });
+
+                                }
+                                var OnClickedOnVideoElement = function (event) {
+                                    myElement.find("#videoDataSavingObject").data("myWorkingObject", event.target);
+                                    //myElement.find("#linkTrack").data("linkObject", "image");
+                                    myElement.find("#videoToolbar").addClass("imageToolbar-menu videoToolbar-menu");
+                                    myElement.find("#videoToolbar").show();
+                                    /*if ($(event.target).parent().prop("tagName").toLowerCase() == "a") {
                                         myElement.find("#imageToolbar").css("width", "366px");
                                         myElement.find("#imageToolbar .ImageToolbarUnLinkClass").show();
                                     }
                                     else {
                                         myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
                                         myElement.find("#imageToolbar").css("width", "310px");
-                                    }
-                                    myElement.find("#imageToolbar").css({
+                                    }*/
+                                    myElement.find("#videoToolbar").css({
                                         top: $(event.target).offset().top + 19 + topPlus,
                                         left: $(event.target).offset().left + 292 + leftPlus
                                     });
@@ -2434,7 +3438,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         options._app.showLoading(false, myElement.find(".imageLib"));
                                     }
 
-                                    LoadImagesInLibrary();
+                                    //LoadImagesInLibrary();
                                 }
                                 // ------------------ End Load Images --------------//
 
@@ -2726,7 +3730,174 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     window.find("div.modal-body").children("img").attr('src', '');
                                     window.hide();
                                 }
-
+                                /*myElement.on('keyup','#bgUrlCode',function(){
+                                    var url = $(this).val();
+                                         var filename = $(this).val().substring(url.lastIndexOf('/')+1);
+                                            var str = decodeURIComponent(filename);
+                                            if(/^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                                this.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                                $(this).val('');
+                                            }
+                                })*/
+                               myElement.find('#bgUrlCode').bind('paste', function(e) {
+                                                var _this = $(this)
+                                                var url = '';
+                                               setTimeout(function(){ 
+                                                   url = _this.val()
+                                                   var filename = url.substring(url.lastIndexOf('/')+1);
+                                                    var str = decodeURIComponent(filename);
+                                               if(str!== "" &&  /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                                   
+                                                   myElement.find('.removeThumb').click();
+                                                   _this.val(url);
+                                                   e.stopPropagation();
+                                                   options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                                }else{
+                                                   setTimeout(function(){ myElement.find('#bgUrlCode').trigger('change');  }, 500);   
+                                                    }
+                                               }, 300);
+                                               
+                                            });
+                                myElement.on('change','#bgUrlCode',function(){
+                                        //console.log('Active Style : '+ IsStyleActivated + ' SelectedElementForStyle :' + SelectedElementForStyle )
+                                        var url = $(this).val();
+                                         var filename = $(this).val().substring(url.lastIndexOf('/')+1);
+                                         var str = decodeURIComponent(filename);
+                                            
+                                        if($(this).val()==""){
+                                            myElement.find('.removeThumb').click();
+                                            myElement.find('.bgimg-thumb,.removeThumb').remove();
+                                        }
+                                        else if($(this).val()!== "" &&  /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                                $(this).val('');
+                                                myElement.find('.removeThumb').click();
+                                                options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                            }
+                                        else{
+                                            
+                                            myElement.find('.bgimg-thumb,.removeThumb').remove();
+                                        myElement.find('.bgimg-thumb_imgwrap').hide();
+                                        myElement.find('.bgimg-thumb_imgwrap h4').hide();
+                                        myElement.find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img style="width: 133px; height: 100px;" class="center-block bgimg-thumb" />')
+                                        
+                                        
+                                        myElement.find('#loadingbgimg').show();
+                                        
+                                        myElement.find('.bgimg-thumb').attr('src',$(this).val()).load(function(){
+                                            //alert('image loaded');
+                                            myElement.find('#loadingbgimg').hide();
+                                            myElement.find('.bgimg-thumb_imgwrap').show();
+                                            changFlag.editor_change = true;
+                                            //myElement.find('#bgUrlCode').trigger('change');
+                                        })
+                                        
+                                        myElement.find('.removeThumb').click(function(){
+                                                         SelectedElementForStyle.css('background-image','none');
+                                                         $(this).parent().parent().parent().find('#bgUrlCode').val('');
+                                                         myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                                         myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                         mee_view.isRepeatY = false;
+                                                         mee_view.isRepeatX = false;
+                                                         $(this).parent().find('h4').show();
+                                                         $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
+                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                                    pageBackgroundimage='none';
+                                                            }
+                                                         changFlag.editor_change = true;
+                                                         pageBackgroundimage_repeat = 'no-repeat';
+                                                         pageBackgroundimage_pos = '0% 0%';
+                                                     });
+                                            
+                                        SetBackgroundImage($(this).val());
+                                        }
+                                        
+                                })
+                                myElement.find('#bgimg_position_percent').on('ifChecked', function(event){
+                                    //console.log($(this).val());
+                                    myElement.find('#bg-leftpos_input,#bg-toppos_input').val('0');
+                                    myElement.find('#bg-leftpos_input,#bg-toppos_input').attr('disabled','disabled');
+                                    myElement.find('#bg-leftpos,#bg-toppos').removeAttr('disabled')
+                                })
+                                myElement.find('#bg_img_pixel').on('ifChecked', function(event){
+                                    //console.log($(this).val());
+                                     myElement.find('#bg-leftpos,#bg-toppos').attr('disabled','disabled');
+                                     myElement.find('#bg-leftpos_input,#bg-toppos_input').removeAttr('disabled');
+                                })
+                                myElement.find('#bg-leftpos_input').on('change', function(event){
+                                    // validation need to be added 
+                                    var leftposval = $(this).val()+'px';
+                                    var rightposval = myElement.find('#bg-toppos_input').val()+'px';
+                                    SelectedElementForStyle.css('background-position',leftposval +' '+ rightposval);
+                                    changFlag.editor_change = true;
+                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        pageBackgroundimage_pos = leftposval +' '+ rightposval;
+                                    }
+                                });
+                                myElement.find('#bg-toppos_input').on('change', function(event){
+                                    // Validation need to be set
+                                    var rightposval  = $(this).val()+'px';
+                                    var leftposval= myElement.find('#bg-leftpos_input').val()+'px';
+                                    SelectedElementForStyle.css('background-position',leftposval +' '+ rightposval);
+                                    changFlag.editor_change = true;
+                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        pageBackgroundimage_pos = leftposval +' '+ rightposval;
+                                    }
+                                });
+                                myElement.on('change','.bg-leftpos',function(){
+                                    var leftpos = $(this).val();
+                                    var toppos = myElement.find('.bg-toppos').val();
+                                    leftpos = leftpos.replace(/^"(.+(?="$))"$/, '$1');
+                                    toppos = toppos.replace(/^"(.+(?="$))"$/, '$1');
+                                    SelectedElementForStyle.css('background-position',leftpos +' '+ toppos);
+                                    changFlag.editor_change = true;
+                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        pageBackgroundimage_pos = leftpos +' '+ toppos;
+                                    }
+                                })
+                                myElement.on('change','.bg-toppos',function(){
+                                    var toppos  = $(this).val();
+                                    var leftpos = myElement.find('.bg-leftpos').val();
+                                    leftpos = leftpos.replace(/^"(.+(?="$))"$/, '$1');
+                                    toppos = toppos.replace(/^"(.+(?="$))"$/, '$1');
+                                    SelectedElementForStyle.css('background-position',leftpos +' '+ toppos);
+                                    changFlag.editor_change = true;
+                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        pageBackgroundimage_pos = leftpos +' '+ toppos;
+                                    }
+                                })
+                                
+                                myElement.on('click','.openUpGallery',function(){
+                                      mee.openupGallery();
+                                })
+                              
+                               
+                                 myElement.find('#bgimg_repeaty').on('ifChecked', function(event){
+                                    mee_view.isRepeatY = true;
+                                    mee.repeatImageProperties();
+//                                    alert('repeat Y : '+event.type + ' callback');
+                                  });
+                               
+                               
+                                 myElement.find('#bgimg_repeaty').on('ifUnchecked', function(event){
+                                    mee_view.isRepeatY = false;
+                                    mee.repeatImageProperties();
+                                   });
+                               
+                               
+                                myElement.find('#bgimg_repeatx').on('ifChecked', function(event){
+                                    mee_view.isRepeatX = true;
+                                    mee.repeatImageProperties();
+                                    //alert('repeat X : '+event.type + ' callback');
+                                  });
+                               
+                               
+                                myElement.find('#bgimg_repeatx').on('ifUnchecked', function(event){
+                                    mee_view.isRepeatX = false;
+                                    mee.repeatImageProperties();
+                                    //alert('repeat X : '+event.type + ' callback');
+                                  });
+                               
+                               
                                 myElement.on("click", "i,action", function () {
                                     var element = $(this);
                                     var type = element.data("actiontype");
@@ -2882,9 +4053,83 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                     return false;
                                 });
+                                 mee.processUpload = function(data){
+                                        var _image = jQuery.parseJSON(data);
+                                        if (_image.success) {
+                                            options._app.showMessge("Image has been successfully uploaded.", $("body"));
+                                            LoadImagesInLibrary();
+                                        }
+                                        else {
+                                            options._app.showAlert(_image.err1, $("body"), {fixed: true});
+                                        }
+                                        
+                                }
+                                myElement.find("#HTML5FileUploader").dragfileEditor({
+                                    post_url: '/pms/io/publish/saveImagesData/?&type=add&BMS_REQ_TK=' + options._app.get('bms_token'),
+                                    callBack: _.bind(mee.processUpload, mee),
+                                    app: options._app,
+                                    module: 'template',
+                                    progressElement: myElement.find('#HTML5FileUploader')
+                                }); 
+                                
+                                mee.openupGallery = function(){
+                                    var dialog_width = $(document.documentElement).width() - 60;
+                                        var dialog_height = $(document.documentElement).height() - 162;
+                                        var dialog = options._app.showDialog({title:  'Images',
+                                            css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
+                                            headerEditable: true,
+                                            headerIcon: '_graphics',
+                                            bodyCss: {"min-height": dialog_height + "px"}
+                                        });
 
-
-                                myElement.find("#HTML5FileUploader").on("dragenter", function (e) {
+                                      
+                                        options._app.showLoading("Loading...", dialog.getBody());
+                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                        var wrapelement = 'dialogWrap-' + dialogArrayLength; // New Dialog
+                                        //var img = "<img id='img1' src= '" + args.URL + "' class='" + wrapelement + "'>";
+                                        require(["userimages/userimages", 'app'], function (pageTemplate, app) {
+                                            var mPage = new pageTemplate({app: options._app, fromDialog: true, _select_dialog: dialog, _select_page: mee});
+                                            dialog.getBody().append(mPage.$el);
+                                            options._app.showLoading(false, mPage.$el.parent());
+                                            var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                            mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog                         
+                                            options._app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog                       
+                                        });
+                                        
+                                }                                
+                                mee.useImage = function(data){                                    
+                                    if(data){
+                                        myElement.find('.bgimg-thumb,.removeThumb').remove();
+                                        myElement.find('#bgUrlCode').val(data);
+                                        myElement.find(".bgimage-properties").show();
+                                        myElement.find('#bgUrlCode').trigger('change');
+                                        
+                                    }
+                                    
+                                }
+                                mee.repeatImageProperties = function(){
+                                    var setRepeatprop = '';
+                                    if(mee_view.isRepeatX && mee_view.isRepeatY){
+                                        setRepeatprop = 'repeat'; // Both are true
+                                    }else if(mee_view.isRepeatX && !mee_view.isRepeatY){
+                                        setRepeatprop = 'repeat-x'; // Repeat X 
+                                    }else if(!mee_view.isRepeatX && mee_view.isRepeatY){
+                                        setRepeatprop = 'repeat-y'; // Repeat Y 
+                                    }else{
+                                        setRepeatprop = 'no-repeat';
+                                    }
+                                    if(SelectedElementForStyle){
+                                        changFlag.editor_change = true;
+                                        SelectedElementForStyle.css('background-repeat',setRepeatprop);
+                                        
+                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                           pageBackgroundimage_repeat = setRepeatprop;
+                                        }
+                                    }
+                                    
+                                    
+                                }
+                               /* myElement.find("#HTML5FileUploader").on("dragenter", function (e) {
                                     e.stopPropagation();
                                     e.preventDefault();                                    
                                 });
@@ -2963,7 +4208,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                     });
 
-                                }
+                                }*/
 
 //**************************************************************End Images Library***********************************************************************************///
 
@@ -3455,7 +4700,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                 var _LoadDynamicBlocks = function (args) {
-
+                                     var ulBuildingBlocks = myElement.find(".dynamicBlockDroppable");
+                                          ulBuildingBlocks.empty();
+                                                options._app.showLoading("Loading dynamic blocks...", ulBuildingBlocks, {
+                                                    "width": "140px",
+                                                    "margin-left": "-70px"
+                                                });
+                                                
                                     if (args == null) {
                                         args = new Object();
                                     }
@@ -3487,7 +4738,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     "</li>");
 
 
-
+                                         
                                             //Initialize with default draggable:
                                             InitializeMainDraggableControls(block);
 
@@ -3762,11 +5013,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             statusbar: true,
                                             object_resizing: false
                                         })
-                                        meeIframeWindow.$("div#load_css").remove();
+                                        meeIframeWindow.$("div#load_css").remove();                                        
                                     }
                                     else{
                                          setTimeout(_.bind(mee.initTinyMCE,mee),200);
                                     }
+                                }
+                                mee.setColResize = function(element){
+                                    if(mee.isHTMLSet){
+                                        meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable({
+                                                            gripInnerHtml:"<div class='colresize-grip'></div>"
+                                                        });
+                                    }
+                                    else{
+                                         setTimeout(_.bind(mee.setColResize,mee,element),500);
+                                    }                                  
                                 }
                                 
                                 function InitializeAndDestroyEvents() {
@@ -3834,6 +5095,31 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             });
                                             meeIframeWindow.$(element.find(".formresizable")).resizable({});
+                                            meeIframeWindow.$(element.find(".MEEVIDEOCONTAINER")).resizable({
+                                                 aspectRatio: true,
+                                                start:function(event,ui){
+                                                    $(this).find(".resizeable-tooltip").remove();
+                                                    $(this).append("<div class='resizeable-tooltip'></div>")
+                                                },
+                                                resize: function( event, ui ) {
+                                                    if( $(this).find(".embedvido-wrap").length){
+                                                        $(this).find(".embedvido-wrap iframe").attr("width",$(this).css("width"));
+                                                        $(this).find(".embedvido-wrap iframe").attr("height",$(this).css("height"));
+                                                    }
+                                                    $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                                },
+                                                stop: function(event,ui){
+                                                    $(this).find(".resizeable-tooltip").remove();
+                                                }
+                                            });
+                                        }
+                                        if (options.landingPage) {
+                                            if (meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable) {
+                                                mee.setColResize(element);                                                
+                                            }
+                                        }
+                                        else{
+                                            meeIframeWindow.$(element.find("table.COLRESIZEABLE")).removeClass("COLRESIZEABLE");
                                         }
 
                                         if (element.find("div.textcontent").length === 0) {
@@ -3845,30 +5131,47 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             meeIframeWindow.tinymce.init({
                                                 selector: "div.textcontent",
                                                 inline: true,
-                                                theme: "modern",
-                                                paste_as_text:true,    
+                                                theme: "modern",                                                
+                                                paste_enable_default_filters: false,
+                                                paste_preprocess: function(plugin, args) {
+                                                    if(args.content !== "text" && args.content !== "dragging"){
+                                                        console.log(args.content);   
+                                                    }else{
+                                                        args.content = "";
+                                                    }                                                                                              
+                                                },
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
-                                                toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist",
+                                                toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist | LineHeight",
                                                 fontsize_formats: "8pt 10pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 36pt",
+
+                                                formats:{
+                                                     underline: {inline : 'span', 'classes' : 'underline', exact : true}
+
+
+                                                },
                                                 setup: function (editor) {
                                                     if (meeIframe.find("#" + editor.id).data('tinymce') == undefined) {
                                                         meeIframe.find("#" + editor.id).data('tinymce', true);
                                                         editor.on("mouseDown", function (e) {
                                                             selectedLinkFromTinyMCE = e.target;
+                                                            
                                                         });
                                                         editor.on("AddUndo", function (e) {
                                                             if (editor.undoManager.hasUndo() || editor.undoManager.hasRedo()) {
                                                                 makeCloneAndRegister();
                                                             }
                                                         });
-                                                         
+                                                        editor.on("LoadContent", function (e) {
+                                                            mee.isHTMLSet = true;                                                            
+                                                        });
+                                                        
                                                         editor.on("mouseUp", function (e) {
                                                             myElement.find(".alertButtons").hide();
                                                             var tiny_editor_selection = editor.selection;
                                                             var currentNode = tiny_editor_selection.getNode();
-                                                           
+                                                            $(tiny_editor_selection.getSelectedBlocks()).closest('.csHaveData').addClass('mce-highlight-div');
                                                             isElementClicked = false;
                                                              $(editor.bodyElement).parents('body').find('.mce-floatpanel').removeClass('fixed-panel');
                                                             var toolbar = $(editor.bodyElement).parents('body').find('.mce-floatpanel');
@@ -3910,11 +5213,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
                                                                               $(val).css({top:scrollPosition+"px","left":"0"});
                                                                             }else{
-                                                                               $(val).css({top:"0px","left":"0"}); 
+                                                                                        $(val).css({top:"0px","left":"0"}); 
+                                                                                        setTimeout(function(){
+                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
+                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
+                                                                                        }, 10);
+                                                                                        
                                                                             }
                                                                     setTimeout(function(){ $(val).addClass('fixed-panel'); }, 50);
                                                                     
-                                                                    setTimeout(function(){ myElement.find('.disabled-toolbar').css('visibility','hidden'); }, 100);
+                                                                    setTimeout(function(){ myElement.find('.disabled-toolbar').css('visibility','hidden');}, 100);
+                                                                  
                                                                 }
                                                             })
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A" || currentNode.parentNode.nodeName == "A" || currentNode.parentNode.nodeName == "a") {
@@ -3923,8 +5232,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
                                                                 isElementClicked = true;
                                                             }
-                                                        });
-                                                        
+                                                         });
                                                         editor.on('blur', function () {
                                                             //$(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").hide();
                                                             //console.log('Hitting');
@@ -4133,6 +5441,46 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     
                                                         },
                                                     });
+                                                    editor.addButton('LineHeight', {
+                                                        type: 'listbox',
+                                                        title: 'Line Height',
+                                                        text: 'Line Height',
+                                                        icon: false,
+                                                        values: [
+                                                            {text:"8px", value:"8px"},
+                                                            {text:"10px", value:"10px"},
+                                                            {text:"12px", value:"12px"},
+                                                            {text:"13px", value:"13px"},
+                                                            {text:"14px", value:"14px"},
+                                                            {text:"15px", value:"15px"},
+                                                            {text:"16px", value:"16px"},
+                                                            {text:"18px", value:"18px"},
+                                                            {text:"20px", value:"20px"},
+                                                            {text:"22px", value:"22px"},
+                                                            {text:"24px", value:"24px"},
+                                                            {text:"26px", value:"26px"},
+                                                            {text:"28px", value:"28px"},
+                                                            {text:"30px", value:"30px"},
+                                                            {text:"32px", value:"32px"},
+                                                            {text:"36px", value:"36px"},
+                                                           ],
+                                                        fixedWidth: true,
+                                                        onPostRender: function () {
+                                                                  this.value('9px');
+                                                                  var self = this;
+                                                                  editor.on('nodeChange', function(e) {
+                                                                      $.each(e.parents,function(key,val){
+                                                                          if(val.nodeName === "SPAN" && $(val).css('line-height') != ""){
+                                                                             self.value($(val).css('line-height'));
+                                                                             makeCloneAndRegister();
+                                                                          }
+                                                                      })
+                                                                  });
+                                                        },
+                                                        onselect: function (e) {
+                                                            $(editor.selection.getNode()).css('line-height',this.value());
+                                                          },
+                                                    });
                                                 },
                                                 //theme_modern_buttons2: "exapmle Mybutton",
                                                 toolbar_items_size: 'small',
@@ -4143,6 +5491,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
                                             //}
                                         });
+                                        
+                                    
                                     }
                                     ////
 
@@ -4158,14 +5508,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     function (e) {
                                                         e.stopPropagation();
                                                         meeIframe.find(".topHandlers").remove();                                                                                                                
-
+                                                        meeIframe.find('.csHaveData').removeClass('mce-highlight-div');
                                                         if (!IsStyleActivated) {
                                                                                                                         
                                                             $(this).addClass("hover");
                                                             $(this).parents(".csHaveData").addClass("hoverParent");
                                                             $(this).prepend(myobject);
+                                                            meeIframeWindow.setDragging(myobject.find('.myHandle'), mee);
                                                             $(this).parents(".csHaveData").removeClass("hover");
                                                             $(this).find(".editformpanel,.edit-form").show();
+                                                            $(this).find(".editvideopanel").show();
                                                             $(this).find(".drop-here").hide();
                                                             //Assign DELETE functionality here
                                                             InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
@@ -4177,6 +5529,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         $(this).parents(".csHaveData").removeClass("hoverParent");
                                                         $(this).find(".topHandlers").remove();
                                                         $(this).find(".editformpanel").hide();
+                                                        $(this).find(".editvideopanel").hide();
                                                         $(this).removeClass("hover");
                                                     }
                                                 );
@@ -4186,17 +5539,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         }
 
-
                                         //-------------- Initialize Again all nested controls after dropped-------------------//:
                                         //Droppable:
                                         oHtml.find(".myDroppable").andSelf().filter(".myDroppable").each(function (i, o) {
                                             CreateDroppableWithAllFunctions(o);
+                                            attachClickEvent(o);
                                             DropableMouseEnterLeave($(o));                                            
                                         });
 
                                         //Moving Handlers - Mouse Hover
                                         oHtml.find(".csHaveData").andSelf().filter(".csHaveData").each(function (i, o) {
                                             InitializeElementWithDraggable($(o));
+                                            attachClickEvent(o);
                                             InitializeMouseHover($(o));                                            
                                         });
 
@@ -4216,7 +5570,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     $(element).on('dragover', function (event) {
                                                         event.preventDefault();
                                                         if ($(this).hasClass("imagePlaceHolderAlone") && mee.dragElement) {
-                                                            $(this).css({"outline": "2px dashed #01aeee"});
+                                                            $(this).css({"outline": "2px dashed #94cf1e"});
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
@@ -4258,7 +5612,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     $(element).on('dragover', function (event) {
                                                         event.preventDefault();
                                                         if ($(this).hasClass("resizableImage") && mee.dragElement) {
-                                                            $(this).css({"outline": "2px dashed #01aeee"});
+                                                            $(this).css({"outline": "2px dashed #94CF1E"});
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
@@ -4308,7 +5662,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     $(element).on('dragover', function (event) {
                                                         event.preventDefault();
                                                         if ($(this).hasClass("MEEFORMCONTAINER") && mee.dragElement) {
-                                                            $(this).css({"outline": "2px dashed #01aeee"});
+                                                            $(this).css({"outline": "2px dashed #94CF1E"});
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
@@ -4414,6 +5768,22 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                 });
                                             }
+                                            
+                                            if (oHtml.find('.clickEventVideo').andSelf().filter('.clickEventVideo').length > 0) {
+                                                
+                                                oHtml.find('.clickEventVideo').andSelf().filter('.clickEventVideo').each(function (index, element) {
+                                                    //console.log('video iframes'+index);
+                                                    $(element).click(function (event) {
+                                                        
+                                                        isElementClicked = true;
+                                                        if($(event.target).hasClass('MEEVIDEOCONTAINER')){
+                                                                OnClickedOnVideoElement(event);
+                                                        }
+
+                                                    });
+
+                                                });
+                                            }
                                         }
 
                                         //return args;
@@ -4446,9 +5816,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     var form_id = $(this).attr("data-formid");
                                                     mee.showFormWizard(form_id);
                                                 })
+                                                oHtml.find(".editvideopanel button").click(function(e){
+                                                    //var form_id = $(this).attr("data-formid");
+                                                    //myElement.find('#videoToolbar').hide()
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    mee.openvideoDialog($(e.currentTarget).parents('.MEEVIDEOCONTAINER'));
+                                                })
                                             }
-                                            var activeTab = myElement.find("#tabs").tabs("option", "active");
-
+                                            var activeTab = myElement.find("#tabs").tabs("option", "active");                                               
                                         }
                                     }
 
@@ -4461,7 +5837,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 mouseenter: function () {
                                                     if ($(this).hasClass("myDroppable")) {
                                                         $(this).css({
-                                                            "background-color": "#9fcbf1"
+                                                            "background-color": "#80C000"
                                                         });
                                                     }
                                                 }
@@ -4469,7 +5845,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 mouseleave: function () {
                                                     if ($(this).hasClass("myDroppable")) {
                                                         $(this).css({
-                                                            "background-color": "#dceefe"
+                                                            "background-color": "#80C000"
                                                         });
                                                     }
 
@@ -4482,12 +5858,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     sender.on('dragover', function (event) {
                                         event.preventDefault();
                                         if ($(this).html() == "") {
-                                            $(this).css({'height': '20px', "background": "#379ffb"});
+                                            $(this).css({'height': '10px', "background": "#80C000","box-shadow":"0 0 5px rgba(0, 0, 0, 0.5)"});
                                         }
                                     }).on('dragleave', function (event) {
                                         event.preventDefault();
                                         if ($(this).html() == "") {
-                                            $(this).css({'height': '10px', "background": "#dceefe"});
+                                            $(this).css({'height': '4px', "background": "#80C000","box-shadow":"none"});
                                         }
                                     });
 
@@ -4501,7 +5877,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         meeIframe.find(".mainContentHtml").removeClass("show-droppables")
                                         var ui = {draggable: null};
                                         ui.draggable = mee.dragElementIframe ? mee.dragElementIframe : mee.dragElement;                                        
-                                        if (!$(this).hasClass("myDroppable") || ui.draggable.data("type") === "droppedImage") {
+                                        if (!$(this).hasClass("myDroppable") ) { //|| ui.draggable.data("type") === "droppedImage"
                                             //DO NOTHING
                                             return;
                                         }
@@ -4572,7 +5948,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var oControl = new Object();
                                             // -------------- Building Block Controls[Better way] --------------//
 
-                                            if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock" || typeOfDraggingControl == "formBlock") {
+                                            if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock") {
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
                                                 $(this).before(CreateDroppableWithAllFunctions());
                                                 $(this).after(CreateDroppableWithAllFunctions());
@@ -4619,6 +5995,24 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                 }
                                             }
+                                            else if (typeOfDraggingControl == "droppedImage") {
+                                                //INSERT DROPPABLE BEFORE AND AFTER            
+                                                $(this).before(CreateDroppableWithAllFunctions());
+                                                $(this).after(CreateDroppableWithAllFunctions());
+                                                ///////
+                                                                                                
+                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");                                                
+                                                var ui = {draggable: null};
+                                                ui.draggable = mee.dragElement;
+                                                var argsThis = {
+                                                    droppedElement: $(this).find(".drapableImageContainer"),
+                                                    event: event,
+                                                    ui: ui
+                                                };
+                                                OnImageDropped(argsThis);                                                
+                                                oInitDestroyEvents.InitAll($(this));
+                                                mee.dragElement = null;
+                                            }
                                             else if (typeOfDraggingControl == "formBlock") {
 
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
@@ -4628,10 +6022,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             
                                                 
                                                   var oControl = new Object();
-                                                    var controlID = ui.draggable.data("id");
+                                                  var controlID = ui.draggable.data("id");
 
-                                                    var isNew = ui.draggable.data("isnew");                                                    
+                                                  var isNew = ui.draggable.data("isnew");                                                    
                                                     //need to apply each for this and then search on each [0]
+                                                    
+                                                  if(!args.droppedElement.hasClass("MEEFORMCONTAINER") && meeIframe.find(".MEEFORMCONTAINER").length==0)  {
+                                                      args.droppedElement.append("<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>");
+                                                      oInitDestroyEvents.InitAll(args.droppedElement);
+                                                      args.droppedElement = args.droppedElement.find(".MEEFORMCONTAINER");
+                                                  }
 
                                                     if(!isNew){                                                                
                                                         args.FormId = controlID;
@@ -4897,7 +6297,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 //Elements DRAGGING - for swapping elements:dragging2
                                 function InitializeElementWithDraggable(object) {
-                                    meeIframeWindow.setDragging(object, mee);
+                                    
                                     return object;
                                 }
 
@@ -4915,6 +6315,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var d1WithDroppable = InitializeWithDropable(d1WithDraggable);
 
                                     return d1WithDroppable;
+                                }
+                                function attachClickEvent(object){
+                                    var d1;
+                                    if (object == null) {
+                                        console.log('object is empty');
+                                        //d1 = CreateDroppable();
+                                    }
+                                    else {
+                                        d1 = $(object);
+                                    }
+                                    
+                                    d1.click(function(e){
+                                           $(this).addClass('mce-highlight-div');
+                                          // e.stopPropagation();
+                                        })
+
+                                    //return d1WithDroppable;
                                 }
 
                                 var InsertDroppableInEmpty = function (sender, listOfElements) {
@@ -4950,6 +6367,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 var RemovePopups = function () {
                                     myElement.find("#imageToolbar").hide();
+                                    meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
+                                    myElement.find("#videoToolbar").hide();
                                 }
 
                                 var IsFirstDroppableElement = false;
@@ -4993,12 +6412,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         event.originalEvent.dataTransfer.setData("text", "dragging");
                                         mee.dragElement = $(this);
                                         var draggedControlType = $(this).data("type");
-                                        if (draggedControlType === "droppedImage" ) {
+                                        /*if (draggedControlType === "droppedImage" ) {
                                             return;
-                                        }                                        
+                                        }*/                                       
                                         RemovePopups();                                        
-
-                                        if (draggedControlType != "droppedImage" && (draggedControlType !="formBlock" || meeIframe.find(".MEEFORMCONTAINER").length==0) ) {
+                                        if (draggedControlType !=="formBlock" ||  meeIframe.find(".MEEFORMCONTAINER").length==0) {
                                             ShowDroppables(meeIframe);
                                             if (meeIframe.find(".mainContentHtml li.myDroppable").length > 1) {
                                                 meeIframe.find(".mainContentHtml").addClass("show-droppables")
@@ -5017,14 +6435,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     SetLastElementHeight($(this));
                                                 }
                                             });
+                                        
+                                            
                                         }
-                                        else if(draggedControlType =="formBlock"){
-                                            
-                                            meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #01aeee"});
-                                            meeIframe.find(".editformpanel,.drop-here").show();
-                                            meeIframe.find(".editformpanel .edit-form").hide();
-                                            
-                                            
+                                        else if(draggedControlType =="formBlock"){                                            
+                                            meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #94CF1E"});
+                                            meeIframe.find(".editformpanel,.drop-here").show();                                            
+                                            meeIframe.find(".editformpanel .edit-form").hide();                                                                                        
                                         }
 
                                     }).on('dragend', function (event) {
@@ -5048,7 +6465,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             //alert(args.predefinedControl.Html.html());
                                             oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);
                                         }
-
                                         if ((args.predefinedControl.Type == "text") || (args.predefinedControl.Type == "textWithImage") || (args.predefinedControl.Type == "imageWithText")) {
 
                                             oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);
@@ -5070,6 +6486,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         makeCloneAndRegister();
                                         return false;
                                     });
+                                    
+                                        /*===Video Enabled attached later if needed====*/
+                                    if(args.predefinedControl && args.predefinedControl.Html){
+                                        mee.openvideoDialog(args.predefinedControl.Html);
+                                    }
+                                    
                                     mee.checkForm();
 
                                 }
@@ -5573,7 +6995,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if (selected_anchor.tagName.toLowerCase() == "a") {
                                         var $selected_anchor = $(selected_anchor);
                                         var _html = $selected_anchor.html();
-                                        $selected_anchor.replaceWith(_html);
+                                        if($selected_anchor.parent().hasClass('underline')){
+                                            $selected_anchor.parent().replaceWith(_html);
+                                        }else{
+                                            $selected_anchor.replaceWith(_html);
+                                        }
+                                        
                                     }else if(selected_anchor.parentNode.tagName.toLowerCase()=="a"){
                                         var $selectedtag = $(selected_anchor)
                                         var $clonedtag = $selectedtag.clone()
@@ -5617,7 +7044,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     _AjaxParameters.Url = "/pms/io/form/getSignUpFormData/?" + options._BMSTOKEN + "&type=search&offset=" + forms_offset;
                                     returnData = SendServerRequest(_AjaxParameters);
                                     options._app.showLoading(false, myElement.find(".ulFormBlocks"));
-                                    if(returnData[0] && returnData[0]=="err"){
+                                    if(returnData && returnData[0] && returnData[0]=="err"){
                                         myElement.find("#FBResultDiv").html(returnData[1]);
                                         myElement.find("#FBResultDiv").show();      
                                         myElement.find(".formDroppable").hide();
@@ -5664,9 +7091,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find(".formDroppable").show();
                                         }
                                     }
-                                    myElement.find(".form-footer-loading").hide();
-                                    
-
+                                    myElement.find(".form-footer-loading").hide();                                    
                                 }
 
                                 
@@ -5917,7 +7342,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         saveCallBack: this.options.saveClick,
                         templatesCallBack: this.options.changeTemplateClick,
                         saveTextVersionCallBack: this.options.textVersionCallBack,
-                        previewdesignTemplateCallback :  this.options.previewCallback,
+                        previewdesignTemplateCallback :  this.options.previewCallback,                        
                         textVersion:this.options.text,
                         formCallBack: this.options.formAttach, 
                         formid : this.options.formid,

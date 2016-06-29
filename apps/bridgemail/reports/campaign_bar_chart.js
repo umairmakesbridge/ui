@@ -1,4 +1,4 @@
-define(['text!reports/html/campaign_pie_chart.html','highcharts','export-chart'],
+define(['text!reports/html/campaign_pie_chart.html','highcharts','export-chart','funnel-chart'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -31,6 +31,8 @@ function (template) {
                this.yAxis = this.options.yAxis;
                this.title = this.options.title ?this.options.title:'';
                this.isStacked = this.options.isStacked;
+               this.clickEvent = this.options.clickEvent;
+               this.checkSum = this.options.checkSum?this.options.checkSum:"";
                this.colors = this.options.colors?this.options.colors:['#454F88','#2F93E5','#62ABE6','#0C73C2','#3b5998','#bb0000'];               
             }
             /**
@@ -80,8 +82,8 @@ function (template) {
                     colors: this.colors,
                     yAxis: {
                         lineWidth:0,
-                        minorGridLineWidth:0,
-                        gridLineColor:'transparent',
+                        minorGridLineWidth:1,
+                        gridLineColor:'#cbd0d3',
                         min: 0,
                         title: {
                             text: '',
@@ -123,11 +125,12 @@ function (template) {
                         formatter: function () {
                             var tooltip_rect = that.$('.highcharts-tooltip path:nth-child(4)');
                             tooltip_rect.attr("fill",this.series.color);
+                            var clickTo = this.series.name.toLowerCase()=="submissions"?"Click to view contacts":"";
                             return '<b>' + this.x + '</b><br/>' +
-                                this.series.name + ': ' + that.app.addCommas(this.y) + '<br/>' 
+                                this.series.name + ': ' + that.app.addCommas(this.y) + '<br/>' +clickTo
                                 //'Total: ' + that.app.addCommas(this.point.stackTotal);
                         }
-                    };
+                    };                    
                     options.plotOptions = {column:{
                         stacking: 'normal',
                         dataLabels: {
@@ -138,6 +141,21 @@ function (template) {
                             }
                         }
                     }}
+                    
+                   if(this.clickEvent){
+                       options.plotOptions = {
+                           series : {
+                               cursor:'pointer',
+                               point: {
+                                   events: {
+                                       click: function(){
+                                          that.clickEvent(this,that.checkSum)
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   } 
                 }
                 else{
                   options.series = [  {
@@ -156,6 +174,46 @@ function (template) {
                         }
                   ]    
                 }
+                
+                Highcharts.setOptions({
+                    lang: {
+                        thousandsSep: ',',
+                        contextButtonTitle:'Choose an output format'
+                    }
+                });
+                
+                this.$el.highcharts(options);                           
+            },
+            createFunnelChart:function(_data){
+                            
+               var options = {
+                    chart: {
+                        type: 'funnel',
+                        marginRight: 50
+                    },
+                    title: {
+                        text: this.title,
+                        x: -50
+                    },
+                    colors: this.colors,
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: false,
+                                format: '<b>{point.name}</b> ({point.y:,.0f})',
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                                softConnector: true
+                            },
+                            neckWidth: '30%',
+                            neckHeight: '25%'                            
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: _data,
+                }
+                
                 
                 Highcharts.setOptions({
                     lang: {

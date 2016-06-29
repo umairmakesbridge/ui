@@ -26,6 +26,7 @@ function (template, ListsCollection, ListsView,moment) {
                         this.totalListArray = [];
                         this.total = 0;
                         this.offsetLength = 0;
+                        this.source = this.options.source?this.options.source:'';
                         this.render();
                 },
 
@@ -38,7 +39,7 @@ function (template, ListsCollection, ListsView,moment) {
                             id:'list-recps-search',
                             width:'220px',
                             height:'22px',
-                            placeholder: 'Search recipient list',
+                            placeholder: this.source=="" ? 'Search recipient list':"Search selected lists",
                             gridcontainer: 'recipients',
                             showicon: 'yes',
                             iconsource: 'list'
@@ -118,10 +119,11 @@ function (template, ListsCollection, ListsView,moment) {
                             if (data.models.length == 0) {
                                 that.$el.find('.no-contacts').show();
                                 that.$el.find('#list_grid tbody').find('.loading-target').remove();
-                            } else {
+                            } else {                                
                                 $('#list_grid tbody').find('.loading-target').remove();
                                 that.$el.find('#list_grid tbody #loading-tr').remove();
                             }
+                            
                             if (that.total_fetch < parseInt(that.objTargets.total)) {
                                 that.$el.find("#list_grid tbody tr:last").attr("data-load", "true");
                             }
@@ -132,8 +134,12 @@ function (template, ListsCollection, ListsView,moment) {
                                 that.$el.find('.list-search-close').show();
                                 that.loadLists();
                             });
+                            
                             that.app.showLoading(false, that.el);
                             that.hideRecipients();
+                            if(that.source=="report" && !that.selectedLoaded){
+                                that.showSelectedList(); 
+                            }
                             /*setInterval(function(){
                                 that.updateRunningModels();
                             },30000);*/
@@ -164,6 +170,15 @@ function (template, ListsCollection, ListsView,moment) {
                     }
                     this.col1.find("tr[_checksum='"+model.get("listNumber.checksum")+"']").show();
                 },
+                deleteCol2:function(model){
+                    for(var i=0;i<this.listsModelArray.length;i++){
+                        if(this.listsModelArray[i].get("listNumber.checksum")==model.get("listNumber.checksum")){
+                            this.listsModelArray.splice(i,1);
+                            this.listsIdArray.splice(i,1);
+                            break;
+                        }
+                    }
+                },
                createRecipients:function(lists){
                    var collection = new Backbone.Collection(lists);
                     for(var i=0;i<collection.length;i++){
@@ -177,8 +192,20 @@ function (template, ListsCollection, ListsView,moment) {
                      for(var i=0;i<this.totalListArray.length;i++){                        
                         this.col1.find("tr[_checksum='"+this.totalListArray[i].get("listNumber.checksum")+"']").hide();
                     }
+                }
+                ,
+                showSelectedList : function(){                                      
+                  var selectedLists = this.parent.modelArray;
+                  if(selectedLists.length){
+                    for(var s=0;s<selectedLists.length;s++){                                
+                         this.addToCol2(selectedLists[s]);                         
+                         this.totalListArray.push(selectedLists[s]);
+                    }                        
+                  }               
+                  this.selectedLoaded = true;
+                  this.hideRecipients();                   
                 },
-                search:function(ev){
+              search:function(ev){
               this.searchText = '';
               this.searchTags = '';
               var that = this;
@@ -308,5 +335,27 @@ function (template, ListsCollection, ListsView,moment) {
                //this.$(".total-count").html(count);
                //this.$(".total-text").html('My Nurture Tracks <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
             },
+            saveCall: function(){
+                var col2 = this.$(this.col2).find(".bDiv tbody");
+                if(col2.find("tr").length>0){
+                    if(this.listsModelArray.length <= 6){  
+                        var listArray =  {}
+                         var t =1;
+                         _.each(this.listsModelArray,function(val,key){
+                            listArray["list"+t] = [{"checksum":val.get("listNumber.checksum"),"encode":val.get("listNumber.encode")}] ;
+                            t++;
+                         },this);   
+                         this.parent.modelArray = this.listsModelArray;                             
+                         this.dialog.hide(true);
+                         this.parent.loadListsSummary(true);
+                    }
+                    else{
+                        setTimeout(_.bind(function(){this.app.showAlert("You cann't select more than 6 lists",this.$el)},this),100);
+                    }
+                }
+                else{
+                    this.app.showAlert("Please select at least on list",this.$el);
+                }
+            }
         });
 });

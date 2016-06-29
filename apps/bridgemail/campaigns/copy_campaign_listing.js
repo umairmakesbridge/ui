@@ -258,8 +258,7 @@ function (template,bmsfilters,campaignCollection,campaignRowView) {
                     $(this.el).find("#template_search_menu").slideToggle();
                 },
                 filterCampaign: function(obj){					
-                                    var camp_obj = this;
-                                    var appMsgs = this.app.messages[0];
+                                    var camp_obj = this;                                    
                                     var target = $.getObj(obj,"a");
                                     var prevStatus = this.searchTxt;
                                     if(target.parent().hasClass('active')){

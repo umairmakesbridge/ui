@@ -241,9 +241,10 @@ function (template, CampaignsCollection, campRowView) {
                         this.loadCampaigns(this.offsetLength);
                     }
                 },
-                saveCall:function(){
+                saveCall:function(e){
                     var col2 = this.$(this.col2).find(".bDiv tbody");
                     if(col2.find("tr").length>0){
+                       if(this.campaignsModelArray.length <= 6){ 
                        var pagesArray =  {};
                        var objectArray =[];
                         var t =1;
@@ -255,12 +256,16 @@ function (template, CampaignsCollection, campRowView) {
                         this.parent.modelArray = this.campaignsModelArray;
                         this.parent.pagesArray = pagesArray;
                         this.parent.objects = objectArray;
-                        this.dialog.hide();
+                        this.dialog.hide(true);
                         this.parent.createCampaigns();
+                        }
+                        else{
+                            setTimeout(_.bind(function(){this.app.showAlert("You cann't select more than 6 campaigns",this.$el)},this),100);
+                        }
                     }
                     else{
                         this.app.showAlert("Please select at least on page",this.$el);
-                    }
+                    }                    
                 },
               showSelectedCampaigns : function(lists){                                      
                   if(this.showSelectedRecords==false){

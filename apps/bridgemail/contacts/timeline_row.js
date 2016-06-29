@@ -122,7 +122,8 @@ define(['text!contacts/html/timeline_row.html'],
                     var title = "";//model.get("name")?this.model.get("name"):this.mapping[this.model.get("activityType")].name;                                    
                     var summary = "";                    
                     title = this.mapping[model.get("activityType")].name;
-                    return {name: this.app.decodeHTML(title), summary: this.app.decodeHTML(summary)};
+                    var furtureText = this.future ? ('to be '+this.app.decodeHTML(title).toLowerCase()):this.app.decodeHTML(title);
+                    return {name: furtureText, summary: this.app.decodeHTML(summary)};
                 },
                 getTriggerType: function () {
                     var triggerType = "";

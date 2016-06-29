@@ -1,5 +1,5 @@
-define(['text!contacts/html/subscriber_row.html', 'common/tags_row'],
-        function (template, tagView) {
+define(['text!contacts/html/subscriber_row.html', 'common/tags_row','contacts/listviewonly'],
+        function (template, tagView,listView) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber Record View to show on listing page
@@ -28,7 +28,8 @@ define(['text!contacts/html/subscriber_row.html', 'common/tags_row'],
                     'click .show-detail': 'editProfile',
                     'click .show-contact-detail': 'openContact',
                     'click .add-to-salesforce': "synctoSF",
-                    'click .salesforce-view': "viewSyncedSF"
+                    'click .salesforce-view': "viewSyncedSF",
+                    'click .add-to-lists':"add2list"
                 },
                 /**
                  * Initialize view - backbone
@@ -38,6 +39,7 @@ define(['text!contacts/html/subscriber_row.html', 'common/tags_row'],
                     this.sub = this.options.sub
                     this.app = this.sub.app;
                     this.tmPr = '';
+                    this.dialogStyles = {};
                     this.render();
                     this.model.on('change', this.renderRow, this);
                 },
@@ -379,8 +381,50 @@ define(['text!contacts/html/subscriber_row.html', 'common/tags_row'],
                     var url = $(event.target).parent().data('url');
                     window.open(url, 'newwindow', 'scrollbars=yes,resizable=yes');
                     event.stopPropagation();
+                },
+                //////////////////////////
+                /// Add 2 Lists
+                /////////////////////////
+                add2list : function(){
+                  //this.subsType = substype;
+                    var _this = this;
+                    var dialog_width = 1000;
+                    this.editable = true;
+
+                    var dialog_height = $(document.documentElement).height() - 192;
+                    var btn_prp = {title: 'Add Contact into List',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'account',
+                        bodyCss: {"min-height": dialog_height + "px"}
+
+                    }
+
+                    if (this.editable) {
+                        btn_prp['buttons'] = {saveBtn: {text: 'Add', btnicon: 'plus'}};
+                        // if (this.sub_fields["conLeadId"]) {
+                        //     btn_prp['newButtons'] = [{'btn_name': 'Update at Salesforce'}];
+                        // }
+                    }
+                    this.dialog = this.app.showDialog(btn_prp);
+                    this.app.showLoading("Loading...", this.dialog.getBody());
+                     
+                            var page = new listView({sub: this, model: this.model,dialog:this.dialog});
+                            this.dialog.getBody().html(page.$el);
+                            page.dialogStyles['height'] = dialog_height;
+                            page.dialogStyles['width'] = dialog_width;
+                            page.dialogStyles['top'] = '10px';
+                            page.init();
+                            this.dialog.saveCallBack(_.bind(page.addSubscriber, page, this.dialog));
+                       
+                       
+                    
+                        //if (this.subsType === 'multiEmails') {
+                        //    this.dialog.getBody().css('overflow', 'hidden');
+                        //}
+                        //this.subDetail = new sub_detail({sub: this.parent, page: this, isSalesforceUser: false, isAddFlag: true, emailsFlag: true});
+                    
+                    
                 }
-
-
             });
         });

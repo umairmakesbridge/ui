@@ -241,16 +241,21 @@ function (template, PagesCollection, pageRowView) {
                 saveCall:function(){
                     var col2 = this.$(this.col2).find(".bDiv tbody");
                     if(col2.find("tr").length>0){
-                       var pagesArray =  {}
-                        var t =1;
-                        _.each(this.pagesModelArray,function(val,key){
-                           pagesArray["page"+t] = [{"checksum":val.get("pageId.checksum"),"encode":val.get("pageId.checksum")}] ;
-                           t++;
-                        },this);   
-                        this.parent.modelArray = this.pagesModelArray;
-                        this.parent.pagesArray = pagesArray;
-                        this.dialog.hide();
-                        this.parent.createPages();
+                        if(this.pagesModelArray.length <= 6){  
+                            var pagesArray =  {}
+                             var t =1;
+                             _.each(this.pagesModelArray,function(val,key){
+                                pagesArray["page"+t] = [{"checksum":val.get("pageId.checksum"),"encode":val.get("pageId.checksum")}] ;
+                                t++;
+                             },this);   
+                             this.parent.modelArray = this.pagesModelArray;
+                             this.parent.pagesArray = pagesArray;
+                             this.dialog.hide(true);
+                             this.parent.createPages();
+                        }
+                        else{
+                            setTimeout(_.bind(function(){this.app.showAlert("You cann't select more than 6 pages",this.$el)},this),100);
+                        }
                     }
                     else{
                         this.app.showAlert("Please select at least on page",this.$el);

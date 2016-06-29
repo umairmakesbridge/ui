@@ -1,4 +1,4 @@
-define(['text!forms/html/selectform.html', 'forms/collections/formlistings', 'forms/formlistings_row','bms-shuffle'],
+define(['text!forms/html/selectform.html', 'forms/collections/formlistings',  'forms/formlistings_row','bms-shuffle'],
 function (template, FormsCollection, formRowView) {
         'use strict';
         return Backbone.View.extend({  
@@ -244,16 +244,21 @@ function (template, FormsCollection, formRowView) {
                 saveCall:function(){
                     var col2 = this.$(this.col2).find(".bDiv tbody");
                     if(col2.find("tr").length>0){
-                       var pagesArray =  {}
-                        var t =1;
-                        _.each(this.formsModelArray,function(val,key){
-                           pagesArray["page"+t] = [{"checksum":val.get("formId.checksum"),"encode":val.get("formId.checksum")}] ;
-                           t++;
-                        },this);   
-                        this.parent.modelArray = this.formsModelArray;
-                        this.parent.pagesArray = pagesArray;
-                        this.dialog.hide();
-                        this.parent.createSignupForms();
+                       if(this.formsModelArray.length <= 6){ 
+                            var pagesArray =  {}
+                            var t =1;
+                            _.each(this.formsModelArray,function(val,key){
+                               pagesArray["page"+t] = [{"checksum":val.get("formId.checksum"),"encode":val.get("formId.checksum")}] ;
+                               t++;
+                            },this);   
+                            this.parent.modelArray = this.formsModelArray;
+                            this.parent.pagesArray = pagesArray;
+                            this.dialog.hide(true);
+                            this.parent.createSignupForms();
+                        }
+                        else{
+                            setTimeout(_.bind(function(){this.app.showAlert("You cann't select more than 6 forms",this.$el)},this),100);
+                        }
                     }
                     else{
                         this.app.showAlert("Please select at least on signup form.",this.$el);

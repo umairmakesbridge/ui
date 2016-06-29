@@ -5,7 +5,8 @@ backup/
 
 Gruntfile.js
 package.json
-test.html
+test*.html
+funnel.html
 
 DS_Store
 .DS_Store?

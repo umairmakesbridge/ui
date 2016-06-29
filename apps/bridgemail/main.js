@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.469_1" ,       
+       urlArgs: "bust=1.472_8" ,       
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
@@ -18,6 +18,7 @@
            'jquery.icheck': 'shared/libs/jquery.icheck',
            'jquery.chosen': 'shared/libs/chosen.jquery',
            'jquery.highlight': 'shared/libs/jquery.highlight',           
+           'jquery.colresize':'shared/libs/jquery.colresizable',
            'jquery.searchcontrol': 'shared/searchcontrol',
            'jquery-ui': 'shared/libs/jquery-ui',
            'bms-remote': 'shared/libs/remote',
@@ -43,6 +44,7 @@
            'scrollbox':'shared/jquery.scrollbox',
            'highcharts':'shared/libs/charts/highcharts',
            'export-chart':'shared/libs/charts/modules/exporting',
+           'funnel-chart':'shared/libs/charts/modules/funnel',
            'jspdf' : 'reports/summary/vendors/jspdf'
        },
         shim: {
@@ -78,6 +80,11 @@
                'jquery.highlight':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.highlight'
+               }
+               ,
+               'jquery.colresize':{
+                   deps: ['jquery'],
+                   exports: 'jQuery.fn.colResizable'
                }
                ,
                'jquery.searchcontrol':{

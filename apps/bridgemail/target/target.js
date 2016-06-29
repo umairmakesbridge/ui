@@ -38,10 +38,9 @@ define(['text!target/html/target.html', 'bms-filters'],
                     }, this));
                     this.dialog.$(".pointy .delete").click(_.bind(function (obj) {
                         var curview = this;
-                        var app = this.options.camp.app;
-                        var appMsgs = app.messages[0];
+                        var app = this.options.camp.app;                        
                         app.showAlertDetail({heading: 'Confirm Deletion',
-                            detail: appMsgs.CAMPS_delete_confirm_error,
+                            detail: "Are you sure you want to delete?",
                             callback: _.bind(function () {
                                 curview.deleteTarget();
                             }, curview)},
@@ -71,10 +70,9 @@ define(['text!target/html/target.html', 'bms-filters'],
                     }, this));
                     this.dialog.$(".pointy .delete").click(_.bind(function (obj) {
                         var curview = this;
-                        var app = this.options.camp.app;
-                        var appMsgs = app.messages[0];
+                        var app = this.options.camp.app;                        
                         app.showAlertDetail({heading: 'Confirm Deletion',
-                            detail: appMsgs.CAMPS_delete_confirm_error,
+                            detail: "Are you sure you want to delete?",
                             callback: _.bind(function () {
                                 curview.deleteTarget();
                             }, curview)},

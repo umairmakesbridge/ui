@@ -184,7 +184,33 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         bodyCss: {"min-height": dialog_height + "px"},
                         //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
                     });
+                     var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.campNum + "&type=basic";
+                        
+                        jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
+                            
+                       if (xhr && xhr.responseText) {
+                            var defaults_json = jQuery.parseJSON(xhr.responseText);
+                            if (this.app.checkError(defaults_json)) {
+                                return false;
+                            }
+                            this.camp_json = defaults_json;
+                            this.previewCampainDetails({dialogview:dialog,dialogHeight:dialog_height});
+                        }
+                    
+                        
+                        
+                    }, this));
                     //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
+                    
+//                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+//                        dialog.getBody().html(preview_iframe);               
+//                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
+                    //e.stopPropagation();
+                },
+                previewCampainDetails : function(dialogObj){
+                    var dialog = dialogObj.dialogview;
+                    var dialog_height = dialogObj.dialogHeight;  
+                    var that = this;
                     var preview_url = "https://" + that.options.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.campNum;
                     require(["common/templatePreview"], _.bind(function(templatePreview) {
 
@@ -197,11 +223,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                          dialog.$el.find('.modal-header .cstatus').remove();
                          dialog.$el.find('.modal-footer').find('.btn-play').hide();
                          dialog.$el.find('.modal-footer').find('.btn-save').removeClass('btn-green').addClass('btn-blue');
-                    }, this));
-//                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
-//                        dialog.getBody().html(preview_iframe);               
-//                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
-                    //e.stopPropagation();
+                    }, this));   
                 },
                 loadTargets: function() {
                     var dialog_object = {title: 'Select Targets',

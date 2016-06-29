@@ -128,6 +128,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .bounced-email': 'bouncedEmail',
                     'click .linkfilters': 'linkfilters',
                     'click .custom-reports': 'customReprots',
+                    'click .performance-analytics': 'performanceAnalytics',
                     'click .report-flow':'reportFlow',
                     'click .tipntestlistings':'tipandtestlistings',
                     'click #ql_refresh': function () {
@@ -347,8 +348,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#wp_li_" + wp_id + " .subheading").html(params.subheading);
                     }
                 },
-                openCampaign: function (camp_id, camp_wsid,isCreateCamp ,schFlag, reschedule, hidecalender) {
-                    var camp_id = camp_id ? camp_id : 0;
+                openCampaign: function (camp_obj,schFlag, reschedule, hidecalender) {
+                    if(typeof(camp_obj)=="object"){
+                        var camp_id = camp_obj.campid ? camp_obj.campid : 0;
+                        var parent = camp_obj.parent ? camp_obj.parent : "";
+                    }
+                    //var camp_id = camp_id ? camp_id : 0;
                     var active_step = 1;
                     if (schFlag) {
                         active_step = schFlag;   // Active Step if Schedule is called
@@ -356,12 +361,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: 'wizard',
                         title: "Campaigns",
                         isLoadSpinner: true,
-                        workspace_id: 'campaign_' + camp_wsid,
+                        workspace_id: 'campaign_' + camp_obj.camp_wsid,
                         url: 'campaigns/campaign',
                         tab_icon: 'campaign',
                         sub_title: 'Campaing Wizard',
-                        params: {camp_id: camp_id},
-                        wizard: {cssClass: 'campaign_progress', isCreateCamp:isCreateCamp,rescheduled: reschedule, hidecalender: hidecalender, steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
+                        params: {camp_id: camp_id,parent:parent},
+                        wizard: {cssClass: 'campaign_progress', isCreateCamp:camp_obj.isCreateCamp,rescheduled: reschedule, hidecalender: hidecalender, steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
                                 "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]},
                         actions: []
                     });
@@ -441,14 +446,33 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 openLandingPage: function (opt) {
                     var page_id = opt.id ? opt.id : 0;
-                    var page_checksum = opt.checksum ? opt.checksum : 0;
+                    var page_checksum = opt.checksum ? opt.checksum : 0;                    
                     this.addWorkSpace({type: '',
                         title: "Loading...",
                         sub_title: 'Landing Page',
                         tab_icon: 'lpages',
                         workspace_id: 'landingpage_' + page_checksum,
                         url: 'landingpages/landingpage',
-                        params: {page_id: page_id, parent: opt.parent, editable: opt.editable}
+                        params: {page_id: page_id, parent: opt.parent, editable: opt.editable,parentPageId:opt.parentPageId}
+
+                    });
+                }
+                ,
+                openPopulation: function (opt) {
+                    var id = opt.objId ? opt.objId : 0;
+                    var checksum = opt.objCheckSum ? opt.objCheckSum : 0;
+                    var type = opt.type ?opt.type:"";
+                    var params = opt.params ? opt.params : null;
+                    var ws_title = opt.ws_title?opt.ws_title:"Population";
+                    this.addWorkSpace({type: '',
+                        title: ws_title,
+                        sub_title: 'Population',
+                        tab_icon: 'population',
+                        workspace_id: 'population_' + checksum,
+                        url: 'recipientscontacts/rcontacts',
+                        addAction: false,
+                        noTags: type=="workflow"?false:true,
+                        params: {app:app,listNum:id,type:type,fromDate:opt.fromDate,params:params}
 
                     });
                 }
@@ -661,8 +685,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 customReprots: function(){
                     this.addWorkSpace({type: '', title: 'Custom Charts', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': true, tab_icon: 'reports', noTags: true});
                 },
+                performanceAnalytics: function(){
+                    this.addWorkSpace({type: '', title: 'Email Send Analytics', sub_title: 'Analytics', url: 'reports/performanceanalytics', workspace_id: 'performanceanalytics', 'addAction': false, tab_icon: 'performance', noTags: true});
+                },
                 reportFlow: function(){
-                    this.addWorkSpace({type: '', title: 'Reports', sub_title: 'Analytics', url: 'reports/reports', workspace_id: 'reports', 'addAction': true, tab_icon: 'reportslisting', noTags: true});
+                    this.addWorkSpace({type: '', title: 'Business Intelligence Dashboards', sub_title: 'Analytics', url: 'reports/reports', workspace_id: 'reports', 'addAction': true, tab_icon: 'reportslisting', noTags: true});
                 },
                 exportsubscribers: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'contacts/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
@@ -697,8 +724,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 camapignReport: function () {
                     this.addWorkSpace({type: '', title: 'Reports', sub_title: 'Analytic', url: 'reports/campaign_report', workspace_id: 'camp_reports', tab_icon: 'reports', noTags: true});
                 },
-                csvUpload: function () {
-                    this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload'});
+                csvUpload: function (listNum) {
+                    var listNum = (listNum)?listNum:'';
+                    this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload',params: {listNum:listNum}});
                 },
                 supressList: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload To Suppress List', sub_title: 'Show Supress List', url: 'listupload/csvupload', workspace_id: 'supress_list', tab_icon: 'csvupload',headerObj:{headerclass:'orange-head'}});
@@ -849,7 +877,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         headerIcon: 'template',
                         bodyCss: {"min-height": dialog_height + "px"},
                         tagRegen: true,
-                        buttons: {saveBtn: {text: 'Save'}}
+                        buttons: {saveBtn: {text: 'Save Template'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
                     this.$el.parents('body').find("#template_search_menu li:first-child").removeClass("active").click();
@@ -861,7 +889,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         _this.app.showLoading(false, mPage.$el.parent());
                         mPage.init();
                         mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage));
+                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage, true));
                         _this.app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
                         _this.app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
                         _this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveTemplateCall, mPage); // New Dialog
@@ -892,11 +920,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                  this.openNurtureTrack({"id":_json[1],"checksum":_json[2],isCreateNT:isCreateNT,"parent":this,editable:true});
                              
                     },
-                createCampaign: function (fieldText, _json) {
+                createCampaign: function (fieldText, _json,parent) {
                     var camp_id = _json[1];
                     var camp_wsid = _json[2];
                     var isCreateCamp = true;
-                    this.openCampaign(camp_id, camp_wsid , isCreateCamp);
+                    this.openCampaign({campid:camp_id, camp_wsid:camp_wsid , isCreateCamp:isCreateCamp,parent:parent});
 
                 },
                 initCreateEditTarget: function (target_id) {
