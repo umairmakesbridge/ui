@@ -1,5 +1,5 @@
-define(['text!contacts/html/subscriber_row.html', 'common/tags_row'],
-        function (template, tagView) {
+define(['text!contacts/html/subscriber_row.html', 'common/tags_row','contacts/listviewonly'],
+        function (template, tagView,listView) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber Record View to show on listing page
@@ -408,15 +408,15 @@ define(['text!contacts/html/subscriber_row.html', 'common/tags_row'],
                     }
                     this.dialog = this.app.showDialog(btn_prp);
                     this.app.showLoading("Loading...", this.dialog.getBody());
-                     require(["contacts/listviewonly"], _.bind(function (sub_detail) {
-                            var page = new sub_detail({sub: this, model: this.model,dialog:this.dialog});
+                     
+                            var page = new listView({sub: this, model: this.model,dialog:this.dialog});
                             this.dialog.getBody().html(page.$el);
                             page.dialogStyles['height'] = dialog_height;
                             page.dialogStyles['width'] = dialog_width;
                             page.dialogStyles['top'] = '10px';
                             page.init();
                             this.dialog.saveCallBack(_.bind(page.addSubscriber, page, this.dialog));
-                        },this));
+                       
                        
                     
                         //if (this.subsType === 'multiEmails') {
