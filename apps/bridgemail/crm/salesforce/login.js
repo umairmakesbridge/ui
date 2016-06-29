@@ -102,8 +102,10 @@ function (template) {
                                         curview.options.camp.checkSalesForceStatus();
                                      }
                                      else{
+                                         curview.$("#btnTestLogin").show();
                                          curview.parent.loadMapping();
                                          curview.parent.loadSyncArea();
+                                         app.setAppData("salesfocre", {"isLoggedIn":"Y","isSalesforceUser":"Y"});
                                          app.showMessge(creds.success,$("body"),{fixed:true});						
                                      }
                                 }
@@ -214,7 +216,7 @@ function (template) {
                         this.dialog = this.options.dialog;
                         this.parent = this.options.page ? this.options.page : null;
                         this.layout = this.options.layout?this.options.layout:'';
-                        this.$el.html(this.template({layout:this.layout}));
+                        this.$el.html(this.template({layout:this.layout}));                        
                 }
         });
 });

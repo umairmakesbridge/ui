@@ -22,7 +22,11 @@ function (template,crm_filters) {
                 initControl:function(){                    
                     var sf = this.app.getAppData("salesfocre");                   
                     this.$loginInner = this.$(".accordion_login-inner");
-                    if(sf && sf.isSalesforceUser=="N"){                       
+                    this.$syncInner = this.$(".accordion_sync-inner");
+                    this.$mappingInner = this.$(".accordion_mapping-inner");
+                    if(sf && sf.isSalesforceUser=="N"){  
+                       /*this.$("#salesforce_welcome").show();
+                       this.$(".setup-accordion").hide();*/
                        this.$(".setup-accordion").show();
                        this.$("#accordion_login").accordion({heightStyle: "fill",collapsible: true});
                        this.$loginInner.css({"min-height":"235px","position":"relative"});
@@ -30,8 +34,10 @@ function (template,crm_filters) {
                        require(["crm/salesforce/login"],_.bind(function(page){    
                            this.app.showLoading(false,this.$loginInner);
                            this.$loginInner.css("position","inherit");
-                           var login_page = new page({page:this,layout:'col'})                       
-                           this.$loginInner.append(login_page.$el);                       
+                           var login_page = new page({page:this,layout:'col'});
+                           login_page.$("#btnTestLogin").hide();
+                           this.$loginInner.append(login_page.$el);                   
+                           this.app.removeSpinner(this.$el); 
                        },this));
                        this.$("#accordion_mapping,#accordion_sync").hide();
                    } 
@@ -42,9 +48,7 @@ function (template,crm_filters) {
                         this.$("#accordion_sync").accordion({heightStyle: "fill",collapsible: true,active:1});
                         this.$("#accordion_mapping").accordion({heightStyle: "fill",collapsible: true,active:1});
 
-                       
-                       this.$syncInner = this.$(".accordion_sync-inner");
-                       this.$mappingInner = this.$(".accordion_mapping-inner");
+                                              
                        /*Load login view for salesforce*/
                        this.$loginInner.css({"min-height":"235px","position":"relative"});
                        this.app.showLoading("Loading Login...",this.$loginInner);
@@ -52,7 +56,8 @@ function (template,crm_filters) {
                            this.app.showLoading(false,this.$loginInner);
                            this.$loginInner.css("position","inherit");
                            var login_page = new page({page:this,layout:'col'})                       
-                           this.$loginInner.append(login_page.$el);                       
+                           this.$loginInner.append(login_page.$el);          
+                           this.app.removeSpinner(this.$el); 
                        },this));
 
                        if(sf && sf.isSalesforceUser=="Y"){
@@ -64,7 +69,11 @@ function (template,crm_filters) {
                 loadMapping:function(){
                    if(this.mappingLoaded ==false){ 
                         this.mappingLoaded = true;
-                        this.parent.salesforceSetup = true;
+                        this.parent.salesforceSetup = true;                        
+                        if(this.$("#accordion_mapping").css("display")=="none"){
+                            this.$("#accordion_mapping").show();
+                            this.$("#accordion_mapping").accordion({heightStyle: "fill",collapsible: true,active:1});
+                        }
                         /*Load mapping view for salesforce*/
                        this.$mappingInner.css({"min-height":"480px","position":"relative"});
                        this.app.showLoading("Loading Mapping...",this.$mappingInner);                   
@@ -79,6 +88,10 @@ function (template,crm_filters) {
                 loadSyncArea:function(){
                    if(this.syncAreaLoaded ==false){  
                    this.syncAreaLoaded = true;    
+                   if(this.$("#accordion_sync").css("display")=="none"){
+                        this.$("#accordion_sync").show();
+                        this.$("#accordion_sync").accordion({heightStyle: "fill",collapsible: true,active:1});
+                    }
                    /*Load owner synchronization view for salesforce*/
                     this.$syncInner.css({"min-height":"390px","position":"relative"});
                     this.app.showLoading("Loading Login...",this.$syncInner);

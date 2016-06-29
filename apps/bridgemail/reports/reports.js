@@ -65,7 +65,7 @@ define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/r
                    this.ws_header = active_ws.find(".camp_header .edited"); 
                    this.ws_header.find('.workspace-field').remove();
                    active_ws.find("#campaign_tags").remove();
-                   active_ws.find("#addnew_action").attr("data-original-title", "Add Report").click(_.bind(this.createReportDialog, this));
+                   active_ws.find("#addnew_action").attr("data-original-title", "Add Business Intelligence Dashboard").click(_.bind(this.createReportDialog, this));
                    active_ws.find("div.create_new").click(_.bind(this.createReportDialog, this));  
                 },
                 createReportDialog: function (  ) {
