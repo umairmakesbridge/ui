@@ -13,6 +13,9 @@
                  <li style="float:right;width: auto;"><a  class="btn-red suppress-sub showtooltip" data-original-title="Click to suppress contact"><i class="icon supress-w"></i></a></li>                 
                  <li style="float:right;width: auto;"><a  class="btn-green coursecorrect-sub showtooltip" data-original-title="Click for course correct"><i class="icon coursecorrect-w"></i></a></li>                    
                  <% } %>
+                 <% if(this.editable){%>
+                 <li style="float:right;width: auto;"><a  class="btn-blue add-to-lists showtooltip" data-original-title="Click to add into list"><i class="icon add-list"></i></a></li>
+                 <%}%>
                  <li style="float:right;width: auto;"><a  class="btn-yellow manage-lists showtooltip" data-original-title="<% if(this.editable){%>Click to manage lists<%} else {%>Click to view lists<%}%>"><i class="icon mlist2"></i></a></li>
                  <li style="float:right;width: auto;"><a  class="btn-green edit-profile showtooltip" data-original-title="<% if(this.editable){%>Click to edit profile<%} else {%>Click to view profile<%}%>"><i class="icon editpro2"></i></a></li>
                  <li style="float:right;width: auto;"><a  class="btn-blue oto-sendmail showtooltip" data-original-title="Click to send email"><i class="icon otolist"></i></a></li>

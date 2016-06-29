@@ -1791,23 +1791,49 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     myElement.find("#imageTitleDialog").hide();
                                     myElement.find(".accordian").accordion({
                                         heightStyle: "fill",
-                                        collapsible: false
+                                        collapsible: false,
+                                        activate: function (event, ui) {
+                                            
+                                            if($(ui.newPanel[0]).hasClass('images-accordion') == true){
+                                                if(!$(ui.newPanel[0]).data('firstloaded')){
+                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                                    LoadImagesInLibrary();
+                                                }
+                                            }else if($(ui.newPanel[0]).hasClass('dropblock-accordian') == true){
+                                                if(!$(ui.newPanel[0]).data('firstloaded')){
+                                                     $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                                    //Load building blocks from service:
+                                                      mee._LoadBuildingBlocks();
+                                                }
+                                            }else if($(ui.newPanel[0]).hasClass('dynamicblock-accordian')==true){
+                                                if(!$(ui.newPanel[0]).data('firstloaded')){
+                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                                    //Load building blocks from service:
+                                                      _LoadDynamicBlocks();
+                                                }
+                                            }else if($(ui.newPanel[0]).hasClass('forms-accordion')==true){
+                                                if(!$(ui.newPanel[0]).data('firstloaded')){
+                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                                    // Load Form blocks from service
+                                                     mee._LoadFormBlocks();
+                                                }
+                                            }
+                                        }
                                     });
                                     
                                     myElement.find(".builder-panel").css("height", (myElement.find(".builder-panel").height() + 12) + "px");
                                     var bbaccord = myElement.find(".builder-panel .bb-scrollarea-wrapper").height();
                                     myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height":(parseInt(bbaccord) - 20),"overflow-y":"scroll"});
-                                    //Load building blocks from service:
-                                    mee._LoadBuildingBlocks();
+                                    
                                     //////////
                                     _LoadContentBlocks();
-                                    _LoadDynamicBlocks();
+                                    
                                     _LoadPersonalizeTags();
 
 
-                                    if (options.landingPage) {
-                                        mee._LoadFormBlocks();
-                                    }
+                                    //if (options.landingPage) {
+                                       
+                                    //}
 
 
                                     //TODO Styles
@@ -3412,7 +3438,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         options._app.showLoading(false, myElement.find(".imageLib"));
                                     }
 
-                                    LoadImagesInLibrary();
+                                    //LoadImagesInLibrary();
                                 }
                                 // ------------------ End Load Images --------------//
 
@@ -4674,7 +4700,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                 var _LoadDynamicBlocks = function (args) {
-
+                                     var ulBuildingBlocks = myElement.find(".dynamicBlockDroppable");
+                                          ulBuildingBlocks.empty();
+                                                options._app.showLoading("Loading dynamic blocks...", ulBuildingBlocks, {
+                                                    "width": "140px",
+                                                    "margin-left": "-70px"
+                                                });
+                                                
                                     if (args == null) {
                                         args = new Object();
                                     }
@@ -4706,7 +4738,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     "</li>");
 
 
-
+                                         
                                             //Initialize with default draggable:
                                             InitializeMainDraggableControls(block);
 
