@@ -158,8 +158,7 @@
                     </h3>                                             
                     <span class="landingpage"><i class="icon lp"></i><%= this.app.addCommas(this.model.get('viewCount')) %></span>
                     <span class="formview"><i class="icon formview"></i><% if(this.model.get('submitCount')!="0") { %> <a class="submissionview showtooltip" title="Click to view submissions detail" ><%=this.app.addCommas(this.model.get('submitCount'))%></a> <% } else { print(this.app.addCommas(this.model.get('submitCount')))} %></span>
-                </div>
-             </div>
+                </div>             
            <% } else if(this.type=="form") { %>
                  <div class="name-type">              
                     <h3>                    
