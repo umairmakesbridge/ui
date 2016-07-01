@@ -185,10 +185,7 @@ define([
 
             //Ajax Error handling
             $(document).ajaxError(function (event, jqxhr, settings, exception) {
-                console.log(event);
-                console.log(jqxhr);
-                console.log(settings);
-                console.log(exception);
+                console.log("url failed:"+settings.url+"\n---Status::"+jqxhr.statusText+"\n---Status Code::"+jqxhr.status);                
             });
             //Cache Clear time set
             this.clearCache();
