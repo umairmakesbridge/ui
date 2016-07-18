@@ -510,7 +510,7 @@ define(['text!reports/html/report_block.html'],
                     var dialog_title = "Submissions of '" + formName + "'";
                     var formId = this.model.get('formId.encode') ? this.model.get('formId.encode') : this.model.get('id');
                     var formCheckSum = this.model.get('formId.checksum') ? this.model.get('formId.encode') : this.model.get('checkSum');
-                    this.app.mainContainer.openPopulation({objId: formId, ws_title: dialog_title, objCheckSum: formCheckSum,type:"webform"});                    
+                    this.app.mainContainer.openPopulation({objId: formId, ws_title: dialog_title, objCheckSum: formCheckSum,type:"webform",params:{pageId:this.model.get('pageId.encode')}});                    
                 },
                 showPopulation: function (ev) {                    
                     var dialog_title = "Population '"+this.model.get("name")+"'";
