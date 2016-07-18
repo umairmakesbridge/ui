@@ -23,10 +23,11 @@ define(['text!reports/html/customreports.html'],
                     this.current_ws = this.$el.parents(".ws-content");                                        
                     this.ws_header = this.current_ws.find(".camp_header .edited"); 
                     this.current_ws.find("#campaign_tags").remove();
-                    this.app.removeSpinner(this.$el);                    
+                                      
                     this.current_ws.find("#addnew_action").attr("data-original-title", "Add Chart").click(_.bind(this.addChart, this));
                     this.$(".customreportsiframe").load(_.bind(function () {
-                        this.app.showLoading(false,this.$el);                        
+                        this.app.showLoading(false,this.$el);  
+                        this.app.removeSpinner(this.$el);  
                     },this))
                 },
                 resizeHeight:function(height){

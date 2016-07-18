@@ -652,8 +652,8 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
 
 }
 .mce-highlight-div .topHandlers{
-    top : -25px;
-}
+    top : -25px !important;
+} 
 .topHandlers_wrap{
     font-size: 1px;
     height: 0;

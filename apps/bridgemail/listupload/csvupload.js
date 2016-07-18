@@ -96,12 +96,15 @@ define(['app', 'text!listupload/html/csvupload.html', 'fileuploader', 'bms-dragf
                 },
                 render: function () {
                     this.$el.html(this.template({}));
+                    
                     this.app = this.options.app;
+                    
                     this.errMessage = 0;
                     this.iThumbnail = this.$(".drop-files");
                     this.camp_obj = this.options.camp;
                     this.listNum = (this.options.params) ? this.options.params.listNum :'';
                     jQuery.event.props.push('dataTransfer');
+                    
                     this.dragCSVSetting();
                 },
                 // Drag and Drop file to upload, append the upload box every time grid empty /search/tags search/new load
@@ -124,9 +127,12 @@ define(['app', 'text!listupload/html/csvupload.html', 'fileuploader', 'bms-dragf
                 },
                 init: function () {
                     this.$(".template-container").css("min-height", (this.app.get('wp_height') - 178));
-                    /*-----Remove loading------*/
-                    this.app.removeSpinner(this.$el);
+                    var _this = this;
+                    setTimeout(function(){
+                        /*-----Remove loading------*/
+                    _this.app.removeSpinner(_this.$el);
                     /*------------*/
+                    },500)
                 }
             });
         });

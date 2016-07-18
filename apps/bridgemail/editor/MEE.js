@@ -341,6 +341,29 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.resizeHeight();
                                     }
                                 }
+                                mee.IntializeToolTip = function(){
+                                    
+                                    myElement.find(".showtooltip-dg").tooltip({
+                                            template: '<div class="tooltip custom-tooltip"><div class="tooltip-inner"></div></div>',
+                                           //'placement':  'right',
+                                           delay: { show: 0, hide: 0 },
+                                           animation: false,
+                                        });
+                                   myElement.find(".showtooltip-dg").unbind('mousemove');
+                                   myElement.find(".showtooltip-dg").unbind('mouseleave');
+                                   myElement.find(".showtooltip-dg").bind('mousemove',function(e){
+                                       //console.log(e.pageY,e.pageX);
+                                       $(this).tooltip('show');
+                                       $('.custom-tooltip').css({top:e.pageY, left: e.pageX + 30});
+
+                                   }).bind('mouseleave', function(e) {
+                                          //  $(this).tooltip('hide');
+                                          setTimeout(function(){
+                                              myElement.find('.showtooltip-dg').tooltip('hide')
+                                          },40);
+                                        });
+                                    
+                                }
                                 mee.resizeHeight = function() {
                                     var ul_container = meeIframe.find(".mainContentHtml");
                                     var main_container = myElement.find(".editorbox");
@@ -1809,7 +1832,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 if(!$(ui.newPanel[0]).data('firstloaded')){
                                                     $(ui.newPanel[0]).attr('data-firstloaded','true');
                                                     //Load building blocks from service:
-                                                      _LoadDynamicBlocks();
+                                                      _LoadDynamicBlocks(options);
                                                 }
                                             }else if($(ui.newPanel[0]).hasClass('forms-accordion')==true){
                                                 if(!$(ui.newPanel[0]).data('firstloaded')){
@@ -3051,7 +3074,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         $.each(obj[0], function (index, val) {
                                             var tagsArr = val[0].tags.split(',');
                                             var _index = "image" + (parseInt(_offset) + parseInt(index.substr(5)));
-                                            var li = "<li class='draggableControl ui-draggable droppedImage' data-type='droppedImage'>";
+                                            var li = "<li class='draggableControl ui-draggable droppedImage showtooltip-dg' title='Drag' data-type='droppedImage'>";
                                             li += "<span class='img'>";
                                             li += "<img title='" + val[0].tags + "' src='" + val[0].thumbURL + "' alt='" + val[0].fileName + "' data-id='" + val[0]["imageId.encode"] + "' data-tags='" + val[0].tags + "' data-name='" + val[0].fileName + "' /></span>";
                                             li += "<a href='#'><span class='font_75'>" + val[0].fileName + "</span></a>";
@@ -3433,6 +3456,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     myElement.find(".imageLib li:last-child").attr("data-load", "true");
                                                 }
                                                 myElement.find(".footer-loading").hide();
+                                                mee.IntializeToolTip();
                                             }
                                         }
                                         options._app.showLoading(false, myElement.find(".imageLib"));
@@ -3478,6 +3502,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var imagesHTML = getImagesMarkup(obj.images);
                                         var oImages = $(imagesHTML);
                                         myElement.find(".imageLib").html(oImages);
+                                        mee.IntializeToolTip();
                                         oImages.find(".draggableControl").andSelf().filter(".draggableControl").each(function (index, element) {
                                             InitializeMainDraggableControls($(element));
                                         });
@@ -4663,7 +4688,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var label = obj[0].label;
                                             if (label.startsWith(textForSearch)) {
                                                 counter++;
-                                                var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock' draggable='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
+                                                var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock showtooltip-dg' title='Drag' draggable='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
                                                         "<i class='icon dyblck'></i> " +
                                                         "<a href='#'> <span class='font_75 bbName'>" + obj[0].label + "</span></a>" +
                                                         "<div class='imageicons' > " +
@@ -4684,7 +4709,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
 
                                         });
-
+                                        mee.IntializeToolTip();
                                         myElement.find("#DCResultDiv").html(counter + " records Found");
                                         myElement.find("#DCResultDiv").show();
 
@@ -4727,7 +4752,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         $.each(dynamicBlocksFromService, function (i, obj) {
 
 
-                                            var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock' draggable='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
+                                            var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock showtooltip-dg' title='Drag' draggable='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
                                                     "<i class='icon dyblck'></i> " +
                                                     "<a href='#'> <span class='font_75 bbName'>" + obj[0].label + "</span></a>" +
                                                     "<div class='imageicons' > " +
@@ -4750,7 +4775,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                         });
-
+                                        mee.IntializeToolTip();
                                         dynamicBlocksGlobal = dynamicBlocksFromService;
 
                                     }
@@ -5076,6 +5101,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                         catch (e) {
                                         }
+                                        mee.IntializeToolTip();
                                         if (!meeIframeWindow || !meeIframeWindow.$) {
                                             return false;
                                         }
@@ -6410,6 +6436,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     $(elementToApply).on('dragstart', function (event) {
                                         event.originalEvent.dataTransfer.setData("text", "dragging");
+                                        /*--Hide tooltop--*/
+                                        setTimeout(function(){
+                                            $('.showtooltip-dg').tooltip('hide')
+                                        },40);
                                         mee.dragElement = $(this);
                                         var draggedControlType = $(this).data("type");
                                         /*if (draggedControlType === "droppedImage" ) {
@@ -6542,7 +6572,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     if (obj[0]["thumbURL"]) {
                                                         blockIcon = "<img src='" + obj[0]["thumbURL"] + "' class='blockimg' />"
                                                     }
-                                                    var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' draggable='true' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
+                                                    var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock showtooltip-dg' draggable='true' title='Drag' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
                                                             blockIcon +
                                                             "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                             "</li>");
@@ -6591,7 +6621,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 blockIcon = "<img src='" + obj[0]["thumbURL"] + "' class='blockimg' />"
                                             }
 
-                                            var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
+                                            var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock showtooltip-dg' title='Drag' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
                                                     blockIcon +
                                                     "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                     "<div class='imageicons' > " +
@@ -6614,6 +6644,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
                                             count++;
                                         });
+                                        mee.IntializeToolTip();
                                         buildingBlocksGlobal = buildingBlocksFromService;
                                         myElement.find("#DCResultDiv").hide();
                                     });
@@ -6802,7 +6833,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var label = obj[0].name;
                                             if (label.startsWith(textForSearch)) {
                                                 counter++;
-                                                var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
+                                                var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock showtooltip-dg' title='Drag' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
                                                         "<i class='icon myblck'></i> " +
                                                         "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                         "<div class='imageicons' > " +
@@ -6827,6 +6858,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //count++;
                                             }
                                         });
+                                        mee.IntializeToolTip();
                                         myElement.find("#BBResultDiv").html(counter + " records Found");
                                         myElement.find("#BBResultDiv").show();
 
@@ -7057,7 +7089,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 obj[0].ID = obj[0]["formId.encode"];
 
 
-                                                var block = $("<li class='draggableControl ui-draggable droppedFormBlock' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
+                                                var block = $("<li class='draggableControl ui-draggable droppedFormBlock showtooltip-dg' title='Drag' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
                                                         "<i class='icon myblck'></i> " +
                                                         "<a><span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                         "<div class='imageicons' > " +
@@ -7076,7 +7108,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                             });   
-
+                                            mee.IntializeToolTip();
                                             if (myElement.find(".ulFormBlocks li").length < parseInt(returnData.totalCount)) {
                                                 myElement.find(".ulFormBlocks li:last-child").attr("data-load", "true");
                                             }
@@ -7706,8 +7738,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 cache: false,
                                 async: false,
                                 success: function (e) {
+                                    
                                     if (e.variations != undefined) {
                                         args.dynamicBlocks = e.variations[0];                                        
+                                    }else{
+                                        console.log(args);
+                                        if(args && args._app){
+                                           args._app.showLoading(false,$('body').find('.dynamicBlockDroppable')); 
+                                        }
+                                        console.log('No Record Found');
                                     }
                                 },
                                 error: function (e) {
@@ -7801,6 +7840,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                     });
                     $(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    
+                   
                 }
 
 

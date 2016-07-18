@@ -5054,3 +5054,14 @@ Stickybar accordian
 .bb-scrollarea-wrapper{
     overflow: hidden !important;
 }
+
+
+div.tooltip.custom-tooltip{
+    max-width: 60px;
+}
+div.tooltip.custom-tooltip::before{
+   top:0;
+}
+div.tooltip.custom-tooltip .tooltip-inner{
+    min-width:55px;
+}

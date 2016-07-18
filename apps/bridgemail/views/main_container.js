@@ -147,7 +147,222 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.isTipnTestFlag = false;
                     this.openTipnTest = false;
                     this.openTipnTest2 = false;
+                    this.wizardSteps = '';
+                    this.params = '';
                     this.render();
+                    this.ws_campaignListObj='';
+                    this.pageLoadOptions = {};
+                    this.static_ws = {
+                                "campaigns": {
+                                    "tab_icon": "campaignlisting",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                    "url":"campaigns/campaigns",
+                                    "wizard":''
+                                },
+                                "campaign_listings": {
+                                    "tab_icon": "campaign",
+                                    "ws_type": "wizard",
+                                    "addAction": false,
+                                    "url":"campaigns/campaign",
+                                     wizard: {cssClass: 'campaign_progress',  steps: 4, active_step: 1, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
+                                         "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]}
+                                },
+                                "contacts" : {
+                                    "tab_icon": "contactlisting",
+                                    "url":"contacts/contacts",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                },
+                                "subscriber_listings" : {
+                                    "tab_icon": "contactdetail",
+                                    "url":"contacts/subscriber",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                }
+                                ,
+                                "mytemplates" : {
+                                    "tab_icon": "mytemplates",
+                                    "url":"bmstemplates/mytemplates",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                },
+                                "singleemail" : {
+                                    "tab_icon": "onetoonelisting",
+                                    "url":"onetooneemails/singlelistings",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                }
+                                ,
+                                "nuture" : {
+                                    "tab_icon": "nuturelisting",
+                                    "url":"nurturetrack/nurturetracks",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                },
+                                "nurturetrack_listings" : {
+                                    "tab_icon": "nuturetrack",
+                                    "url":"nurturetrack/nurturetrack",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                }
+                                ,"crm_salesforce" : {
+                                    "tab_icon": "salesforce",
+                                    "url":"crm/salesforce/salesforce",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                }
+                                ,"crm_netsuite" : {
+                                    "tab_icon": "netsuite",
+                                    "url":"crm/netsuite/netsuite",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                }
+                                ,"crm_highrise" : {
+                                    "tab_icon": "highrises",
+                                    "url":"crm/highrise/highrise",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                }
+                                ,"crm_google" : {
+                                    "tab_icon": "google",
+                                    "url":"crm/google/google",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                }
+                                ,"userimages" : {
+                                    "tab_icon": "graphiclisting",
+                                    "url":"userimages/userimages",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                }
+                                ,"autobots" : {
+                                    "tab_icon": "autobotslisting",
+                                    "url":"autobots/autobots",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                }
+                                ,"workflows" : {
+                                    "tab_icon": "workflowlisting",
+                                    "url":"workflow/workflows",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                }
+                                ,"bouncedemail" : {
+                                    "tab_icon": "bouncedemails",
+                                    "url":"common/bouncereport",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                },
+                                "export_listings":{
+                                    "tab_icon": "exportsubscribers",
+                                    "url":"contacts/exportsubscribers",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                },
+                                "remove_listings":{
+                                    "ws_type": '',
+                                    noTags: true, 
+                                    url: 'contacts/removesubscribers', 
+                                    workspace_id: 'remove_subscriber',
+                                    'addAction': false, 
+                                    tab_icon: 'removesubscribers'
+                                }
+                                ,
+                                "landingpages":{
+                                    "tab_icon": "lpageslisting",
+                                    "url":"landingpages/landingpages",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                }
+                                ,
+                                "landingpage_listings":{
+                                    "tab_icon": "lpages",
+                                    "url":"landingpages/landingpage",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                },
+                                "signup-forms":{
+                                    "tab_icon": "lpageslisting",
+                                    "url":"landingpages/landingpages",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                }
+                                ,
+                                "recipients":{
+                                    "tab_icon": "subscribers",
+                                    "url":"contacts/recipients",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "single_row":true
+                                },
+                                "csv_listings":{
+                                     "tab_icon": "csvupload",
+                                    "url":"listupload/csvupload",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                }
+                                ,
+                                "supress_listings":{
+                                    ws_type: '', 
+                                    noTags: true,
+                                    url: 'listupload/csvupload', 
+                                    workspace_id: 'supress_list', 
+                                    tab_icon: 'csvupload',
+                                    headerObj:{headerclass:'orange-head'}
+                                }
+                                ,
+                                "crm":{
+                                     "tab_icon": "crm",
+                                    "url":"crm/crm",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "single_row":true
+                                }
+                                ,
+                                "camp_listings":{
+                                     "tab_icon": "reports",
+                                    "url":"reports/campaign_report",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                }
+                                ,
+                                "performanceanalytics":{
+                                     "tab_icon": "performance",
+                                    "url":"reports/performanceanalytics",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                }
+                                ,
+                                "customereports":{
+                                    "tab_icon": "reports",
+                                    "url":"reports/customreports",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                    "noTags":true
+                                }
+                                ,
+                                "reports":{
+                                    "tab_icon": "reportslisting",
+                                    "url":"reports/reports",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                    "noTags":true
+                                }
+                                ,
+                                "report_listings":{
+                                    "tab_icon": "reports",
+                                    "url":"reports/reportflow",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                }
+                            }
                 }
                 ,
                 render: function () {
@@ -155,6 +370,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     //this.$el.append(this.header.$el,LandingPage, this.footer.$el,this.news.$el);          
                     this.app = this.options.app;
                     this.template = _.template(LandingPage);
+                    this.ws_params='';
                     if(!this.app.get("newWin")){
                         this.$el.append(this.header.$el, this.template({}));
                     }
@@ -200,34 +416,75 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             if (options && options["params"]) {
                                 options["params"]["wp_id"] = wp_count;
                             }
-                            var wp_view = new WorkSpace(options);
-
-                            wp_view.$el.addClass("active");
-
+                            
+                           if(!options.tabsOnly){
+                               var wp_view = new WorkSpace(options);
+                               this.wizardView = wp_view;
+                               wp_view.$el.addClass("active");
+                           }
+                            
+                            
                             $(".ws-tabs li").removeClass('active');
                             var workspaceid = options.workspace_id ? ('workspace_id="' + options.workspace_id + '"') : "";
                             var tab_icon = (options.tab_icon) ? "wtab-" + options.tab_icon : "step1";
+                            var viewUrl="";
+                            this.pageLoadOptions[options.ws_key] =  options;
+                            if(options.autoPageLoad){
+                                viewUrl = (!options.isactive) ? options.url : "";
+                                this.app.isAutoLoadWorkspace = true;
+                            }else{
+                                this.app.isAutoLoadWorkspace = false;
+                            }
+                            if(!options.tabsOnly){
+                                var activeClass = "active";
+                            }
+                           
+                            $('#wp_li_0').before('<li class="'+activeClass+'" id="wp_li_' + wp_count + '" ' + workspaceid + ' data-loadurl="'+viewUrl+'" data-key="'+options.ws_key+'"><a><span class="icon ' + tab_icon + '"></span></a><div class="detail"><div class="heading">' + options.title + '</div><div class="subheading">' + options.sub_title + '</div><i class="closehover" title="Close Workspace"></i></div></li>');
                             
-                            $('#wp_li_0').before('<li class="active" id="wp_li_' + wp_count + '" ' + workspaceid + '><a><span class="icon ' + tab_icon + '"></span></a><div class="detail"><div class="heading">' + options.title + '</div><div class="subheading">' + options.sub_title + '</div><i class="closehover" title="Close Workspace"></i></div></li>');
                             if(this.subscribe_name){
                                 this.SubscriberName(this.subscribe_id,this.subscribe_name);
                             }
+                            if(options.params && options.params.sub_id && options.params.autoPageLoad){
+                                this.SubscriberName(options.params.sub_id,options.params.sub_name);
+                            }
                             /*--loading Spinneer--*/
                             this.lastActiveWorkSpace = "wp_li_" + wp_count;
-                            wp_view.$el.attr("id", "workspace_" + wp_count);
-                            $('#' + this.lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
-                            if (options.isLoadSpinner) {
+                            if(!options.tabsOnly){
+                                wp_view.$el.attr("id", "workspace_" + wp_count);
+                            }
+                            if(!options.tabsOnly){
+                                 $('#' + this.lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                            }
+                            
+                           
+                            if (options.isLoadSpinner && !options.tabsOnly) {
                                 $('#' + this.lastActiveWorkSpace).find('.detail .heading').html('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
                             }
                             /*-----*/
+                            
+                            /*-----------Adding options into app.workspaceParams---------------*/
+                           // this.app.ws_title=options.title;
+                            //this.app.ws_sub_title = options.sub_title;
+                            this.wizardSteps = (options.wizard) ? options.wizard : "";
+                            //this.params = a : "";
+                            
+                            if(!options.tabsOnly){
                             $("#workspace .ws-content.active").removeClass('active').css("display", "none");
+                            
                             $("#workspace .workspace").append(wp_view.$el);
+                            }
                             /*--------Push Workspace Tabs into array-------*/
                             this.app.pushWKSTabs({wks_id:wp_count.toString(),wscroll:0});
                             //wp_view.initScroll(wp_view.$el);
                             //this.addMoreTabs( wp_count+1);
-                            wp_view.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-
+                             if(options.autoPageLoad && $('.ws-content.active').length > 0){
+                                 var ws_id = $('.ws-content.active').attr('id').split('_')[1];
+                                 this.$el.parents('body').find('#wstabs li#wp_li_'+ws_id).addClass('active');
+                             }
+                            
+                            if(!options.tabsOnly){
+                                wp_view.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                            }
 
                             $("#wp_li_" + wp_count).click(_.bind(function () {
                                 this.activeWorkSpace($("#wp_li_" + wp_count));
@@ -253,12 +510,15 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                     $(".tooltip-inner").parents(".tooltip").remove();
                                 }, this), 50);
                             });
+                            var _this = this;
                             $("#wp_li_" + wp_count + " .closehover").click(function (event) {
                                 var li = $(this).parents("li");
                                 li.removeClass("hover");
                                 var wp_id = li.attr("id").split("_")[2];
                                 $("#wp_li_" + wp_id + ",#workspace_" + wp_id).remove();
                                 $(".tooltip-inner").parents(".tooltip").remove();
+                                _this.app.isAutoLoadWorkspace = false;
+                                _this.app.createPageRequest();
                                 event.stopPropagation();
                             });
                             $("#wp_li_" + wp_count + " .closehover").hover(function () {
@@ -334,7 +594,31 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             if (obj.data("viewObj") && obj.data("viewObj").refreshWorkSpace) {
                                 obj.data("viewObj").refreshWorkSpace(options);
                             }
-                            this.app.pushWKSTabs({wks_id:workspace_id,wscroll:0});
+                            
+                             /*----------------------Logic for Making Wizard--------------------------*/
+                                      if(obj.attr("data-loadurl")){
+                                          
+                                          obj.append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                                        this.pageLoadOptions['url'] = obj.data("loadurl");
+                                        var ws_key = obj.data('key');
+                                       var wp_view = new WorkSpace(this.pageLoadOptions[ws_key]);
+                                       wp_view.$el.addClass("active");
+                                       wp_view.$el.attr("id", "workspace_" + obj.attr("id").split("_")[2]);
+                                       $("#workspace .ws-content.active").removeClass('active').css("display", "none");
+                                       $("#workspace .workspace").append(wp_view.$el);
+                                       this.app.isAutoLoadWorkspace = false;
+                                       obj.removeAttr('data-loadurl');
+                                      // $.removeData("loadurl");
+                                    }else{
+                                        this.app.createPageRequest();
+                                    }
+                                    this.app.pushWKSTabs({wks_id:workspace_id,wscroll:0});
+                                    /*
+                                        console.log(this.ws_campaignListObj);
+                                        this.wizardView.loadPage(obj.data("loadurl"),false,this.ws_campaignListObj);
+                                    }*/
+                            /*---------------------------------------------*/
+                            
                         }
                     }
                 },
@@ -695,7 +979,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'contacts/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
                 },
                 removeSubscribers: function () {
-                    this.addWorkSpace({type: '', noTags: true, title: 'Remove Subscribers', sub_title: 'Remove Contacts', url: 'contacts/removesubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'removesubscribers'});
+                    this.addWorkSpace({type: '', noTags: true, title: 'Remove Subscribers', sub_title: 'Remove Contacts', url: 'contacts/removesubscribers', workspace_id: 'remove_subscriber', 'addAction': false, tab_icon: 'removesubscribers'});
                 },
                 bouncedEmail: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'Bounced Emails', sub_title: 'Bounced Campaign Report', url: 'common/bouncereport', workspace_id: 'bouncedemail', 'addAction': false, tab_icon: 'bouncedemails'});
@@ -953,7 +1237,6 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 addMoreTabs: function (count) {
                     var tabHeight = $(".ws-tabs").height();
                     var windowHeight = $(window).height() - 250;
-                    console.log('window height is here');
                     if (tabHeight >= windowHeight) {
                         var liMore = $('#wp_li_0').before('<li class="li-more" id="wp_li_' + count + '"><a><span class="icon extra "></span></a><div class="detail"><div class="heading"></div><div class="subheading"> test</div><i class="closehover" title="Close Workspace"></i></div></li>');
                         $("#wstabs").append(liMore);
@@ -1072,7 +1355,81 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                          tmPr.init();
                        },this));
                    }
-                }
+                },
+                openPageSettings: function(jsonData){
+                    _.each(jsonData,_.bind(function(value,key){
+                        //console.log(value);  
+                        var paramObj = "";
+                        
+                        if(value.ws_params && value.ws_params.camp_id){
+                            paramObj = {'camp_id':value.ws_params.camp_id,'wp_id':value.ws_params.wp_id}
+                        }else if(value.ws_params && value.ws_params.sub_id){
+                            paramObj = {
+                                'sub_id':value.ws_params.sub_id,
+                                'wp_id':value.ws_params.wp_id,
+                                'sub_name':value.ws_params.sub_name,
+                                'isSalesforceUser':value.ws_params.isSalesforceUser,
+                                'email':value.ws_params.email,
+                                'editable':value.ws_params.editable
+                            }
+                        }else if(value.ws_params && value.ws_params.track_id){
+                            paramObj = {
+                                'track_id':value.ws_params.track_id,
+                                'wp_id':value.ws_params.wp_id,
+                                'isCreateNT':value.ws_params.isCreateNT,
+                                'editable':value.ws_params.editable,
+                            }
+                        }else if(value.ws_params && value.ws_params.report_id){
+                             paramObj = {
+                                'report_id':value.ws_params.report_id,
+                                'editable':value.ws_params.editable,
+                            }
+                        }
+                        else if(value.ws_params && value.ws_params.page_id){
+                            paramObj = {
+                                'page_id':value.ws_params.page_id,
+                                'editable':value.ws_params.editable,
+                            }
+                        }
+                        else if(value.ws_params && value.ws_key == "recipients"){
+                             paramObj = {
+                                'type':value.ws_params.type,
+                                'wp_id':value.ws_params.wp_id,
+                            }
+                        }
+                        
+                        // CRM ws Key needs to be change
+                        if(value.ws_key == "crm_listings"){
+                            value['ws_key'] = value.ws_id;
+                        }
+                        this.ws_params = {
+                            type: eval(this.static_ws[value.ws_key]).ws_type, 
+                            title: value.ws_title,
+                            sub_title: value.ws_sub_title, 
+                            url: eval(this.static_ws[value.ws_key]).url, 
+                            workspace_id: value.ws_id, 
+                            addAction: eval(this.static_ws[value.ws_key]).addAction, 
+                            params:paramObj ,
+                            tab_icon: eval(this.static_ws[value.ws_key]).tab_icon,
+                            wizard:eval(this.static_ws[value.ws_key]).wizard,
+                            'isactive':value.ws_active,
+                            'ws_key':value.ws_key,
+                            'headerObj':(this.static_ws[value.ws_key].headerObj) ? this.static_ws[value.ws_key].headerObj : "",
+                            'autoPageLoad':'true', // Check if its autoloading
+                            'noTags':(eval(this.static_ws[value.ws_key]).noTags) ? eval(this.static_ws[value.ws_key]).noTags : ""
+                        }
+                        
+                        if(this.ws_params.isactive){
+                            this.addWorkSpace(this.ws_params);
+                        }else{
+                            this.ws_params['tabsOnly'] = true;
+                            this.addWorkSpace(this.ws_params);
+                        }
+                        
+                            
+                    },this));
+                },
+                
             });
 
         });

@@ -35,11 +35,12 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                     this.current_ws = this.$el.parents(".ws-content");                                        
                     this.ws_header = this.current_ws.find(".camp_header .edited"); 
                     this.current_ws.find("#campaign_tags").remove();
-                    this.app.removeSpinner(this.$el);                    
+                                       
                     this.current_ws.find("#addnew_action").attr("data-original-title", "Create Workflow").click(_.bind(this.createWorkflowDialog, this));
                     this.$("div.create_new").click(_.bind(this.createWorkflowDialog, this));  
                     this.$(".workflowiframe").load(_.bind(function () {
                         this.app.showLoading(false,this.$el);
+                        this.app.removeSpinner(this.$el); 
                         //this.$("#workflowlistsearch #clearsearch").click();
                         
                     },this))
