@@ -51,6 +51,13 @@ function (template,app) {
                 }
                 this.$el.find(".template-container").empty();
                 this.active = 1;
+                if(this.$el.parents('.ws-content.active').length > 0){
+                    this.options.params['type'] = "lists";
+                    var activeTabLi = $('.ws-tabs').find('#wp_li_'+this.$el.parents('.ws-content.active').attr('id').split('_')[1]);
+                    activeTabLi.append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                    this.app.isAutoLoadWorkspace = false;
+                }
+                
                 this.app.showLoading('Loading Lists...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['listupload/recipients_list'],function(viewLists){
@@ -76,6 +83,12 @@ function (template,app) {
                 this.active = 2;
                 this.$el.find(".template-container").empty();
                 this.app.showLoading('Loading Targets...', this.$el.find(".template-container"));
+                if(this.$el.parents('.ws-content.active').length > 0){
+                    this.options.params['type'] = "targets";
+                    var activeTabLi = $('.ws-tabs').find('#wp_li_'+this.$el.parents('.ws-content.active').attr('id').split('_')[1]);
+                    activeTabLi.append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                    this.app.isAutoLoadWorkspace = false;
+                }
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['target/recipients_targets'],function(viewTargets){
                     that.listingView = new viewTargets();
@@ -100,6 +113,12 @@ function (template,app) {
                 this.$el.find(".template-container").empty();
                 this.active = 3;
                 this.app.showLoading('Loading Tags...', this.$el.find(".template-container"));
+                 if(this.$el.parents('.ws-content.active').length > 0){
+                    this.options.params['type'] = "tags";
+                    var activeTabLi = $('.ws-tabs').find('#wp_li_'+this.$el.parents('.ws-content.active').attr('id').split('_')[1]);
+                    activeTabLi.append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                    this.app.isAutoLoadWorkspace = false;
+                }
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['tags/recipients_tags'],function(viewTags){
                     that.listingView = new viewTags();

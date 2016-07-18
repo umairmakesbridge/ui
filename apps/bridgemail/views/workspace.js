@@ -34,6 +34,8 @@ function ($,Backbone, _,app,Wizard, template) {
                         }
                         app.mainContainer.openTipnTest=false;
                         app.mainContainer.openTipnTest2=false;
+                        app.isAutoLoadWorkspace=false;
+                        app.createPageRequest();
                         $("body").css("overflow","auto");                                                    
                         $("#activities,#search,.icons-bar").show();                        
                     },
@@ -87,10 +89,11 @@ function ($,Backbone, _,app,Wizard, template) {
                         if(this.options.addAction){
                             this.$el.find(".add-action").addClass("show-add");
                         }
+                        
                         //Load a page 
                         if(this.options.url){                            
-                            this.loadPage(this.options.url,page_container,this.options.params);
-                        }
+                                this.loadPage(this.options.url,page_container,this.options.params);
+                            }
                         
                         if(this.options.actions){
                             var wp_header_shortcuts = this.$(".shortcuts ul");
