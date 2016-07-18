@@ -1403,20 +1403,20 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             value['ws_key'] = value.ws_id;
                         }
                         this.ws_params = {
-                            type: eval(this.static_ws[value.ws_key]).ws_type, 
+                            type: this.static_ws[value.ws_key].ws_type, 
                             title: value.ws_title,
                             sub_title: value.ws_sub_title, 
-                            url: eval(this.static_ws[value.ws_key]).url, 
+                            url: this.static_ws[value.ws_key].url, 
                             workspace_id: value.ws_id, 
-                            addAction: eval(this.static_ws[value.ws_key]).addAction, 
+                            addAction: this.static_ws[value.ws_key].addAction, 
                             params:paramObj ,
-                            tab_icon: eval(this.static_ws[value.ws_key]).tab_icon,
-                            wizard:eval(this.static_ws[value.ws_key]).wizard,
+                            tab_icon: this.static_ws[value.ws_key].tab_icon,
+                            wizard: this.static_ws[value.ws_key].wizard,
                             'isactive':value.ws_active,
                             'ws_key':value.ws_key,
                             'headerObj':(this.static_ws[value.ws_key].headerObj) ? this.static_ws[value.ws_key].headerObj : "",
                             'autoPageLoad':'true', // Check if its autoloading
-                            'noTags':(eval(this.static_ws[value.ws_key]).noTags) ? eval(this.static_ws[value.ws_key]).noTags : ""
+                            'noTags':(this.static_ws[value.ws_key].noTags) ? this.static_ws[value.ws_key].noTags : ""
                         }
                         
                         if(this.ws_params.isactive){
