@@ -251,7 +251,10 @@ define([
                 }
                 if (this.mainContainer) {
                     this.showFeatures();
-                    this.getPageSettings();
+                    if(!this.get("tipId") && !this.get("workId") && !this.get("newWin") && !this.get("subNum")){
+                        this.getPageSettings();
+                    }
+                    
                 } else {
                     setTimeout(_.bind(this.showFeatures, this), 200);
                 }

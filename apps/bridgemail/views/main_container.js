@@ -362,6 +362,14 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                     "addAction": false,
                                     "noTags":true
                                 }
+                                ,
+                                "tip_listings":{
+                                    "tab_icon": "tipntest",
+                                    "url":"tipandtest/tipandtest",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                }
                             }
                 }
                 ,
