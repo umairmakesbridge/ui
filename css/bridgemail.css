@@ -11406,3 +11406,81 @@ right: 66px;
     color:#01aeee;
     font-size:14px;
 }
+.report-placeholder{
+    border:1px dashed #b4cbdc;
+    border-radius: 2px;
+    clear:both;
+    height: 20px;
+    padding: 5px;
+    position: relative;
+    margin: -10px 5px 10px 0;        
+}
+
+.report-placeholder .add-report {
+ position:absolute; left:-2px; top:-7px; background:#fff; border:0; margin:0;
+ z-index:99;
+ width:auto;
+ display: none;
+-webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);   
+-webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;    
+
+}
+
+.report-placeholder .add-report ul {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 2px;
+    float: left;
+    height: 35px;    
+    padding: 5px;
+    width: 100%;
+}
+.report-placeholder .add-report ul li {
+    border-left: 0 none;
+    float: left;
+    margin-left:5px;    
+}
+.report-placeholder .add-report ul li i{    
+    float: right;
+    height: 35px;
+    margin: 0 !important;
+    width: 35px;
+}
+.report-placeholder .add-report ul li:first-child {
+    margin-left:0;
+}
+.report-placeholder:hover .add-report{
+   display:block;
+}
+.ac-campaign{
+    background-position: 3px -128px;
+}
+.ac-lpage{
+    background-position: -148px -128px;
+}
+.ac-webform{
+    background-position: -118px -127px;
+}
+.ac-tag{
+    background-position: -27px -128px;
+}
+.ac-autobot{
+    background-position: -57px -128px;
+}
+.ac-workflow{
+    background-position: -417px -128px;
+}
+.ac-list{    
+    background-position: -386px -128px;
+}
+.ac-funnel{
+    background-position: -206px -126px;
+}
+.ac-webstat{
+    background-position: -177px -128px;
+}
+.md-button{z-index:20;line-height:40px;min-width:0;width:40px;height:40px;vertical-align:middle;box-shadow:0 2px 5px 0 rgba(0,0,0,.26);border-radius:50%;background-clip:padding-box;overflow:hidden;transition:all .3s cubic-bezier(.55,0,.55,.2);transition-property:background-color,box-shadow,-webkit-transform;transition-property:background-color,box-shadow,transform}

@@ -245,6 +245,7 @@
                     }
                 },
                 removeReport: function () {
+                    this.$el.prev(".report-placeholder").remove();
                     this.$el.remove();
                     this.sub.removeMode(this.orderNo);
                     this.loadReport = false;
@@ -458,7 +459,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }                                                
                         var _grid = this.$(".rpt-block-area");                                                
@@ -696,7 +698,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }                                                
                         var _grid = this.$(".rpt-block-area");                        
@@ -971,7 +974,8 @@
                     if (this.modelArray.length) {
                          if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }    
                         var _grid = this.$(".rpt-block-area");                           
@@ -1225,7 +1229,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }    
                        var _grid = this.$(".rpt-block-area");                       
@@ -1427,7 +1432,8 @@
                     if (this.modelArray.length) {                        
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }          
                         this.$(".nt-name").html(this.modelArray[0].get("name"));
@@ -1832,7 +1838,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        } 
                         var _grid = this.$(".rpt-block-area");
@@ -2237,7 +2244,8 @@
                     if (this.modelArray.length) {   
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }
                         var _type = this.modelArray[0].id?this.modelArray[0].id:this.modelArray[0];
@@ -2857,7 +2865,8 @@
                 createFunnel: function() {
                     if(this.doDraw){
                         this.sub.$(".report-empty").hide();
-                        this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                        this.sub.insertReportRow(this);
+                        //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                         this.doDraw = false;
                     }
                     
@@ -3000,7 +3009,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         } 
                         
@@ -3113,7 +3123,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         } 
                         

@@ -1,17 +1,19 @@
-define(['text!reports/html/reportflow.html','reports/report_row'],
-        function (template,reportRow) {
+define(['text!reports/html/reportflow.html','reports/report_row','reports/report_placeholder'],
+        function (template, reportRow, reportPlaceholder) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',
                 className:'content-inner',
                 events: {                    
                      'click .addbar li':'addReport',
+                     'click .add-report li':'addReport',
                      'click .help-video':'showVideo'
                 },
                 initialize: function () {
                     this.app = this.options.app;     
                     this.template = _.template(template);                                        
                     this.editable = true;
+                    this.beforeElement = null;
                     this.models = [];                    
                     if (this.options.params) {
                         if(this.options.params.report_id){
@@ -62,17 +64,48 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 addReport:function(event,obj,loadReport){
                     var rType = typeof(event)=="object"?$.getObj(event, "li").attr("data-type"):event;
                     var objects = (obj) ? obj[obj.type]:null;
-                    var row_view = new reportRow({reportType:rType,sub:this,row_obj:obj,objects:objects,loadReport:loadReport});
-                    this.models.push(row_view);
+                    var row_view = new reportRow({reportType:rType,sub:this,row_obj:obj,objects:objects,loadReport:loadReport});                    
+                    this.beforeElement = null;
+                    if(typeof(event)=="object"){
+                        var placeHolderRow = $(event.target).parents(".report-placeholder");
+                        if(placeHolderRow.length){
+                            this.beforeElement = parseInt(placeHolderRow.attr("t_order"));
+                        }
+                    }
+                    if(!this.beforeElement){
+                        this.models.push(row_view);
+                    }
                     row_view.orderNo = this.models.length;                    
                     if(loadReport){
                         this.$(".report-empty").hide();
-                        row_view.$el.insertBefore(this.$(".add-panel"));                        
+                        row_view.$el.insertBefore(this.$(".add-panel"));   
+                        var placeholder_view = new reportPlaceholder({sub:this});                        
+                        placeholder_view.$el.attr("t_order",this.models.length);
+                        placeholder_view.$el.insertBefore(row_view.$el);
                     }
                     else{
                         row_view.openSelectionDialog();
                         row_view.doDraw = true;
                     }
+                },
+                insertReportRow: function(row_view){
+                    if(this.beforeElement){
+                        this.models.splice(this.beforeElement-1,0,row_view);
+                        row_view.$el.insertBefore(this.$(".report-placeholder[t_order='"+this.beforeElement+"']"));                                            
+                    }
+                    else{
+                        row_view.$el.insertBefore(this.$(".add-panel"));                          
+                    }
+                    var placeholder_view = new reportPlaceholder({sub:this});                                                
+                    placeholder_view.$el.insertBefore(row_view.$el);
+                    this.reOrderPlaceHolder();                        
+                },
+                reOrderPlaceHolder : function(){
+                    var placeholders = this.$(".report-placeholder");
+                    _.each(placeholders,function(val,index){
+                        $(val).attr("t_order",index+1);
+                        this.models[index].orderNo = index+1;
+                    },this);
                 },
                 saveSettings:function(){
                     var URL = "/pms/io/user/customReports/?BMS_REQ_TK="+this.app.get('bms_token');                    
@@ -201,6 +234,7 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                     if(this.models.length==0){
                         this.$(".report-empty").fadeIn();
                     }
+                    this.reOrderPlaceHolder(); 
                 },
                 removeUndrawModel:function(no){                    
                     this.models.splice(no-1,1);                    
