@@ -369,7 +369,36 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                     "ws_type": "",
                                     "addAction": false,
                                     "noTags":true
+                                },
+                                "tiptest_listings":{
+                                    "tab_icon": "tipntestlisting",
+                                    "url":"tipandtest/tipandtestlisting",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                },
+                                "tipntest-toggle-one":{
+                                    "tab_icon": "tipntest",
+                                    "url":"tipandtest/tipandtest",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                },
+                                "tipntest-toggle-two":{
+                                    "tab_icon": "tipntest",
+                                    "url":"tipandtest/tipandtest2",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
+                                },
+                                "tipntest-toggle-three":{
+                                    "tab_icon": "tipntest",
+                                    "url":"tipandtest/tipandtest3",
+                                    "ws_type": "",
+                                    "addAction": false,
+                                    "noTags":true
                                 }
+                                
                             }
                 }
                 ,
@@ -999,7 +1028,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
                 },
                  tipandtestlistings : function(){
-                   this.addWorkSpace({type: '', noTags: true ,title: 'Proven Processes', sub_title: 'Listings', url: 'tipandtest/tipandtestlisting', workspace_id: 'tip_test_listings', 'addAction': false, tab_icon: 'tipntestlisting'}); 
+                   this.addWorkSpace({type: '', noTags: true ,title: 'Proven Processes', sub_title: 'Listings', url: 'tipandtest/tipandtestlisting', workspace_id: 'tiptest_listings', 'addAction': false, tab_icon: 'tipntestlisting'}); 
                 },
                 tip_test : function(){
                    this.addWorkSpace({type: '', noTags: true ,title: 'Increase Sales Meetings - Follow Up In Under 5 Minutes', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': false, tab_icon: 'tipntest'}); 

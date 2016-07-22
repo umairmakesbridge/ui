@@ -53,7 +53,7 @@ define(['text!tipandtest/html/tipandtest3.html','tipandtest/collections/autobots
                 },
                 init: function () {
                         //this.$el.parents('.ws-content').find('.camp_header').remove();
-                        this.app.removeSpinner(this.$el);
+                        
                         
                 },
                 fetchBots: function(offset,botId,isCreateAB) {
@@ -91,7 +91,7 @@ define(['text!tipandtest/html/tipandtest3.html','tipandtest/collections/autobots
                                 
                             },this);
                             
-                                   
+                          that.app.removeSpinner(that.$el);         
                         }});
                     
 
