@@ -554,8 +554,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                 var wp_id = li.attr("id").split("_")[2];
                                 $("#wp_li_" + wp_id + ",#workspace_" + wp_id).remove();
                                 $(".tooltip-inner").parents(".tooltip").remove();
-                                _this.app.isAutoLoadWorkspace = false;
-                                _this.app.createPageRequest();
+                                
                                 event.stopPropagation();
                             });
                             $("#wp_li_" + wp_count + " .closehover").hover(function () {
@@ -636,15 +635,31 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                       if(obj.attr("data-loadurl")){
                                           
                                           obj.append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                                        
                                         this.pageLoadOptions['url'] = obj.data("loadurl");
                                         var ws_key = obj.data('key');
-                                       var wp_view = new WorkSpace(this.pageLoadOptions[ws_key]);
-                                       wp_view.$el.addClass("active");
-                                       wp_view.$el.attr("id", "workspace_" + obj.attr("id").split("_")[2]);
-                                       $("#workspace .ws-content.active").removeClass('active').css("display", "none");
-                                       $("#workspace .workspace").append(wp_view.$el);
-                                       this.app.isAutoLoadWorkspace = false;
-                                       obj.removeAttr('data-loadurl');
+                                        if(ws_key == "report_listings"){
+                                                require(["highcharts"],_.bind(function(highcharts){  
+                                                console.log(Highcharts);
+                                                var wp_view = new WorkSpace(this.pageLoadOptions[ws_key]); 
+                                                wp_view.$el.addClass("active");
+                                                wp_view.$el.attr("id", "workspace_" + obj.attr("id").split("_")[2]);
+                                                $("#workspace .ws-content.active").removeClass('active').css("display", "none");
+                                                $("#workspace .workspace").append(wp_view.$el);
+                                                this.app.isAutoLoadWorkspace = false;
+                                                obj.removeAttr('data-loadurl');
+                                            },this));
+                                        }else{
+                                           var wp_view = new WorkSpace(this.pageLoadOptions[ws_key]);
+                                           wp_view.$el.addClass("active");
+                                            wp_view.$el.attr("id", "workspace_" + obj.attr("id").split("_")[2]);
+                                            $("#workspace .ws-content.active").removeClass('active').css("display", "none");
+                                            $("#workspace .workspace").append(wp_view.$el);
+                                            this.app.isAutoLoadWorkspace = false;
+                                            obj.removeAttr('data-loadurl');
+                                        }
+                                      
+                                       
                                       // $.removeData("loadurl");
                                     }else{
                                         this.app.createPageRequest();
@@ -1394,6 +1409,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                    }
                 },
                 openPageSettings: function(jsonData){
+                    
                     _.each(jsonData,_.bind(function(value,key){
                         //console.log(value);  
                         var paramObj = "";
@@ -1439,6 +1455,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         if(value.ws_key == "crm_listings"){
                             value['ws_key'] = value.ws_id;
                         }
+                        
                         this.ws_params = {
                             type: this.static_ws[value.ws_key].ws_type, 
                             title: value.ws_title,
@@ -1455,8 +1472,15 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             'autoPageLoad':'true', // Check if its autoloading
                             'noTags':(this.static_ws[value.ws_key].noTags) ? this.static_ws[value.ws_key].noTags : ""
                         }
-                        
-                        if(this.ws_params.isactive){
+                    
+                        if(value.ws_key=="report_listings" && this.ws_params.isactive){
+                            this.app.showLoading("Loading...", $('body'))
+                            require(["highcharts"],_.bind(function(highcharts){  
+                                this.app.showLoading(false, $('body'))
+                                this.addWorkSpace(this.ws_params);
+                            },this));
+                        }
+                        else if(this.ws_params.isactive){
                             this.addWorkSpace(this.ws_params);
                         }else{
                             this.ws_params['tabsOnly'] = true;
