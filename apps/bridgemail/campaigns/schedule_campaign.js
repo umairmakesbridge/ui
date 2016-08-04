@@ -154,7 +154,8 @@ function (template,calendario) {
                     $wrapper = this.$( '#custom-inner' ),
                     $calendar = this.$( '#calendar' ),
                     cal = $calendar.calendario( {
-                    onDayClick : function( $el, $contentEl, dateProperties ) {                                
+                    onDayClick : function( $el, $contentEl, dateProperties ) { 
+                            
                             if($el.hasClass("fc-disabled")===false){
                                if(self.options.rescheduled){
                                    self.$('#calendar').find("div.sch-selected").removeClass("sch-selected"); 
@@ -223,105 +224,59 @@ function (template,calendario) {
                 scheduleCampNow: function(event){
                   if(!$(event.currentTarget).hasClass('disabled-btn') && !$(event.currentTarget).hasClass('send-confirm')){
                       this.sendNow = true;  
-                      this.getScheduleDate();   
+                     
+                      this.getScheduleDate(event); 
+                      this.scheduleCamp(event);
                   }
                   
                 },
-               scheduleCamp:function(){
-                   
+               scheduleCamp:function(event){
+                 
+                
                    this.app.showLoading("Confirmation Dialog...",this.$(".schedule-panel")); 
                    this.draftstate = false; 
                    var URL = '';
                    
-                    if(this.parent.model){ // Call From campaign listings
-                        if(this.parent.model.get('recipientType')=="Salesforce"){
-                           URL = "/pms/io/salesforce/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
-                       }else if(this.parent.model.get('recipientType')=="Netsuite"){
-                           URL = "/pms/io/netsuite/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
-                       }else if(this.parent.model.get('recipientType')=="Highrise"){
-                           URL = "/pms/io/highrise/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
-                       }else if(this.parent.model.get('recipientType')=="Google"){
-                           URL = "/pms/io/google/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
-                       }
-                       else {
-                           URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=recipientType";
-                       }
-                       this.getReciepientsEncodes(URL);
-                       
-                   }else{ // Call with in campagin
-                        var helpingText = '';
-                        
-                        this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap schedule-confirm-dialog-wrap modal-body"></div></div>');
-                        if(this.sendNow){
-                                this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px', 'margin-top': '-223px', 'max-height': '455px','height':'190px','width':'560px'});
-
-                        }else{
-                                this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px', 'margin-top': '-223px', 'max-height': '455px','height':'230px','width':'560px'}); 
-                        }
                    
-                        var recipients = this.parent.$el.find('.recipients-inner .recipient-details').html();
-                        var frecipients='';
-                        var contactCount = 0;
-                        if(this.parent.states.step3.recipientType=="List"){
+                   
+                    var currentServerDateHObj = moment(this.serverDate, ["YYYY-M-D H:m:s"]);
+                            var currentServerDateHFormat = currentServerDateHObj.format('YYYY-M-D H:m:s a');
+                            var currentServerDateH = moment(currentServerDateHFormat, 'YYYY-M-D H:m:s a');
+                            //console.log(this.currentState.datetime);
+                            var dayDate = this.currentState.datetime.day;
+                                if(parseInt(dayDate) <= 9){
+                                    dayDate = "0"+dayDate;
+                                }
+                            var month = this.currentState.datetime.month;
+                            if(parseInt(month) <= 9){
+                                    month = "0"+month;
+                                }
+                            var year = this.currentState.datetime.year;
+                            var caldate = year+'-'+month+'-'+dayDate;   
+                            var currentSelectedDateH = moment(caldate + " " +this.$('.timebox-hour').val()+":"+this.$('.timebox-min').val()+":00" + " " + this.$('.timebox-hours .active').text().toLowerCase(), 'YYYY-M-D H:m:s a');
+
                             
-                            $.each(this.parent.RecListsPage.listsModelArray,_.bind(function(key,val){
-                                contactCount = contactCount + parseInt(val.get("subscriberCount"));
-                            },this));
+                           var diffMins = currentSelectedDateH.diff(currentServerDateH, 'minutes') // 31
+                           //console.log(diffMins);
+
+                           if(diffMins < -30){
+                               this.app.showAlert('Danger ! Selected Date is Less than current','body');
+                               this.app.showLoading(false,this.$(".schedule-panel")); 
+                               return false;
+                           }
+                   
+                   var currentElement = $(event.currentTarget);
+                   if(!currentElement.hasClass('saving') && !currentElement.hasClass('lst-sch-btn-now')){
+                       currentElement.addClass('saving').css('background-position','115px center');
+                   }
+                    if(this.parent.model){ // Call From campaign listings
+                            this.SendNowConfirmDialogLst(currentElement)
                            
-                        }else if(this.parent.states.step3.recipientType=="Target"){
-                            $.each(this.parent.RecTargetPage.targetsModelArray,_.bind(function(key,val){
-                                contactCount = contactCount + parseInt(val.get("populationCount"));
-                            },this));
-                        }else if(this.parent.states.step3.recipientType=="Tags"){
-                            $.each($(this.parent.states.step3.tags.el).find('#tagsrecpslist li'),function(key,val){
-                                contactCount = contactCount + parseInt($(val).find('.badge').text());
-                            });
-                        }else if(this.parent.states.step3.recipientType=="Google"){
-                            var type = this.parent.$el.find('#google_import_container .radiopanelinput.checked input').val();
-                            if(type=="sheet"){
-                               recipients = this.parent.$el.find('#ddlspreadsheet_chosen .chosen-single span').text();
-                               helpingText = 'Spreadsheet';
-                            }else{
-                                recipients = 'All Contacts';
-                            }
-                            contactCount = "Selected";
-                        }
-                        else if(this.parent.states.step3.recipientType=="Salesforce" || this.parent.states.step3.recipientType=="Highrise" || this.parent.states.step3.recipientType=="Netsuite" ){
-                            if(this.parent.states.step3.recipientType=="Salesforce" && this.parent.$el.find('#sf_accordion .radiopanelinput.checked input').val()=="campaign"){helpingText = 'Campaign';}
-                            if(this.parent.states.step3.recipientType=="Netsuite" && this.parent.$el.find('#netsuite_setup .radiopanelinput.checked input').val()=="group"){helpingText = 'Campaign';}
-                            if(this.parent.states.step3.recipientType=="Highrise" && this.parent.$el.find('#highrise_import_container .radiopanelinput.checked input').val()=="tags"){helpingText = 'Tags';}
-                            contactCount = "Selected";
-                            recipients = this.parent.$el.find('.recipients-inner .recipient-details').find('label').html();
-                        }
-                        var dayDate = this.$el.parents('body').find('#calendar .fc-body .selected .fc-date').text();
-                        if(parseInt(dayDate) <= 9){
-                            dayDate = "0"+dayDate;
-                        }
-                        recipients = recipients.replace(/,\s*$/, "");
-                        $.each(recipients.split(','),_.bind(function(key,val){
-                            if(frecipients){
-                                          frecipients += "<li class='recepient_type'><i class='icon "+this.parent.states.step3.recipientType.toLowerCase()+"'></i>"+val+"</li>";
-                                      }else{
-                                          frecipients = "<li class='recepient_type'><i class='icon "+this.parent.states.step3.recipientType.toLowerCase()+"'></i>"+val+"</li>";
-                                      } 
-                        },this));
-                        if(this.sendNow){
-                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Campaign Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4><ul>'+frecipients+'</ul><div class="clearfix"></div><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>'; 
-                        }else{
-                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Schedule Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4>  <ul>'+frecipients+'</ul><div class="clearfix"></div><p class="note" style="padding-top: 0px; text-align: left; margin-top: 10px; margin-bottom: 5px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><p class="note" style="padding-top: 8px; text-align: left; float: left;">* The time is according to Pacific Standard Time  </p><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>';
-                        }
-                        this.$el.parents('body').find('.reschedule-dialog-wrap').html(appendHtml);
-                        this.$el.parents('body').find('.reschedule-dialog-wrap .fluidlabel label').css({'width':'34%','font-size':'12px'});
-                        this.app.showLoading(false,this.$(".schedule-panel")); 
-                        this.$el.parents('body').find('.reschedule-dialog-wrap').find('.closebtn,.btn-cancel').click(_.bind(function(){
-                            this.$el.parents('body').find('.sch-overlay').remove();
-                        },this));
-                        this.$el.parents('body').find('.reschedule-dialog-wrap').find('.btn-run').click(_.bind(function(event){
-                               
-                                this.scheduledCampaign('S',"Scheduling Campaign...");   
-                                this.$el.parents('body').find('.sch-overlay').remove();
-                        },this));
-                        
+                   }else{ // Call with in campagin
+                           
+                          
+                        this.sendNowConfimDialogCmp(currentElement);
+                       
                    }
                },
                /*
@@ -702,27 +657,35 @@ function (template,calendario) {
                   //recipients = recipients.replace(/,\s*$/, "");
                   this.$el.parents('body').find('.reschedule-dialog-wrap').addClass('schedule-confirm-dialog-wrap');
                   this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-top': '-223px', 'max-height': '455px','min-height':'210px'});
-                  var dayDate = this.$el.parents('body').find('#calendar .fc-body .selected .fc-date').text();
+                  var dayDate = this.currentState.datetime.day;
                         if(parseInt(dayDate) <= 9){
                             dayDate = "0"+dayDate;
                         }
                   if(this.sendNow){
                        this.$el.parents('body').find('.reschedule-dialog-wrap').css({'width':'560px','margin-left':'-280px'});
-                       var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Campaign Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><div class="clearfix"></div><div class="btns right" style="margin:10px 0"><a class="btn-green btn-run" ><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
+                       var currentServerDateHObj = moment(this.serverDate, ["YYYY-M-D H:m:s"]);
+                            var currentServerDateHFormat = currentServerDateHObj.format('YYYY-MM-DD HH:mm:ss A');
+                            
+                       var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Campaign Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><p style="float: left;" class="">On</p><span class="schdate-span"><i style="background-color: transparent ! important; height: 18px; width: 22px;" class="icon schedulesn left"></i>'+currentServerDateHFormat+' PST</span><div class="clearfix"></div><div class="btns right" style="margin:10px 0"><a class="btn-green btn-run" ><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
                       }else{
                        var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Schedule Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><hr><div class="clearfix"></div><p class="note" style="padding-top: 0px;text-align:left;margin-top:10px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><p style="padding-top: 8px; text-align: left; float: left;padding-right:5px;" class="note">* The time is according to Pacific Standard Time  </p><div class="btns right" style="margin:0 0 10px;"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
                       }
-                   
+                  this.$el.parents('body').find('.reschedule-dialog-wrap').find('.scheduled-campaign').removeClass('saving')
+                  this.$el.parents('body').find('.reschedule-dialog-wrap').find('.lst-sch-btn-nown').removeClass('saving')
+                  this.$el.parents('body').find('.reschedule-dialog-wrap').find('.scheduled-campaign').removeAttr('style')
+                  
                   this.$el.parents('body').find('.reschedule-dialog-wrap').append(appendHtml);
                   this.$el.find('btn-run').click(_.bind(function(){
-                        this.scheduledCampaign('S',"Scheduling Campaign...");   
+                        //this.scheduledCampaign('S',"Scheduling Campaign...");   
+                         this.getScheduleDate('',true)
                         this.$el.find('#schedule-panel-1').show();
                         this.$el.find('#schedule-panel-2').remove();
                   },this));
                   this.$el.parents('body').find('.reschedule-dialog-wrap .btn-run').click(_.bind(function(){
                       
                       this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-top': '-223px', 'max-height': '455px','min-height':'455px'});
-                        this.scheduledCampaign('S',"Scheduling Campaign...");   
+                        //this.scheduledCampaign('S',"Scheduling Campaign...");   
+                        this.getScheduleDate('',true)
                         this.$el.parents('body').find('.reschedule-dialog-wrap #schedule-panel-1').show();
                         this.$el.parents('body').find('.reschedule-dialog-wrap #schedule-panel-2').remove();
                         if(this.sendNow){
@@ -745,14 +708,16 @@ function (template,calendario) {
                * 
                * Schedule Date 
                */
-              getScheduleDate:function(){
+              getScheduleDate:function(event,isSave){
                   var url = "/pms/io/getMetaData/?type=time&BMS_REQ_TK="+this.app.get('bms_token');
                   $.post(url)
                     .done(_.bind(function(data) {                              
                        var data = jQuery.parseJSON(data);
                        
                         this.snServerDate = this.app.decodeHTML(data[0]);
-                        this.scheduleCamp();
+                        if(isSave){
+                            this.scheduledCampaign('S',"Scheduling Campaign...");   
+                        }
                         
                    },this));
               },
@@ -767,20 +732,58 @@ function (template,calendario) {
                    var time =  _hour+":"+_min+":00";                  
                    var camp_obj = this;
                    var parent_obj = this.parent;
+                   var _ampm = $('.timebox-hours').find('.active').text().toLowerCase();
+                   var serverDate = this.snServerDate.split(' ')[0];
+                   //console.log(serverDate)
                    
+                    if(_date && !this.sendNow){
+                        /*var currentServerDate = serverDate.split('-');
+                        var currentSelectedDate = _date.split('-');
+                        var dateForServer = new Date();
+                        currentServerDate = dateForServer.setFullYear(currentServerDate[0],(currentServerDate[1] - 1 ),currentServerDate[2]);
+                        currentSelectedDate = dateForServer.setFullYear(currentSelectedDate[0],(currentSelectedDate[1] - 1 ),currentSelectedDate[2]);
+                        */
+                        
+                        var currentServerDateHObj = moment(this.snServerDate, ["YYYY-M-D H:m:s"]);
+                        var currentServerDateHFormat = currentServerDateHObj.format('YYYY-M-D H:m:s a');
+                        var currentServerDateH = moment(currentServerDateHFormat, 'YYYY-M-D H:m:s a');
+                        var currentSelectedDateH = moment(_date + " " +_time+":"+_min+":00" + " " + _ampm, 'YYYY-M-D H:m:s a');
+                        
+                        //console.log(currentServerDateH,currentSelectedDateH);
+                       var diffMins = currentSelectedDateH.diff(currentServerDateH, 'minutes') // 31
+                       console.log(diffMins);
+                       
+                       if(diffMins < -30){
+                           this.app.showAlert('Danger ! Selected Date is Less than current','body');
+                           return false;
+                       }
+                       
+                       /*if(currentSelectedDate > currentServerDate){
+                            console.log('Ok Selected Date is Greater than Server');
+                        }else if(currentSelectedDate == currentServerDate){
+                            console.log('Ok Selected Date is Equal than Server');
+                        }else{
+                            alert('Danger ! Selected Date is Less than Server');
+                        }*/
+                        
+                        
+                    }
+                   //return false;
+                  
                    var post_data = {"campNum": this.campNum,
                                     "type":"saveStep4",
                                     "status":flag                                    
                                     }
                    if(flag=='S'){
                        post_data["scheduleType"] = "scheduled";
-                       if(this.snServerDate){
+                       if(this.snServerDate && this.sendNow){
                            post_data["scheduleDate"] =this.snServerDate;
                        }else{
                            post_data["scheduleDate"] =_date+" "+time;   
                        }
                                                         
-                   }                 
+                   } 
+                   
                    var _message = message?message:'Changing mode...';
                    this.app.showLoading(_message,this.$el.parents(".ws-content"));  
                    $.post(URL,post_data)
@@ -820,7 +823,6 @@ function (template,calendario) {
                             camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
                         }                        
                    });
-                   camp_obj.refreshList();
                    //var campaign_listing = $(".ws-tabs li[workspace_id='campaigns']");
                    
                },
@@ -1025,6 +1027,110 @@ function (template,calendario) {
               closeDialog : function(){
                   this.$el.parents('body').find('.reschedule-dialog-wrap').parent().remove();
                   //this.$el.parents('body').find('.sch-overlay').remove();
+              },
+              /*
+               * Schedule Dialog from Campaign Listings
+               * 
+               */
+              SendNowConfirmDialogLst : function(){
+                    var URL = '';
+                    if(this.parent.model.get('recipientType')=="Salesforce"){
+                           URL = "/pms/io/salesforce/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
+                   }else if(this.parent.model.get('recipientType')=="Netsuite"){
+                           URL = "/pms/io/netsuite/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
+                       }else if(this.parent.model.get('recipientType')=="Highrise"){
+                           URL = "/pms/io/highrise/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
+                       }else if(this.parent.model.get('recipientType')=="Google"){
+                           URL = "/pms/io/google/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=import";
+                       }
+                       else {
+                           URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.parent.model.get("campNum.encode")  + "&type=recipientType";
+                       }
+                       this.getReciepientsEncodes(URL);
+              },
+              /*
+               * Schedule Dialog from Campaign Wizard
+               */
+              sendNowConfimDialogCmp:function(element){
+                   var helpingText = '';
+                        
+                        this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap schedule-confirm-dialog-wrap modal-body"></div></div>');
+                        if(this.sendNow){
+                                this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px', 'margin-top': '-223px', 'max-height': '455px','height':'190px','width':'560px'});
+
+                        }else{
+                                this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px', 'margin-top': '-223px', 'max-height': '455px','height':'230px','width':'560px'}); 
+                        }
+                   
+                        var recipients = this.parent.$el.find('.recipients-inner .recipient-details').html();
+                        var frecipients='';
+                        var contactCount = 0;
+                        if(this.parent.states.step3.recipientType=="List"){
+                            
+                            $.each(this.parent.RecListsPage.listsModelArray,_.bind(function(key,val){
+                                contactCount = contactCount + parseInt(val.get("subscriberCount"));
+                            },this));
+                           
+                        }else if(this.parent.states.step3.recipientType=="Target"){
+                            $.each(this.parent.RecTargetPage.targetsModelArray,_.bind(function(key,val){
+                                contactCount = contactCount + parseInt(val.get("populationCount"));
+                            },this));
+                        }else if(this.parent.states.step3.recipientType=="Tags"){
+                            $.each($(this.parent.states.step3.tags.el).find('#tagsrecpslist li'),function(key,val){
+                                contactCount = contactCount + parseInt($(val).find('.badge').text());
+                            });
+                        }else if(this.parent.states.step3.recipientType=="Google"){
+                            var type = this.parent.$el.find('#google_import_container .radiopanelinput.checked input').val();
+                            if(type=="sheet"){
+                               recipients = this.parent.$el.find('#ddlspreadsheet_chosen .chosen-single span').text();
+                               helpingText = 'Spreadsheet';
+                            }else{
+                                recipients = 'All Contacts';
+                            }
+                            contactCount = "Selected";
+                        }
+                        else if(this.parent.states.step3.recipientType=="Salesforce" || this.parent.states.step3.recipientType=="Highrise" || this.parent.states.step3.recipientType=="Netsuite" ){
+                            if(this.parent.states.step3.recipientType=="Salesforce" && this.parent.$el.find('#sf_accordion .radiopanelinput.checked input').val()=="campaign"){helpingText = 'Campaign';}
+                            if(this.parent.states.step3.recipientType=="Netsuite" && this.parent.$el.find('#netsuite_setup .radiopanelinput.checked input').val()=="group"){helpingText = 'Campaign';}
+                            if(this.parent.states.step3.recipientType=="Highrise" && this.parent.$el.find('#highrise_import_container .radiopanelinput.checked input').val()=="tags"){helpingText = 'Tags';}
+                            contactCount = "Selected";
+                            recipients = this.parent.$el.find('.recipients-inner .recipient-details').find('label').html();
+                        }
+                        var dayDate = this.currentState.datetime.day;
+                        if(parseInt(dayDate) <= 9){
+                            dayDate = "0"+dayDate;
+                        }
+                        recipients = recipients.replace(/,\s*$/, "");
+                        $.each(recipients.split(','),_.bind(function(key,val){
+                            if(frecipients){
+                                          frecipients += "<li class='recepient_type'><i class='icon "+this.parent.states.step3.recipientType.toLowerCase()+"'></i>"+val+"</li>";
+                                      }else{
+                                          frecipients = "<li class='recepient_type'><i class='icon "+this.parent.states.step3.recipientType.toLowerCase()+"'></i>"+val+"</li>";
+                                      } 
+                        },this));
+                        if(this.sendNow){
+                            var currentServerDateHObj = moment(this.serverDate, ["YYYY-M-D H:m:s"]);
+                            var currentServerDateHFormat = currentServerDateHObj.format('YYYY-MM-DD hh:mm:ss A');
+                            
+                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Campaign Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4><ul>'+frecipients+'</ul><p style="float: left;" class="">On</p><span class="schdate-span"><i style="background-color: transparent ! important; height: 18px; width: 22px;" class="icon schedulesn left"></i>'+currentServerDateHFormat+' PST</span><div class="clearfix"></div><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>'; 
+                        }else{
+                         
+                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Schedule Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4>  <ul>'+frecipients+'</ul><div class="clearfix"></div><p class="note" style="padding-top: 0px; text-align: left; margin-top: 10px; margin-bottom: 5px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><p class="note" style="padding-top: 8px; text-align: left; float: left;">* The time is according to Pacific Standard Time  </p><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>';
+                        }
+                        
+                        this.$el.parents('body').find('.reschedule-dialog-wrap').html(appendHtml);
+                       
+                        element.removeClass('saving');
+                        //element.removeAttr('style');
+                        this.$el.parents('body').find('.reschedule-dialog-wrap .fluidlabel label').css({'width':'34%','font-size':'12px'});
+                        this.app.showLoading(false,this.$(".schedule-panel")); 
+                        this.$el.parents('body').find('.reschedule-dialog-wrap').find('.closebtn,.btn-cancel').click(_.bind(function(){
+                            this.$el.parents('body').find('.sch-overlay').remove();
+                        },this));
+                        this.$el.parents('body').find('.reschedule-dialog-wrap').find('.btn-run').click(_.bind(function(event){
+                                this.getScheduleDate('',true); // Send Request Call
+                                this.$el.parents('body').find('.sch-overlay').remove();
+                        },this));
               }
               
         });

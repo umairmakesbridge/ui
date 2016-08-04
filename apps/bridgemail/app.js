@@ -252,7 +252,7 @@ define([
                 if (this.mainContainer) {
                     this.showFeatures();
                     if(!this.get("tipId") && !this.get("workId") && !this.get("newWin") && !this.get("subNum")){
-                        this.getPageSettings();
+                        //this.getPageSettings();
                     }
                     
                 } else {
