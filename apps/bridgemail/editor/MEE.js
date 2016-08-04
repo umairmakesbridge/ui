@@ -203,11 +203,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.$el.html(this.my_template({allowedUser: ['admin', 'jayadams', 'demo'], options: options}));
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;
-                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                          
+                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                                                                      
                                             if(options.landingPage){
                                                  mee.getActionScript();
-                                            }
-                                           
+                                            }                                   
+                                                                                                                        
                                         })
                                         
                                     }
@@ -340,6 +340,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if($(meeIframeWindow).height()<$(meeIframeWindow.document).height()){
                                         this.resizeHeight();
                                     }
+                                    
                                 }
                                 mee.IntializeToolTip = function(){
                                     
@@ -389,7 +390,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         contentObj.html(replaceObj.outerHTML());
                                         var mainObj = meeIframe.find(".mainTable");
                                         mainObj.find("div.textcontent").css('visibility', 'visible');
-                                        oInitDestroyEvents.InitAll(mainObj, true);
+                                        oInitDestroyEvents.InitDCContents(mainObj);
+                                        oInitDestroyEvents.InitAll(mainObj, true);                                        
                                         undoredo = true;
                                         if (myElement.find(".style-tab").hasClass("active")) {
                                             InitializeElementsForStyle(true);
@@ -400,7 +402,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             if (editorfocused.length) {
                                                 meeIframeWindow.tinymce.get(editorfocused.attr("id")).focus();
                                             }
+                                            
                                         }
+                                        
                                          mee.resizeHeight();
                                     }
                                 });
@@ -412,9 +416,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if (replaceObj != null) {
                                         var contentObj = meeIframe.find("body");
                                         contentObj.html(replaceObj.outerHTML());
-                                        var mainObj = meeIframe.find(".mainTable");
+                                        var mainObj = meeIframe.find(".mainTable");                                        
                                         mainObj.find("div.textcontent").css('visibility', 'visible');
-                                        oInitDestroyEvents.InitAll(mainObj, true);
+                                        oInitDestroyEvents.InitDCContents(mainObj);
+                                        oInitDestroyEvents.InitAll(mainObj, true);                                        
                                         undoredo = true;
                                         if (myElement.find(".style-tab").hasClass("active")) {
                                             InitializeElementsForStyle(true);
@@ -425,7 +430,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             if (editorfocused.length) {
                                                 meeIframeWindow.tinymce.get(editorfocused.attr("id")).focus();
                                             }
+                                            
                                         }
+                                        
                                          mee.resizeHeight();
 
                                     }
@@ -2331,7 +2338,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     emailWidth = "500px";
                                                 }
                                                 //undoManager.registerAction(mainContentHtmlGrand.html());
-                                                makeCloneAndRegister();
+                                                    makeCloneAndRegister();
                                             });
 
                                             myElement.find(".txtContainerSize").keyup(function (e) {
@@ -2816,26 +2823,68 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         oInitDestroyEvents.DestroyPluginsEvents(myParent);
                                         var duplicateElement = myParent.clone();
-                                        oInitDestroyEvents.InitAll(myParent, false);
+                                         oInitDestroyEvents.InitAll(myParent, false);
+                                        if(myParent.find(".dynamicContentContainer").length==0){                                            
+                                           
 
+                                            var oControl = new Object();
+                                            oControl.Html = duplicateElement;
+                                            oControl.Type = "copied";
 
-                                        var oControl = new Object();
-                                        oControl.Html = duplicateElement;
-                                        oControl.Type = "copied";
+                                            var args = {};
 
-                                        var args = {};
+                                            args.predefinedControl = oControl;
+                                            args.droppedElement = oControl.Html;
 
-                                        args.predefinedControl = oControl;
-                                        args.droppedElement = oControl.Html;
+                                            oInitDestroyEvents.InitAll(oControl.Html, false);
 
-                                        oInitDestroyEvents.InitAll(oControl.Html, false);
+                                            droppable.before(args.droppedElement);
 
-                                        droppable.before(args.droppedElement);
+                                            myElement.find(".topHandlers").remove();
+                                            RemoveDroppables(myElement, true); 
 
-                                        myElement.find(".topHandlers").remove();
-                                        RemoveDroppables(myElement, true);
-
-                                        OnNewElementDropped(args);
+                                            OnNewElementDropped(args);
+                                        }
+                                        else{
+                                            
+                                            //Dynamic Blocks Copy Handling. 
+                                            
+                                            var dcTable = duplicateElement.find("table.dynamicContentContainer");
+                                            var dcName = dcTable.find("h5.dcName span").text();
+                                            var dcTableHeight = 270;
+                                            var dcId = dcTable.attr("id");
+                                            dcTable.children().remove(); //Remove All Contents
+                                            dcTable.append("<tr><td><div style='height: "+dcTableHeight+"px;' class='overlay'><p>Creating Copy...</p></div></td></tr>");
+                                            dcTable.css("height",dcTableHeight+"px");
+                                            oInitDestroyEvents.InitAll(duplicateElement, false);
+                                            droppable.before(duplicateElement);
+                                            myElement.find(".topHandlers").remove();
+                                            var _date = new Date();
+                                            var rTimeStamp = Date.UTC(_date.getFullYear(),_date.getMonth(),_date.getDate(),_date.getHours(),_date.getMinutes(),_date.getSeconds(),_date.getMilliseconds())
+                                            $.ajax({
+                                               url: "/pms/io/publish/saveDynamicVariation/?"+ options._BMSTOKEN,
+                                               data: {"type":"clone","label":dcName.split("|")[0]+"| "+rTimeStamp,"dynamicNumber":dcId},
+                                               type: 'POST',
+                                               success: function (data, textStatus, jqXHR) {                                           
+                                                    var result = jQuery.parseJSON(data);
+                                                    if (result[0]=="success") {
+                                                        dcTable.attr("id",result[1]);
+                                                        dcTable.attr("keyword",result[3]);
+                                                        oInitDestroyEvents.InitOneDCContent(meeIframe.find("table#"+result[1]));
+                                                        if(myElement.find(".dynamicblock-accordian[data-firstloaded='true']").length){
+                                                            _LoadDynamicBlocks();
+                                                        }
+                                                    } 
+                                                    else{
+                                                        duplicateElement.remove();
+                                                        options._app.showAlert(result[1], $("body"));
+                                                    }
+                                               }
+                                           });
+                                             
+                                            
+                                            RemoveDroppables(myElement, true);
+                                        }
 
                                         makeCloneAndRegister();
                                     });
@@ -2941,7 +2990,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if (type == "info") {
                                         var li = "<a class='closebtn'></a>";
                                         li += "<h4>" + imageObj.fileName + "</h4>";
-                                        li += "<h5><em>Size: </em>" + imageObj.height + " x " + imageObj.width + "</h5>";
+                                        li += "<h5><em>Size: </em>" + imageObj.width + " x " + imageObj.height + "</h5>";
                                         li += "<h5><em>Created on: </em>" + imageObj.updationDate + "</h5>";
                                         myElement.find(".info-windowDiv").html(li);
                                         myElement.find(".info-windowDiv").css({
@@ -4154,86 +4203,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                     
                                 }
-                               /* myElement.find("#HTML5FileUploader").on("dragenter", function (e) {
-                                    e.stopPropagation();
-                                    e.preventDefault();                                    
-                                });
-
-                                myElement.find("#HTML5FileUploader").on("dragover", function (e) {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                });
-
-                                myElement.find("#HTML5FileUploader").on("dragleave", function (e) {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                });
-
-                                myElement.find("#HTML5FileUploader").on("drop", function (e) {                                    
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    var files = e.originalEvent.dataTransfer.files;                                    
-                                    handleFileUpload(files);                                    
-                                });
-
-                                var handleFileUpload = function (files) {
-                                    for (var i = 0; i < files.length; i++) {
-                                        if (validateIfImage(files[i])) {
-                                            var fd = new FormData();
-                                            fd.append('fileName', files[i]);
-                                            this.name = files[i];
-                                            sendFileToServer(fd);
-                                        }
-                                    }
-                                }
-
-                                var validateIfImage = function (file) {
-                                    var isImage = true;
-                                    if (file.type.indexOf("image") < 0) {
-                                        //this.app.showAlert("Please select a image with extension jpeg,jpg,png or gif.",$("body"),{fixed:true})
-                                        isImage = false
-                                    }
-                                    return isImage;
-                                }
-
-
-                                var sendFileToServer = function (formData) {
-                                    var uploadURL = myElement.find("#form1").attr("action");                                    
-                                    var _this = this;
-                                    var data_id = 0;
-                                    var jqXHR = $.ajax({
-                                        xhr: function () {
-                                            var xhrobj = $.ajaxSettings.xhr();
-                                            if (xhrobj.upload) {
-                                                xhrobj.upload.addEventListener('progress', function (event) {
-                                                    var percent = 0;
-                                                    var position = event.loaded || event.position;
-                                                    var total = event.total;
-                                                    if (event.lengthComputable) {
-                                                        percent = Math.ceil(position / total * 100);
-                                                    }
-                                                }, false);
-                                            }
-                                            return xhrobj;
-                                        },
-                                        url: uploadURL,
-                                        type: "POST",
-                                        contentType: false,
-                                        processData: false,
-                                        cache: false,
-                                        async: false,
-                                        data: formData,
-                                        success: function (data) {
-                                            options._app.showMessge("Image has been successfully uploaded.", $("body"));
-                                            LoadImagesInLibrary();
-                                        }
-                                        ,
-                                        error: function () {
-                                            options._app.showAlert("Faild uploading image...", $("body"));
-                                        }
-                                    });
-
-                                }*/
+                               
 
 //**************************************************************End Images Library***********************************************************************************///
 
@@ -4321,7 +4291,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         var ContentLi = $(myElement.find(".dcLI").html());
                                                         ContentLi.find("span:first").html(variation.Label);
                                                         ContentLi.data("content", variation);
-                                                        ContentLi.attr("id", variation.DynamicContentID)
+                                                        ContentLi.attr("id", variation.DynamicContentID);
+                                                        ContentLi.attr("id", variation.DynamicContentID);
                                                         var _html = $('<div/>').html(variation.InternalContents).text();
                                                         ContentLi.data("dcInternalData", $(reConstructCode("<div>" + _html + "</div>").html()));
                                                         if (firstBlock === false) {
@@ -4340,6 +4311,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     }
 
                                                 });
+                                                /*var activeContentDC = args.activeLi;
+                                                if(activeContentDC){
+                                                   var tableid = args.predefinedControl.Html.attr("id");                                                   
+                                                   meeIframe.find("#"+tableid+" ul.dcContents li").eq(parseInt(activeContentDC)).click();                                                    
+                                                   args.activeLi = null;
+                                                }*/
                                             }
 
                                         }
@@ -4561,7 +4538,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             event.stopPropagation();
                                             args.clickedLi = $(this);
                                             args.IsUpdate = false;
-
+                                            //makeCloneAndRegister();
                                             var dcClickedContainer = args.clickedLi.parents(".dynamicContentContainer:first");
                                             var dcInternal = dcClickedContainer.find(".dcInternalContents:first");
 
@@ -4573,14 +4550,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 if (options.OnDynamicContentSwap != null) {
                                                     args.DynamicContent = previuosActivate.data("content");
                                                     args.DynamicContent.InternalContents = CleanCode($("<div>" + previuosActivate.data("dcInternalData") + "</div>")).html();
-
                                                     options.OnDynamicContentSwap(args);
                                                 }
                                             }
-
-
-
-
 
                                             //Set this element data
                                             if (args.clickedLi.data("dcInternalData") != null) {
@@ -4595,6 +4567,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                             args.clickedLi.siblings().removeClass("active");
                                             args.clickedLi.addClass("active");
+                                            
+                                            var selectedActive = dcClickedContainer.find("li.active").index();
+                                            dcClickedContainer.attr("data-activeli",selectedActive);
 
                                         }));
 
@@ -5853,6 +5828,40 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var activeTab = myElement.find("#tabs").tabs("option", "active");                                               
                                         }
                                     }
+                                    
+                                    this.InitDCContents = function (oHtml){
+                                        var self = this;
+                                        oHtml.find(".dynamicContentContainer").each(function (index, object) {
+                                            self.InitOneDCContent(object);
+                                        });                                                              
+                                    }
+                                    
+                                    this.InitOneDCContent = function (object){
+                                        var variation = $(object);
+                                        var activeLi = variation.attr("data-activeli");
+                                        var variation_ID = variation.attr("id");
+                                        var keyword = variation.attr("keyword");                                         
+                                        var oControl = new Object();
+                                        var args = {
+                                            droppedElement: $(object),                                                
+                                            predefinedControl: null,
+                                            buildingBlock: null
+                                        };
+                                        var predefinedControl = myElement.find(".divDCTemplate").html();                                            
+                                        oControl.Html = $(predefinedControl);
+                                        oControl.Type = predefinedControl.type;
+                                        args.predefinedControl = oControl;
+
+                                        args.droppedElement.html(oControl.Html);
+                                        args.activeLi = activeLi;
+
+                                        args.ID = keyword;
+                                        args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
+                                        InitializeDynamicControl(args);         
+                                        variation.replaceWith(args.predefinedControl.Html.clone(true, true));                                                                       
+                                                                                
+                                        oInitDestroyEvents.InitAll(meeIframe.find("#"+variation_ID+" .dcInternalContents"),true);
+                                    }
 
                                 }
 
@@ -5881,6 +5890,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 //Elements Dropping
                                 function InitializeWithDropable(sender) {
+                                                                        
+                                    
                                     sender.on('dragover', function (event) {
                                         event.preventDefault();
                                         if ($(this).html() == "") {
@@ -6433,7 +6444,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                 function InitializeMainDraggableControls(elementToApply) {
-
+                                   
+                                    
                                     $(elementToApply).on('dragstart', function (event) {
                                         event.originalEvent.dataTransfer.setData("text", "dragging");
                                         /*--Hide tooltop--*/

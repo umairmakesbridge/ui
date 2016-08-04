@@ -11410,77 +11410,213 @@ right: 66px;
     border:1px dashed #b4cbdc;
     border-radius: 2px;
     clear:both;
-    height: 20px;
+    height: 48px;
     padding: 5px;
     position: relative;
     margin: -10px 5px 10px 0;        
 }
 
-.report-placeholder .add-report {
- position:absolute; left:-2px; top:-7px; background:#fff; border:0; margin:0;
- z-index:99;
- width:auto;
- display: none;
--webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);
--moz-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);
-	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);   
--webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;    
+    .mdl-button--fab_flinger-container {
+        position: absolute;
+        top: 3px;
+        left:3px;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options > button i {
+    -webkit-transition: -webkit-transform 0.1s linear;
+            transition: transform 0.1s linear;
+    -webkit-transform: translate(0px, 0px) rotate(45deg);
+        -ms-transform: translate(0px, 0px) rotate(45deg);
+            transform: translate(0px, 0px) rotate(45deg);
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: row;
+        -ms-flex-direction:row;
+            flex-direction: row;
+    top:-4px;   
+    left:55px;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button {
+    display: block;
+    -webkit-animation-name: enter;
+            animation-name: enter;
+    -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+    -webkit-animation-duration: 0.1s;
+            animation-duration: 0.1s;
+    -webkit-transform-origin: bottom center;
+        -ms-transform-origin: bottom center;
+            transform-origin: bottom center;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(1) {
+    -webkit-animation-delay: 0.01s;
+            animation-delay: 0.01s;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(2) {
+    -webkit-animation-delay: 0.02s;
+            animation-delay: 0.02s;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(3) {
+    -webkit-animation-delay: 0.03s;
+            animation-delay: 0.03s;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(4) {
+    -webkit-animation-delay: 0.04s;
+            animation-delay: 0.04s;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(5) {
+    -webkit-animation-delay: 0.05s;
+            animation-delay: 0.05s;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(6) {
+    -webkit-animation-delay: 0.06s;
+            animation-delay: 0.06s;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(7) {
+    -webkit-animation-delay: 0.07s;
+            animation-delay: 0.07s;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(8) {
+    -webkit-animation-delay: 0.08s;
+            animation-delay: 0.08s;
+    }
+    .mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(9) {
+    -webkit-animation-delay: 0.09s;
+            animation-delay: 0.09s;
+    }
+    .mdl-button--fab_flinger-container .mdl-button--fab_flinger-options {
+    position: absolute;
+    bottom: 100%;
+    margin-bottom: 10px;
+    }
+    .mdl-button--fab_flinger-container .mdl-button--fab_flinger-options button {
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);
+            transform: scale(0);
+    display: none;
+    }
+    @-webkit-keyframes enter {
+    from {
+      -webkit-transform: scale(0);
+              transform: scale(0);
+    }
+    to {
+      -webkit-transform: scale(0.8);
+              transform: scale(0.8);
+    }
+    }
+    @keyframes enter {
+    from {
+      -webkit-transform: scale(0);
+              transform: scale(0);
+    }
+    to {
+      -webkit-transform: scale(0.8);
+              transform: scale(0.8);
+    }
+    }
 
-}
-
-.report-placeholder .add-report ul {
-    background: none repeat scroll 0 0 #FFFFFF;
+    .mdl-button {
+    background: 0 0;
+    border: none;
     border-radius: 2px;
-    float: left;
-    height: 35px;    
-    padding: 5px;
-    width: 100%;
-}
-.report-placeholder .add-report ul li {
-    border-left: 0 none;
-    float: left;
-    margin-left:5px;    
-}
-.report-placeholder .add-report ul li i{    
-    float: right;
-    height: 35px;
-    margin: 0 !important;
-    width: 35px;
-}
-.report-placeholder .add-report ul li:first-child {
-    margin-left:0;
-}
-.report-placeholder:hover .add-report{
-   display:block;
-}
-.ac-campaign{
-    background-position: 3px -128px;
-}
-.ac-lpage{
-    background-position: -148px -128px;
-}
-.ac-webform{
-    background-position: -118px -127px;
-}
-.ac-tag{
-    background-position: -27px -128px;
-}
-.ac-autobot{
-    background-position: -57px -128px;
-}
-.ac-workflow{
-    background-position: -417px -128px;
-}
-.ac-list{    
-    background-position: -386px -128px;
-}
-.ac-funnel{
-    background-position: -206px -126px;
-}
-.ac-webstat{
-    background-position: -177px -128px;
-}
-.md-button{z-index:20;line-height:40px;min-width:0;width:40px;height:40px;vertical-align:middle;box-shadow:0 2px 5px 0 rgba(0,0,0,.26);border-radius:50%;background-clip:padding-box;overflow:hidden;transition:all .3s cubic-bezier(.55,0,.55,.2);transition-property:background-color,box-shadow,-webkit-transform;transition-property:background-color,box-shadow,transform}
+    color: #000;
+    display: block;
+    position: relative;
+    height: 36px;
+    min-width: 64px;
+    padding: 0 8px;
+    display: inline-block;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    overflow: hidden;
+    will-change: box-shadow, transform;
+    -webkit-transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+    transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    line-height: 36px;
+    vertical-align: middle
+    }    
+    .mdl-button--fab.mdl-button--colored {
+    background: #94cf1e;
+    color: rgb(255, 255, 255)
+    }
+    .mdl-button--fab.mdl-button--colored:hover {
+    background-color: #94cf1e;
+    }
+    .mdl-button--fab.mdl-button--colored:focus:not(:active) {
+    background-color: #94cf1e;
+    }
+    .mdl-button--fab.mdl-button--colored:active {
+    background-color: #94cf1e;
+    }
+    .mdl-button--fab {
+    border-radius: 50%;
+    font-size: 24px;
+    height: 50px;
+    margin: auto;
+    min-width: 50px;
+    width: 50px;
+    padding: 0;
+    overflow: hidden;
+    background: rgba(158, 158, 158, .2);
+    box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, .12), 0 1px 1px 0 rgba(0, 0, 0, .24);
+    position: relative;
+    line-height: normal
+    }
+    .add-icon{
+    background: url("../img/plusicon.png") no-repeat scroll center center transparent;  
+    width:30px;
+    height:30px;
+    position: absolute;
+    top:10px;
+    left:10px;
+    border-radius: 50%;
+    }
+
+    .rpt-icons {
+    background: rgba(0, 0, 0, 0) url("../images/reports-icons-1.png") no-repeat scroll 0 0;
+    float:left;
+    width:30px;
+    height:30px;
+    margin:5px 0 0 7px;
+    }
+    .ac-campaign{
+    background-position: 3px -102px;
+    }
+    .ac-lpage{
+    background-position: -148px -102px;
+    }
+    .ac-webform{
+    background-position: -119px -102px;
+    margin-left: 10px;
+    }
+    .ac-tag{
+    background-position: -27px -102px;
+    }
+    .ac-autobot{
+    background-position: -57px -102px;
+    }
+    .ac-workflow{
+    background-position: -416px -102px;
+    }
+    .ac-list{    
+    background-position: -386px -102px;
+    }
+    .ac-funnel{
+    background-position: -206px -100px;
+    }
+    .ac-webstat{
+    background-position: -176px -102px;
+    }

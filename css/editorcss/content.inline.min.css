@@ -1550,6 +1550,23 @@ ul.linkresults li:hover { background:#dcf3fe; }
 	z-index: 9999;
 }
 
+.overlay p {
+    background: url("../../img/loading.gif") no-repeat scroll center top transparent;
+    font-weight: bold;
+    height: 20px;
+    font-family: 'PT Sans', sans-serif;
+    font-size:11px;
+    left: 50%;
+    margin: -45px 0 0 -50px;
+    padding: 60px 0 0;
+    position: absolute;
+    text-align: center;
+    color:#fff;
+    top: 40%;
+    width: 100px;
+}
+
+
 .csHaveData .overlay { position:absolute;  background: none repeat scroll 0 0 rgba(47, 63, 74, 0.5);}
 .csHaveData .overlay .image-info {
     box-shadow: none;
@@ -1936,10 +1953,10 @@ div.textcontent ol{
 .dcRulesDialog .btn-group + .btn-group{
     margin-left: 0px;
 }
-.mainContentHtmlGrand > .sortable > li.csDynamicData.hover .block_controls {    
-    padding-right:75px;
+.csDynamicData.hover .block_controls {    
+    padding-right:101px;
 }
-.mainContentHtmlGrand > .sortable > li.csDynamicData td.tab-header{
+.csDynamicData td.tab-header{
     background: #e9eff3;
     position: relative;
     padding-bottom: 0px;

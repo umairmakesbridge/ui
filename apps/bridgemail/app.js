@@ -1,5 +1,5 @@
 define([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment','jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker'
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment','jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker','highcharts'
 ], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog, moment) {
     'use strict';
     var App = Backbone.Model.extend({        

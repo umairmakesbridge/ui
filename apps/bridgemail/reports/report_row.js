@@ -23,7 +23,7 @@
                     this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'rpt-campaign', iconClass: 'rpblue-campagin'},
                         landingpages: {label: 'Landing Pages', colorClass: 'rpt-landingpages', iconClass: 'rpblue-lp'},
                         nurturetracks: {label: 'Nurture Tracks', colorClass: 'rpt-nt', iconClass: 'rpblue-nt'},
-                        autobots: {label: 'Autobots', colorClass: '.rpt-autobots', iconClass: 'rpblue-autobots'},
+                        autobots: {label: 'Autobots', colorClass: 'rpt-autobots', iconClass: 'rpblue-autobots'},
                         tags: {label: 'Tags', colorClass: 'rpt-tag', iconClass: 'rpblue-tag'},
                         webforms: {label: 'Signup Forms', colorClass: 'rpt-webforms', iconClass: 'rpblue-webforms'},
                         targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'},

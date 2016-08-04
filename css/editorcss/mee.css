@@ -2629,6 +2629,9 @@ a,
 .editorbar i.icon.redo  { background-position:-180px 0;  }
 .MEE_EDITOR .icon.preview  {background: url("../images/meeicons.png") no-repeat  -60px 0; }
 .MEE_EDITOR .icon.code  {background: url("../images/myhtml-18.png") no-repeat  6px 6px; }
+.editorbar i.icon.doing{
+    background:url(../img/greenloader.gif) no-repeat center center transparent;
+}
 .header-icon .code {
     background: url("../images/myhtml-18.png") no-repeat  6px 6px;
     height: 33px;

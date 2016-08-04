@@ -6,7 +6,7 @@ define(['text!reports/html/reportflow.html','reports/report_row','reports/report
                 className:'content-inner',
                 events: {                    
                      'click .addbar li':'addReport',
-                     'click .add-report li':'addReport',
+                     'click .add-report button':'addReport',
                      'click .help-video':'showVideo'
                 },
                 initialize: function () {
@@ -29,7 +29,7 @@ define(['text!reports/html/reportflow.html','reports/report_row','reports/report
                 {                     
                   this.$el.html(this.template({}));                    
                   this.checkBridgeStats();
-                  this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                  this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});                  
                 },
                 init: function () {
                     this.current_ws = this.$el.parents(".ws-content"); 
@@ -62,7 +62,18 @@ define(['text!reports/html/reportflow.html','reports/report_row','reports/report
                     this.getSettings();
                 },
                 addReport:function(event,obj,loadReport){
-                    var rType = typeof(event)=="object"?$.getObj(event, "li").attr("data-type"):event;
+                    var rType ="";
+                    if(typeof(event)=="object"){
+                        if(event.target.tagName=="I" || event.target.tagName=="BUTTON"){
+                            rType = $.getObj(event, "button").attr("data-type");
+                        }
+                        else{
+                            rType = $.getObj(event, "li").attr("data-type");
+                        }
+                    }
+                    else{
+                        rType = event;
+                    }                    
                     var objects = (obj) ? obj[obj.type]:null;
                     var row_view = new reportRow({reportType:rType,sub:this,row_obj:obj,objects:objects,loadReport:loadReport});                    
                     this.beforeElement = null;
