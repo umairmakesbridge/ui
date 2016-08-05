@@ -251,7 +251,9 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
 
                 },
                 newTags: function (data) {
-                    this.modelTemplate.model.set("tags", data);
+                    if(this.modelTemplate){
+                        this.modelTemplate.model.set("tags", data);
+                    }
                 },
                 /**
                  * Show and hide large view of fields on view.

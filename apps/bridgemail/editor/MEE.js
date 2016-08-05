@@ -5169,6 +5169,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         });
                                                         
                                                         editor.on("mouseUp", function (e) {
+                                                            console.log('mouse down');
                                                             myElement.find(".alertButtons").hide();
                                                             var tiny_editor_selection = editor.selection;
                                                             var currentNode = tiny_editor_selection.getNode();
@@ -5187,11 +5188,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                             var scrollPosition = scrollTop - options.scrollTopMinus;
                                                                         }
                                                                        else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                           if(currentWindowObj.find('#campaign_useCustomFooter_div').css('display')!=='none'){
-                                                                                var addHeight = 27;
-                                                                           }else{
-                                                                               var addHeight = 8;
-                                                                           }
+                                                                           
                                                                             scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
                                                                            //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
                                                                            if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
