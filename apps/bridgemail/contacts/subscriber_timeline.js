@@ -148,6 +148,8 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                             
                     }
                 });
+                // add into enqueueAjax Request
+                //this.app.enqueueAjaxReq.push({'wk_id':this.$el.parents('body').find('#wstabs li.active').attr('workspace_id'),'ajax_enq':this._request}); 
             },
             validEvent: function(model){
                 var isValid = true;

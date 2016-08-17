@@ -9,6 +9,7 @@ function ($,Backbone, _,app,Wizard, template) {
                     'click .close-wp':function(obj){
                         var cur_wp = $(obj.target).parents(".ws-content");
                         var wp_id = cur_wp.attr("id").split("_")[1];
+                        var wp_ws_id = $("#wp_li_"+wp_id).attr('workspace_id');
                         var close_wp = $("#wp_li_"+wp_id).data('viewObj');
                         if(close_wp && close_wp.$el.find('#mee_editor').length > 0 && close_wp.$el.find('#mee_editor').resetAutoSaveTimer && close_wp.$el.find('#mee_editor').html() !== ""){
                                close_wp.$el.find('#mee_editor').resetAutoSaveTimer();
@@ -28,6 +29,14 @@ function ($,Backbone, _,app,Wizard, template) {
                         else{
                            //$("#wstabs li:first").click();
                            //$("#"+app.mainContainer.lastActiveWorkSpace).click();
+                            //  Abort Requests 
+                            //console.log(app.enqueueAjaxReq);
+                           //$.each(app.enqueueAjaxReq,function(key,val){
+                           //    if(wp_ws_id==val.wk_id){
+                               //    console.log(key);
+                               //    val.ajax_enq.abort();
+                             //  }
+                           //})
                            app.tabsArray.pop();
                            app.popWKSTabs();
                            

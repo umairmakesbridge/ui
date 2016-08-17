@@ -8,7 +8,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'test',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -69,6 +69,8 @@ define([
                 this.ws_title,this.ws_sub_title='';
                 //attaching main container in body 
                 this.isAutoLoadWorkspace = false;
+                // Enqueued Ajax request
+                this.enqueueAjaxReq = [];
                 
                 $('body').append(this.mainContainer.$el);
                 $('body').append(this.mainContainer.footer.$el);

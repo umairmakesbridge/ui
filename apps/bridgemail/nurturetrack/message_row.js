@@ -191,6 +191,7 @@ function (template) {
                     dialog.getBody().append(sPage.$el);
                     this.app.showLoading(false, sPage.$el.parent());
                     dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
+                    dialog.$el.find('#dialog-title .dialog-title strong').css('float','none'); 
                     var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                     sPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                     this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
