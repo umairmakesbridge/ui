@@ -1032,6 +1032,7 @@ define([
             this.savePageSettings(ws_json);
         },
        savePageSettings : function(ws_json){
+           return false;
            var stringfy_json = JSON.stringify(ws_json); 
            var URL = "/pms/io/user/savePageSettings/?BMS_REQ_TK=" + this.get("bms_token");
            $.ajax({

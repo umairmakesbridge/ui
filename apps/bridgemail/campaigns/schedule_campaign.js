@@ -259,8 +259,8 @@ function (template,calendario) {
                            var diffMins = currentSelectedDateH.diff(currentServerDateH, 'minutes') // 31
                            //console.log(diffMins);
 
-                           if(diffMins < -30){
-                               this.app.showAlert('Danger ! Selected Date is Less than current','body');
+                           if(diffMins < -15){
+                               this.app.showAlert('Selected date or time is Less than current date or time','body');
                                this.app.showLoading(false,this.$(".schedule-panel")); 
                                return false;
                            }

@@ -212,7 +212,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            $this.find("#mee-iframe").contents().find("body").mouseup(function(e){
                                                
                                                if(!mee.isSameElement && mee.CurrentDivId !=""){
-                                                   console.log('2. Mouse Up on body');
+                                                   //console.log('2. Mouse Up on body');
                                                    var toolPanelID = $this.find("#mee-iframe")[0].contentWindow.tinyMCE.get(mee.CurrentDivId).theme.panel._id; 
                                                    var toolPanelObj = $this.find('#mee-iframe').contents().find('#'+toolPanelID)
                                                    $(toolPanelObj).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
@@ -3444,6 +3444,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                     if($(event.target).closest('div').hasClass('resizableImage')){
                                             $(event.target).closest('div').addClass("mce-edit-focus");
+                                            myElement.find(".alertButtons").hide();
                                         }
                                     myElement.find("#imageToolbar").css({
                                        // top: $(event.target).offset().top + 19 + topPlus,
@@ -5245,7 +5246,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         });
                                                         
                                                         editor.on("mouseUp", function (e) {
-                                                            console.log('mouse up');
+                                                            //console.log('mouse up');
                                                            myElement.find(".alertButtons").hide();
                                                            if(mee.CurrentDivId == editor.id){
                                                                mee.isSameElement = true;
@@ -5261,7 +5262,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             var toolbar = $(editor.bodyElement).parents('body').find('.mce-floatpanel');
                                                             
                                                             //mee.reAdjustToolbar(toolbar,editor); // Previous Logic
-                                                            mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                            if(editor.theme.panel){
+                                                                mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                            }
+                                                            
                                                            
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A" || currentNode.parentNode.nodeName == "A" || currentNode.parentNode.nodeName == "a") {
                                                                 myElement.find("#imageToolbar").hide();
@@ -5320,7 +5324,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         
                                                         editor.on('NodeChange', function(e) {
                                                            
-                                                            console.log('NodeChange event', e);
+                                                            //console.log('NodeChange event', e);
                                                             var targetEle = $(e.target.bodyElement);
                                                             if(editor.theme.panel && editor.theme.panel._id){
                                                                 if(targetEle.hasClass('textcontent')){
@@ -7212,7 +7216,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             })
                                 }
                                 mee.reAdjusToolBarByID = function(toolPanelObj){
-                                    console.log(toolPanelObj);
+                                    //console.log(toolPanelObj);
                                     $(toolPanelObj).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
                                                                     var scrollTop = options.parentWindowobj.scrollTop();
                                                                     var currentWindowObj = options.parentWindowobj; 

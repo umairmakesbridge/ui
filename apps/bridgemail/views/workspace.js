@@ -24,19 +24,20 @@ function ($,Backbone, _,app,Wizard, template) {
                             $("#tiles").show();                      
                             $('#workspace').animate({left:'150%'},function(){
                                 $(this).hide();
-                            });    
+                            }); 
+                            app.enqueueAjaxReq.pop();
                         }
                         else{
-                           //$("#wstabs li:first").click();
-                           //$("#"+app.mainContainer.lastActiveWorkSpace).click();
-                            //  Abort Requests 
-                            //console.log(app.enqueueAjaxReq);
-                           //$.each(app.enqueueAjaxReq,function(key,val){
-                           //    if(wp_ws_id==val.wk_id){
-                               //    console.log(key);
-                               //    val.ajax_enq.abort();
-                             //  }
-                           //})
+                           
+                            //console.log(app.enqueueAjaxReq.length);
+                            if(app.enqueueAjaxReq.length > 0){
+                                    for(var i=0;i < app.enqueueAjaxReq.length ; i++){
+                                       app.enqueueAjaxReq[i].abort();
+                                       var poped = app.enqueueAjaxReq.splice(i,1);
+                                       //console.log('Remaining enqueue obj',app.enqueueAjaxReq);
+                                    }
+                            }
+                           
                            app.tabsArray.pop();
                            app.popWKSTabs();
                            

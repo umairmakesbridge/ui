@@ -321,6 +321,11 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                             
                     }
                 });
+                // add into enqueueAjax Request
+                if(this.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
+                    this.app.enqueueAjaxReq.push(this.contacts_request); 
+                }      
+                console.log(this.app.enqueueAjaxReq);
             },
              /**
             * Fetch next records on scroll and resize.
