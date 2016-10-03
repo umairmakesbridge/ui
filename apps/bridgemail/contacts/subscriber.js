@@ -30,7 +30,11 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                  */
                 initialize: function() {
                     this.sub_fields = null;
-                    this.current_ws = null;                    
+                    this.current_ws = null;    
+                    this.getSubscriber = null;
+                    this.getTimeLine = null;
+                    this.getTimeLineDetail = null;
+                    this.enqueueAjaxReq = [];
                     this.template = _.template(template);
                     this.render();
                 },
@@ -109,7 +113,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                     else{
                         URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&sfid=" + this.sub_id + "&type=getSubscriberBySfInfo&email="+this.email;
                     }
-                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                    this.getSubscriber = jQuery.getJSON(URL, function(tsv, state, xhr) {
                         _this.app.showLoading(false, _this.$el);
                         var _json = jQuery.parseJSON(xhr.responseText);
                         if (_this.app.checkError(_json)) {
@@ -163,18 +167,33 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                             _this.getActiviites();
                         }
                     })
-                    
+                    this.enqueueAjaxReq.push(this.getSubscriber);
                     if(this.editable){
                         this.getActiviites();
                     }
                     
                 },
+                closeCallBack:function(){
+                if(this.enqueueAjaxReq.length > 0){
+                        for(var i=0;i < this.enqueueAjaxReq.length ; i++){
+                                        
+                                        if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
+                                            console.log(this.enqueueAjaxReq[i].readyState,this.enqueueAjaxReq[i].status);
+                                            this.enqueueAjaxReq[i].abort();
+                                        }
+                                       //this.app.enqueueAjaxReq[i].abort();
+                                       var poped = this.enqueueAjaxReq.splice(i,1);
+                                       //console.log('Remaining enqueue obj',app.enqueueAjaxReq);
+                                    }   
+                }
+                      
+            },
                 getActiviites: function(){
                   //Loading subscriber activities like last seen, visists and actions 
                     var _this = this;
                     this.app.showLoading("States..", this.$(".sub-stats"));
                     URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getActivityStats";
-                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                   this.getTimeLine = jQuery.getJSON(URL, function(tsv, state, xhr) {
                         _this.app.showLoading(false, _this.$(".sub-stats"));
                         var _json = jQuery.parseJSON(xhr.responseText);
                         if (_this.app.checkError(_json)) {
@@ -217,11 +236,11 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                             _this.$(".seen-time-text").html("-")
                         }
                     })
-
+                    this.enqueueAjaxReq.push(this.getTimeLine);
                     //Loading subscriber activities COUNT like email, alert, workflows, segements, lists and alerts
                     this.app.showLoading("Activities...", this.$(".activity-details"));
                     URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getInvolvedInStats";
-                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                    this.getTimeLineDetail=jQuery.getJSON(URL, function(tsv, state, xhr) {
                         _this.app.showLoading(false, _this.$(".activity-details"));
                         var _json = jQuery.parseJSON(xhr.responseText);
                         if (_this.app.checkError(_json)) {
@@ -231,6 +250,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                             _this.$("." + key).html(value);
                         })
                     })  
+                    this.enqueueAjaxReq.push(this.getTimeLineDetail);
                 },
                 /**
                  * Show tags of view called when data is fetched.

@@ -149,9 +149,8 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                     }
                 });
                 // add into enqueueAjax Request
-                if(this.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
-                    this.app.enqueueAjaxReq.push(this._request); 
-                }
+                this.sub.enqueueAjaxReq.push(this._request); 
+               
             },
             validEvent: function(model){
                 var isValid = true;
@@ -224,6 +223,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                             
                     }
                 });
+                this.sub.enqueueAjaxReq.push(this._request);
             }
              /**
              * Fetching current server time.

@@ -30,13 +30,13 @@ function ($,Backbone, _,app,Wizard, template) {
                         else{
                            
                             //console.log(app.enqueueAjaxReq.length);
-                            if(app.enqueueAjaxReq.length > 0){
+                            /*if(app.enqueueAjaxReq.length > 0){
                                     for(var i=0;i < app.enqueueAjaxReq.length ; i++){
                                        app.enqueueAjaxReq[i].abort();
                                        var poped = app.enqueueAjaxReq.splice(i,1);
                                        //console.log('Remaining enqueue obj',app.enqueueAjaxReq);
                                     }
-                            }
+                            }*/
                            
                            app.tabsArray.pop();
                            app.popWKSTabs();

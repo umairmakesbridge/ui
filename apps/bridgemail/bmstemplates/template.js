@@ -309,7 +309,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     }else {
                         if(obj && typeof obj !== "boolean"){
                             button = $.getObj(obj, "a");
-                        }else if(!obj){
+                        }else if(!obj && !this.meeView.autoSaveFlag){
                             obj = false;
                         }
                     }

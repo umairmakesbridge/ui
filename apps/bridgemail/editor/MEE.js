@@ -3422,7 +3422,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                 }
                                
-
+                                var OnUrlImageAdded = function(args,dialog){
+                                    
+                                    var imageSrc = args.imgurl;
+                                    var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + imageSrc + "' style='display:block;' /></div></div>");
+                                    
+                                    meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
+                                        aspectRatio: false,
+                                        start:function(event,ui){
+                                            $(this).find(".resizeable-tooltip").remove();
+                                            $(this).append("<div class='resizeable-tooltip'></div>")
+                                        },
+                                        resize: function( event, ui ) {                                                    
+                                            $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
+                                            $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                        },
+                                        stop: function(event,ui){
+                                            $(this).find(".resizeable-tooltip").remove();
+                                        }
+                                    });
+                                    args.droppedElement.html(htmlToPlace);
+                                    oInitDestroyEvents.InitializeClickEvent(args.droppedElement.parent());
+                                    dialog.hide();
+                                    makeCloneAndRegister();
+                                } 
                                 var OnClickedOnElement = function (event) {
                                     myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
                                     meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
@@ -6145,6 +6168,63 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     ui: ui
                                                 };
                                                 OnImageDropped(argsThis);                                                
+                                                oInitDestroyEvents.InitAll($(this));
+                                                mee.dragElement = null;
+                                            }
+                                            else if(typeOfDraggingControl == "droppedUrlImage"){
+                                                //INSERT DROPPABLE BEFORE AND AFTER            
+                                                $(this).before(CreateDroppableWithAllFunctions());
+                                                $(this).after(CreateDroppableWithAllFunctions());
+                                                ///////
+                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");                                                
+                                                var ui = {draggable: null};
+                                                ui.draggable = mee.dragElement;
+                                                var argsThis = {
+                                                    droppedElement: $(this).find(".drapableImageContainer"),
+                                                    event: event,
+                                                    ui: ui
+                                                };
+                                                var dialogOptions = {
+                                                        title: "Paste Image URL",
+                                                        css: {
+                                                            "width": "490px",
+                                                            "margin-left": "-230px"
+                                                        },
+                                                        bodyCss: {
+                                                            "min-height": "75px"
+                                                        },
+                                                        headerIcon: 'image',
+                                                        buttons: {
+                                                            saveBtn: {
+                                                                text: 'Insert'
+                                                            }
+                                                        }
+                                                    };
+                                                var dialog = null;  
+                                                dialog = options._app.showStaticDialog(dialogOptions); 
+                                                options._app.showLoading("Loading...", dialog.getBody());
+                                                dialog.$el.css("z-index", "99999");
+                                                $(".modal-backdrop").css("z-index", "99998");
+                                               
+                                                    
+                                                dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 24px;" placeholder="Enter campaign name here" id="onlineimg_url"></div></div>');
+                                                dialog.$el.find('.dialog-backbtn').hide();
+                                                dialog.saveCallBack(function(){
+                                                   var stringImg = dialog.$el.find('#onlineimg_url').val();
+                                                   argsThis['imgurl']=stringImg;
+                                                   if(/^((https?|ftp):)?\/\/.*(jpeg|jpg|png|gif|bmp)$/.test(stringImg)==true){
+                                                      OnUrlImageAdded(argsThis,dialog); 
+                                                   }else{
+                                                         options._app.showError({
+                                                                    control:dialog.$el.find('.imgurl-container'),
+                                                                    message:"Invalid image url path."
+                                                          });
+                                                            
+                                                   }
+                                                   
+                                                });
+                                                options._app.showLoading(false, dialog.getBody());             
+                                                
                                                 oInitDestroyEvents.InitAll($(this));
                                                 mee.dragElement = null;
                                             }
