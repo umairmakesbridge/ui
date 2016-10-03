@@ -113,7 +113,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                     else{
                         URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&sfid=" + this.sub_id + "&type=getSubscriberBySfInfo&email="+this.email;
                     }
-                    this.getSubscriber = jQuery.getJSON(URL, function(tsv, state, xhr) {
+                    var getSubscriber = jQuery.getJSON(URL, function(tsv, state, xhr) {
                         _this.app.showLoading(false, _this.$el);
                         var _json = jQuery.parseJSON(xhr.responseText);
                         if (_this.app.checkError(_json)) {
@@ -167,7 +167,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                             _this.getActiviites();
                         }
                     })
-                    this.enqueueAjaxReq.push(this.getSubscriber);
+                    this.enqueueAjaxReq.push(getSubscriber);
                     if(this.editable){
                         this.getActiviites();
                     }
@@ -178,12 +178,12 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                         for(var i=0;i < this.enqueueAjaxReq.length ; i++){
                                         
                                         if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
-                                            console.log(this.enqueueAjaxReq[i].readyState,this.enqueueAjaxReq[i].status);
+                                           
                                             this.enqueueAjaxReq[i].abort();
                                         }
                                        //this.app.enqueueAjaxReq[i].abort();
                                        var poped = this.enqueueAjaxReq.splice(i,1);
-                                       //console.log('Remaining enqueue obj',app.enqueueAjaxReq);
+                                       
                                     }   
                 }
                       
@@ -193,7 +193,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                     var _this = this;
                     this.app.showLoading("States..", this.$(".sub-stats"));
                     URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getActivityStats";
-                   this.getTimeLine = jQuery.getJSON(URL, function(tsv, state, xhr) {
+                   var getTimeLine = jQuery.getJSON(URL, function(tsv, state, xhr) {
                         _this.app.showLoading(false, _this.$(".sub-stats"));
                         var _json = jQuery.parseJSON(xhr.responseText);
                         if (_this.app.checkError(_json)) {
@@ -236,11 +236,11 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                             _this.$(".seen-time-text").html("-")
                         }
                     })
-                    this.enqueueAjaxReq.push(this.getTimeLine);
+                    this.enqueueAjaxReq.push(getTimeLine);
                     //Loading subscriber activities COUNT like email, alert, workflows, segements, lists and alerts
                     this.app.showLoading("Activities...", this.$(".activity-details"));
                     URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getInvolvedInStats";
-                    this.getTimeLineDetail=jQuery.getJSON(URL, function(tsv, state, xhr) {
+                    var getTimeLineDetail=jQuery.getJSON(URL, function(tsv, state, xhr) {
                         _this.app.showLoading(false, _this.$(".activity-details"));
                         var _json = jQuery.parseJSON(xhr.responseText);
                         if (_this.app.checkError(_json)) {
@@ -250,7 +250,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                             _this.$("." + key).html(value);
                         })
                     })  
-                    this.enqueueAjaxReq.push(this.getTimeLineDetail);
+                    this.enqueueAjaxReq.push(getTimeLineDetail);
                 },
                 /**
                  * Show tags of view called when data is fetched.

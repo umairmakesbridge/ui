@@ -156,7 +156,6 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                         for(var i=0;i < this.enqueueAjaxReq.length ; i++){
                                         
                                         if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
-                                            console.log(this.enqueueAjaxReq[i].readyState,this.enqueueAjaxReq[i].status);
                                             this.enqueueAjaxReq[i].abort();
                                         }
                                        //this.app.enqueueAjaxReq[i].abort();
@@ -341,7 +340,6 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                 if(this.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
                     this.enqueueAjaxReq.push(this.contacts_request); 
                 }      
-                console.log(this.enqueueAjaxReq);
             },
              /**
             * Fetch next records on scroll and resize.
