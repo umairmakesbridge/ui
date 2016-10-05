@@ -23,6 +23,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                 this.app = this.sub.app;
                 this.timeLineRequest = new Timeline(); 
                 this.timeLineRequestFuture = new TimelineFuture(); 
+                this.sub.enqueueAjaxReq.push(this.timeLineRequestFuture);
                 this.monthYear = "";
                 this.filter = {filterType:"",filerEvents:""};
                 this.render();                 
