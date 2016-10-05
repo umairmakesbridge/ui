@@ -45,7 +45,8 @@
            'highcharts':'shared/libs/charts/highcharts',
            'export-chart':'shared/libs/charts/modules/exporting',
            'funnel-chart':'shared/libs/charts/modules/funnel',
-           'jspdf' : 'reports/summary/vendors/jspdf'
+           'jspdf' : 'reports/summary/vendors/jspdf',
+           'offline':'shared/libs/offline'
        },
         shim: {
                 backbone: {

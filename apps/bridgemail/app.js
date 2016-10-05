@@ -1,5 +1,5 @@
 define([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment','jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker','highcharts'
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment', 'jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker','highcharts'
 ], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog, moment) {
     'use strict';
     var App = Backbone.Model.extend({        
@@ -8,7 +8,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'test',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -176,8 +176,12 @@ define([
             var _app = this;
             $(document).ajaxComplete(function (event, request, settings) {
                 if (request.responseText) {
-                    var result = jQuery.parseJSON(request.responseText);
-                    if (result[0] == "err" && result[1] == "SESSION_EXPIRED") {
+                    var result = null;
+                    try{
+                        result = jQuery.parseJSON(request.responseText);                                            
+                    }
+                    catch(e){}
+                    if (result && result[0] == "err" && result[1] == "SESSION_EXPIRED") {
                         var messageObj = {};
                         messageObj["heading"] = "Session Expired"
                         messageObj["detail"] = "Your session has expired due to an extended period of inactivity. You will need to login again to access the requested information.";
@@ -185,17 +189,26 @@ define([
                         return false;
                     }
                 }
+                if($(".offline-ui").length && $(".offline-ui").css("display")!=="none"){
+                    Offline.check();
+                }
             });
 
             //Ajax Error handling
             $(document).ajaxError(function (event, jqxhr, settings, exception) {
-                console.log("url failed:"+settings.url+"\n---Status::"+jqxhr.statusText+"\n---Status Code::"+jqxhr.status);                
+                console.log("url failed:"+settings.url+"\n---Status::"+jqxhr.statusText+"\n---Status Code::"+jqxhr.status);          
+                if(jqxhr.status===200){
+                    
+                    self.showAlert("There is some thing wrong with our server. Please try again later.", $("body"), {fixed: true});
+                }
+                Offline.check();
+                
             });
             //Cache Clear time set
             this.clearCache();
             this.mainContainer.$el.css("min-height", $(document.documentElement).height() - 35);
             // Load large files in start. 
-            require(["editor/MEE",'jquery-ui'], _.bind(function (MEE) { },this));
+            require(["editor/MEE",'jquery-ui','offline'], _.bind(function (MEE) { },this));
 
         },
         getUser: function () {
