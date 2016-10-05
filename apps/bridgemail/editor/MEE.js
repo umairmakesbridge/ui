@@ -185,6 +185,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             mee.iframeLoaded = false;
                             mee.isActionScriptSet= '';
                             mee.isActionScriptSetG = '';
+                            mee.CurrentDivId = '';
+                            mee.isSameElement = false;
                             this.each(function () {
                                 var $this = $(this);
                                 var undoManager = new MakeBridgeUndoRedoManager({
@@ -207,7 +209,59 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             if(options.landingPage){
                                                  mee.getActionScript();
                                             }                                   
-                                                                                                                        
+                                           $this.find("#mee-iframe").contents().find("body").mouseup(function(e){
+                                               
+                                               if(!mee.isSameElement && mee.CurrentDivId !=""){
+                                                   //console.log('2. Mouse Up on body');
+                                                   var toolPanelID = $this.find("#mee-iframe")[0].contentWindow.tinyMCE.get(mee.CurrentDivId).theme.panel._id; 
+                                                   var toolPanelObj = $this.find('#mee-iframe').contents().find('#'+toolPanelID)
+                                                   $(toolPanelObj).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
+                                                                    var scrollTop = options.parentWindowobj.scrollTop();
+                                                                    var currentWindowObj = options.parentWindowobj; 
+                                                                    if(currentWindowObj.hasClass('modal-body')){
+                                                                        if(options.scrollTopMinus){ // Without Accordian
+                                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
+                                                                        }
+                                                                       else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
+                                                                           
+                                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
+                                                                           //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
+                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                             scrollPosition = scrollPosition + 50; 
+                                                                            }
+                                                                       }
+                                                                       else{
+                                                                                scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
+                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                                    scrollPosition = scrollPosition + 56; 
+                                                                                     }
+                                                                            } 
+                                                                    }
+                                                                    else{
+                                                                        //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
+                                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
+                                                                    }
+                                                                    
+                                                                    if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
+                                                                              $(toolPanelObj).css({top:scrollPosition+"px","left":"0"});
+                                                                            }else{
+                                                                                        $(toolPanelObj).css({top:"0px","left":"0"}); 
+                                                                                        setTimeout(function(){
+                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
+                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
+                                                                                        }, 10);
+                                                                                        
+                                                                            }
+                                                                    //setTimeout(function(){ 
+                                                                        $(toolPanelObj).addClass('fixed-panel'); 
+                                                                        $(toolPanelObj).show();
+                                                                        myElement.find('.disabled-toolbar').css('visibility','hidden');
+                                                                    //}, 10);
+                                                                    mee.CurrentDivId="";
+                                               
+                                               }
+
+                                           })                                                                             
                                         })
                                         
                                     }
@@ -3368,7 +3422,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                 }
                                
-
+                                var OnUrlImageAdded = function(args,dialog){
+                                    
+                                    var imageSrc = args.imgurl;
+                                    var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + imageSrc + "' style='display:block;' /></div></div>");
+                                    
+                                    meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
+                                        aspectRatio: false,
+                                        start:function(event,ui){
+                                            $(this).find(".resizeable-tooltip").remove();
+                                            $(this).append("<div class='resizeable-tooltip'></div>")
+                                        },
+                                        resize: function( event, ui ) {                                                    
+                                            $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
+                                            $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                        },
+                                        stop: function(event,ui){
+                                            $(this).find(".resizeable-tooltip").remove();
+                                        }
+                                    });
+                                    args.droppedElement.html(htmlToPlace);
+                                    oInitDestroyEvents.InitializeClickEvent(args.droppedElement.parent());
+                                    dialog.hide();
+                                    makeCloneAndRegister();
+                                } 
                                 var OnClickedOnElement = function (event) {
                                     myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
                                     meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
@@ -3390,6 +3467,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                     if($(event.target).closest('div').hasClass('resizableImage')){
                                             $(event.target).closest('div').addClass("mce-edit-focus");
+                                            myElement.find(".alertButtons").hide();
                                         }
                                     myElement.find("#imageToolbar").css({
                                        // top: $(event.target).offset().top + 19 + topPlus,
@@ -5135,12 +5213,22 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 theme: "modern",                                                
                                                 paste_enable_default_filters: false,
                                                 paste_preprocess: function(plugin, args) {
+                                                    var str = args.content;
+                                                    
                                                     if(args.content !== "text" && args.content !== "dragging"){
                                                         console.log(args.content);   
                                                     }else{
                                                         args.content = "";
                                                     }                                                                                              
                                                 },
+                                                paste_postprocess: function(plugin, args) {
+                                                    console.log(args.node);
+                                                    //console.log(args.target.theme.panel._id);
+                                                    var panelId = args.target.theme.panel._id;
+                                                    setTimeout(function(){
+                                                       mee.reAdjusToolBarByID(meeIframe.find('#'+panelId)); 
+                                                    },100);
+                                                  },
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
@@ -5157,6 +5245,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         meeIframe.find("#" + editor.id).data('tinymce', true);
                                                         editor.on("mouseDown", function (e) {
                                                             selectedLinkFromTinyMCE = e.target;
+                                                            mee.isSameElement = false;
+                                                            mee.CurrentDivId = editor.id;
+                                                            //console.log('Mouse DOwn Trigger',editor.id);
+                                                            /*var tiny_editor_selection = editor.selection;
+                                                            var currentNode = tiny_editor_selection.getNode();
+                                                            $(tiny_editor_selection.getSelectedBlocks()).closest('.csHaveData').addClass('mce-highlight-div');
+                                                            isElementClicked = false;
+                                                             $(editor.bodyElement).parents('body').find('.mce-floatpanel').removeClass('fixed-panel');
+                                                            var toolbar = $(editor.bodyElement).parents('body').find('.mce-floatpanel');
+                                                            mee.reAdjustToolbar(toolbar,editor);*/
+                                                            
+                                                            
                                                             
                                                         });
                                                         editor.on("AddUndo", function (e) {
@@ -5169,62 +5269,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         });
                                                         
                                                         editor.on("mouseUp", function (e) {
-                                                            console.log('mouse down');
-                                                            myElement.find(".alertButtons").hide();
+                                                            //console.log('mouse up');
+                                                           myElement.find(".alertButtons").hide();
+                                                           if(mee.CurrentDivId == editor.id){
+                                                               mee.isSameElement = true;
+                                                           }
+                                                           
+                                                           
                                                             var tiny_editor_selection = editor.selection;
                                                             var currentNode = tiny_editor_selection.getNode();
                                                             $(tiny_editor_selection.getSelectedBlocks()).closest('.csHaveData').addClass('mce-highlight-div');
                                                             isElementClicked = false;
                                                              $(editor.bodyElement).parents('body').find('.mce-floatpanel').removeClass('fixed-panel');
+                                                              //$(editor.bodyElement).parents('body').find('.mce-floatpanel').hide();
                                                             var toolbar = $(editor.bodyElement).parents('body').find('.mce-floatpanel');
-                                                            $.each(toolbar,function(key,val){
-                                                                if($(val).css('display')!=='none'){
-                                                                    
-                                                                    $(val).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
-                                                                    var scrollTop = options.parentWindowobj.scrollTop();
-                                                                    var currentWindowObj = options.parentWindowobj; 
-                                                                    if(currentWindowObj.hasClass('modal-body')){
-                                                                        if(options.scrollTopMinus){ // Without Accordian
-                                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
-                                                                        }
-                                                                       else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                           
-                                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
-                                                                           //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
-                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
-                                                                             scrollPosition = scrollPosition + 50; 
-                                                                            }
-                                                                       }
-                                                                       else{
-                                                                                scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
-                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
-                                                                                    scrollPosition = scrollPosition + 56; 
-                                                                                     }
-                                                                            } 
-                                                                    }
-                                                                    else{
-                                                                         //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
-                                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
-                                                                    }
-                                                                                                                                        
-                                                                    
-                                                                    if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
-                                                                              $(val).css({top:scrollPosition+"px","left":"0"});
-                                                                            }else{
-                                                                                        $(val).css({top:"0px","left":"0"}); 
-                                                                                        setTimeout(function(){
-                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
-                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
-                                                                                        }, 10);
-                                                                                        
-                                                                            }
-                                                                    setTimeout(function(){ $(val).addClass('fixed-panel'); }, 50);
-                                                                    
-                                                                    setTimeout(function(){ myElement.find('.disabled-toolbar').css('visibility','hidden');}, 100);
-                                                                  
-                                                                }
-                                                            })
+                                                            
+                                                            //mee.reAdjustToolbar(toolbar,editor); // Previous Logic
+                                                            if(editor.theme.panel){
+                                                                mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                            }
+                                                            
+                                                           
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A" || currentNode.parentNode.nodeName == "A" || currentNode.parentNode.nodeName == "a") {
+                                                                myElement.find("#imageToolbar").hide();
+                                                                meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
                                                                 editor.selection.select(selectedLinkFromTinyMCE);
                                                                 var selected_element_range = meeIframeWindow.tinyMCE.activeEditor.selection.getRng();
                                                                 showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
@@ -5233,9 +5301,65 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                          });
                                                         editor.on('blur', function () {
                                                             //$(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").hide();
-                                                            //console.log('Hitting');
+                                                            //console.log('blur');
                                                             myElement.find('.disabled-toolbar').removeAttr('style');
                                                         });
+                                                       editor.on('ExecCommand', function(e) {
+                                                            console.log('ExecCommand event', e);
+                                                            //alert(e.command);
+                                                            /*var strHtml = $(e.target.targetElm).html();
+                                                             var regex= /\<\/?FONT.*?\/?\>/gi;
+                                                            var str = strHtml.replace(regex, "")
+                                                            $(e.target.targetElm).html(str);*/
+                                                            var fontTagObj = $(e.target.targetElm).find('font');
+                                                            if(fontTagObj.length > 0){
+                                                                $.each(fontTagObj,function(key,val){
+                                                                    // Font Face removed
+                                                                    if($(val).attr("face") !== ""){
+                                                                        $(val).removeAttr("face");
+                                                                    }
+                                                                    // Font Color removed
+                                                                    if($(val).attr("color") !== ""){
+                                                                        $(val).removeAttr("color");
+                                                                    }
+                                                                    // Font Size removed
+                                                                    if($(val).attr("size") !== ""){
+                                                                        $(val).removeAttr("size");
+                                                                    }
+                                                                })
+                                                            }
+                                                            //console.log(editor.theme.panel._id);
+                                                            if(e.command=="FontSize"){
+                                                                mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                            }else if(e.command == "Undo"){
+                                                                mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                            }
+                                                            
+                                                        });
+                                                        editor.on('BeforeExecCommand', function(e) {
+                                                            //console.log('BeforeExecCommand event', e);
+                                                           
+                                                            //console.log();
+                                                           //e.target['startContent'] = 
+                                                           //console.log(e.target.startContent);
+                                                            //console.log();
+                                                        });
+                                                        
+                                                        editor.on('NodeChange', function(e) {
+                                                           
+                                                            //console.log('NodeChange event', e);
+                                                            var targetEle = $(e.target.bodyElement);
+                                                            if(editor.theme.panel && editor.theme.panel._id){
+                                                                if(targetEle.hasClass('textcontent')){
+                                                                    mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                                }
+                                                            }
+                                                            
+                                                        });
+
+
+
+
                                                     }
                                                     editor.addButton('LinksButton', {
                                                         type: 'button',
@@ -5509,7 +5633,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         meeIframe.find('.csHaveData').removeClass('mce-highlight-div');
                                                         if (!IsStyleActivated) {
                                                                                                                         
-                                                            $(this).addClass("hover");
+                                                            $(this).addClass("hover mce-highlight-div");
                                                             $(this).parents(".csHaveData").addClass("hoverParent");
                                                             $(this).prepend(myobject);
                                                             meeIframeWindow.setDragging(myobject.find('.myHandle'), mee);
@@ -6044,6 +6168,63 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     ui: ui
                                                 };
                                                 OnImageDropped(argsThis);                                                
+                                                oInitDestroyEvents.InitAll($(this));
+                                                mee.dragElement = null;
+                                            }
+                                            else if(typeOfDraggingControl == "droppedUrlImage"){
+                                                //INSERT DROPPABLE BEFORE AND AFTER            
+                                                $(this).before(CreateDroppableWithAllFunctions());
+                                                $(this).after(CreateDroppableWithAllFunctions());
+                                                ///////
+                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");                                                
+                                                var ui = {draggable: null};
+                                                ui.draggable = mee.dragElement;
+                                                var argsThis = {
+                                                    droppedElement: $(this).find(".drapableImageContainer"),
+                                                    event: event,
+                                                    ui: ui
+                                                };
+                                                var dialogOptions = {
+                                                        title: "Paste Image URL",
+                                                        css: {
+                                                            "width": "490px",
+                                                            "margin-left": "-230px"
+                                                        },
+                                                        bodyCss: {
+                                                            "min-height": "75px"
+                                                        },
+                                                        headerIcon: 'image',
+                                                        buttons: {
+                                                            saveBtn: {
+                                                                text: 'Insert'
+                                                            }
+                                                        }
+                                                    };
+                                                var dialog = null;  
+                                                dialog = options._app.showStaticDialog(dialogOptions); 
+                                                options._app.showLoading("Loading...", dialog.getBody());
+                                                dialog.$el.css("z-index", "99999");
+                                                $(".modal-backdrop").css("z-index", "99998");
+                                               
+                                                    
+                                                dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 24px;" placeholder="Enter campaign name here" id="onlineimg_url"></div></div>');
+                                                dialog.$el.find('.dialog-backbtn').hide();
+                                                dialog.saveCallBack(function(){
+                                                   var stringImg = dialog.$el.find('#onlineimg_url').val();
+                                                   argsThis['imgurl']=stringImg;
+                                                   if(/^((https?|ftp):)?\/\/.*(jpeg|jpg|png|gif|bmp)$/.test(stringImg)==true){
+                                                      OnUrlImageAdded(argsThis,dialog); 
+                                                   }else{
+                                                         options._app.showError({
+                                                                    control:dialog.$el.find('.imgurl-container'),
+                                                                    message:"Invalid image url path."
+                                                          });
+                                                            
+                                                   }
+                                                   
+                                                });
+                                                options._app.showLoading(false, dialog.getBody());             
+                                                
                                                 oInitDestroyEvents.InitAll($(this));
                                                 mee.dragElement = null;
                                             }
@@ -7054,7 +7235,112 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     e.stopPropagation();
                                     return false;
                                 })
-
+                                
+                                mee.reAdjustToolbar = function(toolbar,editor){
+                                    
+                                     $.each(toolbar,function(key,val){
+                                                                
+                                                                 if($(val).css('display')!=='none'){
+                                                                    
+                                                                    $(val).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
+                                                                    var scrollTop = options.parentWindowobj.scrollTop();
+                                                                    var currentWindowObj = options.parentWindowobj; 
+                                                                    if(currentWindowObj.hasClass('modal-body')){
+                                                                        if(options.scrollTopMinus){ // Without Accordian
+                                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
+                                                                        }
+                                                                       else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
+                                                                           
+                                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
+                                                                           //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
+                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                             scrollPosition = scrollPosition + 50; 
+                                                                            }
+                                                                       }
+                                                                       else{
+                                                                                scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
+                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                                    scrollPosition = scrollPosition + 56; 
+                                                                                     }
+                                                                            } 
+                                                                    }
+                                                                    else{
+                                                                        //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
+                                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
+                                                                    }
+                                                                                                                                        
+                                                                    
+                                                                    if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
+                                                                              $(val).css({top:scrollPosition+"px","left":"0"});
+                                                                            }else{
+                                                                                        $(val).css({top:"0px","left":"0"}); 
+                                                                                        setTimeout(function(){
+                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
+                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
+                                                                                        }, 10);
+                                                                                        
+                                                                            }
+                                                                    setTimeout(function(){ 
+                                                                        $(val).addClass('fixed-panel'); 
+                                                                        $(val).show();
+                                                                        myElement.find('.disabled-toolbar').css('visibility','hidden');
+                                                                    }, 10);
+                                                                    
+                                                                    //setTimeout(function(){ 
+                                                                        
+                                                                    //}, 100);
+                                                                  
+                                                                }else{
+                                                                    console.log('All toolbars are disabled');
+                                                                }
+                                                            })
+                                }
+                                mee.reAdjusToolBarByID = function(toolPanelObj){
+                                    //console.log(toolPanelObj);
+                                    $(toolPanelObj).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
+                                                                    var scrollTop = options.parentWindowobj.scrollTop();
+                                                                    var currentWindowObj = options.parentWindowobj; 
+                                                                    if(currentWindowObj.hasClass('modal-body')){
+                                                                        if(options.scrollTopMinus){ // Without Accordian
+                                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
+                                                                        }
+                                                                       else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
+                                                                           
+                                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
+                                                                           //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
+                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                             scrollPosition = scrollPosition + 50; 
+                                                                            }
+                                                                       }
+                                                                       else{
+                                                                                scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
+                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                                    scrollPosition = scrollPosition + 56; 
+                                                                                     }
+                                                                            } 
+                                                                    }
+                                                                    else{
+                                                                        //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
+                                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
+                                                                    }
+                                                                    
+                                                                    if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
+                                                                              $(toolPanelObj).css({top:scrollPosition+"px","left":"0"});
+                                                                            }else{
+                                                                                        $(toolPanelObj).css({top:"0px","left":"0"}); 
+                                                                                        setTimeout(function(){
+                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
+                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
+                                                                                        }, 10);
+                                                                                        
+                                                                            }
+                                                                    //setTimeout(function(){ 
+                                                                        $(toolPanelObj).addClass('fixed-panel'); 
+                                                                        $(toolPanelObj).show();
+                                                                        myElement.find('.disabled-toolbar').css('visibility','hidden');
+                                                                    //}, 10);
+                                    
+                                }
 //****************************************************End Editor Functions **************************************************** //    
 
 //****************************************************Landing page Forms **************************************************** //    Section8

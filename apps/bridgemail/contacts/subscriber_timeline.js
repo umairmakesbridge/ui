@@ -148,6 +148,9 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                             
                     }
                 });
+                // add into enqueueAjax Request
+                this.sub.enqueueAjaxReq.push(this._request); 
+               
             },
             validEvent: function(model){
                 var isValid = true;
@@ -220,6 +223,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                             
                     }
                 });
+                this.sub.enqueueAjaxReq.push(this._request);
             }
              /**
              * Fetching current server time.

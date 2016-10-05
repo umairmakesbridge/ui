@@ -24,6 +24,8 @@ define(['text!contacts/html/removesubscribers.html'],
                     this.$(".subscriberiframe").load(_.bind(function () {
                         this.app.showLoading(false,this.$el);
                         // this.$("#workflowlistsearch #clearsearch").click();
+                        this.resizeHeight(this.$('.subscriberiframe').contents().find('body').height()+20);
+                        
                         this.app.removeSpinner(this.$el);         
                         
                     },this))

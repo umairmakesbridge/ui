@@ -2973,6 +2973,11 @@
                             }, this);                        
                             this.createWorkflow(true);
                         }, this));
+                        
+                        // add into enqueueAjax Request
+                        if(this.sub.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
+                            this.app.enqueueAjaxReq.push(this.states_call); 
+                        }
                     }
                     else{
                         this.createWorkflow(true);

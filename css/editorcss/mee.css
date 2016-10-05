@@ -5068,3 +5068,7 @@ div.tooltip.custom-tooltip::before{
 div.tooltip.custom-tooltip .tooltip-inner{
     min-width:55px;
 }
+
+.imgurl-container .errortext{
+     bottom: 59px;
+}
