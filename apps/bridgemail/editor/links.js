@@ -334,7 +334,7 @@ function (template) {
                 if(($(this.tiny_editor_selection.getStart()).children().length > 0) && (this.tiny_editor_selection.getStart().nodeName.toLowerCase() !== "span" && this.tiny_editor_selection.getStart().nodeName.toLowerCase() !=="a")){
                     
                     //if($(this.tiny_editor_selection.getStart()).find('a').text()==this.$("."+this.activeTab+"Div textarea.linkTextArea").val().trim()){
-                       if($(this.tiny_editor_selection.getStart()).find('a')) {
+                       if($(this.tiny_editor_selection.getStart()).find('a').length > 0) {
                            selected_node = $(this.tiny_editor_selection.getStart()).find('a')[0];
                        }
                     //}
