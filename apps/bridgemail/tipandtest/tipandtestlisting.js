@@ -97,9 +97,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
                     this.app.scrollingTop({scrollDiv: 'window', appendto: this.$el});
-                        /*-----Remove loading------*/
-                                   this.app.removeSpinner(this.$el);
-                                   /*------------*/
+                        
                     this.tagDiv.hide();
                 },
                 getalltipandtest: function () {
@@ -125,7 +123,11 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                                         _.each(data1.models, _.bind(function (model) {
                                             this.$el.find('#camp_list_grid tbody').append(new tipandtestRowView({model: model, sub: this}).el);
                                         }, this));
+                                        
                                          this.app.showLoading(false, this.$("#target-camps"));
+                                         /*-----Remove loading------*/
+                                            this.app.removeSpinner(this.$el);
+                                            /*------------*/
                                     },this)
                     
                     

@@ -323,6 +323,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                                // rowView.showEllipsis();
                             }, this));
                             /*-----Remove loading------*/
+                            this.app.isAutoLoadWorkspace= false;
                             this.app.removeSpinner(this.$el);
                             /*------------*/
                             if (this.total_fetch < parseInt(collection.totalCount)) {

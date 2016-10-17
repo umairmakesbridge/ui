@@ -439,7 +439,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
 
 
                         camp_obj.$("select#campaign_unSubscribeType").val(camp_json.unSubscribeType).trigger("chosen:updated");
-                        camp_obj.$("#campaign_profileUpdate").prop("checked", camp_json.profileUpdate == "N" ? false : true);
+                        //camp_obj.$("#campaign_profileUpdate").prop("checked", camp_json.profileUpdate == "N" ? false : true);
                         camp_obj.$("#campaign_useCustomFooter").prop("checked", camp_json.useCustomFooter == "N" ? false : true);
                         camp_obj.$("#campaign_isFooterText").prop("checked", camp_json.isFooterText == "N" ? false : true);
                         camp_obj.$("#campaign_subscribeInfoUpdate").prop("checked", camp_json.subInfoUpdate == "N" ? false : true);

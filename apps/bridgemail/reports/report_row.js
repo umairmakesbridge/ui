@@ -23,7 +23,7 @@
                     this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'rpt-campaign', iconClass: 'rpblue-campagin'},
                         landingpages: {label: 'Landing Pages', colorClass: 'rpt-landingpages', iconClass: 'rpblue-lp'},
                         nurturetracks: {label: 'Nurture Tracks', colorClass: 'rpt-nt', iconClass: 'rpblue-nt'},
-                        autobots: {label: 'Autobots', colorClass: '.rpt-autobots', iconClass: 'rpblue-autobots'},
+                        autobots: {label: 'Autobots', colorClass: 'rpt-autobots', iconClass: 'rpblue-autobots'},
                         tags: {label: 'Tags', colorClass: 'rpt-tag', iconClass: 'rpblue-tag'},
                         webforms: {label: 'Signup Forms', colorClass: 'rpt-webforms', iconClass: 'rpblue-webforms'},
                         targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'},
@@ -245,6 +245,7 @@
                     }
                 },
                 removeReport: function () {
+                    this.$el.prev(".report-placeholder").remove();
                     this.$el.remove();
                     this.sub.removeMode(this.orderNo);
                     this.loadReport = false;
@@ -458,7 +459,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }                                                
                         var _grid = this.$(".rpt-block-area");                                                
@@ -696,7 +698,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }                                                
                         var _grid = this.$(".rpt-block-area");                        
@@ -971,7 +974,8 @@
                     if (this.modelArray.length) {
                          if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }    
                         var _grid = this.$(".rpt-block-area");                           
@@ -1225,7 +1229,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }    
                        var _grid = this.$(".rpt-block-area");                       
@@ -1427,7 +1432,8 @@
                     if (this.modelArray.length) {                        
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }          
                         this.$(".nt-name").html(this.modelArray[0].get("name"));
@@ -1832,7 +1838,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        } 
                         var _grid = this.$(".rpt-block-area");
@@ -2237,7 +2244,8 @@
                     if (this.modelArray.length) {   
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }
                         var _type = this.modelArray[0].id?this.modelArray[0].id:this.modelArray[0];
@@ -2857,7 +2865,8 @@
                 createFunnel: function() {
                     if(this.doDraw){
                         this.sub.$(".report-empty").hide();
-                        this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                        this.sub.insertReportRow(this);
+                        //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                         this.doDraw = false;
                     }
                     
@@ -2964,6 +2973,11 @@
                             }, this);                        
                             this.createWorkflow(true);
                         }, this));
+                        
+                        // add into enqueueAjax Request
+                        if(this.sub.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
+                            this.app.enqueueAjaxReq.push(this.states_call); 
+                        }
                     }
                     else{
                         this.createWorkflow(true);
@@ -3000,7 +3014,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         } 
                         
@@ -3113,7 +3128,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         } 
                         

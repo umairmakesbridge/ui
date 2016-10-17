@@ -14,6 +14,7 @@ define(['text!target/html/target.html', 'bms-filters'],
                     this.target_id = this.options.target_id;
                     this.dialog = this.options.dialog;
                     this.editable = this.options.editable;
+                    this.currentTarget = '';
                     this.$el.html(this.template({}));
                     this.$("#c_c_target").filters({app: this.app});
 
@@ -198,6 +199,11 @@ define(['text!target/html/target.html', 'bms-filters'],
                     var camp_obj = this;
                     var campview = this.options.camp;
                     var target_id = this.target_id;
+                    console.log(campview.objTargets);
+                    
+
+                                
+                    
                     if (target_id) {
                         var camp_obj = this;
                         var post_data = "";
@@ -227,6 +233,14 @@ define(['text!target/html/target.html', 'bms-filters'],
                                     else {
                                         camp_obj.app.showAlert(false, camp_obj.$el);
                                     }
+                                    
+                                    if(campview.type=="autobots"){
+                                        var newModel = new Backbone.Model(camp_obj.currentTarget);
+                                        campview.options.page.addToCol2(newModel)
+                                         campview.dialog.showPrevious();
+                                         campview.dialog.showPrevious();
+                                    }
+                                        
                                     if (campview.loadTargets) {
                                         campview.loadTargets();
                                     }
@@ -285,6 +299,7 @@ define(['text!target/html/target.html', 'bms-filters'],
                             return false;
                         }
                         if (selected_target) {
+                            camp_obj.currentTarget = selected_target;
                             camp_obj.target_id = selected_target["filterNumber.encode"];
 
                             camp_obj.dialog.$("#dialog-title span").html(selected_target.name);

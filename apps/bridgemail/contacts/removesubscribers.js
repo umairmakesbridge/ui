@@ -19,11 +19,14 @@ define(['text!contacts/html/removesubscribers.html'],
                     this.current_ws = this.$el.parents(".ws-content");                                        
                     this.ws_header = this.current_ws.find(".camp_header .edited"); 
                     this.current_ws.find("#campaign_tags").remove();
-                    this.app.removeSpinner(this.$el);                    
+                               
                     
                     this.$(".subscriberiframe").load(_.bind(function () {
                         this.app.showLoading(false,this.$el);
                         // this.$("#workflowlistsearch #clearsearch").click();
+                        this.resizeHeight(this.$('.subscriberiframe').contents().find('body').height()+20);
+                        
+                        this.app.removeSpinner(this.$el);         
                         
                     },this))
                 },

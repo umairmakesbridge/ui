@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.472_81" ,       
+       urlArgs: "bust=1.472_84" ,       
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
@@ -45,7 +45,8 @@
            'highcharts':'shared/libs/charts/highcharts',
            'export-chart':'shared/libs/charts/modules/exporting',
            'funnel-chart':'shared/libs/charts/modules/funnel',
-           'jspdf' : 'reports/summary/vendors/jspdf'
+           'jspdf' : 'reports/summary/vendors/jspdf',
+           'offline':'shared/libs/offline'
        },
         shim: {
                 backbone: {

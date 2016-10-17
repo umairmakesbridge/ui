@@ -2629,6 +2629,9 @@ a,
 .editorbar i.icon.redo  { background-position:-180px 0;  }
 .MEE_EDITOR .icon.preview  {background: url("../images/meeicons.png") no-repeat  -60px 0; }
 .MEE_EDITOR .icon.code  {background: url("../images/myhtml-18.png") no-repeat  6px 6px; }
+.editorbar i.icon.doing{
+    background:url(../img/greenloader.gif) no-repeat center center transparent;
+}
 .header-icon .code {
     background: url("../images/myhtml-18.png") no-repeat  6px 6px;
     height: 33px;
@@ -5053,4 +5056,19 @@ Stickybar accordian
 }
 .bb-scrollarea-wrapper{
     overflow: hidden !important;
+}
+
+
+div.tooltip.custom-tooltip{
+    max-width: 60px;
+}
+div.tooltip.custom-tooltip::before{
+   top:0;
+}
+div.tooltip.custom-tooltip .tooltip-inner{
+    min-width:55px;
+}
+
+.imgurl-container .errortext{
+     bottom: 59px;
 }

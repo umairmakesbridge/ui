@@ -1,5 +1,5 @@
 define([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment','jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker'
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment', 'jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker','highcharts'
 ], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog, moment) {
     'use strict';
     var App = Backbone.Model.extend({        
@@ -8,7 +8,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'test',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -65,7 +65,13 @@ define([
                 this.tabsArray = [];
                 // Salesforce Merge Allowed 
                 this.salesMergeAllowed = false;
-                //attaching main container in body                                
+                // workspace title and sub title
+                this.ws_title,this.ws_sub_title='';
+                //attaching main container in body 
+                this.isAutoLoadWorkspace = false;
+                // Enqueued Ajax request
+                this.enqueueAjaxReq = [];
+                
                 $('body').append(this.mainContainer.$el);
                 $('body').append(this.mainContainer.footer.$el);
                 if (this.get("newWin")) {
@@ -172,8 +178,12 @@ define([
             var _app = this;
             $(document).ajaxComplete(function (event, request, settings) {
                 if (request.responseText) {
-                    var result = jQuery.parseJSON(request.responseText);
-                    if (result[0] == "err" && result[1] == "SESSION_EXPIRED") {
+                    var result = null;
+                    try{
+                        result = jQuery.parseJSON(request.responseText);                                            
+                    }
+                    catch(e){}
+                    if (result && result[0] == "err" && result[1] == "SESSION_EXPIRED") {
                         var messageObj = {};
                         messageObj["heading"] = "Session Expired"
                         messageObj["detail"] = "Your session has expired due to an extended period of inactivity. You will need to login again to access the requested information.";
@@ -181,17 +191,26 @@ define([
                         return false;
                     }
                 }
+                if($(".offline-ui").length && $(".offline-ui").css("display")!=="none"){
+                    Offline.check();
+                }
             });
 
             //Ajax Error handling
             $(document).ajaxError(function (event, jqxhr, settings, exception) {
-                console.log("url failed:"+settings.url+"\n---Status::"+jqxhr.statusText+"\n---Status Code::"+jqxhr.status);                
+                console.log("url failed:"+settings.url+"\n---Status::"+jqxhr.statusText+"\n---Status Code::"+jqxhr.status);          
+                if(jqxhr.status===200){
+                    
+                    self.showAlert("There is some thing wrong with our server. Please try again later.", $("body"), {fixed: true});
+                }
+                Offline.check();
+                
             });
             //Cache Clear time set
             this.clearCache();
             this.mainContainer.$el.css("min-height", $(document.documentElement).height() - 35);
             // Load large files in start. 
-            require(["editor/MEE",'jquery-ui'], _.bind(function (MEE) { },this));
+            require(["editor/MEE",'jquery-ui','offline'], _.bind(function (MEE) { },this));
 
         },
         getUser: function () {
@@ -244,10 +263,14 @@ define([
                 }
                 if (this.mainContainer) {
                     this.showFeatures();
+                    if(!this.get("tipId") && !this.get("workId") && !this.get("newWin") && !this.get("subNum")){
+                        //this.getPageSettings();
+                    }
+                    
                 } else {
                     setTimeout(_.bind(this.showFeatures, this), 200);
                 }
-
+                
             }, this));
             this.checkFromCRM();
         },
@@ -573,11 +596,19 @@ define([
             delete cache[key];
         },
         removeSpinner: function (elObj) {
+            var isCreatePage = false;
             if (elObj.parents('.ws-content').length) {
                 var activeSpaceID = elObj.parents('.ws-content').attr('id');
                 activeSpaceID = activeSpaceID.split('_')[1];
+                if($('#wp_li_' + activeSpaceID).find('.spinner').length > 0){
+                    isCreatePage = true;
+                }
                 $('#wp_li_' + activeSpaceID).find('.spinner').remove();
             }
+            if(isCreatePage && this.isAutoLoadWorkspace==false){
+                this.createPageRequest();
+            }
+            
         },
         addSpinner: function (elObj) {
             if (elObj.parents('.ws-content').length) {
@@ -867,7 +898,7 @@ define([
             if (!isTabExist) {
                 tabarray.push(tabobj);
             }
-            //console.log(tabarray);
+           //console.log(tabarray);
             /*-----Scrolling of Workspace-----*/
             var currentTab = tabarray.pop();
             $(window).scrollTop(currentTab.wscroll);
@@ -882,9 +913,12 @@ define([
             var tabarray = this.tabsArray;
             var currentTab = tabarray.pop();
             $('#wp_li_' + currentTab.wks_id).click();
+            /*if($('#wp_li_' + currentTab.wks_id).attr("data-loadurl")){
+             this.tabsArray.push(currentTab);   
+            }*/
             $(window).scrollTop(currentTab.wscroll);
         },
-        scrollWKStab: function (et) {
+        scrollWKStab: function (et,currentTab) {
             var tabarray = this.tabsArray;
             var currentTab = tabarray.pop();
             if (currentTab) {
@@ -918,8 +952,120 @@ define([
             }, this));
 
 
-        }
+        },
+        /*--------------------------------
+         * Get Page Settings
+         * -------------------------------*/
+        getPageSettings : function(){
+                var _this = this;
+                var URL = "/pms/io/user/getPageSettings/?BMS_REQ_TK=" + this.get("bms_token") + "&type=get&BMS_PAGE_ID="+this.get("user").userKey;
+                $.ajax({
+                dataType: "json",
+                url: URL,
+                async: true,
+                success: function (tsv, state, xhr) {
+                    if (xhr && xhr.responseText) {
+                        var _json = jQuery.parseJSON(xhr.responseText);
+                        var responseDetails = jQuery.parseJSON(_this.decodeHTML(_json.p_one));
+                        if(responseDetails.length > 0){
+                                _this.mainContainer.openPageSettings(responseDetails);
+                        }
+                    }
+                }
+            });
+        },
+        /*
+         * 
+         */
+        createPageRequest:function(){
+            /*-----------Adding options into app.workspaceParams---------------*/
+                       var ws_json = [];
+                       var paramObj ="";
+                      _.each($('#wstabs li'),_.bind(function(value,key){
+                               var viewObj = $(value).data("viewObj");
+                          
+                                if(viewObj){
+                                    
+                                     if(viewObj.options.params && viewObj.options.params.camp_id){
+                                            paramObj = {'camp_id':viewObj.options.params.camp_id,'wp_id':viewObj.options.params.wp_id};
+                                        }else if(viewObj.options.params && viewObj.options.params.sub_id){
+                                            paramObj = {
+                                                'sub_id':viewObj.options.params.sub_id,
+                                                'wp_id':viewObj.options.params.wp_id,
+                                                'sub_name':viewObj.options.params.sub_name,
+                                                'isSalesforceUser':viewObj.options.params.isSalesforceUser,
+                                                'email':viewObj.options.params.email,
+                                                'editable':viewObj.options.params.editable,
+                                            };
+                                        }else if(viewObj.options.params && viewObj.options.params.track_id){
+                                            paramObj = {
+                                                'track_id':viewObj.options.params.track_id,
+                                                'wp_id':viewObj.options.params.wp_id,
+                                                'isCreateNT':viewObj.options.params.isCreateNT,
+                                                'editable':viewObj.options.params.editable,
+                                            };
+                                        }else if(viewObj.options.params && viewObj.options.params.report_id){
+                                            paramObj = {
+                                                'report_id':viewObj.options.params.report_id,
+                                                'editable':viewObj.options.params.editable,
+                                            };
+                                        }else if(viewObj.options.params && viewObj.options.params.page_id){
+                                                  paramObj = {
+                                                 'editable':viewObj.options.params.editable,
+                                                 'page_id':viewObj.options.params.page_id,
+                                             }
+                                        }
+                                        else if(viewObj.options.params && $(value).attr('workspace_id')=="recipients"){
+                                             paramObj = {
+                                                 'type':viewObj.options.params.type,
+                                                 'wp_id':viewObj.options.params.wp_id,
+                                             }
+                                        }
+                                    
+                                    ws_json.push({
+                                            'ws_id':$(value).attr('workspace_id'),
+                                            'ws_key' : ($(value).attr('workspace_id').split('_')[1]) ? $(value).attr('workspace_id').split('_')[0]+'_listings' : $(value).attr('workspace_id'),
+                                            'ws_active' : ($(value).hasClass('active')) ? true : false,
+                                            'ws_title': $(value).find('.detail .heading').text(),
+                                            'ws_params': paramObj,
+                                            'ws_sub_title':$(value).find('.detail .subheading').text(),        
+                                        })
+                                }else if($(value).attr('data-loadurl')){
+                                  //console.log(this.mainContainer.pageLoadOptions[$(value).attr('data-key')]['title']);
+                                  ws_json.push({
+                                      'ws_id' : this.mainContainer.pageLoadOptions[$(value).attr('data-key')]['workspace_id'],
+                                      'ws_key' : this.mainContainer.pageLoadOptions[$(value).attr('data-key')]['ws_key'],
+                                      'ws_active' : this.mainContainer.pageLoadOptions[$(value).attr('data-key')]['isactive'],
+                                      'ws_title': this.mainContainer.pageLoadOptions[$(value).attr('data-key')]['title'],
+                                      'ws_params': this.mainContainer.pageLoadOptions[$(value).attr('data-key')]['params'],
+                                      'ws_sub_title': this.mainContainer.pageLoadOptions[$(value).attr('data-key')]['sub_title']
+                                  });
+                                }
+                            },this));
+            this.savePageSettings(ws_json);
+        },
+       savePageSettings : function(ws_json){
+           return false;
+           var stringfy_json = JSON.stringify(ws_json); 
+           var URL = "/pms/io/user/savePageSettings/?BMS_REQ_TK=" + this.get("bms_token");
+           $.ajax({
+                dataType: "json",
+                method:"POST",
+                url: URL,
+                data: { 'BMS_PAGE_ID' : this.get("user").userKey , 'p_one':stringfy_json},
+                async: true,
+                success: function (tsv, state, xhr) {
+                    if (xhr && xhr.responseText) {
+                        var responsData = jQuery.parseJSON(xhr.responseText);
+                    }
+                }
+            });
+           
+       }
+  
+
     });
+            
 
     return new App();
 

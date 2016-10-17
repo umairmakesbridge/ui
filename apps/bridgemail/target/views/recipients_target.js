@@ -342,7 +342,7 @@ function (template,copytargetPage) {
             },
             stopTarget: function(){
                 var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + this.app.get('bms_token');
-                this.app.showLoading("Stoping target...", this.$el.parents(".ws-content.active"), {fixed: 'fixed'});
+                this.app.showLoading("Stopping target...", this.$el.parents(".ws-content.active"), {fixed: 'fixed'});
                 $.post(URL, {type: 'stop', filterNumber: this.model.get('filterNumber.encode')})
                 .done(_.bind(function (data) {
                     this.app.showLoading(false, this.$el.parents(".ws-content.active"));

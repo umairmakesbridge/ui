@@ -52,7 +52,10 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.active_ws = this.$el.parents(".ws-content");
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
-                   
+                    if(this.dialog && this.type=="autobots"){
+                       var dialogBody = this.dialog.getBody();
+                       dialogBody.scroll(_.bind(this.liveLoading, this));
+                    }
                     this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});    
                 },
                 updateRunningModels:function(){
@@ -250,8 +253,14 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});
-                           dialog.getBody().html(mPage.$el);
+                           dialog.getBody().append(mPage.$el);
+                           self.app.showLoading(false, dialog.getBody()); 
+                           var dialogArrayLength = self.app.dialogArray.length;
+                           mPage.$el.addClass('dialogWrap-'+dialogArrayLength);
+                           self.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                           self.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New dialog
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
+                          //dialog.closeDialogCallBack(_.bind(mPage.closeCallBack,mPage));
                       });
                 },
                 closeContactsListing: function() {

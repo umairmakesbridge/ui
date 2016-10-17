@@ -67,6 +67,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                this.filterBy = 'CK';
                this.contacts_request = null;
                this.sortBy = '';
+               this.enqueueAjaxReq = [];
                 this.isSearchTag = false;
                this.render();
             },
@@ -149,6 +150,20 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
               $(window).scroll(_.bind(this.liveLoading,this));
               $(window).resize(_.bind(this.liveLoading,this));
               this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
+            },
+            closeCallBack:function(){
+                if(this.enqueueAjaxReq.length > 0){
+                        for(var i=0;i < this.enqueueAjaxReq.length ; i++){
+                                        
+                                        if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
+                                            this.enqueueAjaxReq[i].abort();
+                                        }
+                                       //this.app.enqueueAjaxReq[i].abort();
+                                       var poped = this.enqueueAjaxReq.splice(i,1);
+                                       //console.log('Remaining enqueue obj',app.enqueueAjaxReq);
+                                    }   
+                }
+                      
             },
             checkSalesforce:function(){
                 this.app.getData({
@@ -321,6 +336,10 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                             
                     }
                 });
+                // add into enqueueAjax Request
+                if(this.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
+                    this.enqueueAjaxReq.push(this.contacts_request); 
+                }      
             },
              /**
             * Fetch next records on scroll and resize.
