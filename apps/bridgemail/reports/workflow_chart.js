@@ -1,4 +1,4 @@
-define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart'],
+define(['text!reports/html/campaign_pie_chart.html'],
         function (template) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //

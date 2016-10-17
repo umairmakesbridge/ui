@@ -2244,3 +2244,6 @@ i.icon{
 .COLRESIZEABLE tr td:last-child{
     border-right: none;
 }
+.myImage{
+    margin-bottom: 3px;
+}

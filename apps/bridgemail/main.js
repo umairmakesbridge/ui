@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.472_84" ,       
+       urlArgs: "bust=1.472_86" ,       
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
@@ -42,9 +42,7 @@
            'mincolors':'shared/libs/jquery.minicolors',
            'tinymce':'shared/libs/tinymce/tinymce',
            'scrollbox':'shared/jquery.scrollbox',
-           'highcharts':'shared/libs/charts/highcharts',
-           'export-chart':'shared/libs/charts/modules/exporting',
-           'funnel-chart':'shared/libs/charts/modules/funnel',
+           'highcharts':'shared/libs/charts/highcharts',          
            'jspdf' : 'reports/summary/vendors/jspdf',
            'offline':'shared/libs/offline'
        },
