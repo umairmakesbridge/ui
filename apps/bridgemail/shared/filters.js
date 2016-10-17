@@ -1655,9 +1655,9 @@
         
         
         dialog.find("#filter_list_grid .action").click(function(){            
-             dialog.parent().find('.sub-date-container').attr("list_id",$(this).attr("id"))
-             dialog.parent().find('.sub-date-container').attr("list_checksum",$(this).parents("tr").attr("list_checksum"))
-             dialog.parent().find('.sub-date-container').find("a").removeClass("add-list").addClass("list");
+             dialog.parents('.filter').find('.sub-date-container').attr("list_id",$(this).attr("id"))
+             dialog.parents('.filter').find('.sub-date-container').attr("list_checksum",$(this).parents("tr").attr("list_checksum"))
+             dialog.parents('.filter').find('.sub-date-container').find("a").removeClass("add-list").addClass("list");
              dialog.find("#filter_list_grid tr").removeClass("selected");
              $(this).parents("tr").addClass("selected");
              dialog.find('.nolist').remove();
