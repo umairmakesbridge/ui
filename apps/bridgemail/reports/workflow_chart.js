@@ -393,7 +393,7 @@ define(['text!reports/html/campaign_pie_chart.html'],
                         async: true,
                         cache: false,
                         error: function(){
-                            alert('session expired');
+                            console.log('some thing wrong with json or url');
                         },
                         success: function(json1){
                             try{

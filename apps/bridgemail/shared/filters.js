@@ -23,7 +23,7 @@
       this.pageTypes = []
       this.linkFilters = []
       this.basicFields = []
-      this.customFields = []
+      this.customFields = []      
       this.lists = null;
       this.formats = []
       this.rules = []
@@ -1316,15 +1316,17 @@
                                  return false;
                              }
                              var select_html = ''
-                             $.each(_json.links[0], function(index, val) {            
-                                  selected_link = (params && params['pageURL']==val[0]["url"]) ? "selected" : ""
-                                  var url = val[0]["url"] ? self.options.app.decodeHTML(val[0]["url"]) : ""
-                                  var title = val[0].title ? self.options.app.decodeHTML(val[0].title) : ""
-                                  select_html += '<option value="'+url+'" '+selected_link+'>'+(title? title : url)+'</option>'
-                                  self.pageUrls.push({"id":url,"title":title})
-                              })
+                             if(_json.links){
+                                $.each(_json.links[0], function(index, val) {            
+                                     selected_link = (params && params['pageURL']==val[0]["url"]) ? "selected" : ""
+                                     var url = val[0]["url"] ? self.options.app.decodeHTML(val[0]["url"]) : ""
+                                     var title = val[0].title ? self.options.app.decodeHTML(val[0].title) : ""
+                                     select_html += '<option value="'+url+'" '+selected_link+'>'+(title? title : url)+'</option>'
+                                     self.pageUrls.push({"id":url,"title":title})
+                                 })
+                            }
                                                                                                                       
-                              filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated")           
+                            filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated")           
                            
                              if( filter.find(".pagelink-box").find("option").length < parseInt(_json.totalCount)){
                                     filter.find(".pagelink-box").find("option:last-child").attr("data-load","true");
@@ -1366,11 +1368,13 @@
                                  return false;
                              }
                              var select_html = ''
-                             $.each(_json.groups[0], function(index, val) {                            
-                                  selected_ptype = (params && params['linkFilterGroupId.checksum']==val[0]["groupId.checksum"]) ? "selected" : ""
-                                  select_html += '<option value="'+val[0]["groupId.encode"]+'" '+selected_ptype+'>'+val[0].name+'</option>'
-                                  self.pageTypes.push({"id":val[0]["groupId.encode"],"name":val[0].name,checksum:val[0]["groupId.checksum"]})
-                              })
+                             if(_json.groups){
+                                $.each(_json.groups[0], function(index, val) {                            
+                                     selected_ptype = (params && params['linkFilterGroupId.checksum']==val[0]["groupId.checksum"]) ? "selected" : ""
+                                     select_html += '<option value="'+val[0]["groupId.encode"]+'" '+selected_ptype+'>'+val[0].name+'</option>'
+                                     self.pageTypes.push({"id":val[0]["groupId.encode"],"name":val[0].name,checksum:val[0]["groupId.checksum"]})
+                                 })
+                            }
 
                              filter.find(".pagetype-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
                         }
@@ -1393,22 +1397,29 @@
               //Load link filters 
                 if(self.linkFilters.length===0){
                   URL = "/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type=listLinkFilters";
-                  jQuery.getJSON(URL,  function(tsv, state, xhr){
-                        if(xhr && xhr.responseText){                        
+                  $.ajax({
+                    dataType: "json",
+                    url: URL,
+                    async: false,
+                    success: function (tsv, state, xhr) {    
+                            if(xhr && xhr.responseText){                        
                              var _json = jQuery.parseJSON(xhr.responseText);                                
                              if(self.options.app.checkError(_json)){
                                  return false;
                              }
                              var select_html = ''
-                             $.each(_json.filters[0], function(index, val) {                            
-                                  selected_linkfilter = (params && params['linkIDFilterNum.checksum']==val[0]["filterNumber.checksum"]) ? "selected" : ""
-                                  select_html += '<option value="'+val[0]["filterNumber.encode"]+'" '+selected_linkfilter+'>'+val[0].name+'</option>'
-                                  self.linkFilters.push({"id":val[0]["filterNumber.encode"],"name":val[0].name,checksum:val[0]["ilterNumber.checksum"]})
-                              })
+                             if(_json.filters){
+                                $.each(_json.filters[0], function(index, val) {                            
+                                     selected_linkfilter = (params && params['linkIDFilterNum.checksum']==val[0]["filterNumber.checksum"]) ? "selected" : ""
+                                     select_html += '<option value="'+val[0]["filterNumber.encode"]+'" '+selected_linkfilter+'>'+val[0].name+'</option>'
+                                     self.linkFilters.push({"id":val[0]["filterNumber.encode"],"name":val[0].name,checksum:val[0]["filterNumber.checksum"]})
+                                 })
+                            }
 
                              filter.find(".linkfilter-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
                         }
-                  }).fail(function() { console.log( "error in loading page types" ); });
+                    }    
+                  });
                 }
                 else{
                     var select_html = ''
