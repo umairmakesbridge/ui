@@ -23,6 +23,7 @@
        <%=this.getPopulationCount()%>
     </div> <!--  infotxt  -->
     
+    <% if(this.model.get('tags')){ %>
     <div class="infotxt">
         <strong>Tags</strong>
         
@@ -38,6 +39,7 @@
     </div>
      
      </div>
+    <% } %>
     </div> <!--  infotxt  -->
      <div class="infotxt">
        <%=this.isTextOnly()%>
