@@ -411,8 +411,9 @@
                         <select class="nosearch ddlBackgroundLayers ddlBackgroundColorLayers" data-placeholder="Select Parent Layer">
                             <option value=""></option>
                         </select>
+                        <div class="clearfix" id="backgroundColorWrap"></div>
                         <br class="clearfix"/> <br/>
-                        <div class="clearfix"></div>
+                        
                         <div class="minicolors minicolors-theme-default minicolors-position-bottom minicolors-position-left minicolors-inline" style="text-align:center;">
 
                             <div class="divColorPicker"></div>
@@ -448,12 +449,12 @@
             
             <div class="scrollarea images-accordion">
                 <div class="clearfix"  style="padding:5px;">
-                        <h4 class="" style="margin: 10px 0px 15px;">Parent Layers</h4>
+                        <h4 class="" style="color: rgb(29, 145, 188); font-weight: normal; margin: 30px 0px 5px;">Parent Layers</h4>
                         <select class="nosearch ddlBackgroundLayers ddlBackgroundImgLayers" data-placeholder="Select Parent Layer">
                             <option value=""></option>
                         </select>
                         
-                        <div class="clearfix"></div>
+                        <div class="clearfix" id="backgroundImge"></div>
                         <div id="loadingbgimg" style="min-height: 90px;display:none;">
                             <img alt="" src="<%- options._app.get('path')%>img/recurring2.gif">
                             <h4>Loading...</h4>
@@ -541,11 +542,11 @@
             </h3>
             <div class="scrollarea border-accordion">
                 <div class="accordian-content active">
-                    <h4 class="" style="margin: 10px 0px 15px;">Parent Layers</h4>
+                    <h4 class="" >Parent Layers</h4>
                         <select class="nosearch ddlBackgroundLayers ddlBackgroundBorderLayers" data-placeholder="Select Parent Layer">
                             <option value=""></option>
                         </select>
-                    <div class="clearfix">
+                    <div class="clearfix" id="bordersWrap">
                         <h4 class="">Borders</h4>
                         <div style="padding:5px;">
 
@@ -751,12 +752,14 @@
                     <!--<span>Code</span>-->
                 </a>
             </li>
-            <% if (!options.otopage && !options.landingPage) { %>
+            <% if (!options.otopage && !options.landingPage && !options.isTemplate) { %>
+               
             <li class="MenuCallTextVersion" style="float:right">
                 <a  class="btn-green">
                     <i class="icon plaintext"></i><span>Text Version</span>
                 </a>
             </li>
+              
             <% if (options._app.dcItemsUsers.indexOf(options._app.get("user").userId)>-1 ) { %>
             <li class="MenuCallDCItems" style="float:right">
                 <a  class="btn-yellow">

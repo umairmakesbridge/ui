@@ -2713,7 +2713,10 @@ a,
 
 
 
-
+.border-accordion .chosen-container {
+    margin-top: 0;
+    padding: 2px 4px 0 !important;
+}
 .MEE_EDITOR .accordian {
     background: none repeat scroll 0 0 #FFFFFF; 
     padding: 4px;

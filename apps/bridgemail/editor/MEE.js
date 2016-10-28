@@ -1954,20 +1954,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find(".style-panel .accordian").on( "accordionactivate", function( event, ui ) {
                                                      
                                                     setTimeout(function(){ 
-                                                            myElement.find('.ddlBackgroundLayers').chosen("destroy").chosen();
+                                                            myElement.find('.ddlBackgroundLayers').chosen("destroy");
                                                             if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && SelectedElementForStyle.prop("tagName") != "BODY"){
-                                                                
+                                                                console.log('1. Accordion Active is Image', mee_view.parentTd);
                                                                 myElement.find('.bgimg-thumb_imgwrap').show();
                                                                 reGenerateDropElements('.ddlBackgroundImgLayers');
                                                                 //myElement.find('.ddlBackgroundImgLayers option').eq(mee_view.parentTd).attr('selected','selected');
                                                                 //myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
                                                                 myElement.find('.ddlBackgroundImgLayers').trigger('change');
-                                                            }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
-                                                                 
+                                                            }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement){
+                                                                 console.log('2. Accordion Active is Color or Image', mee_view.parentTd , ' Selected Element : ',mee_view.selectedDropElement);
                                                                  reGenerateDropElements('.ddlBackgroundColorLayers');
                                                                 
-                                                            }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
-                                                               
+                                                            }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement){
+                                                                console.log('3. Accordion Active is Body', mee_view.parentTd);
                                                                 SelectedElementForStyle = SelectedElementForStyle;
                                                                 reGenerateDropElements('.ddlBackgroundBorderLayers');
                                                                 if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
@@ -1975,11 +1975,22 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 }
                                                             }
                                                             else{
-                                                                
-                                                                myElement.find('.ddlBackgroundLayers option').eq(1).attr('selected','selected');
+                                                                console.log('4. Accordion Active is Color or Image', mee_view.parentTd);
+                                                                myElement.find('.ddlBackgroundColorLayers option').eq(mee_view.parentTd).attr('selected','selected')
+                                                                myElement.find('.ddlBackgroundImgLayers option').eq(mee_view.parentTd).attr('selected','selected');
+                                                                myElement.find('.ddlBackgroundBorderLayers option').eq(mee_view.parentTd).attr('selected','selected');
                                                                 myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated");
                                                                 myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated");
-                                                                
+                                                                myElement.find('.ddlBackgroundBorderLayers').trigger("chosen:updated");
+                                                                myElement.find('.ddlBackgroundImgLayers').trigger('change');
+                                                                myElement.find('.ddlBackgroundLayers').chosen()
+                                                                /*if(mee_view.parentTd){
+                                                                    myElement.find('.ddlBackgroundLayers option:last-child').prev().attr('selected','selected').chosen('update');
+                                                                     myElement.find('.ddlBackgroundLayers').trigger('change');
+                                                                }else{
+                                                                    myElement.find('.ddlBackgroundLayers').val("body").chosen('update');
+                                                                }*/
+                                                                //SelectedElementForStyle = meeIframe.find("body");
                                                             }
 
 
@@ -2040,6 +2051,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 }
                                 function reGenerateDropElements(ElementObj){
+                                    console.log('I am going to generate the drop again');
                                     
                                     //--------------Background Layers-------------//
                                                         
@@ -2049,7 +2061,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     myElement.find(ElementObj).chosen("destroy");
                                                     var ddlBackgroundLayers = myElement.find(ElementObj);
                                                     ddlBackgroundLayers.find("option").remove();
-
+                                                    var parentElement = myElement.find(ElementObj).parent();
+                                                    console.log('The next element is : '+parentElement);
+                                                    if(parentElement.find('.chosen-container').length > 0){
+                                                        myElement.find(ElementObj).chosen("destroy");
+                                                    }
                                                     ddlBackgroundLayers.append(
                                                             $('<option value=""></option>'));                                                    
 
@@ -2089,7 +2105,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             $('<option value="body">BODY</option>'));
                                                      myElement.find(ElementObj + ' option').eq(mee_view.parentTd).attr('selected','selected');
                                                      myElement.find(ElementObj).chosen();
-                                                     myElement.find(ElementObj).bind('chnage');
+                                        
+                                                    // myElement.find(ElementObj).bind('chnage');
                                                      //myElement.find(ElementObj).trigger("chosen:updated");
                                                      //myElement.find(ElementObj).trigger('change');
                                                     
@@ -2190,8 +2207,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                          
                                                         myElement.find('.ddlBackgroundColorLayers option').eq(1).attr('selected','selected');
                                                         myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated")
+                                                    }else if(myElement.find('.border-accordion').hasClass('ui-accordion-content-active')){
+                                                        myElement.find('.ddlBackgroundBorderLayers option').eq(1).attr('selected','selected');
+                                                        myElement.find('.ddlBackgroundBorderLayers').trigger("chosen:updated")
                                                     }
-                                                    mee_view.parentTd = ddlBackgroundLayers.prop('selectedIndex');
+                                                    mee_view.parentTd = 1;
                                                     //////////////////////////////////////////////////
 
                                                 }
@@ -2357,6 +2377,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     }*/
                                                    
                                                     mee_view.parentTd = $(this).prop('selectedIndex');
+                                                    console.log(mee_view.parentTd);
                                                     SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
                                                     // undoManager.registerAction(mainContentHtmlGrand.html());
                                                     makeCloneAndRegister();
@@ -2373,6 +2394,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     
                                                     SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
                                                     mee_view.parentTd = $(this).prop('selectedIndex');
+                                                    console.log('BG Image dropdow : ',mee_view.parentTd);
                                                     if(SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== ""){
                                                         var bgimage = SelectedElementForStyle.css('background-image').replace(/^url|[\(\)]/g, '');
                                                         
@@ -2452,6 +2474,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             
                                             }
                                             
+                                            
+                                            var ddlBackgroundLayersBorder = myElement.find(".ddlBackgroundBorderLayers");
+                                            if(ddlBackgroundLayersBorder.length > 0){
+                                                ddlBackgroundLayersBorder.on('change', function (event) {
+                                                    if ($(this).find(':selected').val() != "-1") {
+                                                        RemoveAllOutline();                                                    
+                                                        SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
+                                                        /*if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
+                                                            mee_view.parentTd = true;
+                                                        }else{
+                                                             mee_view.parentTd = false;
+                                                        }*/
+
+                                                        mee_view.parentTd = $(this).prop('selectedIndex');
+                                                        console.log(mee_view.parentTd);
+                                                        SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
+                                                        // undoManager.registerAction(mainContentHtmlGrand.html());
+                                                        makeCloneAndRegister();
+                                                    }
+                                                });
+                                            }
                                             ///////////////////////
 
 
@@ -5391,7 +5434,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             myElement.find('.disabled-toolbar').removeAttr('style');
                                                         });
                                                        editor.on('ExecCommand', function(e) {
-                                                            //console.log('ExecCommand event', e);
+                                                            console.log('ExecCommand event', e);
                                                             //alert(e.command);
                                                             /*var strHtml = $(e.target.targetElm).html();
                                                              var regex= /\<\/?FONT.*?\/?\>/gi;
@@ -5425,10 +5468,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         editor.on('BeforeExecCommand', function(e) {
                                                             //console.log('BeforeExecCommand event', e);
                                                            
-                                                           
+                                                            //console.log();
                                                            //e.target['startContent'] = 
                                                            //console.log(e.target.startContent);
-                                                            
+                                                            //console.log();
                                                         });
                                                         
                                                         editor.on('NodeChange', function(e) {
@@ -7762,6 +7805,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         _app: this.app,
                         parentWindowobj:this.options.parentWindow,
                         scrollTopMinus:this.options.scrollTopMinus,
+                        isTemplate: this.options.isTemplate,
                         scrollTopMinusObj:this.options.scrollTopMinusObj,
                         pageId: this.options.pageid?this.options.pageid:false,
                         _BMSTOKEN: BMSTOKEN,
