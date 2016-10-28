@@ -560,7 +560,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                     
                                     
-                                    console.log(parentTd);
+                                    
                                     
                                     mainHTMLELE.find(".bgimage").each(function(){
                                         $(this).attr("mee-style",$(this).attr("style"));
@@ -1956,18 +1956,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     setTimeout(function(){ 
                                                             myElement.find('.ddlBackgroundLayers').chosen("destroy");
                                                             if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && SelectedElementForStyle.prop("tagName") != "BODY"){
-                                                                console.log('1. Accordion Active is Image', mee_view.parentTd);
+                                                                
                                                                 myElement.find('.bgimg-thumb_imgwrap').show();
                                                                 reGenerateDropElements('.ddlBackgroundImgLayers');
                                                                 //myElement.find('.ddlBackgroundImgLayers option').eq(mee_view.parentTd).attr('selected','selected');
                                                                 //myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
                                                                 myElement.find('.ddlBackgroundImgLayers').trigger('change');
                                                             }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement){
-                                                                 console.log('2. Accordion Active is Color or Image', mee_view.parentTd , ' Selected Element : ',mee_view.selectedDropElement);
+                                                                 
                                                                  reGenerateDropElements('.ddlBackgroundColorLayers');
                                                                 
                                                             }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement){
-                                                                console.log('3. Accordion Active is Body', mee_view.parentTd);
+                                                                
                                                                 SelectedElementForStyle = SelectedElementForStyle;
                                                                 reGenerateDropElements('.ddlBackgroundBorderLayers');
                                                                 if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
@@ -1975,7 +1975,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 }
                                                             }
                                                             else{
-                                                                console.log('4. Accordion Active is Color or Image', mee_view.parentTd);
+                                                                //console.log('4. Accordion Active is Color or Image', mee_view.parentTd);
                                                                 myElement.find('.ddlBackgroundColorLayers option').eq(mee_view.parentTd).attr('selected','selected')
                                                                 myElement.find('.ddlBackgroundImgLayers option').eq(mee_view.parentTd).attr('selected','selected');
                                                                 myElement.find('.ddlBackgroundBorderLayers option').eq(mee_view.parentTd).attr('selected','selected');
@@ -2377,7 +2377,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     }*/
                                                    
                                                     mee_view.parentTd = $(this).prop('selectedIndex');
-                                                    console.log(mee_view.parentTd);
+                                                    
                                                     SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
                                                     // undoManager.registerAction(mainContentHtmlGrand.html());
                                                     makeCloneAndRegister();
@@ -2394,7 +2394,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     
                                                     SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
                                                     mee_view.parentTd = $(this).prop('selectedIndex');
-                                                    console.log('BG Image dropdow : ',mee_view.parentTd);
+                                                    
                                                     if(SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== ""){
                                                         var bgimage = SelectedElementForStyle.css('background-image').replace(/^url|[\(\)]/g, '');
                                                         
@@ -2488,7 +2488,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         }*/
 
                                                         mee_view.parentTd = $(this).prop('selectedIndex');
-                                                        console.log(mee_view.parentTd);
+                                                        
                                                         SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
                                                         // undoManager.registerAction(mainContentHtmlGrand.html());
                                                         makeCloneAndRegister();
