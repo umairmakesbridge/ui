@@ -355,6 +355,7 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     var count = "";
                     var date = "";
                     var nameOf = "";
+                    var sfCount = (this.model.get('Count')) ? this.options.app.addCommas(this.model.get('Count')): "";
    
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
@@ -409,15 +410,15 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                            caption = "Salesforce Synch";
                             noun = "has been";
                             to="";
-                            count = "completed"+"&nbsp;"+this.options.app.addCommas(this.model.get('Count'))+"&nbsp;records&nbsp;";
+                            count = "completed"+"&nbsp;"+sfCount+"&nbsp;records&nbsp;";
                             date= this.dateSetting(this.model.get('logTime'));
                             nameOf = "on";
                             break;
                         case "SYNCH_PEER":
                             caption = "Salesforce peer ";
-                            noun = "has been started";
-                            to="to";
-                            count = " Processing";
+                            noun = "has been";
+                            to="";
+                            count = " Processed ";
                             date= this.dateSetting(this.model.get('logTime'));
                             nameOf = "on";
                             break;
