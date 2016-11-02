@@ -21,6 +21,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.topMinus = 381;
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
                     this.autoSaveFlag = false;
+                    this.parentTd = false;
+                    this.selectedDropElement = null;
                     this.timer = false;
                     this.isRepeatX = false;
                     this.isRepeatY = false;
@@ -526,6 +528,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                        else{
                                          mee_view.autoSaveFlag = false;
+                                         
                                          // console.log('Flag is false now');      
                                         }
                                       mee_view.timer = setTimeout(function(){recursiveSaveCall()},20000)
@@ -546,12 +549,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 $.fn.getMEEHTML = function () {
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var parentTd = '';
+                                    
+                                    
                                     if(this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style')!==""){
                                         parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');                                        
-                                        if(parentTd){
-                                            parentTd = "height:500px;"
+                                        if(this.find("#mee-iframe").contents().find(".mainContentHtml").parent().css('height') =="" && parentTd){
+                                         parentTd += "height:500px;";   
                                         }
+                                        
                                     }
+                                    
+                                    
                                     
                                     
                                     mainHTMLELE.find(".bgimage").each(function(){
@@ -594,7 +602,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                     }
                                     var emailWidthScale = (emailWidth && emailWidth.indexOf("%")>-1)?"%":"";
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='"+parseFloat(emailWidth)+emailWidthScale+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgleftborder='"+pageBorderLeftProp+"' data-bgrightborder='"+pageBorderRightProp+"' data-bgtopborder='"+pageBorderTopProp+"' data-bgbottomborder='"+pageBorderBottomProp+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+emailWidthScale+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='"+parseFloat(emailWidth)+emailWidthScale+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgleftborder='"+pageBorderLeftProp+"' data-bgrightborder='"+pageBorderRightProp+"' data-bgtopborder='"+pageBorderTopProp+"' data-bgbottomborder='"+pageBorderBottomProp+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+emailWidthScale+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div >"+cleanedupHTML+"</div></td></tr></table>"
 
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
@@ -1932,7 +1940,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find('.builder-panel').show();
                                             myElement.find('.style-panel').hide();
                                             initStyles = false;
-
+                                            mee_view.parentTd = 2;
+                                            mee_view.selectedDropElement = null;
                                         }
                                         else if ($(this).hasClass("style-tab")) {
                                             myElement.find('.builder-panel').hide();
@@ -1944,32 +1953,95 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
                                              
                                             myElement.find(".style-panel .accordian").on( "accordionactivate", function( event, ui ) {
-                                                     
+                                                     var ui = ui;
+                                                     var event = event;
                                                     setTimeout(function(){ 
-                                                            myElement.find('.ddlBackgroundLayers').chosen("destroy").chosen();
-                                                            if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && SelectedElementForStyle.prop("tagName") != "BODY"){
+                                                            myElement.find('.ddlBackgroundLayers').chosen("destroy");
+                                                            if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement){
                                                                 myElement.find('.bgimg-thumb_imgwrap').show();
-                                                                myElement.find('.ddlBackgroundImgLayers option').eq(1).attr('selected','selected');
-                                                                myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
+                                                                reGenerateDropElements('.ddlBackgroundImgLayers');
+                                                                //myElement.find('.ddlBackgroundImgLayers option').eq(mee_view.parentTd).attr('selected','selected');
+                                                                //myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
                                                                 myElement.find('.ddlBackgroundImgLayers').trigger('change');
-                                                            }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
-                                                                myElement.find('.ddlBackgroundColorLayers option').eq(1).attr('selected','selected');
-                                                                myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated")
-                                                            }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
+                                                            }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement ){
+                                                                 reGenerateDropElements('.ddlBackgroundColorLayers');
+                                                                
+                                                            }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement){
                                                                 SelectedElementForStyle = SelectedElementForStyle;
+                                                                reGenerateDropElements('.ddlBackgroundBorderLayers');
                                                                 if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
                                                                     mee.setBodyBorders();
                                                                 }
                                                             }
                                                             else{
-
-                                                                myElement.find('.ddlBackgroundLayers').val("body").chosen('update');
-                                                                SelectedElementForStyle = meeIframe.find("body");
+                                                                
+                                                                 mee_view.selectedDropElement = null;
+                                                                 if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
+                                                                     mee_view.parentTd = 1;
+                                                                 }
+                                                                 var parentElement = ui.newPanel.find('.ddlBackgroundLayers').parent();
+                                                                 if(parentElement.find('.chosen-container').length > 0){
+                                                                      myElement.find('.ddlBackgroundLayers').chosen("destroy");
+                                                                 }
+                                                                 var nextElement = '';
+                                                                 var dropDownClass = '';
+                                                                 
+                                                                if(ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundColorLayers')){
+                                                                    nextElement = '#backgroundColorWrap';
+                                                                    dropDownClass = 'ddlBackgroundColorLayers';
+                                                                    
+                                                                }else if(ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundImgLayers')){
+                                                                    nextElement = '#backgroundImge';
+                                                                    dropDownClass = 'ddlBackgroundImgLayers';
+                                                                    
+                                                                }else if(ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundBorderLayers')){
+                                                                    nextElement = '#bordersWrap';
+                                                                    dropDownClass = 'ddlBackgroundBorderLayers';
+                                                                   
+                                                                }
+                                                                ui.newPanel.find('.ddlBackgroundLayers').remove();
+                                                                var SelectHTML = '<select class="nosearch ddlBackgroundLayers '+dropDownClass+'"> </select>';                               
+                                                                var newHTml = $(SelectHTML);
+                                                                
+                                                                newHTml.append($('<option value=""></option>'));                                        
+                                                                newHTml.append(
+                                                                        $('<option></option>')
+                                                                        .val(mainContentHtmlGrand.prop("tagName"))
+                                                                        .html("Parent: " + mainContentHtmlGrand.prop("tagName"))
+                                                                        .data("el", mainContentHtmlGrand)
+                                                                        );
+                                                                newHTml.append($('<option value="body" selected="selected">BODY</option>'));
+                                                                //myElement.find(".ddlBackgroundLayers").trigger("chosen:updated").change();
+                                                                parentElement.find(nextElement).before(newHTml);
+                                                                var selectedElementVal = ui.newPanel.find('.ddlBackgroundLayers option').eq(mee_view.parentTd).val();
+                                                                 newHTml.val(selectedElementVal).change(); 
+                                                                 newHTml.chosen();
+                                                                mee_view.parentTd = newHTml.prop('selectedIndex');
+                                                                    newHTml.on('change',function(){
+                                                                        if(dropDownClass =="ddlBackgroundColorLayers"){
+                                                                            ddlBackgroundColorLayerChange($(this));
+                                                                        }else if(dropDownClass =="ddlBackgroundImgLayers"){
+                                                                            ddlBackgroundImgLayerChange($(this));
+                                                                        }else if(dropDownClass =="ddlBackgroundBorderLayers"){
+                                                                            ddlBackgroundBorderLayerChange($(this));
+                                                                        }
+                                                                            
+                                                                     });
+                                                                     newHTml.trigger('change');
+                                                                //newHTml.chosen();
+                                                                
+                                                                /*if(mee_view.parentTd){
+                                                                    myElement.find('.ddlBackgroundLayers option:last-child').prev().attr('selected','selected').chosen('update');
+                                                                     myElement.find('.ddlBackgroundLayers').trigger('change');
+                                                                }else{
+                                                                    myElement.find('.ddlBackgroundLayers').val("body").chosen('update');
+                                                                }*/
+                                                                //SelectedElementForStyle = meeIframe.find("body");
                                                             }
 
 
 
-                                                    }, 500);
+                                                    }, 100);
                                                     
                                                     
                                                 } );
@@ -2024,7 +2096,65 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
 
                                 }
+                                function reGenerateDropElements(ElementObj){
+                                    
+                                    //--------------Background Layers-------------//
+                                                        
+                                                    
+                                                    var isGetGrandParent = false;
+                                                    var SelectedElementForStyle = mee_view.selectedDropElement;
+                                                    myElement.find(ElementObj).chosen("destroy");
+                                                    var ddlBackgroundLayers = myElement.find(ElementObj);
+                                                    ddlBackgroundLayers.find("option").remove();
+                                                    var parentElement = myElement.find(ElementObj).parent();
+                                                    if(parentElement.find('.chosen-container').length > 0){
+                                                        myElement.find(ElementObj).chosen("destroy");
+                                                    }
+                                                    ddlBackgroundLayers.append(
+                                                            $('<option value=""></option>'));                                                    
 
+
+                                                    //Add Self
+                                                    
+                                                    ddlBackgroundLayers.append(
+                                                            $('<option></option>')
+                                                            .val(SelectedElementForStyle.prop("tagName"))
+                                                            .html("Parent: " + SelectedElementForStyle.prop("tagName"))
+                                                            .data("el", SelectedElementForStyle)
+                                                            );
+
+                                                    SelectedElementForStyle.parents().each(function (index, element) {
+
+                                                        if (!isGetGrandParent) {
+                                                            if ($(element).hasClass("mainContentHtmlGrand")) {
+                                                                isGetGrandParent = true;
+                                                            }
+
+                                                            //if ($(element).prop("tagName") === "TD") {
+                                                            if($(element).prop("tagName").toLowerCase() !="ul"){
+                                                                ddlBackgroundLayers.append(
+                                                                    $('<option></option>')
+                                                                    .val($(element).prop("tagName"))
+                                                                    .html("Parent: " + $(element).prop("tagName"))
+                                                                    .data("el", $(element))
+                                                                    );
+                                                            }
+                                                            
+                                                            // }
+
+                                                        }
+
+                                                    });
+                                                     myElement.find(ElementObj).append(
+                                                            $('<option value="body">BODY</option>'));
+                                                     myElement.find(ElementObj + ' option').eq(mee_view.parentTd).attr('selected','selected');
+                                                     myElement.find(ElementObj).chosen();
+                                        
+                                                    // myElement.find(ElementObj).bind('chnage');
+                                                     //myElement.find(ElementObj).trigger("chosen:updated");
+                                                     //myElement.find(ElementObj).trigger('change');
+                                                    
+                                }
 
 //**************************************************************End ***********************************************************************************///
 
@@ -2057,9 +2187,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                     RemoveAllOutline();
 
-                                                    $(this).css("outline", "2px solid #94CF1E");
+                                                    
 
                                                     SelectedElementForStyle = $(this);
+                                                    if(SelectedElementForStyle.hasClass('mainContentHtml')== true){
+                                                      SelectedElementForStyle = SelectedElementForStyle.parent();  
+                                                    }
+                                                    mee_view.selectedDropElement = SelectedElementForStyle;
+                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E");
                                                     SetStylesOnSelection(SelectedElementForStyle);
 
                                                     //--------------Background Layers-------------//
@@ -2073,6 +2208,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                                     //Add Self
+                                                    
                                                     ddlBackgroundLayers.append(
                                                             $('<option></option>')
                                                             .val(SelectedElementForStyle.prop("tagName"))
@@ -2088,13 +2224,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             }
 
                                                             //if ($(element).prop("tagName") === "TD") {
-
-                                                            ddlBackgroundLayers.append(
+                                                            if($(element).prop("tagName").toLowerCase() !="ul"){
+                                                                ddlBackgroundLayers.append(
                                                                     $('<option></option>')
                                                                     .val($(element).prop("tagName"))
                                                                     .html("Parent: " + $(element).prop("tagName"))
                                                                     .data("el", $(element))
                                                                     );
+                                                            }
+                                                            
                                                             // }
 
                                                         }
@@ -2105,15 +2243,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             $('<option value="body">BODY</option>'));
                                                     myElement.find(".ddlBackgroundLayers").trigger("chosen:updated");
                                                     if(myElement.find('.ddlBackgroundImgLayers').length > 0 && myElement.find('.images-accordion').hasClass('ui-accordion-content-active') == true){
-                                                       
+                                                        
                                                         myElement.find('.ddlBackgroundImgLayers option').eq(1).attr('selected','selected');
                                                         myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
                                                         myElement.find('.ddlBackgroundImgLayers').trigger('change');
                                                     }else if(myElement.find('.color-accordion').hasClass('ui-accordion-content-active')){
+                                                         
                                                         myElement.find('.ddlBackgroundColorLayers option').eq(1).attr('selected','selected');
                                                         myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated")
+                                                    }else if(myElement.find('.border-accordion').hasClass('ui-accordion-content-active')){
+                                                        myElement.find('.ddlBackgroundBorderLayers option').eq(1).attr('selected','selected');
+                                                        myElement.find('.ddlBackgroundBorderLayers').trigger("chosen:updated")
                                                     }
-                                                    
+                                                    mee_view.parentTd = 1;
                                                     //////////////////////////////////////////////////
 
                                                 }
@@ -2138,7 +2280,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         myElement.find("#" + type + "Border").removeClass('borderselected');
                                                         $element.css("border-" + type, "none");
                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                                        if(type=='left'){
+                                                                    if(type=='left'){
                                                                         pageBorderLeft = '';
                                                                     }
                                                                     if(type=='top'){
@@ -2269,103 +2411,26 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var ddlBackgroundLayers = myElement.find(".ddlBackgroundLayers");
 
                                             ddlBackgroundLayers.on('change', function () {
-                                                if ($(this).find(':selected').val() != "-1") {
-                                                    RemoveAllOutline();                                                    
-                                                    SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
-                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
-                                                    // undoManager.registerAction(mainContentHtmlGrand.html());
-                                                    makeCloneAndRegister();
-                                                }
+                                                    ddlBackgroundColorLayerChange($(this));
+                                                
                                             });
+                                            
+                                            
                                             var ddlBackgroundLayersImg = myElement.find(".ddlBackgroundImgLayers");
                                             if(ddlBackgroundLayersImg.length > 0){
                                                 ddlBackgroundLayersImg.on('change', function (event) {
-                                                if ($(this).find(':selected').val() != "-1") {
-                                                    //RemoveAllOutline(); 
-                                                    $(this).parent().find('.bgimg-thumb_imgwrap h4').show();
-                                                    $(this).parent().find('.bgimg-thumb,.removeThumb').remove(); // Remove the thumbnail 
-                                                    $(this).parent().find('#bgUrlCode').val(''); // Empty the input
-                                                    
-                                                    SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
-                                                    if(SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== ""){
-                                                        var bgimage = SelectedElementForStyle.css('background-image').replace(/^url|[\(\)]/g, '');
-                                                        
-                                                        /*=====Repeat Icheck set on change of ======*/
-                                                        if(SelectedElementForStyle.css('background-repeat')=="repeat-x"){
-                                                            myElement.find('#bgimg_repeatx').iCheck('check');
-                                                             myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                        }else if(SelectedElementForStyle.css('background-repeat')=="repeat-y"){
-                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
-                                                             myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
-                                                        }else if(SelectedElementForStyle.css('background-repeat')=="no-repeat"){
-                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
-                                                        }else{
-                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
-                                                            myElement.find('#bgimg_repeatx').iCheck('check'); 
-                                                        }
-                                                        // Check background position in px
-                                                        var splitbackground = SelectedElementForStyle.css('background-position').split(" ");
-                                                        if(splitbackground[0].slice(-2)=="px" || splitbackground[1].slice(-2)=="px"){
-                                                            myElement.find('.bg-leftpos_input').val(parseFloat(splitbackground[0], 10))
-                                                            myElement.find('.bg-toppos_input').val(parseFloat(splitbackground[1], 10))
-                                                            myElement.find('#bg_img_pixel').iCheck('check');
-                                                        }
-                                                        else if(SelectedElementForStyle.css('background-position') !=="0% 0%" && SelectedElementForStyle.css('background-position')!=="" && SelectedElementForStyle.css('background-position') !=="0 0"){
-                                                            var splitImgpos = SelectedElementForStyle.css('background-position').split(" ");
-                                                            myElement.find('.bg-leftpos').val(splitImgpos[0]).attr("selected", "selected");
-                                                            myElement.find('.bg-toppos').val(splitImgpos[1]).attr("selected", "selected");
-                                                            
-                                                        }else{
-                                                            myElement.find('.bg-leftpos').val('0%').attr("selected", "selected");
-                                                            myElement.find('.bg-toppos').val('0%').attr("selected", "selected");
-                                                            $(this).parent().find('.bgimg-thumb').remove();
-                                                        }
-                                                        if(bgimage && bgimage !== "" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="none" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="undefined"){
-                                                            $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
-                                                            $(this).parent().find('.bgimg-thumb_imgwrap').find('h4').hide();
-                                                            $(this).parent().find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img class="center-block bgimg-thumb" style="width: 133px; height: 100px;" src='+bgimage+'/>')
-                                                            $(this).parent().find('#bgUrlCode').val(bgimage.replace(/^"(.*)"$/, '$1'));
-                                                            myElement.find(".bgimage-properties").show();
-                                                            
-                                                        }else{
-                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
-                                                        }
-                                                        
-                                                    }else{
-                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
-                                                            $(this).parent().find('.bgimg-thumb').remove();
-                                                            $(this).parent().find('.bgimg-thumb_imgwrap').show();
-                                                            
-                                                    }
-                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E"); 
-                                                     myElement.find('.removeThumb').click(function(){
-                                                         SelectedElementForStyle.css('background-image','none');
-                                                         $(this).parent().parent().parent().find('#bgUrlCode').val('');
-                                                         myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                         myElement.find('#bgimg_repeatx').iCheck('uncheck');
-                                                         $(this).parent().find('h4').show();
-                                                         $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
-                                                         mee_view.isRepeatY = false;
-                                                         mee_view.isRepeatX = true;
-                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                                                    pageBackgroundimage='none';
-                                                            }
-                                                         
-                                                         pageBackgroundimage_repeat = 'no-repeat';
-                                                         pageBackgroundimage_pos = '0% 0%';
-                                                     });
-                                                    // undoManager.registerAction(mainContentHtmlGrand.html());
-                                                    makeCloneAndRegister();
-                                                }
-                                                
-                                                
-                                            });
+                                                        ddlBackgroundImgLayerChange($(this));    
+                                                });
                                             
                                             }
                                             
+                                            
+                                            var ddlBackgroundLayersBorder = myElement.find(".ddlBackgroundBorderLayers");
+                                            if(ddlBackgroundLayersBorder.length > 0){
+                                                ddlBackgroundLayersBorder.on('change', function (event) {
+                                                    ddlBackgroundBorderLayerChange($(this));
+                                                });
+                                            }
                                             ///////////////////////
 
 
@@ -2446,6 +2511,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
                                             myElement.find(".removeMyColors").click(function () {
                                                 SelectedElementForStyle.css('background-color','transparent');
+                                                if(SelectedElementForStyle[0].tagName.toLowerCase() == 'body'){
+                                                    pageBackgroundColor = 'transparent';
+                                                }
+                                                
                                                 myElement.find('.txtColorCode').val('');
                                             });
                                             myElement.find(".txtColorCode").change(function () {
@@ -2486,7 +2555,124 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                 }
+                                function ddlBackgroundColorLayerChange(obj){
+                                                if (obj.find(':selected').val() != "-1") {
+                                                    RemoveAllOutline();                                                    
+                                                    SelectedElementForStyle = obj.find(':selected').val()=="body"? meeIframe.find("body"): obj.find(':selected').data('el');
+                                                    /*if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
+                                                        mee_view.parentTd = true;
+                                                    }else{
+                                                         mee_view.parentTd = false;
+                                                    }*/
+                                                   
+                                                    mee_view.parentTd = obj.prop('selectedIndex');
+                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
+                                                    // undoManager.registerAction(mainContentHtmlGrand.html());
+                                                    
+                                                    makeCloneAndRegister();
+                                                }
+                                            }
+                                function ddlBackgroundImgLayerChange(obj){
+                                            if ($(this).find(':selected').val() != "-1") {
+                                                    //RemoveAllOutline(); 
+                                                    obj.parent().find('.bgimg-thumb_imgwrap h4').show();
+                                                    obj.parent().find('.bgimg-thumb,.removeThumb').remove(); // Remove the thumbnail 
+                                                    obj.parent().find('#bgUrlCode').val(''); // Empty the input
+                                                    RemoveAllOutline();  
+                                                    SelectedElementForStyle = obj.find(':selected').val()=="body"? meeIframe.find("body"): obj.find(':selected').data('el');
+                                                    mee_view.parentTd = obj.prop('selectedIndex');
+                                                    //console.log('BG Image dropdow : ',mee_view.parentTd);
+                                                    if(SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== ""){
+                                                        var bgimage = SelectedElementForStyle.css('background-image').replace(/^url|[\(\)]/g, '');
+                                                        
+                                                        /*=====Repeat Icheck set on change of ======*/
+                                                        if(SelectedElementForStyle.css('background-repeat')=="repeat-x"){
+                                                            myElement.find('#bgimg_repeatx').iCheck('check');
+                                                             myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                        }else if(SelectedElementForStyle.css('background-repeat')=="repeat-y"){
+                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                                             myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                                        }else if(SelectedElementForStyle.css('background-repeat')=="no-repeat"){
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
+                                                        }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('check'); 
+                                                        }
+                                                        // Check background position in px
+                                                        var splitbackground = SelectedElementForStyle.css('background-position').split(" ");
+                                                        if(splitbackground[0].slice(-2)=="px" || splitbackground[1].slice(-2)=="px"){
+                                                            myElement.find('.bg-leftpos_input').val(parseFloat(splitbackground[0], 10))
+                                                            myElement.find('.bg-toppos_input').val(parseFloat(splitbackground[1], 10))
+                                                            myElement.find('#bg_img_pixel').iCheck('check');
+                                                        }
+                                                        else if(SelectedElementForStyle.css('background-position') !=="0% 0%" && SelectedElementForStyle.css('background-position')!=="" && SelectedElementForStyle.css('background-position') !=="0 0"){
+                                                            var splitImgpos = SelectedElementForStyle.css('background-position').split(" ");
+                                                            myElement.find('.bg-leftpos').val(splitImgpos[0]).attr("selected", "selected");
+                                                            myElement.find('.bg-toppos').val(splitImgpos[1]).attr("selected", "selected");
+                                                            
+                                                        }else{
+                                                            myElement.find('.bg-leftpos').val('0%').attr("selected", "selected");
+                                                            myElement.find('.bg-toppos').val('0%').attr("selected", "selected");
+                                                            obj.parent().find('.bgimg-thumb').remove();
+                                                        }
+                                                        if(bgimage && bgimage !== "" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="none" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="undefined"){
+                                                            obj.parent().find('.bgimg-thumb,.removeThumb').remove();
+                                                            obj.parent().find('.bgimg-thumb_imgwrap').find('h4').hide();
+                                                            obj.parent().find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img class="center-block bgimg-thumb" style="width: 133px; height: 100px;" src='+bgimage+'/>')
+                                                            obj.parent().find('#bgUrlCode').val(bgimage.replace(/^"(.*)"$/, '$1'));
+                                                            myElement.find(".bgimage-properties").show();
+                                                            
+                                                        }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                        }
+                                                        
+                                                    }else{
+                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                            obj.parent().find('.bgimg-thumb').remove();
+                                                            obj.parent().find('.bgimg-thumb_imgwrap').show();
+                                                            
+                                                    }
+                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E"); 
+                                                     myElement.find('.removeThumb').click(function(){
+                                                         SelectedElementForStyle.css('background-image','none');
+                                                         $(this).parent().parent().parent().find('#bgUrlCode').val('');
+                                                         myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                                         myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                                         $(this).parent().find('h4').show();
+                                                         $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
+                                                         mee_view.isRepeatY = false;
+                                                         mee_view.isRepeatX = true;
+                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                                                    pageBackgroundimage='none';
+                                                            }
+                                                         
+                                                         pageBackgroundimage_repeat = 'no-repeat';
+                                                         pageBackgroundimage_pos = '0% 0%';
+                                                     });
+                                                    // undoManager.registerAction(mainContentHtmlGrand.html());
+                                                    makeCloneAndRegister();
+                                                }
+                                }
+                                function ddlBackgroundBorderLayerChange(obj){
+                                    if ($(this).find(':selected').val() != "-1") {
+                                                        RemoveAllOutline();                                                    
+                                                        SelectedElementForStyle = obj.find(':selected').val()=="body"? meeIframe.find("body"): obj.find(':selected').data('el');
+                                                        /*if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
+                                                            mee_view.parentTd = true;
+                                                        }else{
+                                                             mee_view.parentTd = false;
+                                                        }*/
 
+                                                        mee_view.parentTd = obj.prop('selectedIndex');
+                                                        //console.log(mee_view.parentTd);
+                                                        SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
+                                                        // undoManager.registerAction(mainContentHtmlGrand.html());
+                                                        makeCloneAndRegister();
+                                                    }
+                                }
                                 function RemoveAllOutline() {
                                     meeIframe.find(".mainContentHtmlGrand").removeInlineStyle("outline");
                                     meeIframe.find("*").removeInlineStyle("outline");
@@ -5339,10 +5525,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         editor.on('BeforeExecCommand', function(e) {
                                                             //console.log('BeforeExecCommand event', e);
                                                            
-                                                            //console.log();
+                                                          
                                                            //e.target['startContent'] = 
                                                            //console.log(e.target.startContent);
-                                                            //console.log();
+                                                            
                                                         });
                                                         
                                                         editor.on('NodeChange', function(e) {
@@ -7676,6 +7862,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         _app: this.app,
                         parentWindowobj:this.options.parentWindow,
                         scrollTopMinus:this.options.scrollTopMinus,
+                        isTemplate: this.options.isTemplate,
                         scrollTopMinusObj:this.options.scrollTopMinusObj,
                         pageId: this.options.pageid?this.options.pageid:false,
                         _BMSTOKEN: BMSTOKEN,

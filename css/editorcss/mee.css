@@ -2713,7 +2713,10 @@ a,
 
 
 
-
+.border-accordion .chosen-container {
+    margin-top: 0;
+    padding: 2px 4px 0 !important;
+}
 .MEE_EDITOR .accordian {
     background: none repeat scroll 0 0 #FFFFFF; 
     padding: 4px;
@@ -2779,8 +2782,8 @@ a,
 .MEE_EDITOR .accordian-content h4 {
     color: #1d91bc;
     font-size: 14px;
-    font-weight: normal;
-    margin: 30px 0 0;
+    font-weight: bold;
+   margin: 10px 0 0;
     letter-spacing:0;
     padding: 5px;
 }
@@ -3441,7 +3444,7 @@ input.openUpGallery[type="button"] {
 }
 .bgimage-properties .bgimage-repeat-h4{
     background: #6494af none repeat scroll 0 0;
-    color: #fff;
+    color: #fff !important;
     margin: 8px 0 0;
     padding-left: 3px;
 }
