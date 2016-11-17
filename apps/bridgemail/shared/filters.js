@@ -492,7 +492,7 @@
             
            
           filter_html += '<div class="row nolabel campaign-url-container" style="display:none"><label style="width: 9px; visibility: hidden;">test</label><div class="btn-group "><select data-placeholder="Select URL" class="campaign-url"></select></div>'              
-          filter_html += '<a  class="icon view showtooltip" title="Preview Link"></a></div>'
+          filter_html += '<a  class="icon view preview-campaign-url showtooltip" title="Preview Link"></a></div>'
           filter_html += '<div class="row match"> <em class="text">happens in last</em> '
           filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">'+this.getTimeSpan(30,90)+'</select><em class="text">days</em></div> '  
           filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailFreq">'+this.getTimeSpan(1)+'</select><em class="text">or more times</em></div> '  
@@ -624,7 +624,8 @@
               var obj = {};
               obj["currview"] = self;
               if($( ".campaign-list option:selected" ).val() != -1){
-                  obj['camp_id'] = $( ".campaign-list option:selected" ).val();
+                  //obj['camp_id'] = $( ".campaign-list option:selected" ).val();
+                  obj['camp_id'] = $(this).parent().find('.campaign-list option:selected').val();
                   obj['camp_name'] = $( ".campaign-list option:selected" ).text();
                   if(mapValue==="N"){
                       obj['isTextOnly'] = $( ".campaign-list option:selected" ).data('istext'); 
@@ -635,6 +636,19 @@
               } 
               
           });
+       // Preview campaign url 
+       filter.find(".preview-campaign-url").click(function(){
+           if(!$(this).hasClass('disabled-btn')){
+               var url = $(this).parent().find('.campaign-url option:selected').text();
+                var valid = /^(http|https):\/\/[^ "]+$/.test(url);
+                if(valid){
+                    window.open(url, '_blank');
+                }else{
+                   self.options.app.showAlert("Selected value is an invalid url.",$("body"),{fixed:true});
+                }
+           }
+           
+       })
       //Campaign List Select box 
       filter.find(".campaign-list").chosen({width:"450px"}).change(function(){
           if($(this).val()!=="-1" &&  filter.find(".filter-by").val()=="CK"){
@@ -655,7 +669,13 @@
                             select_html += '<option value="'+_value+'" '+selected_article+'>'+val[0].title+'</option>'
                         })
                      }
-                     filter.find(".campaign-url").html(select_html).prop("disabled",false).trigger("chosen:updated")
+                     filter.find(".campaign-url").html(select_html).prop("disabled",false).trigger("chosen:updated").change(function(){
+                         if($(this).val()=="-1"){
+                             filter.find('.preview-campaign-url').addClass('disabled-btn');
+                         }else{
+                             filter.find('.preview-campaign-url').removeClass('disabled-btn');
+                         }
+                     })
                      
                 }
             }).fail(function() { console.log( "error Articals listing" ); })
@@ -666,7 +686,7 @@
           }
       })
       //Article URL select box
-      filter.find(".campaign-url").chosen({width:"350px"})
+      filter.find(".campaign-url").chosen({width:"578px"})
       
       //Time Span Select boxes
       filter.find(".timespan").chosen({disable_search: "true",width:"80px"}).change(function(){
