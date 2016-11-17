@@ -5736,9 +5736,16 @@ opacity: 0.9;
     height: 36px;
     line-height: 36px;
     overflow: hidden;
-    width: 90%;
+    width: 86%;
 }
-.toplinks .linkrow a.lcount { float:right;width: 9%; text-align:right;font-size: 14px; font-weight:bold; line-height: 36px; }
+.toplinks .linkrow a.download-lnk-csv{
+    background: #dcf2fd url("../images/csv_b_11_14.png") no-repeat scroll 27px center !important;
+    padding:2px 20px 1px 5px;
+    margin-left: 0 !important;
+    margin-top:9px;
+    color: #6cacea !important;
+}
+.toplinks .linkrow a.lcount { float:right;width: 7%; text-align:right;font-size: 14px; font-weight:bold; line-height: 36px; }
 .toplinks .linkrow .gbarfull { background:#edf9ff; height:7px; display:block; clear:both; width:100%;}
 .toplinks .linkrow .gbar{height:7px; display:block; background:#13b4ef;}
 
@@ -5777,6 +5784,7 @@ ul.chartstatdetail {
 ul.chartstatdetail li {
     background: none repeat scroll 0 0 #A9C2D5;
     border: 0 none;
+    position:relative;
     border-radius: 2px;
 	float:left;
     margin-left: 0.5%;
@@ -5820,6 +5828,17 @@ ul.chartstatdetail li strong {
     font-size: 36px;
     line-height: 40px;
     margin: 8px 0 0;
+}
+
+ul.chartstatdetail li a.download-sub-csv{
+    background: rgba(255, 255, 255, 0.2) url("../images/csv_w_16_16.png") no-repeat scroll 33px 2px !important;
+    padding:3px 25px 1px 10px;
+    margin-left: 0 !important;
+    color: #fff !important;
+    position: absolute;
+    right:15px;
+    top:5px;    
+    height:18px;
 }
 
 ul.chartstatdetail li:hover { background:#7797ac;}
@@ -7742,7 +7761,7 @@ left: 17px;
 position: absolute;
 top: 14px;
 }
-/// icon bots
+/* icon bots */
 .icon-b { float:left;  
     height: 20px;
 	position:relative;
@@ -9565,4 +9584,23 @@ a.add-list{
 }
 a.add-to-lists > i.add-list {
     background: #7b929f url("../img/act-list-add-w_24x24.png") no-repeat scroll center center;
+}
+
+/*==============================================
+Download CSV Button
+===============================================*/
+.download-csv{
+    background: #dcf2fd url("../images/csv_b_16_16.png") no-repeat scroll 33px center !important;
+    padding:3px 25px 1px 10px;
+    margin-left: 0 !important;
+    color: #6cacea !important;
+}
+
+.disabled-csv-download{
+    opacity: 0.5;
+    cursor:default !important;
+}
+
+.downloadcsv{
+    background: url("../images/csv_w_20_20.png") no-repeat scroll center center;    
 }

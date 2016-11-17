@@ -201,7 +201,7 @@ define([
                 console.log("url failed:"+settings.url+"\n---Status::"+jqxhr.statusText+"\n---Status Code::"+jqxhr.status);          
                 if(jqxhr.status===200){
                     
-                    self.showAlert("There is some thing wrong with our server. Please try again later.", $("body"), {fixed: true});
+                    self.showAlert("Sorry, there's something wrong with our server. Please try again later.", $("body"), {fixed: true});
                 }
                 Offline.check();
                 

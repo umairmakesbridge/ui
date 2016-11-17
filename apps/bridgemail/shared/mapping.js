@@ -53,6 +53,14 @@
         }
         , addToCol2: function (obj) {
             var self = this
+            
+            //Limit Check on moving
+            if(self.options.moveLimit){
+                if(self.$element.find(".col2 .rightcol tbody tr").length >=  self.options.moveLimit){
+                    self.options.app.showAlert("You cannot add more than "+self.options.moveLimit+" "+self.options.moveItemName+".", $("body"), {fixed: true});
+                    return false;
+                }
+            }
             if (self.options.movingElement == 'tr')
                 var tr_obj = $(obj.target).parents("tr");
             else
@@ -108,6 +116,7 @@
         }
         , removeFromCol2: function (obj) {
             var self = this;
+            
             if (self.options.movingElement == 'tr')
                 var tr_obj = $(obj.target).parents("tr");
             else
@@ -217,6 +226,8 @@
         app: null,
         gridHeight: 290,
         sumColumn: '',
+        moveLimit: null,
+        moveItemName:"Item",
         sumTarget: '',
         loadTarget: '',
         copyTarget: '',

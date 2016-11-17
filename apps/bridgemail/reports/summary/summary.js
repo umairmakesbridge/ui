@@ -7,8 +7,8 @@
  * Dependency: HTML, Summary Model, Graphs View, Stats Model, Contacts VIew.
  */
 
-define(['text!reports/summary/html/summary.html','reports/summary/models/summary','reports/summary/views/links','reports/summary/views/graphs','reports/summary/models/stats','reports/summary/views/scontacts',"reports/summary/views/settings"],
-function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage) {
+define(['text!reports/summary/html/summary.html','reports/summary/models/summary','reports/summary/views/links','reports/summary/views/graphs','reports/summary/models/stats','reports/summary/views/scontacts',"reports/summary/views/settings","common/mapping"],
+function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage,mappingPage) {
         'use strict';
         return Backbone.View.extend({
             className: 'campaign-summary',
@@ -23,7 +23,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                 "click .sent-views":"sentViews",
                 "click .pending-views":"pendingViews",
                 "click .closebtn":"closeContactsListing",
-                "click .s-report":"openSnapshotReport"
+                "click .s-report":"openSnapshotReport",
+                "click .download-sub-csv":"openMappingDialog"
             },
             initialize: function () {
                this.template = _.template(template);				
@@ -48,10 +49,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
             render: function () {
                 this.options.app.addSpinner(this.$el);
                 this.fetchStats();
-                this.active_ws = this.$el.parents(".ws-content");
+                this.active_ws = this.$el.parents(".ws-content");                
                 $(window).scroll(_.bind(this.scrollTop,this));
-                $(window).resize(_.bind(this.scrollTop,this));
-               
+                $(window).resize(_.bind(this.scrollTop,this));                
                 //console.log(this.options);
             },
             refreshWorkSpace:function(options){
@@ -60,23 +60,25 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                     this.fetchStats();
                  }
             },
+            init:function(){
+              
+            },
             addLinks:function(){
-               this.$el.find('.links-container').prepend(new ViewLinks({clickCount:this.stats.get('clickCount'),app:this.options.app,campNum:this.campNum}).el);  
+               var linksView = new ViewLinks({clickCount:this.stats.get('clickCount'),app:this.options.app,campNum:this.campNum});                
+               this.$el.find('.links-container').prepend(linksView.el);  
+               linksView.on('linksDownloadClick',this.mapCSVFieldsDialog);
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
                  /*-----Remove loading------*/
                     this.options.app.removeSpinner(this.$el);
                    
                    /*------------*/
-                   if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
-                      
-                       this.graphView.$el.find('.download').html('Loading...');
-                      
+                   if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari                      
+                       this.graphView.$el.find('.download').html('Loading...');                      
                    }
             },
             addGraphs:function(data){
                 this.graphView = new ViewGraphs({campaignType:this.objSummary.get('campaignType'),triggerOrder:this.options.params.messageNo,clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId,botId:this.autobotId});
-                this.$('.col-cstats').prepend(this.graphView.el);  
-                
+                this.$('.col-cstats').prepend(this.graphView.el);                  
                 this.options.app.showLoading(false,this.$('.col-cstats'));
             },
             fetchStats:function(){
@@ -147,7 +149,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                         } 
                          
                         self.addLinks();
-                        
+                        self.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});    
                     });
                     /*self.objSummary.fetch({data:_data,success:function(dataS){
                             
@@ -164,7 +166,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
             }
             ,
             getTabbedText:function(tab){
-              var numbers = 0;
+              var numbers = 0;              
               switch(tab){
                  case "open":
                     tab = "Opened";
@@ -191,6 +193,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                     numbers = this.stats.get('pageViewsCount');
                     break;    
               }
+                   
                     var sent = parseInt(this.stats.get('sentCount'));
                     var numbers = parseInt(numbers);
 
@@ -560,9 +563,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                     });
                     this.options.app.showLoading("Loading...",dialog.getBody());
                     require(["campaigns/copycampaign"],function(copycampaignPage){                                     
-                                     var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.options.app,copycampsdialog:dialog});
-                                     dialog.getBody().html(mPage.$el);
-                                     dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
+                        var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.options.app,copycampsdialog:dialog});                        
+                        dialog.getBody().html(mPage.$el);
+                        dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
                     });
                 },
                 truncateHeader:function(header){
@@ -582,8 +585,28 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                     var URL = "/pms/report/SnapshotReport.jsp?viewBy=campaign&selectCampaign="+this.campNum+"&BMS_REQ_TK="+this.options.app.get('bms_token')+"&fromNewUI=true&ft=y&as=y&doPreview=n";
                     var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                     dialog.getBody().html(iframHTML);
-                }        
-
+                },
+                openMappingDialog: function(e){
+                    var downloadLink = $(e.target);
+                    if(downloadLink.hasClass("disabled-csv-download")){
+                        return false;
+                    }
+                    var options = {type:downloadLink.data("type"),campNum:this.campNum};
+                    this.mapCSVFieldsDialog(options)
+                    
+                },
+                mapCSVFieldsDialog: function(options){
+                    var dialog = this.options.app.showDialog({title: ' Map Your .CSV Layout',
+                        css: {"width": "1200px", "margin-left": "-600px"},
+                        bodyCss: {"min-height": "400px"},
+                        buttons: {saveBtn: {text: 'Export CSV',btnicon:'downloadcsv'}}
+                    });
+                    var mPage = new mappingPage({camp: this, app: this.options.app, dialog: dialog});
+                    var dialogArrayLength = this.options.app.dialogArray.length; // New Dialog
+                    dialog.getBody().append(mPage.$el);                    
+                    mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                    dialog.saveCallBack(_.bind(mPage.saveCall, mPage, options));
+                }
             
         });    
 });

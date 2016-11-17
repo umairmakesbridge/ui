@@ -1798,7 +1798,7 @@
                         this.app.showLoading(false, this.$el);
                         var _json = jQuery.parseJSON(data);
                         _.each(_json.tagList[0], function (val) {
-                            if (tags_array.indexOf(val[0].tag) > -1) {
+                            if (tags_array.indexOf(this.app.decodeHTML(val[0].tag)) > -1) {
                                 this.modelArray.push(new Backbone.Model(val[0]));
                             }
                         }, this);                                                             
@@ -1981,7 +1981,7 @@
                         _.each(this.modelArray, function (val, index) {
 
                             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagStatDayByDay";
-                            var tag = val.get("tag");
+                            var tag = this.app.decodeHTML(val.get("tag"));
                             var post_data = {tag: tag, toDate: this.toDate, fromDate: this.fromDate}
                             val.set("cno",index);
                             var tagRow = new reportBlock({model: val, page: this, type: "tag","expandedView":true});                            
@@ -2758,7 +2758,7 @@
                     var returnVal = valObj;
                     if(this.subType=="tag"){
                        _.each(this._json.tagList[0], function (val) {
-                            if (valObj.tag==val[0].tag) {
+                            if (valObj.tag==this.app.decodeHTML(val[0].tag)) {
                                 returnVal = {tag:valObj.tag,subCount:val[0].subCount};
                                 return;
                             }
