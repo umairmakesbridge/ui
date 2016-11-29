@@ -13,9 +13,15 @@
       <div style="height: 70px;">
               <ul class="s-u-b bounce-class" style="border-top:0;">
 
-                      <li data-type="UN" data-count="<%=this.model.get('unSubscribeCount')%>"><span>Unsubscribed<strong><%=this.options.app.addCommas(this.model.get('unSubscribeCount'))%></strong></span></li>
-                      <li data-type="SP" data-count="<%=this.model.get('supressCount')%>"><span>Suppressed<strong><%=this.options.app.addCommas(this.model.get('supressCount'))%></strong></span></li>
-                      <li data-type="CB" data-count="<%=this.model.get('bounceCount')%>"><span>Bounced <strong><%=this.options.app.addCommas(this.model.get('bounceCount'))%></strong></span></li>
+                      <li data-type="UN" data-count="<%=this.model.get('unSubscribeCount')%>">
+                          <a class="cstatus pclr2 download-sub-csv showtooltip <% if(this.model.get('unSubscribeCount')=='0'){print('disabled-csv-download')}%>" title="Download Unsubscribed as CSV" data-type="unsubscribe">CSV</a>
+                          <span>Unsubscribed<strong><%=this.options.app.addCommas(this.model.get('unSubscribeCount'))%></strong></span></li>
+                      <li data-type="SP" data-count="<%=this.model.get('supressCount')%>">
+                          <a class="cstatus pclr2 download-sub-csv showtooltip <% if(this.model.get('supressCount')=='0'){print('disabled-csv-download')}%>" title="Download Suppressed as CSV" data-type="supress">CSV</a>
+                          <span>Suppressed<strong><%=this.options.app.addCommas(this.model.get('supressCount'))%></strong></span></li>
+                      <li data-type="CB" data-count="<%=this.model.get('bounceCount')%>">
+                          <a class="cstatus pclr2 download-sub-csv showtooltip <% if(this.model.get('bounceCount')=='0'){print('disabled-csv-download')}%>" title="Download Bounced as CSV" data-type="bounce">CSV</a>
+                          <span>Bounced <strong><%=this.options.app.addCommas(this.model.get('bounceCount'))%></strong></span></li>
                     </ul>
 
 

@@ -9,14 +9,14 @@
  * * Section8 - Landing page Forms
  ****/
 
-define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors','bms-remote','editor/editor-dragfile', 'jquery.colresize'],
+define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors', 'bms-remote', 'editor/editor-dragfile', 'jquery.colresize'],
         function ($, Backbone, _, template, linksPage, blocksPage, filterPage) {
             'use strict';
             return Backbone.View.extend({
                 events: {
                 },
                 initialize: function () {
-                    this.app = this.options.app;                    
+                    this.app = this.options.app;
                     this.leftMinus = 80;
                     this.topMinus = 381;
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
@@ -92,8 +92,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     if ($("body").MakeBridgeEditor) {
                         this.render();
                         return;
-                    }                                      
-                    
+                    }
+
                     $.fn.extend({
                         MakeBridgeEditor: function (options) {
 
@@ -108,7 +108,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 this.registerAction = MakeBridgeUndoRedoManager_RegisterAction;
                                 this._undo = MakeBridgeUndoRedoManager_Undo;
                                 this._redo = MakeBridgeUndoRedoManager_Redo;
-                                
+
                                 function MakeBridgeUndoRedoManager_RegisterAction(obj) { // Save HTML before performing any action
 
                                     if (isUndoPerformed) { // While performing undo redo if any new action performed then clear the stack
@@ -119,12 +119,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             undoRedoStack.pop();
                                         }
                                         isUndoPerformed = false;
-                                    }                                    
+                                    }
                                     if (undoRedoStack.length == 0) {
                                         _view.find(".undo_li a.btn-gray").addClass("disabled");
                                         _view.find(".redo_li a.btn-gray").addClass("disabled");
-                                    }
-                                    else if (undoRedoStack.length == 1) {
+                                    } else if (undoRedoStack.length == 1) {
                                         _view.find(".undo_li a.btn-gray").removeClass("disabled");
                                         _view.find(".redo_li a.btn-gray").addClass("disabled");
                                     }
@@ -148,12 +147,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     if (undoRedoIndex >= 0) {
                                         isUndoPerformed = true;
-                                        undoRedoIndex--;                                        
+                                        undoRedoIndex--;
                                         if (undoRedoStack.length > 1 && undoRedoIndex == 0) {
                                             _view.find(".undo_li a.btn-gray").addClass("disabled");
                                             _view.find(".redo_li a.btn-gray").removeClass("disabled");
-                                        }
-                                        else {
+                                        } else {
                                             _view.find(".undo_li a.btn-gray").removeClass("disabled");
                                             _view.find(".redo_li a.btn-gray").removeClass("disabled");
                                         }
@@ -167,25 +165,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 function MakeBridgeUndoRedoManager_Redo() { // on Press Redu increase index and send the stack Element
 
                                     if (isUndoPerformed && undoRedoStack.length > (undoRedoIndex + 1)) {
-                                        undoRedoIndex++;                                        
+                                        undoRedoIndex++;
                                         if (undoRedoIndex < undoRedoStack.length - 1) {
                                             _view.find(".undo_li a.btn-gray").removeClass("disabled");
                                             _view.find(".redo_li a.btn-gray").removeClass("disabled");
-                                        }
-                                        else {
+                                        } else {
                                             _view.find(".undo_li a.btn-gray").removeClass("disabled");
                                             _view.find(".redo_li a.btn-gray").addClass("disabled");
                                         }
                                         return undoRedoStack[undoRedoIndex];
-                                    }
-                                    else {
+                                    } else {
                                         return null;
                                     }
                                 }
                             }
                             var mee = this;
                             mee.iframeLoaded = false;
-                            mee.isActionScriptSet= '';
+                            mee.isActionScriptSet = '';
                             mee.isActionScriptSetG = '';
                             mee.CurrentDivId = '';
                             mee.isSameElement = false;
@@ -203,69 +199,66 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.render();
                                     },
                                     render: function () {
-                                        
+
                                         this.$el.html(this.my_template({allowedUser: ['admin', 'jayadams', 'demo'], options: options}));
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;
-                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                                                                      
-                                            if(options.landingPage){
-                                                 mee.getActionScript();
-                                            }                                   
-                                           $this.find("#mee-iframe").contents().find("body").mouseup(function(e){
-                                               
-                                               if(!mee.isSameElement && mee.CurrentDivId !=""){
-                                                   //console.log('2. Mouse Up on body');
-                                                   var toolPanelID = $this.find("#mee-iframe")[0].contentWindow.tinyMCE.get(mee.CurrentDivId).theme.panel._id; 
-                                                   var toolPanelObj = $this.find('#mee-iframe').contents().find('#'+toolPanelID)
-                                                   $(toolPanelObj).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
-                                                                    var scrollTop = options.parentWindowobj.scrollTop();
-                                                                    var currentWindowObj = options.parentWindowobj; 
-                                                                    if(currentWindowObj.hasClass('modal-body')){
-                                                                        if(options.scrollTopMinus){ // Without Accordian
-                                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
-                                                                        }
-                                                                       else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                           
-                                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
-                                                                           //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
-                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
-                                                                             scrollPosition = scrollPosition + 50; 
-                                                                            }
-                                                                       }
-                                                                       else{
-                                                                                scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
-                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
-                                                                                    scrollPosition = scrollPosition + 56; 
-                                                                                     }
-                                                                            } 
-                                                                    }
-                                                                    else{
-                                                                        //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
-                                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
-                                                                    }
-                                                                    
-                                                                    if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
-                                                                              $(toolPanelObj).css({top:scrollPosition+"px","left":"0"});
-                                                                            }else{
-                                                                                        $(toolPanelObj).css({top:"0px","left":"0"}); 
-                                                                                        setTimeout(function(){
-                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
-                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
-                                                                                        }, 10);
-                                                                                        
-                                                                            }
-                                                                    //setTimeout(function(){ 
-                                                                        $(toolPanelObj).addClass('fixed-panel'); 
-                                                                        $(toolPanelObj).show();
-                                                                        myElement.find('.disabled-toolbar').css('visibility','hidden');
-                                                                    //}, 10);
-                                                                    mee.CurrentDivId="";
-                                               
-                                               }
+                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight, mee));
+                                            if (options.landingPage) {
+                                                mee.getActionScript();
+                                            }
+                                            $this.find("#mee-iframe").contents().find("body").mouseup(function (e) {
 
-                                           })                                                                             
+                                                if (!mee.isSameElement && mee.CurrentDivId != "") {
+                                                    //console.log('2. Mouse Up on body');
+                                                    var toolPanelID = $this.find("#mee-iframe")[0].contentWindow.tinyMCE.get(mee.CurrentDivId).theme.panel._id;
+                                                    var toolPanelObj = $this.find('#mee-iframe').contents().find('#' + toolPanelID)
+                                                    $(toolPanelObj).css({'width': parseInt(myElement.find('.editortoolbar').width()) - 9 + 'px', 'left': '0px'});
+                                                    var scrollTop = options.parentWindowobj.scrollTop();
+                                                    var currentWindowObj = options.parentWindowobj;
+                                                    if (currentWindowObj.hasClass('modal-body')) {
+                                                        if (options.scrollTopMinus) { // Without Accordian
+                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
+                                                        } else if (currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")) {
+
+                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top) - (myElement.offset().top + 60)); // New Offset 
+                                                            //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
+                                                            if (currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')) {
+                                                                scrollPosition = scrollPosition + 50;
+                                                            }
+                                                        } else {
+                                                            scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
+                                                            if (currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')) {
+                                                                scrollPosition = scrollPosition + 56;
+                                                            }
+                                                        }
+                                                    } else {
+                                                        //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
+                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
+                                                    }
+
+                                                    if (scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true) {
+                                                        $(toolPanelObj).css({top: scrollPosition + "px", "left": "0"});
+                                                    } else {
+                                                        $(toolPanelObj).css({top: "0px", "left": "0"});
+                                                        setTimeout(function () {
+                                                            myElement.find('.editortoolbar').css('margin-bottom', '0');
+                                                            meeIframe.find(".mainTable").css("margin-top", "45px");
+                                                        }, 10);
+
+                                                    }
+                                                    //setTimeout(function(){ 
+                                                    $(toolPanelObj).addClass('fixed-panel');
+                                                    $(toolPanelObj).show();
+                                                    myElement.find('.disabled-toolbar').css('visibility', 'hidden');
+                                                    //}, 10);
+                                                    mee.CurrentDivId = "";
+
+                                                }
+
+                                            })
                                         })
-                                        
+
                                     }
 
                                 });
@@ -276,14 +269,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 //$this = element;
                                 $this.html(mainView.el);
                                 var myElement = $this;
-                                 myElement.find(".bgimage-properties li input.radiopanel").iCheck({
-                                                                checkboxClass: 'checkpanelinput',
-                                                                insert: '<div class="icheck_line-icon"></div>'
-                                                            });
-                                 myElement.find(".bgimage-properties input.radiopanel_percent").iCheck({
-                                                                radioClass: 'radiopanelinput',
-                                                                insert: '<div class="icheck_radio-icon"></div>'
-                                                            });
+                                myElement.find(".bgimage-properties li input.radiopanel").iCheck({
+                                    checkboxClass: 'checkpanelinput',
+                                    insert: '<div class="icheck_line-icon"></div>'
+                                });
+                                myElement.find(".bgimage-properties input.radiopanel_percent").iCheck({
+                                    radioClass: 'radiopanelinput',
+                                    insert: '<div class="icheck_radio-icon"></div>'
+                                });
                                 var meeIframe = myElement.find("#mee-iframe").contents();
                                 var meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                 var oInitDestroyEvents = new InitializeAndDestroyEvents();
@@ -297,15 +290,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var myColorsFromServiceGlobal = "";
                                 var txtColorCode = myElement.find(".txtColorCode");
                                 var ulMyColors = myElement.find(".myColors");
-                                var personalizedTagsGlobal = new Array();var customTagsGlobal = new Array();var linksTagsGlobal = new Array();var basicTagsGlobal=new Array();                                
+                                var personalizedTagsGlobal = new Array();
+                                var customTagsGlobal = new Array();
+                                var linksTagsGlobal = new Array();
+                                var basicTagsGlobal = new Array();
                                 var topPlus = options.topPlus;
                                 var leftPlus = options.leftPlus;
                                 var $element = null;
-                                var emailWidth = options.landingPage? "100%":"600px";                              
+                                var emailWidth = options.landingPage ? "100%" : "600px";
                                 var pageBackgroundColor = "#fff";
                                 var pageBorderWidth = '0px';
                                 var pageBorderColor = 'transparent';
-                                var pageBorderType= 'none'; // Style of 
+                                var pageBorderType = 'none'; // Style of 
                                 var pageBorderLeft = 'none';
                                 var pageBorderLeftProp = '';
                                 var pageBorderRight = 'none';
@@ -383,53 +379,54 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
 
                                 function makeCloneAndRegister() {
+                                    console.log("Undo Register")
                                     var mainTable = meeIframe.find(".mainTable").clone(true);
                                     mainTable.find("div.ui-resizable-e").remove();
                                     mainTable.find("div.ui-resizable-s").remove();
                                     mainTable.find("div.ui-resizable-se").remove();
-                                    mainTable.find("div.textcontent").removeClass('mce-content-body');                                    
+                                    mainTable.find("div.textcontent").removeClass('mce-content-body');
+                                    mainTable.attr("mee-body-style",meeIframe.find("body").attr("style"));
                                     undoManager.registerAction(mainTable);
-                                    mee.resizeHeight();                                    
+                                    mee.resizeHeight();
                                     return false;
                                 }
-                                mee.setScrollHeight = function(){                                    
-                                    if($(meeIframeWindow).height()<$(meeIframeWindow.document).height()){
+                                mee.setScrollHeight = function () {
+                                    if ($(meeIframeWindow).height() < $(meeIframeWindow.document).height()) {
                                         this.resizeHeight();
                                     }
-                                    
-                                }
-                                mee.IntializeToolTip = function(){
-                                    
-                                    myElement.find(".showtooltip-dg").tooltip({
-                                            template: '<div class="tooltip custom-tooltip"><div class="tooltip-inner"></div></div>',
-                                           //'placement':  'right',
-                                           delay: { show: 0, hide: 0 },
-                                           animation: false,
-                                        });
-                                   myElement.find(".showtooltip-dg").unbind('mousemove');
-                                   myElement.find(".showtooltip-dg").unbind('mouseleave');
-                                   myElement.find(".showtooltip-dg").bind('mousemove',function(e){
-                                       //console.log(e.pageY,e.pageX);
-                                       $(this).tooltip('show');
-                                       $('.custom-tooltip').css({top:e.pageY, left: e.pageX + 30});
 
-                                   }).bind('mouseleave', function(e) {
-                                          //  $(this).tooltip('hide');
-                                          setTimeout(function(){
-                                              myElement.find('.showtooltip-dg').tooltip('hide')
-                                          },40);
-                                        });
-                                    
                                 }
-                                mee.resizeHeight = function() {
+                                mee.IntializeToolTip = function () {
+
+                                    myElement.find(".showtooltip-dg").tooltip({
+                                        template: '<div class="tooltip custom-tooltip"><div class="tooltip-inner"></div></div>',
+                                        //'placement':  'right',
+                                        delay: {show: 0, hide: 0},
+                                        animation: false,
+                                    });
+                                    myElement.find(".showtooltip-dg").unbind('mousemove');
+                                    myElement.find(".showtooltip-dg").unbind('mouseleave');
+                                    myElement.find(".showtooltip-dg").bind('mousemove', function (e) {
+                                        //console.log(e.pageY,e.pageX);
+                                        $(this).tooltip('show');
+                                        $('.custom-tooltip').css({top: e.pageY, left: e.pageX + 30});
+
+                                    }).bind('mouseleave', function (e) {
+                                        //  $(this).tooltip('hide');
+                                        setTimeout(function () {
+                                            myElement.find('.showtooltip-dg').tooltip('hide')
+                                        }, 40);
+                                    });
+
+                                }
+                                mee.resizeHeight = function () {
                                     var ul_container = meeIframe.find(".mainContentHtml");
                                     var main_container = myElement.find(".editorbox");
                                     if (ul_container.height() > ($(".tabcontent").height() - 100)) {
-                        
+
                                         main_container.css("height", (ul_container.height() + 200) + "px");
                                         iframeEle.css("height", (ul_container.height() + 200) + "px");
-                                    }
-                                    else {
+                                    } else {
                                         main_container.css("height", $(".tabcontent").height() + "px");
                                         iframeEle.css("height", $(".tabcontent").height() + "px");
                                     }
@@ -443,25 +440,26 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var replaceObj = undoManager._undo();
                                     if (replaceObj != null) {
                                         var contentObj = meeIframe.find("body");
+                                        contentObj.attr("style",replaceObj.attr("mee-body-style"));
+                                        replaceObj.removeAttr("mee-body-style");
                                         contentObj.html(replaceObj.outerHTML());
                                         var mainObj = meeIframe.find(".mainTable");
                                         mainObj.find("div.textcontent").css('visibility', 'visible');
                                         oInitDestroyEvents.InitDCContents(mainObj);
-                                        oInitDestroyEvents.InitAll(mainObj, true);                                        
+                                        oInitDestroyEvents.InitAll(mainObj, true);
                                         undoredo = true;
                                         if (myElement.find(".style-tab").hasClass("active")) {
                                             InitializeElementsForStyle(true);
-                                        }
-                                        else {
+                                        } else {
                                             RemoveAllOutline();
                                             var editorfocused = meeIframe.find("div.textcontent.mce-edit-focus");
                                             if (editorfocused.length) {
                                                 meeIframeWindow.tinymce.get(editorfocused.attr("id")).focus();
                                             }
-                                            
+
                                         }
-                                        
-                                         mee.resizeHeight();
+
+                                        mee.resizeHeight();
                                     }
                                 });
                                 myElement.find(".redo_li").click(function () {
@@ -471,25 +469,26 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var replaceObj = undoManager._redo();
                                     if (replaceObj != null) {
                                         var contentObj = meeIframe.find("body");
+                                        contentObj.attr("style",replaceObj.attr("mee-body-style"));
+                                        replaceObj.removeAttr("mee-body-style");
                                         contentObj.html(replaceObj.outerHTML());
-                                        var mainObj = meeIframe.find(".mainTable");                                        
+                                        var mainObj = meeIframe.find(".mainTable");
                                         mainObj.find("div.textcontent").css('visibility', 'visible');
                                         oInitDestroyEvents.InitDCContents(mainObj);
-                                        oInitDestroyEvents.InitAll(mainObj, true);                                        
+                                        oInitDestroyEvents.InitAll(mainObj, true);
                                         undoredo = true;
                                         if (myElement.find(".style-tab").hasClass("active")) {
                                             InitializeElementsForStyle(true);
-                                        }
-                                        else {
+                                        } else {
                                             RemoveAllOutline();
                                             var editorfocused = meeIframe.find("div.textcontent.mce-edit-focus");
                                             if (editorfocused.length) {
                                                 meeIframeWindow.tinymce.get(editorfocused.attr("id")).focus();
                                             }
-                                            
+
                                         }
-                                        
-                                         mee.resizeHeight();
+
+                                        mee.resizeHeight();
 
                                     }
                                 });
@@ -500,129 +499,130 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     $(this).addClass('active');
                                     myElement.find('div[data-element="' + $(this).attr('id') + '"]').show();
                                 });
-                                
+
                                 function setIFrameElements() {
                                     meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                     mainContentHtmlGrand = meeIframe.find(".mainContentHtmlGrand");
-                                   if(!isRemoveDialogAttach){
-                                        removeDialogs();    
-                                   }
-                                   recursiveSaveCall();
+                                    if (!isRemoveDialogAttach) {
+                                        removeDialogs();
+                                    }
+                                    recursiveSaveCall();
                                     mainContentHtmlGrand.mouseup(function () {
-                                        if(changFlag){
+                                        if (changFlag) {
                                             changFlag.editor_change = true;
-                                        }   
+                                        }
                                     })
                                     //*****************************************Landing page options***********************************************************************************///
                                     if (options.landingPage) {
                                         iframeEle.css("width", "100%");
                                         meeIframe.find(".mainTable").addClass("landingpage");
                                     }
-                                   //*****************************************End of landing pages***********************************************************************************///
+                                    //*****************************************End of landing pages***********************************************************************************///
                                 }
                                 /* ===============Auto Save======================== */
-                                function recursiveSaveCall(){
-                                     if(changFlag.editor_change && options.otopage !== true && myElement.find("#mee-iframe").contents().find('.mainContentHtml').html().trim() !== ""){
-                                            //console.log(mee.iframeLoaded);
-                                            options.saveCallBack();
-                                        }
-                                       else{
-                                         mee_view.autoSaveFlag = false;
-                                         
-                                         // console.log('Flag is false now');      
-                                        }
-                                      mee_view.timer = setTimeout(function(){recursiveSaveCall()},20000)
+                                function recursiveSaveCall() {
+                                    if (changFlag.editor_change && options.otopage !== true && myElement.find("#mee-iframe").contents().find('.mainContentHtml').html().trim() !== "") {
+                                        //console.log(mee.iframeLoaded);
+                                        options.saveCallBack();
+                                    } else {
+                                        mee_view.autoSaveFlag = false;
+
+                                        // console.log('Flag is false now');      
+                                    }
+                                    mee_view.timer = setTimeout(function () {
+                                        recursiveSaveCall()
+                                    }, 20000)
                                 }
                                 $.fn.setChange = function (states) {
                                     changFlag = states;
                                 };
-                                $.fn.resetAutoSaveTimer = function(){
+                                $.fn.resetAutoSaveTimer = function () {
                                     changFlag = false;
                                     clearTimeout(mee_view.timer);
                                 };
-                                $.fn.getMEEBody = function(){
+                                $.fn.getMEEBody = function () {
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
-                                    var constructedHTML = $(mainHTMLELE.outerHTML());                                    
+                                    var constructedHTML = $(mainHTMLELE.outerHTML());
                                     return CleanCode(constructedHTML).html();
                                 }
 
                                 $.fn.getMEEHTML = function () {
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var parentTd = '';
-                                    
-                                    
-                                    if(this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style')!==""){
-                                        parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');                                        
-                                        if(this.find("#mee-iframe").contents().find(".mainContentHtml").parent().css('height') =="" && parentTd){
-                                         parentTd += "height:500px;";   
+
+
+                                    if (this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style') !== "") {
+                                        parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');
+                                        if (this.find("#mee-iframe").contents().find(".mainContentHtml").parent().css('height') == "" && parentTd) {
+                                            parentTd += "height:500px;";
                                         }
-                                        
+
                                     }
-                                    
-                                    
-                                    
-                                    
-                                    mainHTMLELE.find(".bgimage").each(function(){
-                                        $(this).attr("mee-style",$(this).attr("style"));
+
+
+
+
+                                    mainHTMLELE.find(".bgimage").each(function () {
+                                        $(this).attr("mee-style", $(this).attr("style"));
                                         $(this).removeAttr("style");
                                     });
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
                                     var cleanedCode = CleanCode(constructedHTML);
-                                    
-                                    var cleanedupHTML =  mee.encodeSpecialHTML(cleanedCode.html());
-                                    mainHTMLELE.find(".bgimage").each(function(){
-                                        $(this).attr("style",$(this).attr("mee-style"));
+
+                                    var cleanedupHTML = mee.encodeSpecialHTML(cleanedCode.html());
+                                    mainHTMLELE.find(".bgimage").each(function () {
+                                        $(this).attr("style", $(this).attr("mee-style"));
                                         $(this).removeAttr("mee-style");
                                     });
 
-                                    if(!pageBackgroundimage){
+                                    if (!pageBackgroundimage) {
                                         pageBackgroundimage = "none";
                                     }
 
-                                    if(pageBorderLeft !="none" || pageBorderRight !="none" || pageBorderTop !="none" || pageBorderBottom !="none"){
-                                        if(pageBorderLeft !="none" && pageBorderLeft !=""){
-                                            pageBorderLeftProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
-                                        }else{
+                                    if (pageBorderLeft != "none" || pageBorderRight != "none" || pageBorderTop != "none" || pageBorderBottom != "none") {
+                                        if (pageBorderLeft != "none" && pageBorderLeft != "") {
+                                            pageBorderLeftProp = pageBorderWidth + " " + pageBorderType + " " + pageBorderColor;
+                                        } else {
                                             pageBorderLeftProp = '';
                                         }
-                                         if(pageBorderRight !="none" && pageBorderRight !=""){
-                                            pageBorderRightProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
-                                        }else{
+                                        if (pageBorderRight != "none" && pageBorderRight != "") {
+                                            pageBorderRightProp = pageBorderWidth + " " + pageBorderType + " " + pageBorderColor;
+                                        } else {
                                             pageBorderRightProp = '';
                                         }
-                                        if(pageBorderTop !="none" && pageBorderTop !=""){
-                                            pageBorderTopProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
-                                        }else{
+                                        if (pageBorderTop != "none" && pageBorderTop != "") {
+                                            pageBorderTopProp = pageBorderWidth + " " + pageBorderType + " " + pageBorderColor;
+                                        } else {
                                             pageBorderTopProp = '';
                                         }
-                                        if(pageBorderBottom !="none" && pageBorderBottom !=""){
-                                            pageBorderBottomProp =  pageBorderWidth+" "+pageBorderType+" "+pageBorderColor; 
-                                        }else{
+                                        if (pageBorderBottom != "none" && pageBorderBottom != "") {
+                                            pageBorderBottomProp = pageBorderWidth + " " + pageBorderType + " " + pageBorderColor;
+                                        } else {
                                             pageBorderBottomProp = '';
                                         }
                                     }
-                                    var emailWidthScale = (emailWidth && emailWidth.indexOf("%")>-1)?"%":"";
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='"+parseFloat(emailWidth)+emailWidthScale+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' data-pagetitle='"+pageTitle+"' data-bgimg='"+pageBackgroundimage+"' data-bgleftborder='"+pageBorderLeftProp+"' data-bgrightborder='"+pageBorderRightProp+"' data-bgtopborder='"+pageBorderTopProp+"' data-bgbottomborder='"+pageBorderBottomProp+"' data-bgimgrepeat='"+pageBackgroundimage_repeat+"' data-bgimgpos='"+pageBackgroundimage_pos+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+emailWidthScale+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div >"+cleanedupHTML+"</div></td></tr></table>"
+                                    var emailWidthScale = (emailWidth && emailWidth.indexOf("%") > -1) ? "%" : "";
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='" + parseFloat(emailWidth) + emailWidthScale + "' ><tr><td  data-bgcolor='" + pageBackgroundColor + "' data-pagetitle='" + pageTitle + "' data-bgimg='" + pageBackgroundimage + "' data-bgleftborder='" + pageBorderLeftProp + "' data-bgrightborder='" + pageBorderRightProp + "' data-bgtopborder='" + pageBorderTopProp + "' data-bgbottomborder='" + pageBorderBottomProp + "' data-bgimgrepeat='" + pageBackgroundimage_repeat + "' data-bgimgpos='" + pageBackgroundimage_pos + "' style='width: 100%;" + parentTd + "outline:none;vertical-align:top;' width='" + parseFloat(emailWidth) + emailWidthScale + "' id='__OUTERTD'><!-- MEE_DOCUMENT --><div >" + cleanedupHTML + "</div></td></tr></table>"
 
-                                    
+
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
                                     header_section.find("link:not([rel='image_src'])").remove();
-                                    
-                                    if(mee.isActionScriptSet){
+
+                                    if (mee.isActionScriptSet) {
                                         pageActionScriptSet = mee.isActionScriptSet;
-                                    }else{
+                                    } else {
                                         pageActionScriptSet = "";
                                     }
-                                    if(mee.isActionScriptSetG){
+                                    if (mee.isActionScriptSetG) {
                                         pageActionScriptSetG = mee.isActionScriptSetG;
-                                    }else{
+                                    } else {
                                         pageActionScriptSetG = "";
                                     }
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+pageActionScriptSet+"</head><body style='background-color:"+pageBackgroundColor+";background-image:url("+pageBackgroundimage+");background-repeat:"+pageBackgroundimage_repeat+";background-position:"+pageBackgroundimage_pos+";border-left:"+pageBorderLeftProp+";border-right:"+pageBorderRightProp+";border-top:"+pageBorderTopProp+";border-bottom:"+pageBorderBottomProp+" ' >"+outputHTML+pageActionScriptSetG+"</body></html>";                                    
-                                    
-                                     //"" + outputter.outerHTML();
-                                     outputHTML = outputHTML.replace(/&quot;/g,'&#39;')
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>' + header_section.html() + pageActionScriptSet + "</head><body style='background-color:" + pageBackgroundColor + ";background-image:url(" + pageBackgroundimage + ");background-repeat:" + pageBackgroundimage_repeat + ";background-position:" + pageBackgroundimage_pos + ";border-left:" + pageBorderLeftProp + ";border-right:" + pageBorderRightProp + ";border-top:" + pageBorderTopProp + ";border-bottom:" + pageBorderBottomProp + " ' >" + outputHTML + pageActionScriptSetG + "</body></html>";
+
+                                    //"" + outputter.outerHTML();
+                                    outputHTML = outputHTML.replace(/&quot;/g, '&#39;')
                                     return outputHTML;
                                 };
 
@@ -630,136 +630,134 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 $.fn.setMEEHTML = function (html) {
                                     var htmlOBJ = $(html);
                                     var outerTD = htmlOBJ.find("#__OUTERTD");
-                                    var innerHTML = outerTD.length? $.trim(outerTD.html()) : html;
+                                    var innerHTML = outerTD.length ? $.trim(outerTD.html()) : html;
                                     var outerCss = outerTD.attr('style');
                                     //get background color of body
-                                    pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
-                                    if(outerTD.length){
-                                        pageTitle = outerTD.attr("data-pageTitle") ?outerTD.attr("data-pageTitle"):""; 
+                                    pageBackgroundColor = outerTD.length ? outerTD.attr("data-bgColor") : "#fff";
+                                    if (outerTD.length) {
+                                        pageTitle = outerTD.attr("data-pageTitle") ? outerTD.attr("data-pageTitle") : "";
                                     }
 
-                                    pageBackgroundimage = outerTD.length ?outerTD.attr("data-bgimg"):"none"; 
-                                    pageBackgroundimage_repeat = outerTD.length ?outerTD.attr("data-bgimgrepeat"):"no-repeat"; 
-                                    pageBackgroundimage_pos = outerTD.length ?outerTD.attr("data-bgimgpos"):"0% 0%"; 
-                                    pageBorderLeftProp = outerTD.length ?outerTD.attr("data-bgleftborder"):"none"; 
-                                    pageBorderRightProp = outerTD.length ?outerTD.attr("data-bgrightborder"):"none"; 
-                                    pageBorderTopProp = outerTD.length ?outerTD.attr("data-bgtopborder"):"none"; 
-                                    pageBorderBottomProp = outerTD.length ?outerTD.attr("data-bgbottomborder"):"none"; 
-                                    
-                                    emailWidth = options.landingPage? "100%":outerTD.attr("width");
-                                    this.find('#mee-iframe').contents().find('.mainContentHtmlGrand').attr('style',outerCss);
-                                    if(!emailWidth){
+                                    pageBackgroundimage = outerTD.length ? outerTD.attr("data-bgimg") : "none";
+                                    pageBackgroundimage_repeat = outerTD.length ? outerTD.attr("data-bgimgrepeat") : "no-repeat";
+                                    pageBackgroundimage_pos = outerTD.length ? outerTD.attr("data-bgimgpos") : "0% 0%";
+                                    pageBorderLeftProp = outerTD.length ? outerTD.attr("data-bgleftborder") : "none";
+                                    pageBorderRightProp = outerTD.length ? outerTD.attr("data-bgrightborder") : "none";
+                                    pageBorderTopProp = outerTD.length ? outerTD.attr("data-bgtopborder") : "none";
+                                    pageBorderBottomProp = outerTD.length ? outerTD.attr("data-bgbottomborder") : "none";
+
+                                    emailWidth = options.landingPage ? "100%" : outerTD.attr("width");
+                                    this.find('#mee-iframe').contents().find('.mainContentHtmlGrand').attr('style', outerCss);
+                                    if (!emailWidth) {
                                         var mainTable = this.find("#mee-iframe").contents().find(".mainTable");
                                         emailWidth = mainTable.css("width");
                                     }
                                     options.preDefinedHTML = innerHTML;
-                                    oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
-                                    mee.setHTML();                                    
+                                    oHtml = reConstructCode(options.preDefinedHTML);
+                                    mee.setHTML();
                                 };
-                                
-                                mee.encodeSpecialHTML = function(str){                                    
-                                    str = str.replace(/mee-style=/g, "style=");                                                                      
-                                    str = str.replace(/\​/g,"");
+
+                                mee.encodeSpecialHTML = function (str) {
+                                    str = str.replace(/mee-style=/g, "style=");
+                                    str = str.replace(/\​/g, "");
                                     str = str.replace(//g, "");
                                     return str;
                                 }
-                                
-                                mee.setHTML =  function(){
-                                    if(myElement.find("#mee-iframe").contents().find(".mainContentHtml").length){
+
+                                mee.setHTML = function () {
+                                    if (myElement.find("#mee-iframe").contents().find(".mainContentHtml").length) {
                                         meeIframe = myElement.find("#mee-iframe").contents();
                                         setIFrameElements();
                                         var mainObj = meeIframe.find(".mainContentHtml");
                                         var htmlOBJ = $(oHtml);
-                                        var innerHTML = htmlOBJ.find("#__OUTERTD").length? htmlOBJ.find("#__OUTERTD").html() : oHtml;
+                                        var innerHTML = htmlOBJ.find("#__OUTERTD").length ? htmlOBJ.find("#__OUTERTD").html() : oHtml;
                                         //Set background color of body
-                                        if(pageBackgroundimage){
-                                            meeIframe.find("body").css('background-image','url(' + pageBackgroundimage + ')');
-                                            meeIframe.find("body").css('background-repeat',pageBackgroundimage_repeat);
-                                            meeIframe.find("body").css('background-position',pageBackgroundimage_pos);
-                                            if(pageBackgroundimage_repeat=="repeat-x"){
-                                              myElement.find('#bgimg_repeatx').iCheck('check');  
-                                            }else if(pageBackgroundimage_repeat=="repeat-y"){
-                                                myElement.find('#bgimg_repeaty').iCheck('check');  
-                                            }else if(pageBackgroundimage_repeat=="no-repeat"){
-                                                myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
-                                            }else{
-                                                myElement.find('#bgimg_repeaty').iCheck('check'); 
+                                        if (pageBackgroundimage) {
+                                            meeIframe.find("body").css('background-image', 'url(' + pageBackgroundimage + ')');
+                                            meeIframe.find("body").css('background-repeat', pageBackgroundimage_repeat);
+                                            meeIframe.find("body").css('background-position', pageBackgroundimage_pos);
+                                            if (pageBackgroundimage_repeat == "repeat-x") {
+                                                myElement.find('#bgimg_repeatx').iCheck('check');
+                                            } else if (pageBackgroundimage_repeat == "repeat-y") {
+                                                myElement.find('#bgimg_repeaty').iCheck('check');
+                                            } else if (pageBackgroundimage_repeat == "no-repeat") {
+                                                myElement.find('#bgimg_repeaty').iCheck('uncheck');
+                                                myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                            } else {
+                                                myElement.find('#bgimg_repeaty').iCheck('check');
                                                 myElement.find('#bgimg_repeatx').iCheck('check');
                                             }
                                         }
-                                        if(pageBorderLeftProp){
-                                            meeIframe.find('body').css('border-left',pageBorderLeftProp);
+                                        if (pageBorderLeftProp) {
+                                            meeIframe.find('body').css('border-left', pageBorderLeftProp);
                                         }
-                                        if(pageBorderRightProp){
-                                            meeIframe.find('body').css('border-right',pageBorderRightProp);
+                                        if (pageBorderRightProp) {
+                                            meeIframe.find('body').css('border-right', pageBorderRightProp);
                                         }
-                                        if(pageBorderTopProp){
-                                            meeIframe.find('body').css('border-top',pageBorderTopProp);
+                                        if (pageBorderTopProp) {
+                                            meeIframe.find('body').css('border-top', pageBorderTopProp);
                                         }
-                                        if(pageBorderBottomProp){
-                                            meeIframe.find('body').css('border-bottom',pageBorderBottomProp);
+                                        if (pageBorderBottomProp) {
+                                            meeIframe.find('body').css('border-bottom', pageBorderBottomProp);
                                         }
-                                        if(pageBackgroundColor){
-                                            meeIframe.find("body").css("background-color",pageBackgroundColor);
-                                        } 
-                                        
-                                        
-                                        if(pageTitle){
-                                            meeIframe.find("head").append($("<title>"+pageTitle+"</title>"));
+                                        if (pageBackgroundColor) {
+                                            meeIframe.find("body").css("background-color", pageBackgroundColor);
                                         }
-                                        
-                                        var emailWidthScale = (emailWidth && emailWidth.indexOf("%")>-1)?"%":"px";
+
+
+                                        if (pageTitle) {
+                                            meeIframe.find("head").append($("<title>" + pageTitle + "</title>"));
+                                        }
+
+                                        var emailWidthScale = (emailWidth && emailWidth.indexOf("%") > -1) ? "%" : "px";
                                         var _emailWidth = parseFloat(emailWidth);
-                                        meeIframe.find(".mainTable").css("width",_emailWidth+emailWidthScale);
+                                        meeIframe.find(".mainTable").css("width", _emailWidth + emailWidthScale);
                                         // For Toolbar Test Purpose Abdullah 
-                                        meeIframe.find(".mainTable").css("margin-top","45px");
-                                        myElement.find('.editortoolbar').css('margin-bottom','0');
+                                        meeIframe.find(".mainTable").css("margin-top", "45px");
+                                        myElement.find('.editortoolbar').css('margin-bottom', '0');
                                         // Ends Abdullah test
-                                        mainObj.html(innerHTML);     
-                                        
-                                        if(!options.landingPage && _emailWidth){
+                                        mainObj.html(innerHTML);
+
+                                        if (!options.landingPage && _emailWidth) {
                                             myElement.find(".email-width input.btnContainerSize").removeClass("active");
-                                            if( myElement.find(".email-width input.btnContainerSize#"+_emailWidth).length && emailWidthScale=="px"){                                            
-                                                myElement.find(".email-width input.btnContainerSize#"+_emailWidth).addClass("active");
-                                            }
-                                            else{
-                                                 myElement.find(".email-width input.txtContainerSize").val(_emailWidth);
-                                                 myElement.find(".email-width select.selectEmailSize").val(emailWidthScale);
+                                            if (myElement.find(".email-width input.btnContainerSize#" + _emailWidth).length && emailWidthScale == "px") {
+                                                myElement.find(".email-width input.btnContainerSize#" + _emailWidth).addClass("active");
+                                            } else {
+                                                myElement.find(".email-width input.txtContainerSize").val(_emailWidth);
+                                                myElement.find(".email-width select.selectEmailSize").val(emailWidthScale);
                                             }
                                         }
                                         IsStyleActivated = false;
-                                         mee.checkForm();
+                                        mee.checkForm();
                                         oInitDestroyEvents.InitAll(mainObj);
                                         makeCloneAndRegister();
-                                    }
-                                    else {
-                                        setTimeout(_.bind(mee.setHTML,mee),200);
+                                    } else {
+                                        setTimeout(_.bind(mee.setHTML, mee), 200);
                                     }
                                 }
-                                
-                                mee.checkForm = function(){
-                                    if(!options.landingPage)return false;
+
+                                mee.checkForm = function () {
+                                    if (!options.landingPage)
+                                        return false;
                                     meeIframe = myElement.find("#mee-iframe").contents();
-                                    if(meeIframe.find(".MEEFORMCONTAINER").length){
-                                        myElement.find("[data-type='signupForm']").addClass("disabled").attr("draggable",false);   
-                                    }
-                                    else{
-                                        myElement.find("[data-type='signupForm']").removeClass("disabled").attr("draggable",true);   
+                                    if (meeIframe.find(".MEEFORMCONTAINER").length) {
+                                        myElement.find("[data-type='signupForm']").addClass("disabled").attr("draggable", false);
+                                    } else {
+                                        myElement.find("[data-type='signupForm']").removeClass("disabled").attr("draggable", true);
                                     }
                                 }
-                                mee.openvideoDialog = function(cHtml){
-                                    
+                                mee.openvideoDialog = function (cHtml) {
+
                                     myElement.trigger('click');
-                                   if(cHtml.length && cHtml.hasClass('MEEVIDEOCONTAINER')){
-                                       cHtml.append('<div class="preloadGif" style="display:none;"><img src="'+options._app.get('path')+'/css/images/youtube.gif" /><img src="'+options._app.get('path')+'/css/images/embed_vimeo.gif" /></div>')
-                                       cHtml.addClass('clickEventVideo');
-                                       var dialogOptions = {
+                                    if (cHtml.length && cHtml.hasClass('MEEVIDEOCONTAINER')) {
+                                        cHtml.append('<div class="preloadGif" style="display:none;"><img src="' + options._app.get('path') + '/css/images/youtube.gif" /><img src="' + options._app.get('path') + '/css/images/embed_vimeo.gif" /></div>')
+                                        cHtml.addClass('clickEventVideo');
+                                        var dialogOptions = {
                                             title: "Embed Video",
                                             css: {
                                                 "width": "800px",
                                                 "margin-left": "-340px",
-                                                "top":"20%"
+                                                "top": "20%"
                                             },
                                             bodyCss: {
                                                 "min-height": "90px"
@@ -771,382 +769,375 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             }
                                         };
-                                    var dialog = null;  
-                                    dialog = options._app.showStaticDialog(dialogOptions);                                            
-                                    options._app.showLoading("Loading...", dialog.getBody());
-                                    dialog.$el.css("z-index", "99999");
-                                    dialog.$el.find('.dialog-backbtn').hide();
-                                    $(".modal-backdrop").css("z-index", "99998");
-                                    //require(["editor/links"], function (page) {
-                                        
-                                        var iframeval = (cHtml.find('.embedvido-wrap').length) ? cHtml.find('.embedvido-wrap').html() : ""; 
-                                        var yotubeGif = options._app.get('path')+'/css/images/youtube.gif';
-                                        var vimeoGif = options._app.get('path')+'/css/images/embed_vimeo.gif';
-                                        dialog.getBody().append('<div class="embedvideolinkwrap" style="position:relative;">Paste the video url here, from your media (youtube/vimeo) provider<br><span style="float:left">For youtube help&nbsp;</span> <a id="ytube" style="display: block;float:left;" class="bs-docs-popover" data-content="<img src= '+yotubeGif+' class=\'img-responsive\' /> " title="" data-toggle="popover" data-original-title="Help for Youtube" aria-describedby="popover628884">click here.</a><span style="float:left">&nbsp;For vimeo help&nbsp;</span><a id="vtube" style="display: block;float:left" class="bs-docs-popover" data-content="<img src= '+vimeoGif+' class=\'img-responsive\' /> " title="" data-toggle="popover" data-original-title="Help for Vimeo" aria-describedby="popover628884">click here</a><br/><div class="ui-code-area inputcont" style="padding: 4px 0; margin: 6px 0px; "><textarea type="text" class="divVideoCode " style="font-size:12px;width:750px;height:130px;" placeholder="Paste video embed code here">'+iframeval+'</textarea></div></div>');
-                                        dialog.saveCallBack(_.bind(mee.saveVideo,mee,dialog,cHtml));
+                                        var dialog = null;
+                                        dialog = options._app.showStaticDialog(dialogOptions);
+                                        options._app.showLoading("Loading...", dialog.getBody());
+                                        dialog.$el.css("z-index", "99999");
+                                        dialog.$el.find('.dialog-backbtn').hide();
+                                        $(".modal-backdrop").css("z-index", "99998");
+                                        //require(["editor/links"], function (page) {
+
+                                        var iframeval = (cHtml.find('.embedvido-wrap').length) ? cHtml.find('.embedvido-wrap').html() : "";
+                                        var yotubeGif = options._app.get('path') + '/css/images/youtube.gif';
+                                        var vimeoGif = options._app.get('path') + '/css/images/embed_vimeo.gif';
+                                        dialog.getBody().append('<div class="embedvideolinkwrap" style="position:relative;">Paste the video url here, from your media (youtube/vimeo) provider<br><span style="float:left">For youtube help&nbsp;</span> <a id="ytube" style="display: block;float:left;" class="bs-docs-popover" data-content="<img src= ' + yotubeGif + ' class=\'img-responsive\' /> " title="" data-toggle="popover" data-original-title="Help for Youtube" aria-describedby="popover628884">click here.</a><span style="float:left">&nbsp;For vimeo help&nbsp;</span><a id="vtube" style="display: block;float:left" class="bs-docs-popover" data-content="<img src= ' + vimeoGif + ' class=\'img-responsive\' /> " title="" data-toggle="popover" data-original-title="Help for Vimeo" aria-describedby="popover628884">click here</a><br/><div class="ui-code-area inputcont" style="padding: 4px 0; margin: 6px 0px; "><textarea type="text" class="divVideoCode " style="font-size:12px;width:750px;height:130px;" placeholder="Paste video embed code here">' + iframeval + '</textarea></div></div>');
+                                        dialog.saveCallBack(_.bind(mee.saveVideo, mee, dialog, cHtml));
                                         mee.openPopup(dialog.getBody());
                                         options._app.showLoading(false, dialog.getBody());
                                         dialog.$el.find('.divVideoCode').focus()
-                                        dialog.closeDialogCallBack(_.bind(mee.videocloseCallBack,mee,dialog,cHtml));
-                                    oInitDestroyEvents.InitializeClickEvent(cHtml);  
-                                   }
-                                        
-                                },
-                                mee.openPopup = function(dialog){
-                                    
-                                    $('body').click(function(e) {
-                                        dialog.find('.bs-docs-popover').popover('hide');
-                                    });
-                                    
-                                    dialog.find('.bs-docs-popover').popover({
-                                        html: true,
-                                        trigger: 'manual'
-                                    }).click(function(e) {
-                                        $('.popover').remove();
-                                        $(this).popover('show');
-                                        e.stopPropagation();
-                                    });
-                                    
-                                    //dialog.find('#ytube').popover({html:true}); 
-                                    
-                                },
-                                mee.videocloseCallBack = function(dialog,cHtml){
-                                    var embedvideo = dialog.$el.find('.divVideoCode').val();
-                                    $('.popover').remove();
-                                    if(embedvideo.trim()==""){
-                                        /*cHtml.parent().prev().remove();
-                                        cHtml.parent().next().remove();
-                                        cHtml.parent().remove();*/
-                                        //cHtml.removeClass('clickEventVideo');
-                                        cHtml.find('.embedvido-wrap').remove();
-                                        
-                                        cHtml.removeClass('videoenable');
-                                    }else{
-                                        //cHtml.addClass('clickEventVideo');
-                                        cHtml.addClass('videoenable');
+                                        dialog.closeDialogCallBack(_.bind(mee.videocloseCallBack, mee, dialog, cHtml));
+                                        oInitDestroyEvents.InitializeClickEvent(cHtml);
                                     }
-                                    
-                                },
-                                mee.saveVideo = function(dialog,cHtml){
-                                    $('.popover').remove();
-                                    var embedval = dialog.$el.find('.divVideoCode').val();
-                                    var iframe = '';
-                                    var ytp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-                                    //var regVimeo =   /vimeo.*(?:\/|clip_id=)([0-9a-z]*)/i;
-                                    
-                                    var matchlist=embedval.match(/^(<iframe.*? src=")(.*?)(\??)(.*?)(".*)$/mg);
-                                    var ytmatches = embedval.match(ytp);
-                                    //var vmatches = embedval.match(regVimeo);
-                                    var isvalidurl = true;
-                                    /*
-                                     * 
-                                     * else if(){
-                                        var videoid = mee.parseVimeo(embedval);
-                                        isvalidurl = false;
-                                        //console.log('vimeo :'+videoid);
-                                        //iframe = '<iframe src="https://player.vimeo.com/video/'+videoid+'?badge=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
-                                    }
-                                     */
-                                    console.log(matchlist);
-                                    if (ytmatches || !matchlist || embedval=="") {
-                                        //var videoid = mee.youtube_parser(embedval);
-                                        isvalidurl = false;
-                                        //iframe = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoid+'" frameborder="0" allowfullscreen></iframe>'
-                                    }
-                                    if(isvalidurl){
-                                        cHtml.addClass('videoenable');
-                                        cHtml.find('.embedvido-wrap').remove();
-                                        cHtml.append('<div class="embedvido-wrap responsive_video" align="center" style="display:none;" >'+embedval+'</div>');
-                                        cHtml.css({width:cHtml.find('.embedvido-wrap iframe').attr('width'),height:cHtml.find('.embedvido-wrap iframe').attr('height')});
-                                        dialog.hide();
-                                        
-                                    }else{
-                                        isvalidurl = false;
-                                         options._app.showError({
-                                            control:dialog.$el.find('.embedvideolinkwrap'),
-                                            message: "We are only supporting youtube and vimeo."
-                                        });
-                                         dialog.$el.find('.embedvideolinkwrap .errortext').css({right:"6px",bottom:"158px"});
-                                         dialog.$el.find('.embedvideolinkwrap .errortext em').show();
-                                        //alert('We are only supporting youtube and vimeo.');
-                                        dialog.$el.find('.divVideoCode').val('');
-                                    }
-                                },
-                                mee.setBorderColor = function(){
-                                    $.each(myElement.find(".sBorderLine"),function(key,val){
-                                                        if($(val).hasClass('borderselected')== true){
-                                                          $(val).removeClass('borderselected').trigger('click');
-                                                        }
-                                                    })
-                                },
-                                mee.setBodyBorders = function(){
-                                   var properties = '';
-                                    $element = myElement.find(".borderControl .ved-edge-inner");
-                                    if(pageBorderTopProp !="none" || pageBorderBottomProp !="none" || pageBorderLeftProp !="none" || pageBorderRightProp !="none"){
-                                        if(pageBorderTopProp !="none" && pageBorderTopProp !=""){
-                                            properties= pageBorderTopProp.split(" "); 
-                                        }else if(pageBorderBottomProp !="none" && pageBorderBottomProp !=""){
-                                            properties = pageBorderBottomProp.split(" ");
-                                        }else if(pageBorderLeftProp !="none" && pageBorderLeftProp !=""){
-                                            properties = pageBorderLeftProp.split(" ");
-                                        }else if(pageBorderRightProp !="none" && pageBorderRightProp !=""){
-                                            properties = pageBorderLeftProp.split(" ");
-                                        }
-                                        myElement.find('.colorPickerBorder').minicolors('value', properties[2])
-                                        myElement.find('.ddlBorderType').val(properties[1]);
-                                        myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
-                                        pageBorderWidth =  properties[0];
-                                        pageBorderType = properties[1] ;
-                                        pageBorderColor = properties[2];
-                                        if(pageBorderTopProp !="none" && pageBorderTopProp !=""){
-                                           var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
-                                           $element.css("border-top", string);
-                                           pageBorderTop = "border-top";
-                                           myElement.find('#topBorder').addClass("borderselected");
-                                        }
-                                        if(pageBorderBottomProp !="none" && pageBorderBottomProp !=""){
-                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
-                                           $element.css("border-bottom", string);
-                                           pageBorderBottom = "border-bottom";
-                                            myElement.find('#bottomBorder').addClass("borderselected");
-                                        }
-                                        if(pageBorderLeftProp !="none" && pageBorderLeftProp !=""){
-                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
-                                            $element.css("border-left", string);
-                                            pageBorderLeft = "border-left";
-                                            myElement.find('#leftBorder').addClass("borderselected");
-                                        }
-                                        if(pageBorderRightProp !="none" && pageBorderRightProp !=""){
-                                            var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
-                                            $element.css("border-right", string);
-                                            pageBorderRight = "border-right";
-                                            myElement.find('#rightBorder').addClass("borderselected");
-                                        }
-                                    }
-                                },
-                                mee.saveActionScript = function(dialog){
-                                 var embedval = dialog.$el.find('.divPixelCode').val();
-                                 var embedvalG = dialog.$el.find('.divPixelCodeGoogle').val();
-                                 var encodeEmbedval = embedval.replace(/(&amp;)/g, "%26amp%3B");
-                                     encodeEmbedval = encodeEmbedval.replace(/(&)/g, "%26");
-                                 var encodeEmbedvalG = embedvalG.replace(/(&amp;)/g, "%26amp%3B");
-                                     encodeEmbedvalG = encodeEmbedvalG.replace(/(&)/g, "%26");
-                                   
-                                   if(encodeEmbedvalG && encodeEmbedval){ 
-                                     var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
-                                     var snippetTypeG  = $(dialog.$el.find('.pixelTab li')[1]).data('snippet'); 
-                                     
-                                   }else{
-                                       var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
-                                   }
-                                 var type = "add"; // needs to be dynamic 
-                                 var userId = options._app.get("user").userId;
-                                 var isScriptTrue = true;
-                                 
-                                 if((embedval.match(/facebook/g) && embedval.match(/facebook/g).length > 0)){
-                                      
-                                      var snippetType = "facebook";
-                                      mee.saveAjaxActionScript({type:type,embedval:embedval,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedval,dialog:dialog,isScriptTrue:true})
-                                 }else if(embedval ==""){
-                                        mee.saveAjaxActionScript({type:type,embedval:embedval,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedval,dialog:dialog,isScriptTrue:true})
-                                 }else{
-                                     isScriptTrue = false;
-                                     mee.saveAjaxActionScript({embedval:embedval,dialog:dialog,userId:userId,snippetType:snippetType,landingPageId:options.pageId,isScriptTrue:false})
-                                 }
-                                 if( (embedvalG.match(/google/g) && embedvalG.match(/google/g).length > 0) && isScriptTrue){
-                                     if(snippetTypeG){
-                                         snippetType = snippetTypeG;
-                                     }
-                                     var snippetType = "google";
-                                     mee.saveAjaxActionScript({type:type,embedval:embedvalG,userId:userId,snippetType:snippetType,landingPageId:options.pageId,snippetValue:encodeEmbedvalG,dialog:dialog,closeDialog:true,isScriptTrue:true})
-                                 }else if(embedvalG =="" && isScriptTrue){
-                                     mee.saveAjaxActionScript({type:type,embedval:embedvalG,userId:userId,snippetType:"google",landingPageId:options.pageId,snippetValue:encodeEmbedvalG,dialog:dialog,closeDialog:true,isScriptTrue:true})
-                                 }else{
-                                     isScriptTrue = false;
-                                     mee.saveAjaxActionScript({embedval:embedvalG,dialog:dialog,userId:userId,snippetType:"google",landingPageId:options.pageId,closeDialog:true,isScriptTrue:isScriptTrue})
-                                 }
-                                 
-                                 
-                                 
-                                },
-                                mee.saveAjaxActionScript = function(embedObj){
-                                    var dialog = embedObj.dialog
-                                    if(embedObj.embedval !="" && embedObj.type=="add" && embedObj.isScriptTrue){
-                                     options._app.showLoading("Saving tracking Snippet...", dialog.getBody());
-                                     var saveUrl = "/pms/events/thirdPartyTrackingSnippet.jsp";
-                                    $.ajax({
-                                           url: saveUrl,
-                                           data: {"type":embedObj.type,"userId":embedObj.userId,"snippetType":embedObj.snippetType,"landingPageId":embedObj.landingPageId,"snippetValue":embedObj.snippetValue},
-                                           type: 'POST',
-                                           success: function (data, textStatus, jqXHR) {                                            
-                                               options._app.showLoading(false, dialog.getBody());
-                                               var result = jQuery.parseJSON(data);
-                                               if (result.result=="success") {
-                                                   options._app.showMessge("Tracking Snippet added successfully", $("body"));
-                                                   if(embedObj.snippetType =="facebook"){
-                                                       mee.isActionScriptSet = embedObj.snippetValue;
-                                                   }
-                                                   if(embedObj.snippetType =="google"){
-                                                      mee.isActionScriptSetG = embedObj.snippetValue; 
-                                                   }
-                                                   if(embedObj.closeDialog){
-                                                       dialog.hide();
-                                                     
-                                                   }
-                                                   
-                                               }
-                                               else {
-                                                   options._app.showAlert("Error while saving", $("body"));
-                                               }
-                                           }
-                                       });
-                                   
-                                 }else if(embedObj.embedval=="" && embedObj.isScriptTrue){
-                                                var type = 'delete';
-                                                  if(embedObj.closeDialog){
-                                                       dialog.hide();
-                                                     
-                                                   }
-                                                 $.ajax({
-                                                        url: '/pms/events/thirdPartyTrackingSnippet.jsp',
-                                                        data: {"type":type,"userId":embedObj.userId,"snippetType":embedObj.snippetType,"landingPageId":embedObj.landingPageId},
-                                                        type: 'POST',
-                                                        success: function (data, textStatus, jqXHR) {                                            
-                                                            options._app.showLoading(false, dialog.getBody());
-                                                            var result = jQuery.parseJSON(data);
-                                                            if (result.result=="success") {
-                                                                if(embedObj.snippetType =="facebook"){
-                                                                    mee.isActionScriptSet = "";
-                                                                }
-                                                                if(embedObj.snippetType =="google"){
-                                                                    mee.isActionScriptSetG = "";
-                                                                }
-                                                                
-                                                               
-                                                                
-                                                            }
-                                                            else {
-                                                                options._app.showAlert("Unfortunetly some error occured", $("body"));
-                                                            }
-                                                        }
-                                                    });
-                                                  
-                                               }
-                                 else{
-                                     options._app.showError({
-                                            control:dialog.$el.find('.divScriptVersion'),
-                                            message: "Please paste a valid script."
-                                        });
-                                         dialog.$el.find('.divScriptVersion .errortext').css({right:"2px",bottom:"485px"});
-                                         dialog.$el.find('.divScriptVersion .errortext em').show();
-                                 }
-                                },
-                                mee.getActionScript = function(){
-                                    var type = "get"; // needs to be dynamic 
-                                    var userId = options._app.get("user").userId;
-                                    var getUrl = "/pms/events/thirdPartyTrackingSnippet.jsp?type="+type+"&userId="+userId+"&landingPageId="+options.pageId;
-                                        $.ajax({
-                                           url: getUrl,
-                                           type: 'POST',
-                                           success: function (data, textStatus, jqXHR) {                                            
-                                               //options._app.showLoading(false, dialog.getBody());
-                                               var result = jQuery.parseJSON(data);
-                                               if (result.result=="success" && result.message != "No data available.") {
-                                                   var myString = result.trackingSnippet[0].snippetValue;
-                                                   if(result.trackingSnippet.length > 1){
-                                                        var myStringF = result.trackingSnippet[0].snippetValue;
-                                                        var decodeEmbedvalF = myStringF.replace(/(%26amp%3B)/g, "&amp;");
-                                                        decodeEmbedvalF = decodeEmbedvalF.replace(/(%26)/g, "&");
-                                                        mee.isActionScriptSet = decodeEmbedvalF;
-                                                        
-                                                        var myStringG = result.trackingSnippet[1].snippetValue;
-                                                        var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
-                                                        decodeEmbedvalG = decodeEmbedvalG.replace(/(%26)/g, "&");
-                                                        mee.isActionScriptSetG = decodeEmbedvalG;
-                                                   }else if(result.trackingSnippet[0].snippetType=="facebook"){
-                                                       var myString = result.trackingSnippet[0].snippetValue;
-                                                       var decodeEmbedval = myString.replace(/(%26amp%3B)/g, "&amp;");
-                                                       decodeEmbedval = decodeEmbedval.replace(/(%26)/g, "&");
-                                                       mee.isActionScriptSet = decodeEmbedval;
-                                                   }else{
-                                                       var myStringG = result.trackingSnippet[0].snippetValue;
-                                                       var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
-                                                       decodeEmbedval = decodeEmbedvalG.replace(/(%26)/g, "&");
-                                                       mee.isActionScriptSetG = decodeEmbedval;
-                                                   }
-                                                   //myString = myString.substring(1, myString.length-1);
-                                                  
-                                               }
-                                               else {
-                                                   mee.isActionScriptSet="";
-                                                   mee.isActionScriptSetG = "";
-                                               }
-                                           }
-                                       });
-                                },
-                                mee.youtube_parser = function (url){
-                                        /*==========Supporting youtube URL ===========*/
-                                      /*http://www.youtube.com/watch?v=0zM3nApSvMg&feature=feedrec_grec_index
-                                        http://www.youtube.com/user/IngridMichaelsonVEVO#p/a/u/1/QdK8U-VIH_o
-                                        http://www.youtube.com/v/0zM3nApSvMg?fs=1&amp;hl=en_US&amp;rel=0
-                                        http://www.youtube.com/watch?v=0zM3nApSvMg#t=0m10s
-                                        http://www.youtube.com/embed/0zM3nApSvMg?rel=0
-                                        http://www.youtube.com/watch?v=0zM3nApSvMg
-                                        http://youtu.be/0zM3nApSvMg*/
-                                        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-                                        var match = url.match(regExp);
-                                        if (match&&match[7].length==11){
-                                            var b=match[7];
-                                            return b;
-                                        }else{
-                                            alert("Url incorrect");
-                                        }
-                                },
-                                mee.parseVimeo = function (url) {
-                                    // embed & link: http://vimeo.com/86164897
-                                    // embed & link: http://vimeo.com/channels/86164897
 
-                                    var re = /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
-                                    var matches = re.exec(url);
-                                    return matches && matches[5];
-                                }
+                                },
+                                        mee.openPopup = function (dialog) {
+
+                                            $('body').click(function (e) {
+                                                dialog.find('.bs-docs-popover').popover('hide');
+                                            });
+
+                                            dialog.find('.bs-docs-popover').popover({
+                                                html: true,
+                                                trigger: 'manual'
+                                            }).click(function (e) {
+                                                $('.popover').remove();
+                                                $(this).popover('show');
+                                                e.stopPropagation();
+                                            });
+
+                                            //dialog.find('#ytube').popover({html:true}); 
+
+                                        },
+                                        mee.videocloseCallBack = function (dialog, cHtml) {
+                                            var embedvideo = dialog.$el.find('.divVideoCode').val();
+                                            $('.popover').remove();
+                                            if (embedvideo.trim() == "") {
+                                                /*cHtml.parent().prev().remove();
+                                                 cHtml.parent().next().remove();
+                                                 cHtml.parent().remove();*/
+                                                //cHtml.removeClass('clickEventVideo');
+                                                cHtml.find('.embedvido-wrap').remove();
+
+                                                cHtml.removeClass('videoenable');
+                                            } else {
+                                                //cHtml.addClass('clickEventVideo');
+                                                cHtml.addClass('videoenable');
+                                            }
+
+                                        },
+                                        mee.saveVideo = function (dialog, cHtml) {
+                                            $('.popover').remove();
+                                            var embedval = dialog.$el.find('.divVideoCode').val();
+                                            var iframe = '';
+                                            var ytp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                                            //var regVimeo =   /vimeo.*(?:\/|clip_id=)([0-9a-z]*)/i;
+
+                                            var matchlist = embedval.match(/^(<iframe.*? src=")(.*?)(\??)(.*?)(".*)$/mg);
+                                            var ytmatches = embedval.match(ytp);
+                                            //var vmatches = embedval.match(regVimeo);
+                                            var isvalidurl = true;
+                                            /*
+                                             * 
+                                             * else if(){
+                                             var videoid = mee.parseVimeo(embedval);
+                                             isvalidurl = false;
+                                             //console.log('vimeo :'+videoid);
+                                             //iframe = '<iframe src="https://player.vimeo.com/video/'+videoid+'?badge=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+                                             }
+                                             */
+                                            console.log(matchlist);
+                                            if (ytmatches || !matchlist || embedval == "") {
+                                                //var videoid = mee.youtube_parser(embedval);
+                                                isvalidurl = false;
+                                                //iframe = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoid+'" frameborder="0" allowfullscreen></iframe>'
+                                            }
+                                            if (isvalidurl) {
+                                                cHtml.addClass('videoenable');
+                                                cHtml.find('.embedvido-wrap').remove();
+                                                cHtml.append('<div class="embedvido-wrap responsive_video" align="center" style="display:none;" >' + embedval + '</div>');
+                                                cHtml.css({width: cHtml.find('.embedvido-wrap iframe').attr('width'), height: cHtml.find('.embedvido-wrap iframe').attr('height')});
+                                                dialog.hide();
+
+                                            } else {
+                                                isvalidurl = false;
+                                                options._app.showError({
+                                                    control: dialog.$el.find('.embedvideolinkwrap'),
+                                                    message: "We are only supporting youtube and vimeo."
+                                                });
+                                                dialog.$el.find('.embedvideolinkwrap .errortext').css({right: "6px", bottom: "158px"});
+                                                dialog.$el.find('.embedvideolinkwrap .errortext em').show();
+                                                //alert('We are only supporting youtube and vimeo.');
+                                                dialog.$el.find('.divVideoCode').val('');
+                                            }
+                                        },
+                                        mee.setBorderColor = function () {
+                                            $.each(myElement.find(".sBorderLine"), function (key, val) {
+                                                if ($(val).hasClass('borderselected') == true) {
+                                                    $(val).removeClass('borderselected').trigger('click');
+                                                }
+                                            })
+                                        },
+                                        mee.setBodyBorders = function () {
+                                            var properties = '';
+                                            $element = myElement.find(".borderControl .ved-edge-inner");
+                                            if (pageBorderTopProp != "none" || pageBorderBottomProp != "none" || pageBorderLeftProp != "none" || pageBorderRightProp != "none") {
+                                                if (pageBorderTopProp != "none" && pageBorderTopProp != "") {
+                                                    properties = pageBorderTopProp.split(" ");
+                                                } else if (pageBorderBottomProp != "none" && pageBorderBottomProp != "") {
+                                                    properties = pageBorderBottomProp.split(" ");
+                                                } else if (pageBorderLeftProp != "none" && pageBorderLeftProp != "") {
+                                                    properties = pageBorderLeftProp.split(" ");
+                                                } else if (pageBorderRightProp != "none" && pageBorderRightProp != "") {
+                                                    properties = pageBorderLeftProp.split(" ");
+                                                }
+                                                myElement.find('.colorPickerBorder').minicolors('value', properties[2])
+                                                myElement.find('.ddlBorderType').val(properties[1]);
+                                                myElement.find('.ddlBorderWidth').val(parseInt(properties[0], 10));
+                                                pageBorderWidth = properties[0];
+                                                pageBorderType = properties[1];
+                                                pageBorderColor = properties[2];
+                                                if (pageBorderTopProp != "none" && pageBorderTopProp != "") {
+                                                    var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                                    $element.css("border-top", string);
+                                                    pageBorderTop = "border-top";
+                                                    myElement.find('#topBorder').addClass("borderselected");
+                                                }
+                                                if (pageBorderBottomProp != "none" && pageBorderBottomProp != "") {
+                                                    var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                                    $element.css("border-bottom", string);
+                                                    pageBorderBottom = "border-bottom";
+                                                    myElement.find('#bottomBorder').addClass("borderselected");
+                                                }
+                                                if (pageBorderLeftProp != "none" && pageBorderLeftProp != "") {
+                                                    var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                                    $element.css("border-left", string);
+                                                    pageBorderLeft = "border-left";
+                                                    myElement.find('#leftBorder').addClass("borderselected");
+                                                }
+                                                if (pageBorderRightProp != "none" && pageBorderRightProp != "") {
+                                                    var string = parseInt(properties[0], 10) + "px " + properties[1] + " #000";
+                                                    $element.css("border-right", string);
+                                                    pageBorderRight = "border-right";
+                                                    myElement.find('#rightBorder').addClass("borderselected");
+                                                }
+                                            }
+                                        },
+                                        mee.saveActionScript = function (dialog) {
+                                            var embedval = dialog.$el.find('.divPixelCode').val();
+                                            var embedvalG = dialog.$el.find('.divPixelCodeGoogle').val();
+                                            var encodeEmbedval = embedval.replace(/(&amp;)/g, "%26amp%3B");
+                                            encodeEmbedval = encodeEmbedval.replace(/(&)/g, "%26");
+                                            var encodeEmbedvalG = embedvalG.replace(/(&amp;)/g, "%26amp%3B");
+                                            encodeEmbedvalG = encodeEmbedvalG.replace(/(&)/g, "%26");
+
+                                            if (encodeEmbedvalG && encodeEmbedval) {
+                                                var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
+                                                var snippetTypeG = $(dialog.$el.find('.pixelTab li')[1]).data('snippet');
+
+                                            } else {
+                                                var snippetType = dialog.$el.find('.pixelTab li.active').data('snippet');
+                                            }
+                                            var type = "add"; // needs to be dynamic 
+                                            var userId = options._app.get("user").userId;
+                                            var isScriptTrue = true;
+
+                                            if ((embedval.match(/facebook/g) && embedval.match(/facebook/g).length > 0)) {
+
+                                                var snippetType = "facebook";
+                                                mee.saveAjaxActionScript({type: type, embedval: embedval, userId: userId, snippetType: snippetType, landingPageId: options.pageId, snippetValue: encodeEmbedval, dialog: dialog, isScriptTrue: true})
+                                            } else if (embedval == "") {
+                                                mee.saveAjaxActionScript({type: type, embedval: embedval, userId: userId, snippetType: snippetType, landingPageId: options.pageId, snippetValue: encodeEmbedval, dialog: dialog, isScriptTrue: true})
+                                            } else {
+                                                isScriptTrue = false;
+                                                mee.saveAjaxActionScript({embedval: embedval, dialog: dialog, userId: userId, snippetType: snippetType, landingPageId: options.pageId, isScriptTrue: false})
+                                            }
+                                            if ((embedvalG.match(/google/g) && embedvalG.match(/google/g).length > 0) && isScriptTrue) {
+                                                if (snippetTypeG) {
+                                                    snippetType = snippetTypeG;
+                                                }
+                                                var snippetType = "google";
+                                                mee.saveAjaxActionScript({type: type, embedval: embedvalG, userId: userId, snippetType: snippetType, landingPageId: options.pageId, snippetValue: encodeEmbedvalG, dialog: dialog, closeDialog: true, isScriptTrue: true})
+                                            } else if (embedvalG == "" && isScriptTrue) {
+                                                mee.saveAjaxActionScript({type: type, embedval: embedvalG, userId: userId, snippetType: "google", landingPageId: options.pageId, snippetValue: encodeEmbedvalG, dialog: dialog, closeDialog: true, isScriptTrue: true})
+                                            } else {
+                                                isScriptTrue = false;
+                                                mee.saveAjaxActionScript({embedval: embedvalG, dialog: dialog, userId: userId, snippetType: "google", landingPageId: options.pageId, closeDialog: true, isScriptTrue: isScriptTrue})
+                                            }
+
+
+
+                                        },
+                                        mee.saveAjaxActionScript = function (embedObj) {
+                                            var dialog = embedObj.dialog
+                                            if (embedObj.embedval != "" && embedObj.type == "add" && embedObj.isScriptTrue) {
+                                                options._app.showLoading("Saving tracking Snippet...", dialog.getBody());
+                                                var saveUrl = "/pms/events/thirdPartyTrackingSnippet.jsp";
+                                                $.ajax({
+                                                    url: saveUrl,
+                                                    data: {"type": embedObj.type, "userId": embedObj.userId, "snippetType": embedObj.snippetType, "landingPageId": embedObj.landingPageId, "snippetValue": embedObj.snippetValue},
+                                                    type: 'POST',
+                                                    success: function (data, textStatus, jqXHR) {
+                                                        options._app.showLoading(false, dialog.getBody());
+                                                        var result = jQuery.parseJSON(data);
+                                                        if (result.result == "success") {
+                                                            options._app.showMessge("Tracking Snippet added successfully", $("body"));
+                                                            if (embedObj.snippetType == "facebook") {
+                                                                mee.isActionScriptSet = embedObj.snippetValue;
+                                                            }
+                                                            if (embedObj.snippetType == "google") {
+                                                                mee.isActionScriptSetG = embedObj.snippetValue;
+                                                            }
+                                                            if (embedObj.closeDialog) {
+                                                                dialog.hide();
+
+                                                            }
+
+                                                        } else {
+                                                            options._app.showAlert("Error while saving", $("body"));
+                                                        }
+                                                    }
+                                                });
+
+                                            } else if (embedObj.embedval == "" && embedObj.isScriptTrue) {
+                                                var type = 'delete';
+                                                if (embedObj.closeDialog) {
+                                                    dialog.hide();
+
+                                                }
+                                                $.ajax({
+                                                    url: '/pms/events/thirdPartyTrackingSnippet.jsp',
+                                                    data: {"type": type, "userId": embedObj.userId, "snippetType": embedObj.snippetType, "landingPageId": embedObj.landingPageId},
+                                                    type: 'POST',
+                                                    success: function (data, textStatus, jqXHR) {
+                                                        options._app.showLoading(false, dialog.getBody());
+                                                        var result = jQuery.parseJSON(data);
+                                                        if (result.result == "success") {
+                                                            if (embedObj.snippetType == "facebook") {
+                                                                mee.isActionScriptSet = "";
+                                                            }
+                                                            if (embedObj.snippetType == "google") {
+                                                                mee.isActionScriptSetG = "";
+                                                            }
+
+
+
+                                                        } else {
+                                                            options._app.showAlert("Unfortunetly some error occured", $("body"));
+                                                        }
+                                                    }
+                                                });
+
+                                            } else {
+                                                options._app.showError({
+                                                    control: dialog.$el.find('.divScriptVersion'),
+                                                    message: "Please paste a valid script."
+                                                });
+                                                dialog.$el.find('.divScriptVersion .errortext').css({right: "2px", bottom: "485px"});
+                                                dialog.$el.find('.divScriptVersion .errortext em').show();
+                                            }
+                                        },
+                                        mee.getActionScript = function () {
+                                            var type = "get"; // needs to be dynamic 
+                                            var userId = options._app.get("user").userId;
+                                            var getUrl = "/pms/events/thirdPartyTrackingSnippet.jsp?type=" + type + "&userId=" + userId + "&landingPageId=" + options.pageId;
+                                            $.ajax({
+                                                url: getUrl,
+                                                type: 'POST',
+                                                success: function (data, textStatus, jqXHR) {
+                                                    //options._app.showLoading(false, dialog.getBody());
+                                                    var result = jQuery.parseJSON(data);
+                                                    if (result.result == "success" && result.message != "No data available.") {
+                                                        var myString = result.trackingSnippet[0].snippetValue;
+                                                        if (result.trackingSnippet.length > 1) {
+                                                            var myStringF = result.trackingSnippet[0].snippetValue;
+                                                            var decodeEmbedvalF = myStringF.replace(/(%26amp%3B)/g, "&amp;");
+                                                            decodeEmbedvalF = decodeEmbedvalF.replace(/(%26)/g, "&");
+                                                            mee.isActionScriptSet = decodeEmbedvalF;
+
+                                                            var myStringG = result.trackingSnippet[1].snippetValue;
+                                                            var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
+                                                            decodeEmbedvalG = decodeEmbedvalG.replace(/(%26)/g, "&");
+                                                            mee.isActionScriptSetG = decodeEmbedvalG;
+                                                        } else if (result.trackingSnippet[0].snippetType == "facebook") {
+                                                            var myString = result.trackingSnippet[0].snippetValue;
+                                                            var decodeEmbedval = myString.replace(/(%26amp%3B)/g, "&amp;");
+                                                            decodeEmbedval = decodeEmbedval.replace(/(%26)/g, "&");
+                                                            mee.isActionScriptSet = decodeEmbedval;
+                                                        } else {
+                                                            var myStringG = result.trackingSnippet[0].snippetValue;
+                                                            var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
+                                                            decodeEmbedval = decodeEmbedvalG.replace(/(%26)/g, "&");
+                                                            mee.isActionScriptSetG = decodeEmbedval;
+                                                        }
+                                                        //myString = myString.substring(1, myString.length-1);
+
+                                                    } else {
+                                                        mee.isActionScriptSet = "";
+                                                        mee.isActionScriptSetG = "";
+                                                    }
+                                                }
+                                            });
+                                        },
+                                        mee.youtube_parser = function (url) {
+                                            /*==========Supporting youtube URL ===========*/
+                                            /*http://www.youtube.com/watch?v=0zM3nApSvMg&feature=feedrec_grec_index
+                                             http://www.youtube.com/user/IngridMichaelsonVEVO#p/a/u/1/QdK8U-VIH_o
+                                             http://www.youtube.com/v/0zM3nApSvMg?fs=1&amp;hl=en_US&amp;rel=0
+                                             http://www.youtube.com/watch?v=0zM3nApSvMg#t=0m10s
+                                             http://www.youtube.com/embed/0zM3nApSvMg?rel=0
+                                             http://www.youtube.com/watch?v=0zM3nApSvMg
+                                             http://youtu.be/0zM3nApSvMg*/
+                                            var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+                                            var match = url.match(regExp);
+                                            if (match && match[7].length == 11) {
+                                                var b = match[7];
+                                                return b;
+                                            } else {
+                                                alert("Url incorrect");
+                                            }
+                                        },
+                                        mee.parseVimeo = function (url) {
+                                            // embed & link: http://vimeo.com/86164897
+                                            // embed & link: http://vimeo.com/channels/86164897
+
+                                            var re = /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+                                            var matches = re.exec(url);
+                                            return matches && matches[5];
+                                        }
                                 $.fn.getIframeStatus = function () {
                                     return mee.iframeLoaded;
                                 }
-                                
+
                                 $.fn.seFormIdForPages = function (id) {
-                                   options.formCallBack(id);
+                                    options.formCallBack(id);
                                 }
 
                                 $.fn.setAccordian = function (diff) {
 
                                     var accordian_height = 550;
-                                    if(options._app.get("isFromCRM") && options._app.get("isFromCRM").toLowerCase() == "y"){
-                                        accordian_height =550;
-                                    }
-                                    else{
+                                    if (options._app.get("isFromCRM") && options._app.get("isFromCRM").toLowerCase() == "y") {
+                                        accordian_height = 550;
+                                    } else {
                                         accordian_height = options.parentWindowobj.height() - 62 - diff;
                                     }
-                                    this.find(".builder-panel").css("height",  accordian_height + "px");
+                                    this.find(".builder-panel").css("height", accordian_height + "px");
                                     this.find(".style-panel").css("height", accordian_height + "px");
 
                                     if (this.find(".style-panel").css("display") !== "none") {
                                         this.find(".style-panel .accordian").accordion("refresh");
                                         this.find(".style-panel").css("height", (this.find(".style-panel").height() + 12) + "px");
-                                    }
-                                    else {
+                                    } else {
                                         this.find(".builder-panel .accordian").accordion("refresh");
                                         this.find(".builder-panel").css("height", (this.find(".style-panel").height() + 12) + "px");
                                         var bbaccord = myElement.find(".builder-panel .bb-scrollarea-wrapper").height();
-                                        myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height":(parseInt(bbaccord)),"overflow-y":"scroll"});
+                                        myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height": (parseInt(bbaccord)), "overflow-y": "scroll"});
                                     }
                                 };
                                 function setHTML(dialog) {
                                     myElement.setMEEHTML(dialog.getBody().find(".divHtmlCode").val().replace(/\n/g, ""));
                                     if (options.fromDialog) {
                                         dialog.showPrevious();
-                                    }
-                                    else {
+                                    } else {
                                         dialog.hide();
                                     }
                                 }
@@ -1169,7 +1160,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var lnkTextVersion = myElement.find(".MenuCallTextVersion");
                                     var lnkSetTitle = myElement.find(".MenuSetTitle");
                                     var loadScriptBox = myElement.find(".MenuLoadScriptBox");
-                                    var lnkDCItems = myElement.find(".MenuCallDCItems");    
+                                    var lnkDCItems = myElement.find(".MenuCallDCItems");
                                     var divPreviewCode = myElement.find(".divPreviewCode");
                                     var lnkHtmlCode = myElement.find(".MenuCallCode");
                                     //previeCodeTabs.tabs();
@@ -1177,10 +1168,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     lnkPreviewCode.click(function () {
                                         options.previewdesignTemplateCallback();
                                     });
-                                    lnkHtmlCode.click(function(){
+                                    lnkHtmlCode.click(function () {
                                         var mainHTMLELE = meeIframe.find(".mainContentHtml");
-                                        mainHTMLELE.find(".bgimage").each(function(){
-                                            $(this).attr("mee-style",$(this).attr("style"));
+                                        mainHTMLELE.find(".bgimage").each(function () {
+                                            $(this).attr("mee-style", $(this).attr("style"));
                                             $(this).removeAttr("style");
                                         });
                                         var constructedHTML = $(mainHTMLELE.outerHTML());
@@ -1241,7 +1232,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
                                         }
 
-                                        var content = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en">';                                        
+                                        var content = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en">';
                                         content += '<head><title></title></head><body>'
                                         content += outputHTML
                                         content += '</body>'
@@ -1266,7 +1257,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             bodyCss: {
                                                 "min-height": dialog_height + "px"
                                             },
-                                            headerEditable: false,                                            
+                                            headerEditable: false,
                                             headerIcon: 'pagetitleicon',
                                             buttons: {
                                                 saveBtn: {
@@ -1275,47 +1266,48 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
                                         });
                                         var page_title_val = "";
-                                        if(meeIframe.find("head title").length){
+                                        if (meeIframe.find("head title").length) {
                                             page_title_val = meeIframe.find("head title").text();
                                         }
-                                        var title_html = '<div style="margin-top:0px;" class="blockname-container"><div class="label-text">Page Title:</div>';                                        
-                                        title_html += '<div class="input-append sort-options blockname-container"><div class="inputcont"><input type="text" style="width:' + (dialog_width - 40) + 'px;" placeholder="Enter page title here" value="'+page_title_val+'"></div></div>';
+                                        var title_html = '<div style="margin-top:0px;" class="blockname-container"><div class="label-text">Page Title:</div>';
+                                        title_html += '<div class="input-append sort-options blockname-container"><div class="inputcont"><input type="text" style="width:' + (dialog_width - 40) + 'px;" placeholder="Enter page title here" value="' + page_title_val + '"></div></div>';
                                         title_html += '<div style="font-size: 12px;margin-top:10px"><i>Give your page a title that you will be able to recognize later.</i></div></div>';
                                         title_html = $(title_html);
                                         dialog.getBody().append(title_html);
-                                        setTimeout(function(){dialog.getBody().find("input").focus().select()},50);
-                                        var saveTitle = function(obj){
+                                        setTimeout(function () {
+                                            dialog.getBody().find("input").focus().select()
+                                        }, 50);
+                                        var saveTitle = function (obj) {
                                             var page_title = title_html.find("input").val();
-                                            if($.trim(page_title)){
-                                                if(meeIframe.find("head title").length){
-                                                    meeIframe.find("head title").text(page_title);                                                    
-                                                }
-                                                else{
-                                                    meeIframe.find("head").append($("<title>"+page_title+"</title>"));
+                                            if ($.trim(page_title)) {
+                                                if (meeIframe.find("head title").length) {
+                                                    meeIframe.find("head title").text(page_title);
+                                                } else {
+                                                    meeIframe.find("head").append($("<title>" + page_title + "</title>"));
                                                 }
                                                 pageTitle = page_title;
                                                 changFlag.editor_change = true;
                                                 options._app.showMessge("Page title set successfully. Press save button to save landing page.", $("body"));
-                                                
+
                                                 return true;
                                             }
-                                            
+
                                         };
-                                        dialog.saveCallBack(_.bind(function(){
-                                            if(saveTitle()){
-                                                dialog.hide();  
+                                        dialog.saveCallBack(_.bind(function () {
+                                            if (saveTitle()) {
+                                                dialog.hide();
                                             }
-                                        }, this, dialog));  
-                                        dialog.getBody().find("input").keypress(_.bind(function (obj,e){
-                                            if(e.keyCode==13){
-                                               if(saveTitle()){
-                                                    dialog.hide();  
+                                        }, this, dialog));
+                                        dialog.getBody().find("input").keypress(_.bind(function (obj, e) {
+                                            if (e.keyCode == 13) {
+                                                if (saveTitle()) {
+                                                    dialog.hide();
                                                 }
-                                            }                                           
-                                        },this,dialog))
+                                            }
+                                        }, this, dialog))
 
                                     });
-                                   loadScriptBox.click(function(){
+                                    loadScriptBox.click(function () {
                                         var dialog_width = $(document.documentElement).width() - 60;
                                         var dialog_height = $(document.documentElement).height() - 182;
                                         var fbpixel = (mee.isActionScriptSet) ? mee.isActionScriptSet : "";
@@ -1323,12 +1315,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var dialog = options._app.showDialog({
                                             title: 'Add Tracking Snippets',
                                             css: {
-                                                "width": dialog_width+"px",
-                                                "margin-left": "-"+(dialog_width / 2)+"px",
+                                                "width": dialog_width + "px",
+                                                "margin-left": "-" + (dialog_width / 2) + "px",
                                                 "top": "20px"
                                             },
                                             bodyCss: {
-                                                "min-height": dialog_height+"px"
+                                                "min-height": dialog_height + "px"
                                             },
                                             headerEditable: false,
                                             headerIcon: 'actionScripicon',
@@ -1338,29 +1330,29 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             }
                                         });
-                                        
-                                         var preview_html = '<div class="divScriptVersion">';                                        
+
+                                        var preview_html = '<div class="divScriptVersion">';
                                         preview_html += '<ul  class="pixelTab tabs-btns clearfix"><li class="active" data-snippet="facebook"><a data-toggle="tab" href="#fbpixel">Facebook Pixel</a></li><li data-snippet="google"><a  data-toggle="tab" href="#ganalytics">Google Analytics</a></li></ul><div class="ui-code-area inputcont"><textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 60) + 'px;margin-bottom:0px;" class="divPixelCode" cols="1000" rows="250" placeholder="Paste facebook pixel snippet...."></textarea><textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 60) + 'px;margin-bottom:0px;display:none;" class="divPixelCodeGoogle" cols="1000" rows="250" placeholder="Paste google snippet...."></textarea></div>';
                                         preview_html += '</div>';
                                         preview_html = $(preview_html);
                                         dialog.getBody().append(preview_html);
-                                        dialog.getBody().find('.pixelTab li').click(function(){
-                                           if($(this).data('snippet')=="facebook"){
-                                               dialog.getBody().find('.divPixelCode').show();
-                                               dialog.getBody().find('.divPixelCodeGoogle').hide();
-                                           }else{
-                                               dialog.getBody().find('.divPixelCode').hide();
-                                               dialog.getBody().find('.divPixelCodeGoogle').show();
-                                           }
+                                        dialog.getBody().find('.pixelTab li').click(function () {
+                                            if ($(this).data('snippet') == "facebook") {
+                                                dialog.getBody().find('.divPixelCode').show();
+                                                dialog.getBody().find('.divPixelCodeGoogle').hide();
+                                            } else {
+                                                dialog.getBody().find('.divPixelCode').hide();
+                                                dialog.getBody().find('.divPixelCodeGoogle').show();
+                                            }
                                         })
                                         dialog.$el.find('.divPixelCode').val(fbpixel);
                                         dialog.$el.find('.divPixelCodeGoogle').val(gpixel);
                                         dialog.$el.find('.divPixelCode').focus()
-                                        
-                                        dialog.saveCallBack(_.bind(mee.saveActionScript,mee,dialog));
+
+                                        dialog.saveCallBack(_.bind(mee.saveActionScript, mee, dialog));
                                     })
                                     lnkTextVersion.click(function () {
-                                        
+
                                         var dialog_width = $(document.documentElement).width() - 60;
                                         var dialog_height = $(document.documentElement).height() - 182;
                                         var dialog = options._app.showDialog({
@@ -1381,20 +1373,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             }
                                         });
-                                        
-                                        var preview_html = '<div class="divTextVersion">';                                        
-                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 28) + 'px;margin-bottom:0px;border:2px solid #eaf4f9" class="divHtmlCode" cols="1000" rows="250" placeholder="Enter text version....">'+options._app.decodeHTML(options.textVersion,true)+'</textarea>';
+
+                                        var preview_html = '<div class="divTextVersion">';
+                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 28) + 'px;margin-bottom:0px;border:2px solid #eaf4f9" class="divHtmlCode" cols="1000" rows="250" placeholder="Enter text version....">' + options._app.decodeHTML(options.textVersion, true) + '</textarea>';
                                         preview_html += '</div>';
                                         preview_html = $(preview_html);
                                         dialog.getBody().append(preview_html);
-                                        dialog.saveCallBack(_.bind(function(obj){
+                                        dialog.saveCallBack(_.bind(function (obj) {
                                             options.textVersion = preview_html.find("textarea").val();
                                             options.saveTextVersionCallBack(preview_html.find("textarea").val());
                                             changFlag.editor_change = true;
                                             if (options.fromDialog) {
                                                 dialog.showPrevious();
-                                            }
-                                            else {
+                                            } else {
                                                 dialog.hide();
                                             }
                                         }, this, dialog));
@@ -1406,13 +1397,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             options._app.dialogArray[dialogArrayLength - 1].currentView = preview_html; // New Dialog
                                             options._app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(setHTML, this, dialog); // New Dialog
                                             preview_html.ReattachEvents = options.reAttachEvents;
-                                            
+
                                         }
-                                        
+
 
                                     });
-                                    
-                                    lnkDCItems.click(function(){
+
+                                    lnkDCItems.click(function () {
                                         var dialog_width = $(document.documentElement).width() - 60;
                                         var dialog_height = $(document.documentElement).height() - 182;
                                         var dialog = options._app.showDialog({
@@ -1425,17 +1416,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             bodyCss: {
                                                 "min-height": dialog_height + "px"
                                             },
-                                            headerEditable: false                                            
-                                            
+                                            headerEditable: false
+
                                         });
-                                        var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK="+options._app.get('bms_token')+"&fromNewUI=true";
-                                        var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                                        var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK=" + options._app.get('bms_token') + "&fromNewUI=true";
+                                        var iframHTML = "<iframe src=\"" + URL + "\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe>"
                                         dialog.getBody().html(iframHTML);
-                                         options._app.showLoading("Loading Dynamic Content...",dialog.getBody());
-                                        $('iframe.dcItemsIframe').ready(function() {
-                                           
-                                           setTimeout(function(){ options._app.showLoading(false,dialog.getBody()); }, 3000);
-                                          });
+                                        options._app.showLoading("Loading Dynamic Content...", dialog.getBody());
+                                        $('iframe.dcItemsIframe').ready(function () {
+
+                                            setTimeout(function () {
+                                                options._app.showLoading(false, dialog.getBody());
+                                            }, 3000);
+                                        });
                                     });
 
                                 }
@@ -1449,9 +1442,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find(".MEE_ELEMENT").addClass("csHaveData ui-draggable ui-droppable").removeClass("MEE_ELEMENT");
                                     oHtml.find(".MEE_CONTAINER").addClass("container").removeClass("MEE_CONTAINER");
 
-                                    var RevertCommonLi = function (element) {
+                                    var RevertTags = function (element,tag) {
 
-                                        var newElement = $("<li>");
+                                        var newElement = $(tag);
                                         newElement.html(element.html());
 
 
@@ -1468,27 +1461,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
 
                                         element.replaceWith(newElement);
-                                    }
-
-                                    var RevertCommonUl = function (element) {
-
-                                        var newElement = $("<ul>");
-                                        newElement.html(element.html());
-
-
-                                        //Assign Class
-                                        var elementClass = element.attr("class");
-                                        if (elementClass != null) {
-                                            newElement.attr("class", elementClass);
-                                        }
-
-                                        //Assign Style
-                                        var elementStyle = element.attr("style");
-                                        if (elementStyle != null) {
-                                            newElement.attr("style", elementStyle);
-                                        }
-                                        element.replaceWith(newElement);
-                                    }
+                                    }                                                                        
+                                    
 
                                     oHtml.find(".MEE_ITEM").each(function (i, e) {
                                         var elem = $(e);
@@ -1502,18 +1476,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             elem.addClass("drapableImageContainer").removeClass("MEE_ITEM");
                                             imageElem.addClass("imageHandlingClass  resizable clickEvent");
                                             var imgHeight = imageElem.inlineStyle("height");
-                                            var imgWidth = imageElem.inlineStyle("width");                                            
+                                            var imgWidth = imageElem.inlineStyle("width");
 
                                             var _containerStyle = elem.attr("style") ? elem.attr("style") : "float:none";
                                             var _imageStyle = imageElem.attr("isStyleSet") ? imageElem.attr("style") : "height:" + imgHeight + ";width:" + imgWidth;
-                                            elem.removeAttr("style");                                            
+                                            elem.removeAttr("style");
 
                                             var imgOutHtml = "";
                                             if (imageElem.parent().get(0).tagName == 'a' || imageElem.parent().get(0).tagName == 'A') {
 
                                                 imgOutHtml = imageElem.parent().outerHTML();
-                                            }
-                                            else {
+                                            } else {
                                                 imgOutHtml = imageElem.outerHTML();
                                             }
 
@@ -1525,8 +1498,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 "height": imgHeight
                                             });
 
-                                        }
-                                        else {
+                                        } else {
                                             elem.removeClass("MEE_ITEM").addClass("textcontent");
                                             elem.html(newHtml);
                                         }
@@ -1542,40 +1514,44 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
 
                                     oHtml.find("div.sortable").not(".container").each(function () {
-                                        RevertCommonUl($(this));
+                                        RevertTags($(this),"<ul>");
                                     });
 
                                     oHtml.find(".csHaveData").each(function () {
-                                        RevertCommonLi($(this));
+                                        RevertTags($(this),"<li>");                                        
                                     });
 
                                     oHtml.find(".myDroppable").each(function () {
-                                        RevertCommonLi($(this));
+                                        RevertTags($(this),"<li>");                                        
                                     });
                                     
+                                    oHtml.find("span.underline").each(function () {
+                                        RevertTags($(this),"<font>"); 
+                                    });
+
                                     oHtml.find(".MEEFORMCONTAINER").each(function () {
-                                        if($(this).find("iframe").length){
-                                            $(this).append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button data-formid='"+options.formid+"'>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>")   
+                                        if ($(this).find("iframe").length) {
+                                            $(this).append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button data-formid='" + options.formid + "'>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>")
                                         }
                                     });
-                                    if(oHtml.find(".MEEVIDEOCONTAINER").length){
-                                            oHtml.find(".MEEVIDEOCONTAINER .editvideopanel").remove();
-                                            oHtml.find(".MEEVIDEOCONTAINER .embedvido-wrap").hide();
-                                            $.each(oHtml.find(".MEEVIDEOCONTAINER"),function(key,val){
-                                                $(val).css({width: $(val).find(".embedvido-wrap iframe").attr('width'),height: $(val).find(".embedvido-wrap iframe").attr('height')})
-                                            });
-                                            
-                                            oHtml.find(".MEEVIDEOCONTAINER").append("<div class='editvideopanel' style='display:none;'><span class='edit-video'><button >Edit Embed Video</button></span> </div>");
+                                    if (oHtml.find(".MEEVIDEOCONTAINER").length) {
+                                        oHtml.find(".MEEVIDEOCONTAINER .editvideopanel").remove();
+                                        oHtml.find(".MEEVIDEOCONTAINER .embedvido-wrap").hide();
+                                        $.each(oHtml.find(".MEEVIDEOCONTAINER"), function (key, val) {
+                                            $(val).css({width: $(val).find(".embedvido-wrap iframe").attr('width'), height: $(val).find(".embedvido-wrap iframe").attr('height')})
+                                        });
+
+                                        oHtml.find(".MEEVIDEOCONTAINER").append("<div class='editvideopanel' style='display:none;'><span class='edit-video'><button >Edit Embed Video</button></span> </div>");
                                     }
-                                    
-                                    
+
+
 
                                     oHtml.find("table").each(function () {
                                         oHtml.find(".container .sortable .csHaveData").each(function () {
-                                            RevertCommonLi($(this));
+                                            RevertTags($(this),"<li>");     
                                         });
                                         oHtml.find(".container .sortable .myDroppable").each(function () {
-                                            RevertCommonLi($(this));
+                                            RevertTags($(this),"<li>");     
                                         });
                                     });
 
@@ -1584,30 +1560,29 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if (lengthHTML > 1) {
                                         for (var i = 1; i < lengthHTML; i++) {
                                             var obj = $(oHtml[i]);
-                                            if(obj[0]){
-                                               
-                                            if (obj[0].nodeName == "DIV") {
+                                            if (obj[0]) {
 
-                                                if (obj.children().length > 1) {
-                                                    var ht = obj.html();
-                                                    oHtml = $(ht);
+                                                if (obj[0].nodeName == "DIV") {
+
+                                                    if (obj.children().length > 1) {
+                                                        var ht = obj.html();
+                                                        oHtml = $(ht);
+                                                    } else {
+                                                        var ht = obj.html();
+                                                        var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
+                                                        newHtml.append(obj);
+                                                        oHtml = $(newHtml);
+                                                    }
+
                                                 }
-                                                else {
+
+                                                if (obj[0].nodeName == "TABLE") {
                                                     var ht = obj.html();
                                                     var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
                                                     newHtml.append(obj);
                                                     oHtml = $(newHtml);
                                                 }
-
                                             }
-
-                                            if (obj[0].nodeName == "TABLE") {
-                                                var ht = obj.html();
-                                                var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
-                                                newHtml.append(obj);
-                                                oHtml = $(newHtml);
-                                            }
-                                         }
                                         }
 
                                     }
@@ -1641,7 +1616,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
                                         InitializeDynamicControl(args);
                                         variation.replaceWith(args.predefinedControl.Html.clone(true, true));
-                                    });                                   
+                                    });
                                     return oHtml;
                                 }
 
@@ -1664,7 +1639,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find("div.ui-resizable-e").remove();
                                     oHtml.find("div.ui-resizable-s").remove();
                                     oHtml.find("div.ui-resizable-se").remove();
-                                    
+
                                     oHtml.find(".space").removeInlineStyle("background");
                                     oHtml.find("*").removeInlineStyle("outline");
 
@@ -1675,8 +1650,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.find('.preloadGif').remove();
                                     // Remove Highlight 
                                     oHtml.find('.csHaveData').removeClass('mce-highlight-div');
-                                    oHtml.find('.myDroppable').css('visibility','hidden');
-                                    oHtml.find('.MEE_DROPPABLE').attr('style','');
+                                    oHtml.find('.myDroppable').css('visibility', 'hidden');
+                                    oHtml.find('.MEE_DROPPABLE').attr('style', '');
                                     oHtml.find('.mce-edit-focus').removeClass('mce-edit-focus');
                                     //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
                                     oHtml.find(".drapableImageContainer").each(function (index, object) {
@@ -1686,38 +1661,35 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var myImage = imageContainer.find(".myImage");
                                         if (img.length) {
                                             img.attr("width", parseInt(resizableImg.inlineStyle("width")));
-                                            if(parseInt(resizableImg.inlineStyle("width"))<100){
+                                            if (parseInt(resizableImg.inlineStyle("width")) < 100) {
                                                 img.addClass("static").removeClass("img");
                                             }
                                             img.attr("height", parseInt(resizableImg.inlineStyle("height")));
-                                            img.css("width", resizableImg.inlineStyle("width"));                                            
+                                            img.css("width", resizableImg.inlineStyle("width"));
                                             img.css("height", resizableImg.inlineStyle("height"));
                                             img.attr("border", 0);
                                             var imgStyle = resizableImg.attr("style");
                                             if (imgStyle) {
-                                                img.attr("isStyleSet", "true");                                                                                                
-                                                if(imgStyle.substring(imgStyle.length-1)==";"){
-                                                    img.attr("style",imgStyle + "border:0;margin:0px;padding:0px;");
+                                                img.attr("isStyleSet", "true");
+                                                if (imgStyle.substring(imgStyle.length - 1) == ";") {
+                                                    img.attr("style", imgStyle + "border:0;margin:0px;padding:0px;");
+                                                } else {
+                                                    img.attr("style", imgStyle + ";border:0;margin:0px;padding:0px;");
                                                 }
-                                                else{
-                                                    img.attr("style",imgStyle + ";border:0;margin:0px;padding:0px;");
-                                                }
-                                            }
-                                            else {
+                                            } else {
                                                 img.removeAttr("isStyleSet");
                                             }
                                             img.removeClass("imageHandlingClass resizable clickEvent ui-resizable").not(".static").addClass("img");
-                                            img.css("display","block");
+                                            img.css("display", "block");
 
                                             if (img.parent().get(0).tagName == 'a' || img.parent().get(0).tagName == 'A') {
                                                 imageContainer.html(img.parent().outerHTML());
-                                            }
-                                            else {
+                                            } else {
                                                 imageContainer.html(img.outerHTML());
                                             }
                                             var anchorTag = imageContainer.find("a")
-                                            if(anchorTag.length>0){
-                                                if(anchorTag.attr("onclick")=="return false;"){
+                                            if (anchorTag.length > 0) {
+                                                if (anchorTag.attr("onclick") == "return false;") {
                                                     anchorTag.removeAttr("onclick");
                                                 }
                                             }
@@ -1811,9 +1783,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oHtml.addClass("MEE_DOCUMENT");
                                     oHtml.removeClass("mainTable");
                                     oHtml.find("*").removeAttr("data-mce-style");
-                                    oHtml.find("p").css("margin","0px");
-                                    oHtml.find("ul,ol").css({"margin-top":"0px","margin-bottom":"0px"});
-                                    oHtml.find("li").css({"margin":"0px"});
+                                    oHtml.find("p").css("margin", "0px");
+                                    oHtml.find("ul,ol").css({"margin-top": "0px", "margin-bottom": "0px"});
+                                    oHtml.find("li").css({"margin": "0px"});
                                     oHtml.find(".JCLRgrips").remove();
                                     oHtml.find(".JColResizer").removeAttr("id").removeClass("JColResizer");
 
@@ -1875,7 +1847,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     //Building Blocks Drop Area:
                                     InitializeBuildingBlockDroppableArea();
-                                    var acc_height = options.fromDialog? (parseInt(myElement.parents(".modal-body").css("min-height"))-52) :($(window).height() - 62);                                    
+                                    var acc_height = options.fromDialog ? (parseInt(myElement.parents(".modal-body").css("min-height")) - 52) : ($(window).height() - 62);
                                     myElement.find(".builder-panel").css("height", acc_height + "px");
                                     myElement.find(".style-panel").css("height", acc_height + "px");
                                     myElement.find(".editorbox").css("min-height", ($(window).height() - 100) + "px");
@@ -1885,46 +1857,46 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         heightStyle: "fill",
                                         collapsible: false,
                                         activate: function (event, ui) {
-                                            
-                                            if($(ui.newPanel[0]).hasClass('images-accordion') == true){
-                                                if(!$(ui.newPanel[0]).data('firstloaded')){
-                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+
+                                            if ($(ui.newPanel[0]).hasClass('images-accordion') == true) {
+                                                if (!$(ui.newPanel[0]).data('firstloaded')) {
+                                                    $(ui.newPanel[0]).attr('data-firstloaded', 'true');
                                                     LoadImagesInLibrary();
                                                 }
-                                            }else if($(ui.newPanel[0]).hasClass('dropblock-accordian') == true){
-                                                if(!$(ui.newPanel[0]).data('firstloaded')){
-                                                     $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                            } else if ($(ui.newPanel[0]).hasClass('dropblock-accordian') == true) {
+                                                if (!$(ui.newPanel[0]).data('firstloaded')) {
+                                                    $(ui.newPanel[0]).attr('data-firstloaded', 'true');
                                                     //Load building blocks from service:
-                                                      mee._LoadBuildingBlocks();
+                                                    mee._LoadBuildingBlocks();
                                                 }
-                                            }else if($(ui.newPanel[0]).hasClass('dynamicblock-accordian')==true){
-                                                if(!$(ui.newPanel[0]).data('firstloaded')){
-                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                            } else if ($(ui.newPanel[0]).hasClass('dynamicblock-accordian') == true) {
+                                                if (!$(ui.newPanel[0]).data('firstloaded')) {
+                                                    $(ui.newPanel[0]).attr('data-firstloaded', 'true');
                                                     //Load building blocks from service:
-                                                      _LoadDynamicBlocks(options);
+                                                    _LoadDynamicBlocks(options);
                                                 }
-                                            }else if($(ui.newPanel[0]).hasClass('forms-accordion')==true){
-                                                if(!$(ui.newPanel[0]).data('firstloaded')){
-                                                    $(ui.newPanel[0]).attr('data-firstloaded','true');
+                                            } else if ($(ui.newPanel[0]).hasClass('forms-accordion') == true) {
+                                                if (!$(ui.newPanel[0]).data('firstloaded')) {
+                                                    $(ui.newPanel[0]).attr('data-firstloaded', 'true');
                                                     // Load Form blocks from service
-                                                     mee._LoadFormBlocks();
+                                                    mee._LoadFormBlocks();
                                                 }
                                             }
                                         }
                                     });
-                                    
+
                                     myElement.find(".builder-panel").css("height", (myElement.find(".builder-panel").height() + 12) + "px");
                                     var bbaccord = myElement.find(".builder-panel .bb-scrollarea-wrapper").height();
-                                    myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height":(parseInt(bbaccord) - 20),"overflow-y":"scroll"});
-                                    
+                                    myElement.find(".builder-panel .bb-scrollarea-wrapper .accordian-content").css({"height": (parseInt(bbaccord) - 20), "overflow-y": "scroll"});
+
                                     //////////
                                     _LoadContentBlocks();
-                                    
+
                                     _LoadPersonalizeTags();
 
 
                                     //if (options.landingPage) {
-                                       
+
                                     //}
 
 
@@ -1942,8 +1914,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             initStyles = false;
                                             mee_view.parentTd = 2;
                                             mee_view.selectedDropElement = null;
-                                        }
-                                        else if ($(this).hasClass("style-tab")) {
+                                        } else if ($(this).hasClass("style-tab")) {
                                             myElement.find('.builder-panel').hide();
                                             myElement.find('.style-panel').show();
                                             if (showStyle === false && options.fromDialog == true) {
@@ -1951,100 +1922,99 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 myElement.find(".style-panel").css("height", (myElement.find(".style-panel").height() + 12) + "px");
                                                 showStyle = true;
                                             }
-                                             
-                                            myElement.find(".style-panel .accordian").on( "accordionactivate", function( event, ui ) {
-                                                     var ui = ui;
-                                                     var event = event;
-                                                    setTimeout(function(){ 
+
+                                            myElement.find(".style-panel .accordian").on("accordionactivate", function (event, ui) {
+                                                var ui = ui;
+                                                var event = event;
+                                                setTimeout(function () {
+                                                    myElement.find('.ddlBackgroundLayers').chosen("destroy");
+                                                    if (myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true || $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement) {
+                                                        myElement.find('.bgimg-thumb_imgwrap').show();
+                                                        reGenerateDropElements('.ddlBackgroundImgLayers');
+                                                        //myElement.find('.ddlBackgroundImgLayers option').eq(mee_view.parentTd).attr('selected','selected');
+                                                        //myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
+                                                        myElement.find('.ddlBackgroundImgLayers').trigger('change');
+                                                    } else if (($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true || $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement) {
+                                                        reGenerateDropElements('.ddlBackgroundColorLayers');
+
+                                                    } else if (($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true || $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement) {
+                                                        SelectedElementForStyle = SelectedElementForStyle;
+                                                        reGenerateDropElements('.ddlBackgroundBorderLayers');
+                                                        if (SelectedElementForStyle.prop("tagName").toLowerCase() == "body") {
+                                                            mee.setBodyBorders();
+                                                        }
+                                                    } else {
+
+                                                        mee_view.selectedDropElement = null;
+                                                        if (SelectedElementForStyle.hasClass('mainContentHtmlGrand') == true) {
+                                                            mee_view.parentTd = 1;
+                                                        }
+                                                        var parentElement = ui.newPanel.find('.ddlBackgroundLayers').parent();
+                                                        if (parentElement.find('.chosen-container').length > 0) {
                                                             myElement.find('.ddlBackgroundLayers').chosen("destroy");
-                                                            if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement){
-                                                                myElement.find('.bgimg-thumb_imgwrap').show();
-                                                                reGenerateDropElements('.ddlBackgroundImgLayers');
-                                                                //myElement.find('.ddlBackgroundImgLayers option').eq(mee_view.parentTd).attr('selected','selected');
-                                                                //myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
-                                                                myElement.find('.ddlBackgroundImgLayers').trigger('change');
-                                                            }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement ){
-                                                                 reGenerateDropElements('.ddlBackgroundColorLayers');
-                                                                
-                                                            }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement){
-                                                                SelectedElementForStyle = SelectedElementForStyle;
-                                                                reGenerateDropElements('.ddlBackgroundBorderLayers');
-                                                                if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
-                                                                    mee.setBodyBorders();
-                                                                }
-                                                            }
-                                                            else{
-                                                                
-                                                                 mee_view.selectedDropElement = null;
-                                                                 if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
-                                                                     mee_view.parentTd = 1;
-                                                                 }
-                                                                 var parentElement = ui.newPanel.find('.ddlBackgroundLayers').parent();
-                                                                 if(parentElement.find('.chosen-container').length > 0){
-                                                                      myElement.find('.ddlBackgroundLayers').chosen("destroy");
-                                                                 }
-                                                                 var nextElement = '';
-                                                                 var dropDownClass = '';
-                                                                 
-                                                                if(ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundColorLayers')){
-                                                                    nextElement = '#backgroundColorWrap';
-                                                                    dropDownClass = 'ddlBackgroundColorLayers';
-                                                                    
-                                                                }else if(ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundImgLayers')){
-                                                                    nextElement = '#backgroundImge';
-                                                                    dropDownClass = 'ddlBackgroundImgLayers';
-                                                                    
-                                                                }else if(ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundBorderLayers')){
-                                                                    nextElement = '#bordersWrap';
-                                                                    dropDownClass = 'ddlBackgroundBorderLayers';
-                                                                   
-                                                                }
-                                                                ui.newPanel.find('.ddlBackgroundLayers').remove();
-                                                                var SelectHTML = '<select class="nosearch ddlBackgroundLayers '+dropDownClass+'"> </select>';                               
-                                                                var newHTml = $(SelectHTML);
-                                                                
-                                                                newHTml.append($('<option value=""></option>'));                                        
-                                                                newHTml.append(
-                                                                        $('<option></option>')
-                                                                        .val(mainContentHtmlGrand.prop("tagName"))
-                                                                        .html("Parent: " + mainContentHtmlGrand.prop("tagName"))
-                                                                        .data("el", mainContentHtmlGrand)
-                                                                        );
-                                                                newHTml.append($('<option value="body" selected="selected">BODY</option>'));
-                                                                //myElement.find(".ddlBackgroundLayers").trigger("chosen:updated").change();
-                                                                parentElement.find(nextElement).before(newHTml);
-                                                                var selectedElementVal = ui.newPanel.find('.ddlBackgroundLayers option').eq(mee_view.parentTd).val();
-                                                                 newHTml.val(selectedElementVal).change(); 
-                                                                 newHTml.chosen();
-                                                                mee_view.parentTd = newHTml.prop('selectedIndex');
-                                                                    newHTml.on('change',function(){
-                                                                        if(dropDownClass =="ddlBackgroundColorLayers"){
-                                                                            ddlBackgroundColorLayerChange($(this));
-                                                                        }else if(dropDownClass =="ddlBackgroundImgLayers"){
-                                                                            ddlBackgroundImgLayerChange($(this));
-                                                                        }else if(dropDownClass =="ddlBackgroundBorderLayers"){
-                                                                            ddlBackgroundBorderLayerChange($(this));
-                                                                        }
-                                                                            
-                                                                     });
-                                                                     newHTml.trigger('change');
-                                                                //newHTml.chosen();
-                                                                
-                                                                /*if(mee_view.parentTd){
-                                                                    myElement.find('.ddlBackgroundLayers option:last-child').prev().attr('selected','selected').chosen('update');
-                                                                     myElement.find('.ddlBackgroundLayers').trigger('change');
-                                                                }else{
-                                                                    myElement.find('.ddlBackgroundLayers').val("body").chosen('update');
-                                                                }*/
-                                                                //SelectedElementForStyle = meeIframe.find("body");
+                                                        }
+                                                        var nextElement = '';
+                                                        var dropDownClass = '';
+
+                                                        if (ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundColorLayers')) {
+                                                            nextElement = '#backgroundColorWrap';
+                                                            dropDownClass = 'ddlBackgroundColorLayers';
+
+                                                        } else if (ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundImgLayers')) {
+                                                            nextElement = '#backgroundImge';
+                                                            dropDownClass = 'ddlBackgroundImgLayers';
+
+                                                        } else if (ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundBorderLayers')) {
+                                                            nextElement = '#bordersWrap';
+                                                            dropDownClass = 'ddlBackgroundBorderLayers';
+
+                                                        }
+                                                        ui.newPanel.find('.ddlBackgroundLayers').remove();
+                                                        var SelectHTML = '<select class="nosearch ddlBackgroundLayers ' + dropDownClass + '"> </select>';
+                                                        var newHTml = $(SelectHTML);
+
+                                                        newHTml.append($('<option value=""></option>'));
+                                                        newHTml.append(
+                                                                $('<option></option>')
+                                                                .val(mainContentHtmlGrand.prop("tagName"))
+                                                                .html("Parent: " + mainContentHtmlGrand.prop("tagName"))
+                                                                .data("el", mainContentHtmlGrand)
+                                                                );
+                                                        newHTml.append($('<option value="body" selected="selected">BODY</option>'));
+                                                        //myElement.find(".ddlBackgroundLayers").trigger("chosen:updated").change();
+                                                        parentElement.find(nextElement).before(newHTml);
+                                                        var selectedElementVal = ui.newPanel.find('.ddlBackgroundLayers option').eq(mee_view.parentTd).val();
+                                                        newHTml.val(selectedElementVal).change();
+                                                        newHTml.chosen();
+                                                        mee_view.parentTd = newHTml.prop('selectedIndex');
+                                                        newHTml.on('change', function () {
+                                                            if (dropDownClass == "ddlBackgroundColorLayers") {
+                                                                ddlBackgroundColorLayerChange($(this),['1']);
+                                                            } else if (dropDownClass == "ddlBackgroundImgLayers") {
+                                                                ddlBackgroundImgLayerChange($(this),['1']);
+                                                            } else if (dropDownClass == "ddlBackgroundBorderLayers") {
+                                                                ddlBackgroundBorderLayerChange($(this),['1']);
                                                             }
 
+                                                        });
+                                                        newHTml.trigger('change');
+                                                        //newHTml.chosen();
+
+                                                        /*if(mee_view.parentTd){
+                                                         myElement.find('.ddlBackgroundLayers option:last-child').prev().attr('selected','selected').chosen('update');
+                                                         myElement.find('.ddlBackgroundLayers').trigger('change');
+                                                         }else{
+                                                         myElement.find('.ddlBackgroundLayers').val("body").chosen('update');
+                                                         }*/
+                                                        //SelectedElementForStyle = meeIframe.find("body");
+                                                    }
 
 
-                                                    }, 100);
-                                                    
-                                                    
-                                                } );
+
+                                                }, 100);
+
+
+                                            });
                                             initStyles = true;
                                         }
                                         if (options.fromDialog == false) {
@@ -2054,12 +2024,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 if (mee.setAccordian) {
                                                     mee.setAccordian(lessBy);
                                                 }
-                                            }
-                                            else {
+                                            } else {
                                                 mee.setAccordian(0);
                                             }
                                         }
-                                        
+
 
                                         InitializeElementsForStyle(initStyles);
 
@@ -2074,8 +2043,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         activate: function (event, ui) {
                                             if (ui.newPanel.attr("id") == "tabs-1") {
                                                 InitializeElementsForStyle(false);
-                                            }
-                                            else {
+                                            } else {
                                                 InitializeElementsForStyle(true);
                                             }
                                         }
@@ -2096,64 +2064,64 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
 
                                 }
-                                function reGenerateDropElements(ElementObj){
-                                    
+                                function reGenerateDropElements(ElementObj) {
+
                                     //--------------Background Layers-------------//
-                                                        
-                                                    
-                                                    var isGetGrandParent = false;
-                                                    var SelectedElementForStyle = mee_view.selectedDropElement;
-                                                    myElement.find(ElementObj).chosen("destroy");
-                                                    var ddlBackgroundLayers = myElement.find(ElementObj);
-                                                    ddlBackgroundLayers.find("option").remove();
-                                                    var parentElement = myElement.find(ElementObj).parent();
-                                                    if(parentElement.find('.chosen-container').length > 0){
-                                                        myElement.find(ElementObj).chosen("destroy");
-                                                    }
-                                                    ddlBackgroundLayers.append(
-                                                            $('<option value=""></option>'));                                                    
 
 
-                                                    //Add Self
-                                                    
-                                                    ddlBackgroundLayers.append(
-                                                            $('<option></option>')
-                                                            .val(SelectedElementForStyle.prop("tagName"))
-                                                            .html("Parent: " + SelectedElementForStyle.prop("tagName"))
-                                                            .data("el", SelectedElementForStyle)
-                                                            );
+                                    var isGetGrandParent = false;
+                                    var SelectedElementForStyle = mee_view.selectedDropElement;
+                                    myElement.find(ElementObj).chosen("destroy");
+                                    var ddlBackgroundLayers = myElement.find(ElementObj);
+                                    ddlBackgroundLayers.find("option").remove();
+                                    var parentElement = myElement.find(ElementObj).parent();
+                                    if (parentElement.find('.chosen-container').length > 0) {
+                                        myElement.find(ElementObj).chosen("destroy");
+                                    }
+                                    ddlBackgroundLayers.append(
+                                            $('<option value=""></option>'));
 
-                                                    SelectedElementForStyle.parents().each(function (index, element) {
 
-                                                        if (!isGetGrandParent) {
-                                                            if ($(element).hasClass("mainContentHtmlGrand")) {
-                                                                isGetGrandParent = true;
-                                                            }
+                                    //Add Self
 
-                                                            //if ($(element).prop("tagName") === "TD") {
-                                                            if($(element).prop("tagName").toLowerCase() !="ul"){
-                                                                ddlBackgroundLayers.append(
-                                                                    $('<option></option>')
-                                                                    .val($(element).prop("tagName"))
-                                                                    .html("Parent: " + $(element).prop("tagName"))
-                                                                    .data("el", $(element))
-                                                                    );
-                                                            }
-                                                            
-                                                            // }
+                                    ddlBackgroundLayers.append(
+                                            $('<option></option>')
+                                            .val(SelectedElementForStyle.prop("tagName"))
+                                            .html("Parent: " + SelectedElementForStyle.prop("tagName"))
+                                            .data("el", SelectedElementForStyle)
+                                            );
 
-                                                        }
+                                    SelectedElementForStyle.parents().each(function (index, element) {
 
-                                                    });
-                                                     myElement.find(ElementObj).append(
-                                                            $('<option value="body">BODY</option>'));
-                                                     myElement.find(ElementObj + ' option').eq(mee_view.parentTd).attr('selected','selected');
-                                                     myElement.find(ElementObj).chosen();
-                                        
-                                                    // myElement.find(ElementObj).bind('chnage');
-                                                     //myElement.find(ElementObj).trigger("chosen:updated");
-                                                     //myElement.find(ElementObj).trigger('change');
-                                                    
+                                        if (!isGetGrandParent) {
+                                            if ($(element).hasClass("mainContentHtmlGrand")) {
+                                                isGetGrandParent = true;
+                                            }
+
+                                            //if ($(element).prop("tagName") === "TD") {
+                                            if ($(element).prop("tagName").toLowerCase() != "ul") {
+                                                ddlBackgroundLayers.append(
+                                                        $('<option></option>')
+                                                        .val($(element).prop("tagName"))
+                                                        .html("Parent: " + $(element).prop("tagName"))
+                                                        .data("el", $(element))
+                                                        );
+                                            }
+
+                                            // }
+
+                                        }
+
+                                    });
+                                    myElement.find(ElementObj).append(
+                                            $('<option value="body">BODY</option>'));
+                                    myElement.find(ElementObj + ' option').eq(mee_view.parentTd).attr('selected', 'selected');
+                                    myElement.find(ElementObj).chosen();
+
+                                    // myElement.find(ElementObj).bind('chnage');
+                                    //myElement.find(ElementObj).trigger("chosen:updated");
+                                    //myElement.find(ElementObj).trigger('change');
+
                                 }
 
 //**************************************************************End ***********************************************************************************///
@@ -2168,99 +2136,98 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         IsStyleActivated = false;
 
                                         SelectedElementForStyle = null;
-                                        
+
                                         oInitDestroyEvents.InitializePluginsEvents(meeIframe);
                                         meeIframe.find('.MEEFORMCONTAINER').removeClass('MEEFORMSTYLE');
 
-                                    }
-                                    else {
+                                    } else {
                                         oInitDestroyEvents.DestroyPluginsEvents(meeIframe);
                                         meeIframe.find('.mce-edit-focus').removeClass('mce-edit-focus');
                                         meeIframe.find('.MEEFORMCONTAINER').addClass('MEEFORMSTYLE');
                                         IsStyleActivated = true;
                                         meeIframe.find(".csHaveData td, .csHaveData div").unbind("click");
-                                        
-                                            //Selection
-                                            meeIframe.find(".csHaveData td, .csHaveData div").bind("click",function (event) {
-                                                if (IsStyleActivated) {
-                                                    event.stopPropagation(); //Stop bubbling
 
-                                                    RemoveAllOutline();
+                                        //Selection
+                                        meeIframe.find(".csHaveData td, .csHaveData div").bind("click", function (event) {
+                                            if (IsStyleActivated) {
+                                                event.stopPropagation(); //Stop bubbling
 
-                                                    
-
-                                                    SelectedElementForStyle = $(this);
-                                                    if(SelectedElementForStyle.hasClass('mainContentHtml')== true){
-                                                      SelectedElementForStyle = SelectedElementForStyle.parent();  
-                                                    }
-                                                    mee_view.selectedDropElement = SelectedElementForStyle;
-                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E");
-                                                    SetStylesOnSelection(SelectedElementForStyle);
-
-                                                    //--------------Background Layers-------------//
-                                                    var isGetGrandParent = false;
-
-                                                    var ddlBackgroundLayers = myElement.find(".ddlBackgroundLayers");
-                                                    ddlBackgroundLayers.find("option").remove();
-
-                                                    ddlBackgroundLayers.append(
-                                                            $('<option value=""></option>'));                                                    
+                                                RemoveAllOutline();
 
 
-                                                    //Add Self
-                                                    
-                                                    ddlBackgroundLayers.append(
-                                                            $('<option></option>')
-                                                            .val(SelectedElementForStyle.prop("tagName"))
-                                                            .html("Parent: " + SelectedElementForStyle.prop("tagName"))
-                                                            .data("el", SelectedElementForStyle)
-                                                            );
 
-                                                    SelectedElementForStyle.parents().each(function (index, element) {
+                                                SelectedElementForStyle = $(this);
+                                                if (SelectedElementForStyle.hasClass('mainContentHtml') == true) {
+                                                    SelectedElementForStyle = SelectedElementForStyle.parent();
+                                                }
+                                                mee_view.selectedDropElement = SelectedElementForStyle;
+                                                SelectedElementForStyle.css("outline", "2px solid #94CF1E");
+                                                SetStylesOnSelection(SelectedElementForStyle);
 
-                                                        if (!isGetGrandParent) {
-                                                            if ($(element).hasClass("mainContentHtmlGrand")) {
-                                                                isGetGrandParent = true;
-                                                            }
+                                                //--------------Background Layers-------------//
+                                                var isGetGrandParent = false;
 
-                                                            //if ($(element).prop("tagName") === "TD") {
-                                                            if($(element).prop("tagName").toLowerCase() !="ul"){
-                                                                ddlBackgroundLayers.append(
+                                                var ddlBackgroundLayers = myElement.find(".ddlBackgroundLayers");
+                                                ddlBackgroundLayers.find("option").remove();
+
+                                                ddlBackgroundLayers.append(
+                                                        $('<option value=""></option>'));
+
+
+                                                //Add Self
+
+                                                ddlBackgroundLayers.append(
+                                                        $('<option></option>')
+                                                        .val(SelectedElementForStyle.prop("tagName"))
+                                                        .html("Parent: " + SelectedElementForStyle.prop("tagName"))
+                                                        .data("el", SelectedElementForStyle)
+                                                        );
+
+                                                SelectedElementForStyle.parents().each(function (index, element) {
+
+                                                    if (!isGetGrandParent) {
+                                                        if ($(element).hasClass("mainContentHtmlGrand")) {
+                                                            isGetGrandParent = true;
+                                                        }
+
+                                                        //if ($(element).prop("tagName") === "TD") {
+                                                        if ($(element).prop("tagName").toLowerCase() != "ul") {
+                                                            ddlBackgroundLayers.append(
                                                                     $('<option></option>')
                                                                     .val($(element).prop("tagName"))
                                                                     .html("Parent: " + $(element).prop("tagName"))
                                                                     .data("el", $(element))
                                                                     );
-                                                            }
-                                                            
-                                                            // }
-
                                                         }
 
-                                                    });
-                                                   // console.log('i got hit after loop');
-                                                    ddlBackgroundLayers.append(
-                                                            $('<option value="body">BODY</option>'));
-                                                    myElement.find(".ddlBackgroundLayers").trigger("chosen:updated");
-                                                    if(myElement.find('.ddlBackgroundImgLayers').length > 0 && myElement.find('.images-accordion').hasClass('ui-accordion-content-active') == true){
-                                                        
-                                                        myElement.find('.ddlBackgroundImgLayers option').eq(1).attr('selected','selected');
-                                                        myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
-                                                        myElement.find('.ddlBackgroundImgLayers').trigger('change');
-                                                    }else if(myElement.find('.color-accordion').hasClass('ui-accordion-content-active')){
-                                                         
-                                                        myElement.find('.ddlBackgroundColorLayers option').eq(1).attr('selected','selected');
-                                                        myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated")
-                                                    }else if(myElement.find('.border-accordion').hasClass('ui-accordion-content-active')){
-                                                        myElement.find('.ddlBackgroundBorderLayers option').eq(1).attr('selected','selected');
-                                                        myElement.find('.ddlBackgroundBorderLayers').trigger("chosen:updated")
-                                                    }
-                                                    mee_view.parentTd = 1;
-                                                    //////////////////////////////////////////////////
+                                                        // }
 
+                                                    }
+
+                                                });
+                                                // console.log('i got hit after loop');
+                                                ddlBackgroundLayers.append(
+                                                        $('<option value="body">BODY</option>'));
+                                                myElement.find(".ddlBackgroundLayers").trigger("chosen:updated");
+                                                if (myElement.find('.ddlBackgroundImgLayers').length > 0 && myElement.find('.images-accordion').hasClass('ui-accordion-content-active') == true) {
+
+                                                    myElement.find('.ddlBackgroundImgLayers option').eq(1).attr('selected', 'selected');
+                                                    myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
+                                                    myElement.find('.ddlBackgroundImgLayers').trigger('change');
+                                                } else if (myElement.find('.color-accordion').hasClass('ui-accordion-content-active')) {
+
+                                                    myElement.find('.ddlBackgroundColorLayers option').eq(1).attr('selected', 'selected');
+                                                    myElement.find('.ddlBackgroundColorLayers').trigger("chosen:updated")
+                                                } else if (myElement.find('.border-accordion').hasClass('ui-accordion-content-active')) {
+                                                    myElement.find('.ddlBackgroundBorderLayers option').eq(1).attr('selected', 'selected');
+                                                    myElement.find('.ddlBackgroundBorderLayers').trigger("chosen:updated")
                                                 }
-                                            });
-                                         
+                                                mee_view.parentTd = 1;
+                                                //////////////////////////////////////////////////
+
+                                            }
+                                        });
+
                                         //////////////////////
 
                                         if (eventsApplied === false) {
@@ -2279,28 +2246,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         SelectedElementForStyle.removeInlineStyle("border-" + type);
                                                         myElement.find("#" + type + "Border").removeClass('borderselected');
                                                         $element.css("border-" + type, "none");
-                                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                                                    if(type=='left'){
-                                                                        pageBorderLeft = '';
-                                                                    }
-                                                                    if(type=='top'){
-                                                                        pageBorderTop = '';
-                                                                    }
-                                                                    if(type=='right'){
-                                                                        pageBorderRight = '';
-                                                                    }
-                                                                    if(type=='bottom'){
-                                                                        pageBorderBottom = '';
-                                                                    }
-                                                                }
-                                                    }
-                                                    else {
+                                                        if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                                            if (type == 'left') {
+                                                                pageBorderLeft = '';
+                                                            }
+                                                            if (type == 'top') {
+                                                                pageBorderTop = '';
+                                                            }
+                                                            if (type == 'right') {
+                                                                pageBorderRight = '';
+                                                            }
+                                                            if (type == 'bottom') {
+                                                                pageBorderBottom = '';
+                                                            }
+                                                        }
+                                                    } else {
 
                                                         //$(this).addClass("active");
                                                         var borderType = myElement.find(".ddlBorderType").val();
                                                         var borderWidth = myElement.find(".ddlBorderWidth").val();
                                                         SelectedElementForStyle.css("border-" + type, borderWidth + "px " + borderType + " " + borderColor);
-                                                        
+
                                                         myElement.find("#" + type + "Border").addClass('borderselected');
 
                                                         var string = borderWidth + "px " + borderType + " #000";
@@ -2312,52 +2278,51 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         TotalBorderTopBottom = borderTopWidth + borderBottomWidth;
                                                         if (type == 'top' || type == 'bottom') {
                                                             $element.css("height", 48 - TotalBorderTopBottom + "px");
-                                                        }
-                                                        else {
+                                                        } else {
                                                             $element.css("width", 48 - TotalBorderTopBottom + "px");
                                                         }
-                                                        
-                                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                                                    pageBorderWidth = borderWidth+"px";
-                                                                    pageBorderColor = borderColor;
-                                                                    pageBorderType= borderType;
-                                                                    if(type=='left'){
-                                                                        pageBorderLeft = 'border-left';
-                                                                    }
-                                                                    if(type=='top'){
-                                                                        pageBorderTop = 'border-top';
-                                                                    }
-                                                                    if(type=='right'){
-                                                                        pageBorderRight = 'border-right';
-                                                                    }
-                                                                    if(type=='bottom'){
-                                                                        pageBorderBottom = 'border-bottom';
-                                                                    }
-                                                                }
+
+                                                        if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                                            pageBorderWidth = borderWidth + "px";
+                                                            pageBorderColor = borderColor;
+                                                            pageBorderType = borderType;
+                                                            if (type == 'left') {
+                                                                pageBorderLeft = 'border-left';
+                                                            }
+                                                            if (type == 'top') {
+                                                                pageBorderTop = 'border-top';
+                                                            }
+                                                            if (type == 'right') {
+                                                                pageBorderRight = 'border-right';
+                                                            }
+                                                            if (type == 'bottom') {
+                                                                pageBorderBottom = 'border-bottom';
+                                                            }
+                                                        }
                                                     }
                                                     makeCloneAndRegister();
                                                 }
 
                                             });
-                                            myElement.find(".ddlBorderType").change(function(){
-                                                    var borderType = $(this).val();
-                                                    //var type = $(this).data("type").toLowerCase();
-                                                    $.each(myElement.find(".sBorderLine"),function(key,val){
-                                                        if($(val).hasClass('borderselected')== true){
-                                                          $(val).removeClass('borderselected').trigger('click');
-                                                        }
-                                                    })
+                                            myElement.find(".ddlBorderType").change(function () {
+                                                var borderType = $(this).val();
+                                                //var type = $(this).data("type").toLowerCase();
+                                                $.each(myElement.find(".sBorderLine"), function (key, val) {
+                                                    if ($(val).hasClass('borderselected') == true) {
+                                                        $(val).removeClass('borderselected').trigger('click');
+                                                    }
+                                                })
                                             });
-                                            myElement.find(".ddlBorderWidth").change(function(){
-                                                    var borderWidth = $(this).val();
-                                                    //var type = $(this).data("type").toLowerCase();
-                                                    $.each(myElement.find(".sBorderLine"),function(key,val){
-                                                        if($(val).hasClass('borderselected')== true){
-                                                          $(val).removeClass('borderselected').trigger('click');
-                                                        }
-                                                    })
+                                            myElement.find(".ddlBorderWidth").change(function () {
+                                                var borderWidth = $(this).val();
+                                                //var type = $(this).data("type").toLowerCase();
+                                                $.each(myElement.find(".sBorderLine"), function (key, val) {
+                                                    if ($(val).hasClass('borderselected') == true) {
+                                                        $(val).removeClass('borderselected').trigger('click');
+                                                    }
+                                                })
                                             });
-                                            
+
                                             //////////////////////
                                             //Vertical Align
                                             myElement.find(".sVerticalAlign").click(function () {
@@ -2368,13 +2333,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         myElement.find(".aligncol #top").addClass("active");
                                                         myElement.find(".aligncol #top").siblings().removeClass("active");
 
-                                                    }
-                                                    else if ($(this).attr("id") == "middle") {
+                                                    } else if ($(this).attr("id") == "middle") {
                                                         SelectedElementForStyle.css("vertical-align", "middle");
                                                         myElement.find(".aligncol #middle").addClass("active");
                                                         myElement.find(".aligncol #middle").siblings().removeClass("active");
-                                                    }
-                                                    else if ($(this).attr("id") == "bottom") {
+                                                    } else if ($(this).attr("id") == "bottom") {
                                                         SelectedElementForStyle.css("vertical-align", "bottom");
                                                         myElement.find(".aligncol #bottom").addClass("active");
                                                         myElement.find(".aligncol #bottom").siblings().removeClass("active");
@@ -2394,8 +2357,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         SelectedElementForStyle.removeInlineStyle("padding-" + type);
                                                         myElement.find("#" + type + "Padding").removeClass('borderselected');
 
-                                                    }
-                                                    else {
+                                                    } else {
                                                         //$(this).addClass("active");
                                                         var paddingValue = myElement.find(".ddlPadding").val();
                                                         SelectedElementForStyle.css("padding-" + type, paddingValue + "px");
@@ -2410,25 +2372,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             //Background Layers
                                             var ddlBackgroundLayers = myElement.find(".ddlBackgroundLayers");
 
-                                            ddlBackgroundLayers.on('change', function () {
-                                                    ddlBackgroundColorLayerChange($(this));
-                                                
+                                            ddlBackgroundLayers.on('change', function () {                                                
+                                                ddlBackgroundColorLayerChange($(this),arguments.length);
+
                                             });
-                                            
-                                            
+
+
                                             var ddlBackgroundLayersImg = myElement.find(".ddlBackgroundImgLayers");
-                                            if(ddlBackgroundLayersImg.length > 0){
-                                                ddlBackgroundLayersImg.on('change', function (event) {
-                                                        ddlBackgroundImgLayerChange($(this));    
+                                            if (ddlBackgroundLayersImg.length > 0) {
+                                                ddlBackgroundLayersImg.on('change', function (event) {                                                   
+                                                    ddlBackgroundImgLayerChange($(this),arguments.length);
                                                 });
-                                            
+
                                             }
-                                            
-                                            
+
+
                                             var ddlBackgroundLayersBorder = myElement.find(".ddlBackgroundBorderLayers");
-                                            if(ddlBackgroundLayersBorder.length > 0){
-                                                ddlBackgroundLayersBorder.on('change', function (event) {
-                                                    ddlBackgroundBorderLayerChange($(this));
+                                            if (ddlBackgroundLayersBorder.length > 0) {
+                                                ddlBackgroundLayersBorder.on('change', function (event) {                                                    
+                                                    ddlBackgroundBorderLayerChange($(this),arguments.length);
                                                 });
                                             }
                                             ///////////////////////
@@ -2443,46 +2405,44 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     myElement.find("input#700").addClass("active");
                                                     myElement.find("input#700").siblings().removeClass("active");
                                                     emailWidth = "700px";
-                                                }
-                                                else if (value == "600") {
+                                                } else if (value == "600") {
                                                     myElement.find(".email-width input.txtContSize").val('');
                                                     myElement.find("input#600").addClass("active");
                                                     myElement.find("input#600").siblings().removeClass("active");
                                                     emailWidth = "600px";
-                                                }
-                                                else if (value == "500") {
+                                                } else if (value == "500") {
                                                     myElement.find(".email-width input.txtContSize").val('');
                                                     myElement.find("input#500").addClass("active");
                                                     myElement.find("input#500").siblings().removeClass("active");
                                                     emailWidth = "500px";
                                                 }
                                                 //undoManager.registerAction(mainContentHtmlGrand.html());
-                                                    makeCloneAndRegister();
+                                                makeCloneAndRegister();
                                             });
 
                                             myElement.find(".txtContainerSize").keyup(function (e) {
-                                               var emailWidthScale = myElement.find(".selectEmailSize").val();
+                                                var emailWidthScale = myElement.find(".selectEmailSize").val();
                                                 var _emailWidth = $(this).val();
-                                                if(emailWidthScale=="%" && _emailWidth>100){
+                                                if (emailWidthScale == "%" && _emailWidth > 100) {
                                                     _emailWidth = 100;
                                                     $(this).val(100);
                                                 }
                                                 meeIframe.find(".mainTable").css("width", _emailWidth + emailWidthScale);
-                                                emailWidth = _emailWidth + emailWidthScale;                                                
-                                                makeCloneAndRegister();                                               
+                                                emailWidth = _emailWidth + emailWidthScale;
+                                                makeCloneAndRegister();
                                             });
-                                            
-                                            myElement.find(".selectEmailSize").change(function(e){
+
+                                            myElement.find(".selectEmailSize").change(function (e) {
                                                 var _emailWidth = myElement.find(".txtContainerSize").val();
-                                                if(_emailWidth){                                                    
-                                                    var emailWidthScale = myElement.find(".selectEmailSize").val();                                                    
-                                                    if(emailWidthScale=="%" && _emailWidth>100){
+                                                if (_emailWidth) {
+                                                    var emailWidthScale = myElement.find(".selectEmailSize").val();
+                                                    if (emailWidthScale == "%" && _emailWidth > 100) {
                                                         _emailWidth = 100;
                                                         myElement.find(".txtContainerSize").val(100);
                                                     }
                                                     meeIframe.find(".mainTable").css("width", _emailWidth + emailWidthScale);
-                                                    emailWidth = _emailWidth + emailWidthScale;                                                
-                                                    makeCloneAndRegister();                                               
+                                                    emailWidth = _emailWidth + emailWidthScale;
+                                                    makeCloneAndRegister();
                                                 }
                                             })
                                             ///////////////////////
@@ -2510,18 +2470,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                             });
                                             myElement.find(".removeMyColors").click(function () {
-                                                SelectedElementForStyle.css('background-color','transparent');
-                                                if(SelectedElementForStyle[0].tagName.toLowerCase() == 'body'){
+                                                SelectedElementForStyle.css('background-color', 'transparent');
+                                                if (SelectedElementForStyle[0].tagName.toLowerCase() == 'body') {
                                                     pageBackgroundColor = 'transparent';
                                                 }
-                                                
+
                                                 myElement.find('.txtColorCode').val('');
                                             });
                                             myElement.find(".txtColorCode").change(function () {
-                                               SetBackgroundColor($(this).val())
-                                               myElement.find(".divColorPicker").minicolors('value', $(this).val())
+                                                SetBackgroundColor($(this).val())
+                                                myElement.find(".divColorPicker").minicolors('value', $(this).val())
                                             });
-                                            
+
 
                                             myElement.find(".txtColorCode").keyup(function (e) {
                                                 if (e.keyCode == 13) {
@@ -2533,10 +2493,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                             eventsApplied = true;
                                         } //End of attached events 
-                                        
+
                                         var ddlBackgroundLayers = myElement.find(".ddlBackgroundLayers");
                                         ddlBackgroundLayers.find("option").remove();
-                                        ddlBackgroundLayers.append($('<option value=""></option>'));                                        
+                                        ddlBackgroundLayers.append($('<option value=""></option>'));
                                         ddlBackgroundLayers.append(
                                                 $('<option></option>')
                                                 .val(mainContentHtmlGrand.prop("tagName"))
@@ -2547,131 +2507,143 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find(".ddlBackgroundLayers").trigger("chosen:updated").change();
                                         //Load Colors
                                         _LoadMyColors();
-                                        
-                                        
+
+
                                     }
 
 
 
 
                                 }
-                                function ddlBackgroundColorLayerChange(obj){
-                                                if (obj.find(':selected').val() != "-1") {
-                                                    RemoveAllOutline();                                                    
-                                                    SelectedElementForStyle = obj.find(':selected').val()=="body"? meeIframe.find("body"): obj.find(':selected').data('el');
-                                                    /*if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
-                                                        mee_view.parentTd = true;
-                                                    }else{
-                                                         mee_view.parentTd = false;
-                                                    }*/
-                                                   
-                                                    mee_view.parentTd = obj.prop('selectedIndex');
-                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
-                                                    // undoManager.registerAction(mainContentHtmlGrand.html());
-                                                    
-                                                    makeCloneAndRegister();
-                                                }
-                                            }
-                                function ddlBackgroundImgLayerChange(obj){
-                                            if ($(this).find(':selected').val() != "-1") {
-                                                    //RemoveAllOutline(); 
-                                                    obj.parent().find('.bgimg-thumb_imgwrap h4').show();
-                                                    obj.parent().find('.bgimg-thumb,.removeThumb').remove(); // Remove the thumbnail 
-                                                    obj.parent().find('#bgUrlCode').val(''); // Empty the input
-                                                    RemoveAllOutline();  
-                                                    SelectedElementForStyle = obj.find(':selected').val()=="body"? meeIframe.find("body"): obj.find(':selected').data('el');
-                                                    mee_view.parentTd = obj.prop('selectedIndex');
-                                                    //console.log('BG Image dropdow : ',mee_view.parentTd);
-                                                    if(SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== ""){
-                                                        var bgimage = SelectedElementForStyle.css('background-image').replace(/^url|[\(\)]/g, '');
-                                                        
-                                                        /*=====Repeat Icheck set on change of ======*/
-                                                        if(SelectedElementForStyle.css('background-repeat')=="repeat-x"){
-                                                            myElement.find('#bgimg_repeatx').iCheck('check');
-                                                             myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                        }else if(SelectedElementForStyle.css('background-repeat')=="repeat-y"){
-                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
-                                                             myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
-                                                        }else if(SelectedElementForStyle.css('background-repeat')=="no-repeat"){
-                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
-                                                        }else{
-                                                            myElement.find('#bgimg_repeaty').iCheck('check'); 
-                                                            myElement.find('#bgimg_repeatx').iCheck('check'); 
-                                                        }
-                                                        // Check background position in px
-                                                        var splitbackground = SelectedElementForStyle.css('background-position').split(" ");
-                                                        if(splitbackground[0].slice(-2)=="px" || splitbackground[1].slice(-2)=="px"){
-                                                            myElement.find('.bg-leftpos_input').val(parseFloat(splitbackground[0], 10))
-                                                            myElement.find('.bg-toppos_input').val(parseFloat(splitbackground[1], 10))
-                                                            myElement.find('#bg_img_pixel').iCheck('check');
-                                                        }
-                                                        else if(SelectedElementForStyle.css('background-position') !=="0% 0%" && SelectedElementForStyle.css('background-position')!=="" && SelectedElementForStyle.css('background-position') !=="0 0"){
-                                                            var splitImgpos = SelectedElementForStyle.css('background-position').split(" ");
-                                                            myElement.find('.bg-leftpos').val(splitImgpos[0]).attr("selected", "selected");
-                                                            myElement.find('.bg-toppos').val(splitImgpos[1]).attr("selected", "selected");
-                                                            
-                                                        }else{
-                                                            myElement.find('.bg-leftpos').val('0%').attr("selected", "selected");
-                                                            myElement.find('.bg-toppos').val('0%').attr("selected", "selected");
-                                                            obj.parent().find('.bgimg-thumb').remove();
-                                                        }
-                                                        if(bgimage && bgimage !== "" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="none" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4)!=="undefined"){
-                                                            obj.parent().find('.bgimg-thumb,.removeThumb').remove();
-                                                            obj.parent().find('.bgimg-thumb_imgwrap').find('h4').hide();
-                                                            obj.parent().find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img class="center-block bgimg-thumb" style="width: 133px; height: 100px;" src='+bgimage+'/>')
-                                                            obj.parent().find('#bgUrlCode').val(bgimage.replace(/^"(.*)"$/, '$1'));
-                                                            myElement.find(".bgimage-properties").show();
-                                                            
-                                                        }else{
-                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
-                                                        }
-                                                        
-                                                    }else{
-                                                            myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
-                                                            obj.parent().find('.bgimg-thumb').remove();
-                                                            obj.parent().find('.bgimg-thumb_imgwrap').show();
-                                                            
-                                                    }
-                                                    SelectedElementForStyle.css("outline", "2px solid #94CF1E"); 
-                                                     myElement.find('.removeThumb').click(function(){
-                                                         SelectedElementForStyle.css('background-image','none');
-                                                         $(this).parent().parent().parent().find('#bgUrlCode').val('');
-                                                         myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                         myElement.find('#bgimg_repeatx').iCheck('uncheck');
-                                                         $(this).parent().find('h4').show();
-                                                         $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
-                                                         mee_view.isRepeatY = false;
-                                                         mee_view.isRepeatX = true;
-                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                                                    pageBackgroundimage='none';
-                                                            }
-                                                         
-                                                         pageBackgroundimage_repeat = 'no-repeat';
-                                                         pageBackgroundimage_pos = '0% 0%';
-                                                     });
-                                                    // undoManager.registerAction(mainContentHtmlGrand.html());
-                                                    makeCloneAndRegister();
-                                                }
-                                }
-                                function ddlBackgroundBorderLayerChange(obj){
-                                    if ($(this).find(':selected').val() != "-1") {
-                                                        RemoveAllOutline();                                                    
-                                                        SelectedElementForStyle = obj.find(':selected').val()=="body"? meeIframe.find("body"): obj.find(':selected').data('el');
-                                                        /*if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
-                                                            mee_view.parentTd = true;
-                                                        }else{
-                                                             mee_view.parentTd = false;
-                                                        }*/
+                                function ddlBackgroundColorLayerChange(obj,args) {
+                                    if (obj.find(':selected').val() != "-1") {
+                                        RemoveAllOutline();
+                                        SelectedElementForStyle = obj.find(':selected').val() == "body" ? meeIframe.find("body") : obj.find(':selected').data('el');
+                                        /*if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
+                                         mee_view.parentTd = true;
+                                         }else{
+                                         mee_view.parentTd = false;
+                                         }*/
 
-                                                        mee_view.parentTd = obj.prop('selectedIndex');
-                                                        //console.log(mee_view.parentTd);
-                                                        SelectedElementForStyle.css("outline", "2px solid #94CF1E");                                                    
-                                                        // undoManager.registerAction(mainContentHtmlGrand.html());
-                                                        makeCloneAndRegister();
-                                                    }
+                                        mee_view.parentTd = obj.prop('selectedIndex');
+                                        SelectedElementForStyle.css("outline", "2px solid #94CF1E");
+                                        // undoManager.registerAction(mainContentHtmlGrand.html());
+                                        if(!args){
+                                            makeCloneAndRegister();
+                                        }
+                                        else if(args && args.length==2){
+                                            makeCloneAndRegister();
+                                        }
+                                    }
+                                }
+                                function ddlBackgroundImgLayerChange(obj,args) {
+                                    if ($(this).find(':selected').val() != "-1") {
+                                        //RemoveAllOutline(); 
+                                        obj.parent().find('.bgimg-thumb_imgwrap h4').show();
+                                        obj.parent().find('.bgimg-thumb,.removeThumb').remove(); // Remove the thumbnail 
+                                        obj.parent().find('#bgUrlCode').val(''); // Empty the input
+                                        RemoveAllOutline();
+                                        SelectedElementForStyle = obj.find(':selected').val() == "body" ? meeIframe.find("body") : obj.find(':selected').data('el');
+                                        mee_view.parentTd = obj.prop('selectedIndex');
+                                        //console.log('BG Image dropdow : ',mee_view.parentTd);
+                                        if (SelectedElementForStyle.css('background-image') !== "none" && SelectedElementForStyle.css('background-image') !== "") {
+                                            var bgimage = SelectedElementForStyle.css('background-image').replace(/^url|[\(\)]/g, '');
+
+                                            /*=====Repeat Icheck set on change of ======*/
+                                            if (SelectedElementForStyle.css('background-repeat') == "repeat-x") {
+                                                myElement.find('#bgimg_repeatx').iCheck('check');
+                                                myElement.find('#bgimg_repeaty').iCheck('uncheck');
+                                            } else if (SelectedElementForStyle.css('background-repeat') == "repeat-y") {
+                                                myElement.find('#bgimg_repeaty').iCheck('check');
+                                                myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                            } else if (SelectedElementForStyle.css('background-repeat') == "no-repeat") {
+                                                myElement.find('#bgimg_repeaty').iCheck('uncheck');
+                                                myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                            } else {
+                                                myElement.find('#bgimg_repeaty').iCheck('check');
+                                                myElement.find('#bgimg_repeatx').iCheck('check');
+                                            }
+                                            // Check background position in px
+                                            var splitbackground = SelectedElementForStyle.css('background-position').split(" ");
+                                            if (splitbackground[0].slice(-2) == "px" || splitbackground[1].slice(-2) == "px") {
+                                                myElement.find('.bg-leftpos_input').val(parseFloat(splitbackground[0], 10))
+                                                myElement.find('.bg-toppos_input').val(parseFloat(splitbackground[1], 10))
+                                                myElement.find('#bg_img_pixel').iCheck('check');
+                                            } else if (SelectedElementForStyle.css('background-position') !== "0% 0%" && SelectedElementForStyle.css('background-position') !== "" && SelectedElementForStyle.css('background-position') !== "0 0") {
+                                                var splitImgpos = SelectedElementForStyle.css('background-position').split(" ");
+                                                myElement.find('.bg-leftpos').val(splitImgpos[0]).attr("selected", "selected");
+                                                myElement.find('.bg-toppos').val(splitImgpos[1]).attr("selected", "selected");
+
+                                            } else {
+                                                myElement.find('.bg-leftpos').val('0%').attr("selected", "selected");
+                                                myElement.find('.bg-toppos').val('0%').attr("selected", "selected");
+                                                obj.parent().find('.bgimg-thumb').remove();
+                                            }
+                                            if (bgimage && bgimage !== "" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4) !== "none" && bgimage.replace(/^"(.*)"$/, '$1').slice(-4) !== "undefined") {
+                                                obj.parent().find('.bgimg-thumb,.removeThumb').remove();
+                                                obj.parent().find('.bgimg-thumb_imgwrap').find('h4').hide();
+                                                obj.parent().find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img class="center-block bgimg-thumb" style="width: 133px; height: 100px;" src=' + bgimage + '/>')
+                                                obj.parent().find('#bgUrlCode').val(bgimage.replace(/^"(.*)"$/, '$1'));
+                                                myElement.find(".bgimage-properties").show();
+
+                                            } else {
+                                                myElement.find('#bgimg_repeaty').iCheck('uncheck');
+                                                myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                            }
+
+                                        } else {
+                                            myElement.find('#bgimg_repeaty').iCheck('uncheck');
+                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                            obj.parent().find('.bgimg-thumb').remove();
+                                            obj.parent().find('.bgimg-thumb_imgwrap').show();
+
+                                        }
+                                        SelectedElementForStyle.css("outline", "2px solid #94CF1E");
+                                        myElement.find('.removeThumb').click(function () {
+                                            SelectedElementForStyle.css('background-image', 'none');
+                                            $(this).parent().parent().parent().find('#bgUrlCode').val('');
+                                            myElement.find('#bgimg_repeaty').iCheck('uncheck');
+                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                            $(this).parent().find('h4').show();
+                                            $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
+                                            mee_view.isRepeatY = false;
+                                            mee_view.isRepeatX = true;
+                                            if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                                pageBackgroundimage = 'none';
+                                            }
+
+                                            pageBackgroundimage_repeat = 'no-repeat';
+                                            pageBackgroundimage_pos = '0% 0%';
+                                        });
+                                        if(!args){
+                                            makeCloneAndRegister();
+                                        }
+                                        else if(args && args.length==2){
+                                            makeCloneAndRegister();
+                                        }
+                                    }
+                                }
+                                function ddlBackgroundBorderLayerChange(obj,args) {
+                                    if ($(this).find(':selected').val() != "-1") {
+                                        RemoveAllOutline();
+                                        SelectedElementForStyle = obj.find(':selected').val() == "body" ? meeIframe.find("body") : obj.find(':selected').data('el');
+                                        /*if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
+                                         mee_view.parentTd = true;
+                                         }else{
+                                         mee_view.parentTd = false;
+                                         }*/
+
+                                        mee_view.parentTd = obj.prop('selectedIndex');
+                                        //console.log(mee_view.parentTd);
+                                        SelectedElementForStyle.css("outline", "2px solid #94CF1E");
+                                        // undoManager.registerAction(mainContentHtmlGrand.html());
+                                         if(!args){
+                                            makeCloneAndRegister();
+                                        }
+                                        else if(args && args.length==2){
+                                            makeCloneAndRegister();
+                                        }
+                                    }
                                 }
                                 function RemoveAllOutline() {
                                     meeIframe.find(".mainContentHtmlGrand").removeInlineStyle("outline");
@@ -2721,8 +2693,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find(".aligncol #bottom").siblings().removeClass("active");
                                         }
 
-                                    }
-                                    else {
+                                    } else {
 
                                         myElement.find(".aligncol #top").removeClass("active");
                                         myElement.find(".aligncol #top").siblings().removeClass("active");
@@ -2751,8 +2722,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         $element.css("height", 48 - TotalBorderTopBottom + "px");
 
                                         //applyborder('top');
-                                    }
-                                    else {
+                                    } else {
                                         $element.css("border-top", "none");
                                         myElement.find("#topBorder").removeClass('borderselected');
                                         //applyborder('topNone');
@@ -2774,8 +2744,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                         //applyborder('bottom');
-                                    }
-                                    else {
+                                    } else {
                                         $element.css("border-bottom", "none");
                                         myElement.find("#bottomBorder").removeClass('borderselected');
                                         //applyborder('bottomNone');
@@ -2798,8 +2767,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                         //applyborder('right');
-                                    }
-                                    else {
+                                    } else {
                                         $element.css("border-right", "none");
                                         myElement.find("#rightBorder").removeClass('borderselected');
                                         //applyborder('rightNone');
@@ -2822,8 +2790,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                         //applyborder('left');
-                                    }
-                                    else {
+                                    } else {
                                         $element.css("border-left", "none");
                                         myElement.find("#leftBorder").removeClass('borderselected');
                                         //applyborder('leftNone');
@@ -2834,8 +2801,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find("#topPadding").addClass('borderselected');
 
                                         //applyPadding('top');
-                                    }
-                                    else {
+                                    } else {
                                         myElement.find("#topPadding").removeClass('borderselected');
                                         //applyPadding('topNone');
                                     }
@@ -2844,8 +2810,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         padding_size.val(paddingbottomVal.replace('px', ''));
                                         myElement.find("#bottomPadding").addClass('borderselected');
                                         //applyPadding('bottom');
-                                    }
-                                    else {
+                                    } else {
                                         myElement.find("#bottomPadding").removeClass('borderselected');
                                         //applyPadding('bottomNone');
                                     }
@@ -2853,8 +2818,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         padding_size.val(paddingrightVal.replace('px', ''));
                                         myElement.find("#rightPadding").addClass('borderselected');
                                         //('right');
-                                    }
-                                    else {
+                                    } else {
                                         myElement.find("#rightPadding").removeClass('borderselected');
                                         //applyPadding('rightNone');
                                     }
@@ -2862,8 +2826,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         padding_size.val(paddingleftVal.replace('px', ''));
                                         myElement.find("#leftPadding").addClass('borderselected');
                                         //applyPadding('left');
-                                    }
-                                    else {
+                                    } else {
                                         myElement.find("#leftPadding").removeClass('borderselected');
                                         //applyPadding('leftNone');
                                     }
@@ -2953,7 +2916,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     colorPickerBorder.minicolors({
                                         change: function (hex, opacity) {
                                             borderColor = hex;
-                                            setTimeout(function(){ mee.setBorderColor(borderColor)  }, 100);   
+                                            setTimeout(function () {
+                                                mee.setBorderColor(borderColor)
+                                            }, 100);
                                         },
                                         inline: false,
                                         position: 'top left',
@@ -2983,7 +2948,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
 
                                         SelectedElementForStyle.css("background-color", hex);
-                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                        if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
                                             pageBackgroundColor = hex;
                                         }
                                     }
@@ -2992,18 +2957,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     //console.log(data);
                                     if (IsStyleActivated && SelectedElementForStyle != null) {
 
-                                        SelectedElementForStyle.css({"background-image":"url('"+data+"')","background-repeat":"no-repeat"});
-                                     
-                                         myElement.find('.bgimg-thumb_imgwrap h4').hide();
+                                        SelectedElementForStyle.css({"background-image": "url('" + data + "')", "background-repeat": "no-repeat"});
+
+                                        myElement.find('.bgimg-thumb_imgwrap h4').hide();
                                         //SelectedElementForStyle.css('background-image','url(' + data + ')');
-                                       // SelectedElementForStyle.css('','');
-                                        myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
-                                        myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
+                                        // SelectedElementForStyle.css('','');
+                                        myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                        myElement.find('#bgimg_repeaty').iCheck('uncheck');
                                         mee_view.isRepeatX = false;
                                         mee_view.isRepeatY = false;
                                         changFlag.editor_change = true;
-                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                            
+                                        if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+
                                             pageBackgroundimage = data;
                                             pageBackgroundimage_repeat = 'no-repeat';
                                             pageBackgroundimage_pos = '0% 0%';
@@ -3038,8 +3003,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     //REMOVE DROPPABLES HERE  
                                     if (csHaveDataLength != 1) {
                                         myParent.next(".myDroppable").remove();
-                                    }
-                                    else {
+                                    } else {
                                         //If last element
                                         myParent.next(".myDroppable").remove();
                                         myParent.prev(".myDroppable").remove();
@@ -3054,7 +3018,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 function InitializeCopyButtonOnElement(element) {
                                     element.find(".myHandlerCopy").unbind("click");
-                                    element.find(".myHandlerCopy").bind("click",function () {
+                                    element.find(".myHandlerCopy").bind("click", function () {
 
                                         var myParent = $(this).closest(".csHaveData");
                                         var droppable = CreateDroppableWithAllFunctions();
@@ -3063,9 +3027,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         oInitDestroyEvents.DestroyPluginsEvents(myParent);
                                         var duplicateElement = myParent.clone();
-                                         oInitDestroyEvents.InitAll(myParent, false);
-                                        if(myParent.find(".dynamicContentContainer").length==0){                                            
-                                           
+                                        oInitDestroyEvents.InitAll(myParent, false);
+                                        if (myParent.find(".dynamicContentContainer").length == 0) {
+
 
                                             var oControl = new Object();
                                             oControl.Html = duplicateElement;
@@ -3081,48 +3045,46 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             droppable.before(args.droppedElement);
 
                                             myElement.find(".topHandlers").remove();
-                                            RemoveDroppables(myElement, true); 
+                                            RemoveDroppables(myElement, true);
 
                                             OnNewElementDropped(args);
-                                        }
-                                        else{
-                                            
+                                        } else {
+
                                             //Dynamic Blocks Copy Handling. 
-                                            
+
                                             var dcTable = duplicateElement.find("table.dynamicContentContainer");
                                             var dcName = dcTable.find("h5.dcName span").text();
                                             var dcTableHeight = 270;
                                             var dcId = dcTable.attr("id");
                                             dcTable.children().remove(); //Remove All Contents
-                                            dcTable.append("<tr><td><div style='height: "+dcTableHeight+"px;' class='overlay'><p>Creating Copy...</p></div></td></tr>");
-                                            dcTable.css("height",dcTableHeight+"px");
+                                            dcTable.append("<tr><td><div style='height: " + dcTableHeight + "px;' class='overlay'><p>Creating Copy...</p></div></td></tr>");
+                                            dcTable.css("height", dcTableHeight + "px");
                                             oInitDestroyEvents.InitAll(duplicateElement, false);
                                             droppable.before(duplicateElement);
                                             myElement.find(".topHandlers").remove();
                                             var _date = new Date();
-                                            var rTimeStamp = Date.UTC(_date.getFullYear(),_date.getMonth(),_date.getDate(),_date.getHours(),_date.getMinutes(),_date.getSeconds(),_date.getMilliseconds())
+                                            var rTimeStamp = Date.UTC(_date.getFullYear(), _date.getMonth(), _date.getDate(), _date.getHours(), _date.getMinutes(), _date.getSeconds(), _date.getMilliseconds())
                                             $.ajax({
-                                               url: "/pms/io/publish/saveDynamicVariation/?"+ options._BMSTOKEN,
-                                               data: {"type":"clone","label":dcName.split("|")[0]+"| "+rTimeStamp,"dynamicNumber":dcId},
-                                               type: 'POST',
-                                               success: function (data, textStatus, jqXHR) {                                           
+                                                url: "/pms/io/publish/saveDynamicVariation/?" + options._BMSTOKEN,
+                                                data: {"type": "clone", "label": dcName.split("|")[0] + "| " + rTimeStamp, "dynamicNumber": dcId},
+                                                type: 'POST',
+                                                success: function (data, textStatus, jqXHR) {
                                                     var result = jQuery.parseJSON(data);
-                                                    if (result[0]=="success") {
-                                                        dcTable.attr("id",result[1]);
-                                                        dcTable.attr("keyword",result[3]);
-                                                        oInitDestroyEvents.InitOneDCContent(meeIframe.find("table#"+result[1]));
-                                                        if(myElement.find(".dynamicblock-accordian[data-firstloaded='true']").length){
+                                                    if (result[0] == "success") {
+                                                        dcTable.attr("id", result[1]);
+                                                        dcTable.attr("keyword", result[3]);
+                                                        oInitDestroyEvents.InitOneDCContent(meeIframe.find("table#" + result[1]));
+                                                        if (myElement.find(".dynamicblock-accordian[data-firstloaded='true']").length) {
                                                             _LoadDynamicBlocks();
                                                         }
-                                                    } 
-                                                    else{
+                                                    } else {
                                                         duplicateElement.remove();
                                                         options._app.showAlert(result[1], $("body"));
                                                     }
-                                               }
-                                           });
-                                             
-                                            
+                                                }
+                                            });
+
+
                                             RemoveDroppables(myElement, true);
                                         }
 
@@ -3133,7 +3095,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 //Load Link GUI and show in BMS dialog
                                 function showLinkGUI() {
                                     //BMS dialog code
-                                    var lType = myElement.find("#linkTrack").data("linkObject");    
+                                    var lType = myElement.find("#linkTrack").data("linkObject");
                                     meeIframeWindow.$("[data-mce-type='bookmark']").remove();
                                     var selectedText = ﻿meeIframeWindow.tinyMCE.activeEditor.selection.getBookmark();
                                     var divID = "";
@@ -3141,44 +3103,43 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         divID = meeIframe.find("div.textcontent.mce-edit-focus").attr("id");
                                     }
                                     var dialogOptions = {
-                                            title: "Links GUI",
-                                            css: {
-                                                "width": "780px",
-                                                "margin-left": "-390px"
-                                            },
-                                            bodyCss: {
-                                                "min-height": "325px"
-                                            },
-                                            headerIcon: 'link',
-                                            buttons: {
-                                                saveBtn: {
-                                                    text: 'Insert'
-                                                }
+                                        title: "Links GUI",
+                                        css: {
+                                            "width": "780px",
+                                            "margin-left": "-390px"
+                                        },
+                                        bodyCss: {
+                                            "min-height": "325px"
+                                        },
+                                        headerIcon: 'link',
+                                        buttons: {
+                                            saveBtn: {
+                                                text: 'Insert'
                                             }
-                                        };
-                                    var dialog = null;  
+                                        }
+                                    };
+                                    var dialog = null;
                                     if (options.fromDialog) {
-                                        dialog = options._app.showStaticDialog(dialogOptions);                                            
-                                    }
-                                    else{
-                                        dialog = options._app.showDialog(dialogOptions);                                        
+                                        dialog = options._app.showStaticDialog(dialogOptions);
+                                    } else {
+                                        dialog = options._app.showDialog(dialogOptions);
                                     }
                                     options._app.showLoading("Loading...", dialog.getBody());
                                     dialog.$el.css("z-index", "99999");
                                     $(".modal-backdrop").css("z-index", "99998");
                                     //require(["editor/links"], function (page) {
-                                        var linkDialogPage = new linksPage({
-                                            config: options,
-                                            selectedText : selectedText,
-                                            meeIframeWindow: meeIframeWindow,
-                                            _el: myElement,
-                                            dialog: dialog,
-                                            linkType: lType,
-                                            div: divID
-                                        });
-                                        dialog.getBody().append(linkDialogPage.$el);
-                                        dialog.saveCallBack(_.bind(linkDialogPage.insertLink, linkDialogPage, dialog));
-                                        options._app.showLoading(false, dialog.getBody());                                        
+                                    var linkDialogPage = new linksPage({
+                                        config: options,
+                                        selectedText: selectedText,
+                                        meeIframeWindow: meeIframeWindow,
+                                        _el: myElement,
+                                        dialog: dialog,
+                                        linkType: lType,
+                                        div: divID
+                                    });
+                                    dialog.getBody().append(linkDialogPage.$el);
+                                    dialog.saveCallBack(_.bind(linkDialogPage.insertLink, linkDialogPage, dialog));
+                                    options._app.showLoading(false, dialog.getBody());
                                     //});
                                 }
 
@@ -3237,8 +3198,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             "left": left + "px",
                                             "top": top + "px"
                                         }).show();
-                                    }
-                                    else if (type == "link") {
+                                    } else if (type == "link") {
                                         var li = "<a class='closebtn'></a>";
                                         li += "<h4>Image URL</h4>";
                                         li += "<input type='text' placeholder='Image URL' class='left tginput' style='width: 202px;' value='" + imageObj.originalURL + "'>";
@@ -3247,8 +3207,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             "left": left + "px",
                                             "top": top + "px"
                                         }).show();
-                                    }
-                                    else if (type == "tag") {
+                                    } else if (type == "tag") {
                                         var tagsArr = imageObj.tags.split(',');
                                         var li = "<a class='closebtn /*closebtn-imgtag*/' data-id='" + imageObj["imageId.encode"] + "'></a>";
                                         li += "<div class='tagscont'>";
@@ -3266,8 +3225,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             "left": left + "px",
                                             "top": top + "px"
                                         }).show();
-                                    }
-                                    else if (type == "delete") {
+                                    } else if (type == "delete") {
                                         var li = "<a class='closebtn'></a>";
                                         li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Image?</h5>";
                                         li += "<a class='btn-red left confirm-del' data-id='" + imageObj["imageId.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
@@ -3276,8 +3234,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             "left": left + "px",
                                             "top": top + "px"
                                         }).show();
-                                    }
-                                    else if (type == "bbdel") {
+                                    } else if (type == "bbdel") {
                                         var element = $(obj).parents("li");
                                         var block_id = imageObj["blockId.encode"];
                                         options._app.showAlertDetail({
@@ -3287,10 +3244,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 this.deleteBlock(element, block_id);
                                             }, mee)
                                         },
-                                        $("body"));
-                                    }
-                                    else if (type == "fbdel") {
-                                        var element = $(obj).parents("li");                                        
+                                                $("body"));
+                                    } else if (type == "fbdel") {
+                                        var element = $(obj).parents("li");
                                         var form_id = _ele.data("id");
                                         options._app.showAlertDetail({
                                             heading: 'Confirm Deletion',
@@ -3299,13 +3255,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 this.deleteForm(element, form_id);
                                             }, mee)
                                         },
-                                        $("body"));
-                                    }
-                                    else if (type == "bbedit") {
+                                                $("body"));
+                                    } else if (type == "bbedit") {
                                         mee._LastSelectedBuildingBlock = imageObj;
                                         InitializeBuildingBlockUpdatePopup();
-                                    }
-                                    else if (type == "dcdel") {
+                                    } else if (type == "dcdel") {
                                         var li = "<a class='closebtn'></a>";
                                         li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Block?</h5>";
                                         li += "<a class='btn-red left confirm-del btnDeleteDC' data-id='" + imageObj["dynamicNumber.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
@@ -3314,8 +3268,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             "left": left + "px",
                                             "top": top + "px"
                                         }).show();
-                                    }
-                                    else if (type == "dcedit") {
+                                    } else if (type == "dcedit") {
                                         var li = "<a class='closebtn'></a>";
                                         li += "<h5 style='padding-bottom: 10px;'>Edit Dynamic Content Name</h5>";
                                         li += "<input type='text' placeholder='Image URL' class='left tginput txtBlockName' style='width: 202px; margin-bottom: 10px; dis' value='" + imageObj.label + "'>";
@@ -3346,19 +3299,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         dataType: requestProperties.DataType,
                                         cache: false,
                                         async: false,
-                                        success: function (e) {                                            
+                                        success: function (e) {
                                             returnJson = e;
                                         },
                                         error: errorCallBack
-                                    });                                    
+                                    });
                                     return returnJson;
                                 }
                                 // .................... Send Server Request ................................
 
 
                                 function getImagesMarkup(obj) {
-                                    var imagesMarkup = "";
-                                    var _index = "";
+                                    var imagesMarkup = "";                                    
                                     if (obj && obj[0]) {
                                         $.each(obj[0], function (index, val) {
                                             var tagsArr = val[0].tags.split(',');
@@ -3440,12 +3392,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 $(workingObject).attr("title", title_text);
                                                 if (options.fromDialog) {
                                                     dialog.showPrevious();
-                                                }
-                                                else {
+                                                } else {
                                                     dialog.hide();
                                                 }
-                                            }
-                                            else {
+                                            } else {
                                                 _newTitleHTML.find("input#image_title").focus();
                                             }
                                         }
@@ -3470,41 +3420,41 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         _newTitleHTML.find("input#image_title").focus();
                                     }
                                 }
-                                 // == Enabling VideoFunctionality before access 
-                                 var videoFunctionality = {
-                                        leftAlign: function (myHtmlInstance, workingObject) {
+                                // == Enabling VideoFunctionality before access 
+                                var videoFunctionality = {
+                                    leftAlign: function (myHtmlInstance, workingObject) {
                                         //$(workingObject).parents(".myImage");
-                                        
-                                        if($(workingObject).hasClass('videoenable')){
-                                                $(workingObject).parent().css('overflow','hidden');
-                                                $(workingObject).css('float','left');
-                                                $(workingObject).find('.embedvido-wrap').attr("align", "left");
-                                                myHtmlInstance.find('#videoToolbar').hide();
-                                        }else{
+
+                                        if ($(workingObject).hasClass('videoenable')) {
+                                            $(workingObject).parent().css('overflow', 'hidden');
+                                            $(workingObject).css('float', 'left');
+                                            $(workingObject).find('.embedvido-wrap').attr("align", "left");
+                                            myHtmlInstance.find('#videoToolbar').hide();
+                                        } else {
                                             alert('No Embed Video is found');
                                         }
                                     },
                                     centerAlign: function (myHtmlInstance, workingObject) {
-                                        if($(workingObject).hasClass('videoenable')){
-                                                $(workingObject).parent().css('overflow','unset');
-                                                $(workingObject).css('float','none');
-                                                $(workingObject).find('.embedvido-wrap').attr("align", "center");
-                                                myHtmlInstance.find('#videoToolbar').hide();
-                                        }else{
+                                        if ($(workingObject).hasClass('videoenable')) {
+                                            $(workingObject).parent().css('overflow', 'unset');
+                                            $(workingObject).css('float', 'none');
+                                            $(workingObject).find('.embedvido-wrap').attr("align", "center");
+                                            myHtmlInstance.find('#videoToolbar').hide();
+                                        } else {
                                             alert('No Embed Video is found');
                                         }
                                     },
                                     rightAlign: function (myHtmlInstance, workingObject) {
-                                        if($(workingObject).hasClass('videoenable')){
-                                                $(workingObject).parent().css('overflow','hidden');
-                                                $(workingObject).css('float','right');
-                                                $(workingObject).find('.embedvido-wrap').attr("align", "right");
-                                                myHtmlInstance.find('#videoToolbar').hide();
-                                        }else{
+                                        if ($(workingObject).hasClass('videoenable')) {
+                                            $(workingObject).parent().css('overflow', 'hidden');
+                                            $(workingObject).css('float', 'right');
+                                            $(workingObject).find('.embedvido-wrap').attr("align", "right");
+                                            myHtmlInstance.find('#videoToolbar').hide();
+                                        } else {
                                             alert('No Embed Video is found');
                                         }
                                     },
-                                 }
+                                }
                                 //========================= End Sohaib Nadeem =====================////
 
                                 var isElementClicked = false;
@@ -3527,7 +3477,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     makeCloneAndRegister();
                                     return false;
                                 });
-                                
+
                                 myElement.find(".ImageToolbarLinkClass").click(function () {
                                     //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     showLinkGUI();
@@ -3557,19 +3507,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 });
                                 // Video Frame
                                 myElement.find(".VideoToolbarLeftAlignClass").click(function () {
-                                   
+
                                     videoFunctionality.leftAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
-                                   // makeCloneAndRegister();
+                                    // makeCloneAndRegister();
                                     return false;
                                 });
                                 myElement.find(".VideoToolbarCenterAlignClass").click(function () {
-                                    
+
                                     videoFunctionality.centerAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
-                                   // makeCloneAndRegister();
+                                    // makeCloneAndRegister();
                                     return false;
                                 });
                                 myElement.find(".VideoToolbarRightAlignClass").click(function () {
-                              
+
                                     videoFunctionality.rightAlign(myElement, myElement.find("#videoDataSavingObject").data("myWorkingObject"));
                                     //makeCloneAndRegister();
                                     return false;
@@ -3589,41 +3539,41 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
                                         aspectRatio: false,
-                                        start:function(event,ui){
+                                        start: function (event, ui) {
                                             $(this).find(".resizeable-tooltip").remove();
                                             $(this).append("<div class='resizeable-tooltip'></div>")
                                         },
-                                        resize: function( event, ui ) {                                                    
-                                            $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
-                                            $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                        resize: function (event, ui) {
+                                            $(this).find("img").css({"width": $(this).css("width"), "height": $(this).css("height")});
+                                            $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width")) + " × " + parseInt($(this).css("height")));
                                         },
-                                        stop: function(event,ui){
+                                        stop: function (event, ui) {
                                             $(this).find(".resizeable-tooltip").remove();
                                         }
                                     });
                                     args.droppedElement.html(htmlToPlace);
                                     makeCloneAndRegister();
-                                    if(changFlag){
+                                    if (changFlag) {
                                         changFlag.editor_change = true;
                                     }
                                 }
-                               
-                                var OnUrlImageAdded = function(args,dialog){
-                                    
+
+                                var OnUrlImageAdded = function (args, dialog) {
+
                                     var imageSrc = args.imgurl;
                                     var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + imageSrc + "' style='display:block;' /></div></div>");
-                                    
+
                                     meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
                                         aspectRatio: false,
-                                        start:function(event,ui){
+                                        start: function (event, ui) {
                                             $(this).find(".resizeable-tooltip").remove();
                                             $(this).append("<div class='resizeable-tooltip'></div>")
                                         },
-                                        resize: function( event, ui ) {                                                    
-                                            $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
-                                            $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                        resize: function (event, ui) {
+                                            $(this).find("img").css({"width": $(this).css("width"), "height": $(this).css("height")});
+                                            $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width")) + " × " + parseInt($(this).css("height")));
                                         },
-                                        stop: function(event,ui){
+                                        stop: function (event, ui) {
                                             $(this).find(".resizeable-tooltip").remove();
                                         }
                                     });
@@ -3631,33 +3581,32 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     oInitDestroyEvents.InitializeClickEvent(args.droppedElement.parent());
                                     dialog.hide();
                                     makeCloneAndRegister();
-                                } 
+                                }
                                 var OnClickedOnElement = function (event) {
                                     myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
                                     meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
                                     myElement.find("#linkTrack").data("linkObject", "image");
                                     myElement.find("#imageToolbar").addClass("imageToolbar-menu");
                                     myElement.find("#imageToolbar").show();
-                                    
+
                                     if ($(event.target).parent().prop("tagName").toLowerCase() == "a") {
                                         //myElement.find("#imageToolbar").css("width", "366px");
                                         myElement.find("#imageToolbar .ImageToolbarUnLinkClass").show();
-                                        
-                                    }
-                                    else {
+
+                                    } else {
                                         myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
-                                        if($(event.target).parent().hasClass('resizableImage')){
+                                        if ($(event.target).parent().hasClass('resizableImage')) {
                                             $(event.target).parent().addClass("mce-edit-focus");
                                         }
-                                       // myElement.find("#imageToolbar").css("width", "310px");
+                                        // myElement.find("#imageToolbar").css("width", "310px");
                                     }
-                                    if($(event.target).closest('div').hasClass('resizableImage')){
-                                            $(event.target).closest('div').addClass("mce-edit-focus");
-                                            myElement.find(".alertButtons").hide();
-                                        }
+                                    if ($(event.target).closest('div').hasClass('resizableImage')) {
+                                        $(event.target).closest('div').addClass("mce-edit-focus");
+                                        myElement.find(".alertButtons").hide();
+                                    }
                                     myElement.find("#imageToolbar").css({
-                                       // top: $(event.target).offset().top + 19 + topPlus,
-                                       // left: $(event.target).offset().left + 292 + leftPlus
+                                        // top: $(event.target).offset().top + 19 + topPlus,
+                                        // left: $(event.target).offset().left + 292 + leftPlus
                                     });
 
                                 }
@@ -3667,13 +3616,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     myElement.find("#videoToolbar").addClass("imageToolbar-menu videoToolbar-menu");
                                     myElement.find("#videoToolbar").show();
                                     /*if ($(event.target).parent().prop("tagName").toLowerCase() == "a") {
-                                        myElement.find("#imageToolbar").css("width", "366px");
-                                        myElement.find("#imageToolbar .ImageToolbarUnLinkClass").show();
-                                    }
-                                    else {
-                                        myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
-                                        myElement.find("#imageToolbar").css("width", "310px");
-                                    }*/
+                                     myElement.find("#imageToolbar").css("width", "366px");
+                                     myElement.find("#imageToolbar .ImageToolbarUnLinkClass").show();
+                                     }
+                                     else {
+                                     myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
+                                     myElement.find("#imageToolbar").css("width", "310px");
+                                     }*/
                                     myElement.find("#videoToolbar").css({
                                         top: $(event.target).offset().top + 19 + topPlus,
                                         left: $(event.target).offset().left + 292 + leftPlus
@@ -3737,8 +3686,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var LoadImagesInLibrary = function (offset) {
                                         if (offset) {
                                             _offset = _offset + offset;
-                                        }
-                                        else {
+                                        } else {
                                             imageListGlobal = [];
                                             _offset = 0;
                                             myElement.find(".imageLib").children().remove();
@@ -3826,15 +3774,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 };
 
                                 myElement.find("input#searchImg").keyup(function (e) {
-                                    if (e.which == 13) {                                        
+                                    if (e.which == 13) {
                                         var searchText = myElement.find(".searchimg-text").val();
                                         if (searchText == "") {
                                             LoadImagesInLibrary();
                                             myElement.find("#ILResultDiv").hide();
                                             myElement.find("input#searchImg").val('');
                                             myElement.find("#clearsearch-image").hide();
-                                        }
-                                        else {
+                                        } else {
                                             SearchImages(searchText);
                                         }
                                         return false;
@@ -3846,8 +3793,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var searchText = myElement.find(".searchimg-text").val();
                                     if (searchText == "") {
                                         LoadImagesInLibrary();
-                                    }
-                                    else {
+                                    } else {
                                         SearchImages(searchText);
                                     }
                                     return false;
@@ -3857,7 +3803,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 // ------------------ Start Image upload --------------//
 
-                                myElement.find(".uploadFile").click(function () {                                    
+                                myElement.find(".uploadFile").click(function () {
                                     myElement.find("#myUploadFile").click();
                                     return false;
                                 });
@@ -3885,19 +3831,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         contentType: false,
                                         cache: false,
                                         processData: false,
-                                        success: function (data, textStatus, jqXHR) {                                            
+                                        success: function (data, textStatus, jqXHR) {
                                             options._app.showLoading(false, myElement.find(".imageLib"));
                                             var result = jQuery.parseJSON(data);
                                             if (result.success) {
                                                 options._app.showMessge("Image has been successfully uploaded.", $("body"));
                                                 LoadImagesInLibrary();
-                                            }
-                                            else {
+                                            } else {
                                                 options._app.showAlert(result.err1, $("body"));
                                             }
                                         },
                                         error: function (jqXHR, textStatus, errorThrown) {
-                                            options._app.showLoading(false, myElement.find(".imageLib"));                                            
+                                            options._app.showLoading(false, myElement.find(".imageLib"));
                                             options._app.showAlert(e, $("body"));
                                         }
                                     });
@@ -3985,8 +3930,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 });
 
 
-                                myElement.on("keyup", "#addTagsToImage", function (e) {                                   
-                                    if (e.which == 13) {                                        
+                                myElement.on("keyup", "#addTagsToImage", function (e) {
+                                    if (e.which == 13) {
                                         myElement.find("a.addtag").click();
                                     }
 
@@ -3998,7 +3943,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     return false;
                                 });
 
-                                myElement.on("click", "a.closebtn-imgtag", function () {                                    
+                                myElement.on("click", "a.closebtn-imgtag", function () {
                                     var element = $(this);
                                     var imageId = element.data("id");
                                     var tags = "";
@@ -4069,173 +4014,173 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     window.hide();
                                 }
                                 /*myElement.on('keyup','#bgUrlCode',function(){
-                                    var url = $(this).val();
-                                         var filename = $(this).val().substring(url.lastIndexOf('/')+1);
-                                            var str = decodeURIComponent(filename);
-                                            if(/^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
-                                                this.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
-                                                $(this).val('');
-                                            }
-                                })*/
-                               myElement.find('#bgUrlCode').bind('paste', function(e) {
-                                                var _this = $(this)
-                                                var url = '';
-                                               setTimeout(function(){ 
-                                                   url = _this.val()
-                                                   var filename = url.substring(url.lastIndexOf('/')+1);
-                                                    var str = decodeURIComponent(filename);
-                                               if(str!== "" &&  /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
-                                                   
-                                                   myElement.find('.removeThumb').click();
-                                                   _this.val(url);
-                                                   e.stopPropagation();
-                                                   options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
-                                                }else{
-                                                   setTimeout(function(){ myElement.find('#bgUrlCode').trigger('change');  }, 500);   
-                                                    }
-                                               }, 300);
-                                               
-                                            });
-                                myElement.on('change','#bgUrlCode',function(){
-                                        //console.log('Active Style : '+ IsStyleActivated + ' SelectedElementForStyle :' + SelectedElementForStyle )
-                                        var url = $(this).val();
-                                         var filename = $(this).val().substring(url.lastIndexOf('/')+1);
-                                         var str = decodeURIComponent(filename);
-                                            
-                                        if($(this).val()==""){
+                                 var url = $(this).val();
+                                 var filename = $(this).val().substring(url.lastIndexOf('/')+1);
+                                 var str = decodeURIComponent(filename);
+                                 if(/^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                 this.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                 $(this).val('');
+                                 }
+                                 })*/
+                                myElement.find('#bgUrlCode').bind('paste', function (e) {
+                                    var _this = $(this)
+                                    var url = '';
+                                    setTimeout(function () {
+                                        url = _this.val()
+                                        var filename = url.substring(url.lastIndexOf('/') + 1);
+                                        var str = decodeURIComponent(filename);
+                                        if (str !== "" && /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+
                                             myElement.find('.removeThumb').click();
-                                            myElement.find('.bgimg-thumb,.removeThumb').remove();
+                                            _this.val(url);
+                                            e.stopPropagation();
+                                            options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                        } else {
+                                            setTimeout(function () {
+                                                myElement.find('#bgUrlCode').trigger('change');
+                                            }, 500);
                                         }
-                                        else if($(this).val()!== "" &&  /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
-                                                $(this).val('');
-                                                myElement.find('.removeThumb').click();
-                                                options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
-                                            }
-                                        else{
-                                            
-                                            myElement.find('.bgimg-thumb,.removeThumb').remove();
+                                    }, 300);
+
+                                });
+                                myElement.on('change', '#bgUrlCode', function () {
+                                    //console.log('Active Style : '+ IsStyleActivated + ' SelectedElementForStyle :' + SelectedElementForStyle )
+                                    var url = $(this).val();
+                                    var filename = $(this).val().substring(url.lastIndexOf('/') + 1);
+                                    var str = decodeURIComponent(filename);
+
+                                    if ($(this).val() == "") {
+                                        myElement.find('.removeThumb').click();
+                                        myElement.find('.bgimg-thumb,.removeThumb').remove();
+                                    } else if ($(this).val() !== "" && /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                        $(this).val('');
+                                        myElement.find('.removeThumb').click();
+                                        options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                    } else {
+
+                                        myElement.find('.bgimg-thumb,.removeThumb').remove();
                                         myElement.find('.bgimg-thumb_imgwrap').hide();
                                         myElement.find('.bgimg-thumb_imgwrap h4').hide();
                                         myElement.find('.bgimg-thumb_imgwrap .SI-FILES-STYLIZED').before('<span class="removeThumb"></span><img style="width: 133px; height: 100px;" class="center-block bgimg-thumb" />')
-                                        
-                                        
+
+
                                         myElement.find('#loadingbgimg').show();
-                                        
-                                        myElement.find('.bgimg-thumb').attr('src',$(this).val()).load(function(){
+
+                                        myElement.find('.bgimg-thumb').attr('src', $(this).val()).load(function () {
                                             //alert('image loaded');
                                             myElement.find('#loadingbgimg').hide();
                                             myElement.find('.bgimg-thumb_imgwrap').show();
                                             changFlag.editor_change = true;
                                             //myElement.find('#bgUrlCode').trigger('change');
                                         })
-                                        
-                                        myElement.find('.removeThumb').click(function(){
-                                                         SelectedElementForStyle.css('background-image','none');
-                                                         $(this).parent().parent().parent().find('#bgUrlCode').val('');
-                                                         myElement.find('#bgimg_repeatx').iCheck('uncheck'); 
-                                                         myElement.find('#bgimg_repeaty').iCheck('uncheck'); 
-                                                         mee_view.isRepeatY = false;
-                                                         mee_view.isRepeatX = false;
-                                                         $(this).parent().find('h4').show();
-                                                         $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
-                                                         if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                                                    pageBackgroundimage='none';
-                                                            }
-                                                         changFlag.editor_change = true;
-                                                         pageBackgroundimage_repeat = 'no-repeat';
-                                                         pageBackgroundimage_pos = '0% 0%';
-                                                     });
-                                            
+
+                                        myElement.find('.removeThumb').click(function () {
+                                            SelectedElementForStyle.css('background-image', 'none');
+                                            $(this).parent().parent().parent().find('#bgUrlCode').val('');
+                                            myElement.find('#bgimg_repeatx').iCheck('uncheck');
+                                            myElement.find('#bgimg_repeaty').iCheck('uncheck');
+                                            mee_view.isRepeatY = false;
+                                            mee_view.isRepeatX = false;
+                                            $(this).parent().find('h4').show();
+                                            $(this).parent().find('.bgimg-thumb,.removeThumb').remove();
+                                            if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                                pageBackgroundimage = 'none';
+                                            }
+                                            changFlag.editor_change = true;
+                                            pageBackgroundimage_repeat = 'no-repeat';
+                                            pageBackgroundimage_pos = '0% 0%';
+                                        });
+
                                         SetBackgroundImage($(this).val());
-                                        }
-                                        
+                                    }
+
                                 })
-                                myElement.find('#bgimg_position_percent').on('ifChecked', function(event){
+                                myElement.find('#bgimg_position_percent').on('ifChecked', function (event) {
                                     //console.log($(this).val());
                                     myElement.find('#bg-leftpos_input,#bg-toppos_input').val('0');
-                                    myElement.find('#bg-leftpos_input,#bg-toppos_input').attr('disabled','disabled');
+                                    myElement.find('#bg-leftpos_input,#bg-toppos_input').attr('disabled', 'disabled');
                                     myElement.find('#bg-leftpos,#bg-toppos').removeAttr('disabled')
                                 })
-                                myElement.find('#bg_img_pixel').on('ifChecked', function(event){
+                                myElement.find('#bg_img_pixel').on('ifChecked', function (event) {
                                     //console.log($(this).val());
-                                     myElement.find('#bg-leftpos,#bg-toppos').attr('disabled','disabled');
-                                     myElement.find('#bg-leftpos_input,#bg-toppos_input').removeAttr('disabled');
+                                    myElement.find('#bg-leftpos,#bg-toppos').attr('disabled', 'disabled');
+                                    myElement.find('#bg-leftpos_input,#bg-toppos_input').removeAttr('disabled');
                                 })
-                                myElement.find('#bg-leftpos_input').on('change', function(event){
+                                myElement.find('#bg-leftpos_input').on('change', function (event) {
                                     // validation need to be added 
-                                    var leftposval = $(this).val()+'px';
-                                    var rightposval = myElement.find('#bg-toppos_input').val()+'px';
-                                    SelectedElementForStyle.css('background-position',leftposval +' '+ rightposval);
+                                    var leftposval = $(this).val() + 'px';
+                                    var rightposval = myElement.find('#bg-toppos_input').val() + 'px';
+                                    SelectedElementForStyle.css('background-position', leftposval + ' ' + rightposval);
                                     changFlag.editor_change = true;
-                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                        pageBackgroundimage_pos = leftposval +' '+ rightposval;
+                                    if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                        pageBackgroundimage_pos = leftposval + ' ' + rightposval;
                                     }
                                 });
-                                myElement.find('#bg-toppos_input').on('change', function(event){
+                                myElement.find('#bg-toppos_input').on('change', function (event) {
                                     // Validation need to be set
-                                    var rightposval  = $(this).val()+'px';
-                                    var leftposval= myElement.find('#bg-leftpos_input').val()+'px';
-                                    SelectedElementForStyle.css('background-position',leftposval +' '+ rightposval);
+                                    var rightposval = $(this).val() + 'px';
+                                    var leftposval = myElement.find('#bg-leftpos_input').val() + 'px';
+                                    SelectedElementForStyle.css('background-position', leftposval + ' ' + rightposval);
                                     changFlag.editor_change = true;
-                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                        pageBackgroundimage_pos = leftposval +' '+ rightposval;
+                                    if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                        pageBackgroundimage_pos = leftposval + ' ' + rightposval;
                                     }
                                 });
-                                myElement.on('change','.bg-leftpos',function(){
+                                myElement.on('change', '.bg-leftpos', function () {
                                     var leftpos = $(this).val();
                                     var toppos = myElement.find('.bg-toppos').val();
                                     leftpos = leftpos.replace(/^"(.+(?="$))"$/, '$1');
                                     toppos = toppos.replace(/^"(.+(?="$))"$/, '$1');
-                                    SelectedElementForStyle.css('background-position',leftpos +' '+ toppos);
+                                    SelectedElementForStyle.css('background-position', leftpos + ' ' + toppos);
                                     changFlag.editor_change = true;
-                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                        pageBackgroundimage_pos = leftpos +' '+ toppos;
+                                    if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                        pageBackgroundimage_pos = leftpos + ' ' + toppos;
                                     }
                                 })
-                                myElement.on('change','.bg-toppos',function(){
-                                    var toppos  = $(this).val();
+                                myElement.on('change', '.bg-toppos', function () {
+                                    var toppos = $(this).val();
                                     var leftpos = myElement.find('.bg-leftpos').val();
                                     leftpos = leftpos.replace(/^"(.+(?="$))"$/, '$1');
                                     toppos = toppos.replace(/^"(.+(?="$))"$/, '$1');
-                                    SelectedElementForStyle.css('background-position',leftpos +' '+ toppos);
+                                    SelectedElementForStyle.css('background-position', leftpos + ' ' + toppos);
                                     changFlag.editor_change = true;
-                                    if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                        pageBackgroundimage_pos = leftpos +' '+ toppos;
+                                    if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                        pageBackgroundimage_pos = leftpos + ' ' + toppos;
                                     }
                                 })
-                                
-                                myElement.on('click','.openUpGallery',function(){
-                                      mee.openupGallery();
+
+                                myElement.on('click', '.openUpGallery', function () {
+                                    mee.openupGallery();
                                 })
-                              
-                               
-                                 myElement.find('#bgimg_repeaty').on('ifChecked', function(event){
+
+
+                                myElement.find('#bgimg_repeaty').on('ifChecked', function (event) {
                                     mee_view.isRepeatY = true;
                                     mee.repeatImageProperties();
 //                                    alert('repeat Y : '+event.type + ' callback');
-                                  });
-                               
-                               
-                                 myElement.find('#bgimg_repeaty').on('ifUnchecked', function(event){
+                                });
+
+
+                                myElement.find('#bgimg_repeaty').on('ifUnchecked', function (event) {
                                     mee_view.isRepeatY = false;
                                     mee.repeatImageProperties();
-                                   });
-                               
-                               
-                                myElement.find('#bgimg_repeatx').on('ifChecked', function(event){
+                                });
+
+
+                                myElement.find('#bgimg_repeatx').on('ifChecked', function (event) {
                                     mee_view.isRepeatX = true;
                                     mee.repeatImageProperties();
                                     //alert('repeat X : '+event.type + ' callback');
-                                  });
-                               
-                               
-                                myElement.find('#bgimg_repeatx').on('ifUnchecked', function(event){
+                                });
+
+
+                                myElement.find('#bgimg_repeatx').on('ifUnchecked', function (event) {
                                     mee_view.isRepeatX = false;
                                     mee.repeatImageProperties();
                                     //alert('repeat X : '+event.type + ' callback');
-                                  });
-                               
-                               
+                                });
+
+
                                 myElement.on("click", "i,action", function () {
                                     var element = $(this);
                                     var type = element.data("actiontype");
@@ -4265,10 +4210,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find('.DCEditDialog').hide();
 
 
-                                        var imageObj = imageListGlobal[index];                                        
+                                        var imageObj = imageListGlobal[index];
                                         showBox(element, imageObj, "info");
-                                    }
-                                    else if (type === "imageLink") {
+                                    } else if (type === "imageLink") {
                                         myElement.find('.info-windowDiv').hide();
                                         myElement.find('.link-windowDiv').hide();
                                         myElement.find('.tag-windowDiv').hide();
@@ -4283,11 +4227,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var imageObj = imageListGlobal[index];
 
                                         showBox(element, imageObj, "link");
-                                    }
-                                    else if (type === "imagePreview") {
+                                    } else if (type === "imagePreview") {
                                         ShowImagePreview(imageParams);
-                                    }
-                                    else if (type === "imageTag") {
+                                    } else if (type === "imageTag") {
                                         myElement.find('.info-windowDiv').hide();
                                         myElement.find('.link-windowDiv').hide();
                                         myElement.find('.tag-windowDiv').hide();
@@ -4302,8 +4244,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var imageObj = imageListGlobal[index];
 
                                         showBox(element, imageObj, "tag");
-                                    }
-                                    else if (type === "imageDelete") {
+                                    } else if (type === "imageDelete") {
                                         myElement.find('.info-windowDiv').hide();
                                         myElement.find('.link-windowDiv').hide();
                                         myElement.find('.tag-windowDiv').hide();
@@ -4316,9 +4257,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var imageObj = imageListGlobal[index];
 
                                         showBox(element, imageObj, "delete");
-                                    }
-
-                                    else if (type === "bbdel") {
+                                    } else if (type === "bbdel") {
                                         myElement.find('.info-windowDiv').hide();
                                         myElement.find('.link-windowDiv').hide();
                                         myElement.find('.tag-windowDiv').hide();
@@ -4331,8 +4270,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var bbObj = buildingBlocksGlobal[index][0];
 
                                         showBox(element, bbObj, "bbdel");
-                                    }
-                                    else if (type === "bbedit") {
+                                    } else if (type === "bbedit") {
                                         myElement.find('.info-windowDiv').hide();
                                         myElement.find('.link-windowDiv').hide();
                                         myElement.find('.tag-windowDiv').hide();
@@ -4345,8 +4283,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var bbObj = buildingBlocksGlobal[index][0];
 
                                         showBox(element, bbObj, "bbedit");
-                                    }
-                                    else if (type === "dcdel") {
+                                    } else if (type === "dcdel") {
                                         myElement.find('.info-windowDiv').hide();
                                         myElement.find('.link-windowDiv').hide();
                                         myElement.find('.tag-windowDiv').hide();
@@ -4359,8 +4296,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var dcObj = dynamicBlocksGlobal[index][0];
 
                                         showBox(element, dcObj, "dcdel");
-                                    }
-                                    else if (type === "dcedit") {
+                                    } else if (type === "dcedit") {
                                         myElement.find('.info-windowDiv').hide();
                                         myElement.find('.link-windowDiv').hide();
                                         myElement.find('.tag-windowDiv').hide();
@@ -4373,13 +4309,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var dcObj = dynamicBlocksGlobal[index][0];
 
                                         showBox(element, dcObj, "dcedit");
-                                    }
-                                    else if (type === "fbedit") {                                        
+                                    } else if (type === "fbedit") {
                                         loadForm(imgid);
-                                    }
-                                    else if (type === "fbdel") {                                        
+                                    } else if (type === "fbdel") {
                                         var form_id = element.data("id");
-                                        var element = $(element).parents("li");                                                                                
+                                        var element = $(element).parents("li");
                                         options._app.showAlertDetail({
                                             heading: 'Confirm Deletion',
                                             detail: "Do you want to delete this Form ?",
@@ -4387,20 +4321,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 this.deleteForm(element, form_id);
                                             }, mee)
                                         },
-                                        $("body"));
+                                                $("body"));
                                     }
                                     return false;
                                 });
-                                 mee.processUpload = function(data){
-                                        var _image = jQuery.parseJSON(data);
-                                        if (_image.success) {
-                                            options._app.showMessge("Image has been successfully uploaded.", $("body"));
-                                            LoadImagesInLibrary();
-                                        }
-                                        else {
-                                            options._app.showAlert(_image.err1, $("body"), {fixed: true});
-                                        }
-                                        
+                                mee.processUpload = function (data) {
+                                    var _image = jQuery.parseJSON(data);
+                                    if (_image.success) {
+                                        options._app.showMessge("Image has been successfully uploaded.", $("body"));
+                                        LoadImagesInLibrary();
+                                    } else {
+                                        options._app.showAlert(_image.err1, $("body"), {fixed: true});
+                                    }
+
                                 }
                                 myElement.find("#HTML5FileUploader").dragfileEditor({
                                     post_url: '/pms/io/publish/saveImagesData/?&type=add&BMS_REQ_TK=' + options._app.get('bms_token'),
@@ -4408,66 +4341,66 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     app: options._app,
                                     module: 'template',
                                     progressElement: myElement.find('#HTML5FileUploader')
-                                }); 
-                                
-                                mee.openupGallery = function(){
-                                    var dialog_width = $(document.documentElement).width() - 60;
-                                        var dialog_height = $(document.documentElement).height() - 162;
-                                        var dialog = options._app.showDialog({title:  'Images',
-                                            css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
-                                            headerEditable: true,
-                                            headerIcon: '_graphics',
-                                            bodyCss: {"min-height": dialog_height + "px"}
-                                        });
+                                });
 
-                                      
-                                        options._app.showLoading("Loading...", dialog.getBody());
+                                mee.openupGallery = function () {
+                                    var dialog_width = $(document.documentElement).width() - 60;
+                                    var dialog_height = $(document.documentElement).height() - 162;
+                                    var dialog = options._app.showDialog({title: 'Images',
+                                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
+                                        headerEditable: true,
+                                        headerIcon: '_graphics',
+                                        bodyCss: {"min-height": dialog_height + "px"}
+                                    });
+
+
+                                    options._app.showLoading("Loading...", dialog.getBody());
+                                    var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                    var wrapelement = 'dialogWrap-' + dialogArrayLength; // New Dialog
+                                    //var img = "<img id='img1' src= '" + args.URL + "' class='" + wrapelement + "'>";
+                                    require(["userimages/userimages", 'app'], function (pageTemplate, app) {
+                                        var mPage = new pageTemplate({app: options._app, fromDialog: true, _select_dialog: dialog, _select_page: mee});
+                                        dialog.getBody().append(mPage.$el);
+                                        options._app.showLoading(false, mPage.$el.parent());
                                         var dialogArrayLength = options._app.dialogArray.length; // New Dialog
-                                        var wrapelement = 'dialogWrap-' + dialogArrayLength; // New Dialog
-                                        //var img = "<img id='img1' src= '" + args.URL + "' class='" + wrapelement + "'>";
-                                        require(["userimages/userimages", 'app'], function (pageTemplate, app) {
-                                            var mPage = new pageTemplate({app: options._app, fromDialog: true, _select_dialog: dialog, _select_page: mee});
-                                            dialog.getBody().append(mPage.$el);
-                                            options._app.showLoading(false, mPage.$el.parent());
-                                            var dialogArrayLength = options._app.dialogArray.length; // New Dialog
-                                            mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog                         
-                                            options._app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog                       
-                                        });
-                                        
-                                }                                
-                                mee.useImage = function(data){                                    
-                                    if(data){
+                                        mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog                         
+                                        options._app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog                       
+                                    });
+
+                                }
+                                mee.useImage = function (data) {
+                                    if (data) {
                                         myElement.find('.bgimg-thumb,.removeThumb').remove();
                                         myElement.find('#bgUrlCode').val(data);
                                         myElement.find(".bgimage-properties").show();
                                         myElement.find('#bgUrlCode').trigger('change');
-                                        
+
                                     }
-                                    
+
                                 }
-                                mee.repeatImageProperties = function(){
+                                mee.repeatImageProperties = function () {
                                     var setRepeatprop = '';
-                                    if(mee_view.isRepeatX && mee_view.isRepeatY){
+                                    if (mee_view.isRepeatX && mee_view.isRepeatY) {
                                         setRepeatprop = 'repeat'; // Both are true
-                                    }else if(mee_view.isRepeatX && !mee_view.isRepeatY){
+                                    } else if (mee_view.isRepeatX && !mee_view.isRepeatY) {
                                         setRepeatprop = 'repeat-x'; // Repeat X 
-                                    }else if(!mee_view.isRepeatX && mee_view.isRepeatY){
+                                    } else if (!mee_view.isRepeatX && mee_view.isRepeatY) {
                                         setRepeatprop = 'repeat-y'; // Repeat Y 
-                                    }else{
+                                    } else {
                                         setRepeatprop = 'no-repeat';
                                     }
-                                    if(SelectedElementForStyle){
+                                    if (SelectedElementForStyle) {
                                         changFlag.editor_change = true;
-                                        SelectedElementForStyle.css('background-repeat',setRepeatprop);
-                                        
-                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
-                                           pageBackgroundimage_repeat = setRepeatprop;
+                                        SelectedElementForStyle.css('background-repeat', setRepeatprop);
+
+                                        if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                            pageBackgroundimage_repeat = setRepeatprop;
                                         }
                                     }
-                                    
-                                    
+
+
                                 }
-                               
+
 
 //**************************************************************End Images Library***********************************************************************************///
 
@@ -4550,8 +4483,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         dcContents.prepend(ContentLi);
 
                                                         //ContentLi.trigger( "click" );                        
-                                                    }
-                                                    else {
+                                                    } else {
                                                         var ContentLi = $(myElement.find(".dcLI").html());
                                                         ContentLi.find("span:first").html(variation.Label);
                                                         ContentLi.data("content", variation);
@@ -4576,11 +4508,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                 });
                                                 /*var activeContentDC = args.activeLi;
-                                                if(activeContentDC){
-                                                   var tableid = args.predefinedControl.Html.attr("id");                                                   
-                                                   meeIframe.find("#"+tableid+" ul.dcContents li").eq(parseInt(activeContentDC)).click();                                                    
-                                                   args.activeLi = null;
-                                                }*/
+                                                 if(activeContentDC){
+                                                 var tableid = args.predefinedControl.Html.attr("id");                                                   
+                                                 meeIframe.find("#"+tableid+" ul.dcContents li").eq(parseInt(activeContentDC)).click();                                                    
+                                                 args.activeLi = null;
+                                                 }*/
                                             }
 
                                         }
@@ -4591,11 +4523,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var filterDialog = myElement.find(".dcRulesDialog");
                                         options._app.showLoading("Loading Filters...", filterDialog.find("div"), {"top": "51px", "left": "50%", "margin-left": "-150px"});
                                         //require(["editor/DC/filters"], function (filterPage) {
-                                            var mPage = new filterPage({
-                                                opt: options,
-                                                args: args
-                                            });
-                                            filterDialog.html(mPage.$el);
+                                        var mPage = new filterPage({
+                                            opt: options,
+                                            args: args
+                                        });
+                                        filterDialog.html(mPage.$el);
                                         //});
                                         meeIframe.find(".editNameBox").hide();
                                         filterDialog.css({"left": left, "top": top, "display": "block"});
@@ -4606,7 +4538,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         element.find("i.filter").click(function (event) {
                                             var parentLi = $(event.target).parents("li:first");
                                             parentLi.click();
-                                            event.stopPropagation();                                                                                        
+                                            event.stopPropagation();
                                             args.clickedLi = parentLi;
 
                                             args.IsUpdate = true;
@@ -4616,7 +4548,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var ele_offset = _ele.offset();
                                             var top = ele_offset.top + 80;
                                             var left = ele_offset.left + 50;
-                                            OpenRulesWindow(args, top, left);                                            
+                                            OpenRulesWindow(args, top, left);
                                         });
                                     }
 
@@ -4624,8 +4556,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var _dc = null;
                                         if (element.data("content")) {
                                             _dc = element.data("content");
-                                        }
-                                        else if (element.attr("id")) {
+                                        } else if (element.attr("id")) {
                                             var contentId = element.attr("id");
                                             var contents = args.DynamicVariation.ListOfDynamicContents;
                                             for (var i = 0; i < contents.length; i++) {
@@ -4660,7 +4591,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var updateContent = function () {
                                                 txtfieldContent.prop("disabled", true);
                                                 btnUpdateContent.addClass("saving");
-                                                args.DynamicContent = getDynamicContent(element);                                                
+                                                args.DynamicContent = getDynamicContent(element);
                                                 args.DynamicContent.Label = dcContentNameUpdateWindow.find(".txtContentName").val();
                                                 if (element.attr("id")) {
                                                     meeIframe.find("li[id='" + element.attr("id") + "'] span:first").html(args.DynamicContent.Label);
@@ -4719,8 +4650,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 } else {
                                                     element.remove();
                                                 }
-                                            }
-                                            else {
+                                            } else {
                                                 options._app.showAlert("You cann't delete this option. Dynamic content block should have at least one option.", $("body"), {type: 'caution'});
                                             }
 
@@ -4823,17 +4753,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 var internalData = $(args.clickedLi.data("dcInternalData"));
                                                 dcInternal.html(internalData);
                                                 oInitDestroyEvents.InitAll(internalData);
-                                            }
-                                            else {
+                                            } else {
                                                 dcInternal.empty();
                                             }
                                             //////////////
 
                                             args.clickedLi.siblings().removeClass("active");
                                             args.clickedLi.addClass("active");
-                                            
+
                                             var selectedActive = dcClickedContainer.find("li.active").index();
-                                            dcClickedContainer.attr("data-activeli",selectedActive);
+                                            dcClickedContainer.attr("data-activeli", selectedActive);
 
                                         }));
 
@@ -4892,8 +4821,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 dcContentNameWindow.height(meeIframe.find("table[keyword='" + args.ID + "']").height());
                                                 dcContentNameWindow.toggle();
                                                 dcContentNameWindow.find(".txtContentName").focus();
-                                            }
-                                            else {
+                                            } else {
                                                 options._app.showAlert("You can add upto 6 options.", $("body"), {type: 'caution'});
                                             }
                                         });
@@ -4954,8 +4882,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
 
-                                    }
-                                    else {
+                                    } else {
                                         _LoadDynamicBlocks();
                                         myElement.find("#DCResultDiv").hide();
                                     }
@@ -4964,13 +4891,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                 var _LoadDynamicBlocks = function (args) {
-                                     var ulBuildingBlocks = myElement.find(".dynamicBlockDroppable");
-                                          ulBuildingBlocks.empty();
-                                                options._app.showLoading("Loading dynamic blocks...", ulBuildingBlocks, {
-                                                    "width": "140px",
-                                                    "margin-left": "-70px"
-                                                });
-                                                
+                                    var ulBuildingBlocks = myElement.find(".dynamicBlockDroppable");
+                                    ulBuildingBlocks.empty();
+                                    options._app.showLoading("Loading dynamic blocks...", ulBuildingBlocks, {
+                                        "width": "140px",
+                                        "margin-left": "-70px"
+                                    });
+
                                     if (args == null) {
                                         args = new Object();
                                     }
@@ -5002,7 +4929,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     "</li>");
 
 
-                                         
+
                                             //Initialize with default draggable:
                                             InitializeMainDraggableControls(block);
 
@@ -5069,7 +4996,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         error: function (e) {
                                             console.log("get Dynamic Variation Content failed:" + e);
                                         }
-                                    });                                    
+                                    });
                                     return dynamicVariation;
 
                                 }
@@ -5088,13 +5015,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     //Getting building blocks from provided block:
                                     if (args.personalizeTags != null) {
-                                        
-                                        
+
+
                                         //listOfPersonalizeTagsHtml.push("{ text: 'Personalize', value: '' }");
                                         var personalizeTagsFromService = args.personalizeTags;
 
                                         //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                        
+
                                         personalizedTagsGlobal = personalizeTagsFromService;
 
                                     }
@@ -5135,7 +5062,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         ]
                                     });
                                 }
-                                var _OnEditDynamicVariation = function (args) {                                    
+                                var _OnEditDynamicVariation = function (args) {
                                     if (options.OnEditDynamicVariation != null) {
                                         //Call overridden Method here: will use when exposing properties to developer
                                         options.OnEditDynamicVariation(args);
@@ -5192,8 +5119,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find(".editdynamicBlockInputName").val(name);
                                         InitializeDynamicBuildingBlockUpdatePopup();
                                         return false;
-                                    }
-                                    else {
+                                    } else {
                                         alert("Please Select a Block First");
                                         return false;
                                     }
@@ -5215,14 +5141,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             _OnDeleteDynamicVariation(args);
                                             _LastSelectedDynamicBuildingBlock = null;
                                             UnSelectAllDynamicBlocks();
-                                        }
-                                        else {
+                                        } else {
                                             _LastSelectedDynamicBuildingBlock = null;
                                             UnSelectAllDynamicBlocks();
                                         }
                                         return false;
-                                    }
-                                    else {
+                                    } else {
                                         alert("Please Select a Block First");
                                         return false;
                                     }
@@ -5263,8 +5187,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
 //**************************************************** DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) **************************************************** //Section5            
-                                mee.initTinyMCE = function(){
-                                    if(meeIframeWindow && meeIframeWindow.tinymce){
+                                mee.initTinyMCE = function () {
+                                    if (meeIframeWindow && meeIframeWindow.tinymce) {
                                         meeIframeWindow.$("body").append($("<div id='load_css'></div>"))
                                         meeIframeWindow.tinymce.init({
                                             selector: "div#load_css",
@@ -5277,31 +5201,28 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             statusbar: true,
                                             object_resizing: false
                                         })
-                                        meeIframeWindow.$("div#load_css").remove();                                        
-                                    }
-                                    else{
-                                         setTimeout(_.bind(mee.initTinyMCE,mee),200);
+                                        meeIframeWindow.$("div#load_css").remove();
+                                    } else {
+                                        setTimeout(_.bind(mee.initTinyMCE, mee), 200);
                                     }
                                 }
-                                mee.setColResize = function(element){
-                                    if(mee.isHTMLSet){
+                                mee.setColResize = function (element) {
+                                    if (mee.isHTMLSet) {
                                         meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable({
-                                                            gripInnerHtml:"<div class='colresize-grip'></div>"
-                                                        });
+                                            gripInnerHtml: "<div class='colresize-grip'></div>"
+                                        });
+                                    } else {
+                                        setTimeout(_.bind(mee.setColResize, mee, element), 500);
                                     }
-                                    else{
-                                         setTimeout(_.bind(mee.setColResize,mee,element),500);
-                                    }                                  
                                 }
-                                
+
                                 function InitializeAndDestroyEvents() {
 
                                     //Destroy plugin events all event
                                     this.DestroyPluginsEvents = function (element) {
                                         try {
                                             meeIframeWindow.$(element.find("img.imageHandlingClass")).resizable("destroy");
-                                        }
-                                        catch (e) {
+                                        } catch (e) {
                                             console.log("Exception on destroying resizable on text");
                                         }
                                         //Tiny MCE DESTROY work here:
@@ -5337,8 +5258,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             element.find(".resizableImage .ui-resizable-handle").remove();
                                             meeIframeWindow.$(element.find(".resizableImage")).resizable("destroy");
                                             meeIframeWindow.$(element.find(".formresizable")).resizable("destroy");
-                                        }
-                                        catch (e) {
+                                        } catch (e) {
                                         }
                                         mee.IntializeToolTip();
                                         if (!meeIframeWindow || !meeIframeWindow.$) {
@@ -5347,43 +5267,42 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         if (meeIframeWindow.$(element.find(".resizableImage")).resizable) {
                                             meeIframeWindow.$(element.find(".resizableImage")).resizable({
                                                 aspectRatio: false,
-                                                start:function(event,ui){
+                                                start: function (event, ui) {
                                                     $(this).find(".resizeable-tooltip").remove();
                                                     $(this).append("<div class='resizeable-tooltip'></div>")
                                                 },
-                                                resize: function( event, ui ) {                                                    
-                                                    $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
-                                                    $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                                resize: function (event, ui) {
+                                                    $(this).find("img").css({"width": $(this).css("width"), "height": $(this).css("height")});
+                                                    $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width")) + " × " + parseInt($(this).css("height")));
                                                 },
-                                                stop: function(event,ui){
+                                                stop: function (event, ui) {
                                                     $(this).find(".resizeable-tooltip").remove();
                                                 }
                                             });
                                             meeIframeWindow.$(element.find(".formresizable")).resizable({});
                                             meeIframeWindow.$(element.find(".MEEVIDEOCONTAINER")).resizable({
-                                                 aspectRatio: true,
-                                                start:function(event,ui){
+                                                aspectRatio: true,
+                                                start: function (event, ui) {
                                                     $(this).find(".resizeable-tooltip").remove();
                                                     $(this).append("<div class='resizeable-tooltip'></div>")
                                                 },
-                                                resize: function( event, ui ) {
-                                                    if( $(this).find(".embedvido-wrap").length){
-                                                        $(this).find(".embedvido-wrap iframe").attr("width",$(this).css("width"));
-                                                        $(this).find(".embedvido-wrap iframe").attr("height",$(this).css("height"));
+                                                resize: function (event, ui) {
+                                                    if ($(this).find(".embedvido-wrap").length) {
+                                                        $(this).find(".embedvido-wrap iframe").attr("width", $(this).css("width"));
+                                                        $(this).find(".embedvido-wrap iframe").attr("height", $(this).css("height"));
                                                     }
-                                                    $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                                    $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width")) + " × " + parseInt($(this).css("height")));
                                                 },
-                                                stop: function(event,ui){
+                                                stop: function (event, ui) {
                                                     $(this).find(".resizeable-tooltip").remove();
                                                 }
                                             });
                                         }
                                         if (options.landingPage) {
                                             if (meeIframeWindow.$(element.find("table.COLRESIZEABLE")).colResizable) {
-                                                mee.setColResize(element);                                                
+                                                mee.setColResize(element);
                                             }
-                                        }
-                                        else{
+                                        } else {
                                             meeIframeWindow.$(element.find("table.COLRESIZEABLE")).removeClass("COLRESIZEABLE");
                                         }
 
@@ -5396,33 +5315,32 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             meeIframeWindow.tinymce.init({
                                                 selector: "div.textcontent",
                                                 inline: true,
-                                                theme: "modern",                                                
-                                                paste_enable_default_filters: false,
-                                                paste_preprocess: function(plugin, args) {
-                                                    var str = args.content;
-                                                    
-                                                    if(args.content !== "text" && args.content !== "dragging"){
-                                                        console.log(args.content);   
-                                                    }else{
+                                                theme: "modern",
+                                                paste_preprocess: function (plugin, args) {                                                        
+                                                    args.content = mee.strip_tags(args.content,"i","b","em","strong","a","u","font"); //Strip all tags except i,b,em,strong,a,u and span with underlineclass
+                                                    var pasteDiv = meeIframeWindow.$("<div>"+args.content+"</div>");
+                                                    if(pasteDiv.find("a").length){
+                                                        var areaPaste = meeIframeWindow.$("<header>"+args.target.startContent+"</header>");
+                                                        pasteDiv.find("a").removeAttr("style").removeAttr("data-mce-style").css("color",areaPaste.find("span").css("color"));
+                                                    }                                                    
+                                                    args.content = pasteDiv.html();
+                                                    if (meeIframe.find(".mainContentHtml").hasClass("show-droppables") && (args.content == "text" || args.content == "dragging")) {
                                                         args.content = "";
-                                                    }                                                                                              
+                                                    } 
                                                 },
-                                                paste_postprocess: function(plugin, args) {
-                                                    console.log(args.node);
-                                                    //console.log(args.target.theme.panel._id);
+                                                paste_postprocess: function (plugin, args) {                                                                                                        
                                                     var panelId = args.target.theme.panel._id;
-                                                    setTimeout(function(){
-                                                       mee.reAdjusToolBarByID(meeIframe.find('#'+panelId)); 
-                                                    },100);
-                                                  },
+                                                    setTimeout(function () {
+                                                        mee.reAdjusToolBarByID(meeIframe.find('#' + panelId));
+                                                    }, 100);
+                                                },
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
                                                 toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist | LineHeight",
                                                 fontsize_formats: "8pt 10pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 36pt",
-
-                                                formats:{
-                                                     underline: {inline : 'span', 'classes' : 'underline', exact : true}
+                                                formats: {
+                                                    underline: {inline: 'font', 'classes': 'underline', styles: {textDecoration:'underline'},exact:true}
 
 
                                                 },
@@ -5432,18 +5350,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         editor.on("mouseDown", function (e) {
                                                             selectedLinkFromTinyMCE = e.target;
                                                             mee.isSameElement = false;
-                                                            mee.CurrentDivId = editor.id;
-                                                            //console.log('Mouse DOwn Trigger',editor.id);
-                                                            /*var tiny_editor_selection = editor.selection;
-                                                            var currentNode = tiny_editor_selection.getNode();
-                                                            $(tiny_editor_selection.getSelectedBlocks()).closest('.csHaveData').addClass('mce-highlight-div');
-                                                            isElementClicked = false;
-                                                             $(editor.bodyElement).parents('body').find('.mce-floatpanel').removeClass('fixed-panel');
-                                                            var toolbar = $(editor.bodyElement).parents('body').find('.mce-floatpanel');
-                                                            mee.reAdjustToolbar(toolbar,editor);*/
-                                                            
-                                                            
-                                                            
+                                                            mee.CurrentDivId = editor.id;                                                           
+
                                                         });
                                                         editor.on("AddUndo", function (e) {
                                                             if (editor.undoManager.hasUndo() || editor.undoManager.hasRedo()) {
@@ -5451,31 +5359,31 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             }
                                                         });
                                                         editor.on("LoadContent", function (e) {
-                                                            mee.isHTMLSet = true;                                                            
+                                                            mee.isHTMLSet = true;
                                                         });
-                                                        
+
                                                         editor.on("mouseUp", function (e) {
                                                             //console.log('mouse up');
-                                                           myElement.find(".alertButtons").hide();
-                                                           if(mee.CurrentDivId == editor.id){
-                                                               mee.isSameElement = true;
-                                                           }
-                                                           
-                                                           
+                                                            myElement.find(".alertButtons").hide();
+                                                            if (mee.CurrentDivId == editor.id) {
+                                                                mee.isSameElement = true;
+                                                            }
+
+
                                                             var tiny_editor_selection = editor.selection;
                                                             var currentNode = tiny_editor_selection.getNode();
                                                             $(tiny_editor_selection.getSelectedBlocks()).closest('.csHaveData').addClass('mce-highlight-div');
                                                             isElementClicked = false;
-                                                             $(editor.bodyElement).parents('body').find('.mce-floatpanel').removeClass('fixed-panel');
-                                                              //$(editor.bodyElement).parents('body').find('.mce-floatpanel').hide();
+                                                            $(editor.bodyElement).parents('body').find('.mce-floatpanel').removeClass('fixed-panel');
+                                                            //$(editor.bodyElement).parents('body').find('.mce-floatpanel').hide();
                                                             var toolbar = $(editor.bodyElement).parents('body').find('.mce-floatpanel');
-                                                            
+
                                                             //mee.reAdjustToolbar(toolbar,editor); // Previous Logic
-                                                            if(editor.theme.panel){
-                                                                mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                            if (editor.theme.panel) {
+                                                                mee.reAdjusToolBarByID(meeIframe.find('#' + editor.theme.panel._id))
                                                             }
-                                                            
-                                                           
+
+
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A" || currentNode.parentNode.nodeName == "A" || currentNode.parentNode.nodeName == "a") {
                                                                 myElement.find("#imageToolbar").hide();
                                                                 meeIframe.find(".resizableImage").removeClass('mce-edit-focus');
@@ -5484,63 +5392,50 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
                                                                 isElementClicked = true;
                                                             }
-                                                         });
-                                                        editor.on('blur', function () {
-                                                            //$(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").hide();
-                                                            //console.log('blur');
+                                                        });
+                                                        editor.on('blur', function () {                                                            
                                                             myElement.find('.disabled-toolbar').removeAttr('style');
                                                         });
-                                                       editor.on('ExecCommand', function(e) {
-                                                            console.log('ExecCommand event', e);
-                                                            //alert(e.command);
-                                                            /*var strHtml = $(e.target.targetElm).html();
-                                                             var regex= /\<\/?FONT.*?\/?\>/gi;
-                                                            var str = strHtml.replace(regex, "")
-                                                            $(e.target.targetElm).html(str);*/
+                                                        editor.on('ExecCommand', function (e) {
+                                                            console.log('ExecCommand event', e);                                                           
                                                             var fontTagObj = $(e.target.targetElm).find('font');
-                                                            if(fontTagObj.length > 0){
-                                                                $.each(fontTagObj,function(key,val){
+                                                            if (fontTagObj.length > 0) {
+                                                                $.each(fontTagObj, function (key, val) {
                                                                     // Font Face removed
-                                                                    if($(val).attr("face") !== ""){
+                                                                    if ($(val).attr("face") !== "") {
                                                                         $(val).removeAttr("face");
                                                                     }
                                                                     // Font Color removed
-                                                                    if($(val).attr("color") !== ""){
+                                                                    if ($(val).attr("color") !== "") {
                                                                         $(val).removeAttr("color");
                                                                     }
                                                                     // Font Size removed
-                                                                    if($(val).attr("size") !== ""){
+                                                                    if ($(val).attr("size") !== "") {
                                                                         $(val).removeAttr("size");
                                                                     }
                                                                 })
                                                             }
                                                             //console.log(editor.theme.panel._id);
-                                                            if(e.command=="FontSize"){
-                                                                mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
-                                                            }else if(e.command == "Undo"){
-                                                                mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                            if (e.command == "FontSize") {
+                                                                mee.reAdjusToolBarByID(meeIframe.find('#' + editor.theme.panel._id))
+                                                            } else if (e.command == "Undo") {
+                                                                mee.reAdjusToolBarByID(meeIframe.find('#' + editor.theme.panel._id))
                                                             }
-                                                            
+
                                                         });
-                                                        editor.on('BeforeExecCommand', function(e) {
-                                                            //console.log('BeforeExecCommand event', e);
-                                                           
-                                                          
-                                                           //e.target['startContent'] = 
-                                                           //console.log(e.target.startContent);
+                                                        editor.on('BeforeExecCommand', function (e) {
                                                             
+
                                                         });
-                                                        
-                                                        editor.on('NodeChange', function(e) {
-                                                           
-                                                            //console.log('NodeChange event', e);
+
+                                                        editor.on('NodeChange', function (e) {
                                                             var targetEle = $(e.target.bodyElement);
-                                                            if(editor.theme.panel && editor.theme.panel._id){
-                                                                if(targetEle.hasClass('textcontent')){
-                                                                    mee.reAdjusToolBarByID(meeIframe.find('#'+editor.theme.panel._id))
+                                                            if (editor.theme.panel && editor.theme.panel._id) {
+                                                                if (targetEle.hasClass('textcontent')) {
+                                                                    mee.reAdjusToolBarByID(meeIframe.find('#' + editor.theme.panel._id))
                                                                 }
                                                             }
-                                                            
+
                                                         });
 
 
@@ -5551,7 +5446,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         type: 'button',
                                                         title: 'Links',
                                                         icon: 'link',
-                                                        onClick: function (e) {                                                            
+                                                        onClick: function (e) {
                                                             myElement.find("#linkTrack").data("linkObject", "text");
                                                             showLinkGUI();
                                                             e.stopPropagation();
@@ -5568,15 +5463,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         icon: 'txtcolor',
                                                         //selectcmd: 'ForeColor',
 
-                                                        onClick: function (e) {                                                            
-                                                            var ele_offset = $(e.target).offset();                                                            
+                                                        onClick: function (e) {
+                                                            var ele_offset = $(e.target).offset();
                                                             var top = ele_offset.top + 100 + topPlus;
                                                             var left = ele_offset.left + 85 + leftPlus;
                                                             dialogForTextColor = true;
                                                             myElement.find(".modalDialog").show();
                                                             myElement.find("#ColorPickerpop").css({
-                                                                top:top+"px",
-                                                                left:left+"px"
+                                                                top: top + "px",
+                                                                left: left + "px"
                                                             }).show();
 
                                                             var divFontColorPicker = myElement.find(".divFontColorPicker");
@@ -5642,14 +5537,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         icon: 'txtbg',
                                                         selectcmd: 'HiliteColor',
                                                         onClick: function (e) {
-                                                            var ele_offset = $(e.target).offset();                                                            
+                                                            var ele_offset = $(e.target).offset();
                                                             var top = ele_offset.top + 100 + topPlus;
                                                             var left = ele_offset.left + 85 + leftPlus;
                                                             dialogForTextColor = false;
                                                             myElement.find(".modalDialog").show();
                                                             myElement.find("#ColorPickerpop").css({
-                                                                top:top+"px",
-                                                                left:left+"px"
+                                                                top: top + "px",
+                                                                left: left + "px"
                                                             }).show();
 
                                                             var divFontColorPicker = myElement.find(".divFontColorPicker");
@@ -5716,23 +5611,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         }
 
                                                     });
-                                                    
-                                                    if(basicTagsGlobal.length==0){
+
+                                                    if (basicTagsGlobal.length == 0) {
                                                         $.each(personalizedTagsGlobal, function (i, obj) {
                                                             var entry = {
                                                                 text: $('<div/>').html(obj[1]).text(),
-                                                                value: obj[0],                                                
-                                                                onclick: function(){
-                                                                   meeIframeWindow.tinyMCE.activeEditor.insertContent(this.settings.value);
+                                                                value: obj[0],
+                                                                onclick: function () {
+                                                                    meeIframeWindow.tinyMCE.activeEditor.insertContent(this.settings.value);
                                                                 }
                                                             }
                                                             if (obj[2] == "B") {
                                                                 basicTagsGlobal.push(entry);
-                                                            }
-                                                            else if (obj[2] == "C") {
+                                                            } else if (obj[2] == "C") {
                                                                 customTagsGlobal.push(entry)
-                                                            }
-                                                            else if (obj[2] == "U") {
+                                                            } else if (obj[2] == "U") {
                                                                 linksTagsGlobal.push(entry)
                                                             }
 
@@ -5744,9 +5637,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         title: 'Personalize',
                                                         text: 'Personalize',
                                                         icon: false,
-                                                        menu: [{text:"Personal Fields", menu:basicTagsGlobal,_editor:editor},{text:"Custom Fields", menu:customTagsGlobal,_editor:editor},{text:"Link Fields", menu:linksTagsGlobal,_editor:editor}],
+                                                        menu: [{text: "Personal Fields", menu: basicTagsGlobal, _editor: editor}, {text: "Custom Fields", menu: customTagsGlobal, _editor: editor}, {text: "Link Fields", menu: linksTagsGlobal, _editor: editor}],
                                                         onPostRender: function () {
-                                                                    
+
                                                         },
                                                     });
                                                     editor.addButton('LineHeight', {
@@ -5755,39 +5648,39 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         text: 'Line Height',
                                                         icon: false,
                                                         values: [
-                                                            {text:"8px", value:"8px"},
-                                                            {text:"10px", value:"10px"},
-                                                            {text:"12px", value:"12px"},
-                                                            {text:"13px", value:"13px"},
-                                                            {text:"14px", value:"14px"},
-                                                            {text:"15px", value:"15px"},
-                                                            {text:"16px", value:"16px"},
-                                                            {text:"18px", value:"18px"},
-                                                            {text:"20px", value:"20px"},
-                                                            {text:"22px", value:"22px"},
-                                                            {text:"24px", value:"24px"},
-                                                            {text:"26px", value:"26px"},
-                                                            {text:"28px", value:"28px"},
-                                                            {text:"30px", value:"30px"},
-                                                            {text:"32px", value:"32px"},
-                                                            {text:"36px", value:"36px"},
-                                                           ],
+                                                            {text: "8px", value: "8px"},
+                                                            {text: "10px", value: "10px"},
+                                                            {text: "12px", value: "12px"},
+                                                            {text: "13px", value: "13px"},
+                                                            {text: "14px", value: "14px"},
+                                                            {text: "15px", value: "15px"},
+                                                            {text: "16px", value: "16px"},
+                                                            {text: "18px", value: "18px"},
+                                                            {text: "20px", value: "20px"},
+                                                            {text: "22px", value: "22px"},
+                                                            {text: "24px", value: "24px"},
+                                                            {text: "26px", value: "26px"},
+                                                            {text: "28px", value: "28px"},
+                                                            {text: "30px", value: "30px"},
+                                                            {text: "32px", value: "32px"},
+                                                            {text: "36px", value: "36px"},
+                                                        ],
                                                         fixedWidth: true,
                                                         onPostRender: function () {
-                                                                  this.value('9px');
-                                                                  var self = this;
-                                                                  editor.on('nodeChange', function(e) {
-                                                                      $.each(e.parents,function(key,val){
-                                                                          if(val.nodeName === "SPAN" && $(val).css('line-height') != ""){
-                                                                             self.value($(val).css('line-height'));
-                                                                             makeCloneAndRegister();
-                                                                          }
-                                                                      })
-                                                                  });
+                                                            this.value('9px');
+                                                            var self = this;
+                                                            editor.on('nodeChange', function (e) {
+                                                                $.each(e.parents, function (key, val) {
+                                                                    if (val.nodeName === "SPAN" && $(val).css('line-height') != "") {
+                                                                        self.value($(val).css('line-height'));
+                                                                        makeCloneAndRegister();
+                                                                    }
+                                                                })
+                                                            });
                                                         },
                                                         onselect: function (e) {
-                                                            $(editor.selection.getNode()).css('line-height',this.value());
-                                                          },
+                                                            $(editor.selection.getNode()).css('line-height', this.value());
+                                                        },
                                                     });
                                                 },
                                                 //theme_modern_buttons2: "exapmle Mybutton",
@@ -5799,8 +5692,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
                                             //}
                                         });
-                                        
-                                    
+
+
                                     }
                                     ////
 
@@ -5809,37 +5702,38 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var InitializeMouseHover = function (oHtml) {
 
                                             if (oHtml != null) {
-                                                
-                                                var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>";
-                                                var myobject = meeIframeWindow.$(topHandlersHTML);    
-                                                oHtml.hover(
-                                                    function (e) {
-                                                        e.stopPropagation();
-                                                        meeIframe.find(".topHandlers").remove();                                                                                                                
-                                                        meeIframe.find('.csHaveData').removeClass('mce-highlight-div');
-                                                        if (!IsStyleActivated) {
-                                                                                                                        
-                                                            $(this).addClass("hover mce-highlight-div");
-                                                            $(this).parents(".csHaveData").addClass("hoverParent");
-                                                            $(this).prepend(myobject);
-                                                            meeIframeWindow.setDragging(myobject.find('.myHandle'), mee);
-                                                            $(this).parents(".csHaveData").removeClass("hover");
-                                                            $(this).find(".editformpanel,.edit-form").show();
-                                                            $(this).find(".editvideopanel").show();
-                                                            $(this).find(".drop-here").hide();
-                                                            //Assign DELETE functionality here
-                                                            InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
 
-                                                            //Assign COPY functionality here
-                                                            InitializeCopyButtonOnElement($(this).find(".topHandlers"));                                                                                                                                                                                }
-                                                    },
-                                                    function (e) {     
-                                                        $(this).parents(".csHaveData").removeClass("hoverParent");
-                                                        $(this).find(".topHandlers").remove();
-                                                        $(this).find(".editformpanel").hide();
-                                                        $(this).find(".editvideopanel").hide();
-                                                        $(this).removeClass("hover");
-                                                    }
+                                                var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>";
+                                                var myobject = meeIframeWindow.$(topHandlersHTML);
+                                                oHtml.hover(
+                                                        function (e) {
+                                                            e.stopPropagation();
+                                                            meeIframe.find(".topHandlers").remove();
+                                                            meeIframe.find('.csHaveData').removeClass('mce-highlight-div');
+                                                            if (!IsStyleActivated) {
+
+                                                                $(this).addClass("hover mce-highlight-div");
+                                                                $(this).parents(".csHaveData").addClass("hoverParent");
+                                                                $(this).prepend(myobject);
+                                                                meeIframeWindow.setDragging(myobject.find('.myHandle'), mee);
+                                                                $(this).parents(".csHaveData").removeClass("hover");
+                                                                $(this).find(".editformpanel,.edit-form").show();
+                                                                $(this).find(".editvideopanel").show();
+                                                                $(this).find(".drop-here").hide();
+                                                                //Assign DELETE functionality here
+                                                                InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
+
+                                                                //Assign COPY functionality here
+                                                                InitializeCopyButtonOnElement($(this).find(".topHandlers"));
+                                                            }
+                                                        },
+                                                        function (e) {
+                                                            $(this).parents(".csHaveData").removeClass("hoverParent");
+                                                            $(this).find(".topHandlers").remove();
+                                                            $(this).find(".editformpanel").hide();
+                                                            $(this).find(".editvideopanel").hide();
+                                                            $(this).removeClass("hover");
+                                                        }
                                                 );
 
                                                 return oHtml;
@@ -5852,14 +5746,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         oHtml.find(".myDroppable").andSelf().filter(".myDroppable").each(function (i, o) {
                                             CreateDroppableWithAllFunctions(o);
                                             attachClickEvent(o);
-                                            DropableMouseEnterLeave($(o));                                            
+                                            DropableMouseEnterLeave($(o));
                                         });
 
                                         //Moving Handlers - Mouse Hover
                                         oHtml.find(".csHaveData").andSelf().filter(".csHaveData").each(function (i, o) {
                                             InitializeElementWithDraggable($(o));
                                             attachClickEvent(o);
-                                            InitializeMouseHover($(o));                                            
+                                            InitializeMouseHover($(o));
                                         });
 
                                         //////////////////////////////////////////////////////////////////////////////////////////
@@ -5944,8 +5838,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             var imageSrc = options._app.decodeHTML(imageListGlobal[index].originalURL);
                                                             if ($(this)[0].tagName.toLowerCase() == "img") {
                                                                 $(this).attr("src", imageSrc)
-                                                            }
-                                                            else {
+                                                            } else {
                                                                 $(this).find("img").attr("src", imageSrc)
                                                             }
                                                             makeCloneAndRegister();
@@ -5959,7 +5852,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         }
                                     }
-                                    
+
                                     this.InitializeOnFormDroppedEvent = function (oHtml) {
                                         if (oHtml != null) {
 
@@ -5983,9 +5876,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         event.stopPropagation();
                                                         event.preventDefault();
                                                         var ui = {draggable: null};
-                                                        if(changFlag){
+                                                        if (changFlag) {
                                                             changFlag.editor_change = true;
-                                                         }
+                                                        }
                                                         ui.draggable = mee.dragElement;
                                                         $(this).removeInlineStyle("outline");
                                                         var args = {
@@ -5995,16 +5888,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             predefinedControl: null,
                                                             buildingBlock: null
                                                         };
-                                                       
-                                                        if (ui.draggable.data("type")=="formBlock") {
-                                                            
+
+                                                        if (ui.draggable.data("type") == "formBlock") {
+
                                                             var oControl = new Object();
                                                             var controlID = ui.draggable.data("id");
-                                                            
-                                                            var isNew = ui.draggable.data("isnew");                                                            
+
+                                                            var isNew = ui.draggable.data("isnew");
                                                             //need to apply each for this and then search on each [0]
-                                                            
-                                                            if(!isNew){                                                                
+
+                                                            if (!isNew) {
                                                                 args.FormId = controlID;
                                                                 if (options.LoadFormContents != null) {
                                                                     options.LoadFormContents(args);
@@ -6012,43 +5905,42 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                                 if (args.formContents != undefined) {
                                                                     //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                                    var fContents = options._app.decodeHTML(args.formContents).replace("https:","")+options.pageId+"/";
+                                                                    var fContents = options._app.decodeHTML(args.formContents).replace("https:", "") + options.pageId + "/";
 
-                                                                    if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
+                                                                    if (args.droppedElement.hasClass("MEEFORMCONTAINER")) {
                                                                         var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
-                                                                        oControl.Html = preview_iframe;                                                                
+                                                                        oControl.Html = preview_iframe;
                                                                         oControl.Type = "formBlock";
-                                                                        oControl.ID = args.FormId;                                                                
+                                                                        oControl.ID = args.FormId;
                                                                         args.predefinedControl = oControl;
                                                                         args.droppedElement.html(oControl.Html);
                                                                         args.droppedElement.removeClass("formPlaceHolderAlone");
                                                                         args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
                                                                         oInitDestroyEvents.InitAll(args.droppedElement);
-                                                                        args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId)                                                                        
-                                                                    }
-                                                                    else {
+                                                                        args.droppedElement.find(".editformpanel button").attr("data-formid", args.FormId)
+                                                                    } else {
                                                                         var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
-                                                                        form_ele.find("iframe").attr("src",options._app.decodeHTML(fContents));
-                                                                        form_ele.find(".editformpanel button").attr("data-formid",args.FormId);
+                                                                        form_ele.find("iframe").attr("src", options._app.decodeHTML(fContents));
+                                                                        form_ele.find(".editformpanel button").attr("data-formid", args.FormId);
                                                                     }
                                                                     options.formCallBack(args.FormId);
                                                                 }
-                                                           }else {                                                                                                                                   
-                                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");                                                                      
-                                                                    mee.showFormWizard('');
-                                                                    if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length==0){
-                                                                        oControl.Html = preview_iframe;                                                                
-                                                                        oControl.Type = "formBlock";
-                                                                        oControl.ID = args.FormId;                                                                
-                                                                        args.predefinedControl = oControl;
-                                                                        args.droppedElement.html(oControl.Html);
-                                                                        args.droppedElement.removeClass("formPlaceHolderAlone");
-                                                                        args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
-                                                                        oInitDestroyEvents.InitAll(args.droppedElement);
-                                                                    }
-                                                           }                                                            
+                                                            } else {
+                                                                var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                                mee.showFormWizard('');
+                                                                if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length == 0) {
+                                                                    oControl.Html = preview_iframe;
+                                                                    oControl.Type = "formBlock";
+                                                                    oControl.ID = args.FormId;
+                                                                    args.predefinedControl = oControl;
+                                                                    args.droppedElement.html(oControl.Html);
+                                                                    args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                                    args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                                    oInitDestroyEvents.InitAll(args.droppedElement);
+                                                                }
+                                                            }
                                                         }
-                                                        
+
                                                         mee.dragElement = null;
                                                     });
 
@@ -6076,16 +5968,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                 });
                                             }
-                                            
+
                                             if (oHtml.find('.clickEventVideo').andSelf().filter('.clickEventVideo').length > 0) {
-                                                
+
                                                 oHtml.find('.clickEventVideo').andSelf().filter('.clickEventVideo').each(function (index, element) {
                                                     //console.log('video iframes'+index);
                                                     $(element).click(function (event) {
-                                                        
+
                                                         isElementClicked = true;
-                                                        if($(event.target).hasClass('MEEVIDEOCONTAINER')){
-                                                                OnClickedOnVideoElement(event);
+                                                        if ($(event.target).hasClass('MEEVIDEOCONTAINER')) {
+                                                            OnClickedOnVideoElement(event);
                                                         }
 
                                                     });
@@ -6120,11 +6012,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     e.preventDefault();
                                                     return false;
                                                 })
-                                                oHtml.find(".editformpanel button").click(function(){
+                                                oHtml.find(".editformpanel button").click(function () {
                                                     var form_id = $(this).attr("data-formid");
                                                     mee.showFormWizard(form_id);
                                                 })
-                                                oHtml.find(".editvideopanel button").click(function(e){
+                                                oHtml.find(".editvideopanel button").click(function (e) {
                                                     //var form_id = $(this).attr("data-formid");
                                                     //myElement.find('#videoToolbar').hide()
                                                     e.preventDefault();
@@ -6132,29 +6024,29 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     mee.openvideoDialog($(e.currentTarget).parents('.MEEVIDEOCONTAINER'));
                                                 })
                                             }
-                                            var activeTab = myElement.find("#tabs").tabs("option", "active");                                               
+                                            var activeTab = myElement.find("#tabs").tabs("option", "active");
                                         }
                                     }
-                                    
-                                    this.InitDCContents = function (oHtml){
+
+                                    this.InitDCContents = function (oHtml) {
                                         var self = this;
                                         oHtml.find(".dynamicContentContainer").each(function (index, object) {
                                             self.InitOneDCContent(object);
-                                        });                                                              
+                                        });
                                     }
-                                    
-                                    this.InitOneDCContent = function (object){
+
+                                    this.InitOneDCContent = function (object) {
                                         var variation = $(object);
                                         var activeLi = variation.attr("data-activeli");
                                         var variation_ID = variation.attr("id");
-                                        var keyword = variation.attr("keyword");                                         
+                                        var keyword = variation.attr("keyword");
                                         var oControl = new Object();
                                         var args = {
-                                            droppedElement: $(object),                                                
+                                            droppedElement: $(object),
                                             predefinedControl: null,
                                             buildingBlock: null
                                         };
-                                        var predefinedControl = myElement.find(".divDCTemplate").html();                                            
+                                        var predefinedControl = myElement.find(".divDCTemplate").html();
                                         oControl.Html = $(predefinedControl);
                                         oControl.Type = predefinedControl.type;
                                         args.predefinedControl = oControl;
@@ -6164,10 +6056,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         args.ID = keyword;
                                         args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
-                                        InitializeDynamicControl(args);         
-                                        variation.replaceWith(args.predefinedControl.Html.clone(true, true));                                                                       
-                                                                                
-                                        oInitDestroyEvents.InitAll(meeIframe.find("#"+variation_ID+" .dcInternalContents"),true);
+                                        InitializeDynamicControl(args);
+                                        variation.replaceWith(args.predefinedControl.Html.clone(true, true));
+
+                                        oInitDestroyEvents.InitAll(meeIframe.find("#" + variation_ID + " .dcInternalContents"), true);
                                     }
 
                                 }
@@ -6197,17 +6089,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 //Elements Dropping
                                 function InitializeWithDropable(sender) {
-                                                                        
-                                    
+
+
                                     sender.on('dragover', function (event) {
                                         event.preventDefault();
                                         if ($(this).html() == "") {
-                                            $(this).css({'height': '10px', "background": "#80C000","box-shadow":"0 0 5px rgba(0, 0, 0, 0.5)"});
+                                            $(this).css({'height': '10px', "background": "#80C000", "box-shadow": "0 0 5px rgba(0, 0, 0, 0.5)"});
                                         }
                                     }).on('dragleave', function (event) {
                                         event.preventDefault();
                                         if ($(this).html() == "") {
-                                            $(this).css({'height': '4px', "background": "#80C000","box-shadow":"none"});
+                                            $(this).css({'height': '4px', "background": "#80C000", "box-shadow": "none"});
                                         }
                                     });
 
@@ -6215,13 +6107,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         //restore the dropzone after dropevent                                    
                                         event.stopPropagation();
                                         event.preventDefault();
-                                        if(changFlag){
+                                        if (changFlag) {
                                             changFlag.editor_change = true;
-                                         }
+                                        }
                                         meeIframe.find(".mainContentHtml").removeClass("show-droppables")
                                         var ui = {draggable: null};
-                                        ui.draggable = mee.dragElementIframe ? mee.dragElementIframe : mee.dragElement;                                        
-                                        if (!$(this).hasClass("myDroppable") ) { //|| ui.draggable.data("type") === "droppedImage"
+                                        ui.draggable = mee.dragElementIframe ? mee.dragElementIframe : mee.dragElement;
+                                        if (!$(this).hasClass("myDroppable")) { //|| ui.draggable.data("type") === "droppedImage"
                                             //DO NOTHING
                                             return;
                                         }
@@ -6250,10 +6142,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                             //handling DC into DC MOVE
                                             if (ui.draggable.hasClass("csDynamicData")) {
-                                                if ($(this).parent().hasClass("dcInternalContents")) {                                                    
+                                                if ($(this).parent().hasClass("dcInternalContents")) {
                                                     return;
-                                                }
-                                                else {
+                                                } else {
                                                     console.log("Dropping DC in Container");
                                                 }
                                             }
@@ -6299,7 +6190,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 ///////
 
                                                 var controlID = ui.draggable.data("id");
-                                                
+
                                                 //need to apply each for this and then search on each [0]
 
                                                 var bb = undefined;
@@ -6310,20 +6201,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         }
 
                                                     });
-                                                }
-                                                else {
+                                                } else {
                                                     $.each(contentBlocksGlobal, function (i, obj) {
                                                         if (obj[0]["blockId.encode"] == controlID) {
                                                             bb = obj[0];
                                                         }
                                                     });
-                                                }                                                
+                                                }
                                                 if (bb != undefined) {
                                                     //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
                                                     var decodeHTML = $('<div/>').html(bb.html).text();
                                                     oControl.Html = $(decodeHTML);
                                                     oControl.Type = "buildingBlock";
-                                                    oControl.ID = bb.ID;                                                    
+                                                    oControl.ID = bb.ID;
 
                                                     args.predefinedControl = oControl;
 
@@ -6338,14 +6228,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                                 }
-                                            }
-                                            else if (typeOfDraggingControl == "droppedImage") {
+                                            } else if (typeOfDraggingControl == "droppedImage") {
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
                                                 $(this).before(CreateDroppableWithAllFunctions());
                                                 $(this).after(CreateDroppableWithAllFunctions());
                                                 ///////
-                                                                                                
-                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");                                                
+
+                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");
                                                 var ui = {draggable: null};
                                                 ui.draggable = mee.dragElement;
                                                 var argsThis = {
@@ -6353,16 +6242,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     event: event,
                                                     ui: ui
                                                 };
-                                                OnImageDropped(argsThis);                                                
+                                                OnImageDropped(argsThis);
                                                 oInitDestroyEvents.InitAll($(this));
                                                 mee.dragElement = null;
-                                            }
-                                            else if(typeOfDraggingControl == "droppedUrlImage"){
+                                            } else if (typeOfDraggingControl == "droppedUrlImage") {
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
                                                 $(this).before(CreateDroppableWithAllFunctions());
                                                 $(this).after(CreateDroppableWithAllFunctions());
                                                 ///////
-                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");                                                
+                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");
                                                 var ui = {draggable: null};
                                                 ui.draggable = mee.dragElement;
                                                 var argsThis = {
@@ -6371,119 +6259,115 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     ui: ui
                                                 };
                                                 var dialogOptions = {
-                                                        title: "Paste Image URL",
-                                                        css: {
-                                                            "width": "490px",
-                                                            "margin-left": "-230px"
-                                                        },
-                                                        bodyCss: {
-                                                            "min-height": "75px"
-                                                        },
-                                                        headerIcon: 'image',
-                                                        buttons: {
-                                                            saveBtn: {
-                                                                text: 'Insert'
-                                                            }
+                                                    title: "Paste Image URL",
+                                                    css: {
+                                                        "width": "490px",
+                                                        "margin-left": "-230px"
+                                                    },
+                                                    bodyCss: {
+                                                        "min-height": "75px"
+                                                    },
+                                                    headerIcon: 'image',
+                                                    buttons: {
+                                                        saveBtn: {
+                                                            text: 'Insert'
                                                         }
-                                                    };
-                                                var dialog = null;  
-                                                dialog = options._app.showStaticDialog(dialogOptions); 
+                                                    }
+                                                };
+                                                var dialog = null;
+                                                dialog = options._app.showStaticDialog(dialogOptions);
                                                 options._app.showLoading("Loading...", dialog.getBody());
                                                 dialog.$el.css("z-index", "99999");
                                                 $(".modal-backdrop").css("z-index", "99998");
-                                               
-                                                    
+
+
                                                 dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 24px;" placeholder="Enter campaign name here" id="onlineimg_url"></div></div>');
                                                 dialog.$el.find('.dialog-backbtn').hide();
-                                                dialog.saveCallBack(function(){
-                                                   var stringImg = dialog.$el.find('#onlineimg_url').val();
-                                                   argsThis['imgurl']=stringImg;
-                                                   if(/^((https?|ftp):)?\/\/.*(jpeg|jpg|png|gif|bmp)$/.test(stringImg)==true){
-                                                      OnUrlImageAdded(argsThis,dialog); 
-                                                   }else{
-                                                         options._app.showError({
-                                                                    control:dialog.$el.find('.imgurl-container'),
-                                                                    message:"Invalid image url path."
-                                                          });
-                                                            
-                                                   }
-                                                   
+                                                dialog.saveCallBack(function () {
+                                                    var stringImg = dialog.$el.find('#onlineimg_url').val();
+                                                    argsThis['imgurl'] = stringImg;
+                                                    if (/^((https?|ftp):)?\/\/.*(jpeg|jpg|png|gif|bmp)$/.test(stringImg) == true) {
+                                                        OnUrlImageAdded(argsThis, dialog);
+                                                    } else {
+                                                        options._app.showError({
+                                                            control: dialog.$el.find('.imgurl-container'),
+                                                            message: "Invalid image url path."
+                                                        });
+
+                                                    }
+
                                                 });
-                                                options._app.showLoading(false, dialog.getBody());             
-                                                
+                                                options._app.showLoading(false, dialog.getBody());
+
                                                 oInitDestroyEvents.InitAll($(this));
                                                 mee.dragElement = null;
-                                            }
-                                            else if (typeOfDraggingControl == "formBlock") {
+                                            } else if (typeOfDraggingControl == "formBlock") {
 
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
                                                 $(this).before(CreateDroppableWithAllFunctions());
                                                 $(this).after(CreateDroppableWithAllFunctions());
                                                 ///////
-                                            
-                                                
-                                                  var oControl = new Object();
-                                                  var controlID = ui.draggable.data("id");
 
-                                                  var isNew = ui.draggable.data("isnew");                                                    
-                                                    //need to apply each for this and then search on each [0]
-                                                    
-                                                  if(!args.droppedElement.hasClass("MEEFORMCONTAINER") && meeIframe.find(".MEEFORMCONTAINER").length==0)  {
-                                                      args.droppedElement.append("<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>");
-                                                      oInitDestroyEvents.InitAll(args.droppedElement);
-                                                      args.droppedElement = args.droppedElement.find(".MEEFORMCONTAINER");
-                                                  }
 
-                                                    if(!isNew){                                                                
-                                                        args.FormId = controlID;
-                                                        if (options.LoadFormContents != null) {
-                                                            options.LoadFormContents(args);
-                                                        }
+                                                var oControl = new Object();
+                                                var controlID = ui.draggable.data("id");
 
-                                                        if (args.formContents != undefined) {
-                                                            //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                            var fContents = options._app.decodeHTML(args.formContents).replace("https:","")+options.pageId+"/";
+                                                var isNew = ui.draggable.data("isnew");
+                                                //need to apply each for this and then search on each [0]
 
-                                                            if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
-                                                                var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
-                                                                oControl.Html = preview_iframe;                                                                
-                                                                oControl.Type = "formBlock";
-                                                                oControl.ID = args.FormId;                                                                
-                                                                args.predefinedControl = oControl;
-                                                                args.droppedElement.html(oControl.Html);
-                                                                args.droppedElement.removeClass("formPlaceHolderAlone");
-                                                                args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
-                                                                oInitDestroyEvents.InitAll(args.droppedElement);
-                                                                args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId)                                                                        
-                                                            }
-                                                            else {
-                                                                var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
-                                                                form_ele.find("iframe").attr("src",options._app.decodeHTML(fContents));
-                                                                form_ele.find(".editformpanel button").attr("data-formid",args.FormId);
-                                                            }
-                                                            options.formCallBack(args.FormId);
-                                                        }
-                                                   }else {                                                                                                                                   
-                                                            var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");                                                                      
-                                                            mee.showFormWizard('');
-                                                            if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length==0){
-                                                                oControl.Html = preview_iframe;                                                                
-                                                                oControl.Type = "formBlock";
-                                                                oControl.ID = args.FormId;                                                                
-                                                                args.predefinedControl = oControl;
-                                                                args.droppedElement.html(oControl.Html);
-                                                                args.droppedElement.removeClass("formPlaceHolderAlone");
-                                                                args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
-                                                                oInitDestroyEvents.InitAll(args.droppedElement);
-                                                            }
-                                                   }
-                                            }
-                                            else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
-
-                                                if ($(this).parent().hasClass("dcInternalContents")) {                                                    
-                                                    return;
+                                                if (!args.droppedElement.hasClass("MEEFORMCONTAINER") && meeIframe.find(".MEEFORMCONTAINER").length == 0) {
+                                                    args.droppedElement.append("<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>");
+                                                    oInitDestroyEvents.InitAll(args.droppedElement);
+                                                    args.droppedElement = args.droppedElement.find(".MEEFORMCONTAINER");
                                                 }
-                                                else {
+
+                                                if (!isNew) {
+                                                    args.FormId = controlID;
+                                                    if (options.LoadFormContents != null) {
+                                                        options.LoadFormContents(args);
+                                                    }
+
+                                                    if (args.formContents != undefined) {
+                                                        //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
+                                                        var fContents = options._app.decodeHTML(args.formContents).replace("https:", "") + options.pageId + "/";
+
+                                                        if (args.droppedElement.hasClass("MEEFORMCONTAINER")) {
+                                                            var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                            oControl.Html = preview_iframe;
+                                                            oControl.Type = "formBlock";
+                                                            oControl.ID = args.FormId;
+                                                            args.predefinedControl = oControl;
+                                                            args.droppedElement.html(oControl.Html);
+                                                            args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                            args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                            oInitDestroyEvents.InitAll(args.droppedElement);
+                                                            args.droppedElement.find(".editformpanel button").attr("data-formid", args.FormId)
+                                                        } else {
+                                                            var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
+                                                            form_ele.find("iframe").attr("src", options._app.decodeHTML(fContents));
+                                                            form_ele.find(".editformpanel button").attr("data-formid", args.FormId);
+                                                        }
+                                                        options.formCallBack(args.FormId);
+                                                    }
+                                                } else {
+                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                    mee.showFormWizard('');
+                                                    if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length == 0) {
+                                                        oControl.Html = preview_iframe;
+                                                        oControl.Type = "formBlock";
+                                                        oControl.ID = args.FormId;
+                                                        args.predefinedControl = oControl;
+                                                        args.droppedElement.html(oControl.Html);
+                                                        args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                        args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                        oInitDestroyEvents.InitAll(args.droppedElement);
+                                                    }
+                                                }
+                                            } else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
+
+                                                if ($(this).parent().hasClass("dcInternalContents")) {
+                                                    return;
+                                                } else {
                                                     console.log("Dropping DC in Container");
                                                 }
 
@@ -6535,8 +6419,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             InitializeDynamicControl(args);
                                                             oInitDestroyEvents.InitAll(args.droppedElement);
 
-                                                        }
-                                                        else {
+                                                        } else {
 
                                                             // args.ID = ui.draggable.data("id");
                                                             args.ID = ui.draggable.data("keyword");
@@ -6548,15 +6431,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                         }
                                                     }
-                                                }
-                                                else {
+                                                } else {
                                                     var dcContentVariationWindow = args.predefinedControl.Html.find(".dcVariationName");
                                                     dcContentVariationWindow.height(dcContentVariationWindow.parents("table.dynamicContentContainer").height())
                                                     dcContentVariationWindow.show();
                                                     dcContentVariationWindow.find(".btnCancelVariation").click(function (event) {
                                                         event.stopPropagation();
                                                         DeleteElement(args.droppedElement);
-                                                        if(dcContentNameWindow){
+                                                        if (dcContentNameWindow) {
                                                             dcContentNameWindow.hide();
                                                         }
                                                     });
@@ -6568,8 +6450,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         {
                                                             //alert("Please enter dynamic control name.");
 
-                                                        }
-                                                        else {
+                                                        } else {
 
                                                             args.DynamicVariation = new DynamicVariation();
                                                             args.DynamicVariation.Label = txtVariationName.val();
@@ -6604,9 +6485,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                         dcContentVariationWindow.hide();
                                                     }
-                                                    setTimeout(_.bind(function(){
+                                                    setTimeout(_.bind(function () {
                                                         this.find(".txtPlaceHolder").focus();
-                                                    },dcContentVariationWindow),300);
+                                                    }, dcContentVariationWindow), 300);
                                                     dcContentVariationWindow.find(".btnSaveVariation").click(function () {
                                                         saveContentBlock();
                                                     });
@@ -6617,8 +6498,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     })
                                                 }
 
-                                            }
-                                            else {
+                                            } else {
 
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
                                                 $(this).before(CreateDroppableWithAllFunctions());
@@ -6698,7 +6578,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 //Elements DRAGGING - for swapping elements:dragging2
                                 function InitializeElementWithDraggable(object) {
-                                    
+
                                     return object;
                                 }
 
@@ -6707,8 +6587,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var d1;
                                     if (object == null) {
                                         d1 = CreateDroppable();
-                                    }
-                                    else {
+                                    } else {
                                         d1 = $(object);
                                     }
 
@@ -6717,20 +6596,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     return d1WithDroppable;
                                 }
-                                function attachClickEvent(object){
+                                function attachClickEvent(object) {
                                     var d1;
                                     if (object == null) {
                                         console.log('object is empty');
                                         //d1 = CreateDroppable();
-                                    }
-                                    else {
+                                    } else {
                                         d1 = $(object);
                                     }
-                                    
-                                    d1.click(function(e){
-                                           $(this).addClass('mce-highlight-div');
-                                          // e.stopPropagation();
-                                        })
+
+                                    d1.click(function (e) {
+                                        $(this).addClass('mce-highlight-div');
+                                        // e.stopPropagation();
+                                    })
 
                                     //return d1WithDroppable;
                                 }
@@ -6791,8 +6669,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         if (index != firstLevelAllLiLength - 1) {
                                             hightExcludingLast += $(this).outerHeight();
 
-                                        }
-                                        else {
+                                        } else {
                                             //Get Last element here
                                             var lastDroppableHeight = parentHeight - hightExcludingLast
                                             if (lastDroppableHeight > 0) {
@@ -6808,21 +6685,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                 function InitializeMainDraggableControls(elementToApply) {
-                                   
-                                    
+
+
                                     $(elementToApply).on('dragstart', function (event) {
                                         event.originalEvent.dataTransfer.setData("text", "dragging");
                                         /*--Hide tooltop--*/
-                                        setTimeout(function(){
+                                        setTimeout(function () {
                                             $('.showtooltip-dg').tooltip('hide')
-                                        },40);
+                                        }, 40);
                                         mee.dragElement = $(this);
                                         var draggedControlType = $(this).data("type");
                                         /*if (draggedControlType === "droppedImage" ) {
-                                            return;
-                                        }*/                                       
-                                        RemovePopups();                                        
-                                        if (draggedControlType !=="formBlock" ||  meeIframe.find(".MEEFORMCONTAINER").length==0) {
+                                         return;
+                                         }*/
+                                        RemovePopups();
+                                        if (draggedControlType !== "formBlock" || meeIframe.find(".MEEFORMCONTAINER").length == 0) {
                                             ShowDroppables(meeIframe);
                                             if (meeIframe.find(".mainContentHtml li.myDroppable").length > 1) {
                                                 meeIframe.find(".mainContentHtml").addClass("show-droppables")
@@ -6841,13 +6718,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     SetLastElementHeight($(this));
                                                 }
                                             });
-                                        
-                                            
-                                        }
-                                        else if(draggedControlType =="formBlock"){                                            
+
+
+                                        } else if (draggedControlType == "formBlock") {
                                             meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #94CF1E"});
-                                            meeIframe.find(".editformpanel,.drop-here").show();                                            
-                                            meeIframe.find(".editformpanel .edit-form").hide();                                                                                        
+                                            meeIframe.find(".editformpanel,.drop-here").show();
+                                            meeIframe.find(".editformpanel .edit-form").hide();
                                         }
 
                                     }).on('dragend', function (event) {
@@ -6892,12 +6768,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         makeCloneAndRegister();
                                         return false;
                                     });
-                                    
-                                        /*===Video Enabled attached later if needed====*/
-                                    if(args.predefinedControl && args.predefinedControl.Html){
+
+                                    /*===Video Enabled attached later if needed====*/
+                                    if (args.predefinedControl && args.predefinedControl.Html) {
                                         mee.openvideoDialog(args.predefinedControl.Html);
                                     }
-                                    
+
                                     mee.checkForm();
 
                                 }
@@ -7028,55 +6904,53 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                 }
-                                mee.CloseFormWizard = function(){
-                                   if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length && meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src")=="about:blank"){
-                                         meeIframe.find(".MEEFORMCONTAINER").addClass("formPlaceHolderAlone").children().remove();
+                                mee.CloseFormWizard = function () {
+                                    if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length && meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src") == "about:blank") {
+                                        meeIframe.find(".MEEFORMCONTAINER").addClass("formPlaceHolderAlone").children().remove();
                                     }
                                 }
-                                mee.showFormWizard = function(formId){
-                                    var dialog_width = $(document.documentElement).width()-60;
-                                    var dialog_height = $(document.documentElement).height()-162;
-                                    var dialog = options._app.showDialog({title:'Form Builder',
-                                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
-                                              headerEditable:false,
-                                              headerIcon : 'dlgformwizard',
-                                              closeCallBack: _.bind(mee.CloseFormWizard,mee), 
-                                              bodyCss:{"min-height":dialog_height+"px"}
+                                mee.showFormWizard = function (formId) {
+                                    var dialog_width = $(document.documentElement).width() - 60;
+                                    var dialog_height = $(document.documentElement).height() - 162;
+                                    var dialog = options._app.showDialog({title: 'Form Builder',
+                                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
+                                        headerEditable: false,
+                                        headerIcon: 'dlgformwizard',
+                                        closeCallBack: _.bind(mee.CloseFormWizard, mee),
+                                        bodyCss: {"min-height": dialog_height + "px"}
                                     });
-                                    var formurl = formId ? "&formId="+formId : "";
-                                  
-                                            options._app.showLoading("Loading form...",dialog.getBody());
-                                        
-                                    dialog_height = parseFloat(dialog_height)-6 ;
-                                    var transport = new easyXDM.Socket({           
-                                        remote:  window.location.protocol+'//'+options._app.get("content_domain")+"/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&ukey="+options._app.get("user_Key")+formurl,
-                                        onReady: function(){
-                                                options._app.showLoading(false,dialog.getBody());
+                                    var formurl = formId ? "&formId=" + formId : "";
+
+                                    options._app.showLoading("Loading form...", dialog.getBody());
+
+                                    dialog_height = parseFloat(dialog_height) - 6;
+                                    var transport = new easyXDM.Socket({
+                                        remote: window.location.protocol + '//' + options._app.get("content_domain") + "/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token") + "&ukey=" + options._app.get("user_Key") + formurl,
+                                        onReady: function () {
+                                            options._app.showLoading(false, dialog.getBody());
                                         },
-                                        onMessage: _.bind(function(message, origin){
+                                        onMessage: _.bind(function (message, origin) {
                                             var response = jQuery.parseJSON(message);
-                                            if(response.isRefresh || response.formURL){
-                                                if(response.isRefresh){
-                                                    if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length){
-                                                        meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src =meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src.replace("https:",""); 
+                                            if (response.isRefresh || response.formURL) {
+                                                if (response.isRefresh) {
+                                                    if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length) {
+                                                        meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src = meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src.replace("https:", "");
                                                     }
+                                                } else {
+                                                    meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src", response.formURL.replace("http:", ""));
+                                                    if (meeIframe.find(".MEEFORMCONTAINER .editformpanel button").length) {
+                                                        meeIframe.find(".MEEFORMCONTAINER .editformpanel button").attr("data-formid", response.formId);
+                                                    }
+                                                    options.formCallBack(response.formId);
                                                 }
-                                                else{
-                                                   meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src", response.formURL.replace("http:",""));                                   
-                                                   if(meeIframe.find(".MEEFORMCONTAINER .editformpanel button").length){
-                                                        meeIframe.find(".MEEFORMCONTAINER .editformpanel button").attr("data-formid",response.formId);
-                                                   }
-                                                   options.formCallBack(response.formId); 
-                                                }
-                                            }
-                                            else if(response.showMessage){
+                                            } else if (response.showMessage) {
                                                 options._app.showMessge(response.msg);
                                             }
-                                           
-                                        },mee),
-                                        props:{style:{width:"100%",height:dialog_height+"px"},frameborder:0},
-                                        container : dialog.getBody()[0]
-                                    });                              
+
+                                        }, mee),
+                                        props: {style: {width: "100%", height: dialog_height + "px"}, frameborder: 0},
+                                        container: dialog.getBody()[0]
+                                    });
                                 }
                                 mee.addUpdateContentBlock = function (args) {
                                     var dialog_title = mee._LastSelectedBuildingBlock ? "Edit Block" : "Add Block";
@@ -7089,8 +6963,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             "margin-left": "-" + (dialog_width / 2) + "px",
                                             "top": "20px"
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         css = {
                                             "width": "600px",
                                             "margin-left": "-300px",
@@ -7113,23 +6986,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
                                     options._app.showLoading("Loading...", dialog.getBody());
                                     //require(["editor/buildingblock"], function (blocksPage) {
-                                        var mPage = new blocksPage({
-                                            editor: mee,
-                                            dialog: dialog,
-                                            config: options,
-                                            args: args
-                                        });
-                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
-                                        dialog.getBody().append(mPage.$el);
-                                        options._app.showLoading(false, mPage.$el.parent());
-                                        dialog.saveCallBack(_.bind(mPage.saveBlockCall, mPage));
-                                        mPage.init();
-                                        options._app.showLoading(false, dialog.getBody());
-                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
-                                        dialog.getBody().find(".add-block").addClass('dialogWrap-' + dialogArrayLength); // New Dialog                                    
-                                        options._app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
-                                        options._app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
-                                        options._app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveBlockCall, mPage);
+                                    var mPage = new blocksPage({
+                                        editor: mee,
+                                        dialog: dialog,
+                                        config: options,
+                                        args: args
+                                    });
+                                    var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                    dialog.getBody().append(mPage.$el);
+                                    options._app.showLoading(false, mPage.$el.parent());
+                                    dialog.saveCallBack(_.bind(mPage.saveBlockCall, mPage));
+                                    mPage.init();
+                                    options._app.showLoading(false, dialog.getBody());
+                                    var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                    dialog.getBody().find(".add-block").addClass('dialogWrap-' + dialogArrayLength); // New Dialog                                    
+                                    options._app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
+                                    options._app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
+                                    options._app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveBlockCall, mPage);
 
 
 
@@ -7149,8 +7022,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         var obj = $(this);
                                                         obj.remove();
                                                     })
-                                                }
-                                                else {
+                                                } else {
                                                     options._app.showAlert(result[1], $("body"));
                                                 }
                                             });
@@ -7170,19 +7042,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 });
 
                                 myElement.find("input#searchForm").keyup(function (e) {
-                                    if (e.which == 13) {                                        
+                                    if (e.which == 13) {
                                         _searchFormBlocks();
                                     }
                                 });
 
                                 myElement.find("#clearsearch-forms").click(function (e) {
                                     myElement.find("#clearsearch-forms").hide();
-                                    myElement.find("input#searchForm").val('');                                    
+                                    myElement.find("input#searchForm").val('');
                                     searchFormTxt = "";
                                     mee._LoadFormBlocks();
 
                                 })
-                                
+
                                 myElement.find("#clearsearch-blocks").click(function (e) {
                                     myElement.find("#clearsearch-blocks").hide();
                                     myElement.find("input#searchBB").val('');
@@ -7238,8 +7110,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find("#BBResultDiv").html(counter + " records Found");
                                         myElement.find("#BBResultDiv").show();
 
-                                    }
-                                    else {
+                                    } else {
                                         myElement.find("#clearsearch-blocks").hide();
                                         mee._LoadBuildingBlocks();
                                         myElement.find("#BBResultDiv").hide();
@@ -7303,8 +7174,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 myElement.find(".editBB").click(function () {
                                     if (mee._LastSelectedBuildingBlock != null) {
                                         InitializeBuildingBlockUpdatePopup();
-                                    }
-                                    else {
+                                    } else {
                                         alert("Please Select a Block First");
                                     }
                                 });
@@ -7324,13 +7194,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             _OnDeleteBuildingBlock(args);
                                             mee._LastSelectedBuildingBlock = null;
                                             UnSelectAllDynamicBlocks();
-                                        }
-                                        else {
+                                        } else {
                                             mee._LastSelectedBuildingBlock = null;
                                             UnSelectAllDynamicBlocks();
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         alert("Please Select a Block First");
                                     }
                                 });
@@ -7359,13 +7227,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var left_minus = 15;      //static space to minus to show dialog on exact location
                                     var ele_offset = _ele.offset();
                                     var ele_height = _ele.height();
-                                    var currentWindowObj = options.parentWindowobj; 
-                                    if(currentWindowObj.find('.logpanel_box').length > 0){
-                                             var top = ele_offset.top + 94 + topPlus;
-                                    }else{
+                                    var currentWindowObj = options.parentWindowobj;
+                                    if (currentWindowObj.find('.logpanel_box').length > 0) {
+                                        var top = ele_offset.top + 94 + topPlus;
+                                    } else {
                                         var top = ele_offset.top + 80 + topPlus;
                                     }
-                                    
+
                                     var left = ele_offset.left + 297 + leftPlus;
                                     var url_string = "", showClass = "disabled";
                                     url = _ele.attr("href");
@@ -7384,7 +7252,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     myElement.find(".alertButtons").css({
                                         "left": left + "px",
                                         "top": top + "px"
-                                    }).show();                                
+                                    }).show();
                                 }
                                 myElement.on("click", "i.newwin", function () {
                                     var url = $(this).parent().attr("href");
@@ -7403,13 +7271,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if (selected_anchor.tagName.toLowerCase() == "a") {
                                         var $selected_anchor = $(selected_anchor);
                                         var _html = $selected_anchor.html();
-                                        if($selected_anchor.parent().hasClass('underline')){
+                                        if ($selected_anchor.parent().hasClass('underline')) {
                                             $selected_anchor.parent().replaceWith(_html);
-                                        }else{
+                                        } else {
                                             $selected_anchor.replaceWith(_html);
                                         }
-                                        
-                                    }else if(selected_anchor.parentNode.tagName.toLowerCase()=="a"){
+
+                                    } else if (selected_anchor.parentNode.tagName.toLowerCase() == "a") {
                                         var $selectedtag = $(selected_anchor)
                                         var $clonedtag = $selectedtag.clone()
                                         $selectedtag.parents('span').html($clonedtag);
@@ -7421,126 +7289,136 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     e.stopPropagation();
                                     return false;
                                 })
-                                
-                                mee.reAdjustToolbar = function(toolbar,editor){
-                                    
-                                     $.each(toolbar,function(key,val){
-                                                                
-                                                                 if($(val).css('display')!=='none'){
-                                                                    
-                                                                    $(val).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
-                                                                    var scrollTop = options.parentWindowobj.scrollTop();
-                                                                    var currentWindowObj = options.parentWindowobj; 
-                                                                    if(currentWindowObj.hasClass('modal-body')){
-                                                                        if(options.scrollTopMinus){ // Without Accordian
-                                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
-                                                                        }
-                                                                       else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                           
-                                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
-                                                                           //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
-                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
-                                                                             scrollPosition = scrollPosition + 50; 
-                                                                            }
-                                                                       }
-                                                                       else{
-                                                                                scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
-                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
-                                                                                    scrollPosition = scrollPosition + 56; 
-                                                                                     }
-                                                                            } 
-                                                                    }
-                                                                    else{
-                                                                        //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
-                                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
-                                                                    }
-                                                                                                                                        
-                                                                    
-                                                                    if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
-                                                                              $(val).css({top:scrollPosition+"px","left":"0"});
-                                                                            }else{
-                                                                                        $(val).css({top:"0px","left":"0"}); 
-                                                                                        setTimeout(function(){
-                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
-                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
-                                                                                        }, 10);
-                                                                                        
-                                                                            }
-                                                                    setTimeout(function(){ 
-                                                                        $(val).addClass('fixed-panel'); 
-                                                                        $(val).show();
-                                                                        myElement.find('.disabled-toolbar').css('visibility','hidden');
-                                                                    }, 10);
-                                                                    
-                                                                    //setTimeout(function(){ 
-                                                                        
-                                                                    //}, 100);
-                                                                  
-                                                                }else{
-                                                                    console.log('All toolbars are disabled');
-                                                                }
-                                                            })
+
+                                mee.reAdjustToolbar = function (toolbar, editor) {
+
+                                    $.each(toolbar, function (key, val) {
+
+                                        if ($(val).css('display') !== 'none') {
+
+                                            $(val).css({'width': parseInt(myElement.find('.editortoolbar').width()) - 9 + 'px', 'left': '0px'});
+                                            var scrollTop = options.parentWindowobj.scrollTop();
+                                            var currentWindowObj = options.parentWindowobj;
+                                            if (currentWindowObj.hasClass('modal-body')) {
+                                                if (options.scrollTopMinus) { // Without Accordian
+                                                    var scrollPosition = scrollTop - options.scrollTopMinus;
+                                                } else if (currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")) {
+
+                                                    scrollPosition = ((myElement.find('.disabled-toolbar').offset().top) - (myElement.offset().top + 60)); // New Offset 
+                                                    //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
+                                                    if (currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')) {
+                                                        scrollPosition = scrollPosition + 50;
+                                                    }
+                                                } else {
+                                                    scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
+                                                    if (currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')) {
+                                                        scrollPosition = scrollPosition + 56;
+                                                    }
+                                                }
+                                            } else {
+                                                //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
+                                                var scrollPosition = (myElement.find('.disabled-toolbar').offset().top) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
+                                            }
+
+
+                                            if (scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true) {
+                                                $(val).css({top: scrollPosition + "px", "left": "0"});
+                                            } else {
+                                                $(val).css({top: "0px", "left": "0"});
+                                                setTimeout(function () {
+                                                    myElement.find('.editortoolbar').css('margin-bottom', '0');
+                                                    meeIframe.find(".mainTable").css("margin-top", "45px");
+                                                }, 10);
+
+                                            }
+                                            setTimeout(function () {
+                                                $(val).addClass('fixed-panel');
+                                                $(val).show();
+                                                myElement.find('.disabled-toolbar').css('visibility', 'hidden');
+                                            }, 10);
+
+                                            //setTimeout(function(){ 
+
+                                            //}, 100);
+
+                                        } else {
+                                            console.log('All toolbars are disabled');
+                                        }
+                                    })
                                 }
-                                mee.reAdjusToolBarByID = function(toolPanelObj){
+                                mee.strip_tags = function ( _html)
+                                {
+                                    var _tags = [], _tag = "" ;
+                                    for( var _a = 1 ; _a < arguments.length ; _a++ )
+                                    {
+                                        _tag = arguments[_a].replace( /<|>/g, '' ).trim() ;
+                                        if ( arguments[_a].length > 0 ) _tags.push( _tag, "/"+_tag );
+                                    }
+
+                                    if ( !( typeof _html == "string" ) && !( _html instanceof String ) ) return "" ;
+                                    else if ( _tags.length == 0 ) return _html.replace( /<(\s*\/?)[^>]+>/g, "" ) ;
+                                    else
+                                    {                                        
+                                        var _re = new RegExp( "<(?!("+_tags.join("|")+")\s*\/?)[^>]+>", "g" );
+                                        return _html.replace( _re, '' );
+                                    }
+                                }
+                                mee.reAdjusToolBarByID = function (toolPanelObj) {
                                     //console.log(toolPanelObj);
-                                    $(toolPanelObj).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
-                                                                    var scrollTop = options.parentWindowobj.scrollTop();
-                                                                    var currentWindowObj = options.parentWindowobj; 
-                                                                    if(currentWindowObj.hasClass('modal-body')){
-                                                                        if(options.scrollTopMinus){ // Without Accordian
-                                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
-                                                                        }
-                                                                       else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                           
-                                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
-                                                                           //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
-                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
-                                                                             scrollPosition = scrollPosition + 50; 
-                                                                            }
-                                                                       }
-                                                                       else{
-                                                                                scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
-                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
-                                                                                    scrollPosition = scrollPosition + 56; 
-                                                                                     }
-                                                                            } 
-                                                                    }
-                                                                    else{
-                                                                        //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
-                                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
-                                                                    }
-                                                                    
-                                                                    if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
-                                                                              $(toolPanelObj).css({top:scrollPosition+"px","left":"0"});
-                                                                            }else{
-                                                                                        $(toolPanelObj).css({top:"0px","left":"0"}); 
-                                                                                        setTimeout(function(){
-                                                                                                myElement.find('.editortoolbar').css('margin-bottom','0');
-                                                                                                meeIframe.find(".mainTable").css("margin-top","45px");
-                                                                                        }, 10);
-                                                                                        
-                                                                            }
-                                                                    //setTimeout(function(){ 
-                                                                        $(toolPanelObj).addClass('fixed-panel'); 
-                                                                        $(toolPanelObj).show();
-                                                                        myElement.find('.disabled-toolbar').css('visibility','hidden');
-                                                                    //}, 10);
-                                    
+                                    $(toolPanelObj).css({'width': parseInt(myElement.find('.editortoolbar').width()) - 9 + 'px', 'left': '0px'});
+                                    var scrollTop = options.parentWindowobj.scrollTop();
+                                    var currentWindowObj = options.parentWindowobj;
+                                    if (currentWindowObj.hasClass('modal-body')) {
+                                        if (options.scrollTopMinus) { // Without Accordian
+                                            var scrollPosition = scrollTop - options.scrollTopMinus;
+                                        } else if (currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")) {
+
+                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top) - (myElement.offset().top + 60)); // New Offset 
+                                            //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
+                                            if (currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')) {
+                                                scrollPosition = scrollPosition + 50;
+                                            }
+                                        } else {
+                                            scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
+                                            if (currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')) {
+                                                scrollPosition = scrollPosition + 56;
+                                            }
+                                        }
+                                    } else {
+                                        //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
+                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
+                                    }
+
+                                    if (scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true) {
+                                        $(toolPanelObj).css({top: scrollPosition + "px", "left": "0"});
+                                    } else {
+                                        $(toolPanelObj).css({top: "0px", "left": "0"});
+                                        setTimeout(function () {
+                                            myElement.find('.editortoolbar').css('margin-bottom', '0');
+                                            meeIframe.find(".mainTable").css("margin-top", "45px");
+                                        }, 10);
+
+                                    }
+                                    //setTimeout(function(){ 
+                                    $(toolPanelObj).addClass('fixed-panel');
+                                    $(toolPanelObj).show();
+                                    myElement.find('.disabled-toolbar').css('visibility', 'hidden');
+                                    //}, 10);
+
                                 }
 //****************************************************End Editor Functions **************************************************** //    
 
 //****************************************************Landing page Forms **************************************************** //    Section8
 
                                 /// For Forms handling
-                                
-                                var _AjaxParameters = {Url:'',Data:{},DataType:'json',Type:'GET',ContentType:'application/json; charset=latin1'}
- 
-                                mee._LoadFormBlocks = function (offset) {                                  
+
+                                var _AjaxParameters = {Url: '', Data: {}, DataType: 'json', Type: 'GET', ContentType: 'application/json; charset=latin1'}
+
+                                mee._LoadFormBlocks = function (offset) {
                                     var ulFormBlocks = myElement.find(".formDroppable .ulFormBlocks");
                                     if (offset) {
-                                            forms_offset = forms_offset + offset;
-                                    }
-                                    else {                                        
+                                        forms_offset = forms_offset + offset;
+                                    } else {
                                         forms_offset = 0;
                                         ulFormBlocks.empty();
                                         options._app.showLoading("Loading Forms...", myElement.find(".ulFormBlocks"), {
@@ -7548,22 +7426,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             "margin-left": "-70px"
                                         });
                                     }
-                                    if(searchFormTxt!==""){
+                                    if (searchFormTxt !== "") {
                                         _AjaxParameters["Data"]['searchText'] = searchFormTxt;
-                                    }
-                                    else{
+                                    } else {
                                         delete _AjaxParameters["Data"]['searchText']
-                                    }                                    
+                                    }
                                     _AjaxParameters.Url = "/pms/io/form/getSignUpFormData/?" + options._BMSTOKEN + "&type=search&offset=" + forms_offset;
                                     returnData = SendServerRequest(_AjaxParameters);
                                     options._app.showLoading(false, myElement.find(".ulFormBlocks"));
-                                    if(returnData && returnData[0] && returnData[0]=="err"){
+                                    if (returnData && returnData[0] && returnData[0] == "err") {
                                         myElement.find("#FBResultDiv").html(returnData[1]);
-                                        myElement.find("#FBResultDiv").show();      
+                                        myElement.find("#FBResultDiv").show();
                                         myElement.find(".formDroppable").hide();
-                                    }
-                                    else{
-                                        if(returnData.totalCount!="0"){
+                                    } else {
+                                        if (returnData.totalCount != "0") {
                                             $.each(returnData.forms[0], function (i, obj) {
 
                                                 //Assigning unique ID here:
@@ -7588,34 +7464,33 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 ulFormBlocks.append(block);
 
 
-                                            });   
+                                            });
                                             mee.IntializeToolTip();
                                             if (myElement.find(".ulFormBlocks li").length < parseInt(returnData.totalCount)) {
                                                 myElement.find(".ulFormBlocks li:last-child").attr("data-load", "true");
                                             }
                                         }
-                                        if(searchFormTxt!==""){
+                                        if (searchFormTxt !== "") {
                                             myElement.find("#FBResultDiv").html(returnData.totalCount + " records Found");
-                                            myElement.find("#FBResultDiv").show();      
+                                            myElement.find("#FBResultDiv").show();
                                             //myElement.find(".formDroppable").hide();
-                                        }
-                                        else{
+                                        } else {
                                             myElement.find("#FBResultDiv").hide();
                                             myElement.find(".formDroppable").show();
                                         }
                                     }
-                                    myElement.find(".form-footer-loading").hide();                                    
+                                    myElement.find(".form-footer-loading").hide();
                                 }
 
-                                
+
 
 
                                 /// For Forms handling
 
-                                var _searchFormBlocks = function (args) {                                                          
+                                var _searchFormBlocks = function (args) {
                                     searchFormTxt = myElement.find("input#searchForm").val();
                                     myElement.find("#clearsearch-forms").show();
-                                    mee._LoadFormBlocks();                                                                 
+                                    mee._LoadFormBlocks();
                                 }
 
                                 var _saveCallBackMethod = function () {
@@ -7643,28 +7518,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     loadForm('');
                                 });
 
-                                function loadForm(formId) {                                   
-                                    mee.showFormWizard(formId);                                   
-                                }                                
+                                function loadForm(formId) {
+                                    mee.showFormWizard(formId);
+                                }
                                 mee.deleteForm = function (element, form_id) {
-                                    var URL = "/pms/landingpages/rFormSaver.jsp?" + options._BMSTOKEN+"&ukey="+options._app.get("user_Key");
+                                    var URL = "/pms/landingpages/rFormSaver.jsp?" + options._BMSTOKEN + "&ukey=" + options._app.get("user_Key");
                                     var post_data = {
                                         "delete": true,
-                                        "mformId": form_id                                        
+                                        "mformId": form_id
                                     };
                                     $.post(URL, post_data)
-                                        .done(function (data) {                                            
-                                            if (data && data.success) {
-                                                element.fadeOut("slow", function () {
-                                                    var obj = $(this);
-                                                    obj.remove();
-                                                })
-                                            }
-                                            else {
-                                                options._app.showAlert("An error occured, Please try again!", $("body"));
-                                            }
-                                        });
-                                }                               
+                                            .done(function (data) {
+                                                if (data && data.success) {
+                                                    element.fadeOut("slow", function () {
+                                                        var obj = $(this);
+                                                        obj.remove();
+                                                    })
+                                                } else {
+                                                    options._app.showAlert("An error occured, Please try again!", $("body"));
+                                                }
+                                            });
+                                }
 
                                 myElement.find('.searchFormLink').click(function () {
                                     _searchFormBlocks();
@@ -7673,14 +7547,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 myElement.find('.MenuCallBackSave').click(function (obj) {
                                     options.saveCallBack(obj);
                                 });
-                                                                
-                                
-                                 myElement.find('.MenuCallTemplate').click(function (obj) {
+
+
+                                myElement.find('.MenuCallTemplate').click(function (obj) {
                                     options.templatesCallBack(obj);
-                                    
+
                                 });
 
-                                
+
 //****************************************************End of Ladning page Forms **************************************************** //                                                                 
 
                                 // Kick start controls
@@ -7740,8 +7614,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                         if ($.trim(el.html()) == true || $.trim(el.html()) === "&nbsp;") {
                             return true;
-                        }
-                        else {
+                        } else {
                             return false;
                         }
 
@@ -7843,11 +7716,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         SearchImagesProperties: _searchImagesAjaxParameters,
                         AddImageProperties: _AddimageAjaxParameters,
                         preDefinedHTML: _preDefinedHTML,
-                        topPlus : this.options.margin ? this.options.margin.top:0,
-                        leftPlus : this.options.margin? this.options.margin.left:0,    
+                        topPlus: this.options.margin ? this.options.margin.top : 0,
+                        leftPlus: this.options.margin ? this.options.margin.left : 0,
                         landingPage: this.options.landingPage ? true : false,
                         saveBtnText: this.options.saveBtnText,
-                        otopage : this.options.isOTOFlag ? true: false, 
+                        otopage: this.options.isOTOFlag ? true : false,
                         formWizURL: _formWizURL,
                         fromDialog: this.fromDialog,
                         reAttachEvents: reattachEvents,
@@ -7855,16 +7728,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         saveCallBack: this.options.saveClick,
                         templatesCallBack: this.options.changeTemplateClick,
                         saveTextVersionCallBack: this.options.textVersionCallBack,
-                        previewdesignTemplateCallback :  this.options.previewCallback,                        
-                        textVersion:this.options.text,
-                        formCallBack: this.options.formAttach, 
-                        formid : this.options.formid,
+                        previewdesignTemplateCallback: this.options.previewCallback,
+                        textVersion: this.options.text,
+                        formCallBack: this.options.formAttach,
+                        formid: this.options.formid,
                         _app: this.app,
-                        parentWindowobj:this.options.parentWindow,
-                        scrollTopMinus:this.options.scrollTopMinus,
+                        parentWindowobj: this.options.parentWindow,
+                        scrollTopMinus: this.options.scrollTopMinus,
                         isTemplate: this.options.isTemplate,
-                        scrollTopMinusObj:this.options.scrollTopMinusObj,
-                        pageId: this.options.pageid?this.options.pageid:false,
+                        scrollTopMinusObj: this.options.scrollTopMinusObj,
+                        pageId: this.options.pageid ? this.options.pageid : false,
                         _BMSTOKEN: BMSTOKEN,
                         OnDropElementOnBuildingBlock: function (args, callBack) {
                         },
@@ -7889,9 +7762,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 cache: false,
                                 async: false,
                                 success: function (e) {
-                                    args.myColors = e.colors;                                    
+                                    args.myColors = e.colors;
                                 },
-                                error: function (e) {                                    
+                                error: function (e) {
                                 }
                             });
                         },
@@ -7899,15 +7772,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var saveColors = "";
                             if (args.myColorsFromServiceGlobal == "") {
                                 saveColors = args.AddedColor;
-                            }
-                            else {
+                            } else {
                                 saveColors = args.myColorsFromServiceGlobal + "," + args.AddedColor;
-                            }                            
+                            }
 
-                            saveColors = encodeURIComponent(saveColors);                            
+                            saveColors = encodeURIComponent(saveColors);
                             var URL = "/pms/io/publish/saveEditorData/?" + BMSTOKEN + "&type=saveColors&colors=" + saveColors;
                             $.post(URL)
-                                    .done(function (data) {                                        
+                                    .done(function (data) {
                                         // your code go here. 
                                     });
 
@@ -7929,7 +7801,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     args.DynamicContent.DynamicContentID = ec[1];
                                 },
                                 error: function (e) {
-                                    
+
                                 }
                             });
 
@@ -7951,7 +7823,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 //contentRuleURL += "&"+ j +".listNumber=";
                             }
                             $.ajax({
-                                url: contentRuleURL,                                
+                                url: contentRuleURL,
                                 type: "POST",
                                 contentType: "application/json; charset=latin1",
                                 dataType: "json",
@@ -7961,7 +7833,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 },
                                 error: function (e) {
-                                    
+
                                 }
                             });
 
@@ -7982,10 +7854,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 dataType: "json",
                                 cache: false,
                                 async: false,
-                                success: function (ec) {                                   
+                                success: function (ec) {
 
                                 },
-                                error: function (e) {                                    
+                                error: function (e) {
                                 }
                             });
                         },
@@ -8025,7 +7897,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
                         },
                         OnDynamicControlSave: function (variation)
-                        {                            
+                        {
 
                             if (variation.IsUpdate) {
 
@@ -8037,11 +7909,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     dataType: "json",
                                     cache: false,
                                     async: false,
-                                    success: function (e) {                                        
+                                    success: function (e) {
                                         //LoadBuildingBlocks();
                                     },
                                     error: function (e) {
-                                        
+
                                     }
 
                                 });
@@ -8049,12 +7921,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var contents = variation.ListOfDynamicContents;
                                 for (var i = 0; i < contents.length; i++) {
                                     var content = contents[i];
-                                    var contentNumber = content.DynamicContentID;                                   
+                                    var contentNumber = content.DynamicContentID;
                                     var contentURL = "";
                                     if (contentNumber != 0) {
                                         contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=updateContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&contentNumber=" + contentNumber;
-                                    }
-                                    else {
+                                    } else {
                                         contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=&contentLabel=" + content.Label + "&isDefault=" + (content.IsDefault ? "Y" : "N");
                                     }
 
@@ -8067,7 +7938,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         cache: false,
                                         async: false,
                                         success: function (ec) {
-                                           
+
                                             if (contentNumber == 0) {
                                                 contentNumber = ec[1];
                                             }
@@ -8091,23 +7962,22 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 cache: false,
                                                 async: false,
                                                 success: function (e) {
-                                                    
+
 
                                                 },
                                                 error: function (e) {
-                                                    
+
                                                 }
                                             });
 
 
                                         },
                                         error: function (e) {
-                                            
+
                                         }
                                     });
                                 }
-                            }
-                            else {
+                            } else {
 
                                 var URL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=new&contentType=H&label=" + variation.Label;
 
@@ -8119,7 +7989,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     dataType: "json",
                                     cache: false,
                                     async: false,
-                                    success: function (e) {                                       
+                                    success: function (e) {
 
                                         var dynamicNumber = e[1];
                                         if (dynamicNumber != "err") {
@@ -8127,7 +7997,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                     },
                                     error: function (e) {
-                                       
+
                                     }
 
                                 });
@@ -8136,7 +8006,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         },
                         OnEditDynamicVariation: function (args) {
                             //Save to Server
-                            if (args.DCID != null) {                               
+                            if (args.DCID != null) {
 
                                 $.ajax({
                                     url: "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=relabel&label=" + args.DCName + "&dynamicNumber=" + args.DCID,
@@ -8147,11 +8017,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     cache: false,
                                     async: false,
                                     success: function (e) {
-                                      
+
                                         //LoadBuildingBlocks();
                                     },
                                     error: function (e) {
-                                      
+
                                     }
 
                                 });
@@ -8162,7 +8032,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         },
                         OnDynamicVariationName: function (variation) {
                             //Save to Server
-                            if (variation != null) {                              
+                            if (variation != null) {
 
                                 $.ajax({
                                     url: "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=relabel&label=" + variation.Label + "&dynamicNumber=" + variation.DynamicVariationID,
@@ -8173,11 +8043,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     cache: false,
                                     async: false,
                                     success: function (e) {
-                                       
+
                                         //LoadBuildingBlocks();
                                     },
                                     error: function (e) {
-                                       
+
                                     }
 
                                 });
@@ -8187,7 +8057,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                         },
                         OnDeleteDynamicVariation: function (args) {
-                            if (args != null) {                              
+                            if (args != null) {
 
                                 $.ajax({
                                     url: "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=delete&dynamicNumber=" + args.DCID,
@@ -8198,7 +8068,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     cache: false,
                                     async: false,
                                     success: function (e) {
-                                        
+
                                         //LoadBuildingBlocks();
                                     },
                                     error: function (e) {
@@ -8220,13 +8090,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 cache: false,
                                 async: false,
                                 success: function (e) {
-                                    
+
                                     if (e.variations != undefined) {
-                                        args.dynamicBlocks = e.variations[0];                                        
-                                    }else{
+                                        args.dynamicBlocks = e.variations[0];
+                                    } else {
                                         console.log(args);
-                                        if(args && args._app){
-                                           args._app.showLoading(false,$('body').find('.dynamicBlockDroppable')); 
+                                        if (args && args._app) {
+                                            args._app.showLoading(false, $('body').find('.dynamicBlockDroppable'));
                                         }
                                         console.log('No Record Found');
                                     }
@@ -8248,14 +8118,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 cache: false,
                                 async: false,
                                 success: function (e) {
-                                    args.personalizeTags = e;                                    
+                                    args.personalizeTags = e;
 
                                 },
-                                error: function (e) {                                    
+                                error: function (e) {
                                 }
                             });
                         },
-                        CallBackSaveMethod: function (templateHTML, outputHTML) {                          
+                        CallBackSaveMethod: function (templateHTML, outputHTML) {
 
                             $.post('/pms/io/campaign/saveUserTemplate/?"+BMSTOKEN+"',
                                     {
@@ -8271,7 +8141,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                             )
                                     .done(function (data) {
-                                        
+
                                     });
 
                         },
@@ -8288,11 +8158,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 async: false,
                                 success: function (e) {
                                     if (e.count != "0") {
-                                        args.formBlocks = e.forms[0];                                        
+                                        args.formBlocks = e.forms[0];
                                     }
                                 },
                                 error: function (e) {
-                                    
+
                                 }
                             });
                         },
@@ -8308,22 +8178,22 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 cache: false,
                                 async: false,
                                 success: function (e) {
-                                    args.formContents = e.formPreviewURL;                                   
+                                    args.formContents = e.formPreviewURL;
 
                                 },
-                                error: function (e) {                                    
+                                error: function (e) {
                                 }
                             });
                         },
                         OnExistingDynamicControlDropped: function () {
 
                         }
-                        
+
 
                     });
-                    $(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                    
-                   
+                    $(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+
+
                 }
 
 

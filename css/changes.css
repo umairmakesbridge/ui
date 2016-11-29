@@ -5712,7 +5712,7 @@ opacity: 0.9;
 #sum_top .cstats { overflow:hidden;}
 #sum_top .stats-panel .slidetoggle { display:none  !important; }
 
-#sum_top .stats-panel ul.s-u-b li { background:#7797ac; cursor:pointer; }
+#sum_top .stats-panel ul.s-u-b li { background:#7797ac; cursor:pointer;position: relative;}
 #sum_top .stats-panel ul.s-u-b li strong { padding:0 0 2px; }
 
 #sum_top .stats-panel ul.s-u-b li:hover { background:#97D61D;}
@@ -5830,7 +5830,7 @@ ul.chartstatdetail li strong {
     margin: 8px 0 0;
 }
 
-ul.chartstatdetail li a.download-sub-csv{
+ul.chartstatdetail li a.download-sub-csv, #sum_top .stats-panel ul.s-u-b li a.download-sub-csv{
     background: rgba(255, 255, 255, 0.2) url("../images/csv_w_16_16.png") no-repeat scroll 33px 2px !important;
     padding:3px 25px 1px 10px;
     margin-left: 0 !important;
@@ -5839,6 +5839,9 @@ ul.chartstatdetail li a.download-sub-csv{
     right:15px;
     top:5px;    
     height:18px;
+}
+#sum_top .stats-panel ul.s-u-b li a.download-sub-csv{
+   right:5px;    
 }
 
 ul.chartstatdetail li:hover { background:#7797ac;}

@@ -27,7 +27,7 @@
     <%if(summary.get('campaignType') == "T" || this.autobotId){ var style="width:16.2%"; active=""; %>
       
      <li data-count="<%=this.stats.get('sentCount')%>" class="active" style="<%=style%>" >
-        <a class="cstatus pclr2 download-sub-csv showtooltip <% if(this.stats.get('sentCount')=='0'){print('disabled-csv-download')}%>" title="Download as CSV" data-type="sent">CSV</a>
+        <a class="cstatus pclr2 download-sub-csv showtooltip <% if(this.stats.get('sentCount')=='0'){print('disabled-csv-download')}%>" title="Download as CSV" data-type="sender">CSV</a>
         <a href="#sent-listing" data-toggle="tab" class='sent-views'>
          <%=this.getTabbedText('sent')%>
         </a>

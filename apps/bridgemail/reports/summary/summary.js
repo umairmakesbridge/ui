@@ -592,8 +592,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                         return false;
                     }
                     var options = {type:downloadLink.data("type"),campNum:this.campNum};
-                    this.mapCSVFieldsDialog(options)
-                    
+                    this.mapCSVFieldsDialog(options);
+                    e.stopPropagation();                     
                 },
                 mapCSVFieldsDialog: function(options){
                     var dialog = this.options.app.showDialog({title: ' Map Your .CSV Layout',
