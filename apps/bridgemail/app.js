@@ -7,8 +7,8 @@ define([
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
-                env: 'test',
-                complied: 0,
+                env: 'production',
+                complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -201,7 +201,7 @@ define([
                 console.log("url failed:"+settings.url+"\n---Status::"+jqxhr.statusText+"\n---Status Code::"+jqxhr.status);          
                 if(jqxhr.status===200){
                     
-                    self.showAlert("There is some thing wrong with our server. Please try again later.", $("body"), {fixed: true});
+                    self.showAlert("Sorry, there's something wrong with our server. Please try again later.", $("body"), {fixed: true});
                 }
                 Offline.check();
                 

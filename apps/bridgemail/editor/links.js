@@ -379,7 +379,7 @@ function (template) {
                         selected_node.innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
                     }
                     if(this.$("input.checkinput:checked").length){
-                      if(selected_node.parentNode.nodeName.toLowerCase()=="span"){
+                      if(selected_node.parentNode.nodeName.toLowerCase()=="font"){
                             $(selected_node.parentNode).addClass('underline');
                         }else{
                             selected_node.style.textDecoration = "underline";
@@ -397,7 +397,7 @@ function (template) {
                 }
                 else { 
                     if(this.$("input.checkinput:checked").length){
-                        myTextLink = '<span class="underline">'+myTextLink+'</span>';
+                        myTextLink = '<font class="underline" style="text-decoration:underline">'+myTextLink+'</font>';
                     }
                     
                     this.tiny_editor_selection.setContent(myTextLink);
