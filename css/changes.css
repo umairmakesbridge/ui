@@ -5843,6 +5843,21 @@ ul.chartstatdetail li a.download-sub-csv, #sum_top .stats-panel ul.s-u-b li a.do
 #sum_top .stats-panel ul.s-u-b li a.download-sub-csv{
    right:5px;    
 }
+.sent-pending a.download-sub-csv{
+    background: #ffffff url("../images/csv_g_16_16.png") no-repeat scroll 33px center !important;
+    padding:3px 25px 1px 10px !important;
+    margin-left: 0 !important;
+    color: #7e8c97 !important;
+    font-size: 11px !important;
+    font-weight: normal;
+    line-height: 16px;
+    margin: 0px 0 0 5px !important;
+    float: right;    
+    padding: 0 8px;
+	-webkit-border-radius: 20px ;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+}
 
 ul.chartstatdetail li:hover { background:#7797ac;}
 ul.chartstatdetail li.active { background:#97D61D;}

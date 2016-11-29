@@ -112,9 +112,12 @@ define(['text!reports/summary/html/graphs.html', 'reports/summary/views/chart', 
                 getStatus: function () {
                     //console.log(this.options.status);
                     var status = "";
+                    var disableCountClass = "";
                     if (this.options.campaignType == "T" || this.botId) {
-                        var html = "<span class='pclr18 chart-sent-views' style='width:auto;cursor:pointer;' >Sent <strong title='Click to view contacts' class='showtooltip'>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong></span>";
-                        html = html + "<span class='pclr6 pdf-pending chart-pending-views' style='width:auto;cursor:pointer;' >Pending <strong title='Click to view contacts' class='showtooltip'>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong></span>";
+                        disableCountClass = this.model.get('sentCount')=="0" ? "disabled-csv-download":"";
+                        var html = "<span class='pclr18 chart-sent-views' style='width:auto;cursor:pointer;' >Sent <strong title='Click to view contacts' class='showtooltip'>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><a class='download-sub-csv showtooltip "+disableCountClass+"' title='Download Sent as CSV' data-type='sender'>CSV</a></span>";
+                        disableCountClass = this.model.get('pendingCount')=="0" ? "disabled-csv-download":"";
+                        html = html + "<span class='pclr6 pdf-pending chart-pending-views' style='width:auto;cursor:pointer;' >Pending <strong title='Click to view contacts' class='showtooltip'>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><a class='download-sub-csv showtooltip "+disableCountClass+"' title='Download Pending as CSV' data-type='pending'>CSV</a></span>";
                         return html;
                     }
                     //if(this.options.status ==  "P")  status = "Pending";
@@ -123,11 +126,13 @@ define(['text!reports/summary/html/graphs.html', 'reports/summary/views/chart', 
                     status = this.options.app.getCampStatus(this.options.status);
                     //  }
                     if (status == "Sent") {
-                        return "<span class='pclr18' style='width:auto;'>Sent <strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong></span>";
+                        disableCountClass = this.model.get('sentCount')=="0" ? "disabled-csv-download":"";
+                        return "<span class='pclr18' style='width:auto;'>Sent <strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><a class='download-sub-csv showtooltip "+disableCountClass+"' title='Download Sent as CSV' data-type='sender'>CSV</a></span>";
                     } else if (status == "Pending") {
-                        var html = "<span class='pclr18' style='width:auto;'>Sent <strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong></span>";
-
-                        html = html + "<span class='pclr6 pdf-pending' style='width:auto;'>Pending <strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong></span>";
+                        disableCountClass = this.model.get('sentCount')=="0" ? "disabled-csv-download":"";
+                        var html = "<span class='pclr18' style='width:auto;'>Sent <strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><a class='download-sub-csv showtooltip "+disableCountClass+"' title='Download Sent as CSV' data-type='sender'>CSV</a></span>";
+                        disableCountClass = this.model.get('pendingCount')=="0" ? "disabled-csv-download":"";
+                        html = html + "<span class='pclr6 pdf-pending' style='width:auto;'>Pending <strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><a class='download-sub-csv showtooltip "+disableCountClass+"' title='Download Pending as CSV' data-type='pending'>CSV</a></span>";
                         return html;
                     }
 
