@@ -5065,6 +5065,9 @@ Stickybar accordian
 div.tooltip.custom-tooltip{
     max-width: 60px;
 }
+div.tooltip.custom-full-tooltip{
+    max-width: 150px;
+}
 div.tooltip.custom-tooltip::before{
    top:0;
 }

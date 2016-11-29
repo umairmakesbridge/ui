@@ -12,6 +12,8 @@
                 <a class="cstatus pclr1">Paused </a>
                 <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
                 <a class="cstatus pclr6">Pending </a>
+                <% } else if(model.get('status')==='K'){ %>
+                 <a class="cstatus pclr12">Killed </a>
                 <% } else {%>
                 <a class="cstatus pclr18">Playing </a>
                 <%}
@@ -150,6 +152,8 @@
                 <a class="cstatus pclr1">Paused </a>
                 <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
                 <a class="cstatus pclr6">Pending </a>
+                <% } else if(model.get('status')==='K'){ %>
+                 <a class="cstatus pclr12">Killed </a>
                 <% } else {%>
                 <a class="cstatus pclr18">Playing </a>
                 <%}
@@ -194,6 +198,8 @@
                 <a class="cstatus pclr1">Paused </a>
                 <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
                 <a class="cstatus pclr6">Pending </a>
+                <% } else if(model.get('status')==='K'){ %>
+                 <a class="cstatus pclr12">Killed </a>
                 <% } else {%>
                 <a class="cstatus pclr18">Playing </a>
                 <%}
@@ -261,8 +267,13 @@
                 <a class="icon edit-track edit clr3" ><span>Edit</span></a>
                 <a class="icon copy-track copy clr2" ><span>Copy</span></a>                
                 <a class="icon delete-track delete clr1" ><span>Delete</span></a>
-               <% } else {
-               %>
+                <% } else if(model.get('status')==='K'){ %>
+                <a class="icon preview message-view clr3"><span>Preview</span></a>
+                <a class="icon copy-track copy clr2" ><span>Copy</span></a>                
+                <a class="icon delete-track delete clr1" ><span>Delete</span></a>
+                <% } else {
+                %>
+                
                    <a class="icon pause pause-track clr3"><span>Pause</span></a>  
                    <a class="icon copy-track copy clr2"><span>Copy</span></a> 
                    <a class="icon preview message-view clr1"><span>Preview</span></a>
