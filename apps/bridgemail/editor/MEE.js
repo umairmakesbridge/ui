@@ -21,11 +21,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.topMinus = 381;
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
                     this.autoSaveFlag = false;
+                    
                     this.parentTd = false;
                     this.selectedDropElement = null;
                     this.timer = false;
                     this.isRepeatX = false;
                     this.isRepeatY = false;
+                   
+                   
                     var mee_view = this;
                     var predefinedControls = [
                         {
@@ -396,27 +399,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
 
                                 }
-                                mee.IntializeToolTip = function () {
 
+                                mee.IntializeToolTip = function(flag){
+                                    
+                                    var tooltip= (flag) ? "custom-full-tooltip"  : "";
                                     myElement.find(".showtooltip-dg").tooltip({
-                                        template: '<div class="tooltip custom-tooltip"><div class="tooltip-inner"></div></div>',
-                                        //'placement':  'right',
-                                        delay: {show: 0, hide: 0},
-                                        animation: false,
-                                    });
-                                    myElement.find(".showtooltip-dg").unbind('mousemove');
-                                    myElement.find(".showtooltip-dg").unbind('mouseleave');
-                                    myElement.find(".showtooltip-dg").bind('mousemove', function (e) {
-                                        //console.log(e.pageY,e.pageX);
-                                        $(this).tooltip('show');
-                                        $('.custom-tooltip').css({top: e.pageY, left: e.pageX + 30});
+                                            template: '<div class="tooltip custom-tooltip '+tooltip+'"><div class="tooltip-inner"></div></div>',
+                                           //'placement':  'right',
+                                           delay: { show: 0, hide: 0 },
+                                           animation: false,
+                                        });
+                                   myElement.find(".showtooltip-dg").unbind('mousemove');
+                                   myElement.find(".showtooltip-dg").unbind('mouseleave');
+                                   myElement.find(".showtooltip-dg").bind('mousemove',function(e){
+                                       //console.log(e.pageY,e.pageX);
+                                       $(this).tooltip('show');
+                                       $('.custom-tooltip').css({top:e.pageY, left: e.pageX + 30});
 
-                                    }).bind('mouseleave', function (e) {
-                                        //  $(this).tooltip('hide');
-                                        setTimeout(function () {
-                                            myElement.find('.showtooltip-dg').tooltip('hide')
-                                        }, 40);
-                                    });
+                                   }).bind('mouseleave', function(e) {
+                                          //  $(this).tooltip('hide');
+                                          setTimeout(function(){
+                                              myElement.find('.showtooltip-dg').tooltip('hide')
+                                          },40);
+                                        });
+                                    
 
                                 }
                                 mee.resizeHeight = function () {
@@ -2994,7 +3000,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         makeCloneAndRegister();
                                     });
                                 }
-
+                               
                                 function DeleteElement(element)
                                 {
                                     var csHaveDataLength = meeIframe.find(".csHaveData").length;
@@ -3315,7 +3321,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         $.each(obj[0], function (index, val) {
                                             var tagsArr = val[0].tags.split(',');
                                             var _index = "image" + (parseInt(_offset) + parseInt(index.substr(5)));
-                                            var li = "<li class='draggableControl ui-draggable droppedImage showtooltip-dg' title='Drag' data-type='droppedImage'>";
+                                            var li = "<li class='draggableControl ui-draggable droppedImage showtooltip-dg' title='Drag `"+val[0].fileName+"`' data-type='droppedImage'>";
                                             li += "<span class='img'>";
                                             li += "<img title='" + val[0].tags + "' src='" + val[0].thumbURL + "' alt='" + val[0].fileName + "' data-id='" + val[0]["imageId.encode"] + "' data-tags='" + val[0].tags + "' data-name='" + val[0].fileName + "' /></span>";
                                             li += "<a href='#'><span class='font_75'>" + val[0].fileName + "</span></a>";
@@ -3717,7 +3723,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     myElement.find(".imageLib li:last-child").attr("data-load", "true");
                                                 }
                                                 myElement.find(".footer-loading").hide();
-                                                mee.IntializeToolTip();
+                                                mee.IntializeToolTip(true);
                                             }
                                         }
                                         options._app.showLoading(false, myElement.find(".imageLib"));
@@ -4453,15 +4459,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         if (args.DynamicVariation != null) {
 
                                             args.predefinedControl.Html.find(".dcName span:first").html(args.DynamicVariation.Label);
-                                            args.predefinedControl.Html.find(".dcName span:first").click(onSaveContent)
+                                            args.predefinedControl.Html.find(".dcName span:first").click(onSaveContent);
+                                            //console.log(mee_view.DynamicContentsObj)
                                             var dcContents = args.predefinedControl.Html.find(".dcContents");
 
                                             if (args.DynamicVariation.ListOfDynamicContents.length > 0) {
                                                 var firstBlock = false;
+                                                
                                                 $.each(args.DynamicVariation.ListOfDynamicContents, function (i, variation) {
-
+                                                    
                                                     //var ContentLi = $("<li>" + variation.Label + "</li>");
-
+                                                    
                                                     if (variation.Label == "Default") {
                                                         var ContentLi = defaultLiContentForDC.clone();
                                                         var _html = $('<div/>').html(variation.InternalContents).text();
@@ -4483,7 +4491,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         dcContents.prepend(ContentLi);
 
                                                         //ContentLi.trigger( "click" );                        
+
                                                     } else {
+
                                                         var ContentLi = $(myElement.find(".dcLI").html());
                                                         ContentLi.find("span:first").html(variation.Label);
                                                         ContentLi.data("content", variation);
@@ -4507,6 +4517,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     }
 
                                                 });
+                                                 
                                                 /*var activeContentDC = args.activeLi;
                                                  if(activeContentDC){
                                                  var tableid = args.predefinedControl.Html.attr("id");                                                   
@@ -4669,6 +4680,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             options.OnDynamicContentSwap(args);
                                         }
                                     }
+                                    
 
                                     if (args.predefinedControl != null) {
 
@@ -4732,6 +4744,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             event.stopPropagation();
                                             args.clickedLi = $(this);
                                             args.IsUpdate = false;
+                                            
                                             //makeCloneAndRegister();
                                             var dcClickedContainer = args.clickedLi.parents(".dynamicContentContainer:first");
                                             var dcInternal = dcClickedContainer.find(".dcInternalContents:first");
@@ -4744,6 +4757,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 if (options.OnDynamicContentSwap != null) {
                                                     args.DynamicContent = previuosActivate.data("content");
                                                     args.DynamicContent.InternalContents = CleanCode($("<div>" + previuosActivate.data("dcInternalData") + "</div>")).html();
+                                                    
                                                     options.OnDynamicContentSwap(args);
                                                 }
                                             }
@@ -4783,8 +4797,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             dcContentNameWindow.find(".btnSaveContent").addClass("saving");
                                             args.DynamicContent = new DynamicContents();
                                             args.DynamicContent = content;
+                                           
                                             if (options.OnSaveDynamicContent != null) {
-                                                options.OnSaveDynamicContent(args);
+                                                options.OnSaveDynamicContent(args); 
                                             }
                                             var dcContents = meeIframe.find("table[keyword='" + args.ID + "']").find(".dcContents");
                                             var newLi = $(myElement.find(".dcLI").html());
@@ -4918,7 +4933,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         $.each(dynamicBlocksFromService, function (i, obj) {
 
 
-                                            var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock showtooltip-dg' title='Drag' draggable='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
+                                            var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock showtooltip-dg' title='Drag `"+obj[0].label+"` ' draggable='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
                                                     "<i class='icon dyblck'></i> " +
                                                     "<a href='#'> <span class='font_75 bbName'>" + obj[0].label + "</span></a>" +
                                                     "<div class='imageicons' > " +
@@ -4941,7 +4956,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                         });
-                                        mee.IntializeToolTip();
+                                        mee.IntializeToolTip(true);
                                         dynamicBlocksGlobal = dynamicBlocksFromService;
 
                                     }
@@ -4951,8 +4966,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 function loadDynamicVariationFromServer(keyword, dynamicNumber) {
                                     var dynamicVariation = new DynamicVariation();
-                                    var getPart = keyword ? ("keyword=" + keyword) : "dynamicNumber=" + dynamicNumber
+                                    var getPart = keyword ? ("keyword=" + keyword) : "dynamicNumber=" + dynamicNumber;
                                     var URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&" + getPart;
+                                    
+                                    
                                     $.ajax({
                                         url: URL,
                                         //data: "{ name: 'test', html: args.buildingBlock.Name }",
@@ -4978,6 +4995,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     dynamicContents.ApplyRuleCount = content.ruleCount;
                                                     dynamicContents.InternalContents = content.contents;
                                                     dynamicContents.applyRuleCount = content.applyRuleCount;
+                                                    
                                                     listOfDynamicContents.push(dynamicContents);
                                                     var listOfDynamicRules = new Array();
                                                     if (content.rules != null && content.rules != undefined) {
@@ -5703,6 +5721,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                             if (oHtml != null) {
 
+
                                                 var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>";
                                                 var myobject = meeIframeWindow.$(topHandlersHTML);
                                                 oHtml.hover(
@@ -5734,6 +5753,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             $(this).find(".editvideopanel").hide();
                                                             $(this).removeClass("hover");
                                                         }
+
                                                 );
 
                                                 return oHtml;
@@ -5771,6 +5791,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 oHtml.find('.imageContainer').andSelf().filter('.imageContainer').each(function (index, element) {
                                                     $(element).on('dragover', function (event) {
                                                         event.preventDefault();
+                                                        
                                                         if ($(this).hasClass("imagePlaceHolderAlone") && mee.dragElement) {
                                                             $(this).css({"outline": "2px dashed #94cf1e"});
                                                         }
@@ -5813,7 +5834,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 oHtml.find('.resizableImage').andSelf().filter('.resizableImage').each(function (index, element) {
                                                     $(element).on('dragover', function (event) {
                                                         event.preventDefault();
-                                                        if ($(this).hasClass("resizableImage") && mee.dragElement) {
+                                                        if ($(this).hasClass("resizableImage") && mee.dragElement && mee.dragElement.hasClass('droppedImage')==true) {
                                                             $(this).css({"outline": "2px dashed #94CF1E"});
                                                         }
                                                     }).on('dragleave', function (event) {
@@ -6278,10 +6299,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 dialog = options._app.showStaticDialog(dialogOptions);
                                                 options._app.showLoading("Loading...", dialog.getBody());
                                                 dialog.$el.css("z-index", "99999");
-                                                $(".modal-backdrop").css("z-index", "99998");
+                                                $(".modal-backdrop").css("z-index", "99998");                                
+                                                    
+                                                dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 24px;" placeholder="Paste image url here" id="onlineimg_url"></div></div>');
 
-
-                                                dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 24px;" placeholder="Enter campaign name here" id="onlineimg_url"></div></div>');
                                                 dialog.$el.find('.dialog-backbtn').hide();
                                                 dialog.saveCallBack(function () {
                                                     var stringImg = dialog.$el.find('#onlineimg_url').val();
@@ -6423,7 +6444,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                             // args.ID = ui.draggable.data("id");
                                                             args.ID = ui.draggable.data("keyword");
-
+                                                            
                                                             args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
 
                                                             InitializeDynamicControl(args);
@@ -6692,6 +6713,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         /*--Hide tooltop--*/
                                         setTimeout(function () {
                                             $('.showtooltip-dg').tooltip('hide')
+
                                         }, 40);
                                         mee.dragElement = $(this);
                                         var draggedControlType = $(this).data("type");
@@ -6701,6 +6723,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         RemovePopups();
                                         if (draggedControlType !== "formBlock" || meeIframe.find(".MEEFORMCONTAINER").length == 0) {
                                             ShowDroppables(meeIframe);
+                                            if($(event.currentTarget).hasClass('droppedDynamicBlock')){
+                                                meeIframe.find(".mainContentHtml .dynamicContentContainer li.myDroppable").css('visibility', 'hidden');
+                                            }
                                             if (meeIframe.find(".mainContentHtml li.myDroppable").length > 1) {
                                                 meeIframe.find(".mainContentHtml").addClass("show-droppables")
                                             }
@@ -6824,13 +6849,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     if (obj[0]["thumbURL"]) {
                                                         blockIcon = "<img src='" + obj[0]["thumbURL"] + "' class='blockimg' />"
                                                     }
-                                                    var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock showtooltip-dg' draggable='true' title='Drag' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
+                                                    var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock showtooltip-dg' draggable='true' title='Drag `"+obj[0].name+"`' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
                                                             blockIcon +
                                                             "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                             "</li>");
                                                     InitializeMainDraggableControls(block);
                                                     ulContentBlocks.append(block);
-
+                                                    mee.IntializeToolTip(true);
                                                 });
 
                                             }
@@ -6873,7 +6898,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 blockIcon = "<img src='" + obj[0]["thumbURL"] + "' class='blockimg' />"
                                             }
 
-                                            var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock showtooltip-dg' title='Drag' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
+                                            var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock showtooltip-dg' title='Drag `"+obj[0].name+"`' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
                                                     blockIcon +
                                                     "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                     "<div class='imageicons' > " +
@@ -6896,7 +6921,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             });
                                             count++;
                                         });
-                                        mee.IntializeToolTip();
+                                        mee.IntializeToolTip(true);
                                         buildingBlocksGlobal = buildingBlocksFromService;
                                         myElement.find("#DCResultDiv").hide();
                                     });
@@ -7446,7 +7471,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 obj[0].ID = obj[0]["formId.encode"];
 
 
-                                                var block = $("<li class='draggableControl ui-draggable droppedFormBlock showtooltip-dg' title='Drag' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
+                                                var block = $("<li class='draggableControl ui-draggable droppedFormBlock showtooltip-dg' title='Drag `"+obj[0].name+"`' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
                                                         "<i class='icon myblck'></i> " +
                                                         "<a><span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                         "<div class='imageicons' > " +
@@ -7463,9 +7488,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 // listOfBuildingBlocksHtml.append(block);
                                                 ulFormBlocks.append(block);
 
+                                            });   
+                                            mee.IntializeToolTip(true);
 
-                                            });
-                                            mee.IntializeToolTip();
                                             if (myElement.find(".ulFormBlocks li").length < parseInt(returnData.totalCount)) {
                                                 myElement.find(".ulFormBlocks li:last-child").attr("data-load", "true");
                                             }
@@ -7649,6 +7674,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.render();
                 },
                 render: function () {
+                   
                     var BMSTOKEN = this.BMSTOKEN;
                     this._$el = this.options._el;
                     this.fromDialog = this.options.fromDialog ? true : false;
@@ -7784,11 +7810,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
 
                         },
-                        OnSaveDynamicContent: function (args)
+                        OnSaveDynamicContent: function (args) 
                         {
                             var content = args.DynamicContent;
                             var dynamicNumber = content.DynamicVariationID;
-                            var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&isDefault=" + (content.IsDefault ? "Y" : "N");
+                            var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&isDefault=" + (content.IsDefault ? "Y" : "N") ;
+                            
+                            
+                            
                             $.ajax({
                                 url: contentURL,
                                 //data: "{ name: 'test', html: args.buildingBlock.Name }",
@@ -7798,7 +7827,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 cache: false,
                                 async: false,
                                 success: function (ec) {
-                                    args.DynamicContent.DynamicContentID = ec[1];
+                                    if(ec[0] =="success"){
+                                       
+                                        args.DynamicContent.DynamicContentID = ec[1];
+                                        
+                                        
+                                    }
+                                    
                                 },
                                 error: function (e) {
 
@@ -7861,12 +7896,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                             });
                         },
-                        OnDeleteDynamicContent: function (args)
+                        OnDeleteDynamicContent: function (args) 
                         {
+                            
                             var content = args.DynamicContent;
                             var dynamicNumber = content.DynamicVariationID;
                             var dynamicNumberContent = content.DynamicContentID;
-
+                            
                             var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=deleteContent&dynamicNumber=" + dynamicNumber + "&contentNumber=" + dynamicNumberContent;
 
                             $.ajax({
@@ -7878,20 +7914,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 cache: false,
                                 async: false,
                                 success: function (ec) {
-
+                                    
                                 },
                                 error: function (e) {
                                 }
                             });
                         },
-                        OnDynamicContentSwap: function (args)
+                        OnDynamicContentSwap: function (args) 
                         {
                             var content = args.DynamicContent;
                             var dynamicNumber = content.DynamicVariationID;
                             var dynamicNumberContent = content.DynamicContentID;
-
+                            var postObj = {"contents": content.InternalContents, type: "updateContent", dynamicNumber: dynamicNumber, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
+                            
                             var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN;
-                            $.post(contentURL, {"contents": content.InternalContents, type: "updateContent", dynamicNumber: dynamicNumber, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault})
+                            $.post(contentURL, postObj)
                                     .done(function (data) {
 
                                     });
@@ -7977,7 +8014,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                     });
                                 }
+
                             } else {
+
 
                                 var URL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=new&contentType=H&label=" + variation.Label;
 

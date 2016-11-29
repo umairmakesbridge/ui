@@ -776,7 +776,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         tab_icon: 'nuturetrack',
                         workspace_id: 'nurturetrack_' + track_checksum,
                         url: 'nurturetrack/nurturetrack',
-                        params: {track_id: track_id, isCreateNT:isCreateNT ,parent: opt.parent, editable: opt.editable}
+                        params: {track_id: track_id, isCreateNT:isCreateNT ,parent: opt.parent, editable: opt.editable,kill:opt.kill}
 
                     });
                 },
