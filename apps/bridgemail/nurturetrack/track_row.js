@@ -336,7 +336,7 @@ function (template, copyTrackPage, pageTrackView) {
              },
                 reportShow:function(){                                
                     var camp_id=this.model.get('campNum.encode');
-                    this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.model.get("order"),trackName:this.model.get("subject"),trackId:this.model.get("trackId.encode")},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});                
+                    this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.model.get("order"),trackName:this.model.get("subject"),trackId:this.model.get("trackId.encode"),messageId:this.model.get('messageId.encode')},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});                
                 }   
         });
 });

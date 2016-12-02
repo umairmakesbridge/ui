@@ -30,6 +30,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                this.template = _.template(template);				
                this.campNum = this.options.params.camp_id;
                this.trackId = this.options.params.trackId || null;
+               this.messageId = this.options.params.messageId || null;
                this.icon = this.options.params.icon || null;
                if(this.icon)
                    this.icon = "autobot18"
@@ -593,6 +594,25 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                         return false;
                     }
                     var options = {type:downloadLink.data("type"),campNum:this.campNum};
+                    if(downloadLink.data("type")=="sender" || downloadLink.data("type")=="pending"){
+                        if(this.messageId){
+                            if(downloadLink.data("type")=="sender"){
+                                options = {type:"NTSender",messageId:this.messageId};
+                            }
+                            else if(downloadLink.data("type")=="pending"){
+                                options = {type:"NTPending",messageId:this.messageId};
+                            }
+                        }
+                        else if(this.autobotId){
+                            if(downloadLink.data("type")=="sender"){
+                                options = {type:"ABSender",botId:this.autobotId};
+                            }
+                            else if(downloadLink.data("type")=="pending"){
+                                options = {type:"ABPending",botId:this.autobotId};
+                            }
+                        }
+                        
+                    }
                     this.mapCSVFieldsDialog(options);
                     e.stopPropagation();                     
                 },

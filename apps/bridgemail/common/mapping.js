@@ -136,8 +136,17 @@ function (template,Mapping) {
                 },
                 generateCSV: function(options){
                    this.app.showLoading("Preparing CSV...",this.$el);
-                   var URL = "/pms/report/getCSV.jsp?BMS_REQ_TK="+this.app.get('bms_token');
-                   var postData ={type:options.type,campaignNumber:options.campNum};
+                   var URL = "/pms/report/getCSV.jsp?BMS_REQ_TK="+this.app.get('bms_token');                   
+                   var postData ={type:options.type};
+                   if(options.campNum){
+                       postData["campaignNumber"] = options.campNum;
+                   }
+                   else if(options.messageId){
+                       postData["messageId"] = options.messageId; 
+                   }
+                   else if(options.botId){
+                       postData["botId"] = options.botId; 
+                   }
                    if(options.type=="article"){
                        postData["articleNumber"]=options.articleNum;
                    }                  

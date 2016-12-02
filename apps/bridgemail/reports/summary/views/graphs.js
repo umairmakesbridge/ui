@@ -127,12 +127,12 @@ define(['text!reports/summary/html/graphs.html', 'reports/summary/views/chart', 
                     //  }
                     if (status == "Sent") {
                         disableCountClass = this.model.get('sentCount')=="0" ? "disabled-csv-download":"";
-                        return "<span class='pclr18' style='width:auto;'>Sent <strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><a class='download-sub-csv showtooltip "+disableCountClass+"' title='Download Sent as CSV' data-type='sender'>CSV</a></span>";
+                        return "<span class='pclr18' style='width:auto;'>Sent <strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</span>";
                     } else if (status == "Pending") {
                         disableCountClass = this.model.get('sentCount')=="0" ? "disabled-csv-download":"";
-                        var html = "<span class='pclr18' style='width:auto;'>Sent <strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><a class='download-sub-csv showtooltip "+disableCountClass+"' title='Download Sent as CSV' data-type='sender'>CSV</a></span>";
+                        var html = "<span class='pclr18' style='width:auto;'>Sent <strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong></span>";
                         disableCountClass = this.model.get('pendingCount')=="0" ? "disabled-csv-download":"";
-                        html = html + "<span class='pclr6 pdf-pending' style='width:auto;'>Pending <strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><a class='download-sub-csv showtooltip "+disableCountClass+"' title='Download Pending as CSV' data-type='pending'>CSV</a></span>";
+                        html = html + "<span class='pclr6 pdf-pending' style='width:auto;'>Pending <strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong></span>";
                         return html;
                     }
 
