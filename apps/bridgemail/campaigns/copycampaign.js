@@ -76,11 +76,22 @@ function (template) {
                                                 else{
                                                         curview.options.copycampdialog.hide();
                                                         campview.getcampaigns();                                                         
-                                                }				
+                                                }
+                                                curview.copyDynamicBlock(res[1],camp_id);
                                                 app.mainContainer.openCampaign({campid:res[1],camp_wsid:res[2]});
                                         }
                                 });
                         }
+                },
+                copyDynamicBlock: function(newCampId,oldCampId){
+                    console.log(newCampId,' Old : ',oldCampId);
+                    var app = this.options.app;
+                    var URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+app.get('bms_token')+"&type=cloneCampaign";
+                    
+                    $.post(URL, { oldCampaignNumber: oldCampId,newCampaignNumber: newCampId})
+                                .done(function(data){
+                                    console.log(data);
+                                });
                 }
         });
 });

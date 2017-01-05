@@ -384,7 +384,12 @@ define(['text!editor/DC/html/filters.html'],
                 return filters_post;
             },
             saveFilters:function(){
-               var URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token');                                                     
+                if(this.args.isTemplate){
+                    var URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&isSingle=Y";                            
+                }else{
+                    var URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&campaignNumber="+this.args.camp_id;                            
+                }
+                                        
                var post_data = this.getPostData();               
                if(post_data){
                 this.$(".ruleDialogSave").addClass("saving");

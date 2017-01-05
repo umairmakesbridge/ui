@@ -270,7 +270,7 @@ define(['text!onetooneemails/html/createmessage.html', 'common/ccontacts', 'bms-
 
                     require(["editor/MEE"], _.bind(function (MEE) {
                         var MEEPage = new MEE({app: this.app, margin: {top: 373, left: 0}, _el: this.$("#mee_editor"), html: ''
-                            , saveClick: _.bind(this.sendEmail, this), fromDialog: true, parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: 410, isOTOFlag: true, isSaveHide: true, previewCallback: _.bind(this.previewCallback, this)});
+                            , saveClick: _.bind(this.sendEmail, this), campNum:this.subNum,fromDialog: true, parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: 410, isOTOFlag: true, isSaveHide: true, previewCallback: _.bind(this.previewCallback, this)});
                         this.$("#mee_editor").setChange(this);
                         this.setMEE(_html);
                         this.initScroll();
