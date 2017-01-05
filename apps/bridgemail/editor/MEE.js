@@ -1935,19 +1935,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 var event = event;
                                                 setTimeout(function () {
                                                             //
-                                                            console.log('Selected ELEMENT : '+mee_view.selectedDropElement);
+                                                            //console.log('Selected ELEMENT : '+mee_view.selectedDropElement);
                                                             myElement.find('.ddlBackgroundLayers option[selected="selected"]').removeAttr('selected');
                                                             if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
                                                                 //alert('DDL BgImage ACCORDIAN : '+mee_view.parentTd);
-                                                                console.log('DDL IMAGE ACCORDIAN : '+mee_view.parentTd);
+                                                                //console.log('DDL IMAGE ACCORDIAN : '+mee_view.parentTd);
                                                                 myElement.find('.bgimg-thumb_imgwrap').show();
                                                                 myElement.find('.ddlBackgroundImgLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
                                                                 myElement.find('.ddlBackgroundImgLayers').trigger('change');
                                                             }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
-                                                                console.log('DDL Back Color ACCORDIAN : '+mee_view.parentTd);
+                                                                //console.log('DDL Back Color ACCORDIAN : '+mee_view.parentTd);
                                                                 myElement.find('.ddlBackgroundColorLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
                                                             }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
-                                                                console.log('DDL BORDER ACCORDIAN : '+mee_view.parentTd);
+                                                                //console.log('DDL BORDER ACCORDIAN : '+mee_view.parentTd);
                                                                 myElement.find('.ddlBackgroundBorderLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
                                                                 SelectedElementForStyle = SelectedElementForStyle;
                                                                 if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
