@@ -1919,7 +1919,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find('.style-panel').hide();
                                             initStyles = false;
                                             mee_view.parentTd = 2;
-                                            mee_view.selectedDropElement = null;
+                                           // mee_view.selectedDropElement = null;
                                         } else if ($(this).hasClass("style-tab")) {
                                             myElement.find('.builder-panel').hide();
                                             myElement.find('.style-panel').show();
@@ -1933,87 +1933,42 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 var ui = ui;
                                                 var event = event;
                                                 setTimeout(function () {
-                                                    myElement.find('.ddlBackgroundLayers').chosen("destroy");
-                                                    if (myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true || $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement) {
-                                                        myElement.find('.bgimg-thumb_imgwrap').show();
-                                                        reGenerateDropElements('.ddlBackgroundImgLayers');
-                                                        //myElement.find('.ddlBackgroundImgLayers option').eq(mee_view.parentTd).attr('selected','selected');
-                                                        //myElement.find('.ddlBackgroundImgLayers').trigger("chosen:updated")
-                                                        myElement.find('.ddlBackgroundImgLayers').trigger('change');
-                                                    } else if (($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true || $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement) {
-                                                        reGenerateDropElements('.ddlBackgroundColorLayers');
-
-                                                    } else if (($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true || $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false && mee_view.selectedDropElement) {
-                                                        SelectedElementForStyle = SelectedElementForStyle;
-                                                        reGenerateDropElements('.ddlBackgroundBorderLayers');
-                                                        if (SelectedElementForStyle.prop("tagName").toLowerCase() == "body") {
-                                                            mee.setBodyBorders();
-                                                        }
-                                                    } else {
-
-                                                        mee_view.selectedDropElement = null;
-                                                        if (SelectedElementForStyle.hasClass('mainContentHtmlGrand') == true) {
-                                                            mee_view.parentTd = 1;
-                                                        }
-                                                        var parentElement = ui.newPanel.find('.ddlBackgroundLayers').parent();
-                                                        if (parentElement.find('.chosen-container').length > 0) {
-                                                            myElement.find('.ddlBackgroundLayers').chosen("destroy");
-                                                        }
-                                                        var nextElement = '';
-                                                        var dropDownClass = '';
-
-                                                        if (ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundColorLayers')) {
-                                                            nextElement = '#backgroundColorWrap';
-                                                            dropDownClass = 'ddlBackgroundColorLayers';
-
-                                                        } else if (ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundImgLayers')) {
-                                                            nextElement = '#backgroundImge';
-                                                            dropDownClass = 'ddlBackgroundImgLayers';
-
-                                                        } else if (ui.newPanel.find('.ddlBackgroundLayers').hasClass('ddlBackgroundBorderLayers')) {
-                                                            nextElement = '#bordersWrap';
-                                                            dropDownClass = 'ddlBackgroundBorderLayers';
-
-                                                        }
-                                                        ui.newPanel.find('.ddlBackgroundLayers').remove();
-                                                        var SelectHTML = '<select class="nosearch ddlBackgroundLayers ' + dropDownClass + '"> </select>';
-                                                        var newHTml = $(SelectHTML);
-
-                                                        newHTml.append($('<option value=""></option>'));
-                                                        newHTml.append(
-                                                                $('<option></option>')
-                                                                .val(mainContentHtmlGrand.prop("tagName"))
-                                                                .html("Parent: " + mainContentHtmlGrand.prop("tagName"))
-                                                                .data("el", mainContentHtmlGrand)
-                                                                );
-                                                        newHTml.append($('<option value="body" selected="selected">BODY</option>'));
-                                                        //myElement.find(".ddlBackgroundLayers").trigger("chosen:updated").change();
-                                                        parentElement.find(nextElement).before(newHTml);
-                                                        var selectedElementVal = ui.newPanel.find('.ddlBackgroundLayers option').eq(mee_view.parentTd).val();
-                                                        newHTml.val(selectedElementVal).change();
-                                                        newHTml.chosen();
-                                                        mee_view.parentTd = newHTml.prop('selectedIndex');
-                                                        newHTml.on('change', function () {
-                                                            if (dropDownClass == "ddlBackgroundColorLayers") {
-                                                                ddlBackgroundColorLayerChange($(this),['1']);
-                                                            } else if (dropDownClass == "ddlBackgroundImgLayers") {
-                                                                ddlBackgroundImgLayerChange($(this),['1']);
-                                                            } else if (dropDownClass == "ddlBackgroundBorderLayers") {
-                                                                ddlBackgroundBorderLayerChange($(this),['1']);
+                                                            //
+                                                            console.log('Selected ELEMENT : '+mee_view.selectedDropElement);
+                                                            myElement.find('.ddlBackgroundLayers option[selected="selected"]').removeAttr('selected');
+                                                            if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
+                                                                //alert('DDL BgImage ACCORDIAN : '+mee_view.parentTd);
+                                                                console.log('DDL IMAGE ACCORDIAN : '+mee_view.parentTd);
+                                                                myElement.find('.bgimg-thumb_imgwrap').show();
+                                                                myElement.find('.ddlBackgroundImgLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
+                                                                myElement.find('.ddlBackgroundImgLayers').trigger('change');
+                                                            }else if(($(myElement.find('.color-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.color-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
+                                                                console.log('DDL Back Color ACCORDIAN : '+mee_view.parentTd);
+                                                                myElement.find('.ddlBackgroundColorLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
+                                                            }else if(($(myElement.find('.border-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.border-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
+                                                                console.log('DDL BORDER ACCORDIAN : '+mee_view.parentTd);
+                                                                myElement.find('.ddlBackgroundBorderLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
+                                                                SelectedElementForStyle = SelectedElementForStyle;
+                                                                if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
+                                                                    mee.setBodyBorders();
+                                                                }
                                                             }
-
-                                                        });
-                                                        newHTml.trigger('change');
-                                                        //newHTml.chosen();
-
-                                                        /*if(mee_view.parentTd){
-                                                         myElement.find('.ddlBackgroundLayers option:last-child').prev().attr('selected','selected').chosen('update');
-                                                         myElement.find('.ddlBackgroundLayers').trigger('change');
-                                                         }else{
-                                                         myElement.find('.ddlBackgroundLayers').val("body").chosen('update');
-                                                         }*/
-                                                        //SelectedElementForStyle = meeIframe.find("body");
-                                                    }
+                                                            else{
+                                                                if (SelectedElementForStyle.hasClass('mainContentHtmlGrand')) {
+                                                                    mee_view.parentTd = ui.newPanel.find('.ddlBackgroundLayers > option[value="body"]').index() - 1;
+                                                                    //$('.ddlBackgroundColorLayers > option[value="body"]').index()
+                                                                }
+                                                                myElement.find('.ddlBackgroundImgLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
+                                                                 myElement.find('.ddlBackgroundColorLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
+                                                                 myElement.find('.ddlBackgroundBorderLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
+                                                                
+                                                                //SelectedElementForStyle = meeIframe.find("body");    
+                                                            }
+                                                            myElement.find('.ddlBackgroundImgLayers').chosen("destroy").chosen();
+                                                            myElement.find('.ddlBackgroundColorLayers').chosen("destroy").chosen();
+                                                            myElement.find('.ddlBackgroundBorderLayers').chosen("destroy").chosen();
+                                                            
+                                                    
 
 
 
@@ -2070,65 +2025,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
 
                                 }
-                                function reGenerateDropElements(ElementObj) {
-
-                                    //--------------Background Layers-------------//
-
-
-                                    var isGetGrandParent = false;
-                                    var SelectedElementForStyle = mee_view.selectedDropElement;
-                                    myElement.find(ElementObj).chosen("destroy");
-                                    var ddlBackgroundLayers = myElement.find(ElementObj);
-                                    ddlBackgroundLayers.find("option").remove();
-                                    var parentElement = myElement.find(ElementObj).parent();
-                                    if (parentElement.find('.chosen-container').length > 0) {
-                                        myElement.find(ElementObj).chosen("destroy");
-                                    }
-                                    ddlBackgroundLayers.append(
-                                            $('<option value=""></option>'));
-
-
-                                    //Add Self
-
-                                    ddlBackgroundLayers.append(
-                                            $('<option></option>')
-                                            .val(SelectedElementForStyle.prop("tagName"))
-                                            .html("Parent: " + SelectedElementForStyle.prop("tagName"))
-                                            .data("el", SelectedElementForStyle)
-                                            );
-
-                                    SelectedElementForStyle.parents().each(function (index, element) {
-
-                                        if (!isGetGrandParent) {
-                                            if ($(element).hasClass("mainContentHtmlGrand")) {
-                                                isGetGrandParent = true;
-                                            }
-
-                                            //if ($(element).prop("tagName") === "TD") {
-                                            if ($(element).prop("tagName").toLowerCase() != "ul") {
-                                                ddlBackgroundLayers.append(
-                                                        $('<option></option>')
-                                                        .val($(element).prop("tagName"))
-                                                        .html("Parent: " + $(element).prop("tagName"))
-                                                        .data("el", $(element))
-                                                        );
-                                            }
-
-                                            // }
-
-                                        }
-
-                                    });
-                                    myElement.find(ElementObj).append(
-                                            $('<option value="body">BODY</option>'));
-                                    myElement.find(ElementObj + ' option').eq(mee_view.parentTd).attr('selected', 'selected');
-                                    myElement.find(ElementObj).chosen();
-
-                                    // myElement.find(ElementObj).bind('chnage');
-                                    //myElement.find(ElementObj).trigger("chosen:updated");
-                                    //myElement.find(ElementObj).trigger('change');
-
-                                }
+                                
 
 //**************************************************************End ***********************************************************************************///
 

@@ -52,13 +52,13 @@
   <div class="caption nurture-caption">
       <h3><a title="<% if(model.get('status')==='D'){print('Click to edit \''+this.app.decodeHTML(model.get('name'))+'\'') }else{ print('Click to view \''+this.app.decodeHTML(model.get('name'))+'\'')} %>" class="edit-track showtooltip"><%- this.app.decodeHTML(model.get('name'))%></a></h3>
     <% if(model.get('status')==='D'){  %>
-    <a class="cstatus pclr1">Paused </a> 
+    <a class="filterNT showtooltip ntpauselist cstatus pclr1" title="Click to view paused Nurture Tracks">Paused </a> 
     <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
-        <a class="cstatus pclr6">Pending </a> 
+        <a class="filterNT showtooltip ntpendlist cstatus pclr6">Pending </a> 
     <% } else if(model.get('status')==='K'){ %> 
-        <a class="cstatus pclr12">Killed </a> 
+        <a class="filterNT showtooltip ntkilllist cstatus pclr12" title="Click to view killed Nurture Tracks">Killed </a> 
     <% } else { %>
-      <a class="cstatus pclr18">Playing </a>                
+      <a class="filterNT showtooltip ntplaylist cstatus pclr18" title="Click to view played Nurture Tracks">Playing </a>                
      <% } %>                 
    <div class="t-scroll"></div>    
     <div class="btm-bar">

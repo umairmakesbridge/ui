@@ -18,6 +18,7 @@ function (template, copyTrackPage, pageTrackView) {
               'click .play-track':'playNurtureTrack',
               'click .pause-track':'pauseNurtureTrack',
               'click .campaign_stats':'reportNT',
+              'click .filterNT':'filterNT',
               'click .message-view':'viewNurtureTrack',
               'click .show-detail':'previewMessage',
               'click .tag':'tagSearch',
@@ -148,6 +149,15 @@ function (template, copyTrackPage, pageTrackView) {
                },this));
             }
             ,
+            filterNT : function(ev){
+                if($(ev.target).hasClass('ntpauselist')){
+                    this.parent.showPauseTracks();
+                }else if($(ev.target).hasClass('ntkilllist')){
+                    this.parent.showKillTracks($(ev.target));
+                }else if($(ev.target).hasClass('ntplaylist')){
+                    this.parent.showPlayTracks($(ev.target));
+                }
+            },
             pauseNurtureTrack:function(){
                 var mHtml = '<div class="messagebox messagebox_ delete pause-kill-dialog" style="width: 550px;"><h3>Pause or Kill nurture track</h3><i class="close showtooltip" data-original-title="Close Dialog"></i>';
                         mHtml += '<div class="left-panel">';
