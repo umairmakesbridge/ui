@@ -1205,7 +1205,7 @@ ul.tabs-btns li.active a{
 /*Abdullah Changes*/
 .thumbnail .img > div a.selectbtn.createcamp {
     background: url("../img/campaign48.png") no-repeat scroll center center rgba(0, 0, 0, 0);
-
+    width:100%;
 }
 .thumbnail .img > div a.selectbtn {
     background: url("../img/check48.png") no-repeat scroll center center rgba(0, 0, 0, 0);   

@@ -29,13 +29,13 @@
                 }
                 mee.dragElementIframe =$(e.currentTarget).parent().parent();
                 mee.startDragging(e);            
-                top.$("#top_scroll_page,#bottom_scroll_page").show();
+                parent.$("#top_scroll_page,#bottom_scroll_page").show();
                 e.stopPropagation();    
             }).on('dragend', function(event) {                
                 event.preventDefault();         
                 $("#drag-class").remove();
-                top.$("#top_scroll_page,#bottom_scroll_page").hide();
-                top.$(".file-border").removeClass("file-border");
+                parent.$("#top_scroll_page,#bottom_scroll_page").hide();
+                parent.$(".file-border").removeClass("file-border");
                 mee.stopDragging();                
             });            
            }                      

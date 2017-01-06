@@ -306,7 +306,7 @@ function (template,editorView) {
                            // topaccordian = parseInt(topaccordian) - 10;
                         }
                         var topaccordianObj = {topopenaccordian:topaccordian,topcloseaccordian:topcloseaccord}
-                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',parentWindow:this.$el.parents(".modal-body"),scrollTopMinusObj:topaccordianObj,text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2Mee,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this), previewCallback: _.bind(this.previewCallback, this)});                                    
+                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),campNum:this.parent.camp_id,html:'',parentWindow:this.$el.parents(".modal-body"),scrollTopMinusObj:topaccordianObj,text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2Mee,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this), previewCallback: _.bind(this.previewCallback, this)});                                    
                         this.$("#mee_editor").setChange(this.states);  
                         this.meeView = MEEPage;
                         this.setMEE(_html);
