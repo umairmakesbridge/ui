@@ -110,9 +110,18 @@
                     <% if(this.getCampStatus().status == "Scheduled"){ %>
                          <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" title="Click to view"> <%= this.model.get('name')%> </a>
                     <% }else{ %>
-                    <a class="campname show-detail showtooltip <%= this.getFlagClass().editClass %>" title="<%= this.getCampStatus().tooltip %>"> <%= this.model.get('name')%> </a>
-                    <% } %>
-                    <a class="cstatus cflag showtooltip <%= this.getFlagClass().flag_class %>" title="Click to view <%= this.getCampStatus().status.toLowerCase() %> campaigns"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
+                    <a class="campname show-detail showtooltip <%= this.getFlagClass().editClass %>" title="<%= this.getCampStatus().tooltip %>"> <%= this.model.get('name')%> </a>                                            
+                    
+                    <%  } %>
+                    <a class="cstatus cflag showtooltip <%= this.getFlagClass().flag_class %>" title="Click to view <%= this.getCampStatus().status.toLowerCase() %> campaigns"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %>
+                    
+                    <% if(this.model.get('isShared')=== 'Y'){ %>
+                        <div class="campaign_shared shared-camp showtooltip" title="Click to view my shared campaigns"><a class="icon shared"></a></div>
+                    <%  } %>
+                    <% if(this.sub.status === 'SS') { %>
+                        <div class="campaign_sharedwith showtooltip" title="This campaign is shared with you"><a class="icon sharedwith"></a></div>
+                    <%  } %>    
+                    </h3>  
                  <div class="tags tagscont" id="campaign_tag_camp">
                      <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         
                  </div>
@@ -134,17 +143,24 @@
         <div style="width:105px" class="time">
             <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
         </div>
-        <div class="slide-btns <% if(model.get('status')==='D'){ print('five s-clr6') } else if(model.get('status')==='S'){ print('five s-clr6 slidebtn-sp') } else if(model.get('status')==='C') { print('three s-clr4') } else if(model.get('status')==='P') { print('two s-clr3 slidebtn-sp') } else { print('five s-clr6') }%>">
+        <div class="slide-btns <% if(model.get('status')==='D'){  if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {print('six s-clr7') } else {print('five s-clr6')} }  else if(model.get('status')==='S'){ print('five s-clr6 slidebtn-sp') } else if(model.get('status')==='C') { print('three s-clr4') } else if(model.get('status')==='P') { print('two s-clr3 slidebtn-sp') } else { print('five s-clr6') }%>">
               <span class="icon setting"></span>
               <div>                 
                 <% if(model.get('status')==='D'){  %>
-
-               <a class="icon preview-camp preview clr5"><span>Preview</span></a>
-               <a class="icon edit-camp edit clr4"><span>Edit</span></a>
-               <a class="icon schedule-camp calender clr3"><span>Schedule</span></a>  
-               <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
-               <a class="icon delete-camp delete clr1"><span>Delete</span></a>
-
+                <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
+                    <a class="icon preview-camp preview clr6"><span>Preview</span></a>
+                    <a class="icon edit-camp edit clr5"><span>Edit</span></a>
+                    <a class="icon schedule-camp calender clr4"><span>Schedule</span></a>  
+                    <a class="icon share-camp share clr3"><span>Share</span></a> 
+                    <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                    <a class="icon delete-camp delete clr1"><span>Delete</span></a>
+                <% } else { %>    
+                    <a class="icon preview-camp preview clr5"><span>Preview</span></a>
+                    <a class="icon edit-camp edit clr4"><span>Edit</span></a>
+                    <a class="icon schedule-camp calender clr3"><span>Schedule</span></a>  
+                    <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                    <a class="icon delete-camp delete clr1"><span>Delete</span></a>
+                <% } %>
                <% } else if(model.get('status')==='S') {
                %>
                    <a class="icon preview-camp preview clr5"><span>Preview</span></a>

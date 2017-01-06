@@ -139,6 +139,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.update {background: url("../img/update.png") no-repeat center center ;}
 .icon.chat {background: url("../img/chat.png") no-repeat center center ;}
 .icon.score {background: url("../img/score.png") no-repeat center center ;}
+.icon.shareicon { background: url("../img/share20_w.png") no-repeat center center;}
 
 
 /*
@@ -224,6 +225,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.netsuite {   background: url("../img/nsicon.png") no-repeat scroll center center ;}
 .icon.highrise {   background: url("../img/highrise-g.png") no-repeat scroll center center ;}
 .icon.google {   background: url("../img/google-g.png") no-repeat scroll center center ;}
+.icon.sharecamp {   background: url("../img/share35.png") no-repeat scroll center center;}
 
 
 .icon.h-info {
@@ -4362,8 +4364,7 @@ div.returnpath {
 	display: block;
 	margin: 0;
 	float:left;
-	padding: 0;
-	//background: url(../img/checkicons.png) no-repeat;
+	padding: 0;	
 	border: none;
 	cursor: pointer;
 	min-width:45px;
@@ -4392,6 +4393,7 @@ div.returnpath {
 }
 .checkpanelinput.checked.disabled {
 	background-position: -26px 0;
+        opacity:0.6;
 }
 .radiopanelinput.checked.disabled { /* radio */
 	background-position: -26px 0;
@@ -5983,6 +5985,20 @@ ul.ftipg li span {
     height: 20px;
     width: 20px;
 }
+.campaign_shared, .campaign_sharedwith {
+    float: left;
+    margin: 2px 0 0 5px;
+    position: relative;
+}
+.campaign_shared .shared, .campaign_sharedwith .sharedwith {
+    height: 20px;
+    width: 20px;
+    margin: 0px !important;    
+}
+.campaign_sharedwith .sharedwith{
+    cursor: default !important;
+}
+
 .campaign_stats.cstats {
     position: absolute;
     width:430px; 

@@ -1,5 +1,5 @@
-define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
-        function (template, copycampaignPage) {
+define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'common/shareObject'],
+        function (template, copycampaignPage, shareCommonPage) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber Record View to show on listing page
@@ -19,6 +19,8 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                     'click  a.campname': 'campaignStateOpen',
                     'click .schedule-camp': 'schOpenCampaign',
                     'click .reschedule-camp': 'reschOpenCampaign',
+                    'click .share-camp': 'shareCampaign',
+                    'click .shared-camp':'sharedCampaigns',
                     'click .delete-camp': 'deleteCampaginDialoge',
                     'click .taglink': 'tagClick',
                     'click .report': 'reportShow',
@@ -43,7 +45,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                     this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.tagTxt = '';
                     this.render();
-                    //this.model.on('change',this.renderRow,this);
+                    this.model.on('change',this.renderRow,this);
                 },
                 /**
                  * Render view on page.
@@ -60,6 +62,9 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                     }
                     this.initControls();
 
+                },
+                renderRow:function(){
+                    this.render();
                 },
                 /*
                  * 
@@ -162,6 +167,19 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.copyCampaign, mPage));
                     //}, this));
+                },
+                shareCampaign: function(){                    
+                    var dialog = this.app.showDialog({title: "Share Campaign",
+                        css: {"width": "750px", "margin-left": "-375px"},
+                        bodyCss: {"min-height": "350px"},
+                        headerIcon: 'sharecamp',
+                        buttons: {saveBtn: {text: 'Share Campaign',btnicon:'shareicon'}}
+                    });
+                    this.app.showLoading("Loading...", dialog.getBody());                  
+                    var mPage = new shareCommonPage({camp: this.sub, obj_model: this.model, app: this.app, dialog: dialog,itemNum:2});
+                    dialog.getBody().html(mPage.$el);
+                    dialog.saveCallBack(_.bind(mPage.shareObject, mPage));
+                    
                 },
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');
@@ -323,12 +341,29 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
                             camp_obj.$el.find('.draft').parent().addClass('active');
                             break;
                     }
+                    var flagMapping = {"C":"Sent","P":"Pending","S":"Scheduled","D":"Draft"}
                     camp_obj.status = camp_status;
                     camp_obj.total_fetch = 0;
                     camp_obj.searchTxt = '';
                     camp_obj.$el.find('#list-search').val('');
                     camp_obj.$el.find('#clearsearch').hide();
                     camp_obj.type = 'listNormalCampaigns';
+                    camp_obj.$el.find('.stattype').parent().removeClass('active');
+                    camp_obj.$el.find(".sortoption_expand").find('.spntext').html(flagMapping[camp_status]);
+                    camp_obj.$el.find('[search="'+camp_status+'"]').parent().addClass('active');
+                    camp_obj.getallcampaigns();
+                },
+                sharedCampaigns: function(){
+                    var camp_obj = this.sub;
+                    camp_obj.status = "F";
+                    camp_obj.total_fetch = 0;
+                    camp_obj.searchTxt = '';
+                    camp_obj.$el.find('#list-search').val('');
+                    camp_obj.$el.find('#clearsearch').hide();
+                    camp_obj.type = 'myAllSharedCampaign';
+                    camp_obj.$el.find('.stattype').parent().removeClass('active');
+                    camp_obj.$el.find(".sortoption_expand").find('.spntext').html("My Shared");
+                    camp_obj.$el.find('.myshare').parent().addClass('active');
                     camp_obj.getallcampaigns();
                 },
                 schOpenCampaign: function (ev) {                   

@@ -6560,8 +6560,12 @@ ul.ftipg li i.gp { background-position: -120px -30px;}
     border-radius: 2px;
 }
 .icon.report{background: url("../img/report_gray.png") no-repeat scroll center center ;}
-
 .icon.report:hover {background: url("../img/report_blue.png") no-repeat scroll center center ;}
+
+.icon.shared{background: url("../img/share20_gray.png") no-repeat scroll center center ;}
+.icon.sharedwith{background: url("../img/sharewith.png") no-repeat scroll center center ;}
+.icon.shared:hover {background: url("../img/share20_blue.png") no-repeat scroll center center ;}
+
 
 .icon.report-bar{background: url("../img/percent.png") no-repeat scroll center center ;}
 .icon.report-bar:hover {background: url("../img/percent2.png") no-repeat scroll center center ;}
@@ -7317,6 +7321,7 @@ position:relative;
 .slide-btns .icon.setting { background-image: url("../img/setting-b.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.check { background-image: url("../img/check48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.uncheck { background-image: url("../img/unpublish48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.share { background-image: url("../img/share35.png"); background-position:center center; background-repeat:no-repeat; }
   
 .slide-btns div .icon:hover  {background-position:center 10px !important;}
 

@@ -1,8 +1,8 @@
-define(['text!account/html/salesrep_selection_row.html'],
+define(['text!common/html/subaccount_selection_row.html'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
-        // Salesrep selection View to show on add update sub account dialog
+        // Subacoount selection View to show on sharing dialog
         //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         'use strict';

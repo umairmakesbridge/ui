@@ -1,11 +1,19 @@
+<% if(this.hideSettings==1) { %>
+<td width="1"><input type="checkbox" value="" name="" <% if(this.selection){print('checked="checked" disabled="disabled"')} %>  class="checkpanel" data-subaccount="<%- this.app.decodeHTML(model.get('userId')) %>" data-checksum="<%- this.app.decodeHTML(model.get('customerNumber.checksum')) %>" /></td>
+<td width="120"><div>
+        <div class="colico subscribers"> <strong><span><em>User Name</em><a ><%- this.app.decodeHTML(model.get('firstName')) %> <%- this.app.decodeHTML(model.get('lastName')) %></a></span></strong> </div>
+    </div></td>
+<% }  else { %>
 <td width="120"><div>
         <div class="colico subscribers"> <strong><span><em>User Name</em><a class="edit-subaccount showtooltip" title="Click to edit"><%- this.app.decodeHTML(model.get('firstName')) %> <%- this.app.decodeHTML(model.get('lastName')) %></a></span></strong> </div>
     </div></td>
+    <% }  %>
 <td width="90px"><div>
         <div class="colico mbr"> <strong><span><em>User ID</em><%- this.app.decodeHTML(model.get('userId')) %></span></strong> </div>
     </div></td>
 <td width="100px"><div>
         <div class="colico mail"> <strong><span><em>User Email</em><a style="cursor:default"><%- this.app.decodeHTML(model.get('userEmail')) %></a></span></strong> </div>
+        <% if(this.hideSettings==0) { %>
         <div class="slide-btns two s-clr3">
             <span class="icon setting"></span>
             <div class="">                 
@@ -14,5 +22,6 @@
                 <a class="icon delete s-clr1 delete-subaccount"><span>Delete</span></a>         
             </div>   
         </div>
+        <% } %>
     </div>
 </td>

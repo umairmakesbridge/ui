@@ -21,6 +21,8 @@ function (template,highlighter) {
             initialize: function () {
                     this.parent = this.options.sub;      
                     this.app = this.parent.app;
+                    this.hideSettings = this.options.hideSettings ? this.options.hideSettings : 0;
+                    this.selection = this.options.selection ? this.options.selection: false;
                     this.template = _.template(template);				                                                      
                     this.render();                    
             },
@@ -45,6 +47,10 @@ function (template,highlighter) {
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
+                this.$('input.checkpanel').iCheck({
+                    checkboxClass: 'checkpanelinput',
+                    insert: '<div class="icheck_line-icon" style="margin:18px 0 0 10px"></div>'
+                });
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             tagSearch:function(obj){
