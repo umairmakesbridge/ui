@@ -2933,7 +2933,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                DynamicContent:{
                                                    DynamicContentID : val.DynamicContentID,
                                                    DynamicVariationID : val.DynamicVariationID,
-                                                   InternalContents : _.unescape( _html),
+                                                   InternalContents : _.unescape(_html),
                                                    IsDefault : val.IsDefault,
                                                    IsUpdate : val.IsUpdate,
                                                    Label : val.Label,
@@ -3032,7 +3032,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                DynamicContent:{
                                                    DynamicContentID : val.DynamicContentID,
                                                    DynamicVariationID : val.DynamicVariationID,
-                                                   InternalContents : _html,
+                                                   InternalContents : _.unescape(_html),
                                                    IsDefault : val.IsDefault,
                                                    IsUpdate : val.IsUpdate,
                                                    Label : val.Label,
