@@ -1,5 +1,5 @@
 <% if(this.hideSettings==1) { %>
-<td width="1"><input type="checkbox" value="" name="" <% if(this.selection){print('checked="checked" disabled="disabled"')} %>  class="checkpanel" data-subaccount="<%- this.app.decodeHTML(model.get('userId')) %>" data-checksum="<%- this.app.decodeHTML(model.get('customerNumber.checksum')) %>" /></td>
+<td width="1"><input type="checkbox" value="" name="" <% if(this.selection){print('checked="checked"')} %>  class="checkpanel" data-subaccount="<%- this.app.decodeHTML(model.get('userId')) %>" data-checksum="<%- this.app.decodeHTML(model.get('customerNumber.checksum')) %>" /></td>
 <td width="120"><div>
         <div class="colico subscribers"> <strong><span><em>User Name</em><a ><%- this.app.decodeHTML(model.get('firstName')) %> <%- this.app.decodeHTML(model.get('lastName')) %></a></span></strong> </div>
     </div></td>

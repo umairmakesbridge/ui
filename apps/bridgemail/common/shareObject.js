@@ -87,19 +87,43 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                 shareObject:function(){
                     var sharedUsers = this.$("._subaccount_grid input:checked").map(function() {return $(this).attr("data-subaccount");}).get();
                     var newUsers = _.difference(sharedUsers, this.selectedUser);
-                    if(sharedUsers.length==0){
-                        setTimeout(_.bind(function(){this.app.showAlert("Please select user to proceed.",this.$el)},this),200);
-                        return false;
+                    var unSharedUsers = _.difference(this.selectedUser,sharedUsers);
+                    
+                    var post_data = "";
+                    var URL = "";
+                    // Un share object from users 
+                    if(unSharedUsers.length){
+                        if(newUsers.length==0){
+                            this.app.showLoading("Updating "+this.objectName+" Sharing...", this.dialog.$el); 
+                        }
+                        URL = "/pms/shareable/saveShareableItem.jsp?BMS_REQ_TK="+this.app.get('bms_token');        
+                        post_data = {"type":"unshare","value":this.model.get("campNum.encode"),"users":unSharedUsers.join(","),"itemNum":this.itemNum};
+                        $.post(URL, post_data)
+                        .done(_.bind(function(data) {                                                          
+                          this.app.showLoading(false, this.dialog.$el);                          
+                          var _json = jQuery.parseJSON(data);          
+                          if(newUsers.length==0){
+                              this.app.showMessge(this.objectName+" updated Successfully!");  
+                              this.dialog.hide();
+                          }
+                          if(sharedUsers.length==0){
+                              this.model.set("isShared", 'N'); 
+                              this.app.showMessge(this.objectName+" unshared Successfully!");  
+                          }
+                     },this));            
                     }
+                    if(newUsers.length==0 && unSharedUsers.length==0){
+                        this.dialog.hide();                                                            
+                    }
+                    
                     if(newUsers.length==0){
-                        this.dialog.hide();                                    
                         return false;
                     }
                     
                     this.app.showLoading("Sharing "+this.objectName+"...", this.dialog.$el);                     
-                    var URL = "/pms/shareable/saveShareableItem.jsp?BMS_REQ_TK="+this.app.get('bms_token');        
+                    URL = "/pms/shareable/saveShareableItem.jsp?BMS_REQ_TK="+this.app.get('bms_token');        
 
-                    var post_data = {"type":"saveUserShareabeItem","value":this.model.get("campNum.encode"),"itemNum":this.itemNum
+                    post_data = {"type":"saveUserShareabeItem","value":this.model.get("campNum.encode"),"itemNum":this.itemNum
                                         ,shareableUsers:newUsers.join(",")
                                     };    
                     
