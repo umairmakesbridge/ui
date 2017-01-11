@@ -242,11 +242,13 @@
                 </div>
             </div>
             <!--  accordian-content  -->
-           <% if(options.landingPage==false &&  options.otopage==false ){ %>     
+           <% if(options.landingPage==false &&  options.otopage==false ){ %>   
+           <% if(!options.isTemplate){ %> 
            <h3 class="DCH3" style="dispaly:none">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
                 Dynamic Content Blocks
             </h3>
+           
             <div class="scrollarea dynamicblock-accordian" style="dispaly:none">
                 <div class="accordian-content active DCCC">
                     <div class="accordianbar">
@@ -282,6 +284,7 @@
                     </div>
                 </div>
             </div>
+            <% } %>
             <%}%>
             
            <% if(options.landingPage==true){ %>      
