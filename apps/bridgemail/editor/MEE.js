@@ -6606,8 +6606,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     args.DynamicVariation.ListOfDynamicContents = listOfDC;
 
                                                                     if (options.OnDynamicControlSave != null) {
-
-                                                                        options.OnDynamicControlSave(args.DynamicVariation);
+                                                                       
+                                                                        options.OnDynamicControlSave(args.DynamicVariation,mee_view);
                                                                     }
 
                                                                     args.DynamicVariation = loadDynamicVariationFromServer('', args.DynamicVariation.DynamicVariationID);
@@ -8137,7 +8137,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                              },this));
                            } 
                         },
-                        OnDynamicControlSave: function (variation)
+                        OnDynamicControlSave: function (variation,mee_view)
                         {
 
                             if (variation.IsUpdate) {
@@ -8236,10 +8236,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     cache: false,
                                     async: false,
                                     success: function (e) {
-
                                         var dynamicNumber = e[1];
                                         if (dynamicNumber != "err") {
                                             variation.DynamicVariationID = dynamicNumber;
+                                            mee_view.autoSaveFlag = true;
                                         }
                                     },
                                     error: function (e) {
