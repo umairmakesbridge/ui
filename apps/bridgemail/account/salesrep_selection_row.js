@@ -1,4 +1,4 @@
-define(['text!common/html/subaccount_selection_row.html'],
+define(['text!account/html/salesrep_selection_row.html'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

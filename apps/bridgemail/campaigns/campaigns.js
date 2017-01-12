@@ -450,7 +450,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         this.type = 'normalSharedCampaigns';
                     } 
                     else if(this.status == "F") {
-                        this.type = 'myAllSharedCampaign';
+                        this.type = 'searchSharedCampaigns';
                     }else{
                         this.type = 'listNormalCampaigns';
                     }
