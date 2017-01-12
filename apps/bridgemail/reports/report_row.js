@@ -734,6 +734,9 @@
                         }
                                               
                        if(total_pages_selected!==0){
+                            if(this.camp_states_call){
+                                this.camp_states_call.abort();
+                            }
                             this.app.showLoading("Creating Chart...", this.$(".cstats"));          
                             this.showChart();                        
                             this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
@@ -741,7 +744,7 @@
                                 twitterCount: 0, unSubscribeCount: 0};
                             var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
                             var post_data = {campNums: _campaigns}
-                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                            this.camp_states_call = $.post(URL, post_data).done(_.bind(function (data) {
                                 var camp_json = jQuery.parseJSON(data);
                                 _.each(camp_json.campaigns[0], function (val) {
                                     this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
@@ -1542,9 +1545,12 @@
                             this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
                                 , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
                                 twitterCount: 0, unSubscribeCount: 0};
+                            if(this.nt_states_call){
+                                this.nt_states_call.abort();
+                            }
                             var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
                             var post_data = {campNums: _campaigns}
-                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                            this.nt_states_call = $.post(URL, post_data).done(_.bind(function (data) {
                                 var camp_json = jQuery.parseJSON(data);
                                 _.each(camp_json.campaigns[0], function (val) {
                                     this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
