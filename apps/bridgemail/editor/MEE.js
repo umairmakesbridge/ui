@@ -7940,6 +7940,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
 
                         },
+                        encodeHTMLStr : function(str){
+                                    console.log('Befor : '+str);
+                                    if (typeof (str) !== "undefined") {
+                                        str = str.replace(/\‘/g, "&#145;");                
+                                        str = str.replace(/\’/g, "&#146;");
+                                    }
+                                    else {
+                                        str = "";
+                                    }
+                                    return str;
+                                },
                         OnSaveDynamicContent: function (args,mee_view,gloFlag,showMsg) 
                         {
                             var content = args.DynamicContent;
@@ -8092,7 +8103,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var dynamicNumber = content.DynamicVariationID;
                             var _self = this;
                             var dynamicNumberContent = content.DynamicContentID;
-                            var postObj = {"contents": content.InternalContents, type: "updateContent", dynamicNumber: dynamicNumber, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
+                            // NEED to call from function
+                            var str = _self.encodeHTMLStr(content.InternalContents);
+                            var postObj = {"contents": str, type: "updateContent", dynamicNumber: dynamicNumber, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
                             // DC ADD
                             if(this.isTemplate){
                                 postObj["isSingle"] = "Y";
