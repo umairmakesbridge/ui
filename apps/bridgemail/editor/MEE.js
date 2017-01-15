@@ -4767,7 +4767,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         args.IsUpdate = false;
                                         var previuosActivate = args.clickedLi;
                                         previuosActivate.data("dcInternalData", dcInternal.html());
-                                        if (options.OnDynamicContentSwap != null && args.DynamicContent) {
+                                        if (options.OnDynamicContentSwap != null) {
                                             args.DynamicContent = previuosActivate.data("content");
                                             args.DynamicContent.InternalContents = CleanCode($("<div>" + previuosActivate.data("dcInternalData") + "</div>")).html();
                                             options.OnDynamicContentSwap(args);
@@ -4884,30 +4884,36 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var dcContentNameWindow = meeIframe.find("table[keyword='" + args.ID + "']").find(".dcContentName");
 
                                             content.Label = dcContentNameWindow.find(".txtContentName").val();
-                                            content.DynamicVariationID = args.DynamicVariation.DynamicVariationID;
-                                            dcContentNameWindow.find(".txtContentName").prop("disabled", true);
-                                            dcContentNameWindow.find(".btnSaveContent").addClass("saving");
-                                            args.DynamicContent = new DynamicContents();
-                                            args.DynamicContent = content;
-                                           
-                                            if (options.OnSaveDynamicContent != null) {
-                                                options.OnSaveDynamicContent(args,mee_view); 
+                                            if(content.Label !=""){
+                                                content.DynamicVariationID = args.DynamicVariation.DynamicVariationID;
+                                                dcContentNameWindow.find(".txtContentName").prop("disabled", true);
+                                                dcContentNameWindow.find(".txtContentName").removeClass("error-dc");
+                                                dcContentNameWindow.find(".btnSaveContent").addClass("saving");
+                                                args.DynamicContent = new DynamicContents();
+                                                args.DynamicContent = content;
+
+                                                if (options.OnSaveDynamicContent != null) {
+                                                    options.OnSaveDynamicContent(args,mee_view); 
+                                                }
+                                                var dcContents = meeIframe.find("table[keyword='" + args.ID + "']").find(".dcContents");
+                                                var newLi = $(myElement.find(".dcLI").html());
+                                                newLi.find("span:first").html(args.DynamicContent.Label);
+                                                newLi.data("content", args.DynamicContent);
+
+                                                OnFilterClick(newLi);
+                                                OnEditContentName(newLi);
+                                                OnDeleteContent(newLi);
+
+                                                dcContents.append(newLi);
+                                                dcContentNameWindow.find(".txtContentName").prop("disabled", false);
+                                                dcContentNameWindow.find(".btnSaveContent").removeClass("saving");
+                                                dcContentNameWindow.hide();
+                                                dcContentNameWindow.find(".txtContentName").val("");
+                                                newLi.click();
+                                            }else{
+                                                dcContentNameWindow.find(".txtContentName").addClass('error-dc');
                                             }
-                                            var dcContents = meeIframe.find("table[keyword='" + args.ID + "']").find(".dcContents");
-                                            var newLi = $(myElement.find(".dcLI").html());
-                                            newLi.find("span:first").html(args.DynamicContent.Label);
-                                            newLi.data("content", args.DynamicContent);
-
-                                            OnFilterClick(newLi);
-                                            OnEditContentName(newLi);
-                                            OnDeleteContent(newLi);
-
-                                            dcContents.append(newLi);
-                                            dcContentNameWindow.find(".txtContentName").prop("disabled", false);
-                                            dcContentNameWindow.find(".btnSaveContent").removeClass("saving");
-                                            dcContentNameWindow.hide();
-                                            dcContentNameWindow.find(".txtContentName").val("");
-                                            newLi.click();
+                                            
                                         }
 
                                         dcContentNameWindow.find(".txtContentName").keyup(function (e) {
