@@ -4601,8 +4601,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //console.log('Local DynamicObj',mee_view.DynamicContentsObj); //DC ADD
                                                 if(meeIframe.find('table[keyword="'+args.ID+'"]').length == 1){
                                                     isNewCampaign = true;
-                                                }else{
-                                                    console.log(options);
                                                 }
                                                 
                                                 /*if(Object.keys(args.DynamicVariation.ListOfDynamicContents).length >= args.DynamicVariation.ListOfDynamicContents.length){
@@ -4769,7 +4767,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         args.IsUpdate = false;
                                         var previuosActivate = args.clickedLi;
                                         previuosActivate.data("dcInternalData", dcInternal.html());
-                                        if (options.OnDynamicContentSwap != null) {
+                                        if (options.OnDynamicContentSwap != null && args.DynamicContent) {
                                             args.DynamicContent = previuosActivate.data("content");
                                             args.DynamicContent.InternalContents = CleanCode($("<div>" + previuosActivate.data("dcInternalData") + "</div>")).html();
                                             options.OnDynamicContentSwap(args);
@@ -7940,28 +7938,42 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
 
                         },
+                        encodeHTMLStr : function(str){
+                                    if (typeof (str) !== "undefined") {
+                                        str = str.replace(/\‘/g, "&#145;");                
+                                        str = str.replace(/\’/g, "&#146;");
+                                    }
+                                    else {
+                                        str = "";
+                                    }
+                                    return str;
+                                },
                         OnSaveDynamicContent: function (args,mee_view,gloFlag,showMsg) 
                         {
                             var content = args.DynamicContent;
                             var dynamicNumber = content.DynamicVariationID;
                             var _self = this;
                             var contentURL = "";
+                            var postData;
                             // DC ADD
                             if(gloFlag){
-                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&isDefault=" + (content.IsDefault =="Y"? "Y" : "N")+"&contentNumber="+content.DynamicContentID ;
+                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber+"&contentNumber="+content.DynamicContentID;
+                                postData = {"campaignSubject":content.Label,"contents":content.InternalContents,"contentLabel":content.Label,"isDefault":(content.IsDefault =="Y"? "Y" : "N")}
                             }else if(this.isTemplate){
-                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&isDefault=" + (content.IsDefault =="Y"? "Y" : "N")+"&contentNumber="+content.DynamicContentID+"&isSingle=Y" ;
+                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber +"&isSingle=Y&contentNumber="+content.DynamicContentID ;
+                                postData = {"campaignSubject":content.Label,"contents":content.InternalContents,"contentLabel":content.Label,"isDefault":(content.IsDefault =="Y"? "Y" : "N"),}
                             }
                             else{
-                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&isDefault=" + (content.IsDefault =="Y"? "Y" : "N") + "&campaignNumber="+ this.camp_id+"&contentNumber="+content.DynamicContentID;
+                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber + "&campaignNumber="+ this.camp_id+"&contentNumber="+content.DynamicContentID;
+                                postData = {"campaignSubject":content.Label,"contents":content.InternalContents,"contentLabel":content.Label,"isDefault":(content.IsDefault =="Y"? "Y" : "N")}
                             }
                             
                             
                             $.ajax({
                                 url: contentURL,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                                data: postData,
                                 type: "POST",
-                                contentType: "application/json; charset=latin1",
+                                contentType: "application/x-www-form-urlencoded",
                                 dataType: "json",
                                 cache: false,
                                 async: false,
@@ -8092,7 +8104,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var dynamicNumber = content.DynamicVariationID;
                             var _self = this;
                             var dynamicNumberContent = content.DynamicContentID;
-                            var postObj = {"contents": content.InternalContents, type: "updateContent", dynamicNumber: dynamicNumber, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
+                            // NEED to call from function
+                            var str = _self.encodeHTMLStr(content.InternalContents);
+                            var postObj = {"contents": str, type: "updateContent", dynamicNumber: dynamicNumber, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
                             // DC ADD
                             if(this.isTemplate){
                                 postObj["isSingle"] = "Y";
