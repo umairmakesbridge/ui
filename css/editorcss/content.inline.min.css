@@ -2247,3 +2247,7 @@ i.icon{
 .myImage{
     margin-bottom: 3px;
 }
+
+.error-dc{
+    border : 2px solid #FB8080 !important;
+}
