@@ -447,7 +447,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                     this.searchTxt = txt;
                     this.total_fetch = 0;
                     if (this.status == "SS") {                        
-                        this.type = 'normalSharedCampaigns';
+                        this.type = 'searchSharedCampaigns';
                     } 
                     else if(this.status == "F") {
                         this.type = 'searchSharedCampaigns';
