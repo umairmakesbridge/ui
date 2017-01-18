@@ -568,7 +568,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
 
-
+                                    mainHTMLELE.find('.global-save-overlay').remove(); // Removing the saving di
                                     mainHTMLELE.find(".bgimage").each(function () {
                                         $(this).attr("mee-style", $(this).attr("style"));
                                         $(this).removeAttr("style");
@@ -4840,7 +4840,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             //makeCloneAndRegister();
                                             var dcClickedContainer = args.clickedLi.parents(".dynamicContentContainer:first");
                                             var dcInternal = dcClickedContainer.find(".dcInternalContents:first");
-
+                                             
                                             //Get previous activated content
                                             if (args.clickedLi.siblings(".active").length > 0) {
                                                 var previuosActivate = args.clickedLi.siblings(".active");
@@ -4862,6 +4862,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             } else {
                                                 dcInternal.empty();
                                             }
+                                            internalData.find('.global-save-overlay').remove();
                                             //////////////
 
                                             args.clickedLi.siblings().removeClass("active");
