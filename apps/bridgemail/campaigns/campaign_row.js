@@ -176,7 +176,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'comm
                         buttons: {saveBtn: {text: 'Share Campaign',btnicon:'shareicon'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());                  
-                    var mPage = new shareCommonPage({camp: this.sub, obj_model: this.model, app: this.app, dialog: dialog,itemNum:2});
+                    var mPage = new shareCommonPage({parent: this.sub, obj_model: this.model, app: this.app, dialog: dialog,itemNum:2});
                     dialog.getBody().html(mPage.$el);
                     dialog.saveCallBack(_.bind(mPage.shareObject, mPage));
                     

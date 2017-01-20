@@ -18,7 +18,9 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                "click .refresh_btn":function(){
                    this.loadLists();
                    this.app.addSpinner(this.$el);
-               }
+               },
+               "click .sortoption_expand": "toggleSortOption",
+               "click .stattype": "fitlerLists"
             },
             initialize: function () {
                 this.template = _.template(template);				
@@ -28,8 +30,10 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                 this.total_fetch  = 0;
                 this.total = 0;
                 this.offsetLength = 0;
+                this.type = "batches";
                 this.listChecksum = '';
                 this.addContactView =null;
+                this.status = "A";
                 this.render();
             },
             render:function (search) {
@@ -62,9 +66,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                    var that = this;
                   _data['offset'] = this.offset;
                     if(this.searchText){
-                      _data['searchText'] = this.searchText;
-                       //that.showSearchFilters(this.searchText);
-                       
+                      _data['searchText'] = this.searchText;                       
                     }
                     
                  var that = this; // internal access
@@ -72,7 +74,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                  this.$el.find('#list_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No lists founds!</div><div class='loading-list' style='margin-top:50px'></div></td></tr>");
                  this.app.showLoading("&nbsp;",this.$el.find('#list_grid tbody').find('.loading-list'));
                 
-                _data['type'] = 'batches';
+                _data['type'] = this.type;//'batches';
                 this.objRecipients = new recipientsCollection();
                 
                 this.request = this.objRecipients.fetch({data:_data,success:function(data){
@@ -85,7 +87,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                       if(that.searchText){
                        that.showSearchFilters(that.searchText,that.objRecipients.total);
                       }else{
-                          that.$("#total_lists span").html("List(s) found");
+                          that.$("#total_lists span").html(that.totalLabel());
                           that.$("#total_lists .badge").html(that.objRecipients.total);
                       }
                      
@@ -158,12 +160,12 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                    this.searchText = '';
                    this.searchTags = '';
                    this.total_fetch = 0; 
-                   this.$("#total_lists span").html("List(s) found");
+                   this.$("#total_lists span").html(this.totalLabel());
                    this.loadLists();
            },
            showSearchFilters:function(text,total){
               this.$("#total_lists .badge").html(total);
-               this.$("#total_lists span").html(" List(s) found for <b>\""+text+"\"</b> ");
+               this.$("#total_lists span").html(this.totalLabel() + " for <b>\""+text+"\"</b> ");
            },
            
             createList : function(){
@@ -247,7 +249,54 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                 this.$el.parents('body').find('#contacts-caddDialog .closebtn-2,#contacts-caddDialog .closebtn').click(_.bind(function(){
                     this.$el.parents('body').find('.sch-overlay').remove();
                 },this))
+            },
+            toggleSortOption: function (ev) {
+                $(this.el).find("#template_search_menu").slideToggle();
+                ev.stopPropagation();
+            },
+            fitlerLists: function(obj){                               
+                var target = $.getObj(obj, "a");
+                var prevStatus = this.searchTxt;
+                if (target.parent().hasClass('active')) {
+                    return false;
+                }
+                this.$('.stattype').parent().removeClass('active');
+                target.parent().addClass('active');
+                var html = target.clone();
+                $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());                               
+
+                var type = target.attr("search");
+                if (!type){
+                    type = this.$('#template_search_menu li.active a').attr('search');
+                }
+                this.status = type;                                    
+                if (this.status !== prevStatus) {
+                    this.$el.find('#lists-search').val('');
+                    this.$el.find('#clearsearch').hide();
+                     if (type == "SS") {
+                         this.type = 'sharedList';                                
+                     } else if (type == "F") { 
+                         this.type = 'myAllSharedList';                                
+                     } else {
+                         this.type = 'batches';                                
+                     }
+                    this.searchTxt = '';
+                }
+                this.total_fetch = 0;
+                this.loadLists();
+            
+        },
+        totalLabel: function(){
+            var label = "List(s) found";
+            if (this.status == "SS") {
+               label = 'Shared list(s) found';                                
+            } else if (this.status == "F") { 
+                label= 'My shared list(s) found';                                
+            } else {
+                label = 'List(s) found';                                
             }
+            return label;
+        }
             
         });    
 });

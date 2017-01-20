@@ -6,7 +6,18 @@
       
       <div class="srt-div" style=" ">
         <a class="refresh_btn showtooltip" title="Refresh listing"><i>Refresh</i></a>     
-	<div class="input-append search" id="">         
+        <div class="template-filter_expand right" id="autobots" style="position: relative;"> <strong class="sort left">Filter</strong>
+                <span class="sortoption_expand active text-truncated showtooltip" data-original-title="Click to expand/collapse" style="position: relative;"><span class="spntext">All</span> <b class="caret right" style="position:absolute; top:0px; right:10px; margin: 16px 0 0 8px;"> </b></span>
+                <ul id="template_search_menu" class="breadcrumb template_search_menu" style="display: none; right: 0;top:41px;">
+                   <li class="showtooltip active" data-original-title="Show all lists"><a search="A" class="stattype" tabindex="-1">All</a></li>                  
+                   <% if(this.app.get("user").accountType=="O"){ %>
+                   <li class="showtooltip" title="Click to view shared lists"><a search="SS" class="stattype share" tabindex="-1">Shared</a></li>
+                   <% } else { %>
+                   <li class="showtooltip" title="Click to view my shared lists"><a search="F" class="stattype myshare" tabindex="-1">My Shared</a></li>
+                   <% } %>
+                </ul>
+         </div>
+       <div class="input-append search" id="">         
       <span class="icon list"></span><input type="text" style="width:200px;" class="search-control show-image" placeholder="Search lists" id="lists_search"><a style="display:none" id="clearsearch" class="close-icon"></a><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"> 				  </span></button></div></div>
         
         <!--  search  --> 

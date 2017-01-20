@@ -12,6 +12,7 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                     this.dialog = this.options.dialog;
                     this.template = _.template(template);                          
                     this.itemNum = this.options.itemNum;
+                    this.parent = this.options.parent;
                     this.selectedUser = [];
                     var objectMap = {"1":"List","2":"Campaign","3":"Template"};
                     this.objectName = objectMap[this.itemNum];
@@ -23,7 +24,7 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                     this.$el.html(this.template({}));                    
                     this.$subaccountsContainer = this.$("._subaccount_grid tbody")
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    if(this.model.get("isShared")=="Y"){
+                    if(this.model.get("isShared")=="Y" || this.parent.status =="F"){
                         this.getSharedUsers();
                     }
                     else{
@@ -35,10 +36,18 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                         
                 },
                 getSharedUsers: function(){
-                    this.app.showLoading("Getting Sharing details...", this.dialog.$el);                     
+                    this.app.showLoading("Getting Sharing details...", this.dialog.$el);             
+                    var params = "&type=mySharedCampaign&id=";
+                    if(this.itemNum==1){
+                        params = "&type=mySharedList&id=";
+                    }
+                    else if(this.itemNum==2){
+                        params = "&type=mySharedCampaign&id=";
+                    }
+                    params = params +this.getObjectValue();
                     $.ajax({
                     dataType: "json",
-                    url: "/pms/shareable/getShareableItem.jsp?BMS_REQ_TK="+this.app.get("bms_token")+"&type=mySharedCampaign&id="+this.model.get("campNum.encode"),                    
+                    url: "/pms/shareable/getShareableItem.jsp?BMS_REQ_TK="+this.app.get("bms_token")+params,                    
                     async: true,
                     success: _.bind(function (tsv, state, xhr) {
                         if (xhr && xhr.responseText) {
@@ -97,7 +106,7 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                             this.app.showLoading("Updating "+this.objectName+" Sharing...", this.dialog.$el); 
                         }
                         URL = "/pms/shareable/saveShareableItem.jsp?BMS_REQ_TK="+this.app.get('bms_token');        
-                        post_data = {"type":"unshare","value":this.model.get("campNum.encode"),"users":unSharedUsers.join(","),"itemNum":this.itemNum};
+                        post_data = {"type":"unshare","value":this.getObjectValue(),"users":unSharedUsers.join(","),"itemNum":this.itemNum};
                         $.post(URL, post_data)
                         .done(_.bind(function(data) {                                                          
                           this.app.showLoading(false, this.dialog.$el);                          
@@ -123,7 +132,7 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                     this.app.showLoading("Sharing "+this.objectName+"...", this.dialog.$el);                     
                     URL = "/pms/shareable/saveShareableItem.jsp?BMS_REQ_TK="+this.app.get('bms_token');        
 
-                    post_data = {"type":"saveUserShareabeItem","value":this.model.get("campNum.encode"),"itemNum":this.itemNum
+                    post_data = {"type":"saveUserShareabeItem","value":this.getObjectValue(),"itemNum":this.itemNum
                                         ,shareableUsers:newUsers.join(",")
                                     };    
                     
@@ -140,6 +149,10 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                               this.app.showAlert(_json[1],this.$el);
                           }							                            
                      },this));
+                },
+                getObjectValue:function (){
+                    var encodeKey = {"1":"listNumber.encode","2":"campNum.encode","3":"templateNumber.encode"}                    
+                    return this.model.get(encodeKey[this.itemNum]);
                 }
                 
             });

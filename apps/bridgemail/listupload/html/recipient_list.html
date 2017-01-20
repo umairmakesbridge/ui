@@ -9,6 +9,12 @@
                        style="margin:0px!important;">
                     </a>
                 </div>
+                <% if(this.model.get('isShared')=== 'Y' || this.parents.status === 'F'){ %>
+                      <div class="list_shared shared-camp showtooltip" title="Click to view my shared lists"><a class="icon shared"></a></div>
+                 <%  } %>
+                  <% if(this.parents.status === 'SS') { %>
+                        <div class="list_sharedwith showtooltip" title="This campaign is shared with you"><a class="icon sharedwith"></a></div>
+                    <%  } %>   
               <%}%>
                 <!-- percent_stats  -->
             </h3>
@@ -34,10 +40,14 @@
            <%if (this.model.get('isSupressList')=="true" || this.model.get('isBounceSupressList')== "true"){%>
                   
                 <%}else{%>
-                <div class="slide-btns two s-clr3" style="width:;">
+                <div class="slide-btns <% if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {print('three s-clr4')} else {print('two s-clr3')} %>">
 
                     <span  class="icon setting"></span>
                     <div>
+                        <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
+                             <a class="icon share-camp share clr3" ><span>Share</span></a>
+                        <% } %>
+                        
                         <a class="icon edit edit-list clr2" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Edit</span></a>
 
                         <a class="icon delete delete-list clr1" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Delete</span></a>

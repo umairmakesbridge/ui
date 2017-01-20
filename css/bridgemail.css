@@ -5995,8 +5995,20 @@ ul.ftipg li span {
     width: 20px;
     margin: 0px !important;    
 }
-.campaign_sharedwith .sharedwith{
+.campaign_sharedwith .sharedwith,.list_sharedwith{
     cursor: default !important;
+}
+
+.list_shared,.list_sharedwith{
+    float: left;
+    margin: 0 0 0 5px;
+    position: relative;
+    height: 20px;
+    width: 20px;
+}
+.bmsgrid .list_sharedwith .icon,.bmsgrid .list_shared .icon
+{
+    margin:0px;height:20px;width:20px;
 }
 
 .campaign_stats.cstats {

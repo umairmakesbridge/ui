@@ -205,11 +205,14 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         if (this.status !== prevStatus) {
                             this.$el.find('#list-search').val('');
                             this.$el.find('#clearsearch').hide();
-                            if (searchTarget !== "SS") {
-                                this.type = 'listNormalCampaigns';
+                            if (type == "SS") {
+                                this.type = 'normalSharedCampaigns';                                
+                            } else if (type == "F") { 
+                                this.type = 'myAllSharedCampaign';                                
                             } else {
-                                this.type = 'normalSharedCampaigns';
+                                this.type = 'listNormalCampaigns';                                
                             }
+                            this.searchTxt = '';
                             this.searchTxt = '';
                         }
 
@@ -452,7 +455,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                     else if(this.status == "F") {
                         this.type = 'searchSharedCampaigns';
                     }else{
-                        this.type = 'listNormalCampaigns';
+                        this.type = 'searchNormalCampaigns';
                     }
                     if (this.taglinkVal) {
 
