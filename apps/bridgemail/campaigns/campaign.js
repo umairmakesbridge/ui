@@ -1434,6 +1434,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("saving savingbg");
                                     camp_obj.$(".save-step2").css('width','auto');
                                     if (step1_json[0] !== "err") {
+                                        
                                         if(camp_obj.meeView && !camp_obj.meeView.autoSaveFlag && !camp_obj.isSaveCallFromMee){
                                         camp_obj.app.showMessge("Step 2 saved successfully!");
                                         if(camp_obj.options.params.parent !== ""){
@@ -1447,6 +1448,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                             
                                         }
                                         if(camp_obj.meeView){
+                                            camp_obj.$("#mee_editor").saveDCfromCamp();
                                             camp_obj.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
                                             camp_obj.meeView.autoSaveFlag = false;
                                         }
