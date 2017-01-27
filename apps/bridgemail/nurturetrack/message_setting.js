@@ -249,6 +249,7 @@ function (template) {
                                              this.app.showMessge("Message settings saved successfully!");
                                         }
                                         if(this.messagebody_page.meeView){
+                                            this.$("#mee_editor").saveDCfromCamp();
                                             this.messagebody_page.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
                                             this.messagebody_page.meeView.autoSaveFlag = false;
                                         }

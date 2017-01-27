@@ -553,6 +553,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     return CleanCode(constructedHTML).html();
                                 }
 
+                                $.fn.saveDCfromCamp = function(){
+                                    
+                                     meeIframe.find(".dynamicContentContainer").each(function (index, object) {
+                                            if ($(object).find(".dcName span:first")) {
+                                                    meeIframe.find("#" + $(object).attr("id")).find(".dcName span:first").click();
+                                            }
+                                         });
+                                    
+                                }
                                 $.fn.getMEEHTML = function () {
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var parentTd = '';
@@ -1111,6 +1120,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var matches = re.exec(url);
                                             return matches && matches[5];
                                         }
+                                        
                                 $.fn.getIframeStatus = function () {
                                     return mee.iframeLoaded;
                                 }
@@ -1160,6 +1170,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     });
                                     isRemoveDialogAttach = true;
                                 }
+                                
                                 //--------------------- Code Preview ---------------------------//
 
                                 function InitializePreviewControls() {
@@ -1712,7 +1723,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     oHtml.find(".dynamicContentContainer").each(function (index, object) {
                                         if ($(object).find(".dcName span:first")) {
-                                            meeIframe.find("#" + $(object).attr("id")).find(".dcName span:first").click();
+                                            //meeIframe.find("#" + $(object).attr("id")).find(".dcName span:first").click();
                                         }
                                         var variation = $(object);
                                         var keyword = variation.attr("keyword");
@@ -1905,8 +1916,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     //if (options.landingPage) {
 
                                     //}
-
-
+                                   
                                     //TODO Styles
 
                                     myElement.find('.tabs').click(function () {
@@ -2440,6 +2450,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                     }
                                 }
+                                
+
                                 function ddlBackgroundImgLayerChange(obj,args) {
                                     if ($(this).find(':selected').val() != "-1") {
                                         //RemoveAllOutline(); 
@@ -2833,6 +2845,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                 }
 
+                                
                                 var SetBackgroundColor = function (hex) {
 
                                     if (hex == null && SelectedElementForStyle != null) {
@@ -4770,7 +4783,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         if (options.OnDynamicContentSwap != null) {
                                             args.DynamicContent = previuosActivate.data("content");
                                             args.DynamicContent.InternalContents = CleanCode($("<div>" + previuosActivate.data("dcInternalData") + "</div>")).html();
-                                            options.OnDynamicContentSwap(args);
+                                            args['isLocalDC'] = true;
+                                            options.OnDynamicContentSwap(args,mee_view);
                                         }
                                     }
                                     
@@ -4850,7 +4864,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     args.DynamicContent = previuosActivate.data("content");
                                                     args.DynamicContent.InternalContents = CleanCode($("<div>" + previuosActivate.data("dcInternalData") + "</div>")).html();
                                                     
-                                                    options.OnDynamicContentSwap(args);
+                                                    options.OnDynamicContentSwap(args,mee_view);
                                                 }
                                             }
 
@@ -4858,11 +4872,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             if (args.clickedLi.data("dcInternalData") != null) {
                                                 var internalData = $(args.clickedLi.data("dcInternalData"));
                                                 dcInternal.html(internalData);
+                                                internalData.find('.global-save-overlay').remove();
                                                 oInitDestroyEvents.InitAll(internalData);
                                             } else {
                                                 dcInternal.empty();
                                             }
-                                            internalData.find('.global-save-overlay').remove();
+                                            
                                             //////////////
 
                                             args.clickedLi.siblings().removeClass("active");
@@ -6594,22 +6609,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             });
                                                             var saveContentBlock = function () {
                                                                 var txtVariationName = dcContentVariationWindow.find(".txtPlaceHolder");
-                                                                txtVariationName.prop("disabled", true);
+                                                                
                                                                 dcContentVariationWindow.find(".btnSaveVariation").addClass("saving");
                                                                 if ($.trim(txtVariationName.val()) == "")
                                                                 {
+                                                                    txtVariationName.addClass("error-dc");
+                                                                    changFlag.editor_change = false;
                                                                     //alert("Please enter dynamic control name.");
 
                                                                 } else {
-
+                                                                    
                                                                     args.DynamicVariation = new DynamicVariation();
                                                                     args.DynamicVariation.Label = txtVariationName.val();
                                                                     args.DynamicVariation.isUpdate = false;
+                                                                    txtVariationName.prop("disabled", true);
                                                                     var dc = new DynamicContents();
                                                                     var listOfDC = new Array();
                                                                     listOfDC.push(dc);
                                                                     args.DynamicVariation.ListOfDynamicContents = listOfDC;
-
+                                                                    txtVariationName.removeClass("error-dc");
                                                                     if (options.OnDynamicControlSave != null) {
                                                                        
                                                                         options.OnDynamicControlSave(args.DynamicVariation,mee_view);
@@ -6629,11 +6647,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     InitializeDynamicControl(args);
 
                                                                     oInitDestroyEvents.InitAll(args.droppedElement);
+                                                                    txtVariationName.prop("disabled", false);
+
+                                                                    dcContentVariationWindow.hide();
                                                                 }
                                                                 dcContentVariationWindow.find(".btnSaveVariation").removeClass("saving");
-                                                                txtVariationName.prop("disabled", false);
-
-                                                                dcContentVariationWindow.hide();
+                                                                
                                                             }
                                                             setTimeout(_.bind(function () {
                                                                 this.find(".txtPlaceHolder").focus();
@@ -8113,15 +8132,32 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var dynamicNumberContent = content.DynamicContentID;
                             // NEED to call from function
                             var str = _self.encodeHTMLStr(content.InternalContents);
-                            var postObj = {"contents": str, type: "updateContent", dynamicNumber: dynamicNumber, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
+                            var postObj = {"contents": str, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
+                            var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContent&dynamicNumber="+dynamicNumber;
+                            // making postObj content rich
+                                
+                            //Data = postObj;
                             // DC ADD
                             if(this.isTemplate){
                                 postObj["isSingle"] = "Y";
                             }
                             else if(!gloFlag && !this.isTemplate){
-                                postObj["campaignNumber"] = this.camp_id;
+                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber+"&campaignNumber="+this.camp_id;
+                                var postObj="";
+
+                                // making postObj content rich
+                                $.each(mee_view.DynamicContentsObj[args.ID],function(key,value){
+                                                //var rule = rules[j];
+                                                //contentRuleURL += "&"+ j +".spanInDays=";
+                                                var _html = $('<div/>').html(value.InternalContents).html();
+                                                _html = _.unescape(_html);
+                                                postObj += "&contents=" + _self.encodeHTMLStr(_html);
+                                                postObj += "&campaignSubjects=" + value.Label;
+                                                postObj += "&contentLabels=" + value.Label;
+                                                postObj += "&contentNumbers=" + value.DynamicContentID;
+                                                postObj += "&isDefault=" + value.IsDefault;
+                                            });
                             }
-                            var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN;
                             $.post(contentURL, postObj)
                                     .done(function (data) {
                                            
@@ -8133,6 +8169,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 _self._app.showMessge('Dynamic Content Saved Globaly');
                                             }
                                     });
+                            
                         },
                         onSaveContentFilters : function(postData){
                             if(postData.isLocal){
