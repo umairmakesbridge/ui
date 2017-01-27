@@ -116,7 +116,12 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                               this.dialog.hide();
                           }
                           if(sharedUsers.length==0){
-                              this.model.set("isShared", 'N'); 
+                              if(this.parent.status =="F" && this.itemNum==1){
+                                  this.parent.loadLists();
+                              }
+                              else{
+                                this.model.set("isShared", 'N'); 
+                              }
                               this.app.showMessge(this.objectName+" unshared Successfully!");  
                           }
                      },this));            

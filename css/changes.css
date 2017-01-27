@@ -6566,6 +6566,8 @@ ul.ftipg li i.gp { background-position: -120px -30px;}
 .icon.sharedwith{background: url("../img/sharewith.png") no-repeat scroll center center ;}
 .icon.shared:hover {background: url("../img/share20_blue.png") no-repeat scroll center center ;}
 
+.icon.subaccount {background: url("../img/account.png") no-repeat scroll center center ;}
+
 
 .icon.report-bar{background: url("../img/percent.png") no-repeat scroll center center ;}
 .icon.report-bar:hover {background: url("../img/percent2.png") no-repeat scroll center center ;}

@@ -120,7 +120,10 @@
                     <%  } %>
                     <% if(this.sub.status === 'SS') { %>
                         <div class="campaign_sharedwith showtooltip" title="This campaign is shared with you"><a class="icon sharedwith"></a></div>
-                    <%  } %>    
+                    <%  } %>
+                    <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId!==this.model.get('userId')){ %>
+                     <div class="sub_accountobj showtooltip" title="This campaign is created by sub account '<%=this.model.get('userId') %>'"><a class="icon subaccount"></a></div>
+                    <%  } %>
                     </h3>  
                  <div class="tags tagscont" id="campaign_tag_camp">
                      <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         

@@ -5995,20 +5995,24 @@ ul.ftipg li span {
     width: 20px;
     margin: 0px !important;    
 }
-.campaign_sharedwith .sharedwith,.list_sharedwith{
+.campaign_sharedwith .sharedwith,.list_sharedwith .sharedwith{
     cursor: default !important;
 }
 
-.list_shared,.list_sharedwith{
+.list_shared,.list_sharedwith, .sub_accountobj{
     float: left;
     margin: 0 0 0 5px;
     position: relative;
     height: 20px;
     width: 20px;
 }
-.bmsgrid .list_sharedwith .icon,.bmsgrid .list_shared .icon
+.bmsgrid .list_sharedwith .icon,.bmsgrid .list_shared .icon, .bmsgrid .sub_accountobj .icon
 {
     margin:0px;height:20px;width:20px;
+}
+
+ .sub_accountobj .subaccount, .list_sharedwith sharedwith{
+    cursor: default !important;
 }
 
 .campaign_stats.cstats {

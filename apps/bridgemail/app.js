@@ -151,7 +151,7 @@ define([
                 $(".messsage_alert").fadeOut("fast", function () {
                     $(this).remove();
                 });
-                $("#template_search_menu").hide();
+                $("[id='template_search_menu']").hide();
                 $('body > .percent_stats').remove();
             });
             $("body").keyup(_.bind(function (e) {

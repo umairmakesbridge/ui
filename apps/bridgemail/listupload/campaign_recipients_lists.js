@@ -11,7 +11,8 @@ function (template, ListsCollection, ListsView,moment) {
         return Backbone.View.extend({  
                 'className':'ListsViewWrap',
                 events: {                   
-                      
+                      "click .sortoption_expand": "toggleSortOption",
+                      "click .stattype": "fitlerLists"
                  },
                 initialize: function () {
                         this.template = _.template(template);				
@@ -25,6 +26,8 @@ function (template, ListsCollection, ListsView,moment) {
                         this.listsIdArray = [];
                         this.totalListArray = [];
                         this.total = 0;
+                        this.status = "A";
+                        this.type = "batches";
                         this.offsetLength = 0;
                         this.source = this.options.source?this.options.source:'';
                         this.render();
@@ -91,7 +94,7 @@ function (template, ListsCollection, ListsView,moment) {
                         // that.showSearchFilters(this.searchText);
                     }
                     var that = this; // internal access
-                    _data['type'] = this.options.params.type;
+                    _data['type'] = this.type;
                     _data['campNum'] = this.options.campNum;
                     this.objTargets = new ListsCollection();
                     this.$el.find('#list_grid tbody .load-tr').remove();
@@ -112,7 +115,7 @@ function (template, ListsCollection, ListsView,moment) {
                                 that.showSearchFilters(that.searchText, that.objTargets.total);
                             } else {
                                 that.$("#total_lists .badge").html(that.objTargets.total);
-                                that.$("#total_lists span").html("List(s) found");    
+                                that.$("#total_lists span").html(that.totalLabel());    
                             }
                             that.offsetLength = data.length;
                             that.total_fetch = that.total_fetch + data.length;
@@ -249,12 +252,12 @@ function (template, ListsCollection, ListsView,moment) {
                    this.searchText = '';
                    this.searchTags = '';
                    this.total_fetch = 0; 
-                   this.$("#total_lists span").html("List(s) found");
+                   this.$("#total_lists span").html(this.totalLabel());
                    this.loadLists();
            },
                 showSearchFilters: function(text, total) {
                     this.$("#total_lists .badge").html(total);
-                    this.$("#total_lists span").html("List(s) found for  <b>\"" + text + "\" </b>");
+                    this.$("#total_lists span").html(this.totalLabel()+" for  <b>\"" + text + "\" </b>");
                 },
                 liveLoading: function(where) {
                     var $w = $(window);
@@ -356,6 +359,53 @@ function (template, ListsCollection, ListsView,moment) {
                 else{
                     this.app.showAlert("Please select at least on list",this.$el);
                 }
+            },
+            toggleSortOption: function (ev) {
+                $(this.el).find("#template_search_menu").slideToggle();
+                ev.stopPropagation();
+            },
+            fitlerLists: function(obj){                               
+                var target = $.getObj(obj, "a");
+                var prevStatus = this.searchTxt;
+                if (target.parent().hasClass('active')) {
+                    return false;
+                }
+                this.$('.stattype').parent().removeClass('active');
+                target.parent().addClass('active');
+                var html = target.clone();
+                $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());                               
+
+                var type = target.attr("search");
+                if (!type){
+                    type = this.$('#template_search_menu li.active a').attr('search');
+                }
+                this.status = type;                                    
+                if (this.status !== prevStatus) {
+                    this.$el.find('#lists_search').val('');
+                    this.$el.find('#clearsearch').hide();
+                     if (type == "SS") {
+                         this.type = 'sharedList';                                
+                     } else if (type == "F") { 
+                         this.type = 'myAllSharedList';                                
+                     } else {
+                         this.type = 'batches';                                
+                     }
+                    this.searchTxt = '';
+                }
+                this.total_fetch = 0;
+                this.loadLists();
+            
+        },
+        totalLabel: function(){
+            var label = "List(s) found";
+            if (this.status == "SS") {
+               label = 'Shared list(s) found';                                
+            } else if (this.status == "F") { 
+                label= 'My shared list(s) found';                                
+            } else {
+                label = 'List(s) found';                                
             }
+            return label;
+        }
         });
 });

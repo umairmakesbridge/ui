@@ -13,8 +13,11 @@
                       <div class="list_shared shared-camp showtooltip" title="Click to view my shared lists"><a class="icon shared"></a></div>
                  <%  } %>
                   <% if(this.parents.status === 'SS') { %>
-                        <div class="list_sharedwith showtooltip" title="This campaign is shared with you"><a class="icon sharedwith"></a></div>
+                        <div class="list_sharedwith showtooltip" title="This list is shared with you"><a class="icon sharedwith"></a></div>
                     <%  } %>   
+                  <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId!==this.model.get('userId')){ %>
+                     <div class="sub_accountobj showtooltip" title="This list is created by subaccount '<%=this.model.get('userId') %>'"><a class="icon subaccount"></a></div>
+                    <%  } %>  
               <%}%>
                 <!-- percent_stats  -->
             </h3>
