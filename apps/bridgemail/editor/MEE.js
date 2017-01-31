@@ -2907,8 +2907,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 function InitializeDeleteButtonOnElement(element) {
 
                                     element.find(".myHandlerDelete").click(function () {
-                                        var dynamicKey = element.parent().find('table').attr('keyword');
-                                        var dcId = element.parent().find('table').attr('id');
+                                        var dynamicKey = element.parents('li.csDynamicData').find('table').attr('keyword');
+                                        var dcId = element.parents('li.csDynamicData').find('table').attr('id');
                                         DeleteElement(meeIframeWindow.$(this));
                                         options.OnDeleteDynamicVariation({DCID:dcId,delLocal:true});
                                         delete mee_view.DynamicContentsObj[dynamicKey];
@@ -2926,6 +2926,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var dynmicID = element.parent().find('table').attr('id')
                                         var dcLiObj = element.parent();
                                         //<div style='height: " + dcTableHeight + "px;' class='overlay'><p>Creating Copy...</p></div>
+                                        element.parent().find('table').parent().find('.global-save-overlay').remove();
                                         element.parent().find('table').before("<div style='height:  270px;' class='overlay global-save-overlay'><p>Saving DC Globally...</p></div>");
                                         
                                         var contentReqObj ="";
@@ -8150,12 +8151,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //var rule = rules[j];
                                                 //contentRuleURL += "&"+ j +".spanInDays=";
                                                 var _html = $('<div/>').html(value.InternalContents).html();
-                                                _html = _.unescape(_html);
-                                                postObj += "&contents=" + _self.encodeHTMLStr(_html);
-                                                postObj += "&campaignSubjects=" + value.Label;
-                                                postObj += "&contentLabels=" + value.Label;
-                                                postObj += "&contentNumbers=" + value.DynamicContentID;
-                                                postObj += "&isDefault=" + value.IsDefault;
+                                                _html = escape(_html);
+                                                postObj += '&contents=' + _html;
+                                                postObj += '&campaignSubjects=' + value.Label;
+                                                postObj += '&contentLabels=' + value.Label;
+                                                postObj += '&contentNumbers=' + value.DynamicContentID;
+                                                postObj += '&isDefault=' + value.IsDefault;
                                             });
                             }
                             $.post(contentURL, postObj)
