@@ -2909,9 +2909,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     element.find(".myHandlerDelete").click(function () {
                                         var dynamicKey = element.parents('li.csDynamicData').find('table').attr('keyword');
                                         var dcId = element.parents('li.csDynamicData').find('table').attr('id');
+                                        if(element.parent().hasClass('csDynamicData')){
+                                           delete mee_view.DynamicContentsObj[dynamicKey]; 
+                                        }
                                         DeleteElement(meeIframeWindow.$(this));
                                         options.OnDeleteDynamicVariation({DCID:dcId,delLocal:true});
-                                        delete mee_view.DynamicContentsObj[dynamicKey];
+                                        
+                                        
                                         makeCloneAndRegister();
                                     });
                                 }
@@ -3517,6 +3521,59 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             _newTitleHTML.find("input#image_title").val($(workingObject).attr("title"));
                                         }
                                         _newTitleHTML.find("input#image_title").focus();
+                                    },
+                                    
+                                    setImageAltText : function(workingObject){
+                                             var dialog = options._app.showDialog({
+                                            title: 'Set Image Alt Text',
+                                            css: {
+                                                "width": "500px",
+                                                "margin-left": "-250px",
+                                                "top": "20%"
+                                            },
+                                            headerEditable: false,
+                                            headerIcon: 'template',
+                                            bodyCss: {
+                                                "min-height": "100px"
+                                            },
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Set'
+                                                }
+                                            }
+                                        });
+                                        var _newTitleHTML = '<div class="row campname-container" style="margin-top: 24px;width:96%">'
+                                        _newTitleHTML += '<label style="width:20%;">Title:</label>'
+                                        _newTitleHTML += '<div class="inputcont" style="text-align:right;"><input type="text" id="image_alttext" placeholder="Enter title here" style="width:70%;" /></div>'
+                                        _newTitleHTML += '</div>';
+                                        _newTitleHTML = $(_newTitleHTML);
+                                        var setAlt = function () {
+                                            var alt_text = _newTitleHTML.find("input#image_alttext").val();
+                                            if (alt_text) {
+                                                $(workingObject).attr("alt", alt_text);
+                                                if (options.fromDialog) {
+                                                    dialog.showPrevious();
+                                                } else {
+                                                    dialog.hide();
+                                                }
+                                            } else {
+                                                _newTitleHTML.find("input#image_alttext").focus();
+                                            }
+                                        }
+                                        dialog.saveCallBack(setAlt);
+                                        dialog.getBody().append(_newTitleHTML);
+                                        if (options.fromDialog) {
+                                            var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                            dialog.getBody().find(".campname-container").addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                                            options._app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
+                                            options._app.dialogArray[dialogArrayLength - 1].currentView = _newTitleHTML; // New Dialog
+                                            options._app.dialogArray[dialogArrayLength - 1].saveCall = setAlt; // New Dialog
+                                            _newTitleHTML.ReattachEvents = options.reAttachEvents;
+                                        }
+                                        if ($(workingObject).attr("alt")) {
+                                            _newTitleHTML.find("input#image_alttext").val($(workingObject).attr("alt"));
+                                        }
+                                        _newTitleHTML.find("input#image_alttext").focus();
                                     }
                                 }
                                 // == Enabling VideoFunctionality before access 
@@ -3601,6 +3658,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 myElement.find(".ImageToolbarTitleSetClass").click(function () {
 
                                     imageFunctionality.setImageTitle(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
+                                    makeCloneAndRegister();
+                                    return false;
+                                });
+                                myElement.find(".ImageToolbarAltSetClass").click(function () {
+
+                                    imageFunctionality.setImageAltText(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     makeCloneAndRegister();
                                     return false;
                                 });
@@ -8144,19 +8207,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             }
                             else if(!gloFlag && !this.isTemplate){
                                 contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber+"&campaignNumber="+this.camp_id;
-                                var postObj="";
-
+                                postObj={};
+                                postObj['contentCount']=Object.keys(mee_view.DynamicContentsObj[args.ID]).length;
                                 // making postObj content rich
+                                var i=0;
                                 $.each(mee_view.DynamicContentsObj[args.ID],function(key,value){
                                                 //var rule = rules[j];
                                                 //contentRuleURL += "&"+ j +".spanInDays=";
-                                                var _html = $('<div/>').html(value.InternalContents).html();
-                                                _html = escape(_html);
-                                                postObj += '&contents=' + _html;
-                                                postObj += '&campaignSubjects=' + value.Label;
-                                                postObj += '&contentLabels=' + value.Label;
-                                                postObj += '&contentNumbers=' + value.DynamicContentID;
-                                                postObj += '&isDefault=' + value.IsDefault;
+                                                //var _html = $('<div/>').html(value.InternalContents).html();
+                                                //_html = escape(_html);
+                                                postObj[i+'.contents']=  _self.encodeHTMLStr(value.InternalContents);
+                                                postObj[i+'.campaignSubjects']= value.Label;
+                                                postObj[i+'.contentLabels']= value.Label;
+                                                postObj[i+'.contentNumbers']= value.DynamicContentID;
+                                                postObj[i+'.isDefault']= value.IsDefault;
+                                                i++;
                                             });
                             }
                             $.post(contentURL, postObj)
