@@ -3544,7 +3544,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         });
                                         var _newTitleHTML = '<div class="row campname-container" style="margin-top: 24px;width:96%">'
                                         _newTitleHTML += '<label style="width:20%;">Title:</label>'
-                                        _newTitleHTML += '<div class="inputcont" style="text-align:right;"><input type="text" id="image_alttext" placeholder="Enter title here" style="width:70%;" /></div>'
+                                        _newTitleHTML += '<div class="inputcont" style="text-align:right;"><input type="text" id="image_alttext" placeholder="Enter title here" style="width:70%;" /><p style="font-size: 11px;text-align: left;padding-left: 63px;">The alt text provides alternative information for an image, if a user for some reason cannot view it.</p></div>'
                                         _newTitleHTML += '</div>';
                                         _newTitleHTML = $(_newTitleHTML);
                                         var setAlt = function () {
