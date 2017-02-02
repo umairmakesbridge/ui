@@ -3560,6 +3560,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 _newTitleHTML.find("input#image_alttext").focus();
                                             }
                                         }
+                                        _newTitleHTML.find("input#image_alttext").keypress(function (e) {
+                                            if (e.keyCode == 13) {
+                                                setAlt();
+                                            }
+                                        })
                                         dialog.saveCallBack(setAlt);
                                         dialog.getBody().append(_newTitleHTML);
                                         if (options.fromDialog) {
