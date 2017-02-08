@@ -117,21 +117,26 @@ function (template) {
                     $.post(URL,post_data)
                     .done(_.bind(function(data) {  
                         this.app.showLoading(false,this.$el);     
-                        var _json = jQuery.parseJSON(data);                         
-                        if(_json.tId){
+                        var _json = jQuery.parseJSON(data);  
+                        if(_json[0]!="err"){
+                            if(_json.tId){
                             this.tId = _json.tId;
+                            }
+
+                            if(post_data['type']=='deactivate'){
+                                this.showHideButton(false);
+                                this.page.peerOnOff(false);
+                            }
+                            else{
+                                this.showHideButton(true);
+                                this.page.peerOnOff(true);
+                            }
+
+                            this.app.showMessge("Salesforce peering transaction has been activated/updated successfully.");
+
+                        }else{
+                            this.app.showAlert(_json[1], $("body"), {fixed: true});
                         }
-                        
-                        if(post_data['type']=='deactivate'){
-                            this.showHideButton(false);
-                            this.page.peerOnOff(false);
-                        }
-                        else{
-                            this.showHideButton(true);
-                            this.page.peerOnOff(true);
-                        }
-                        
-                        this.app.showMessge("Salesforce peering transaction has been activated/updated successfully.");
                         
                     },this));
                 }
