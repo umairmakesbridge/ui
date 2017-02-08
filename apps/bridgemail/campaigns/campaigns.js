@@ -320,7 +320,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                     _data['status'] = this.status;
                     _data['bucket'] = 20;
 
-                    this.campaigns_request = this.campaignCollection.fetch({data: _data,remove: remove_cache,
+                    this.campaigns_request = this.campaignCollection.fetch({data: _data,remove: true,
                         success: _.bind(function (data1, collection) {
                             // Display items
                             this.$("#camps_grid tbody").find('.loading-campagins').remove();
