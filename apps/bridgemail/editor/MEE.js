@@ -1137,6 +1137,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     } else {
                                         accordian_height = options.parentWindowobj.height() - 62 - diff;
                                     }
+                                    console.log("parent window height= "+accordian_height)
                                     this.find(".builder-panel").css("height", accordian_height + "px");
                                     this.find(".style-panel").css("height", accordian_height + "px");
 

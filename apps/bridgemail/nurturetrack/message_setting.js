@@ -33,8 +33,12 @@ function (template) {
                 this.isCreateCamp = (this.options.isCreateNT) ? this.options.isCreateNT : '';
                 if(this.options.type !="undefined" && this.options.type == "autobots")
                      this.camp_id = this.options.campNum;     
-                 else
+                 else if(this.options.type !="undefined" && this.options.type == "workflow"){
+                     this.camp_id = this.options.campNum;     
+                 }
+                 else {
                      this.camp_id = this.camp_obj['campNum.encode'];     
+                 }
                 this.app = this.parent.app;       
                 this.isSaveCallFromMee = false;
                 this.render();                    
@@ -78,6 +82,7 @@ function (template) {
             },
             previewCampaign:function(){
                 var camp_id = this.camp_id;                                	
+                if(!camp_id){return false}
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
                 var dialog = this.app.showDialog({title:'Message Preview' ,
@@ -117,18 +122,24 @@ function (template) {
            }
           ,
            loadCallCampaign:function(){
-              var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=basic";
-              this.app.showLoading("Loading Campaign...",this.$el);
-              jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
-                  this.app.showLoading(false,this.$el);  
-                  var camp_json = jQuery.parseJSON(xhr.responseText);
-                  this.camp_json = camp_json;                  
-                  if(this.messagebody_page){
-                      this.messagebody_page.campobjData = camp_json;
-                  }
-                  this.step1_page.loadCampaign(this.camp_json);                  
-                  
-              },this));    
+              if(this.camp_id) {
+                var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=basic";
+                this.app.showLoading("Loading Campaign...",this.$el);
+                jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
+                    this.app.showLoading(false,this.$el);  
+                    var camp_json = jQuery.parseJSON(xhr.responseText);
+                    this.camp_json = camp_json;                  
+                    if(this.messagebody_page){
+                        this.messagebody_page.campobjData = camp_json;
+                    }
+                    this.step1_page.loadCampaign(this.camp_json);                  
+
+                },this));    
+              }
+              else{
+                  this.step1_page.initCheckbox();
+                  this.loadMessageHTML();                  
+              }
              
            },
            loadStep1:function(){
@@ -142,15 +153,20 @@ function (template) {
                  },this));
             },
             validateStep1:function(){
-                if(!this.step1_page.isDataLoaded){
-                    setTimeout(_.bind(this.validateStep1,this),300)
+                if(this.camp_id) {
+                    if(!this.step1_page.isDataLoaded){
+                        setTimeout(_.bind(this.validateStep1,this),300)
+                    }
+                    else{
+                        var isStep1Valid = this.step1_page.saveStep1(true);
+                        if(isStep1Valid===false){
+                            this.$("#accordion_setting").accordion( "option", "active", 0);
+                        }
+
+                    }
                 }
                 else{
-                    var isStep1Valid = this.step1_page.saveStep1(true);
-                    if(isStep1Valid===false){
-                        this.$("#accordion_setting").accordion( "option", "active", 0);
-                    }
-                    
+                    this.$("#accordion_setting").accordion( "option", "active", 0);
                 }
             },
             loadMessageBody:function(){
@@ -179,9 +195,11 @@ function (template) {
                    },this));
                  }
             },
-            saveStep2:function(showLoading,htmlText){                                                   
+            saveStep2:function(showLoading,htmlText){       
+                 if(!this.camp_id){return false}
+                 this.saveEditorType();
                  var html = "",plain="";                  
-                 var post_data = {type: "saveStep2",campNum:this.camp_id};
+                 var post_data = {type: "saveStep2",campNum:this.camp_id};                 
                  var campaign_subject_title = $.trim(this.$("#campaign_subject").val());
                  var selected_li = this.$("#choose_soruce li.selected").attr("id");
                     post_data['isCampaignText'] = 'N';                        
@@ -294,6 +312,16 @@ function (template) {
                          this.dialog.$el.find('.modal-header .cstatus').remove();
                         // this.dialog.$el.find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
                     }
+                },
+                saveEditorType:function(){
+                    if(typeof(this.editorType)=="undefined"){
+                        var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                        this.editorType = this.messagebody_page.campobjData.editorType;
+                        var post_editor = {editorType:this.editorType,type:"editorType",campNum:this.camp_id};                                                                 
+                        $.post(URL,post_editor)
+                         .done(function(data) {
+                         });                
+                    }  
                 }
             
             

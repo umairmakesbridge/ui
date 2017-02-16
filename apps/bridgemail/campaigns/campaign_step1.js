@@ -46,6 +46,7 @@ function (template) {
               if(this.editable===false){
                 this.$(".block-mask").show();
               }
+              
             },
             initControls:function(){                
                 
@@ -163,7 +164,8 @@ function (template) {
                  this.$("#campaign_isWebVersion").prop("checked",camp_json.isWebVersionLink=="N"?false:true);
                  
                  this.parent.htmlText = camp_json.htmlText;
-                 this.parent.plainText = camp_json.plainText;                    
+                 this.parent.plainText = camp_json.plainText;   
+                 this.parent.editorType = camp_json.editorType;
                  if(camp_json.defaultSenderName != '')
                  {
                      if(camp_json.defaultSenderName){
@@ -215,6 +217,9 @@ function (template) {
                             this.$("#campaign_footer_text").val(this.app.decodeHTML(defaults_json.footerText));
                             this.$("#campaign_from_email").val(this.app.decodeHTML(defaults_json.fromEmail));
                             this.$("#campaign_from_name").val(this.app.decodeHTML(defaults_json.fromName));
+                            if(!this.parent.camp_id) {
+                                this.$("#campaign_reply_to").val(this.app.decodeHTML(defaults_json.fromEmail));
+                            }
                             var fromEmails = defaults_json.fromEmail;
                             if(defaults_json.optionalFromEmails)
                                     fromEmails += ',' + defaults_json.optionalFromEmails;
@@ -402,11 +407,14 @@ function (template) {
                     if(validate){
                         
                        return  isValid;
-                    }
-
-            
+                    }                   
+                    
                     if(isValid)
-                    {   
+                    {
+                        if(this.parent.type=="workflow" && !this.parent.camp_id){
+                            this.createWorkFlowMessage();                        
+                            return false;
+                        }    
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                         defaultSenderName = merge_field_patt.test(this.$('#campaign_from_name').val())?this.$("#campaign_default_from_name").val():"";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
@@ -444,17 +452,17 @@ function (template) {
                                     this.app.showLoading(false,this.parent.dialog.$el);
                                     if(step1_json[0]!=="err"){   
                                             this.parent.parent.loadCampaign();
-                                            if(this.parent.dialog){
-                                                this.parent.dialog.$(".dialog-title").html("'"+this.$("#campaign_subject").val()+"' Settings")
+                                            if(this.parent.type!=="workflow"){
+                                                if(this.parent.dialog){
+                                                    this.parent.dialog.$(".dialog-title").html("'"+this.$("#campaign_subject").val()+"' Settings")
+                                                }
                                             }
                                             if(this.parent.messagebody_page.states.editor_change === true ){
                                                 this.parent.saveStep2();                                                
                                             }
                                             else{
                                                 this.app.showMessge("Message settings saved successfully!");
-                                            }
-                                            //camp_obj.states.step1.change=false;
-                                                                                       
+                                            }                                                                                                                                   
                                     }
                                     else{
                                            this.app.showAlert(step1_json[1],this.$el); 
@@ -464,7 +472,49 @@ function (template) {
                         }
                     }
                     
-                }
-            
+                },
+                createWorkFlowMessage: function(){
+                    this.app.showLoading("Creating Message...",this.parent.dialog.$el);
+                    var URL = "/pms/io/workflow/saveWorkflowData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    var wf = this.parent.options.workflowObj;
+                    $.post(URL, { type:"newWorkflowMessage",stepId: wf["stepId"],workflowId:wf["workflowId"],optionNumber:wf["optionNumber"]})
+                     .done(_.bind(function(data) {                                 
+                        var message_json = jQuery.parseJSON(data);
+                        this.app.showLoading(false,this.parent.dialog.$el);
+                        if(message_json[0]!=="err"){
+                            this.parent.camp_id = message_json[1];
+                            this.parent.parent.campNum = message_json[1];  
+                            this.parent.messagebody_page.$(".save-step2").show();
+                            this.saveStep1();   
+                            var workflowIframe = $(".workflowiframe");
+                            if(workflowIframe.length && workflowIframe[0].contentWindow.submitAndRefreshPage){
+                                workflowIframe[0].contentWindow.submitAndRefreshPage();
+                            }
+                        }
+                        else{
+                               this.app.showAlert(message_json[1],this.$el); 
+                        }
+                    },this));
+                },
+                updateWorkFlowMessage: function(campNum){                   
+                    var URL = "/pms/io/workflow/saveWorkflowData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    var wf = this.parent.options.workflowObj;
+                    $.post(URL, { type:"saveWorkflowMessage",stepId: wf["stepId"],workflowId:wf["workflowId"],optionNumber:wf["optionNumber"],campNum:campNum})
+                     .done(_.bind(function(data) {                                 
+                        var message_json = jQuery.parseJSON(data);
+                        this.app.showLoading(false,this.parent.dialog.$el);
+                        if(message_json[0]!=="err"){
+                            //this.saveStep1();   
+                            var workflowIframe = $(".workflowiframe");
+                            if(workflowIframe.length && workflowIframe[0].contentWindow.submitAndRefreshPage){
+                                //workflowIframe[0].contentWindow.submitAndRefreshPage();
+                            }
+                            
+                        }
+                        else{
+                               this.app.showAlert(message_json[1],this.$el); 
+                        }
+                    },this));
+                }            
         });
 });

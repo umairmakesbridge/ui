@@ -382,7 +382,9 @@ function (template) {
                     }
                     if(toDate){
                         this.toDate = toDate.format("MM-DD-YYYY");
-                    }   
+                    }  else {
+                        this.toDate = fromDate.format("MM-DD-YYYY");
+                    }
                     this.getAllCampaigns(this.$(".filter-camp li.active").attr("last"));
                     if(parseInt(this.$(".filter-camp li.active").attr("last"))){
                          this.$('input.checkpanel').iCheck('check');
