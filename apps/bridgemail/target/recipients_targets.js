@@ -22,7 +22,9 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     "click .refresh_btn":function(){
                         this.app.addSpinner(this.$el);
                         this.loadTargets();
-                    }
+                    },
+                    "click .sortoption_expand": "toggleSortOption",
+                    "click .stattype": "fitlerTargets"
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -32,8 +34,8 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.objTargets = new TargetsCollection();
                     this.total = 0;
                     this.offsetLength = 0;
-                    this.showUse = false;
-                    this.type = "";
+                    this.type = "batches";
+                    this.showUse = false;                    
                     if(typeof this.options.showUseButton !="undefined"){
                         this.showUse = this.options.showUseButton;
                     }
@@ -111,7 +113,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                         // that.showSearchFilters(this.searchText);
                     }
                     var that = this; // internal access
-                    _data['type'] = 'batches';
+                    _data['type'] = this.type;//'batches';
                     _data['filterFor'] = 'C';                    
 
                     this.$el.find('#targets_grid tbody .load-tr').remove();
@@ -130,7 +132,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                                 that.showSearchFilters(that.searchText, that.objTargets.total);
                             } else {
                                 that.$("#total_targets .badge").html(that.objTargets.total);
-                                that.$("#total_targets span").html("Target(s) found");    
+                                that.$("#total_targets span").html(that.totalLabel());    
                             }
                             that.offsetLength = data.length;
                             that.total_fetch = that.total_fetch + data.length;
@@ -203,12 +205,12 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.searchText = '';
                     this.searchTags = '';
                     this.total_fetch = 0;
-                    this.$("#total_targets span").html("Target(s) found");    
+                    this.$("#total_targets span").html(this.totalLabel());    
                     this.loadTargets();
                 },
                 showSearchFilters: function(text, total) {
                     this.$("#total_targets .badge").html(total);
-                    this.$("#total_targets span").html("Target(s) found for  <b>\"" + text + "\" </b>");
+                    this.$("#total_targets span").html(this.totalLabel()+" for  <b>\"" + text + "\" </b>");
                 },
                 deleteTarget:function(ev){
                     
@@ -230,12 +232,12 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     });
                 },
                 addTarget : function(fieldText, camp_json){
-                         var target_id = camp_json[1];
-                                        if (this.states) {
-                                            this.states.step3.isNewTarget = true;
-                                            this.states.step3.newTargetName = fieldText;
-                                        }
-                                        this.initCreateEditTarget(target_id);
+                    var target_id = camp_json[1];
+                    if (this.states) {
+                        this.states.step3.isNewTarget = true;
+                        this.states.step3.newTargetName = fieldText;
+                    }
+                    this.initCreateEditTarget(target_id);
                 },
                 initCreateEditTarget:function(target_id){
                     var self = this;
@@ -283,6 +285,51 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                         inview.removeAttr("data-load");
                         this.loadTargets(this.offsetLength);
                     }
+                },
+                toggleSortOption: function (ev) {
+                    $(this.el).find("#template_search_menu").slideToggle();
+                    ev.stopPropagation();
+                },
+                fitlerTargets: function(obj){
+                    var target = $.getObj(obj, "a");
+                    var prevStatus = this.searchTxt;
+                    if (target.parent().hasClass('active')) {
+                        return false;
+                    }
+                    this.$('.stattype').parent().removeClass('active');
+                    target.parent().addClass('active');
+                    var html = target.clone();
+                    $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());                               
+
+                    var type = target.attr("search");
+                    if (!type){
+                        type = this.$('#template_search_menu li.active a').attr('search');
+                    }
+                    this.status = type;                                    
+                    if (this.status !== prevStatus) {
+                        this.$el.find('#lists-search').val('');
+                        this.$el.find('#clearsearch').hide();
+                         if (type == "SS" || type == "F") {
+                             this.type = 'sharedTarget';                                
+                         } else {
+                             this.type = 'batches';                                
+                         }
+                        this.searchTxt = '';
+                    }
+                    this.total_fetch = 0;
+                    this.loadTargets();
+                },
+                totalLabel: function(){
+                    var label = "Targets(s) found";
+                    if (this.status == "SS") {
+                       label = 'Shared target(s) found';                                
+                    } else if (this.status == "F") { 
+                        label= 'My shared target(s) found';                                
+                    } else {
+                        label = 'Target(s) found';                                
+                    }
+                    return label;
                 }
+                
             });
         });

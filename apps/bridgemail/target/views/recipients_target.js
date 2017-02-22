@@ -5,8 +5,8 @@
  * Description: Single Link view to display on main page.
  * Dependency: LINK HTML, SContacts
  */
-define(['text!target/html/recipients_target.html', "target/copytarget"],
-function (template,copytargetPage) {
+define(['text!target/html/recipients_target.html', "target/copytarget", 'common/shareObject'],
+function (template,copytargetPage, shareCommonPage) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',
@@ -20,7 +20,9 @@ function (template,copytargetPage) {
                 "click .preview":"previewTarget",
                 "click .row-move":"addRowToCol2",
                 "click .row-remove":"removeRowToCol2",
-                "click .stop-target":"stopTargetDialog"
+                "click .stop-target":"stopTargetDialog",
+                "click .share-camp":'shareTarget',
+                "click .target_shared":'sharedTargets'
                    
             },
             initialize: function () {
@@ -369,6 +371,31 @@ function (template,copytargetPage) {
                 if (this.parent.createTargetChart) {
                     this.parent.createTargetChart();
                 }
+            },
+            shareTarget: function(){
+                 var dialog = this.app.showDialog({title: "Share Target",
+                    css: {"width": "750px", "margin-left": "-375px"},
+                    bodyCss: {"min-height": "350px"},
+                    headerIcon: 'sharecamp',
+                    buttons: {saveBtn: {text: 'Share Target',btnicon:'shareicon'}}
+                });
+                this.app.showLoading("Loading...", dialog.getBody());                  
+                var mPage = new shareCommonPage({parent: this.parent, obj_model: this.model, app: this.app, dialog: dialog,itemNum:4});
+                dialog.getBody().html(mPage.$el);
+                dialog.saveCallBack(_.bind(mPage.shareObject, mPage));
+            },            
+            sharedTargets: function(){
+                var targets_obj = this.parent;
+                targets_obj.status = "F";
+                targets_obj.total_fetch = 0;
+                targets_obj.searchTxt = '';
+                targets_obj.$el.find('#lists-search').val('');
+                targets_obj.$el.find('#clearsearch').hide();
+                targets_obj.type = 'sharedTarget';
+                targets_obj.$el.find('.stattype').parent().removeClass('active');
+                targets_obj.$el.find(".sortoption_expand").find('.spntext').html("My Shared");
+                targets_obj.$el.find('.myshare').parent().addClass('active');
+                targets_obj.loadTargets();
             }
                 
         });    

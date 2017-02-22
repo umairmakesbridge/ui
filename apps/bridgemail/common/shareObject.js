@@ -14,7 +14,7 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                     this.itemNum = this.options.itemNum;
                     this.parent = this.options.parent;
                     this.selectedUser = [];
-                    var objectMap = {"1":"List","2":"Campaign","3":"Template"};
+                    var objectMap = {"1":"List","2":"Campaign","3":"Template","4":"Target"};
                     this.objectName = objectMap[this.itemNum];
                     this.subaccountRequest = new subaccountCollection();                      
                     this.render();
@@ -44,6 +44,9 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                     else if(this.itemNum==2){
                         params = "&type=mySharedCampaign&id=";
                     }
+                    else if(this.itemNum==4){
+                        params = "&type=mySharedTarget&id=";
+                    }
                     params = params +this.getObjectValue();
                     $.ajax({
                     dataType: "json",
@@ -54,6 +57,8 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                             this.app.showLoading(false, this.dialog.$el);                     
                             var result = jQuery.parseJSON(xhr.responseText);
                             if (this.app.checkError(result)) {
+                                this.app.showAlert(result[1],this.$el);
+                                this.loadSubAccounts();
                                 return false;
                             }
                             if(result.shareDetails){
@@ -75,6 +80,7 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                     success: _.bind(function (collection, response) {                                
                             // Display items
                             if(this.app.checkError(response)){
+                                this.app.showAlert(response[1],this.$el);
                                 return false;
                             }                            
                             this.$subaccountsContainer.children().remove();
@@ -156,7 +162,7 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                      },this));
                 },
                 getObjectValue:function (){
-                    var encodeKey = {"1":"listNumber.encode","2":"campNum.encode","3":"templateNumber.encode"}                    
+                    var encodeKey = {"1":"listNumber.encode","2":"campNum.encode","3":"templateNumber.encode","4":"filterNumber.encode"}                    
                     return this.model.get(encodeKey[this.itemNum]);
                 }
                 
