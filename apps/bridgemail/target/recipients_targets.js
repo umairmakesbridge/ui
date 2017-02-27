@@ -123,7 +123,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
 
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
-                                that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that,showUse:that.showUse,type:that.type,dialog:that.dialog}).el);
+                                that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that,showUse:that.showUse,type:that.dialogType,dialog:that.dialog}).el);
                             });
                              /*-----Remove loading------*/
                              that.app.removeSpinner(that.$el);
