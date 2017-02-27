@@ -41,7 +41,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     }
                     this.dialog = null;
                     if(typeof this.options.type !="undefined"){
-                        this.type = this.options.type;
+                        this.dialogType = this.options.type;
                         this.dialog = this.options.dialog;
                     } 
                     this.render();
@@ -54,7 +54,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.active_ws = this.$el.parents(".ws-content");
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
-                    if(this.dialog && this.type=="autobots"){
+                    if(this.dialog && this.dialogType=="autobots"){
                        var dialogBody = this.dialog.getBody();
                        dialogBody.scroll(_.bind(this.liveLoading, this));
                     }
