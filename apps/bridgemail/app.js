@@ -152,6 +152,8 @@ define([
                     $(this).remove();
                 });
                 $("[id='template_search_menu']").hide();
+                $("[id='template_search_menu_sort']").hide();
+                
                 $('body > .percent_stats').remove();
             });
             $("body").keyup(_.bind(function (e) {

@@ -20,7 +20,9 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                    this.app.addSpinner(this.$el);
                },
                "click .sortoption_expand": "toggleSortOption",
-               "click .stattype": "fitlerLists"
+               "click .sortoption_sort": "toggleSortedOption",
+               "click .stattype": "fitlerLists",
+               "click .status_tgl a": "toggleOrderOption"
             },
             initialize: function () {
                 this.template = _.template(template);				
@@ -33,6 +35,8 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                 this.type = "batches";
                 this.listChecksum = '';
                 this.addContactView =null;
+                this.orderBy = 'name';
+                this.order = 'asc';
                 this.status = "A";
                 this.render();
             },
@@ -75,6 +79,10 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                  this.app.showLoading("&nbsp;",this.$el.find('#list_grid tbody').find('.loading-list'));
                 
                 _data['type'] = this.type;//'batches';
+                if(this.orderBy){
+                    _data['orderBy'] = this.orderBy;
+                }
+                _data['order'] = this.order;
                 this.objRecipients = new recipientsCollection();
                 
                 this.request = this.objRecipients.fetch({data:_data,success:function(data){
@@ -254,18 +262,41 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                 $(this.el).find("#template_search_menu").slideToggle();
                 ev.stopPropagation();
             },
+            toggleSortedOption: function (ev) {
+                $(this.el).find("#template_search_menu_sort").slideToggle();
+                ev.stopPropagation();
+            },
+            toggleOrderOption : function(ev){
+                var target = ev.currentTarget;
+                this.$el.find('.status_tgl a').removeClass('active');
+                
+                if($(target).hasClass('dsctag')){
+                   this.order = 'desc'; 
+                   this.$el.find('.status_tgl a.asctag').addClass('active');
+                }else if($(target).hasClass('asctag')){
+                    this.order = 'asc'; 
+                    this.$el.find('.status_tgl a.dsctag').addClass('active');
+                }
+                this.loadLists();
+            },
             fitlerLists: function(obj){                               
                 var target = $.getObj(obj, "a");
                 var prevStatus = this.searchTxt;
                 if (target.parent().hasClass('active')) {
                     return false;
                 }
-                this.$('.stattype').parent().removeClass('active');
-                target.parent().addClass('active');
+                
                 var html = target.clone();
-                $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());                               
-
+                                              
+                
                 var type = target.attr("search");
+                if(type=="name" || type=="date"){
+                    $(this.el).find(".sortoption_sort").find('.spntext').html(html.html()); 
+                }else{
+                    this.$('.stattype').parent().removeClass('active');
+                    target.parent().addClass('active');
+                    $(this.el).find(".sortoption_expand").find('.spntext').html(html.html()); 
+                }
                 if (!type){
                     type = this.$('#template_search_menu li.active a').attr('search');
                 }
@@ -277,7 +308,12 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                          this.type = 'sharedList';                                
                      } else if (type == "F") { 
                          this.type = 'myAllSharedList';                                
-                     } else {
+                     } else if (type == "name"){
+                         this.orderBy = 'name';
+                     } else if(type == "date"){
+                         this.orderBy = 'date';
+                     }
+                     else {
                          this.type = 'batches';                                
                      }
                     this.searchTxt = '';
