@@ -1209,7 +1209,7 @@ ul.tabs-btns li.active a{
 }
 .thumbnail .img > div a.selectbtn {
     background: url("../img/check48.png") no-repeat scroll center center rgba(0, 0, 0, 0);   
-
+    width:100% !important;
 }
 .thumbnail .img > div a.main-action span {
     opacity: 0 !important;
@@ -3240,7 +3240,7 @@ ul#template_search_menu {
     padding: 8px 5px 3px;
     background: #F8FDFF !important;
 }
-ul#template_search_menu {
+ul#template_search_menu,#template_search_menu_sort {
     display: block;
     padding: 0 1px 1px 0;
     position: absolute;
@@ -3248,13 +3248,13 @@ ul#template_search_menu {
     top: 50px;
     z-index: 9999;
 }
-ul#template_search_menu {
+ul#template_search_menu,ul#template_search_menu_sort {
     border-radius: 0 2px 2px 0;
     line-height: 18px;
     padding: 5px;
-    width: 180px;
+    width: 135px;
 }
-ul#template_search_menu li a {
+ul#template_search_menu li a,#template_search_menu_sort li a {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
     border-radius: 2px;
     color: #5a5a5a;
@@ -3273,7 +3273,7 @@ ul#template_search_menu li a {
     text-align: left;
 }
 
-ul#template_search_menu li {
+ul#template_search_menu li,ul#template_search_menu_sort li {
     display: block;
     margin: 2px 0 0;
 }
@@ -7713,7 +7713,7 @@ position:relative;
     line-height: 14px;
 }
 
-.sortoption_expand {
+.sortoption_expand,.sortoption_sort {
 background: #fff;
 border: 2px solid #EAF4F9;
 cursor: pointer;
@@ -7724,7 +7724,7 @@ border-radius: 2px 2px;
     float: left;
     line-height: 26px;
     padding: 5px 15px;
-    width: 154px;  
+    width: 110px;  
 }
 .sortoption_expand .caret { border-top: 4px solid #637F95; margin: 18px 0 0 8px; }
 
@@ -7804,7 +7804,7 @@ ul#template_search_menu_expand li.active a, ul#template_search_menu_expand li a:
 	color: #576E7E;
 	padding: 0 5px;
 }
-.template-filter_expand strong.sort:after {
+.template-filter_expand strong.sort:after,.template-filter_sort strong.sort:after {
 	border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #EAF4F9;
 	border-style: solid;
 	border-width: 6px;
@@ -7815,7 +7815,7 @@ ul#template_search_menu_expand li.active a, ul#template_search_menu_expand li a:
 	right: -13px;
 	top: 15px;
 }
-.template-filter_expand strong.sort {
+.template-filter_expand strong.sort, .template-filter_sort strong.sort {
 	background-color: #EAF4F9;
 	border-radius: 2px 0 0 2px;
 	color: #637F95;

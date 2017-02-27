@@ -4570,7 +4570,7 @@ ul#template_search_menu li a {
     padding: 3px 10px 5px;
     text-shadow: none;
 }
-ul#template_search_menu li.active a, ul#template_search_menu li a:hover  {   background: none repeat scroll 0 0 #01AEEE;
+ul#template_search_menu li.active a, ul#template_search_menu li a:hover,ul#template_search_menu_sort li.active a,ul#template_search_menu_sort li a:hover  {   background: none repeat scroll 0 0 #01AEEE;
     color: #FFFFFF;}
 
 .modal-footer a { margin:0 0 0 5px;}
@@ -5845,7 +5845,9 @@ color: #FFFFFF;
 	position:absolute; display:block; left:0; top:0; height:100%; width:4px;
 	-webkit-border-radius: 1px ;
 	-moz-border-radius: 1px;
-	border-radius: 1px;}
+	border-radius: 1px;
+        /*border-right: 1px solid #ddd;*/
+}
 
 .cstats ul li.clr1:after { background-color:#b6cbdb !important; }
 .cstats ul li.clr2:after { background-color:#454f88 !important; }
@@ -5942,7 +5944,22 @@ width: 100%;
     width: 20%;
 	 padding: 10px 0;
 }
-
+.socpc li i,.s-u-b li i,.si-p {
+    font-style: normal;
+    float: right;
+    bottom: 1px;
+    position: relative;
+    right: -7px;
+}
+.si-p {
+    font-size: 12px;
+    right:9px;
+    position: absolute;
+}
+.toggle-up-1 .socpc li i,.toggle-up-1 .s-u-b li i{
+    bottom:-10px;
+    right: -7px;
+}
 
 .stats-panel ul.socpc li:after { 
 	content:"";
@@ -7725,6 +7742,9 @@ color: #2A99F8;
 	border-radius: 20px;
         position:relative;
 	}
+        .contacts-switch .status_tgl a.asctag.active {
+            display:block !important;
+        }
         .contacts-switch .status_tgl a.draft.active .toggletag-icon{
             background: url("../images/18x18_icon_map.png") no-repeat scroll -20px -53px;
             display: block;
@@ -7733,6 +7753,29 @@ color: #2A99F8;
             position: absolute;
             top: 2px;
             width: 18px;
+        }
+        .asctag i.togglecontact-icon{
+            background: url("../img/A.png") no-repeat scroll;
+            display: block;
+            height: 20px;
+            left: 0px;
+            position: relative;
+            top: 0px;
+            width: 20px;
+          
+        }
+        .dsctag i.togglecontact-icon{
+            background: url("../img/D_white.png") no-repeat scroll;
+            display: block;
+            height: 20px;
+            left: 0px;
+            position: relative;
+            top: 0px;
+            width: 20px;
+        }
+        .status_tgl > a.dsctag,.status_tgl > a.asctag {
+            padding: 3px;
+            display: none;
         }
 .landing_top .status_tgl a.published.active {
     background: url("../img/check18.png") no-repeat scroll 12px center #fff;
@@ -7746,6 +7789,9 @@ color: #2A99F8;
     color: #41ce20;
     padding-left: 35px;
     position:relative;
+}
+.contacts-switch .status_tgl a.dsctag.active{
+   display:block !important;
 }
 
  .contacts-switch .status_tgl a.published.active .togglecontact-icon{

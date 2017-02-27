@@ -33,6 +33,7 @@
         </div>
     </div>
 </td>
+
 <td width="90px" style="opacity:<%=this.getOpacity()%>">
     <div>
         <div class="subscribers ">
@@ -40,6 +41,19 @@
         </div> 
 
 
+
+
+            </div>
+            </td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em>Creation Date</em>
+                        <% var date = moment(this.app.decodeHTML(this.model.get('creationDate')), 'YYYY-M-D H:m') %>
+                        <% dateFormat = date.format("DD MMM, YYYY"); %>
+                        <%- dateFormat  %></span></strong>
+        </div>
+        
            <%if (this.model.get('isSupressList')=="true" || this.model.get('isBounceSupressList')== "true"){%>
                   
                 <%}else{%>
@@ -61,7 +75,5 @@
              
 
 
-
-
-            </div>
-            </td>
+    </div>
+</td>

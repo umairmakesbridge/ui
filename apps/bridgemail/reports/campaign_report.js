@@ -245,11 +245,11 @@ function (template) {
                 var handle = $.getObj(obj,"a");
                 if(handle.hasClass("close")){
                     handle.removeClass("close");
-                    handle.next().animate({height:70});
+                    handle.next().animate({height:70}).removeClass('toggle-up-1');
                 }
                 else{
                     handle.addClass("close");
-                    handle.next().animate({height:215});
+                    handle.next().animate({height:215}).addClass('toggle-up-1');
                 }
             },
             addToChart:function(obj){
@@ -327,7 +327,19 @@ function (template) {
                       _this.chartPage.createChart(_data);
                       _this.app.showLoading(false,_this.$(".cstats"));
                       _.each(_this.chart_data,function(val,key){
-                          _this.$(".col2 ."+key).html(_this.app.addCommas(val));
+                          var av = (parseInt(val)/parseInt(_this.chart_data.sentCount)) * 100;
+                          if(av > 0){
+                            av =av.toFixed(2); 
+                          }
+                          if(key=="sentCount"){
+                              _this.$(".col2 ."+key).html(_this.app.addCommas(val));
+                          }else{
+                              _this.$(".col2 ."+key).html(_this.app.addCommas(val));
+                              _this.$(".col2 ."+key+"-p").html(_this.app.addCommas(av)+"%");
+                            
+                              
+                          }
+                          
                       });
                       
                        var campaigns_name = $.map(_this.$(".checkedadded"),function(el){
