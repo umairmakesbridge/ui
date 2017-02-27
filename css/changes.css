@@ -9685,3 +9685,4 @@ Download CSV Button
 .downloadcsv{
     background: url("../images/csv_w_20_20.png") no-repeat scroll center center;    
 }
+.modal-body .select-target-view .temp-filters {margin-top:0px !important;}

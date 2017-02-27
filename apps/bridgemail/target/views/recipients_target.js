@@ -381,8 +381,13 @@ function (template,copytargetPage, shareCommonPage) {
                 });
                 this.app.showLoading("Loading...", dialog.getBody());                  
                 var mPage = new shareCommonPage({parent: this.parent, obj_model: this.model, app: this.app, dialog: dialog,itemNum:4});
-                dialog.getBody().html(mPage.$el);
+                dialog.getBody().append(mPage.$el);                
                 dialog.saveCallBack(_.bind(mPage.shareObject, mPage));
+                var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New dialog
+                this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.shareObject,mPage); // New Dialog
             },            
             sharedTargets: function(){
                 var targets_obj = this.parent;

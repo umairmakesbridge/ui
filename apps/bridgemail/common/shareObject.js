@@ -117,6 +117,10 @@ define(['text!common/html/shareObject.html','account/collections/subaccounts','a
                         .done(_.bind(function(data) {                                                          
                           this.app.showLoading(false, this.dialog.$el);                          
                           var _json = jQuery.parseJSON(data);          
+                          if(this.app.checkError(_json)){
+                               this.app.showAlert(_json[1],this.$el);
+                               return false;
+                          }   
                           if(newUsers.length==0){
                               this.app.showMessge(this.objectName+" updated Successfully!");  
                               this.dialog.hide();
