@@ -125,7 +125,7 @@ function (template,copytargetPage, shareCommonPage) {
                         }
                     }else{
                         isEditable = false;
-                    }
+                    }                    
                     //console.log(isEditable);
                     var t_id = target_id?target_id:"";
                     var dialog_title = target_id ? "Edit Target" : "";
@@ -378,8 +378,7 @@ function (template,copytargetPage, shareCommonPage) {
                     bodyCss: {"min-height": "350px"},
                     headerIcon: 'sharecamp',
                     buttons: {saveBtn: {text: 'Share Target',btnicon:'shareicon'}}
-                });
-                this.app.showLoading("Loading...", dialog.getBody());                  
+                });                                
                 var mPage = new shareCommonPage({parent: this.parent, obj_model: this.model, app: this.app, dialog: dialog,itemNum:4});
                 dialog.getBody().append(mPage.$el);                
                 dialog.saveCallBack(_.bind(mPage.shareObject, mPage));
