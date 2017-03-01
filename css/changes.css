@@ -6515,16 +6515,18 @@ width: 100%;
 
 
 ul.s-u-b {  border-top:2px solid #d9e3ea; clear:both; }
-ul.s-u-b li { width:33.3%; padding: 10px 0;}
+ul.s-u-b li { width:33.3%; padding: 3px 0;}
 
 ul.ftipg {border-top:2px solid #d9e3ea; clear:both; }
-ul.ftipg li { width:20%; padding: 20px 0;}
+ul.ftipg li { width:20%; padding: 18px 0;}
 
 ul.ftipg li i {
     float: left;
     margin: 0 0 0 8px;
 }
-
+ul.ftipg li i.si-p{
+    font-weight: normal;
+}
 ul.ftipg li span {
     float: left;
     font-size: 13px;

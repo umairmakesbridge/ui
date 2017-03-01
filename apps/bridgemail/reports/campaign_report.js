@@ -249,7 +249,7 @@ function (template) {
                 }
                 else{
                     handle.addClass("close");
-                    handle.next().animate({height:215}).addClass('toggle-up-1');
+                    handle.next().animate({height:210}).addClass('toggle-up-1');
                 }
             },
             addToChart:function(obj){

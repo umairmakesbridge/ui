@@ -5942,7 +5942,7 @@ width: 100%;
 }
 .stats-panel ul.socpc li {
     width: 20%;
-	 padding: 10px 0;
+	 padding: 2px 0;
 }
 .socpc li i,.s-u-b li i,.si-p {
     font-style: normal;
@@ -5957,7 +5957,7 @@ width: 100%;
     position: absolute;
 }
 .toggle-up-1 .socpc li i,.toggle-up-1 .s-u-b li i{
-    bottom:-10px;
+    bottom:-3px;
     right: -7px;
 }
 
@@ -5973,6 +5973,10 @@ ul.s-u-b li { width:33.3%; padding: 10px 0;}
 
 ul.ftipg {border-top:2px solid #d9e3ea; clear:both; }
 ul.ftipg li { width:20%; padding: 20px 0;}
+
+.toggle-up-1 .s-u-b li i {
+    bottom: -4px;
+}
 
 ul.ftipg li i {
     float: left;
