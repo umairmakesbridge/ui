@@ -943,7 +943,7 @@ ul.tabs-btns li.active a{
 
 /*****workspace tabs icons ***/
 .tabs-menu li span,.expand-menu ul li span{
-    background-image: url("../img/ws-icons.png");
+    background-image: url("../img/ws-icons-1.png");
     background-color: transparent;
 }
 .wtab-campaignlisting{
@@ -991,6 +991,9 @@ ul.tabs-btns li.active a{
 .wtab-workflowlisting{
     background-position: -60px -210px;
 }
+.wtab-workflowlisting{
+    background-position: -60px -210px;
+}
 .wtab-customreports{
     background-position: -90px -180px;
 }
@@ -1009,6 +1012,9 @@ ul.tabs-btns li.active a{
 }
 .wtab-reportslisting{
     background-position:-60px 0px;
+}
+.wtab-ftpuploadlisting{
+    background-position:-90px 0px;
 }
 .wtab-population{
      background-position: 0px -150px;
@@ -7947,6 +7953,7 @@ top: 14px;
 .botpanel h2 .icon.score { background: url("../img/score-g.png") no-repeat scroll center center ; }
 .botpanel h2 .icon.alerts { background: url("../img/alerts-g.png") no-repeat scroll center center ; }
 .botpanel h2 .icon.bday { background: url("../img/bday-g.png") no-repeat scroll center center ; }
+.botpanel h2 .icon.wait { background: url("../img/wait-g.png") no-repeat scroll center center ; }
 
 
 

@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target'],
-        function(template, recipientView, tags, ModelRecipient) {
+define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target','autobots/wait_row'],
+        function(template, recipientView, tags, ModelRecipient, WaitView) {
             'use strict';
             return Backbone.View.extend({
                 className: "botpanel",
@@ -26,6 +26,9 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.model = null;
                     this.dialog = this.options.dialog;
                     this.getAutobotById();
+                },
+                init: function(){
+                  
                 },
                 getAutobotById: function() {
                     var that = this;
@@ -134,6 +137,9 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$el.find("#txtRecurTimes").ForceNumericOnly();
                     this.checkMailMessages();
+                    
+                    this.waitView = new WaitView({page:this,editable:this.editable }); 
+                    this.$(".delayRow").html(this.waitView.$el);
 
                 }, changeSetting: function(ev) {
                     var selected = $(ev.target).val();
@@ -335,6 +341,12 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                 saveEmailAutobot: function(close,isPlayClicked) {
                      var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                      var btnPlay= this.modal.find('.modal-footer').find('.btn-play');
+                     
+                     var delayData = this.waitView.getPostData();
+                     if(delayData.isError!==""){
+                        that.app.showAlert(delayData.isError, $("body"), {fixed: true});
+                        return false;
+                     }
                      if(!isPlayClicked)
                         btnSave.addClass('saving');
                     
@@ -358,8 +370,13 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         recurType = "N";
                         recurTimes = 0;
                         recurPeriod = 0;
-                    }
+                    }                    
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll};
+                    var delayData = this.waitView.getPostData();
+                    if(delayData.isError==""){
+                        $.extend( post_data, delayData.post );
+                    }
+                   
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                     var result = false;
                     var that = this;
