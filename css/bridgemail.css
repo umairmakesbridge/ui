@@ -608,7 +608,7 @@ label:hover .fieldinfo { display:block;}
 
 .inputcont.success input[type="text"], .inputcont.success input[type="password"], .inputcont.success textarea, .inputcont.success .chosen-single
 {border:2px solid #FB8080 !important; }
-.inputcont.error > input[type="text"], .inputcont.error > input[type="password"], .inputcont.error > textarea, .inputcont.error  .chosen-single
+.inputcont.error > input[type="text"], .inputcont.error > input[type="password"], .inputcont.error > textarea, .inputcont.error  .chosen-single, .inputcont.error  .inputfield
 {border:2px solid #FB8080 !important; }
 
 .inputcont.error  .chosen-single{ margin-right:0px;}

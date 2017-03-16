@@ -11,13 +11,17 @@
                     <button class="btn disabled" rel="date">Date</button>
                 </div>
                 <div style="display: inline-block" class="days-select wait-select">
-                    <input type="text" id="waitday" value="1" style=" width:50px;margin-bottom: 0px;" maxlength="3" disabled="disabled" />            
+                    <div class="inputcont" style="display: inline-block;">
+                        <input type="text" id="waitday" value="1" style=" width:50px;margin-bottom: 0px;" maxlength="3" disabled="disabled" />            
+                    </div>
                 Day(s)
                 </div>
                 <div  style="display:none;height:23px;" class="date-select wait-select" >
+                    <div class="inputcont" style="float:right;width:100%;">
                     <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
-                        <input type="text" id="waitdatetime" placeholder="Select Date..." disabled="disabled" />        
+                        <input type="text" id="waitdatetime" class="inputfield" placeholder="Select Date..." disabled="disabled" />        
                     </div>
+                   </div>     
                 </div>             
             
         

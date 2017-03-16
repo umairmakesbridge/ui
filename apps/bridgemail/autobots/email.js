@@ -67,6 +67,10 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         }
                         that.mainTags = "";
                         that.render();
+                        //wait added
+                        if(that.waitView){
+                            that.waitView.setData(autobot);
+                        }
                         that.options.app.showLoading(false, that.$el);
                         //console.log(that.model);
 
@@ -137,7 +141,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$el.find("#txtRecurTimes").ForceNumericOnly();
                     this.checkMailMessages();
-                    
+                    //wait added
                     this.waitView = new WaitView({page:this,editable:this.editable }); 
                     this.$(".delayRow").html(this.waitView.$el);
 
@@ -341,10 +345,10 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                 saveEmailAutobot: function(close,isPlayClicked) {
                      var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                      var btnPlay= this.modal.find('.modal-footer').find('.btn-play');
-                     
+                     //wait added
                      var delayData = this.waitView.getPostData();
                      if(delayData.isError!==""){
-                        that.app.showAlert(delayData.isError, $("body"), {fixed: true});
+                        setTimeout(_.bind(function(){this.app.showAlert(delayData.isError, $("body"), {fixed: true})},this),10);
                         return false;
                      }
                      if(!isPlayClicked)
@@ -372,6 +376,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         recurPeriod = 0;
                     }                    
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll};
+                    //wait added
                     var delayData = this.waitView.getPostData();
                     if(delayData.isError==""){
                         $.extend( post_data, delayData.post );
