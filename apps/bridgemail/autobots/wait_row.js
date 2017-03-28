@@ -33,15 +33,35 @@ function (template) {
                 this.$el.html(this.template({
                     model: this.model
                 }));                
-                this.$("#waitday").ForceNumericOnly();
-                //this.$(".chosen-select").chosen({no_results_text:'Oops, nothing found!', width: "130px",disable_search: "true"});
+                this.$("#waitday").ForceNumericOnly();                
                 this.$(".btn-group").t_button();   
-                this.$("#waitdatetime").datetimepicker({format:'d-m-Y H:00',timepicker:true,closeOnDateSelect:false});                                
+                var d = new Date();                
+                var dateS = (d.getDate())+'.'+(d.getMonth()+1)+'.'+d.getFullYear();                
+                this.$("#waitdatetime").datetimepicker({format:'d-m-Y H:i',timepicker:true,closeOnDateSelect:false,value: dateS, mousewheel: false,reverseMouseWheel: false,
+                onGenerate:function( ct ){
+                    var currentDat = $(this).find('.xdsoft_date.xdsoft_current').data('date')+1;
+                    
+                    $(this).find('.xdsoft_today').addClass('xdsoft_disabled');
+                    // Disable one tomorrow date
+
+                    if($(this).find('td[data-date='+currentDat+']').hasClass('xdsoft_disabled') !=false){
+                      $(this).find('td[data-date='+currentDat+']').addClass('xdsoft_disabled');
+                    }
+                    $(this).find('.xdsoft_date.xdsoft_weekend').addClass('xdsoft_disabled');
+
+                    //$('.xdsoft_time_variant .xdsoft_time').append('<span> PM</span>')
+                  }
+                  ,
+                  onChangeDateTime:function(dp,$input){
+                        
+                   },
+                    minDate:'-1970/01/01'
+                  });                                
                                
                 this.$('.checkpanel').iCheck({
-                            checkboxClass: 'checkpanelinput',
-                            insert: '<div class="icheck_line-icon" style="margin: 20px 0px 0px 7px!important;"></div>'
-                        });
+                    checkboxClass: 'checkpanelinput',
+                    insert: '<div class="icheck_line-icon" style="margin: 20px 0px 0px 7px!important;"></div>'
+                });
                 this.$(".checkpanel").on('ifChecked', _.bind(function (ev) {
                     this.$(".btn").removeClass("disabled");
                     this.$("input[type='text']").removeAttr("disabled")
@@ -49,19 +69,14 @@ function (template) {
                 this.$(".checkpanel").on('ifUnchecked', _.bind(function (ev) {
                    this.$(".btn").addClass("disabled")
                    this.$("input[type='text']").attr("disabled","disabled");
-                },this));
-                /*this.$(".checkpanel").on('click', _.bind(function (ev) {
-                    var checkDiv = $(ev.target).parents('.checkpanelinput');
-                    if (checkDiv.hasClass('checked')) {
-                        this.$(".btn").removeClass("disabled");
-                        this.$("input[type='text']").removeAttr("disabled")
-                        
-                    } else {
-                        this.$(".btn").addClass("disabled")
-                        this.$("input[type='text']").attr("disabled","disabled")
-                    }
-                },this))*/        
+                },this));                    
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false}); 
+            },
+            addZero:function(i){
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
             },
             showWait:function(e){
                 var btn = $.getObj(e,"button");
@@ -96,7 +111,7 @@ function (template) {
                             var _date = moment(this.$("#waitdatetime").val(),'DD-MM-YYYY HH:mm');                            
                             post_data['scheduleDate'] = _date.format("MM-DD-YY");                        
                             post_data['timeOfDayHrs'] =  _date.format("HH");
-                            post_data['timeOfDayMins'] =  _date.format("mm");
+                            post_data['timeOfDayMins'] =  _date.format("mm");                            
                         }
                         else{
                             isError = "Wait date cann't be empty";
@@ -118,7 +133,8 @@ function (template) {
                     else if(_json.scheduleDate){
                         var _date = moment(_json.scheduleDate,'MM-DD-YY');     
                         var hours = _json.timeOfDayHrs.length==1?"0"+_json.timeOfDayHrs:_json.timeOfDayHrs;
-                        this.$("#waitdatetime").val(_date.format("DD-MM-YYYY")+" "+hours+":00" );
+                        var min = _json.timeOfDayMins.length==1?"0"+_json.timeOfDayMins:_json.timeOfDayMins;
+                        this.$("#waitdatetime").val(_date.format("DD-MM-YYYY")+" "+hours+":"+min );
                         this.$(".btn-group button:first-child").removeClass("active");
                         this.$(".btn-group button:last-child").addClass("active");
                         this.$(".wait-select").hide();
