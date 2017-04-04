@@ -55,7 +55,7 @@ function (template) {
                   onChangeDateTime:function(dp,$input){
                         
                    },
-                    minDate:'-1970/01/01'
+                   minDate:'-1970/01/01'
                   });                                
                                
                 this.$('.checkpanel').iCheck({

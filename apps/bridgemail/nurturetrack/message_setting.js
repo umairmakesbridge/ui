@@ -301,6 +301,7 @@ function (template) {
                 },
                 resizeStep1:function(){
                     this.step1_page.setFromNameField();
+                    this.step1_page.$("#conversion_filter_accordion .accordion-inner").css("height","auto");
                 },
                 ReattachEvents: function(){
                     this.dialog.$el.find("#dialog-title i").hide();

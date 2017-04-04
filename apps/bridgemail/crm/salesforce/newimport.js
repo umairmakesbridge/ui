@@ -135,10 +135,14 @@ function (Wizard,template,moment) {
                             if(icheck_val!=="S"){
                                 _this.$(".step3 .control-area select").attr("disabled",true);    
                                 _this.$(".step3 .control-area button").attr("disabled",true);                                    
+                                _this.$('input#refresh_list').iCheck('disable'); 
+                                _this.$(".ui-spinner-button").hide();
                             }    
                             else{
                                 _this.$(".step3 .control-area button").attr("disabled",false);  
                                 _this.$(".step3 .control-area select").attr("disabled",false);
+                                _this.$('input#refresh_list').iCheck('enable'); 
+                                _this.$(".ui-spinner-button").show();
                                 if(_this.$(".step3 .frequency-type").val()!==""){
                                     
                                 }

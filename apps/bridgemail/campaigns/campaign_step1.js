@@ -26,6 +26,8 @@ function (template) {
                     this.editable=this.options.editable;
                     this.settingchange = true;
                     this.isDataLoaded = false;
+                    this.hasConversionFilter = false;
+                    this.pageconversation_checkbox=false;
                     this.campDefaults = {};
                     this.render();                    
             },
@@ -47,6 +49,11 @@ function (template) {
                 this.$(".block-mask").show();
               }
               
+              this.$("#con_filter_combo").chosen({no_results_text: 'Oops, nothing found!', width: "280px", disable_search: "true"});
+              this.$("#conversion_filter_accordion").accordion({active: 0, collapsible: false, activate: _.bind(function () {
+                    this.$("#conversion_filter").prop("checked", this.pageconversation_checkbox);
+                }, this)});
+              
             },
             initControls:function(){                
                 
@@ -62,6 +69,8 @@ function (template) {
                 });
                 this.$("#campaign_from_email_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.$("#fromemail_default_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                
+                
                 /*Campaign Merge Fields*/
                 this.initMergeFields();
                 
@@ -97,6 +106,9 @@ function (template) {
                        }                       
                        else if(icheck_id=="campaign_useCustomFooter"){
                            camp.setCustomFooterArea();
+                       } 
+                       else if (icheck_id == "conversion_filter") {
+                           camp.setCoversionPageStep1(icheck);
                        }
 
                     }                    
@@ -190,6 +202,36 @@ function (template) {
                  this.$("#campaign_pintrest").prop("checked",camp_json.pinterest=="N"?false:true);                        
                  this.$("#campaign_gplus").prop("checked",camp_json.googleplus=="N"?false:true);                        
                  
+                 if (camp_json.conversionFilterStatus == 'Y') {
+                    this.$("#conversion_filter").prop("checked", true);
+                    this.hasConversionFilter = true;
+                    this.pageconversation_checkbox = true;
+                    var URL = "/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=get&campNum=" + this.parent.camp_id;
+
+                    jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
+                        var conversation_filter = jQuery.parseJSON(xhr.responseText);
+                        if (this.app.checkError(conversation_filter)) {
+                            return false;
+                        }
+                        this.setConversionPage();
+                        if (conversation_filter.ruleCount > 0) {
+                            var r = conversation_filter.rules[0].rule1[0];
+                            this.$("select#con_filter_combo").val(this.app.decodeHTML(r.rule));
+                            this.$("#con_filter_field").val(this.app.decodeHTML(r.matchValue));
+                            this.setConversionPage();
+                        }
+
+                    },this));
+                    this.$("#accordion1").accordion({active: 0});
+                }
+                else {
+                    this.hasConversionFilter = false;
+                    this.pageconversation_checkbox = false;
+                    this.$("#conversion_filter").prop("checked", false);
+                    this.$("#accordion1").accordion({active: false});
+                    this.setConversionPage();
+                }
+                 
                  this.initCheckbox();
                  this.isDataLoaded = true; 
                  this.parent.loadMessageHTML();              
@@ -203,6 +245,49 @@ function (template) {
                   this.$("#campaign_from_email_default").hide();  
                 }    
            },
+           setConversionPage: function () {
+                if (this.pageconversation_checkbox) {
+                    this.$("#con_filter_field").prop("disabled", false);
+                    this.$("#con_filter_combo").prop("disabled", false).trigger("chosen:updated");
+                }
+                else {
+                    this.$("#con_filter_field").prop("disabled", true);
+                    this.$("#con_filter_combo").prop("disabled", true).val("#").trigger("chosen:updated");
+                }
+            },
+            setCoversionPageStep1: function (obj) {
+                if (obj.prop("checked")) {
+                    this.pageconversation_checkbox = true;
+                    this.$("#conversion_filter").prop("checked", this.pageconversation_checkbox);
+                    this.$("#accordion1").accordion({active: 0});
+                }
+                else {
+                    this.removeConversionPage();
+                    this.pageconversation_checkbox = false;
+                    this.$("#conversion_filter").prop("checked", this.pageconversation_checkbox);
+                    this.$("#accordion1").accordion({active: 1});
+                }
+                this.setConversionPage();
+
+            },
+            removeConversionPage: function () {
+                var camp_obj = this;
+                var camp_id = this.parent.camp_id;
+
+                var URL = "/pms/io/filters/saveLinkIDFilter/?BMS_REQ_TK=" + this.app.get('bms_token');
+                if (this.hasConversionFilter) {
+                    $.post(URL, {campNum: camp_id,
+                        type: "delete"})
+                            .done(function (data) {
+                                camp_obj.$("#conversion_filter").prop("checked", false);
+                                camp_obj.hasConversionFilter = false;
+                                camp_obj.setConversionPage();
+
+                            });
+                }
+                this.app.hideError({control: this.$("#cov-texturl-container")});
+
+            },
            loadData:function(){
                this.app.showLoading("Loading Campaign...",this.$el);  
                var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=campaignDefaults";
@@ -469,9 +554,28 @@ function (template) {
                                     }
                                 },this));
                                 
+                                if (this.$("#conversion_filter").prop("checked")) {
+                                    this.saveConversionPage();
+                                }
+                                
                         }
                     }
                     
+                },
+                saveConversionPage: function () {
+                    var camp_obj = this;
+                    var camp_id = this.parent.camp_id;
+                    var URL = "/pms/io/filters/saveLinkIDFilter/?BMS_REQ_TK=" + this.app.get('bms_token');
+                    this.$("#save_conversion_filter").addClass("saving");
+                    $.post(URL, {campNum: camp_id,
+                        rule: this.$("select#con_filter_combo").val(),
+                        matchValue: this.$("#con_filter_field").val(),
+                        type: "conversion"})
+                            .done(function (data) {
+                                camp_obj.$("#save_conversion_filter").removeClass("saving");
+                                camp_obj.hasConversionFilter = true;
+                            });
+
                 },
                 createWorkFlowMessage: function(){
                     this.app.showLoading("Creating Message...",this.parent.dialog.$el);
