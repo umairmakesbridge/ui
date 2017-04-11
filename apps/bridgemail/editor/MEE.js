@@ -2931,8 +2931,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var dynmicID = element.parent().find('table').attr('id')
                                         var dcLiObj = element.parent();
                                         //<div style='height: " + dcTableHeight + "px;' class='overlay'><p>Creating Copy...</p></div>
-                                        element.parent().find('table').parent().find('.global-save-overlay').remove();
-                                        element.parent().find('table').before("<div style='height:  270px;' class='overlay global-save-overlay'><p>Saving DC Globally...</p></div>");
+                                        var firstTable = element.parent().find('table:first');
+                                        firstTable.parent().find('.global-save-overlay').remove();
+                                        firstTable.before("<div style='height:  "+firstTable.height()+"px;' class='overlay global-save-overlay'><p>Updating Dynmaic Content Template...</p></div>");
                                         
                                         var contentReqObj ="";
                                         var postData = {};
@@ -8093,7 +8094,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             mee_view.DynamicContentsObj[args.ID][args.DynamicContent.DynamicContentID]["isNew"] = true;   
                                         }
                                         if(showMsg == "showGlobalMsg"){
-                                            _self._app.showMessge('Dynamic Content Saved Globaly');
+                                            _self._app.showMessge('This Dynamic Block template has been updated.');
                                         }
                                         mee_view.DCDrag = false;
                                     }
@@ -8238,7 +8239,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
                                             
                                             if(globalMsg=="showGlobalMsg"){
-                                                _self._app.showMessge('Dynamic Content Saved Globaly');
+                                                _self._app.showMessge('This Dynamic Block template has been updated.');
                                             }
                                     });
                             
