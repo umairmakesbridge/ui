@@ -7,14 +7,22 @@
                 <input type="checkbox" class="checkpanel" value="" style="position: absolute; opacity: 0;">    
                                 
                 <div class="btn-group schedule-group" data-toggle="buttons-radio" style="margin-right:10px;margin-left: 10px">
-                    <button class="btn active disabled" rel="days">Days</button>
+                    <button class="btn active disabled" rel="days">Delay</button>
                     <button class="btn disabled" rel="date">Date</button>
                 </div>
                 <div style="display: inline-block" class="days-select wait-select">
                     <div class="inputcont" style="display: inline-block;">
-                        <input type="text" id="waitday" value="1" style=" width:50px;margin-bottom: 0px;" maxlength="3" disabled="disabled" />            
+                        <input type="text" id="waitday" value="1" style=" width:30px;margin-bottom: 0px;" maxlength="3" disabled="disabled" />            
                     </div>
-                Day(s)
+                    Day(s)
+                    <div class="inputcont" style="display: inline-block;">
+                        <input type="text" id="waithour" value="0" style=" width:30px;margin-bottom: 0px;" maxlength="2" disabled="disabled" />            
+                    </div>
+                    Hour(s)
+                    <div class="inputcont" style="display: inline-block;">
+                        <input type="text" id="waitmin" value="0" style=" width:30px;margin-bottom: 0px;" maxlength="2" disabled="disabled" />            
+                    </div>
+                    Minute(s)
                 </div>
                 <div  style="display:none;height:23px;" class="date-select wait-select" >
                     <div class="inputcont" style="float:right;width:100%;">
