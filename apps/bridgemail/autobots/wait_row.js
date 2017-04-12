@@ -36,7 +36,7 @@ function (template) {
                 this.$("#waitday,#waithour,#waitmin").ForceNumericOnly();                
                 this.$(".btn-group").t_button();   
                 var d = new Date();                
-                var dateS = (d.getDate())+'.'+(d.getMonth()+1)+'.'+d.getFullYear();                
+                var dateS = this.addZero(d.getDate())+'-'+this.addZero(d.getMonth()+1)+'-'+d.getFullYear() +" "+ this.addZero(d.getHours())+":"+this.addZero(d.getMinutes());                
                 this.$("#waitdatetime").datetimepicker({format:'d-m-Y H:i',timepicker:true,closeOnDateSelect:false,value: dateS, mousewheel: false,reverseMouseWheel: false,
                 onGenerate:function( ct ){
                     var currentDat = $(this).find('.xdsoft_date.xdsoft_current').data('date')+1;
@@ -97,28 +97,34 @@ function (template) {
                     if(this.$(".schedule-group button:first-child").hasClass("active")){
                         post_data['dispatchType'] = 'D';
                         post_data['dayLapse'] = this.$("#waitday").val();
-                        //post_data['hourLapse'] = this.$("#waithour").val();
-                        //post_data['minLapse'] = this.$("#waitmin").val();
-                        if(post_data['dayLapse']>0 && post_data['dayLapse']<=365){                                                            
+                        post_data['hourLapse'] = this.$("#waithour").val();
+                        post_data['minLapse'] = this.$("#waitmin").val();
+                        if(post_data['dayLapse'] && post_data['dayLapse']>=0 && post_data['dayLapse']<=365){                                                            
                             var dayText =this.$("#waitday").val()=="1"?" Day":" Days";                            
                         }
                         else{
-                            isError = "Wait days must be between 1-365";
+                            isError = "Wait days must be between 0-365";
                         }
                         
-                        /*if(post_data['hourLapse']>0 && post_data['hourLapse']<=24){ 
+                        if(post_data['hourLapse'] && post_data['hourLapse']>=0 && post_data['hourLapse']<=23){ 
                             var hourText =this.$("#hourLapse").val()=="1"?" Hour":" Hours";                            
                         }
                         else{
-                            isError += "Wait Hours must be between 1-24";
+                            if(isError!==""){
+                                isError += "<br/>";
+                            }
+                            isError += "Wait Hours must be between 0-23";
                         }
                         
-                        if(post_data['minLapse']>0 && post_data['minLapse']<=60){ 
+                        if(post_data['minLapse'] && post_data['minLapse']>=0 && post_data['minLapse']<=59){ 
                             var minText =this.$("#waitmin").val()=="1"?" Min":" Mins";                            
                         }
                         else{
-                            isError += "Wait Minutes must be between 1-60";
-                        }*/
+                            if(isError!==""){
+                                isError += "<br/>";
+                            }
+                            isError = "Wait Minutes must be between 0-59";
+                        }
                     }
                     else{
                         post_data['dispatchType'] = 'S';
@@ -144,8 +150,8 @@ function (template) {
                     this.$("input[type='text']").removeAttr("disabled")
                     if(_json.dayLapse){                    
                         this.$("#waitday").val(_json.dayLapse);                                                
-                        //this.$("#waithour").val(_json.hourLapse);                                                
-                        //this.$("#waitmin").val(_json.minLapse);                                                
+                        this.$("#waithour").val(_json.hourLapse);                                                
+                        this.$("#waitmin").val(_json.minLapse);                                                
                     }
                     else if(_json.scheduleDate){
                         var _date = moment(_json.scheduleDate,'MM-DD-YY');     
