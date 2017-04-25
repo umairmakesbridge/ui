@@ -2941,10 +2941,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var postData = {};
                                         var ruleCount = 0;
                                         var componentsLength = Object.keys(mee_view.DynamicContentsObj[dynamicKey]).length;
-                                        getDCGlobally(dynamicKey,dynmicID);
+                                        //getDCGlobally(dynamicKey,dynmicID);
                                         var showMsg = "";
                                         var coi = 1;
                                         var activeLi = 0;
+                                        
                                         var activeDatali = (firstTable.data('activeli') || firstTable.data('activeli')==0) ? firstTable.data('activeli') : 1;
                                        $.each(mee_view.DynamicContentsObj[dynamicKey],function(key,val){
                                            //objTempHTML.html(val.InternalContents);
@@ -2966,17 +2967,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                    Label : val.Label,
                                                    applyRuleCount : val.applyRuleCount,
                                                    changFlag:changFlag,
+                                                   checksum:val.checksum,
+                                                   DCkey:dynamicKey,
                                                    'dcLi' : dcLiObj
                                                },
                                            }
-                                           if(val.isGlobal =="N"){ // global and del is false
-                                               //val.setGlobal = true;
-                                               //val.isNew = false;
-                                               options.OnSaveDynamicContent(contentReqObj,mee_view,true,showMsg)
-                                           }else if(val.isDel || (val.isGlobal=="Y" && val.isLocal=="N") ){
+                                           
+                                           if(val.isGlobal=="N" && val.isLocal=="Y"){
+                                                options.OnSaveDynamicContent(contentReqObj,mee_view,true,showMsg)
+                                           }else if(val.isGlobal=="Y" && val.isLocal=="N"){
+                                               //console.log('Global : '+val.isGlobal + ' Local : '+val.isLocal);
                                                options.OnDeleteDynamicContent(contentReqObj,mee_view,true)
-                                           }
-                                           else{
+                                           }else{
                                                options.OnDynamicContentSwap(contentReqObj,mee_view,true,showMsg)
                                            }
                                            
@@ -3019,7 +3021,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 
                                 
                                 function getDCGlobally(dynamicKey,dynmicID){
-                                    var contentVariationKeys = [];
+                                       var contentVariationKeys = [];
+                                       
                                        var URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&isBoth=Y&campaignNumber="+options.camp_id+"&dynamicNumber="+dynmicID;
                                        $.ajax({
                                         url: URL,
@@ -3035,11 +3038,33 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                });
                                                mee_view.DynamicContentsGlo[dynamicKey] = contentVariationKeys;
                                                var i=0;
-                                               $.each(mee_view.DynamicContentsObj[dynamicKey],function(key,val){
-                                                   if(val.Label == mee_view.DynamicContentsGlo[dynamicKey][i].label){
+                                               var loopContents;
+                                               var isGlobalGreater = false;
+                                               if(Object.keys(mee_view.DynamicContentsObj[dynamicKey]).length < Object.keys(mee_view.DynamicContentsGlo[dynamicKey]).length){
+                                                   loopContents = mee_view.DynamicContentsGlo[dynamicKey];
+                                                   isGlobalGreater = true;
+                                               }else{
+                                                    loopContents = mee_view.DynamicContentsObj[dynamicKey];
+                                               }
+                                               $.each(loopContents,function(key,val){
+                                                   
+                                                   if(isGlobalGreater){
+                                                       
+                                                       var dynamicContentArrayObj = _.values(mee_view.DynamicContentsObj[dynamicKey]);
+                                                      
+                                                       if(!dynamicContentArrayObj[i] && val){
+                                                           val['DynamicVariationID'] = dynmicID;
+                                                           val['DynamicContentID'] = val['contentNumber.encode'];
+                                                           mee_view.DynamicContentsObj[dynamicKey]['contentNumber.checksum'] = val;
+                                                       }else if(dynamicContentArrayObj[i].checksum == val['contentNumber.checksum']){
+                                                           mee_view.DynamicContentsObj[dynamicKey][val['contentNumber.checksum']]['isGlobal'] = val.isGlobal;
+                                                           mee_view.DynamicContentsObj[dynamicKey][val['contentNumber.checksum']]['isLocal'] = val.isLocal;
+                                                       }
+                                                   }else{
                                                        val['isGlobal'] = mee_view.DynamicContentsGlo[dynamicKey][i].isGlobal;
                                                        val['isLocal'] = mee_view.DynamicContentsGlo[dynamicKey][i].isLocal;
-                                                   } 
+                                                   }
+                                                   
                                                    i++;
                                                });
                                         },
@@ -3047,6 +3072,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             console.log("get Dynamic Variation Content failed:" + e);
                                             }
                                         });
+                                      
                                 }
                                 
                                 function saveLocallyOnDragDrop(dynamicKey){
@@ -3065,10 +3091,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                    IsUpdate : val.IsUpdate,
                                                    Label : val.Label,
                                                    applyRuleCount : val.applyRuleCount,
-                                                   changFlag:changFlag
+                                                   changFlag:changFlag,
+                                                   isLocalSave : true,
+                                                   checksum : val.checksum,
+                                                   DCkey:dynamicKey
                                                },
                                            }
-                                           //console.log('Local Create : ',contentReqObj);
                                            
                                            options.OnSaveDynamicContent(contentReqObj,mee_view);
                                            // if Rules are globally available
@@ -4635,14 +4663,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                             args.predefinedControl.Html.find(".dcName span:first").html(args.DynamicVariation.Label);
                                             args.predefinedControl.Html.find(".dcName span:first").click(onSaveContent);
-                                            //console.log(mee_view.DynamicContentsObj)
+                                            
                                             var dcContents = args.predefinedControl.Html.find(".dcContents");
 
                                             if (args.DynamicVariation.ListOfDynamicContents.length > 0) {
                                                 var firstBlock = false;
                                                 mee_view.DynamicContentsObj[args.DynamicVariation.DynamicVariationCode] = {}; // DC ADD
                                                 $.each(args.DynamicVariation.ListOfDynamicContents, function (i, variation) {
-                                                    mee_view.DynamicContentsObj[args.DynamicVariation.DynamicVariationCode][variation.DynamicContentID] = variation; // DC ADD
+                                                    
+                                                    mee_view.DynamicContentsObj[args.DynamicVariation.DynamicVariationCode][variation.checksum] = variation; // DC ADD
+                                                    
+                                                   
                                                     //var ContentLi = $("<li>" + variation.Label + "</li>");
                                                     
                                                     if (variation.Label == "Default") {
@@ -4692,6 +4723,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     }
 
                                                 });
+                                                
+                                                getDCGlobally(args.DynamicVariation.DynamicVariationCode,args.DynamicVariation.DynamicVariationID);
                                                 var isNewCampaign = false;
                                                 //console.log('Local DynamicObj',mee_view.DynamicContentsObj); //DC ADD
                                                 if(meeIframe.find('table[keyword="'+args.ID+'"]').length == 1){
@@ -4706,8 +4739,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                    //console.log('Its time to save the for NEW Campaign',args.DynamicVariation.DynamicVariationCode);
                                                    saveLocallyOnDragDrop(args.DynamicVariation.DynamicVariationCode); 
                                                 }
-                                                //console.log('Global DynamicObj :',mee_view.DynamicContentsGlo);
-                                                //console.log('DCDRAG : ',mee_view.DCDrag);
                                                 
                                                
                                             }
@@ -4841,6 +4872,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                 if (options.OnDeleteDynamicContent != null) {
                                                     mee_view['allOptions'] = options;
+                                                    var firstTable = element.parents('table:first');
+                                                    firstTable.parent().find('.global-save-overlay').remove();
+                                                    firstTable.before("<div style='height:  "+firstTable.height()+"px;' class='overlay global-save-overlay'><p>Deleting option…</p></div>");
                                                     options.OnDeleteDynamicContent(args,mee_view);
                                                 }
 
@@ -5005,6 +5039,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                                 var dcContents = meeIframe.find("table[keyword='" + args.ID + "']").find(".dcContents");
                                                 var newLi = $(myElement.find(".dcLI").html());
+                                                if(args.DynamicContent.Label != content.Label){
+                                                    args.DynamicContent = content;     
+                                                }
                                                 newLi.find("span:first").html(args.DynamicContent.Label);
                                                 newLi.data("content", args.DynamicContent);
 
@@ -5205,8 +5242,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     dynamicContents.IsDefault = content.isDefault;
                                                     dynamicContents.ruleCount = content.ruleCount;
                                                     dynamicContents.InternalContents = content.contents;
+                                                    dynamicContents.checksum = content["contentNumber.checksum"];
                                                     dynamicContents.applyRuleCount = content.applyRuleCount;
-                                                    
                                                     listOfDynamicContents.push(dynamicContents);
                                                     var listOfDynamicRules = new Array();
                                                     if (content.rules != null && content.rules != undefined) {
@@ -5220,10 +5257,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     
                                                 });
                                                
-                                               //getDCGlobally(e.keyword);
+                                               
                                             }
                                             dynamicVariation.ListOfDynamicContents = listOfDynamicContents;
-
+                                            
                                         },
                                         error: function (e) {
                                             console.log("get Dynamic Variation Content failed:" + e);
@@ -8109,12 +8146,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         
                                         
                                         if(gloFlag == true){
-                                           content["setGlobal"] = true;
-                                           content["isNew"] = false;
+                                           //content["setGlobal"] = true;
+                                           //content["isNew"] = false;
+                                           mee_view.DynamicContentsObj[content.DCkey][content.checksum]['isGlobal'] = "Y";
                                         }
                                         else if(mee_view.DynamicContentsObj[args.ID]){
-                                            mee_view.DynamicContentsObj[args.ID][args.DynamicContent.DynamicContentID] = args.DynamicContent;
-                                            mee_view.DynamicContentsObj[args.ID][args.DynamicContent.DynamicContentID]["isNew"] = true;   
+                                            mee_view.DynamicContentsObj[args.ID][ec[2]] = args.DynamicContent;
+                                            mee_view.DynamicContentsObj[args.ID][ec[2]]["checksum"] = ec[2];
+                                            mee_view.DynamicContentsObj[args.ID][ec[2]]["isNew"] = true;  
+                                            mee_view.DynamicContentsObj[args.ID][ec[2]]["isLocal"] = "Y";
+                                            mee_view.DynamicContentsObj[args.ID][ec[2]]["isGlobal"] = "N";
+                                            
+                                        }else if(content.isLocalSave){
+                                            mee_view.DynamicContentsObj[content.DCkey][content.checksum]['isLocal'] = "Y";
                                         }
                                         if(showMsg == "showGlobalMsg"){
                                             _self._app.showMessge('This Dynamic Block template has been updated.');
@@ -8133,20 +8177,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         },
                         OnSaveDynamicRules: function (args)
                         {
+                            // This function doesn't triggered on save filter from MEE. 
                             var content = args.DynamicContent;
                             var dynamicNumber = content.DynamicVariationID;
                             var dynamicNumberContent = content.DynamicContentID;
                             var rules = content.ListOfDynamicRules;
+                            var contentRules;
                             var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=updateContentRules&dynamicNumber=" + dynamicNumber + "&contentNumber=" + dynamicNumberContent + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
                             for (var j = 0; j < rules.length; j++) {
                                 var rule = rules[j];
                                 //contentRuleURL += "&"+ j +".spanInDays=";
-                                contentRuleURL += "&" + (j + 1) + ".matchValue=" + rule.RuleMatchValue;
+                                contentRuleURL += "&" + (j + 1) + ".matchValue=updateContents" + rule.RuleMatchValue;
                                 contentRuleURL += "&" + (j + 1) + ".fieldName=" + rule.RuleFieldName;
                                 contentRuleURL += "&" + (j + 1) + ".dateFormat=" + rule.RuleDefaultValue;
                                 contentRuleURL += "&" + (j + 1) + ".rule=" + rule.RuleCondition;
                                 //contentRuleURL += "&"+ j +".listNumber=";
                             }
+                            //console.log(contentRules);
                             $.ajax({
                                 url: contentRuleURL,
                                 type: "POST",
@@ -8169,26 +8216,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var dynamicNumber = content.DynamicVariationID;
                             var dynamicNumberContent = content.DynamicContentID;
 
-                            var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=updateContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&contentNumber=" + dynamicNumberContent;
+                            var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=updateContent&dynamicNumber=" + dynamicNumber  ;
 
                             $.ajax({
-                                url: contentURL,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (ec) {
-                                    
-                                },
-                                error: function (e) {
-                                }
-                            });
+                                    dataType: "json",
+                                    method:"POST",
+                                    url: contentURL,
+                                    data: {'contents': content.InternalContents,'campaignSubject': content.Label,'contentNumber':dynamicNumberContent},
+                                    async: false,
+                                    success: function (tsv, state, xhr) {
+                                        if (xhr && xhr.responseText) {
+                                            var responsData = jQuery.parseJSON(xhr.responseText);
+                                            console.log(responsData);
+                                        }
+                                    }
+                                });
+                               
                         },
                         OnDeleteDynamicContent: function (args,mee_view,GloFlg) 
                         {
-                            
                             var content = args.DynamicContent;
                             var dynamicNumber = content.DynamicVariationID;
                             var dynamicNumberContent = content.DynamicContentID;
@@ -8208,13 +8254,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 contentType: "application/json; charset=latin1",
                                 dataType: "json",
                                 cache: false,
-                                async: true,
+                                async: false,
                                 success: function (ec) {
                                     // DC ADD
                                     if(ec[0]=="success"){
+                                        
                                         if(mee_view.DynamicContentsObj[args.ID]){
-                                            mee_view.DynamicContentsObj[args.ID][dynamicNumberContent]["isDel"] = true;
+                                            if(mee_view.DynamicContentsObj[args.ID][content.checksum].isLocal=="Y" && mee_view.DynamicContentsObj[args.ID][content.checksum].isGlobal=="N"){
+                                                delete mee_view.DynamicContentsObj[args.ID][content.checksum];
+                                            }else{
+                                                mee_view.DynamicContentsObj[args.ID][content.checksum]["isLocal"] = "N";
+                                                mee_view.DynamicContentsObj[args.ID][content.checksum]["isDel"] = true;
+                                            }
+                                            
+                                          
                                         }
+                                        if(GloFlg){
+                                            delete mee_view.DynamicContentsObj[args.ID][content.checksum];
+                                        }
+                                        $('.global-save-overlay').remove();
                                         mee_view.app.showMessge('Dynamic content deleted successfully',$('body'));
                                         mee_view.allOptions.saveCallBack();
                                     }
@@ -8245,21 +8303,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             else if(!gloFlag && !this.isTemplate){
                                 contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber+"&campaignNumber="+this.camp_id;
                                 postObj={};
-                                postObj['contentCount']=Object.keys(mee_view.DynamicContentsObj[args.ID]).length;
+                                
                                 // making postObj content rich
                                 var i=0;
+                                var contentCount =0;
                                 $.each(mee_view.DynamicContentsObj[args.ID],function(key,value){
                                                 //var rule = rules[j];
                                                 //contentRuleURL += "&"+ j +".spanInDays=";
                                                 //var _html = $('<div/>').html(value.InternalContents).html();
                                                 //_html = escape(_html);
-                                                postObj[i+'.contents']=  _self.encodeHTMLStr(value.InternalContents);
-                                                postObj[i+'.campaignSubjects']= value.Label;
-                                                postObj[i+'.contentLabels']= value.Label;
-                                                postObj[i+'.contentNumbers']= value.DynamicContentID;
-                                                postObj[i+'.isDefault']= value.IsDefault;
-                                                i++;
+                                                
+                                                if(!value.isDel){
+                                                    postObj[i+'.contents']=  _self.encodeHTMLStr(value.InternalContents);
+                                                    postObj[i+'.campaignSubjects']= value.Label;
+                                                    postObj[i+'.contentLabels']= value.Label;
+                                                    postObj[i+'.contentNumbers']= value.DynamicContentID;
+                                                    postObj[i+'.isDefault']= value.IsDefault;
+                                                    contentCount++;
+                                                    i++;
+                                                }
+                                               
+                                               
                                             });
+                               
+                                postObj['contentCount']=contentCount;
                             }
                             $.post(contentURL, postObj)
                                     .done(function (data) {
@@ -8277,6 +8344,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             
                         },
                         onSaveContentFilters : function(postData){
+                            // This functions hit if global save call trigger.
                             if(postData.isLocal){
                                 var URL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&campaignNumber="+this.camp_id;
                             }else if(this.isTemplate || this.otopage){
