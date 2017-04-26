@@ -4865,32 +4865,38 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     var OnDeleteContent = function (element) {
                                         element.find(".btnContentDelete").click(function (event) {
-
                                             event.stopPropagation();
+                                            event.preventDefault();
                                             if ($("table[keyword='" + args.ID + "'] .dcContents > li").length !== 2) {
                                                 args.DynamicContent = getDynamicContent(element);
-
+                                                
+                                                var firstTable = meeIframe.find('table.dynamicContentContainer');
+                                                firstTable.parent().find('.global-save-overlay').remove();
+                                                firstTable.before("<div style='height:  "+firstTable.height()+"px;' class='overlay global-save-overlay'><p>Deleting option…</p></div>");
+                                                
                                                 if (options.OnDeleteDynamicContent != null) {
                                                     mee_view['allOptions'] = options;
-                                                    var firstTable = element.parents('table:first');
-                                                    firstTable.parent().find('.global-save-overlay').remove();
-                                                    firstTable.before("<div style='height:  "+firstTable.height()+"px;' class='overlay global-save-overlay'><p>Deleting option…</p></div>");
                                                     options.OnDeleteDynamicContent(args,mee_view);
                                                 }
-
                                                 //Activate Default here.
-                                                element.siblings(".defaultLi").trigger("click");
-
+                                                //element.siblings(".defaultLi").trigger("click");
+                                                if(element.attr("id")){
+                                                    meeIframe.find("li[id='" + element.attr("id") + "']").parent().find('.defaultLi').trigger("click");
+                                                }else{
+                                                    element.siblings(".defaultLi").trigger("click");
+                                                }
                                                 element.remove();
                                                 if (element.attr("id")) {
                                                     meeIframe.find("li[id='" + element.attr("id") + "']").remove()
                                                 } else {
                                                     element.remove();
                                                 }
+                                                
+                                                
                                             } else {
                                                 options._app.showAlert("You cann't delete this option. Dynamic content block should have at least one option.", $("body"), {type: 'caution'});
                                             }
-
+                                            
                                         });
                                     }
                                     var onSaveContent = function () {
@@ -4989,7 +4995,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 if (options.OnDynamicContentSwap != null) {
                                                     args.DynamicContent = previuosActivate.data("content");
                                                     args.DynamicContent.InternalContents = CleanCode($("<div>" + previuosActivate.data("dcInternalData") + "</div>")).html();
-                                                    
+                                                    mee_view['isAsync'] = true;
                                                     options.OnDynamicContentSwap(args,mee_view);
                                                 }
                                             }
@@ -8290,6 +8296,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var _self = this;
                             var dynamicNumberContent = content.DynamicContentID;
                             // NEED to call from function
+                            
                             var str = _self.encodeHTMLStr(content.InternalContents);
                             var postObj = {"contents": str, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
                             var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContent&dynamicNumber="+dynamicNumber;
@@ -8301,7 +8308,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 postObj["isSingle"] = "Y";
                             }
                             else if(!gloFlag && !this.isTemplate){
-                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber+"&campaignNumber="+this.camp_id;
+                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&contentNumber="+dynamicNumberContent+"&dynamicNumber="+dynamicNumber+"&campaignNumber="+this.camp_id;
                                 postObj={};
                                 
                                 // making postObj content rich
@@ -8328,19 +8335,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                
                                 postObj['contentCount']=contentCount;
                             }
-                            $.post(contentURL, postObj)
-                                    .done(function (data) {
-                                           
-                                            if(content.dcLi){
+                              $.ajax({
+                                url: contentURL,
+                                data: postObj,
+                                type: "POST",
+                                contentType: "application/x-www-form-urlencoded",
+                                dataType: "json",
+                                cache: false,
+                                async: (mee_view.isAsync) ? mee_view.isAsync : false,
+                                success: function (data) {
+                                    if(content.dcLi){
                                                 content.dcLi.find('.global-save-overlay').remove();
                                             }
                                             
                                             if(globalMsg=="showGlobalMsg"){
                                                 _self._app.showMessge('This Dynamic Block template has been updated.');
                                             }
-                                            
-                                           
-                                    });
+                                },
+                                error: function (e) {
+                                }
+                            });
+                        
                             
                         },
                         onSaveContentFilters : function(postData){
