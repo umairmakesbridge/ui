@@ -124,8 +124,8 @@ outline:0;
 
 i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 
-.icon.back {	background: url("../img/back.png") no-repeat center center;}
-.icon.next {	background: url("../img/next.png") no-repeat center center;}
+.icon.back {	background: url("../img/back.png") no-repeat center center !important;}
+.icon.next {	background: url("../img/next.png") no-repeat center center !important;}
 .icon.save {   background: url("../img/save.png") no-repeat center center;}
 .icon.delete {   background: url("../img/delete24.png") no-repeat center center ;}
 .icon.edit {   background: url("../img/edit.png") no-repeat center center ;}
@@ -4821,8 +4821,8 @@ div.crms a img {
 .tagslist ul { padding:0; height:auto;  max-width:100% !important; top:0;}
 .tagslist  ul li { margin:5px;}
 .tagslist  ul li > a { font-size: 13px !important;line-height: 28px; background:#ffffff ;  min-width: 100px;}
-.tagslist  ul li > a span {  line-height: 28px; color:#6494AF;}
-.tagslist  ul li > a span:hover { color:#fff;} 
+.tagslist  ul li > a span {  line-height: 28px; color:#6494AF !important;}
+.tagslist  ul li > a span:hover { color:#fff !important;} 
 .tagslist  ul li > a i {
     background-color: #19BAF7 ;
     float: right;

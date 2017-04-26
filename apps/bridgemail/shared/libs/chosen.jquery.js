@@ -831,13 +831,18 @@
                        if(selected_link){
                            $(_this.form_field).removeAttr("data-selected");
                            if(callback){
-                               callback();
+                               callback();                               
                            }
                        }
                        var url = val[0]["url"] ? SelectParser.decodeHTML(val[0]["url"]) : ""
                        var title = val[0].title ? SelectParser.decodeHTML(val[0].title) : ""
                        select_html += '<option value="'+url+'" '+selected_link+'>'+ (title ? title : url)+'</option>'                      
                        _this.options.page_urls.push({"id":url,"title":title})
+                       if(_this.options.page_urls.length==parseFloat(_json.totalCount)){                           
+                           if(callback){
+                               callback();
+                           }                           
+                       }
                     }
                       
                      

@@ -3933,9 +3933,14 @@ input[type="button"].small-button {
     width: 160px;
 }
 
+.dc_filters .timeline_panel{
+    min-height:140px;
+}
+
+
 
 .rulesdiv {
-    background: none repeat scroll 0 0 #FFFFFF;
+    background: none repeat scroll 0 0 #e9f5fa;
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
     display: block;
     left: 0;
@@ -3944,13 +3949,16 @@ input[type="button"].small-button {
     min-width: 500px;
     position: absolute;
     top: 58px;
-    width: 856px;
-    z-index: 993;
-    border:2px solid #BADAEC;
+    width: 930px;
+    z-index: 1000;
+    border:2px solid #BADAEC;    
 
     -webkit-box-shadow:0 8px 8px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
     box-shadow:0 8px 8px rgba(0, 0, 0, 0.1);
+}
+.dcRulesDialog .filter-menu {
+    background: none repeat scroll 0 0 #e9f5fa;
 }
 
 .rulesdiv:before {
@@ -3960,7 +3968,7 @@ input[type="button"].small-button {
     bottom: auto;
     content: "";
     display: inline-block;
-    left: 237px;
+    left: 456px;
     position: absolute;
     top: -14px;
 }
@@ -3976,6 +3984,7 @@ input[type="button"].small-button {
     right: 5px;
     top: 5px;
     z-index:98;
+   
 } 
 
 
@@ -4031,7 +4040,20 @@ input[type="button"].small-button {
     line-height: 22px;
 }
 
+.dc_filters #formlistsearch, .dc_filters .list-filter-search {
+    margin-top:-7px !important;
+}
 
+.dc_filters .bDiv{
+    height:200px !important;
+}
+.dc_filters .new_activities{    
+    padding-bottom: 10px;
+}
+
+.dc_filters .timeline_panel .new_activities:before{
+    height: calc(100% - 47px) !important;
+}
 
 .rulesdiv .chosen-container { min-width:175px; float:left; }
 .rulesdiv .chosen-container:first-child {max-width: 260px !important; width: 260px !important; }
@@ -4043,7 +4065,7 @@ input[type="button"].small-button {
     line-height: 30px;
     margin: 0 0 10px;
 }
-.rulesdiv .filter-row {  margin: 10px 0 0 00px; }
+.rulesdiv .filter-row {  margin: 10px 0 0 0px; }
 .rulesdiv .rules-container {margin-left:5px !important;}
 
 
@@ -4055,9 +4077,13 @@ input[type="button"].small-button {
 
 .rulesdiv .filter-row .filter-cont:before { border:0; }
 
-.rulesdiv .addfilter a { line-height:36px; margin-left:5px;} 
-.rulesdiv .addfilter a:first-child { margin:0;}
-.rulesdiv .addfilter a.btn-green .icon.plus
+.rulesdiv .action-row {float:right;margin-top:-51px;}
+.rulesdiv .action-row a { line-height:36px; margin-left:5px;} 
+.rulesdiv .action-row a:first-child { margin:0;}
+.rulesdiv .action-row a.ruleDialogSave{
+    margin-right: 5px;
+}
+.rulesdiv .action-row a.btn-green .icon.plus
 {background: url("../images/add.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 
 .rulesdiv .filter-div {
@@ -4914,6 +4940,19 @@ ul.b-blocks > li > i.icon.cblock.banner{
 .MEE_EDITOR .search .close-icon{
     right:28px;
     margin-top:-7px;
+}
+.MEE_EDITOR .dcRulesDialog .search .close-icon{
+    right:43px;
+    margin-top:0px;
+}
+.tagslist ul li > a span.highlight{
+    color:#fff !important;
+}
+.dcRulesDialog .loading p{
+    top:22%;
+}
+.dcRulesDialog #area_choose_tags .search-control{
+    width:140px !important;
 }
 .add_new_rule{
 

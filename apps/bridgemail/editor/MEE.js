@@ -2938,7 +2938,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         firstTable.before("<div style='height:  "+firstTable.height()+"px;' class='overlay global-save-overlay'><p>Updating Dynmaic Content Template...</p></div>");
                                         
                                         var contentReqObj ="";
-                                        var postData = {};
+                                        
                                         var ruleCount = 0;
                                         var componentsLength = Object.keys(mee_view.DynamicContentsObj[dynamicKey]).length;
                                         //getDCGlobally(dynamicKey,dynmicID);
@@ -2948,6 +2948,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         
                                         var activeDatali = (firstTable.data('activeli') || firstTable.data('activeli')==0) ? firstTable.data('activeli') : 1;
                                        $.each(mee_view.DynamicContentsObj[dynamicKey],function(key,val){
+                                           var postData = {};
                                            //objTempHTML.html(val.InternalContents);
                                            if(coi == componentsLength){
                                                showMsg = 'showGlobalMsg';
@@ -2984,21 +2985,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            
                                            if(val.ListOfDynamicRules.length > 0){
                                                ruleCount = val.ListOfDynamicRules.length;
-                                               
-                                               $.each(val.ListOfDynamicRules,function(key,val){
-                                                    postData[(parseInt(key)+1)+".fieldName"] = val.fieldName;
-                                                    postData[(parseInt(key)+1)+".rule"] = options._app.decodeHTML(val.rule);
-                                                    postData[(parseInt(key)+1)+".matchValue"] = (val.matchValue) ? val.matchValue : "";
-                                                    if(val.spanInDays){
-                                                         postData[(parseInt(key)+1)+".spanInDays"] = val.spanInDays;
-                                                    }
-                                                    if(val.dateFormat){
-                                                        postData[(parseInt(key)+1)+".dateFormat"] = val.dateFormat;
-                                                    }
-                                                    if((parseInt(key)+1)==ruleCount){
-                                                        postData['showRuleData'] = true;
-                                                    }
-                                                }); 
+                                               postData = getFiltersParams(val,ruleCount);
+                                                
                                           
                                             if($.isEmptyObject(postData)==false){
                                                 postData['contentNumber'] = val.DynamicContentID;
@@ -3076,11 +3064,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 
                                 function saveLocallyOnDragDrop(dynamicKey){
-                                    var contentReqObj ="";
-                                    var postData = {};
+                                    var contentReqObj ="";                                    
                                     var ruleCount = 0;
                                        $.each(mee_view.DynamicContentsObj[dynamicKey],function(key,val){
-                                           //objTempHTML.html(val.InternalContents);
+                                           var postData = {};                                           
                                            var _html = $('<div/>').html(val.InternalContents).html();
                                            contentReqObj = {
                                                DynamicContent:{
@@ -3102,18 +3089,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            // if Rules are globally available
                                            if(val.ListOfDynamicRules.length > 0){
                                                 ruleCount = val.ListOfDynamicRules.length;
-                                                $.each(val.ListOfDynamicRules,function(key,val){
-                                                    //console.log(key,val,decodeURI(val.rule));
-                                                    postData[(parseInt(key)+1)+".fieldName"] = val.fieldName;
-                                                    postData[(parseInt(key)+1)+".rule"] = options._app.decodeHTML(val.rule);
-                                                    postData[(parseInt(key)+1)+".matchValue"] = (val.matchValue) ? val.matchValue : "";
-                                                    if(val.spanInDays){
-                                                         postData[(parseInt(key)+1)+".spanInDays"] = val.spanInDays;
-                                                    }
-                                                    if(val.dateFormat){
-                                                        postData[(parseInt(key)+1)+".dateFormat"] = val.dateFormat;
-                                                    }
-                                                }); 
+                                                postData = getFiltersParams(val);
                                                 
                                                 if($.isEmptyObject(postData)==false){
                                                     postData['contentNumber'] = val.DynamicContentID;
@@ -3130,6 +3106,79 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                        });
                                        mee_view.autoSaveFlag = true;
                                 }
+                                // Set Params for filters. 
+                                function getFiltersParams (val,ruleCount){
+                                    var postData = {};
+                                    $.each(val.ListOfDynamicRules,function(key,val){
+                                        postData[(parseInt(key)+1)+".filterType"] =  val.filterType;
+                                        if(val.filterType=="profile"){
+                                            postData[(parseInt(key)+1)+".fieldName"] = val.fieldName;
+                                            postData[(parseInt(key)+1)+".rule"] = options._app.decodeHTML(val.rule);
+                                            postData[(parseInt(key)+1)+".matchValue"] = (val.matchValue) ? val.matchValue : "";
+                                            if(val.spanInDays){
+                                                 postData[(parseInt(key)+1)+".spanInDays"] = val.spanInDays;
+                                            }
+                                            if(val.dateFormat){
+                                                postData[(parseInt(key)+1)+".dateFormat"] = val.dateFormat;
+                                            }
+                                        }
+                                        else if(val.filterType=="emailActivity"){
+                                            postData[(parseInt(key)+1)+".emailCampType"] = val.campaignType;
+                                            postData[(parseInt(key)+1)+".emailFilterBy"] = val.filterBy;
+                                            postData[(parseInt(key)+1)+".campaignNumber"] = val.campaignNumber;
+                                            if(val.articleNumber){
+                                                postData[(parseInt(key)+1)+".articleNumber"] = val.articleNumber;
+                                            }
+                                            postData[(parseInt(key)+1)+".isEmailTimeSpan"] = "Y";
+                                            postData[(parseInt(key)+1)+".emailTimeSpan"] = val.timeSpanInDays;
+                                            postData[(parseInt(key)+1)+".isEmailFreq"] = "Y";
+                                            postData[(parseInt(key)+1)+".emailFreq"] = val.frequency;
+                                        }
+                                        else if(val.filterType=="list"){
+                                            postData[(parseInt(key)+1)+".listNumbers"] = val.listNumbers;
+                                            postData[(parseInt(key)+1)+".subscribed"] = val.isMemberOfList;
+                                            postData[(parseInt(key)+1)+".match"] = val.matchAll;
+                                        }
+                                        else if(val.filterType=="formSubmission"){
+                                            postData[(parseInt(key)+1)+".formId"] = val.formNumber;
+                                            postData[(parseInt(key)+1)+".isFormTimeSpan"] = "Y";
+                                            postData[(parseInt(key)+1)+".formTimeSpan"] = val.timeSpanInDays;
+                                        }
+                                        else if(val.filterType=="webActivity"){
+                                            postData[(parseInt(key)+1)+".webFilterBy"] = val.filterBy;
+                                            if(val.pageURL){
+                                                postData[(parseInt(key)+1)+".webURL"] = val.pageURL;
+                                            }
+                                            if(val.linkIDFilterNum){
+                                                postData[(parseInt(key)+1)+".linkIDFilterNum"] = val.linkIDFilterNum;
+                                            }
+                                            if(val.linkFilterGroupId){
+                                                postData[(parseInt(key)+1)+".linkFilterGroupId"] = val.linkFilterGroupId;
+                                            }
+                                            postData[(parseInt(key)+1)+".isWebTimeSpan"] = "Y";
+                                            postData[(parseInt(key)+1)+".webTimeSpan"] = val.timeSpanInDays;
+                                            postData[(parseInt(key)+1)+".isWebFreq"] = "Y";
+                                            postData[(parseInt(key)+1)+".webFreq"] = val.frequency;
+                                        }
+                                        else if(val.filterType=="tag"){
+                                            postData[(parseInt(key)+1)+".rule"] = val.rule;                                                        
+                                            postData[(parseInt(key)+1)+".tags"] = val.tags;
+                                        }
+                                        else if(val.filterType=="score"){
+                                            postData[(parseInt(key)+1)+".scoreRule"] = val.rule;
+                                            postData[(parseInt(key)+1)+".scoreValue"] = val.score;
+                                            if(val.rangeInDays){
+                                                postData[(parseInt(key)+1)+".scoreRange"] = val.rangeInDays;
+                                            }
+                                        }
+                                        if(ruleCount && (parseInt(key)+1)==ruleCount){
+                                            postData['showRuleData'] = true;
+                                        }
+                                    });
+                                    
+                                    return postData;
+                                }                               
+                                
                                 // DC ADD Ends
                                 function DeleteElement(element)
                                 {
@@ -4780,7 +4829,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var _ele = $(this);
                                             var ele_offset = _ele.offset();
                                             var top = ele_offset.top + 80;
-                                            var left = ele_offset.left + 50;
+                                            var left = ele_offset.left + 50 - 220;
                                             OpenRulesWindow(args, top, left);
                                             
                                         });
