@@ -135,7 +135,7 @@
             filter_html += '<div class="btn-group days-container" style="display:' + gap_display + '"><div class="inputcont"><input type="text" value="' + gapValue + '" name="" class="gap" style="width:30px;" /></div></div>'
             filter_html += '<div class="btn-group formats-container" style="display:' + format_display + '"><div class="inputcont"><select class="selectbox formats" disabled="disabled"><option>Loading...</option>'
             filter_html += '</select></div></div>'
-            filter_html += '<div class="btn-group value-container" style="display:' + value_display + '"><div class="inputcont"><input type="text" value="' + matchValue + '" name="" class="matchValue" style="width:240px;" /></div></div>'
+            filter_html += '<div class="btn-group value-container" style="display:' + value_display + '"><div class="inputcont"><input type="text" value="' + matchValue + '" name="" class="matchValue" style="width:180px;" /></div></div>'
             if (params && params.fieldName == "{{SUBSCRIPTION_DATE}}") {
                 filter.append(list_div)
             }
@@ -144,8 +144,8 @@
             //filter.find(".filter-cont").append('<span class="timelinelabel">Basic Filter</span>');  
             //Chosen with fields
             var self = this;
-
-            filter.find(".fields").chosen({width: '320px'}).change(function () {
+            var bFilterFeldWidth = self.options.DCFilter?"180px":"320px";
+            filter.find(".fields").chosen({width: bFilterFeldWidth}).change(function () {
                 if ($(this).val() == "{{SUBSCRIPTION_DATE}}") {
                     self.subListObj['parentFilter'] = filter;
                     filter.find(".sub-date-container").hide();
@@ -266,7 +266,8 @@
             var URL = ""
             var self = this
             if (this.basicFields.length === 0) {
-                URL = "/pms/io/getMetaData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=fields_all";
+                var fieldsType = self.options.DCFilter?"merge_tags":"fields_all";
+                URL = "/pms/io/getMetaData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type="+fieldsType;
                 $.ajax({
                     dataType: "json",
                     url: URL,
@@ -281,13 +282,24 @@
                             bas_field_html += '<optgroup label="Basic Fields">'
                             var cust_field_html = '<optgroup label="Custom Fields">'
                             $.each(fields_json, function (key, val) {
-                                selected_field = (params && params.fieldName == val[0]) ? "selected" : ""
-                                if (val[2] == "true") {
-                                    self.basicFields.push(val)
-                                    bas_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
-                                } else {
-                                    self.customFields.push(val)
-                                    cust_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
+                                var selected_field = (params && params.fieldName == val[0]) ? "selected" : ""
+                                if(self.options.DCFilter){
+                                    if (val[2] == "B") {
+                                        self.basicFields.push(val)
+                                        bas_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
+                                    } else if(val[2] == "C") {
+                                        self.customFields.push(val)
+                                        cust_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
+                                    }
+                                }
+                                else {
+                                    if (val[2] == "true") {
+                                        self.basicFields.push(val)
+                                        bas_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
+                                    } else {
+                                        self.customFields.push(val)
+                                        cust_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
+                                    }
                                 }
                             });
                             bas_field_html += '</optgroup>'
@@ -305,40 +317,7 @@
                         }
                     }
                 });
-                /*jQuery.getJSON(URL,  function(tsv, state, xhr){
-                 if(xhr && xhr.responseText){                        
-                 var fields_json = jQuery.parseJSON(xhr.responseText);                                
-                 if(self.options.app.checkError(fields_json)){
-                 return false;
-                 }       
-                 var bas_field_html ='<option value=""></option>'
-                 bas_field_html +='<optgroup label="Basic Fields">'                            
-                 var cust_field_html = '<optgroup label="Custom Fields">'                        
-                 $.each(fields_json,function(key,val){
-                 selected_field = (params && params.fieldName==val[0]) ? "selected" : ""
-                 if(val[2]=="true"){                            
-                 self.basicFields.push(val)                            
-                 bas_field_html +='<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'                           
-                 }
-                 else{
-                 self.customFields.push(val)
-                 cust_field_html += '<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'
-                 }
-                 });
-                 bas_field_html +='</optgroup>'
-                 cust_field_html +='</optgroup>'                    
-                 filter.find(".fields").html(bas_field_html+cust_field_html).prop("disabled",false).trigger("chosen:updated")                    
-                 // Hide the fields for Birthday and Subscriber \
-                 if(params){
-                 if( params.fieldName=="{{SUBSCRIPTION_DATE}}" || params.fieldName=="{{BIRTH_DATE}}"){
-                 filter.find('#basic-filter-options option:nth-child(3)').hide().trigger("chosen:updated");
-                 filter.find('#basic-filter-options option:nth-child(4)').hide().trigger("chosen:updated");
-                 filter.find('#basic-filter-options option:nth-child(8)').hide().trigger("chosen:updated");
-                 }
-                 }
-                 
-                 }
-                 }).fail(function() { console.log( "error in loading fields" ); });*/
+                
             } else {
                 var fields_array = this.basicFields
                 var filter_html = '<option value=""></option>'
@@ -379,21 +358,7 @@
                         }
                     }
                 });
-                /*jQuery.getJSON(URL,  function(tsv, state, xhr){
-                 if(xhr && xhr.responseText){                        
-                 var rules_json = jQuery.parseJSON(xhr.responseText);                                
-                 if(self.options.app.checkError(rules_json)){
-                 return false;
-                 }                                     
-                 var filter_html =''
-                 $.each(rules_json,function(k,val){
-                 selected_rule = (params && params.rule==val[0]) ? "selected" : ""
-                 filter_html +='<option value="'+val[0]+'" '+selected_rule+'>'+val[1]+'</option>'
-                 self.rules.push(val)
-                 });                   
-                 filter.find(".selectbox.rules").html(filter_html).prop("disabled",false).trigger("chosen:updated")
-                 }
-                 }).fail(function() { console.log( "error in loading rules" ); });*/
+               
             } else {
 
                 var filter_html = ''
@@ -423,33 +388,11 @@
                                 filter_html += '<option value="' + val[0] + '" ' + selected_formats + '>' + val[1] + '</option>'
                                 self.formats.push(val)
                             });
-                            //changes for format container which was hidden for equal and not equal
-                            /*if (params && params.dateFormat && typeof(params.spanInDays)=="undefined") {
-                                filter.find(".formats-container").show();
-                            } else {
-                                filter.find(".formats-container").hide();
-                            }*/
+                           
                             filter.find(".selectbox.formats").html(filter_html).prop("disabled", false).trigger("chosen:updated")
                         }
                     }
-                });
-                /*jQuery.getJSON(URL,  function(tsv, state, xhr){
-                 if(xhr && xhr.responseText){                        
-                 var formats_json = jQuery.parseJSON(xhr.responseText);                                
-                 if(self.options.app.checkError(formats_json)){
-                 return false;
-                 }
-                 
-                 var filter_html =''
-                 $.each(formats_json,function(k,val){
-                 selected_formats = (params && params.dateFormat==val[0]) ? "selected" : ""
-                 filter_html +='<option value="'+val[0]+'" '+selected_formats+'>'+val[1]+'</option>'
-                 self.formats.push(val)
-                 });                   
-                 filter.find(".selectbox.formats").html(filter_html).prop("disabled",false).trigger("chosen:updated")
-                 
-                 }
-                 }).fail(function() { console.log( "error in loading formats" ); });*/
+                });              
             } else {
                 var filter_html = ''
                 $.each(this.formats, function (k, val) {
@@ -468,7 +411,7 @@
             var selected_camp = "", selected_article = "";
             var isSelected_camp = false;
             var mapValue = ''; // 
-            var self = this
+            var self = this;            
             var filter_html = '<div class="row"><label style="width: 120px;">Filter by</label>'
             filter_html += ' <div class="btn-group "><select data-placeholder="Select Filter by" class="filter-by"><option value="OP">Email Opened</option><option value="CK">Email Clicked</option><option value="NC">Non Clickers</option></select></div>'
             filter_html += '</div>'
@@ -508,7 +451,9 @@
             })
             //Campaign Soruces i.e campaigns, workflows, Nuture Track and Auto Triggers
             filter.find(".campaign-source").chosen({disable_search: "true", width: "170px"}).change(function () {
+                
                 $(this).val($(this).val()).prop("disabled", true)
+                
                 $(this).trigger("chosen:updated")
                 $(this).parent().find(".chosen-container").append('<div class="loading-wheel combo"></div>')
                 var campainVal = $(this).val();
@@ -534,8 +479,8 @@
                         if (self.options.app.checkError(_json)) {
                             return false;
                         }
-                        filter.find(".campaign-source").parent().find(".chosen-container .loading-wheel").remove()
-                        filter.find(".campaign-source").prop("disabled", false).trigger("chosen:updated")
+                        filter.find(".campaign-source").parent().find(".chosen-container .loading-wheel").remove()                        
+                        filter.find(".campaign-source").prop("disabled", self.options.DCFilter).trigger("chosen:updated")
                         if (campainVal == "N") {
                             var select_html = '<option value="-1">Any Campaign</option>';
                         } else if (campainVal == "B") {
@@ -557,9 +502,9 @@
                                 }
                                 var _value = val[0]["campNum.encode"] || val[0]["campNum"]
                                 if (val[0]["isTextOnly"]) {
-                                    select_html += '<option value="' + _value + '" ' + selected_camp + ' data-istext="' + val[0]["isTextOnly"] + '">' + val[0].name + '</option>'
+                                    select_html += '<option value="' + _value + '" ' + selected_camp + ' data-istext="' + val[0]["isTextOnly"] + '" checksum="'+_checksum+'">' + val[0].name + '</option>'
                                 } else {
-                                    select_html += '<option value="' + _value + '" ' + selected_camp + '>' + val[0].name + '</option>'
+                                    select_html += '<option value="' + _value + '" ' + selected_camp + ' checksum="'+_checksum+'">' + val[0].name + '</option>'
                                 }
                                 filter.find('.loadingPurl-mask').hide();
                             })
@@ -662,7 +607,7 @@
                                 $.each(_json.articles[0], function (index, val) {
                                     var _value = val[0]["articleNumber.encode"]
                                     selected_article = (params && params["articleNumber.checksum"] == val[0]["articleNumber.checksum"]) ? "selected" : ""
-                                    select_html += '<option value="' + _value + '" ' + selected_article + '>' + val[0].title + '</option>'
+                                    select_html += '<option value="' + _value + '" ' + selected_article + ' checksum="'+val[0]["articleNumber.checksum"]+'">' + val[0].title + '</option>'
                                 })
                             }
                             filter.find(".campaign-url").html(select_html).prop("disabled", false).trigger("chosen:updated").change(function () {
@@ -702,10 +647,10 @@
                 } else if (params.campaignNumber !== "") {
                     filter.find(".campaign-source").change()
                 }
-                if (params.isTimeSpan == "true") {
+                if (params.isTimeSpan == "true" || typeof(params.isTimeSpan)=="undefined") {
                     filter.find(".emailTimeSpan").val(params.timeSpanInDays).trigger("chosen:updated")
                 }
-                if (params.isFrequency == "true") {
+                if (params.isFrequency == "true" || typeof(params.isFrequency)=="undefined") {
                     filter.find(".emailFreq").val(params.frequency).trigger("chosen:updated")
                 }
             } else {
@@ -736,7 +681,7 @@
             filter_html += '</div>'
             filter_html += '</div>'
             filter_html += '<div class="nolist" style="display:none;"><i class="erroricon"></i><p class="" style="text-align: left;margin: 0 5px 0 10px;">Selected list has been deleted.</p><a title="" class="icon close closelisterror showtooltip" style="position: absolute; background-position: 0px -720px; opacity: 1; right: 3px; top: 3px;"></a></div>'
-            filter_html += '<div class="template-container"><div class="row temp-filters"><h2 style="margin-left: 15px;margin-top: 4px;" id="total_subscriber_lists"><strong class="badge">0</strong><span>lists found</span></h2><h2 class="header-list" style=" float: right;margin-right: 5px;margin-top: 2px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div class="input-append search"></div></h2></div><div class="target-listing"  style="margin-top:9px">'
+            filter_html += '<div class="template-container"><div class="row temp-filters"><h2 style="margin-left: 15px;margin-top: 4px;" id="total_subscriber_lists"><strong class="badge">0</strong><span>lists found</span></h2><h2 class="header-list" style=" float: right;margin-right: 5px;margin-top: 2px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div class="input-append search list-filter-search"></div></h2></div><div class="target-listing"  style="margin-top:9px">'
             filter_html += '<div class="bmsgrid" style="overflow:inherit!important;"><div class="hDiv"><div class="hDivBox"><table cellspacing="0" cellpadding="0"></table></div></div><div class="bDiv" style="height: 320px;"><table cellpadding="0" cellspacing="0" width="100%" id="__list_grid" class="listsgrid ' + filterClass + '" ><tbody>'
             filter_html += '</tbody></table></div><button class="stats-scroll ScrollToTop" type="button" style="display: none; position:absolute;bottom:5px;right:20px;"></button></div>'
             filter_html += '</div></div>'
@@ -1051,7 +996,7 @@
             this.showTooltips(filter)
 
             if (params) {
-                if (params.isTimeSpan == "true") {
+                if (params.isTimeSpan == "true" || typeof(params.isTimeSpan)=="undefined") {
                     filter.find(".formTimeSpan").val(params.timeSpanInDays).trigger("chosen:updated")
                 }
             }
@@ -1334,7 +1279,7 @@
                                         var url = val[0]["url"] ? self.options.app.decodeHTML(val[0]["url"]) : ""
                                         var title = val[0].title ? self.options.app.decodeHTML(val[0].title) : ""
                                         select_html += '<option value="' + url + '" ' + selected_link + '>' + (title ? title : url) + '</option>'
-                                        self.pageUrls.push({"id": url, "title": title})
+                                        self.pageUrls.push({"id": url, "title": title})                                        
                                     })
                                 }
 
@@ -1382,7 +1327,7 @@
                                 if (_json.groups) {
                                     $.each(_json.groups[0], function (index, val) {
                                         selected_ptype = (params && params['linkFilterGroupId.checksum'] == val[0]["groupId.checksum"]) ? "selected" : ""
-                                        select_html += '<option value="' + val[0]["groupId.encode"] + '" ' + selected_ptype + '>' + val[0].name + '</option>'
+                                        select_html += '<option value="' + val[0]["groupId.encode"] + '" ' + selected_ptype + ' checksum="'+val[0]["groupId.checksum"]+'">' + val[0].name + '</option>'
                                         self.pageTypes.push({"id": val[0]["groupId.encode"], "name": val[0].name, checksum: val[0]["groupId.checksum"]})
                                     })
                                 }
@@ -1422,7 +1367,7 @@
                                     if (_json.filters) {
                                         $.each(_json.filters[0], function (index, val) {
                                             selected_linkfilter = (params && params['linkIDFilterNum.checksum'] == val[0]["filterNumber.checksum"]) ? "selected" : ""
-                                            select_html += '<option value="' + val[0]["filterNumber.encode"] + '" ' + selected_linkfilter + '>' + val[0].name + '</option>'
+                                            select_html += '<option value="' + val[0]["filterNumber.encode"] + '" ' + selected_linkfilter + ' checksum="'+val[0]["filterNumber.checksum"]+'">' + val[0].name + '</option>'
                                             self.linkFilters.push({"id": val[0]["filterNumber.encode"], "name": val[0].name, checksum: val[0]["filterNumber.checksum"]})
                                         })
                                     }
@@ -1471,10 +1416,10 @@
             if (params) {
                 filter.find(".filter-box").val(params.filterBy).trigger("chosen:updated")
                 filter.find(".filter-box").change()
-                if (params.isTimeSpan == "true") {
+                if (params.isTimeSpan == "true" || typeof(params.isTimeSpan)=="undefined") {
                     filter.find(".webTimeSpan").val(params.timeSpanInDays).trigger("chosen:updated")
                 }
-                if (params.isFrequency == "true") {
+                if (params.isFrequency == "true" || typeof(params.isFrequency)=="undefined") {
                     filter.find(".webFreq").val(params.frequency).trigger("chosen:updated")
                 }
             }
@@ -1497,29 +1442,10 @@
                 $(this).parents(".filter-row").remove()
             });
             filterRow.find(".filter-cont").append(action)
-
-            //Action url 
-            /*filterRow.mouseover(function(){
-             action.show()
-             })
-             filterRow.mouseout(function(){
-             action.hide()
-             })*/
+  
         }
         , showDialog: function (obj, filter) {
-
-            /*if($("body").hasClass('modal-open')){
-             var active_ws = $(".modal-body");
-             active_ws.find('.filter-clickers').remove();
-             var parentDiv = $(obj.target).parents('.filter-cont');
-             parentDiv.append("<div class='filter-clickers' id='subname-filters-dialog'><div id='show-loading' style='width:300px;height:300px;position:relative;'></div></div>");
-             active_ws.find('.filter-clickers').css({top:'55px'});
-             }*/
-
-            /*var dialog = this.options.app.showDialog({title:'Choose List',
-             css:{"width":"700px","margin-left":"-350px"},
-             bodyCss:{"min-height":"290px"}
-             });*/
+            
             var dialog = filter.find('#subname-filters-dialog');
 
             var showloading = $('#show-loading');
@@ -1957,6 +1883,31 @@
             })
 
         },
+        loadDCFilters: function (data) {
+            var _target = this.$element
+            var self = this
+            _target.find(".filter-div ._row").remove()
+            _target.find("#all-any ").val(data.applyRuleCount).trigger("chosen:updated")
+            $.each(data.ListOfDynamicRules, function (i, v) {
+                var filter = v;
+                if (filter.filterType == "profile") {
+                    self.addBasicFilter(false, false, filter)
+                } else if (filter.filterType == "emailActivity") {
+                    self.addEmailFilter(false, false, filter)
+                } else if (filter.filterType == "list") {
+                    self.addListFilter(false, false, filter)
+                } else if (filter.filterType == "formSubmission") {
+                    self.addFormFilter(false, false, filter)
+                } else if (filter.filterType == "score") {
+                    self.addLeadScoreFilter(false, false, filter)
+                } else if (filter.filterType == "tag") {
+                    self.addTagsFilter(false, false, filter)
+                } else if (filter.filterType == "webActivity") {
+                    self.addWebsiteFilter(false, false, filter)
+                }
+            })
+
+        },
         initFilters: function () {
             var _target = this.$element
             _target.find(".filter-div ._row").remove()
@@ -2016,6 +1967,7 @@
             var filters_post = {}
             var _target = this.$element;
             var self = this;
+            var result_array = [];
             var total_rows = _target.find(".filter-div ._row");
             filters_post["count"] = total_rows.length
             filters_post["applyRuleCount"] = _target.find("#all-any option:selected").val();
@@ -2023,9 +1975,15 @@
             if (this.validate(total_rows)) {
                 return false
             }
+            
+            if(self.options.DCObject){
+                self.options.DCObject.applyRuleCount = filters_post["applyRuleCount"];
+                self.options.DCObject.ListOfDynamicRules = [];
+            }
 
             for (var i = 0; i < total_rows.length; i++) {
                 var N = i + 1
+                var filter_rules = {};
                 var filter = $(total_rows[i])
                 if ($(total_rows[i]).hasClass("score")) {
                     filters_post[N + ".filterType"] = "S"
@@ -2034,6 +1992,19 @@
                     if ($(total_rows[i]).find(".condtion-box").val() == "incmore") {
                         filters_post[N + ".scoreRange"] = filter.find(".scoreRange").val()
                     }
+                    //DC Block Population for Score filter
+                    if(self.options.DCObject){
+                        filter_rules["filterType"] = "score"
+                        filter_rules["rule"] = filters_post[N + ".scoreRule"]
+                        filter_rules["score"] = filters_post[N + ".scoreValue"]
+                        if(filters_post[N + ".scoreRange"]){
+                            filter_rules["rangeInDays"] = filters_post[N + ".scoreRange"]
+                        }
+                        else{
+                            filter_rules["rangeInDays"] = "0"
+                        }
+                        
+                    }
                 } else if ($(total_rows[i]).hasClass("list")) {
                     filters_post[N + ".filterType"] = "L"
                     filters_post[N + ".listNumbers"] = filter.find(".check-list:checked").map(function () {
@@ -2041,6 +2012,18 @@
                     }).get().join()
                     filters_post[N + ".subscribed"] = filter.find(".member-box").val()
                     filters_post[N + ".match"] = filter.find(".match-box").val()
+                   
+                    //DC Block Population for list filter
+                    if(self.options.DCObject){
+                        filter_rules["filterType"] = "list"
+                        filter_rules["listNumbers"] = filters_post[N + ".listNumbers"]
+                        filter_rules["listNumbers.checksums"] = filter.find(".check-list:checked").map(function () {
+                                return $(this).attr("list_checksum")
+                            }).get().join()
+                        filter_rules["isMemberOfList"] = filters_post[N + ".subscribed"]=="Y"?"true":"false"
+                        filter_rules["matchAll"] = filters_post[N + ".match"]=="Y"?"true":"false"                       
+                    }
+                    
                 } else if ($(total_rows[i]).hasClass("email")) {
                     filters_post[N + ".filterType"] = "E"
                     filters_post[N + ".emailCampType"] = filter.find(".campaign-source").val()
@@ -2061,6 +2044,30 @@
                     if (emailTimeSpan !== "-1") {
                         filters_post[N + ".emailFreq"] = emailFreq
                     }
+                    
+                    //DC Block Population for email Activity filter
+                    if(self.options.DCObject){
+                        filter_rules["filterType"] = "emailActivity"
+                        filter_rules["campaignType"] = filters_post[N + ".emailCampType"]
+                        filter_rules["filterBy"] = filters_post[N + ".emailFilterBy"]
+                        if(filters_post[N + ".campaignNumber"]!="-1"){
+                            filter_rules["campaignNumber"] = filters_post[N + ".campaignNumber"]
+                            filter_rules["campaignNumber.checksum"] = filter.find(".campaign-list :selected").attr("checksum")
+                        }
+                        else{
+                            filter_rules["campaignNumber"] = "-1"
+                        }
+                        if(filters_post[N + ".articleNumber"]!="-1"){
+                            filter_rules["articleNumber"] = filters_post[N + ".articleNumber"]
+                            filter_rules["articleNumber.checksum"] = filter.find(".campaign-url :selected").attr("checksum")
+                        }
+                        else{
+                            filter_rules["articleNumber"] = "-1"
+                        }
+                        filter_rules["timeSpanInDays"] = filters_post[N + ".emailTimeSpan"]
+                        filter_rules["frequency"] = filters_post[N + ".emailFreq"]
+                    }
+                    
                 } else if ($(total_rows[i]).hasClass("web")) {
                     filters_post[N + ".filterType"] = "W"
                     filters_post[N + ".webFilterBy"] = filter.find(".filter-box").val()
@@ -2081,6 +2088,25 @@
                     if (webFreq !== "-1") {
                         filters_post[N + ".webFreq"] = webFreq
                     }
+                    //DC Block Population for Web Activity filter
+                    if(self.options.DCObject){
+                        filter_rules["filterType"] = "webActivity"
+                        filter_rules["filterBy"] = filters_post[N + ".webFilterBy"]
+                        if(filters_post[N + ".webURL"]){
+                            filter_rules["pageURL"] = self.options.app.encodeHTML(filters_post[N + ".webURL"])
+                        }
+                        if(filters_post[N + ".linkIDFilterNum"]){
+                            filter_rules["linkIDFilterNum"] = filters_post[N + ".linkIDFilterNum"]
+                            filter_rules["linkIDFilterNum.checksum"] = filter.find(".linkfilter-box :selected").attr("checksum");
+                        }
+                        if(filters_post[N + ".linkFilterGroupId"]){
+                            filter_rules["linkFilterGroupId"] = filters_post[N + ".linkFilterGroupId"]
+                            filter_rules["linkFilterGroupId.checksum"] = filter.find(".pagetype-box :selected").attr("checksum");
+                        }
+                        filter_rules["timeSpanInDays"] = filters_post[N + ".webTimeSpan"]
+                        filter_rules["frequency"] = filters_post[N + ".webFreq"]
+                        
+                    }
                 } else if ($(total_rows[i]).hasClass("form")) {
                     filters_post[N + ".filterType"] = "F"
                     filters_post[N + ".formId"] = filter.find(".forms-box").val()
@@ -2088,6 +2114,14 @@
                     filters_post[N + ".isFormTimeSpan"] = ((formTimeSpan !== "-1") ? "Y" : "N")
                     if (formTimeSpan !== "-1") {
                         filters_post[N + ".formTimeSpan"] = formTimeSpan
+                    }
+                    //DC Block Population for form filter
+                    if(self.options.DCObject){
+                        filter_rules["filterType"] = "formSubmission"
+                        filter_rules["formNumber"] = filters_post[N + ".formId"]
+                        filter_rules["formNumber.checksum"] = filter.find(".forms-box :selected").attr("webform_checksum")
+                        filter_rules["timeSpanInDays"] = filters_post[N + ".formTimeSpan"]
+                        
                     }
                 } else if ($(total_rows[i]).hasClass("tag")) {
                     filters_post[N + ".filterType"] = "T"
@@ -2098,6 +2132,17 @@
                     });
                     tags = tags.replace(/,(?=[^,]*$)/, '');
                     filters_post[N + ".tags"] = tags;
+                    
+                    //DC Block Population for tag filter
+                    if(self.options.DCObject){
+                        filter_rules["filterType"] = "tag"
+                        if(filters_post[N + ".rule"]){
+                            filter_rules["rule"] = filters_post[N + ".rule"]
+                        }
+                        if(filters_post[N + ".tags"]){
+                            filter_rules["tags"] = filters_post[N + ".tags"]
+                        }
+                    }
                 } else if ($(total_rows[i]).hasClass("filter")) {
                     filters_post[N + ".filterType"] = "P"
                     filters_post[N + ".fieldName"] = filter.find(".fields").val()
@@ -2123,8 +2168,30 @@
 
                     if (filter.find(".fields").val() == "{{SUBSCRIPTION_DATE}}") {
                         filters_post[N + ".listNum"] = filter.find(".sub-date-container").attr("list_id")
-                    }
+                    } 
+                     //DC Block Population for basic filter    
+                     if(self.options.DCObject){
+                         filter_rules["filterType"] = "profile"
+                         filter_rules["fieldName"] = filters_post[N + ".fieldName"]
+                         filter_rules["rule"] = self.options.app.encodeHTML(filters_post[N + ".rule"]) 
+                         if(filters_post[N + ".dateFormat"]){
+                            filter_rules["dateFormat"] = filters_post[N + ".dateFormat"]
+                         }  
+                         if(filters_post[N + ".matchValue"]){
+                            filter_rules["matchValue"] = filters_post[N + ".matchValue"]
+                         }
+                         if(filters_post[N + ".gap"]){
+                             filter_rules["spanInDays"] = filters_post[N + ".gap"]
+                        }  
+                     }
+                                        
                 }
+                
+                //DC Block Population 
+                if(self.options.DCObject){
+                    self.options.DCObject.ListOfDynamicRules.push(filter_rules);
+                }
+                
             }
             /*Closing Filter Clickers*/
             self.closefilterBox();
@@ -2256,7 +2323,9 @@
         , bottomrow_c: '<div class="timeline_panel"><div class="new_activities"><div class="addfilter"><div class="addbar"><a class="icon plus"></a><ul></ul></div></div></div></div>'
         , filterRow: '<div class="filter-row _row act_row "><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
         , filterFor: 'C'
-        , title: ''
+        , DCFilter : false
+        , DCObject : null
+        , title: ''        
         , app: null
     }
 
