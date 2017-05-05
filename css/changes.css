@@ -6329,6 +6329,9 @@ ul.chartstatdetail li.active { background:#97D61D;}
 .icon.setting2 {
    background: url("../img/setting2.png") no-repeat center center;
 }
+.icon.settingNcolor {
+   background: #2699E9 url("../img/p-settings.png") no-repeat center center !important;
+}
 .icon.social {
    background: url("../img/social.png") no-repeat center center;
 }
@@ -9695,6 +9698,33 @@ Download CSV Button
     background: url("../images/csv_w_20_20.png") no-repeat scroll center center;    
 }
 .modal-body .select-target-view .temp-filters {margin-top:0px !important;}
+
+
+.social-icon-ss{
+    margin: 3px 6px 3px 5px !important;
+}
+
+
+/*========================================
+    Show Setting Box 
+========================================*/
+.ssbox_background{
+    background: none repeat scroll 0 0 #EAF4F9;
+    padding-left: 10px;
+}
+
+.ssbox_border{
+    margin: 0px 0 10px;
+    border: solid 2px #EAF4F9;
+}
+.ssbox_boxinner{
+    background: #fff;
+}
+.ssb-row-fluid.row-fluid [class*="span"]:nth-child(2n+1) {
+    margin-left: 0;
+}
+.ss_head_box .camp_set_boxinner{
+    min-height:160px;
 
 .hideEle {
     opacity: 0.5;    

@@ -21,6 +21,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'comm
                     'click .reschedule-camp': 'reschOpenCampaign',
                     'click .share-camp': 'shareCampaign',
                     'click .shared-camp':'sharedCampaigns',
+                    'click .setting-camp':'openSettingsCampaigns',
                     'click .delete-camp': 'deleteCampaginDialoge',
                     'click .taglink': 'tagClick',
                     'click .report': 'reportShow',
@@ -434,6 +435,31 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'comm
                     if (this.sub.createCampaignChart) {
                         this.sub.createCampaignChart();
                     }
+                },
+                openSettingsCampaigns : function(obj){
+                    var dialog_width = 800;
+                  var that = this;
+                  var title = 'Settings';
+                  var loading = "Loading Settings...";
+                  var height = 250;
+                 
+                  console.log(this.model);
+                  var dialog_height = $(document.documentElement).height()-height;
+                  var dialog = this.app.showDialog(
+                        {           
+                                    title:this.model.get('name'),
+                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                    headerEditable:false,
+                                    headerIcon : 'setting2',
+                                    bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                         });
+                  this.app.showLoading(loading,dialog.getBody());
+                  require(["reports/summary/views/settings"], _.bind(function (settingsPage) {
+                        var mPage = new settingsPage({model:this.model,dialog:dialog,app:this.app,campId:this.model.get('campNum.encode')});
+                        dialog.getBody().append(mPage.$el);
+                       // this.app.showLoading(false,dialog.getBody());
+                    }, this));
+                   
                 }
 
             });
