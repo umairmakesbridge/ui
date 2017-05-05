@@ -8375,7 +8375,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //var _html = $('<div/>').html(value.InternalContents).html();
                                                 //_html = escape(_html);
                                                 if(!value.isDel){
-                                                    postObj[i+'.contents']=  _self.encodeHTMLStr(value.InternalContents);
+                                                    postObj[i+'.contents']=  mee_view.app.decodeHTML(value.InternalContents);
                                                     postObj[i+'.campaignSubjects']= value.Label;
                                                     postObj[i+'.contentLabels']= value.Label;
                                                     postObj[i+'.contentNumbers']= value.DynamicContentID;

@@ -18,12 +18,21 @@ function (template) {
                  this.app = this.options.app;
                  this.botId = this.options.botId;
                  this.trackId = this.options.trackId;
+                 this.campid = this.options.campId;
+                 this.dialog = this.options.dialog;
                  this.render();
             },
             render: function () {
-                this.$el.html(this.template(this.model.toJSON())); 
-                this.defaultValues();
-                this.recipientsType();
+                
+                if(this.campid){
+                     this.app.showLoading("Loading Settings...",this.dialog.getBody());
+                    this.getCampDetails();
+                }else{
+                    this.$el.html(this.template(this.model.toJSON())); 
+                    this.defaultValues();
+                    this.recipientsType();
+                }
+                
             },
             checkSubscriber:function(){
                 if(this.model.get('isWebVersionLink') == "S")
@@ -52,6 +61,7 @@ function (template) {
                         this.$el.find("#campaign_profileUpdate").prop("checked",this.model.get('profileUpdate')=="N"?false:true);
                         this.$el.find("#campaign_isTextOnly").prop("checked",this.model.get('isFooterText')=="N"?false:true);
                         this.$el.find("#campaign_isWebVersion").prop("checked",this.model.get('isWebVersionLink')=="N"?false:true);
+                        this.$el.find("#campaign_tellafriend").prop("checked",this.model.get('tellAFriend')=="N"?false:true);
                         
                          this.$('input').iCheck({
                                 checkboxClass: 'checkinput'
@@ -64,7 +74,7 @@ function (template) {
                        this.$el.find("#campaign_profileUpdate").prop("disabled",true);
                         this.$el.find("#campaign_isTextOnly").prop("disabled",true);
                         this.$el.find("#campaign_isWebVersion").prop("disabled",true);
-
+                        this.$el.find("#campaign_tellafriend").prop("disabled",true);
             },
             checkShowWebVersion:function(ev){
                if(this.model.get('isWebVersionLink') == "Y")
@@ -88,6 +98,119 @@ function (template) {
             isFooterText:function(){
                 if(this.model.get('isFooterText') == "Y")
                 return "Company and Physical Address in email footer:";
+            },
+            getCampDetails: function(){
+                var _this = this;
+                var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=basic&campNum="+this.model.get('campNum.encode');
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                          if(xhr && xhr.responseText){
+                            var result = jQuery.parseJSON(xhr.responseText);                            
+                            if(_this.app.checkError(result)){
+                                return false;
+                            }               
+                                
+                                _this.model.set(result);
+                                _this.$el.html(_this.template(_this.model.toJSON())); 
+                                _this.defaultValues();
+                                _this.recipientsType();
+                                if(_this.model.get('sfCampaignID')){
+                                    _this.getSfCamp();
+                                }
+                                if(_this.model.get('nsCampaignID')){
+                                    _this.getNsCamp();
+                                }
+                                if(_this.model.get('conversionFilterStatus')){
+                                    _this.getConversion();
+                                }
+                                
+
+                                if (_this.$el.find('.ssbox_wrap').length %2 != 0){
+                                    // Odd
+                                    _this.$el.find('.ssbox_wrap:last-child').addClass('span12');
+                                    _this.$el.find('.ssbox_wrap:last-child').removeClass('span6');
+                                }
+                                var higher=[];
+                                $.each(_this.$el.find('.ss_head_box'),function(k,v){
+                                higher[k] = $(v).outerHeight() - 30;
+
+                                
+
+                                });
+                                var max = higher.reduce(function(a, b) {
+                                    return Math.max(a, b);
+                                });
+                                
+                                console.log(max);
+                                _this.$el.find('.ss_head_box .camp_set_boxinner').css('min-height',max+'px');
+                                _this.app.showLoading(false,_this.dialog.getBody())
+                                //_this.render({isRenderCustom:true});
+                            }
+                        });
+            },
+            getSfCamp: function(){
+                var _this = this;
+                var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=sfCampaignList";
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                          if(xhr && xhr.responseText){
+                            var result = jQuery.parseJSON(xhr.responseText);                            
+                            if(_this.app.checkError(result)){
+                                    return false;
+                                }               
+                                
+                              $.each(result.campList[0],function(key,val){
+                                  if(val[0].sfCampaignID == _this.model.get('sfCampaignID')){
+                                      _this.$el.find('#sf-camp-container strong').html(val[0].name);
+                                  }
+                              });  
+                            }
+                        });
+            },
+            getNsCamp:function(){
+                var _this = this;
+                var URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=nsCampaignList";
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                          if(xhr && xhr.responseText){
+                            var result = jQuery.parseJSON(xhr.responseText);                            
+                            if(_this.app.checkError(result)){
+                                    return false;
+                                }               
+                              if(result.count !="0"){
+                                 $.each(result.campList[0],function(key,val){
+                                  if(val[0].id == _this.model.get('nsCampaignID')){
+                                      _this.$el.find('#ns-camp-container strong').html(val[0].title);
+                                  }
+                                });   
+                              }
+                              
+                            }
+                        });
+            },
+            getConversion : function(){
+                var _this = this;
+                var URL = "/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=get&campNum="+this.model.get('campNum.encode');;
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                          if(xhr && xhr.responseText){
+                            var result = jQuery.parseJSON(xhr.responseText);                            
+                            if(_this.app.checkError(result)){
+                                    return false;
+                                }               
+                               var rule ;
+                              $.each(result.rules[0],function(key,val){
+                                  console.log(val);
+                                  if(val[0].rule=="ct"){
+                                      rule ='Contain';
+                                  }else{
+                                      rule = 'Equals'
+                                  }
+                                  
+                                  _this.$el.find('#cov-matchtype-contain strong').html(rule);
+                                  _this.$el.find('#cov-matchtype-value strong').html(val[0].matchValue);
+                                 /* if(val[0].id == _this.model.get('nsCampaignID')){
+                                      _this.$el.find('#ns-camp-container strong').html(val[0].title);
+                                  }*/
+                              });  
+                            }
+                        });
             },
             recipientsType:function(){
                 if(this.model.get('recipientType') !="List" && this.model.get('recipientType') != "Tags" && this.model.get('recipientType') !="Target"){
