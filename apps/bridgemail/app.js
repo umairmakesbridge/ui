@@ -8,7 +8,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'test',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -376,6 +376,11 @@ define([
                 {
                     cl = 'caution';
                     title = 'Caution';
+                }
+                else if (option && option.type == 'Reason')
+                {
+                    cl = 'caution';
+                    title = option.type;
                 }
 
                 var message_box = $('<div class="messagebox messsage_alert messagebox_ ' + cl + '" style=' + inlineStyle + '><h3>' + title + '</h3><p>' + message + '</p><a class="closebtn"></a></div> ');

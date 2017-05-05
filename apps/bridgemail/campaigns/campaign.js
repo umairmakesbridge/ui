@@ -874,6 +874,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             that.$('.scroll-text').trigger('forward');
 
                         });
+                        /*if(this.DCExists){
+                            that.$('.step3').find('.selection-boxes').css('width',"420px");
+                        }*/
                     }
                 },
                 fetchServerTime: function () {
@@ -1124,7 +1127,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var fromEmail = el.find('#campaign_from_email').val();//el.find('#campaign_from_email_input').val();
                     var fromEmailDefault = el.find('#fromemail_default_input').val();
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
-
+                                        
 
                     if (el.find('#campaign_subject').val() == '')
                     {
@@ -1417,10 +1420,29 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         post_data['plainText'] = this.states.step2.plainText;
                         post_data['isCampaignText'] = 'N';
                         camp_obj.camp_istext = 'N';
+                       
                     }
                     if (typeof (htmlText) !== "undefined") {
                         post_data['htmlCode'] = "";
-                    }                  
+                    }    
+                    
+                    this.DCExists = false; 
+                    if(typeof (gotoNext)=="undefined" && selected_li == "html_editor_mee"){
+                        var dcMatchRegex = new RegExp("{{BMS_DYNAMIC_VARIATION_[0-9]+}}","g");
+                        if(dcMatchRegex.test(html)){                           
+                           this.$("#choose_tags,#salesforce_import,#netsuite_import,#highrise_import,#google_import").addClass("hideEle");                           
+                           this.DCExists = true;
+                        }
+                        else{                           
+                           this.$("#choose_tags,#salesforce_import,#netsuite_import,#highrise_import,#google_import").removeClass("hideEle");                           
+                           this.DCExists = false;
+                        }
+                    }
+                    else{                        
+                        this.$("#choose_tags,#salesforce_import,#netsuite_import,#highrise_import,#google_import").removeClass("hideEle");                        
+                        this.DCExists = false;
+                    }
+                    
                     if ((this.states.editor_change === true || typeof (gotoNext) !== "undefined")) {
                         if (typeof (gotoNext) === "undefined") {
                             this.app.showLoading("Saving Step 2...", this.$el.parents(".ws-content"));
@@ -2515,8 +2537,15 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 },
                 step3TileClick: function (obj) {
                     var target_li = obj.target.tagName == "LI" ? $(obj.target) : $(obj.target).parents("li");
-                    if (target_li.hasClass("selected"))
+                    if (target_li.hasClass("selected")){
                         return false;
+                    }
+                    
+                    if(target_li.hasClass("hideEle")){
+                        this.app.showAlert('This option is disabled <b>temporary</b>, because you are using Dynamic Content block in campaign HTML.',this.$el,{type:'Reason',fixed: true});
+                        return false;
+                    }
+                    
                     this.$(".step3 #choose_soruce li").removeClass("selected");
                     this.$(".step3 .soruces").hide();
                     this.$(".step3 #area_" + target_li.attr("id")).fadeIn("fast");
