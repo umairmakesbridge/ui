@@ -2542,7 +2542,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     }
                     
                     if(target_li.hasClass("hideEle")){
-                        this.app.showAlert('This option is disabled <b>temporary</b>, because you are using Dynamic Content block in campaign HTML.',this.$el,{type:'Reason',fixed: true});
+                        var li_names = {"salesforce_import":"Salesforce Import","netsuite_import":"Netsute Import","choose_tags":"Tags","highrise_import":"Highrise Import","google_import":"Google Import"};
+                        this.app.showAlert('"'+li_names[target_li.attr("id")]+'" option is disabled <b>temporary</b>, because you are using Dynamic Content block in campaign HTML.Please select <b>Lists</b> or <b>Targets</b> as recipients.',this.$el,{type:'Disabled',fixed: true});
                         return false;
                     }
                     

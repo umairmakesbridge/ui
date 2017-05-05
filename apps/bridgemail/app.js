@@ -8,7 +8,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'test',
-                complied: 0,
+                complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -377,7 +377,7 @@ define([
                     cl = 'caution';
                     title = 'Caution';
                 }
-                else if (option && option.type == 'Reason')
+                else if (option && option.type == 'Disabled')
                 {
                     cl = 'caution';
                     title = option.type;
