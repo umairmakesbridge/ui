@@ -146,7 +146,7 @@
         <div style="width:105px" class="time">
             <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
         </div>
-        <div class="slide-btns <% if(model.get('status')==='D'){  if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {print('seven s-clr8') } else {print('five s-clr6')} }  else if(model.get('status')==='S'){ print('five s-clr6 slidebtn-sp') } else if(model.get('status')==='C') { if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {print('four s-clr5') } else {print('three s-clr4')}  } else if(model.get('status')==='P') { print('two s-clr3 slidebtn-sp') } else { print('five s-clr6') }%>">
+        <div class="slide-btns <% if(model.get('status')==='D'){  if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {print('seven s-clr8') } else {print('six s-clr7')} }  else if(model.get('status')==='S'){ print('five s-clr6 slidebtn-sp') } else if(model.get('status')==='C') { if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {print('five s-clr6') } else {print('three s-clr4')}  } else if(model.get('status')==='P') { print('three s-clr4 slidebtn-sp') } else { print('six s-clr7') }%>">
               <span class="icon setting"></span>
               <div>                 
                 <% if(model.get('status')==='D'){  %>
@@ -160,7 +160,7 @@
                     <a class="icon delete-camp delete clr1"><span>Delete</span></a>
                 <% } else { %>    
                     <a class="icon preview-camp preview clr6"><span>Preview</span></a>
-                    <a class="icon setting-camp setting2 clr5"><span>Settings</span></a>
+                    <a class="icon setting-camp settingNcolor clr5"><span>Settings</span></a>
                     <a class="icon edit-camp edit clr4"><span>Edit</span></a>
                     <a class="icon schedule-camp calender clr3"><span>Schedule</span></a>  
                     <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
@@ -168,22 +168,22 @@
                 <% } %>
                <% } else if(model.get('status')==='S') {
                %>
-                   <a class="icon preview-camp preview clr5"><span>Preview</span></a>
-                   <a class="icon setting-camp settingNcolor clr6"><span>Settings</span></a>
+                   <a class="icon preview-camp preview clr6"><span>Preview</span></a>
+                   <a class="icon setting-camp settingNcolor clr5"><span>Settings</span></a>
                    <a class="icon draft-camp draft clr4" title="draft"><span>Draft</span></a>
                    <a class="icon reschedule-camp calender clr3"><span>Reschedule</span></a>
                    <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
                    <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	
                <%} else if(model.get('status')==='P') {
                %>
-                   <a class="icon preview-camp preview clr2"><span>Preview</span></a>  
-                   <a class="icon setting-camp settingNcolor clr6"><span>Settings</span></a>
+                   <a class="icon preview-camp preview clr3"><span>Preview</span></a>  
+                   <a class="icon setting-camp settingNcolor clr2"><span>Settings</span></a>
                    <a class="icon copy-camp copy clr1"><span>Copy</span></a> 
                <%} else if(model.get('status')==='C') {
                %>
                 <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
-                   <a class="icon preview-camp preview clr4"><span>Preview</span></a>
-                   <a class="icon setting-camp settingNcolor clr6"><span>Settings</span></a>
+                   <a class="icon preview-camp preview clr5"><span>Preview</span></a>
+                   <a class="icon setting-camp settingNcolor clr4"><span>Settings</span></a>
                    <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
                    <a class="icon share-camp share clr2"><span>Share</span></a> 
                    <a class="icon delete-camp delete clr1"><span>Delete</span></a>        
@@ -194,8 +194,8 @@
                    <a class="icon delete-camp delete clr1"><span>Delete</span></a>        
                   <% } %>
                <%} else {%>
-               <a class="icon preview-camp preview clr5"><span>Preview</span></a>
-               <a class="icon setting-camp settingNcolor clr6"><span>Settings</span></a>
+               <a class="icon preview-camp preview clr6"><span>Preview</span></a>
+               <a class="icon setting-camp settingNcolor clr5"><span>Settings</span></a>
                <a class="icon edit-camp edit clr4"><span>Edit</span></a>
                <a class="icon schedule-camp calender clr3"><span>Schedule</span></a>  
                <a class="icon copy-camp copy clr2"><span>Copy</span></a> 

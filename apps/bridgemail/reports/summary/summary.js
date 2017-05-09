@@ -250,6 +250,17 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                          var mPage = new settingsPage({model:that.objSummary,app:that.options.app, botId:that.autobotId,trackId:that.trackId});
                          dialog.getBody().html(mPage.$el);
                          that.options.app.showLoading(false,dialog.getBody());
+                          var higher=[];
+                                $.each(mPage.$el.find('.ss_head_box'),function(k,v){
+                                higher[k] = $(v).outerHeight() - 30;
+
+                                
+
+                                });
+                                var max = higher.reduce(function(a, b) {
+                                    return Math.max(a, b);
+                                });
+                                mPage.$el.find('.ss_head_box .camp_set_boxinner').css('min-height',max+'px');
                    //});
                   
             },

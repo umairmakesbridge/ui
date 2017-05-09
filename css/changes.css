@@ -6330,7 +6330,9 @@ ul.chartstatdetail li.active { background:#97D61D;}
    background: url("../img/setting2.png") no-repeat center center;
 }
 .icon.settingNcolor {
-   background: #2699E9 url("../img/p-settings.png") no-repeat center center !important;
+   background-image: url("../img/p-settings.png") !important;
+background-position: center center !important;
+background-repeat: no-repeat !important;
 }
 .icon.social {
    background: url("../img/social.png") no-repeat center center;
