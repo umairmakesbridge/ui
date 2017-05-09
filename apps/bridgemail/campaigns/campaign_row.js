@@ -1,5 +1,5 @@
-define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'common/shareObject'],
-        function (template, copycampaignPage, shareCommonPage) {
+define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'common/shareObject','reports/summary/views/settings'],
+        function (template, copycampaignPage, shareCommonPage,settingsPage) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber Record View to show on listing page
@@ -454,11 +454,10 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'comm
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
                   this.app.showLoading(loading,dialog.getBody());
-                  require(["reports/summary/views/settings"], _.bind(function (settingsPage) {
+//                  
                         var mPage = new settingsPage({model:this.model,dialog:dialog,app:this.app,campId:this.model.get('campNum.encode')});
                         dialog.getBody().append(mPage.$el);
-                       // this.app.showLoading(false,dialog.getBody());
-                    }, this));
+                       
                    
                 }
 
