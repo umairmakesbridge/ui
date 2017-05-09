@@ -31,7 +31,15 @@ function (template) {
                     this.$el.html(this.template(this.model.toJSON())); 
                     this.defaultValues();
                     this.recipientsType();
+                   
+                    
                 }
+                 if (this.$el.find('.ssbox_wrap').length %2 != 0){
+                                    // Odd
+                                    this.$el.find('.ssbox_wrap:last-child').addClass('span12');
+                                    this.$el.find('.ssbox_wrap:last-child').removeClass('span6');
+                                }
+               
                 
             },
             checkSubscriber:function(){
@@ -75,6 +83,11 @@ function (template) {
                         this.$el.find("#campaign_isTextOnly").prop("disabled",true);
                         this.$el.find("#campaign_isWebVersion").prop("disabled",true);
                         this.$el.find("#campaign_tellafriend").prop("disabled",true);
+                        
+                if(this.model.get('conversionFilterStatus')=="Y"){
+                                    this.getConversion();
+                                }
+                            
             },
             checkShowWebVersion:function(ev){
                if(this.model.get('isWebVersionLink') == "Y")
@@ -119,17 +132,14 @@ function (template) {
                                 if(_this.model.get('nsCampaignID')){
                                     _this.getNsCamp();
                                 }
-                                if(_this.model.get('conversionFilterStatus')){
-                                    _this.getConversion();
-                                }
                                 
-
                                 if (_this.$el.find('.ssbox_wrap').length %2 != 0){
                                     // Odd
                                     _this.$el.find('.ssbox_wrap:last-child').addClass('span12');
                                     _this.$el.find('.ssbox_wrap:last-child').removeClass('span6');
                                 }
-                                var higher=[];
+                                
+                                 var higher=[];
                                 $.each(_this.$el.find('.ss_head_box'),function(k,v){
                                 higher[k] = $(v).outerHeight() - 30;
 
@@ -139,9 +149,10 @@ function (template) {
                                 var max = higher.reduce(function(a, b) {
                                     return Math.max(a, b);
                                 });
-                                
-                                console.log(max);
+                               
                                 _this.$el.find('.ss_head_box .camp_set_boxinner').css('min-height',max+'px');
+
+                                
                                 _this.app.showLoading(false,_this.dialog.getBody())
                                 //_this.render({isRenderCustom:true});
                             }
@@ -282,6 +293,8 @@ function (template) {
                                     that.$el.find(".recepient_type").html(str);
                                     return false;
                                 }
+                                
+                               
                             }
                         });
                    
@@ -332,8 +345,10 @@ function (template) {
                                      that.$el.find(".recepient_type").html(str);
                                      return str;
                             }
+                             
                             
                         }
+                        
                     });
               }
             
