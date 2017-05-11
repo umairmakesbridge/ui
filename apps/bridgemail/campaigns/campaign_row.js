@@ -437,13 +437,12 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'comm
                     }
                 },
                 openSettingsCampaigns : function(obj){
-                    var dialog_width = 800;
-                  var that = this;
+                  var dialog_width = 800;
+                  
                   var title = 'Settings';
                   var loading = "Loading Settings...";
                   var height = 250;
-                 
-                  console.log(this.model);
+                  //console.log(this.model);
                   var dialog_height = $(document.documentElement).height()-height;
                   var dialog = this.app.showDialog(
                         {           
@@ -453,8 +452,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'comm
                                     headerIcon : 'setting2',
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
-                  this.app.showLoading(loading,dialog.getBody());
-//                  
+                         
                         var mPage = new settingsPage({model:this.model,dialog:dialog,app:this.app,campId:this.model.get('campNum.encode')});
                         dialog.getBody().append(mPage.$el);
                        
