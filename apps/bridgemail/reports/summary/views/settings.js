@@ -66,7 +66,7 @@ function (template) {
                   if(this.model.get('defaultReplyTo')){                    
                     this.$el.find(".reply-to").append($('<em >Default Value: <i >'+this.app.encodeHTML(this.model.get('defaultReplyTo'))+'</i></em>'))
                   } 
-                        this.$el.find("#campaign_profileUpdate").prop("checked",this.model.get('profileUpdate')=="N"?false:true);
+                        this.$el.find("#campaign_profileUpdate").prop("checked",this.model.get('subInfoUpdate')=="N"?false:true);
                         this.$el.find("#campaign_isTextOnly").prop("checked",this.model.get('isFooterText')=="N"?false:true);
                         this.$el.find("#campaign_isWebVersion").prop("checked",this.model.get('isWebVersionLink')=="N"?false:true);
                         this.$el.find("#campaign_tellafriend").prop("checked",this.model.get('tellAFriend')=="N"?false:true);
