@@ -246,9 +246,14 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         current_ws.find(".tagscont").show();
                     }
                 },
-                formLandingPage:function(id){
-                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');                    
-                    $.post(URL, { type: "form",formId:id,pageId:this.page_id })
+                formLandingPage:function(id,isSignupLightbox){
+                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');   
+                    
+                    var data = { type: "form",formId:id,pageId:this.page_id, isLightboxAttach : "N" };
+                    if(isSignupLightbox){
+                       data =  { type: "form",formId:id,pageId:this.page_id, isLightboxAttach : "Y"};
+                    }
+                    $.post(URL, data)
                       .done(_.bind(function(data) {                              
                           var _json = jQuery.parseJSON(data);                              
                           if(_json[0]!=="err"){                                                               
@@ -463,7 +468,9 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                             changeTemplateClick: _.bind(this.templatesDialog,this), previewCallback: _.bind(this.previewCallback, this)});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
+                        
                         this.meeView = MEEPage;
+                        this.meeView.isSignupLightbox = false;
                         this.initScroll();
                     },this));  
                 },

@@ -2251,3 +2251,23 @@ i.icon{
 .error-dc{
     border : 2px solid #FB8080 !important;
 }
+
+.MEEFORMLIGHTBOX.MEEFORMCONTAINER {
+    position: absolute;
+    top: 102px;
+    left: 15px;
+    height: 70px;
+    outline: 2px dashed rgb(148, 207, 30);
+    z-index: 9999;
+    background: rgb(128, 192, 0) none repeat scroll 0% 0%;
+    text-align: center;
+    padding: 60px 50px;
+    color: #fff;
+    font-size: 18px;
+    font-family: Helvetica ,Arial, sans-serif;
+    line-height: 32px;
+}
+.MEEFORMLIGHTBOX.MEEFORMCONTAINER span{
+    position: relative;
+top: 22px;
+}
