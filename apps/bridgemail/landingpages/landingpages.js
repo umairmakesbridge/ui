@@ -262,7 +262,7 @@ define(['text!landingpages/html/landingpages.html', 'landingpages/collections/la
                 createPage: function(txt,json){
                     if(json[0]=="success"){
                         var templateId = this.app.get("env")!= 'production'?"kzaqwNe26Ii17Mj20kbhui":"zdTyioJp17Eh20Km21zbgFyh";
-                        this.app.mainContainer.openLandingPage({"id":json[1],"checksum":json[2],"parent":this,editable:true,parentPageId:templateId});        
+                        this.app.mainContainer.openLandingPage({"id":json[1],"checksum":json[2],"parent":this,editable:true,parentPageId:templateId,isNew:true});        
                         this.headBadge();
                         this.getLandingPages();
                     }

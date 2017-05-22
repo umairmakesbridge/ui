@@ -316,7 +316,7 @@
                     </div>
                     <div class="clearfix formDroppable">                        
                         <ul class="b-blocks">
-                            <li class="draggableControl ui-draggable newblock" data-type="formBlock" data-isnew="true" draggable="true">
+                            <li class="draggableControl ui-draggable newblock" data-type="formBlock" data-islightbox="Y" data-isnew="true" draggable="true">
                                 <i class="icon plus"></i>
                                 <a >
                                     <span class=" font_75">Add New Form</span>
@@ -745,8 +745,8 @@
             </li>
             <% } %>
             
-             <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>">
-                <a  class="btn-blue showtooltip" data-original-title="Click to preview" >
+             <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>" >
+                <a  class="btn-blue showtooltip <% if (options.isNewLP) { print('disabled-btn') } %>" data-original-title="Click to preview" >
                     <i class="icon preview"></i>
                     <!--<span>Preview</span>-->
                 </a>
