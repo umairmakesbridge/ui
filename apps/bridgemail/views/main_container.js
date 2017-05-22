@@ -131,6 +131,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .performance-analytics': 'performanceAnalytics',
                     'click .report-flow':'reportFlow',
                     'click .tipntestlistings':'tipandtestlistings',
+                    'click .view-ftpuploads':'ftpUploadPage',
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
                     }
@@ -247,7 +248,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                     "url":"workflow/workflows",
                                     "ws_type": "",
                                     "addAction": true,
-                                }
+                                }                                
                                 ,"bouncedemail" : {
                                     "tab_icon": "bouncedemails",
                                     "url":"common/bouncereport",
@@ -1018,6 +1019,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 workflowListing: function () {
                     this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
+                },
+                ftpUploadPage: function(){
+                    this.addWorkSpace({type: '', title: 'FTP Uploads', sub_title: 'Schedule FTP Uploads', url: 'common/ftpupload', workspace_id: 'ftpupload', 'addAction': false, tab_icon: 'ftpuploadlisting', noTags: true});
                 },
                 customReprots: function(){
                     this.addWorkSpace({type: '', title: 'Custom Charts', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': true, tab_icon: 'reports', noTags: true});

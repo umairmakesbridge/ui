@@ -445,6 +445,9 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                         dialog.getFooter().append(btn);
                         that.options.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
                         that.options.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                        if(mPage.init){
+                            mPage.init();
+                        }
                        //if (that.model.get('status') == "D")
                             //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });

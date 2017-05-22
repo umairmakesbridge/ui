@@ -42,8 +42,30 @@ function (template) {
                 }));                
                 this.$("#waitday").ForceNumericOnly();
                 //this.$(".chosen-select").chosen({no_results_text:'Oops, nothing found!', width: "130px",disable_search: "true"});
-                this.$(".btn-group").t_button();   
-                this.$("#waitdatetime").datetimepicker({format:'d-m-Y',timepicker:false,closeOnDateSelect:true});                                
+                this.$(".btn-group").t_button();                                                  
+                
+                var d = new Date();   
+                var self = this;
+                var dateS = this.addZero(d.getDate())+'-'+this.addZero(d.getMonth()+1)+'-'+d.getFullYear();                
+                this.$("#waitdatetime").datetimepicker({format:'d-m-Y',timepicker:false,closeOnDateSelect:true,value: dateS, mousewheel: false,reverseMouseWheel: false,
+                onGenerate:function( ct ){
+                    var currentDat = $(this).find('.xdsoft_date.xdsoft_current').data('date')+1;
+                    
+                    $(this).find('.xdsoft_today').addClass('xdsoft_disabled');
+                    // Disable one tomorrow date
+
+                    if($(this).find('td[data-date='+currentDat+']').hasClass('xdsoft_disabled') !=false){
+                      $(this).find('td[data-date='+currentDat+']').addClass('xdsoft_disabled');
+                    }
+                    $(this).find('.xdsoft_date.xdsoft_weekend').addClass('xdsoft_disabled');
+                    
+                  }
+                  ,
+                  onChangeDateTime:function(dp,$input){
+                        
+                  },
+                   minDate:'-1970/01/01'
+                  });           
                 
                 if(this.object && this.object[0].dispatchType){
                     var _json = this.object[0];
@@ -52,8 +74,12 @@ function (template) {
                             this.$(".chosen-select").val(_json.dayLapse).trigger("chosen:updated");
                         }*/
                         this.$("#waitday").val(_json.dayLapse);
+                        this.$("#waithour").val(_json.hourLapse);                                                
+                        this.$("#waitmin").val(_json.minLapse);
                         var dayText = _json.dayLapse=="1"?" Day":" Days";
-                        this.$(".wait-container").html(": "+_json.dayLapse + dayText);
+                        var hourText = _json.hourLapse=="1"?" Hour":" Hours";
+                        var minText = _json.minLapse=="1"?" Min":" Mins";
+                        this.$(".wait-container").html(": "+_json.dayLapse + dayText + " - "+_json.hourLapse+hourText+" - "+_json.minLapse + minText);
                     }
                     else{
                         var _date = moment(_json.scheduleDate,'MM-DD-YY');                                                        
@@ -75,6 +101,12 @@ function (template) {
             */
             renderRow:function(){
                 
+            },
+            addZero:function(i){
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
             },
             deleteRow:function(){
                 var buttonPlaceHolder = this.$el.prev();
@@ -116,19 +148,57 @@ function (template) {
                         if(this.$(".schedule-group button:first-child").hasClass("active")){
                         post_data['dispatchType'] = 'D';
                         post_data['dayLapse'] = this.$("#waitday").val();
-                        if(post_data['dayLapse']>0 && post_data['dayLapse']<=365){                                                            
-                            var dayText =this.$("#waitday").val()=="1"?" Day":" Days";
-                            this.$(".wait-container").html(": "+this.$("#waitday").val() + dayText);
+                        post_data['hourLapse'] = this.$("#waithour").val();
+                        post_data['minLapse'] = this.$("#waitmin").val();
+                        var dayText = 0, hourText=0, minText = 0;
+                        if(post_data['dayLapse'] && post_data['dayLapse']>=0 && post_data['dayLapse']<=365){                                                            
+                            dayText =this.$("#waitday").val()=="1"?" Day":" Days";                            
                         }
                         else{
                             isError = "Days must be between 1-365";
                         }
+                        if(post_data['hourLapse'] && post_data['hourLapse']>=0 && post_data['hourLapse']<=23){ 
+                            hourText =this.$("#hourLapse").val()=="1"?" Hour":" Hours";                            
+                        }
+                        else{
+                            if(isError!==""){
+                                isError += "<br/>";
+                            }
+                            isError += "Wait Hours must be between 0-23";
+                        }
+                        
+                        if(post_data['minLapse'] && post_data['minLapse']>=0 && post_data['minLapse']<=59){ 
+                            minText =this.$("#waitmin").val()=="1"?" Min":" Mins";                            
+                        }
+                        else{
+                            if(isError!==""){
+                                isError += "<br/>";
+                            }
+                            isError = "Wait Minutes must be between 0-59";
+                        }
+                        this.$(".wait-container").html(": "+this.$("#waitday").val() + dayText + " - "+post_data['hourLapse']+hourText+" - "+post_data['minLapse'] + minText );
                     }
                     else{
                         post_data['dispatchType'] = 'S';
-                        var _date = moment(this.$("#waitdatetime").val(),'DD-MM-YYYY');                            
-                        post_data['scheduleDate'] = _date.format("MM-DD-YY");
-                        this.$(".wait-container").html(": "+_date.format("DD MMM YYYY"));
+                        var _dateValue = this.$("#waitdatetime").val();
+                        if(moment(_dateValue,'DD-MM-YYYY').format("DD-MM-YYYY")==_dateValue){
+                            var _date = moment(_dateValue,'DD-MM-YYYY');                             
+                            var date_today = new Date();
+                            var date1 = moment(date_today.getDate()+ '-' + (date_today.getMonth() + 1) + '-' + date_today.getFullYear() , 'DD-MM-YYYY');                            
+                            var diffDays = _date.diff(date1, 'days');;
+                            if(diffDays>=0){                                                       
+                                post_data['scheduleDate'] = _date.format("MM-DD-YY");
+                                this.$(".wait-container").html(": "+_date.format("DD MMM YYYY"));
+                            }
+                            else {
+                                isError = "You can't set wait in previous date";
+                            }
+                          
+                        }
+                        else {
+                            isError = "Date format is not correct, Date format should be DD-MM-YYYY";
+                        }
+                        
                     }
                     
                     return {"post":post_data,isError:isError}

@@ -11,7 +11,8 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                 },
                 initialize: function () {
                     this.app = this.options.app;     
-                    this.template = _.template(template);                                        
+                    this.template = _.template(template); 
+                    this.camp_json = null;
                     this.render();
                 },
                 render: function ()
@@ -217,6 +218,78 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                         }
                     
                     
+                },
+                editMessage: function(params) {                                        
+                    var isEdit = typeof(params.isEditable)!=="undefined"? params.isEditable: true;                    
+                    var dialog_width = $(document.documentElement).width() - 50;
+                    var dialog_height = $(document.documentElement).height() - 162;
+                    var stepNum = "",optionNum = "";
+                    if(params.optionID){
+                        var messageDetail = params.optionID.split(".");
+                        stepNum = "Step "+messageDetail[0];
+                        optionNum = " Option "+messageDetail[1];
+                    }
+                    if(params.campNum){
+                        this.campNum = params.campNum;
+                    }
+                    else{
+                        this.camp_json = null;
+                    }
+                    var dialog_object = {title: "Message For "+stepNum+optionNum,
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        bodyCss: {"min-height": dialog_height + "px"}
+                    };
+
+                    if(isEdit){
+                        dialog_object["buttons"]=  {saveBtn:{text:'Save Message'} }
+                    }
+
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Settings...", dialog.getBody());                    
+                    require(["nurturetrack/message_setting"], _.bind(function(settingPage) {
+                        var sPage = new settingPage({page: this, dialog: dialog, editable: isEdit, type: "workflow", campNum: params.campNum, workflowObj:params});
+                        this.sPage = sPage;
+                        dialog.getBody().append(sPage.$el);
+                        this.app.showLoading(false, sPage.$el.parent());
+                        dialog.saveCallBack(_.bind(sPage.saveCall, sPage));     
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        sPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].currentView = sPage; // New dialog
+                        this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(sPage.saveCall,sPage); // New Dialog
+                        sPage.init();                        
+                    }, this));
+                    
+
+                }, loadCampaign: function() {
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.campNum + "&type=basic";
+                    jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
+                        var camp_json = jQuery.parseJSON(xhr.responseText);
+                        this.camp_json = camp_json;   
+                        this.sPage.camp_json = camp_json;
+                    }, this));
+                },
+                previewMessage:function(camp_id){                    
+                    if(!camp_id){return false}
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = this.app.showDialog({title:'Message Preview' ,
+                                      css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                      headerEditable:false,
+                                      headerIcon : 'dlgpreview',
+                                      bodyCss:{"min-height":dialog_height+"px"}
+                    });	
+                    this.app.showLoading("Loading Message HTML...",dialog.getBody());									
+                    var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
+                    require(["common/templatePreview"],_.bind(function(MessagePreview){
+
+                    var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'',loadCampaignData:true}); // isText to Dynamic
+                     dialog.getBody().append(tmPr.$el);
+                     this.app.showLoading(false, tmPr.$el.parent());
+                     tmPr.init();
+                                          
+                   },this));
                 }
                 
 

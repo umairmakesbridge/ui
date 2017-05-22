@@ -943,7 +943,7 @@ ul.tabs-btns li.active a{
 
 /*****workspace tabs icons ***/
 .tabs-menu li span,.expand-menu ul li span{
-    background-image: url("../img/ws-icons.png");
+    background-image: url("../img/ws-icons-1.png");
     background-color: transparent;
 }
 .wtab-campaignlisting{
@@ -991,6 +991,9 @@ ul.tabs-btns li.active a{
 .wtab-workflowlisting{
     background-position: -60px -210px;
 }
+.wtab-workflowlisting{
+    background-position: -60px -210px;
+}
 .wtab-customreports{
     background-position: -90px -180px;
 }
@@ -1009,6 +1012,9 @@ ul.tabs-btns li.active a{
 }
 .wtab-reportslisting{
     background-position:-60px 0px;
+}
+.wtab-ftpuploadlisting{
+    background-position:-90px 0px;
 }
 .wtab-population{
      background-position: 0px -150px;
@@ -5111,7 +5117,7 @@ div.tooltip.right .tooltip-inner { border-radius:6px; }
 .icon.copy {   background: url("../img/copy24.png") no-repeat center center; float:left; margin:0px 0px 0 5px !important; }
 #area_choose_tags h2.header-list { margin-top:0; padding:5px 0; }
 .tagslist ul li > .btn-red span {	
-	padding:0 5px 0 10px;
+	padding:0 5px 0 10px !important;
 }
 .temp-filters { padding:7px 0; }
 .tagslist { width:100%; }
@@ -6322,6 +6328,11 @@ ul.chartstatdetail li.active { background:#97D61D;}
 }
 .icon.setting2 {
    background: url("../img/setting2.png") no-repeat center center;
+}
+.icon.settingNcolor {
+   background-image: url("../img/p-settings.png") !important;
+background-position: center center !important;
+background-repeat: no-repeat !important;
 }
 .icon.social {
    background: url("../img/social.png") no-repeat center center;
@@ -7947,6 +7958,7 @@ top: 14px;
 .botpanel h2 .icon.score { background: url("../img/score-g.png") no-repeat scroll center center ; }
 .botpanel h2 .icon.alerts { background: url("../img/alerts-g.png") no-repeat scroll center center ; }
 .botpanel h2 .icon.bday { background: url("../img/bday-g.png") no-repeat scroll center center ; }
+.botpanel h2 .icon.wait { background: url("../img/wait-g.png") no-repeat scroll center center ; }
 
 
 
@@ -9686,4 +9698,37 @@ Download CSV Button
 
 .downloadcsv{
     background: url("../images/csv_w_20_20.png") no-repeat scroll center center;    
+}
+.modal-body .select-target-view .temp-filters {margin-top:0px !important;}
+
+
+.social-icon-ss{
+    margin: 3px 6px 3px 5px !important;
+}
+
+
+/*========================================
+    Show Setting Box 
+========================================*/
+.ssbox_background{
+    background: none repeat scroll 0 0 #EAF4F9;
+    padding-left: 10px;
+}
+
+.ssbox_border{
+    margin: 0px 0 10px;
+    border: solid 2px #EAF4F9;
+}
+.ssbox_boxinner{
+    background: #fff;
+}
+.ssb-row-fluid.row-fluid [class*="span"]:nth-child(2n+1) {
+    margin-left: 0;
+}
+.ss_head_box .camp_set_boxinner{
+    min-height:160px;
+}
+
+.hideEle {
+    opacity: 0.5;    
 }

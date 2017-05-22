@@ -3664,6 +3664,10 @@ border-color: #0096FF #0096FF transparent transparent;
   -webkit-animation-name: rotateIn;
   animation-name: rotateIn;
 }
+.rotateIn, .selection-boxes li.hideEle:hover img {
+  -webkit-animation-name:rotateOut;
+  animation-name: rotateOut;
+}
 .rotateIn, .selection-boxes li img {
   -webkit-animation-name: rotateOut;
   animation-name: rotateOut;

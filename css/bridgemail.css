@@ -124,8 +124,8 @@ outline:0;
 
 i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 
-.icon.back {	background: url("../img/back.png") no-repeat center center;}
-.icon.next {	background: url("../img/next.png") no-repeat center center;}
+.icon.back {	background: url("../img/back.png") no-repeat center center !important;}
+.icon.next {	background: url("../img/next.png") no-repeat center center !important;}
 .icon.save {   background: url("../img/save.png") no-repeat center center;}
 .icon.delete {   background: url("../img/delete24.png") no-repeat center center ;}
 .icon.edit {   background: url("../img/edit.png") no-repeat center center ;}
@@ -214,6 +214,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.calender {   background: url("../img/calender.png") no-repeat scroll center center ;}
 .icon.report {   background: url("../img/report.png") no-repeat scroll center center ;}
 .icon.copycamp {   background: url("../img/copycamp.png") no-repeat scroll center center ;}
+.icon.helptitle {   background: url("../images/help.png") no-repeat scroll center center ;}
 .icon.copy-header {   background: url("../img/copy48.png") no-repeat scroll center center ;}
 .icon.template {   background: url("../img/template.png") no-repeat scroll center center ;}
 .icon.template_gallery {   background: url("../img/template2.png") no-repeat scroll center center ;}
@@ -607,7 +608,7 @@ label:hover .fieldinfo { display:block;}
 
 .inputcont.success input[type="text"], .inputcont.success input[type="password"], .inputcont.success textarea, .inputcont.success .chosen-single
 {border:2px solid #FB8080 !important; }
-.inputcont.error > input[type="text"], .inputcont.error > input[type="password"], .inputcont.error > textarea, .inputcont.error  .chosen-single
+.inputcont.error > input[type="text"], .inputcont.error > input[type="password"], .inputcont.error > textarea, .inputcont.error  .chosen-single, .inputcont.error  .inputfield
 {border:2px solid #FB8080 !important; }
 
 .inputcont.error  .chosen-single{ margin-right:0px;}
@@ -2162,7 +2163,7 @@ a.tw-toggle.tiles i {
 .settings.social h2 {
     float: left;
     line-height: 45px;
-    margin: 0 20px 0 0;
+    margin: 8px 20px 0 0;
 }
 .settings.social h2 .icon {
     margin: 8px 7px 0 -3px;
@@ -4820,8 +4821,8 @@ div.crms a img {
 .tagslist ul { padding:0; height:auto;  max-width:100% !important; top:0;}
 .tagslist  ul li { margin:5px;}
 .tagslist  ul li > a { font-size: 13px !important;line-height: 28px; background:#ffffff ;  min-width: 100px;}
-.tagslist  ul li > a span {  line-height: 28px; color:#6494AF;}
-.tagslist  ul li > a span:hover { color:#fff;} 
+.tagslist  ul li > a span {  line-height: 28px; color:#6494AF !important;}
+.tagslist  ul li > a span:hover { color:#fff !important;} 
 .tagslist  ul li > a i {
     background-color: #19BAF7 ;
     float: right;
@@ -6016,23 +6017,23 @@ ul.ftipg li span {
     width: 20px;
     margin: 0px !important;    
 }
-.campaign_sharedwith .sharedwith,.list_sharedwith .sharedwith{
+.campaign_sharedwith .sharedwith,.list_sharedwith .sharedwith,.target_sharedwith .sharedwith{
     cursor: default !important;
 }
 
-.list_shared,.list_sharedwith, .sub_accountobj{
+.list_shared,.list_sharedwith, .sub_accountobj,.target_sharedwith,.target_shared{
     float: left;
     margin: 0 0 0 5px;
     position: relative;
     height: 20px;
     width: 20px;
 }
-.bmsgrid .list_sharedwith .icon,.bmsgrid .list_shared .icon, .bmsgrid .sub_accountobj .icon
+.bmsgrid .list_sharedwith .icon,.bmsgrid .list_shared .icon, .bmsgrid .sub_accountobj .icon, .bmsgrid .target_sharedwith .icon, .bmsgrid .target_shared .icon
 {
     margin:0px;height:20px;width:20px;
 }
 
- .sub_accountobj .subaccount, .list_sharedwith sharedwith{
+ .sub_accountobj .subaccount, .list_sharedwith sharedwith, .target_sharedwith sharedwith{
     cursor: default !important;
 }
 
@@ -6995,15 +6996,18 @@ background:#F1F9FD;
     margin: 15px auto;
     width: 185px;
 }
-.nurturw_wizard .msg  .btn-group .btn { background:#fff;}
-.nurturw_wizard .msg .btn-group .btn.active {
+.delayRow .btn-group{
+    display: inline-blockblock;    
+}
+.nurturw_wizard .msg  .btn-group .btn,.delayRow .btn-group .btn { background:#fff;}
+.nurturw_wizard .msg .btn-group .btn.active,.delayRow .btn-group .btn.active {
     background: none repeat scroll 0 0 #4FC8F5;}
 .nurturw_wizard .accordion-inner.msg .row {}
 .nurturw_wizard .accordion-inner.msg .row:first-child  { margin-top:0;}
 
 
-.nurturw_wizard .accordion-group  .btn-group .btn { background:#fff;}
-.nurturw_wizard .accordion-group .btn-group .btn.active { background:  #4FC8F5;}
+.nurturw_wizard .accordion-group  .btn-group .btn,.delayRow .btn-group .btn { background:#fff;}
+.nurturw_wizard .accordion-group .btn-group .btn.active,.delayRow .btn-group .btn.active { background:  #4FC8F5;}
 
 
 .nurturw_wizard .collapse.in { overflow:visible;}
@@ -8857,6 +8861,7 @@ margin: 10px 0 0;
 .n_birthdaybot {   background: url("../img/bdaybot-add.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .customreports{background: url("../images/customcharts.png") no-repeat scroll center center; }
 .cust-reports{background: url("../images/reports_m.png") no-repeat scroll center center; }
+.ftpuploads {background: url("../images/ftpupload.png") no-repeat scroll center center;}
 
 
 
@@ -9864,14 +9869,18 @@ a.bayshore-toggle i {
     margin: 0 2px 0 10px;
 }
 
-.pre_row .checkpanelinput {
+.pre_row .checkpanelinput,.wait-row .checkpanelinput{
     height: 59px;
 	min-width: 35px;
     margin: -10px 10px -10px -10px;
 	background-color: #ccdce5;
 }
-.pre_row .checkpanelinput .icheck_line-icon { background-position: -20px 0;}
-.pre_row .checkpanelinput.checked { background-color:#94cf1e;}
+.wait-row .checkpanelinput{
+    margin: -10px 10px -10px -15px;
+    position:relative;
+}
+.pre_row .checkpanelinput .icheck_line-icon,.wait-row .checkpanelinput .icheck_line-icon { background-position: -20px 0;}
+.pre_row .checkpanelinput.checked,.wait-row .checkpanelinput.checked{ background-color:#94cf1e;}
 
 .pre_row .chosen-container { float:left;margin: 0 2px 0 10px;}
 

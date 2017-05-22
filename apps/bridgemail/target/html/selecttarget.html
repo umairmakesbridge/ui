@@ -1,22 +1,35 @@
 <div class="soruces clearfix" id="area_choose_targets" style=" height:410px;">
     <div class="col1">
-        <h2 class="header-list"><strong class="left">Targets</strong>
+        <div class="temp-filters clearfix" style="margin-top:20px;">
+            <h2 class="header-list"><strong class="left">Targets</strong></h2>
 
-            <div class="iconpointy" style="top:0px;">
+            <div class="iconpointy" style="top:6px;">
                 <a class="btn-green add-target showtooltip" title="Add target" ><i class="icon plus left"></i></a>
             </div>
+            
+            <div class="srt-div">               
+                <% if(this.app.get("user").accountType=="O"){ %> 
+                <div class="template-filter_expand right" id="autobots" style="position: relative;"> <strong class="sort left">Filter</strong>
+                        <span class="sortoption_expand active text-truncated showtooltip" data-original-title="Click to expand/collapse" style="position: relative;max-width: 80px;"><span class="spntext">All</span> <b class="caret right" style="position:absolute; top:0px; right:10px; margin: 16px 0 0 8px;"> </b></span>
+                        <ul id="template_search_menu" class="breadcrumb template_search_menu" style="display: none; right: 0;top:41px;width:100px">
+                           <li class="showtooltip active" data-original-title="Show all targets"><a search="A" class="stattype" tabindex="-1">All</a></li>                                     
+                           <li class="showtooltip" title="Click to view shared targets"><a search="SS" class="stattype share" tabindex="-1">Shared</a></li>                   
 
-
+                        </ul>
+                 </div>
+                <% } %>
             <div class="input-append search" id="targetsearch"> 
-                <a class="refresh_btn showtooltip" data-original-title="Refresh listing" style="margin:0 0 0 5px;"><i>Refresh</i></a>
-                <span class="icon target"></span><input type="text" style="width:200px;" class="search-control show-image" placeholder="Search targets" id="target-search"><a style="display: none;right: 80px;" id="clearsearch" class="close-icon target-search" ></a><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"> 				  </span></button></div></div>
-        </h2>
+                <a class="refresh_btn showtooltip" data-original-title="Refresh listing" style="margin:0 0 0 5px;"><i>Refresh</i></a>                               
+                <span class="icon target"></span><input type="text" style="width:130px;" class="search-control show-image" placeholder="Search targets" id="target-search"><a style="display: none;right: 80px;" id="clearsearch" class="close-icon target-search" ></a><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"> 				  </span></button></div></div>
+           </div>     
+        </div>
         <div class="template-container leftcol" style="margin-right:5px">
             <div class="target-listing" id="targets">
                 <table cellpadding="0" cellspacing="0" width="100%" id="targets_grid"><tbody></tbody></table>
             </div>
         </div>
         <!-- template-container  --> 
+ 
     </div>
     <!-- col1  -->
 

@@ -1565,7 +1565,10 @@ ul.linkresults li:hover { background:#dcf3fe; }
     top: 40%;
     width: 100px;
 }
-
+.global-save-overlay p {
+    width: 220px;
+    left:40%;
+}
 
 .csHaveData .overlay { position:absolute;  background: none repeat scroll 0 0 rgba(47, 63, 74, 0.5);}
 .csHaveData .overlay .image-info {
@@ -2269,5 +2272,11 @@ i.icon{
 }
 .MEEFORMLIGHTBOX.MEEFORMCONTAINER span{
     position: relative;
-top: 22px;
+    top: 22px;
+
+}
+.dropHighlighter{
+  background:#80C000 !important;
+  box-shadow:0 0 5px rgba(0, 0, 0, 0.5)  !important;
+  height:10px !important;
 }

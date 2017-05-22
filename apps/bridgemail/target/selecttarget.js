@@ -4,7 +4,9 @@ function (template, TargetsCollection, TargetView) {
         return Backbone.View.extend({  
                 className:'select-target-view',
                 events: {                   
-                      'click .add-target':'createTarget'
+                      'click .add-target':'createTarget',
+                      "click .sortoption_expand": "toggleSortOption",
+                      "click .stattype": "fitlerLists"
                  },
                 initialize: function () {
                         this.template = _.template(template);				
@@ -18,6 +20,7 @@ function (template, TargetsCollection, TargetView) {
                         this.targetsModelArray = [];
                         this.targetsIdArray = [];
                         this.total = 0;
+                        this.type = "batches";
                         this.offsetLength = 0;
                         this.render();
                 },
@@ -114,7 +117,7 @@ function (template, TargetsCollection, TargetView) {
                         // that.showSearchFilters(this.searchText);
                     }
                     var that = this; // internal access
-                    _data['type'] = 'batches';
+                    _data['type'] = this.type;//'batches';
                     _data['filterFor'] = 'C';
                     if(typeof this.options.type !="undefined" && this.options.type == "autobots"){
                         var type = this.options.type;
@@ -139,7 +142,7 @@ function (template, TargetsCollection, TargetView) {
                                 that.showSearchFilters(that.searchText, that.objTargets.total);
                             } else {
                                 that.$("#total_targets .badge").html(that.objTargets.total);
-                                that.$("#total_targets span").html("Target(s) found");    
+                                that.$("#total_targets span").html(that.totalLabel());    
                             }
                             that.offsetLength = data.length;
                             that.total_fetch = that.total_fetch + data.length;
@@ -267,12 +270,12 @@ function (template, TargetsCollection, TargetView) {
                     this.searchText = '';
                     this.searchTags = '';
                     this.total_fetch = 0;
-                    this.$("#total_targets span").html("Target(s) found");    
+                    this.$("#total_targets span").html(this.totalLabel());    
                     this.loadTargets();
                 },
                 showSearchFilters: function(text, total) {
                     this.$("#total_targets .badge").html(total);
-                    this.$("#total_targets span").html("Target(s) found for  <b>\"" + text + "\" </b>");
+                    this.$("#total_targets span").html(this.totalLabel()+" for  <b>\"" + text + "\" </b>");
                 },
                 liveLoading: function(where) {
                     var $w = $(window);
@@ -409,5 +412,50 @@ function (template, TargetsCollection, TargetView) {
                     }
                }).show();               
             },
+            toggleSortOption: function (ev) {
+                $(this.el).find("#template_search_menu").slideToggle();
+                ev.stopPropagation();
+            },
+            fitlerLists: function(obj){                               
+                var target = $.getObj(obj, "a");
+                var prevStatus = this.searchTxt;
+                if (target.parent().hasClass('active')) {
+                    return false;
+                }
+                this.$('.stattype').parent().removeClass('active');
+                target.parent().addClass('active');
+                var html = target.clone();
+                $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());                               
+
+                var type = target.attr("search");
+                if (!type){
+                    type = this.$('#template_search_menu li.active a').attr('search');
+                }
+                this.status = type;                                    
+                if (this.status !== prevStatus) {
+                    this.$el.find('#lists_search').val('');
+                    this.$el.find('#clearsearch').hide();
+                     if (type == "SS" || type == "F") {
+                         this.type = 'sharedTarget';                                
+                     }else {
+                         this.type = 'batches';                                
+                     }
+                    this.searchTxt = '';
+                }
+                this.total_fetch = 0;
+                this.loadTargets();
+            
+            },
+            totalLabel: function(){
+                var label = "Targets(s) found";
+                if (this.status == "SS") {
+                   label = 'Shared target(s) found';                                
+                } else if (this.status == "F") { 
+                    label= 'My shared target(s) found';                                
+                } else {
+                    label = 'Target(s) found';                                
+                }
+                return label;
+            }
         });
 });

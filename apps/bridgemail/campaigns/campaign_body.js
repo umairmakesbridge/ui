@@ -31,7 +31,7 @@ function (template,editorView) {
                     this.templates = false;
                     this.states = {};
                     this.states.editor_change = false;
-                    this.campobjData = this.parent.camp_json;
+                    this.campobjData = this.parent.camp_json;                    
                     this.copyCampaigns = false;
                     this.copyFromCampaign = true;
                     this.meeEditor = false;                    
@@ -52,6 +52,9 @@ function (template,editorView) {
                     model: this.model
                 }));                               
                 this.initControls();  
+                if(!this.campobjData){
+                    this.campobjData = {"isTextOnly":"N","editorType":""};
+                }
                
             },
             saveForStep2:function(obj){ 
@@ -160,6 +163,7 @@ function (template,editorView) {
                 },
             populateBody:function(){           
                 
+             if(this.campobjData){
                 if(this.campobjData.isTextOnly=="Y" ){
                     this.$("#plain_text").click();
                     this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainText,true));
@@ -175,6 +179,11 @@ function (template,editorView) {
                 else if(this.campobjData.editorType==""){
                     this.$("#use_template").click();
                 }
+            }
+            else{
+                this.$("#use_template").click();
+                
+            }
                 
                 
             },
@@ -188,6 +197,12 @@ function (template,editorView) {
               this.$("#htmlarea").css({"height":_height+"px","width":(_width-2)+"px"});
               if(this.campobjData && this.campobjData.editorType=="W"){
                 this.openEditor();
+              }
+              if(!this.parent.camp_id){
+                  this.$(".save-step2").hide();
+              }
+              else{
+                  this.$(".save-step2").show();
               }
             },
             step2TileClick:function(obj){
@@ -233,7 +248,7 @@ function (template,editorView) {
                         this.showChangeEditorDialog("Your current built Template will be lost, as it is not compatible with <b>Hand Code HTML</b>. Are you sure you want to continue?",target_li);
                         return true;    
                   }  
-                  else if(selected_li.length && ( (this.campobjData.editorType=="W" && _tinyMCE.get('bmseditor_'+this.wp_id).getBody().childNodes.length!==1) || ( this.campobjData.editorType=="H" && this.$("textarea#handcodedhtml").val()!="")) && target_li.attr("id")=="html_editor_mee" ){
+                  else if(selected_li.length && ( (this.campobjData.editorType=="W" && (_tinyMCE.get('bmseditor_'+this.wp_id).getBody().childNodes.length!==1) || _tinyMCE.get('bmseditor_'+this.wp_id).getBody().innerHTML.length>30) || ( this.campobjData.editorType=="H" && this.$("textarea#handcodedhtml").val()!="")) && target_li.attr("id")=="html_editor_mee" ){
                       this.showChangeEditorDialog("Your current built Template will be lost, as it is not compatible with <b>Easy Editor</b>. Are you sure you want to continue?",target_li);
                       return true;    
                   }
@@ -275,16 +290,18 @@ function (template,editorView) {
                  }                 
                  else if(selected_li=="html_editor_mee"){                        
                      post_editor['editorType'] = 'MEE';
-                 }                 
-                 if(post_editor["editorType"] && this.campobjData.editorType!=post_editor["editorType"]){
-                    this.campobjData.editorType = post_editor["editorType"];
-                    $.post(URL,post_editor)
-                     .done(function(data) {
-                     });
+                 }     
+                 if(this.parent.camp_id){
+                    if(post_editor["editorType"] && this.campobjData.editorType!=post_editor["editorType"]){
+                       this.campobjData.editorType = post_editor["editorType"];
+                       $.post(URL,post_editor)
+                        .done(function(data) {
+                        });
+                    }
                  }
                  if( post_editor['editorType']){
                      this.campobjData.editorType = post_editor['editorType'];
-                }
+                 }
 
             },
             loadMEE:function(){
@@ -310,7 +327,10 @@ function (template,editorView) {
                         this.$("#mee_editor").setChange(this.states);  
                         this.meeView = MEEPage;
                         this.setMEE(_html);
-                        this.initScroll();                        
+                        this.initScroll();            
+                        if(!this.parent.camp_id){
+                           this.$(".save-step2").hide();
+                        }
                     },this));  
             },
             setTextVersion:function(text){
@@ -456,7 +476,9 @@ function (template,editorView) {
                 var previewIconMessage = $('<a class="icon preview showtooltip" title="Preview Message"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.$el.parents('.modal').find(".modal-header .edited  h2").append(previewIconMessage);
                 previewIconMessage.click(_.bind(this.parent.previewCampaign,this.parent));
-                this.$el.parents('.modal').find('#dialog-title span').append('<strong style="float:right; margin-left:5px" class="cstatus pclr18"> Message <b>'+this.parent.triggerOrder+'</b> </strong>');
+                if(this.parent.type!=="workflow"){
+                    this.$el.parents('.modal').find('#dialog-title span').append('<strong style="float:right; margin-left:5px" class="cstatus pclr18"> Message <b>'+this.parent.triggerOrder+'</b> </strong>');
+                }
                 if(this.parent.type == "autobots"){
                        this.$el.parents('.modal').find('.modal-header .cstatus').remove();                          
                        this.$el.parents('.modal').find('#dialog-title .cstatus').remove();

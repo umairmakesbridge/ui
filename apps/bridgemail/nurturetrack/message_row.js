@@ -307,7 +307,7 @@ function (template) {
                         var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
                         if(this.isWait){
                             var _data = this.waitView.getPostData(); 
-                            post_data =  _data.post;                        
+                            post_data =  _data.post;                                                    
                         }
                         post_data = $.extend({},post_data,this.getPostData());
                         this.$(".save-message").addClass("saving");
@@ -333,6 +333,7 @@ function (template) {
                        },this));
                     
                 }
+                
                 
             },
              getHour:function(hour){                   

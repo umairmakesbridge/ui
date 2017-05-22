@@ -26,6 +26,8 @@ function (template) {
                     this.editable=this.options.editable;
                     this.settingchange = true;
                     this.isDataLoaded = false;
+                    this.hasConversionFilter = false;
+                    this.pageconversation_checkbox=false;
                     this.campDefaults = {};
                     this.render();                    
             },
@@ -46,6 +48,12 @@ function (template) {
               if(this.editable===false){
                 this.$(".block-mask").show();
               }
+              
+              this.$("#con_filter_combo").chosen({no_results_text: 'Oops, nothing found!', width: "280px", disable_search: "true"});
+              this.$("#conversion_filter_accordion").accordion({active: 0, collapsible: false, activate: _.bind(function () {
+                    this.$("#conversion_filter").prop("checked", this.pageconversation_checkbox);
+                }, this)});
+              
             },
             initControls:function(){                
                 
@@ -61,6 +69,8 @@ function (template) {
                 });
                 this.$("#campaign_from_email_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.$("#fromemail_default_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                
+                
                 /*Campaign Merge Fields*/
                 this.initMergeFields();
                 
@@ -96,6 +106,9 @@ function (template) {
                        }                       
                        else if(icheck_id=="campaign_useCustomFooter"){
                            camp.setCustomFooterArea();
+                       } 
+                       else if (icheck_id == "conversion_filter") {
+                           camp.setCoversionPageStep1(icheck);
                        }
 
                     }                    
@@ -163,7 +176,8 @@ function (template) {
                  this.$("#campaign_isWebVersion").prop("checked",camp_json.isWebVersionLink=="N"?false:true);
                  
                  this.parent.htmlText = camp_json.htmlText;
-                 this.parent.plainText = camp_json.plainText;                    
+                 this.parent.plainText = camp_json.plainText;   
+                 this.parent.editorType = camp_json.editorType;
                  if(camp_json.defaultSenderName != '')
                  {
                      if(camp_json.defaultSenderName){
@@ -188,6 +202,36 @@ function (template) {
                  this.$("#campaign_pintrest").prop("checked",camp_json.pinterest=="N"?false:true);                        
                  this.$("#campaign_gplus").prop("checked",camp_json.googleplus=="N"?false:true);                        
                  
+                 if (camp_json.conversionFilterStatus == 'Y') {
+                    this.$("#conversion_filter").prop("checked", true);
+                    this.hasConversionFilter = true;
+                    this.pageconversation_checkbox = true;
+                    var URL = "/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=get&campNum=" + this.parent.camp_id;
+
+                    jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
+                        var conversation_filter = jQuery.parseJSON(xhr.responseText);
+                        if (this.app.checkError(conversation_filter)) {
+                            return false;
+                        }
+                        this.setConversionPage();
+                        if (conversation_filter.ruleCount > 0) {
+                            var r = conversation_filter.rules[0].rule1[0];
+                            this.$("select#con_filter_combo").val(this.app.decodeHTML(r.rule));
+                            this.$("#con_filter_field").val(this.app.decodeHTML(r.matchValue));
+                            this.setConversionPage();
+                        }
+
+                    },this));
+                    this.$("#accordion1").accordion({active: 0});
+                }
+                else {
+                    this.hasConversionFilter = false;
+                    this.pageconversation_checkbox = false;
+                    this.$("#conversion_filter").prop("checked", false);
+                    this.$("#accordion1").accordion({active: false});
+                    this.setConversionPage();
+                }
+                 
                  this.initCheckbox();
                  this.isDataLoaded = true; 
                  this.parent.loadMessageHTML();              
@@ -201,6 +245,49 @@ function (template) {
                   this.$("#campaign_from_email_default").hide();  
                 }    
            },
+           setConversionPage: function () {
+                if (this.pageconversation_checkbox) {
+                    this.$("#con_filter_field").prop("disabled", false);
+                    this.$("#con_filter_combo").prop("disabled", false).trigger("chosen:updated");
+                }
+                else {
+                    this.$("#con_filter_field").prop("disabled", true);
+                    this.$("#con_filter_combo").prop("disabled", true).val("#").trigger("chosen:updated");
+                }
+            },
+            setCoversionPageStep1: function (obj) {
+                if (obj.prop("checked")) {
+                    this.pageconversation_checkbox = true;
+                    this.$("#conversion_filter").prop("checked", this.pageconversation_checkbox);
+                    this.$("#accordion1").accordion({active: 0});
+                }
+                else {
+                    this.removeConversionPage();
+                    this.pageconversation_checkbox = false;
+                    this.$("#conversion_filter").prop("checked", this.pageconversation_checkbox);
+                    this.$("#accordion1").accordion({active: 1});
+                }
+                this.setConversionPage();
+
+            },
+            removeConversionPage: function () {
+                var camp_obj = this;
+                var camp_id = this.parent.camp_id;
+
+                var URL = "/pms/io/filters/saveLinkIDFilter/?BMS_REQ_TK=" + this.app.get('bms_token');
+                if (this.hasConversionFilter) {
+                    $.post(URL, {campNum: camp_id,
+                        type: "delete"})
+                            .done(function (data) {
+                                camp_obj.$("#conversion_filter").prop("checked", false);
+                                camp_obj.hasConversionFilter = false;
+                                camp_obj.setConversionPage();
+
+                            });
+                }
+                this.app.hideError({control: this.$("#cov-texturl-container")});
+
+            },
            loadData:function(){
                this.app.showLoading("Loading Campaign...",this.$el);  
                var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=campaignDefaults";
@@ -215,6 +302,9 @@ function (template) {
                             this.$("#campaign_footer_text").val(this.app.decodeHTML(defaults_json.footerText));
                             this.$("#campaign_from_email").val(this.app.decodeHTML(defaults_json.fromEmail));
                             this.$("#campaign_from_name").val(this.app.decodeHTML(defaults_json.fromName));
+                            if(!this.parent.camp_id) {
+                                this.$("#campaign_reply_to").val(this.app.decodeHTML(defaults_json.fromEmail));
+                            }
                             var fromEmails = defaults_json.fromEmail;
                             if(defaults_json.optionalFromEmails)
                                     fromEmails += ',' + defaults_json.optionalFromEmails;
@@ -402,11 +492,14 @@ function (template) {
                     if(validate){
                         
                        return  isValid;
-                    }
-
-            
+                    }                   
+                    
                     if(isValid)
-                    {   
+                    {
+                        if(this.parent.type=="workflow" && !this.parent.camp_id){
+                            this.createWorkFlowMessage();                        
+                            return false;
+                        }    
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                         defaultSenderName = merge_field_patt.test(this.$('#campaign_from_name').val())?this.$("#campaign_default_from_name").val():"";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
@@ -444,27 +537,88 @@ function (template) {
                                     this.app.showLoading(false,this.parent.dialog.$el);
                                     if(step1_json[0]!=="err"){   
                                             this.parent.parent.loadCampaign();
-                                            if(this.parent.dialog){
-                                                this.parent.dialog.$(".dialog-title").html("'"+this.$("#campaign_subject").val()+"' Settings")
+                                            if(this.parent.type!=="workflow"){
+                                                if(this.parent.dialog){
+                                                    this.parent.dialog.$(".dialog-title").html("'"+this.$("#campaign_subject").val()+"' Settings")
+                                                }
                                             }
                                             if(this.parent.messagebody_page.states.editor_change === true ){
                                                 this.parent.saveStep2();                                                
                                             }
                                             else{
                                                 this.app.showMessge("Message settings saved successfully!");
-                                            }
-                                            //camp_obj.states.step1.change=false;
-                                                                                       
+                                            }                                                                                                                                   
                                     }
                                     else{
                                            this.app.showAlert(step1_json[1],this.$el); 
                                     }
                                 },this));
                                 
+                                if (this.$("#conversion_filter").prop("checked")) {
+                                    this.saveConversionPage();
+                                }
+                                
                         }
                     }
                     
-                }
-            
+                },
+                saveConversionPage: function () {
+                    var camp_obj = this;
+                    var camp_id = this.parent.camp_id;
+                    var URL = "/pms/io/filters/saveLinkIDFilter/?BMS_REQ_TK=" + this.app.get('bms_token');
+                    this.$("#save_conversion_filter").addClass("saving");
+                    $.post(URL, {campNum: camp_id,
+                        rule: this.$("select#con_filter_combo").val(),
+                        matchValue: this.$("#con_filter_field").val(),
+                        type: "conversion"})
+                            .done(function (data) {
+                                camp_obj.$("#save_conversion_filter").removeClass("saving");
+                                camp_obj.hasConversionFilter = true;
+                            });
+
+                },
+                createWorkFlowMessage: function(){
+                    this.app.showLoading("Creating Message...",this.parent.dialog.$el);
+                    var URL = "/pms/io/workflow/saveWorkflowData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    var wf = this.parent.options.workflowObj;
+                    $.post(URL, { type:"newWorkflowMessage",stepId: wf["stepId"],workflowId:wf["workflowId"],optionNumber:wf["optionNumber"]})
+                     .done(_.bind(function(data) {                                 
+                        var message_json = jQuery.parseJSON(data);
+                        this.app.showLoading(false,this.parent.dialog.$el);
+                        if(message_json[0]!=="err"){
+                            this.parent.camp_id = message_json[1];
+                            this.parent.parent.campNum = message_json[1];  
+                            this.parent.messagebody_page.$(".save-step2").show();
+                            this.saveStep1();   
+                            var workflowIframe = $(".workflowiframe");
+                            if(workflowIframe.length && workflowIframe[0].contentWindow.submitAndRefreshPage){
+                                workflowIframe[0].contentWindow.submitAndRefreshPage();
+                            }
+                        }
+                        else{
+                               this.app.showAlert(message_json[1],this.$el); 
+                        }
+                    },this));
+                },
+                updateWorkFlowMessage: function(campNum){                   
+                    var URL = "/pms/io/workflow/saveWorkflowData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    var wf = this.parent.options.workflowObj;
+                    $.post(URL, { type:"saveWorkflowMessage",stepId: wf["stepId"],workflowId:wf["workflowId"],optionNumber:wf["optionNumber"],campNum:campNum})
+                     .done(_.bind(function(data) {                                 
+                        var message_json = jQuery.parseJSON(data);
+                        this.app.showLoading(false,this.parent.dialog.$el);
+                        if(message_json[0]!=="err"){
+                            //this.saveStep1();   
+                            var workflowIframe = $(".workflowiframe");
+                            if(workflowIframe.length && workflowIframe[0].contentWindow.submitAndRefreshPage){
+                                //workflowIframe[0].contentWindow.submitAndRefreshPage();
+                            }
+                            
+                        }
+                        else{
+                               this.app.showAlert(message_json[1],this.$el); 
+                        }
+                    },this));
+                }            
         });
 });

@@ -638,13 +638,15 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 },
                 saveAllMessages:function(obj){
                     var button = $.getObj(obj,"a");
+                    var hasError = false;                    
                     if(!button.hasClass("saving")){
+                        this.saveAllCall = 0;
                         for(var i=0;i<this.messages.length;i++){
-                            var _message =  this.messages[i];
+                            var _message =  this.messages[i];                            
+                             _message.saveMessage();                                                    
                             this.saveAllCall++;
-                            _message.saveMessage();                            
                         }
-                        if(this.messages.length){
+                        if(!hasError && this.messages.length){
                             this.$(".save-all-nt").addClass("saving");
                         }
                     }
