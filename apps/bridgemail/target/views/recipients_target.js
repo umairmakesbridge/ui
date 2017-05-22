@@ -194,7 +194,7 @@ function (template,copytargetPage, shareCommonPage) {
                previewTarget:function(ev){
                       if(this.options.type == "autobots_listing"){
                         if(this.options.editable == true){
-                            var target_id = ev;
+                            var target_id = this.model.get("filterNumber.encode");
                         }else{
                             var target_id = $(ev.target).data('id');
                         }      

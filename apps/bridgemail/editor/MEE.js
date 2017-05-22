@@ -208,6 +208,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;
                                             $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight, mee));
+                                            $this.find("#mee-iframe").contents().find("body").on('dragover',_.bind(mee.dragOverBody, mee));
                                             if (options.landingPage) {
                                                 mee.getActionScript();
                                             }
@@ -399,6 +400,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         this.resizeHeight();
                                     }
 
+                                }
+                                mee.dragOverBody = function(e){
+                                    if(this.dragElement){
+                                        meeIframeWindow.$("li.dropHighlighter").removeClass("dropHighlighter");
+                                        var dropEle = meeIframeWindow.$.nearest({x: e.originalEvent.x, y: e.originalEvent.y}, 'li.myDroppable')
+                                        dropEle.addClass("dropHighlighter")
+                                        //console.log("x:"+e.originalEvent.x+"-y:"+e.originalEvent.y);
+                                    }
                                 }
 
                                 mee.IntializeToolTip = function(flag){
@@ -6226,6 +6235,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         }
                                                         ui.draggable = mee.dragElement;
                                                         $(this).removeInlineStyle("outline");
+                                                        
                                                         var args = {
                                                             droppedElement: $(this),
                                                             event: event,
@@ -7101,6 +7111,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         meeIframe.find(".mainContentHtml").removeClass("show-droppables");
                                         meeIframe.find(".MEEFORMCONTAINER").removeInlineStyle("outline");
                                         meeIframe.find(".editformpanel").hide();
+                                        meeIframe.find(".dropHighlighter").removeClass("dropHighlighter");
                                         RemoveDroppables(meeIframe);
                                         $(".file-border").removeClass("file-border");
                                         mee.dragElement = null;

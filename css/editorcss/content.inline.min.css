@@ -2254,3 +2254,8 @@ i.icon{
 .error-dc{
     border : 2px solid #FB8080 !important;
 }
+.dropHighlighter{
+  background:#80C000 !important;
+  box-shadow:0 0 5px rgba(0, 0, 0, 0.5)  !important;
+  height:10px !important;
+}
