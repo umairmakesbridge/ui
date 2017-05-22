@@ -76,7 +76,8 @@ function (template) {
                                                 else{
                                                         curview.options.copycampdialog.hide();
                                                         campview.getcampaigns();                                                         
-                                                }				
+                                                }
+                                                curview.copyDynamicBlock(res[1],camp_id);
                                                 app.mainContainer.openCampaign({campid:res[1],camp_wsid:res[2]});
                                         }
                                 });

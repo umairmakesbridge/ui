@@ -31,9 +31,12 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     this.template = _.template(template);                    
                     this.saveAllCall = 0;
                     this.editable = true;
+                    this.isKillNT = false;
                     if (this.options.params) {                        
                         this.editable = this.options.params.editable;
-                    }                   
+                        this.isKillNT = (this.options.params.kill) ? this.options.params.kill : false;
+                    }     
+                    
                     this.render();
                 },
                 /**
@@ -169,10 +172,15 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                             },this)
                         }
                         this.ws_header.find(".cstatus").remove();
+                        console.log(_json.status);
                         if(_json.status=="D"){
                             this.ws_header.find(".play24").show();
                             this.ws_header.find(".pause24").hide();                             
                             this.ws_header.find("#workspace-header").after($('<a class="cstatus pclr1" style="margin:6px 4px 0px -7px">Paused </a>'));
+                        }else if(_json.status =="K"){
+                            this.ws_header.find(".play24").hide();
+                            this.ws_header.find(".pause24").hide();                             
+                            this.ws_header.find("#workspace-header").after($('<a class="cstatus pclr12" style="margin:6px 4px 0px -7px">Killed </a>'));
                         }
                         else{
                             this.ws_header.find(".play24,.delete").hide();
@@ -284,6 +292,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 playNurtureTrack:function(){
                     this.app.showLoading("Playing Nurture Track...",this.$el);
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    
                     $.post(URL, {type:'play',trackId:this.track_id})
                     .done(_.bind(function(data) {                  
                            this.app.showLoading(false,this.$el);   
@@ -291,6 +300,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                            if(!_json.err){
                                this.app.showMessge("Nurture track played.");
                                 this.editable = false;
+                                this.isKillNT = false;
                                 this.render();
                                 this.init();                                
                                 this.parentWS.fetchTracks();   
@@ -302,17 +312,64 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                    },this));
                 },
                 pauseNurtureTrack:function(){
-                    this.app.showLoading("Pausing Nurture Track...",this.$el);
+                    
+                    var mHtml = '<div class="messagebox messagebox_ delete pause-kill-dialog" style="width: 550px;"><h3>Pause or Kill nurture track</h3><i class="close showtooltip" data-original-title="Close Dialog"></i>';
+                        mHtml += '<div class="left-panel">';
+                        mHtml += '<p><span>||</span>By pausing Nurture track, you will able to play it any time.</p>';
+                        mHtml += '<div class="btns pull-right" style="margin: 74px 20px 0px;"><a class="btn-blue btn-ok"><span>Pause</span><i class="icon pause"></i></a></div></div>';
+                        mHtml += '<div class="right-panel" >';
+                        mHtml += '<p style="padding: 0px 10px; text-align: justify; line-height: 15px;"><span>X</span>By Killing Nuture track, every operation on Nuture track will be stopped immediately and you will not able to Play it again. But you can perform other operations i.e copy</p><div class="btns pull-right"><a class="btn-red btn-cancel btn-kill" style="margin-left: 10px;"><span>&nbsp;&nbsp;Kill&nbsp;&nbsp;</span><i class="icon cross"></i></a></div>';
+                        mHtml += '</div><div class="clearfix"></div></div>';
+                    var obmHtml = $(mHtml);
+                    this.$el.parents('body').append('<div class="overlay"></div>');
+                    this.$el.parents('body').append(obmHtml);
+                    obmHtml.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    // Close dialog
+                    obmHtml.find('.close').click(_.bind(function(){
+                        this.$el.parents('body').find('.overlay').remove();
+                        this.$el.parents('body').find('.pause-kill-dialog').remove();
+                    },this));
+                    // Pause NT
+                    obmHtml.find('.btn-ok').click(_.bind(function(){
+                        this.pauseKillNurtureTrack('pause');
+                    },this));
+                    // Kill NT
+                    obmHtml.find('.btn-kill').click(_.bind(function(){
+                        this.pauseKillNurtureTrack('kill');
+                    },this));
+                    
+                    /**/
+                },
+                pauseKillNurtureTrack : function(type){
+                    var killtype = false;
+                   if(type=='pause'){
+                       var msg = "Pausing Nurture Track...";
+                   }else{
+                       var msg = "Killing Nurture Track...";
+                       killtype = true;
+                   }
+                   
+                   this.$el.parents('body').find('.overlay').remove();
+                   this.$el.parents('body').find('.pause-kill-dialog').remove(); 
+                   this.app.showLoading(msg,this.$el);
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
-                    $.post(URL, {type:'pause',trackId:this.track_id})
+                    $.post(URL, {type:'pause',trackId:this.track_id,kill:killtype})
                     .done(_.bind(function(data) {                  
                            this.app.showLoading(false,this.$el);   
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
-                               this.app.showMessge("Nurture track paused.");
-                               this.editable = true;
+                               if(type=='pause'){
+                                   this.app.showMessge("Nurture track paused.");
+                                   this.editable = true;
+                               }else{
+                                   this.app.showMessge("Nurture track killed.");
+                                   this.editable = false;
+                                   this.isKillNT = true;
+                               }
+                               
                                this.render();
-                               this.init();                               
+                               this.init();  
+                              
                                this.parentWS.fetchTracks();   
                                this.parentWS.addCountHeader();
                            }
@@ -581,13 +638,15 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 },
                 saveAllMessages:function(obj){
                     var button = $.getObj(obj,"a");
+                    var hasError = false;                    
                     if(!button.hasClass("saving")){
+                        this.saveAllCall = 0;
                         for(var i=0;i<this.messages.length;i++){
-                            var _message =  this.messages[i];
+                            var _message =  this.messages[i];                            
+                             _message.saveMessage();                                                    
                             this.saveAllCall++;
-                            _message.saveMessage();                            
                         }
-                        if(this.messages.length){
+                        if(!hasError && this.messages.length){
                             this.$(".save-all-nt").addClass("saving");
                         }
                     }

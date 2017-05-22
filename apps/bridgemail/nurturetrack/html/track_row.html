@@ -9,11 +9,13 @@
             <h3>
                 <a  title="Click to view" class="showtooltip edit-track"><%- this.app.decodeHTML(model.get('name')) %></a> 
                 <% if(model.get('status')==='D'){  %>
-                <a class="cstatus pclr1">Paused </a>
+                <a class="filterNT ntpauselist showtooltip cstatus pclr1" title="Click to view paused Nurture Tracks">Paused </a>
                 <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
-                <a class="cstatus pclr6">Pending </a>
+                <a class="filterNT ntpendlist cstatus pclr6">Pending </a>
+                <% } else if(model.get('status')==='K'){ %>
+                 <a class="filterNT ntkilllist showtooltip cstatus pclr12" title="Click to view killed Nurture Tracks">Killed </a>
                 <% } else {%>
-                <a class="cstatus pclr18">Playing </a>
+                <a class="filterNT ntplaylist showtooltip cstatus pclr18" title="Click to view played Nurture Tracks">Playing </a>
                 <%}
                 %>                                    
             </h3>
@@ -147,11 +149,13 @@
             <h3>
                 <a  title="Click to view" class="showtooltip edit-track" style="max-width:<%-this.maxWidth%>px;overflow-x:hidden;text-overflow: ellipsis"><%- this.app.decodeHTML(model.get('name')) %></a> 
                 <% if(model.get('status')==='D'){  %>
-                <a class="cstatus pclr1">Paused </a>
+                <a class="filterNT showtooltip cstatus ntpauselist pclr1" title="Click to view paused Nurture Tracks">Paused </a>
                 <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
-                <a class="cstatus pclr6">Pending </a>
+                <a class="filterNT ntpendlist cstatus pclr6">Pending </a>
+                <% } else if(model.get('status')==='K'){ %>
+                 <a class="filterNT showtooltip cstatus ntkilllist pclr12" title="Click to view killed Nurture Tracks">Killed </a>
                 <% } else {%>
-                <a class="cstatus pclr18">Playing </a>
+                <a class="filterNT showtooltip cstatus ntplaylist pclr18" title="Click to view palyed Nurture Tracks">Playing </a>
                 <%}
                 %>                                    
             </h3>
@@ -191,11 +195,13 @@
             <h3>
                 <a  title="<% if(model.get('status')==='D'){print('Click to edit') }else{ print('Click to view')} %>" class="showtooltip edit-track"><%- this.app.decodeHTML(model.get('name')) %></a> 
                 <% if(model.get('status')==='D'){  %>
-                <a class="cstatus pclr1">Paused </a>
+                <a class="filterNT cstatus showtooltip ntpauselist pclr1" title="Click to view paused Nurture Tracks">Paused </a>
                 <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
-                <a class="cstatus pclr6">Pending </a>
+                <a class="filterNT ntpendlist cstatus pclr6">Pending </a>
+                <% } else if(model.get('status')==='K'){ %>
+                 <a class="filterNT cstatus showtooltip ntkilllist pclr12" title="Click to view killed Nurture Tracks">Killed </a>
                 <% } else {%>
-                <a class="cstatus pclr18">Playing </a>
+                <a class="filterNT cstatus showtooltip ntplaylist pclr18" title="Click to view played Nurture Tracks">Playing </a>
                 <%}
                 %>                    
                 <div class="percent_stats">
@@ -261,8 +267,13 @@
                 <a class="icon edit-track edit clr3" ><span>Edit</span></a>
                 <a class="icon copy-track copy clr2" ><span>Copy</span></a>                
                 <a class="icon delete-track delete clr1" ><span>Delete</span></a>
-               <% } else {
-               %>
+                <% } else if(model.get('status')==='K'){ %>
+                <a class="icon preview message-view clr3"><span>Preview</span></a>
+                <a class="icon copy-track copy clr2" ><span>Copy</span></a>                
+                <a class="icon delete-track delete clr1" ><span>Delete</span></a>
+                <% } else {
+                %>
+                
                    <a class="icon pause pause-track clr3"><span>Pause</span></a>  
                    <a class="icon copy-track copy clr2"><span>Copy</span></a> 
                    <a class="icon preview message-view clr1"><span>Preview</span></a>

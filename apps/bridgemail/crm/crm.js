@@ -32,7 +32,12 @@ define(['text!crm/html/crm.html','app'],
                  this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             init:function(){
-               this.app.removeSpinner(this.$el);                
+                var _this = this;
+              setTimeout(function(){
+                        /*-----Remove loading------*/
+                    _this.app.removeSpinner(_this.$el);
+                    /*------------*/
+                    },500)              
             }
             ,
             /**

@@ -188,7 +188,11 @@ function (template) {
                 var flag_class = this.getCampStatus(val[0].status);                 
                 row_html += '<tr id="row_'+val[0]['campNum.encode']+'">';                        
                 var _checked =this.$(".filter-camp li:first-child").hasClass("active")?'class="unchecked check-box"':'class="checkedadded check-box"';
-                row_html += '<td style="padding:0px"><a '+_checked+' id="'+val[0]['campNum.encode']+'" style="margin:0px;position:relative"><i class="icon check"></i></a></td><td><div class="name-type"><h3><span class="campname showtooltip" style="float:left;overflow:hidden;min-width:40px;max-width:'+max_width+'px;" title="Click to Preview">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</span><div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div></h3><div class="tags tagscont">'+this.app.showTags(val[0].tags)+'</div></td>';                               
+                row_html += '<td style="padding:0px"><a '+_checked+' id="'+val[0]['campNum.encode']+'" style="margin:0px;position:relative"><i class="icon check"></i></a></td><td><div class="name-type"><h3><span class="campname showtooltip" style="float:left;overflow:hidden;min-width:40px;max-width:'+max_width+'px;" title="Click to Preview">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</span><div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
+                if(this.app.get("user").accountType =='A' && this.app.get("user").userId!==val[0]['userId']){
+                    row_html += '<div class="sub_accountobj showtooltip" title="This campaign is created by sub account '+val[0]['userId'] +'"><a class="icon subaccount"></a></div>';
+                }
+                row_html += '</h3><div class="tags tagscont">'+this.app.showTags(val[0].tags)+'</div></td>';                               
                 
                 row_html += '<td><div class="time show" style="width:160px !important;"><strong><span>'+this.getDateFormat(val)+'</strong></div>';
                 row_html += '<div class="sent-pending" style="width:160px !important;"><span><em>Sent</em>'+this.app.addCommas(val[0].sentCount)+'</span><span><em>Pending</em>'+this.app.addCommas(val[0].pendingCount)+'</span></div>'
@@ -245,11 +249,11 @@ function (template) {
                 var handle = $.getObj(obj,"a");
                 if(handle.hasClass("close")){
                     handle.removeClass("close");
-                    handle.next().animate({height:70});
+                    handle.next().animate({height:70}).removeClass('toggle-up-1');
                 }
                 else{
                     handle.addClass("close");
-                    handle.next().animate({height:215});
+                    handle.next().animate({height:210}).addClass('toggle-up-1');
                 }
             },
             addToChart:function(obj){
@@ -327,7 +331,19 @@ function (template) {
                       _this.chartPage.createChart(_data);
                       _this.app.showLoading(false,_this.$(".cstats"));
                       _.each(_this.chart_data,function(val,key){
-                          _this.$(".col2 ."+key).html(_this.app.addCommas(val));
+                          var av = (parseInt(val)/parseInt(_this.chart_data.sentCount)) * 100;
+                          if(av > 0){
+                            av =av.toFixed(2); 
+                          }
+                          if(key=="sentCount"){
+                              _this.$(".col2 ."+key).html(_this.app.addCommas(val));
+                          }else{
+                              _this.$(".col2 ."+key).html(_this.app.addCommas(val));
+                              _this.$(".col2 ."+key+"-p").html(_this.app.addCommas(av)+"%");
+                            
+                              
+                          }
+                          
                       });
                       
                        var campaigns_name = $.map(_this.$(".checkedadded"),function(el){
@@ -382,7 +398,9 @@ function (template) {
                     }
                     if(toDate){
                         this.toDate = toDate.format("MM-DD-YYYY");
-                    }   
+                    }  else {
+                        this.toDate = fromDate.format("MM-DD-YYYY");
+                    }
                     this.getAllCampaigns(this.$(".filter-camp li.active").attr("last"));
                     if(parseInt(this.$(".filter-camp li.active").attr("last"))){
                          this.$('input.checkpanel').iCheck('check');

@@ -39,45 +39,50 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
 
                     this.$el.html(this.template());
                     this.app = this.options.app;
+                    this.loadCampaignData = this.options.loadCampaignData;
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 init: function () {
-
-                    this.showFrame();
-                    this.initCheckbox();
-                    this.loadPrevTemplates();
-                    /*Check and Uncheck of Checkbox*/
-                    this.$('.show-original').on('ifChecked', _.bind(function (event) {
-                        this.setiFrameSrc();
-                    }, this));
-                    this.$('.show-original').on('ifUnchecked', _.bind(function (event) {
-                        this.setiFrameSrc();
-                    }, this));
-                    this.$el.parents('.modal').find('#dialog-title .dialog-title').removeAttr('data-original-title')
-                    /* Chosen Plugin dropdown*/
-                    this.$("#campaign-prev-select").chosen();
-
-                    // IFrame Loaded Successfully 
-                    this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="display: inline-block;left: 0.1%;position: relative;top: 0;z-index: 111;"></div>');
-                    if(typeof(this.options.prevFlag)!=="undefined"){
-                        this.$('#temp-camp-previewbar').delay(600).slideDown(500);
+                    if(this.loadCampaignData){
+                        this.loadCampaign();
                     }
-                    this.$("#email-template-iframe").load(_.bind(function () {
-                        this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();                        
-                    }, this));
-                    
-                    //this.loadTemplates();
-                    if (this.options.prevFlag === 'C')
-                        this.loadContact();
-                    if (this.options.isText && this.options.isText == "Y") {
-                        this.$("#choose_soruce").hide();
-                        this.$(".messagebox").show();
-                        this.$(".selection-boxes").css({"width": "347px", "height": "35px"})
+                    else{
+                        this.showFrame();
+                        this.initCheckbox();
+                        this.loadPrevTemplates();
+                        /*Check and Uncheck of Checkbox*/
+                        this.$('.show-original').on('ifChecked', _.bind(function (event) {
+                            this.setiFrameSrc();
+                        }, this));
+                        this.$('.show-original').on('ifUnchecked', _.bind(function (event) {
+                            this.setiFrameSrc();
+                        }, this));
+                        this.$el.parents('.modal').find('#dialog-title .dialog-title').removeAttr('data-original-title')
+                        /* Chosen Plugin dropdown*/
+                        this.$("#campaign-prev-select").chosen();
 
-                    }
-                    else {
-                        this.$(".messagebox").hide();
-                        this.$("#choose_soruce").show();
+                        // IFrame Loaded Successfully 
+                        this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="display: inline-block;left: 0.1%;position: relative;top: 0;z-index: 111;"></div>');
+                        if(typeof(this.options.prevFlag)!=="undefined"){
+                            this.$('#temp-camp-previewbar').delay(600).slideDown(500);
+                        }
+                        this.$("#email-template-iframe").load(_.bind(function () {
+                            this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();                        
+                        }, this));
+
+                        //this.loadTemplates();
+                        if (this.options.prevFlag === 'C')
+                            this.loadContact();
+                        if (this.options.isText && this.options.isText == "Y") {
+                            this.$("#choose_soruce").hide();
+                            this.$(".messagebox").show();
+                            this.$(".selection-boxes").css({"width": "347px", "height": "35px"})
+
+                        }
+                        else {
+                            this.$(".messagebox").hide();
+                            this.$("#choose_soruce").show();
+                        }
                     }
                     //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 },
@@ -270,6 +275,14 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     this.$('#contact-name-prev').hide();
                     this.subNum = null;
                     this.setiFrameSrc();
+                }, loadCampaign: function() {
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.options.tempNum + "&type=basic";                   
+                    jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {                        	
+                        var camp_json = jQuery.parseJSON(xhr.responseText);
+                        this.options.isText = camp_json.isTextOnly;
+                        this.loadCampaignData = false;
+                        this.init();
+                    }, this));
                 }
             });
 

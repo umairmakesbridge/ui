@@ -1,4 +1,4 @@
-define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart'],
+define(['text!reports/html/campaign_pie_chart.html'],
         function (template) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
@@ -393,7 +393,7 @@ define(['text!reports/html/campaign_pie_chart.html', 'highcharts', 'export-chart
                         async: true,
                         cache: false,
                         error: function(){
-                            alert('session expired');
+                            console.log('some thing wrong with json or url');
                         },
                         success: function(json1){
                             try{

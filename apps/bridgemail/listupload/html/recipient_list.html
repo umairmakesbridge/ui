@@ -9,6 +9,15 @@
                        style="margin:0px!important;">
                     </a>
                 </div>
+                <% if(this.model.get('isShared')=== 'Y' || this.parents.status === 'F'){ %>
+                      <div class="list_shared shared-camp showtooltip" title="Click to view my shared lists"><a class="icon shared"></a></div>
+                 <%  } %>
+                  <% if(this.parents.status === 'SS') { %>
+                        <div class="list_sharedwith showtooltip" title="This list is shared with you"><a class="icon sharedwith"></a></div>
+                    <%  } %>   
+                  <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId!==this.model.get('userId')){ %>
+                     <div class="sub_accountobj showtooltip" title="This list is created by subaccount '<%=this.model.get('userId') %>'"><a class="icon subaccount"></a></div>
+                    <%  } %>  
               <%}%>
                 <!-- percent_stats  -->
             </h3>
@@ -24,6 +33,7 @@
         </div>
     </div>
 </td>
+
 <td width="90px" style="opacity:<%=this.getOpacity()%>">
     <div>
         <div class="subscribers ">
@@ -31,13 +41,30 @@
         </div> 
 
 
+
+
+            </div>
+            </td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em>Creation Date</em>
+                        <% var date = moment(this.app.decodeHTML(this.model.get('creationDate')), 'YYYY-M-D H:m') %>
+                        <% dateFormat = date.format("DD MMM, YYYY"); %>
+                        <%- dateFormat  %></span></strong>
+        </div>
+        
            <%if (this.model.get('isSupressList')=="true" || this.model.get('isBounceSupressList')== "true"){%>
                   
                 <%}else{%>
-                <div class="slide-btns two s-clr3" style="width:;">
+                <div class="slide-btns <% if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {print('three s-clr4')} else {print('two s-clr3')} %>">
 
                     <span  class="icon setting"></span>
                     <div>
+                        <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
+                             <a class="icon share-camp share clr3" ><span>Share</span></a>
+                        <% } %>
+                        
                         <a class="icon edit edit-list clr2" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Edit</span></a>
 
                         <a class="icon delete delete-list clr1" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Delete</span></a>
@@ -48,7 +75,5 @@
              
 
 
-
-
-            </div>
-            </td>
+    </div>
+</td>

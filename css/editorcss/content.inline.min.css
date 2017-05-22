@@ -652,8 +652,8 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
 
 }
 .mce-highlight-div .topHandlers{
-    top : -25px;
-}
+    top : -25px !important;
+} 
 .topHandlers_wrap{
     font-size: 1px;
     height: 0;
@@ -1550,6 +1550,26 @@ ul.linkresults li:hover { background:#dcf3fe; }
 	z-index: 9999;
 }
 
+.overlay p {
+    background: url("../../img/loading.gif") no-repeat scroll center top transparent;
+    font-weight: bold;
+    height: 20px;
+    font-family: 'PT Sans', sans-serif;
+    font-size:11px;
+    left: 50%;
+    margin: -45px 0 0 -50px;
+    padding: 60px 0 0;
+    position: absolute;
+    text-align: center;
+    color:#fff;
+    top: 40%;
+    width: 100px;
+}
+.global-save-overlay p {
+    width: 220px;
+    left:40%;
+}
+
 .csHaveData .overlay { position:absolute;  background: none repeat scroll 0 0 rgba(47, 63, 74, 0.5);}
 .csHaveData .overlay .image-info {
     box-shadow: none;
@@ -1936,10 +1956,10 @@ div.textcontent ol{
 .dcRulesDialog .btn-group + .btn-group{
     margin-left: 0px;
 }
-.mainContentHtmlGrand > .sortable > li.csDynamicData.hover .block_controls {    
-    padding-right:75px;
+.csDynamicData.hover .block_controls {    
+    padding-right:101px;
 }
-.mainContentHtmlGrand > .sortable > li.csDynamicData td.tab-header{
+.csDynamicData td.tab-header{
     background: #e9eff3;
     position: relative;
     padding-bottom: 0px;
@@ -2226,4 +2246,37 @@ i.icon{
 
 .COLRESIZEABLE tr td:last-child{
     border-right: none;
+}
+.myImage{
+    margin-bottom: 3px;
+}
+
+.error-dc{
+    border : 2px solid #FB8080 !important;
+}
+
+.MEEFORMLIGHTBOX.MEEFORMCONTAINER {
+    position: absolute;
+    top: 102px;
+    left: 15px;
+    height: 70px;
+    outline: 2px dashed rgb(148, 207, 30);
+    z-index: 9999;
+    background: rgb(128, 192, 0) none repeat scroll 0% 0%;
+    text-align: center;
+    padding: 60px 50px;
+    color: #fff;
+    font-size: 18px;
+    font-family: Helvetica ,Arial, sans-serif;
+    line-height: 32px;
+}
+.MEEFORMLIGHTBOX.MEEFORMCONTAINER span{
+    position: relative;
+    top: 22px;
+
+}
+.dropHighlighter{
+  background:#80C000 !important;
+  box-shadow:0 0 5px rgba(0, 0, 0, 0.5)  !important;
+  height:10px !important;
 }

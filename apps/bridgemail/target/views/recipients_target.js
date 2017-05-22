@@ -5,8 +5,8 @@
  * Description: Single Link view to display on main page.
  * Dependency: LINK HTML, SContacts
  */
-define(['text!target/html/recipients_target.html', "target/copytarget"],
-function (template,copytargetPage) {
+define(['text!target/html/recipients_target.html', "target/copytarget", 'common/shareObject'],
+function (template,copytargetPage, shareCommonPage) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',
@@ -20,7 +20,9 @@ function (template,copytargetPage) {
                 "click .preview":"previewTarget",
                 "click .row-move":"addRowToCol2",
                 "click .row-remove":"removeRowToCol2",
-                "click .stop-target":"stopTargetDialog"
+                "click .stop-target":"stopTargetDialog",
+                "click .share-camp":'shareTarget',
+                "click .target_shared":'sharedTargets'
                    
             },
             initialize: function () {
@@ -123,7 +125,7 @@ function (template,copytargetPage) {
                         }
                     }else{
                         isEditable = false;
-                    }
+                    }                    
                     //console.log(isEditable);
                     var t_id = target_id?target_id:"";
                     var dialog_title = target_id ? "Edit Target" : "";
@@ -192,7 +194,7 @@ function (template,copytargetPage) {
                previewTarget:function(ev){
                       if(this.options.type == "autobots_listing"){
                         if(this.options.editable == true){
-                            var target_id = ev;
+                            var target_id = this.model.get("filterNumber.encode");
                         }else{
                             var target_id = $(ev.target).data('id');
                         }      
@@ -342,7 +344,7 @@ function (template,copytargetPage) {
             },
             stopTarget: function(){
                 var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + this.app.get('bms_token');
-                this.app.showLoading("Stoping target...", this.$el.parents(".ws-content.active"), {fixed: 'fixed'});
+                this.app.showLoading("Stopping target...", this.$el.parents(".ws-content.active"), {fixed: 'fixed'});
                 $.post(URL, {type: 'stop', filterNumber: this.model.get('filterNumber.encode')})
                 .done(_.bind(function (data) {
                     this.app.showLoading(false, this.$el.parents(".ws-content.active"));
@@ -369,6 +371,35 @@ function (template,copytargetPage) {
                 if (this.parent.createTargetChart) {
                     this.parent.createTargetChart();
                 }
+            },
+            shareTarget: function(){
+                 var dialog = this.app.showDialog({title: "Share Target",
+                    css: {"width": "750px", "margin-left": "-375px"},
+                    bodyCss: {"min-height": "350px"},
+                    headerIcon: 'sharecamp',
+                    buttons: {saveBtn: {text: 'Share Target',btnicon:'shareicon'}}
+                });                                
+                var mPage = new shareCommonPage({parent: this.parent, obj_model: this.model, app: this.app, dialog: dialog,itemNum:4});
+                dialog.getBody().append(mPage.$el);                
+                dialog.saveCallBack(_.bind(mPage.shareObject, mPage));
+                var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New dialog
+                this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.shareObject,mPage); // New Dialog
+            },            
+            sharedTargets: function(){
+                var targets_obj = this.parent;
+                targets_obj.status = "F";
+                targets_obj.total_fetch = 0;
+                targets_obj.searchTxt = '';
+                targets_obj.$el.find('#lists-search').val('');
+                targets_obj.$el.find('#clearsearch').hide();
+                targets_obj.type = 'sharedTarget';
+                targets_obj.$el.find('.stattype').parent().removeClass('active');
+                targets_obj.$el.find(".sortoption_expand").find('.spntext').html("My Shared");
+                targets_obj.$el.find('.myshare').parent().addClass('active');
+                targets_obj.loadTargets();
             }
                 
         });    

@@ -11,6 +11,11 @@
                    <li class="showtooltip" data-original-title="Click to view draft"><a search="P" class="stattype pending" tabindex="-1">Pending</a></li>
                    <li class="showtooltip" data-original-title="Click to view scheduled"><a search="S" class="stattype scheduled" tabindex="-1">Scheduled</a></li>
                    <li class="showtooltip" data-original-title="Click to view draft"><a search="D" class="stattype draft" tabindex="-1">Draft</a></li>
+                   <% if(this.app.get("user").accountType=="O"){ %>
+                   <li class="showtooltip" title="Click to  view shared campaign"><a search="SS" class="stattype share" tabindex="-1">Shared</a></li>
+                   <% } else { %>
+                   <li class="showtooltip" title="Click to view my shared campaign"><a search="F" class="stattype myshare" tabindex="-1">My Shared</a></li>
+                   <% } %>
                 </ul>
             </div>
           <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>

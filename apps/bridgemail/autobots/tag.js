@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target'],
-        function(template, recipientView, tags, ModelRecipient) {
+define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target','autobots/wait_row'],
+        function(template, recipientView, tags, ModelRecipient, WaitView) {
             'use strict';
             return Backbone.View.extend({
                 className: "botpanel",
@@ -54,6 +54,10 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                         }
                         that.mainTags = "";
                         that.render();
+                        //wait added
+                        if(that.waitView){
+                            that.waitView.setData(autobot);
+                        }
                         that.options.app.showLoading(false, that.$el);
                         //console.log(that.model);
 
@@ -122,6 +126,9 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     if (this.status != "D") {
                         this.disableAllEvents();
                     }
+                    //wait added
+                    this.waitView = new WaitView({page:this,editable:this.editable }); 
+                    this.$(".delayRow").html(this.waitView.$el);
 
                 }, changeSetting: function(ev) {
                     var selected = $(ev.target).val();
@@ -253,6 +260,12 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                 saveTagAutobot: function(close,isPlayClicked) {
                      var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                      var btnPlay = this.modal.find('.modal-footer').find('.btn-play');
+                     //wait added
+                     var delayData = this.waitView.getPostData();
+                     if(delayData.isError!==""){
+                        setTimeout(_.bind(function(){this.app.showAlert(delayData.isError, $("body"), {fixed: true})},this),10);
+                        return false;
+                     }
                      if(!isPlayClicked)
                         btnSave.addClass('saving');
                    
@@ -282,6 +295,10 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     var recurPeriod = this.model.get('recurTimes');//this.$el.find("#txtRecurPeriod").val();
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll, actionTags: this.tags};
+                    var delayData = this.waitView.getPostData();
+                    if(delayData.isError==""){
+                        $.extend( post_data, delayData.post );
+                    }
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                     var result = false;
                     var that = this;

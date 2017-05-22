@@ -307,8 +307,10 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                             return false;
                         }
                     }else {
-                        if(typeof obj !== "boolean"){
+                        if(obj && typeof obj !== "boolean"){
                             button = $.getObj(obj, "a");
+                        }else if(!obj && !this.meeView.autoSaveFlag){
+                            obj = false;
                         }
                     }
 
@@ -671,7 +673,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     var _html = this.editorContent !== "" ? $('<div/>').html(this.editorContentMEE).text().replace(/&line;/g, "") : "";
                     var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 31); // Scroll Top Minus from Body
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, margin: {top: 236, left: 0}, _el: this.$("#mee_editor"), parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: topaccordian, html: '', saveClick: _.bind(this.saveTemplateCall, this), fromDialog: true, reattachEvents: _.bind(this.ReattachEvents, this), saveBtnText: 'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});
+                        var MEEPage = new MEE({app: this.app, isTemplate:true,margin: {top: 236, left: 0}, _el: this.$("#mee_editor"), parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: topaccordian, html: '', saveClick: _.bind(this.saveTemplateCall, this), fromDialog: true, reattachEvents: _.bind(this.ReattachEvents, this), saveBtnText: 'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});
                         this.$("#mee_editor").setChange(this);
                         this.meeView = MEEPage;
                         this.setMEE(_html);

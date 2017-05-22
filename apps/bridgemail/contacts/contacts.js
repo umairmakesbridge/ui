@@ -17,12 +17,18 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                     this.app.addSpinner(this.$el);
                     this.fetchContacts();               
                 },
-                "click .searchbtn":function(){
+                "click .searchbtn":function(e){
                         this.searchTxt=this.$("#contact-search").val();
                         if(this.searchTxt){
-                            this.search()
+                            this.search("click")
                         }
                     },
+                "paste .search-control":function(e){
+                        this.searchTxt=this.$("#contact-search").val();
+                        if(this.searchTxt){
+                            this.search("paste")
+                        }
+                },
                 "click .toggletags":function(event){
                         this.$('.status_tgl a').removeClass('active');
                         $(event.currentTarget).addClass('active');
@@ -67,6 +73,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                this.filterBy = 'CK';
                this.contacts_request = null;
                this.sortBy = '';
+               this.enqueueAjaxReq = [];
                 this.isSearchTag = false;
                this.render();
             },
@@ -149,6 +156,20 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
               $(window).scroll(_.bind(this.liveLoading,this));
               $(window).resize(_.bind(this.liveLoading,this));
               this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
+            },
+            closeCallBack:function(){
+                if(this.enqueueAjaxReq.length > 0){
+                        for(var i=0;i < this.enqueueAjaxReq.length ; i++){
+                                        
+                                        if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
+                                            this.enqueueAjaxReq[i].abort();
+                                        }
+                                       //this.app.enqueueAjaxReq[i].abort();
+                                       var poped = this.enqueueAjaxReq.splice(i,1);
+                                       //console.log('Remaining enqueue obj',app.enqueueAjaxReq);
+                                    }   
+                }
+                      
             },
             checkSalesforce:function(){
                 this.app.getData({
@@ -321,6 +342,10 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                             
                     }
                 });
+                // add into enqueueAjax Request
+                if(this.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
+                    this.enqueueAjaxReq.push(this.contacts_request); 
+                }      
             },
              /**
             * Fetch next records on scroll and resize.
@@ -373,27 +398,18 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
             search:function(o){
                 if(this.searchTxt.indexOf("Tag: ")>-1 || this.isSearchTag == true){                    
                     this.timeout = setTimeout(_.bind(function() {
-                                    clearTimeout(this.timeout);
-                                    //this.$('#contact-search').val('Tag: '+this.tagTxt);
-                                    //var tagName = this.tagTxt.split(": ");
-                                    //if(tagName.length > 1 && tagName[1] != ""){
-                                     //   this.searchByTag(tagName[1]);
-                                    //}else if(tagName.length == 1 && tagName[0] != ""){
-                                     //   this.searchByTag(tagName[0]);
-                                    //}else{
-                                    if(this.tagTxt === ""){
-                                        this.$('#contact-search').val('');
-                                        this.$('#clearsearch').click();
-                                    }else{
-                                        this.searchByTag(this.tagTxt);
-                                    }
-                                        
-                                    //}
-                                    
-                                }, this), 500);
+                        clearTimeout(this.timeout);
+
+                        if(this.tagTxt === ""){
+                            this.$('#contact-search').val('');
+                            this.$('#clearsearch').click();
+                        }else{
+                            this.searchByTag(this.tagTxt);
+                        }                
+                    }, this), 500);
                     this.$('#contact-search').keydown(_.bind(function() {
-                                clearTimeout(this.timeout);
-                            }, this));
+                       clearTimeout(this.timeout);
+                    }, this));
                  }
                  else{
                      var keyCode = this.keyvalid(o);
@@ -539,19 +555,23 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                }
             },
             keyvalid:function(event){
-                        var regex = new RegExp("^[A-Z,a-z,0-9]+$");
-                        var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                         if (event.keyCode == 8 || event.keyCode == 32 || event.keyCode == 37 || event.keyCode == 39) {
-                            return true;
-                        }
-                        else if (regex.test(str)) {
-                            return true;
-                        }
-                       else{
-                            return false;
-                        }
-                        event.preventDefault();
-                   },
+                if(event && (event=="click" || event=="paste")){
+                    return true;
+                }else {
+                    var regex = new RegExp("^[A-Z,a-z,0-9]+$");
+                    var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                     if (event.keyCode == 8 || event.keyCode == 32 || event.keyCode == 37 || event.keyCode == 39) {
+                        return true;
+                    }
+                    else if (regex.test(str)) {
+                        return true;
+                    }
+                   else{
+                        return false;
+                    }
+                }
+                event.preventDefault();
+            },
             addSubscriber: function(){
                  var _this = this;
                    $("body #new_autobot").remove();

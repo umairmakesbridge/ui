@@ -18,7 +18,11 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                "click .refresh_btn":function(){
                    this.loadLists();
                    this.app.addSpinner(this.$el);
-               }
+               },
+               "click .sortoption_expand": "toggleSortOption",
+               "click .sortoption_sort": "toggleSortedOption",
+               "click .stattype": "fitlerLists",
+               "click .status_tgl a": "toggleOrderOption"
             },
             initialize: function () {
                 this.template = _.template(template);				
@@ -28,8 +32,12 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                 this.total_fetch  = 0;
                 this.total = 0;
                 this.offsetLength = 0;
+                this.type = "batches";
                 this.listChecksum = '';
                 this.addContactView =null;
+                this.orderBy = 'name';
+                this.order = 'asc';
+                this.status = "A";
                 this.render();
             },
             render:function (search) {
@@ -62,9 +70,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                    var that = this;
                   _data['offset'] = this.offset;
                     if(this.searchText){
-                      _data['searchText'] = this.searchText;
-                       //that.showSearchFilters(this.searchText);
-                       
+                      _data['searchText'] = this.searchText;                       
                     }
                     
                  var that = this; // internal access
@@ -72,7 +78,11 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                  this.$el.find('#list_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No lists founds!</div><div class='loading-list' style='margin-top:50px'></div></td></tr>");
                  this.app.showLoading("&nbsp;",this.$el.find('#list_grid tbody').find('.loading-list'));
                 
-                _data['type'] = 'batches';
+                _data['type'] = this.type;//'batches';
+                if(this.orderBy){
+                    _data['orderBy'] = this.orderBy;
+                }
+                _data['order'] = this.order;
                 this.objRecipients = new recipientsCollection();
                 
                 this.request = this.objRecipients.fetch({data:_data,success:function(data){
@@ -85,7 +95,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                       if(that.searchText){
                        that.showSearchFilters(that.searchText,that.objRecipients.total);
                       }else{
-                          that.$("#total_lists span").html("List(s) found");
+                          that.$("#total_lists span").html(that.totalLabel());
                           that.$("#total_lists .badge").html(that.objRecipients.total);
                       }
                      
@@ -158,12 +168,12 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                    this.searchText = '';
                    this.searchTags = '';
                    this.total_fetch = 0; 
-                   this.$("#total_lists span").html("List(s) found");
+                   this.$("#total_lists span").html(this.totalLabel());
                    this.loadLists();
            },
            showSearchFilters:function(text,total){
               this.$("#total_lists .badge").html(total);
-               this.$("#total_lists span").html(" List(s) found for <b>\""+text+"\"</b> ");
+               this.$("#total_lists span").html(this.totalLabel() + " for <b>\""+text+"\"</b> ");
            },
            
             createList : function(){
@@ -247,7 +257,82 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                 this.$el.parents('body').find('#contacts-caddDialog .closebtn-2,#contacts-caddDialog .closebtn').click(_.bind(function(){
                     this.$el.parents('body').find('.sch-overlay').remove();
                 },this))
+            },
+            toggleSortOption: function (ev) {
+                $(this.el).find("#template_search_menu").slideToggle();
+                ev.stopPropagation();
+            },
+            toggleSortedOption: function (ev) {
+                $(this.el).find("#template_search_menu_sort").slideToggle();
+                ev.stopPropagation();
+            },
+            toggleOrderOption : function(ev){
+                var target = ev.currentTarget;
+                this.$el.find('.status_tgl a').removeClass('active');
+                
+                if($(target).hasClass('dsctag')){
+                   this.order = 'desc'; 
+                   this.$el.find('.status_tgl a.asctag').addClass('active');
+                }else if($(target).hasClass('asctag')){
+                    this.order = 'asc'; 
+                    this.$el.find('.status_tgl a.dsctag').addClass('active');
+                }
+                this.loadLists();
+            },
+            fitlerLists: function(obj){                               
+                var target = $.getObj(obj, "a");
+                var prevStatus = this.searchTxt;
+                if (target.parent().hasClass('active')) {
+                    return false;
+                }
+                
+                var html = target.clone();
+                                              
+                
+                var type = target.attr("search");
+                if(type=="name" || type=="date"){
+                    $(this.el).find(".sortoption_sort").find('.spntext').html(html.html()); 
+                }else{
+                    this.$('.stattype').parent().removeClass('active');
+                    target.parent().addClass('active');
+                    $(this.el).find(".sortoption_expand").find('.spntext').html(html.html()); 
+                }
+                if (!type){
+                    type = this.$('#template_search_menu li.active a').attr('search');
+                }
+                this.status = type;                                    
+                if (this.status !== prevStatus) {
+                    this.$el.find('#lists-search').val('');
+                    this.$el.find('#clearsearch').hide();
+                     if (type == "SS") {
+                         this.type = 'sharedList';                                
+                     } else if (type == "F") { 
+                         this.type = 'myAllSharedList';                                
+                     } else if (type == "name"){
+                         this.orderBy = 'name';
+                     } else if(type == "date"){
+                         this.orderBy = 'date';
+                     }
+                     else {
+                         this.type = 'batches';                                
+                     }
+                    this.searchTxt = '';
+                }
+                this.total_fetch = 0;
+                this.loadLists();
+            
+        },
+        totalLabel: function(){
+            var label = "List(s) found";
+            if (this.status == "SS") {
+               label = 'Shared list(s) found';                                
+            } else if (this.status == "F") { 
+                label= 'My shared list(s) found';                                
+            } else {
+                label = 'List(s) found';                                
             }
+            return label;
+        }
             
         });    
 });

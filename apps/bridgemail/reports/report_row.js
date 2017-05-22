@@ -23,7 +23,7 @@
                     this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'rpt-campaign', iconClass: 'rpblue-campagin'},
                         landingpages: {label: 'Landing Pages', colorClass: 'rpt-landingpages', iconClass: 'rpblue-lp'},
                         nurturetracks: {label: 'Nurture Tracks', colorClass: 'rpt-nt', iconClass: 'rpblue-nt'},
-                        autobots: {label: 'Autobots', colorClass: '.rpt-autobots', iconClass: 'rpblue-autobots'},
+                        autobots: {label: 'Autobots', colorClass: 'rpt-autobots', iconClass: 'rpblue-autobots'},
                         tags: {label: 'Tags', colorClass: 'rpt-tag', iconClass: 'rpblue-tag'},
                         webforms: {label: 'Signup Forms', colorClass: 'rpt-webforms', iconClass: 'rpblue-webforms'},
                         targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'},
@@ -245,6 +245,7 @@
                     }
                 },
                 removeReport: function () {
+                    this.$el.prev(".report-placeholder").remove();
                     this.$el.remove();
                     this.sub.removeMode(this.orderNo);
                     this.loadReport = false;
@@ -458,7 +459,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }                                                
                         var _grid = this.$(".rpt-block-area");                                                
@@ -696,7 +698,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }                                                
                         var _grid = this.$(".rpt-block-area");                        
@@ -731,6 +734,9 @@
                         }
                                               
                        if(total_pages_selected!==0){
+                            if(this.camp_states_call){
+                                this.camp_states_call.abort();
+                            }
                             this.app.showLoading("Creating Chart...", this.$(".cstats"));          
                             this.showChart();                        
                             this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
@@ -738,7 +744,7 @@
                                 twitterCount: 0, unSubscribeCount: 0};
                             var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
                             var post_data = {campNums: _campaigns}
-                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                            this.camp_states_call = $.post(URL, post_data).done(_.bind(function (data) {
                                 var camp_json = jQuery.parseJSON(data);
                                 _.each(camp_json.campaigns[0], function (val) {
                                     this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
@@ -971,7 +977,8 @@
                     if (this.modelArray.length) {
                          if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }    
                         var _grid = this.$(".rpt-block-area");                           
@@ -1225,7 +1232,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }    
                        var _grid = this.$(".rpt-block-area");                       
@@ -1427,7 +1435,8 @@
                     if (this.modelArray.length) {                        
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        }          
                         this.$(".nt-name").html(this.modelArray[0].get("name"));
@@ -1536,9 +1545,12 @@
                             this.chart_data = {bounceCount: 0, clickCount: 0, conversionCount: 0, facebookCount: 0, googlePlusCount: 0, linkedInCount: 0
                                 , openCount: 0, pageViewsCount: 0, pendingCount: 0, pinterestCount: 0, sentCount: 0, supressCount: 0,
                                 twitterCount: 0, unSubscribeCount: 0};
+                            if(this.nt_states_call){
+                                this.nt_states_call.abort();
+                            }
                             var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
                             var post_data = {campNums: _campaigns}
-                            this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                            this.nt_states_call = $.post(URL, post_data).done(_.bind(function (data) {
                                 var camp_json = jQuery.parseJSON(data);
                                 _.each(camp_json.campaigns[0], function (val) {
                                     this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
@@ -1792,7 +1804,7 @@
                         this.app.showLoading(false, this.$el);
                         var _json = jQuery.parseJSON(data);
                         _.each(_json.tagList[0], function (val) {
-                            if (tags_array.indexOf(val[0].tag) > -1) {
+                            if (tags_array.indexOf(this.app.decodeHTML(val[0].tag)) > -1) {
                                 this.modelArray.push(new Backbone.Model(val[0]));
                             }
                         }, this);                                                             
@@ -1832,7 +1844,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                            this.sub.$(".report-empty").hide();
-                           this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                           this.sub.insertReportRow(this);
+                           //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                            this.doDraw = false;
                        } 
                         var _grid = this.$(".rpt-block-area");
@@ -1974,7 +1987,7 @@
                         _.each(this.modelArray, function (val, index) {
 
                             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagStatDayByDay";
-                            var tag = val.get("tag");
+                            var tag = this.app.decodeHTML(val.get("tag"));
                             var post_data = {tag: tag, toDate: this.toDate, fromDate: this.fromDate}
                             val.set("cno",index);
                             var tagRow = new reportBlock({model: val, page: this, type: "tag","expandedView":true});                            
@@ -2237,7 +2250,8 @@
                     if (this.modelArray.length) {   
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         }
                         var _type = this.modelArray[0].id?this.modelArray[0].id:this.modelArray[0];
@@ -2750,7 +2764,7 @@
                     var returnVal = valObj;
                     if(this.subType=="tag"){
                        _.each(this._json.tagList[0], function (val) {
-                            if (valObj.tag==val[0].tag) {
+                            if (valObj.tag==this.app.decodeHTML(val[0].tag)) {
                                 returnVal = {tag:valObj.tag,subCount:val[0].subCount};
                                 return;
                             }
@@ -2857,7 +2871,8 @@
                 createFunnel: function() {
                     if(this.doDraw){
                         this.sub.$(".report-empty").hide();
-                        this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                        this.sub.insertReportRow(this);
+                        //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                         this.doDraw = false;
                     }
                     
@@ -2964,6 +2979,11 @@
                             }, this);                        
                             this.createWorkflow(true);
                         }, this));
+                        
+                        // add into enqueueAjax Request
+                        if(this.sub.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
+                            this.app.enqueueAjaxReq.push(this.states_call); 
+                        }
                     }
                     else{
                         this.createWorkflow(true);
@@ -3000,7 +3020,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         } 
                         
@@ -3113,7 +3134,8 @@
                     if (this.modelArray.length) {
                         if(this.doDraw){
                             this.sub.$(".report-empty").hide();
-                            this.$el.insertBefore(this.sub.$(".add-panel"));                            
+                            this.sub.insertReportRow(this);
+                            //this.$el.insertBefore(this.sub.$(".add-panel"));                            
                             this.doDraw = false;
                         } 
                         

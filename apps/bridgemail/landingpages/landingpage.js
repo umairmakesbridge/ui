@@ -23,6 +23,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                     this.app = this.options.app;
                     this.template = _.template(template);                    
                     this.saveAllCall = 0;
+                    this.isNewLP = this.options.params.isNewLP;
                     this.editable = true;
                     this.status = "D";
                     this.editor_change = false;
@@ -246,9 +247,14 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         current_ws.find(".tagscont").show();
                     }
                 },
-                formLandingPage:function(id){
-                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');                    
-                    $.post(URL, { type: "form",formId:id,pageId:this.page_id })
+                formLandingPage:function(id,isSignupLightbox){
+                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');   
+                    
+                    var data = { type: "form",formId:id,pageId:this.page_id, isLightboxAttach : "N" };
+                    if(isSignupLightbox){
+                       data =  { type: "form",formId:id,pageId:this.page_id, isLightboxAttach : "Y"};
+                    }
+                    $.post(URL, data)
                       .done(_.bind(function(data) {                              
                           var _json = jQuery.parseJSON(data);                              
                           if(_json[0]!=="err"){                                                               
@@ -460,10 +466,12 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:60,html:''
                             ,saveClick:_.bind(this.saveLandingPage,this),saveBtnText:'Save HTML',landingPage:true,formAttach:_.bind(this.formLandingPage,this),formid:this.formid,pageid:this.page_id,
-                            changeTemplateClick: _.bind(this.templatesDialog,this), previewCallback: _.bind(this.previewCallback, this)});                                    
+                            changeTemplateClick: _.bind(this.templatesDialog,this), previewCallback: _.bind(this.previewCallback, this),isNewLP:this.isNewLP});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
+                        
                         this.meeView = MEEPage;
+                        this.meeView.isSignupLightbox = false;
                         this.initScroll();
                     },this));  
                 },
@@ -504,7 +512,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                                      if(!this.meeView.autoSaveFlag){
                                         this.app.showMessge("Landing page saved successfully!");
                                         }
-                                         
+                                        this.meeView._$el.find('.MenuCallPreview > a').removeClass('disabled-btn'); 
                                         this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
                                         
                                  }
@@ -687,7 +695,10 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                    this.saveImage(obj.imgencode);
                 },
                 previewCallback: function(){
-                    this.previewPage(true);
+                    if(!this.meeView._$el.find('.MenuCallPreview > a').hasClass('disabled-btn')){
+                        this.previewPage(true);
+                    }
+                    
                 }
             });
         });

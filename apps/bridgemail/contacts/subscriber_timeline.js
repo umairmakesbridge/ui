@@ -23,6 +23,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                 this.app = this.sub.app;
                 this.timeLineRequest = new Timeline(); 
                 this.timeLineRequestFuture = new TimelineFuture(); 
+                this.sub.enqueueAjaxReq.push(this.timeLineRequestFuture);
                 this.monthYear = "";
                 this.filter = {filterType:"",filerEvents:""};
                 this.render();                 
@@ -148,6 +149,9 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                             
                     }
                 });
+                // add into enqueueAjax Request
+                this.sub.enqueueAjaxReq.push(this._request); 
+               
             },
             validEvent: function(model){
                 var isValid = true;
@@ -220,6 +224,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                             
                     }
                 });
+                this.sub.enqueueAjaxReq.push(this._request);
             }
              /**
              * Fetching current server time.

@@ -22,7 +22,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         this.headBadge();
                     },
                     "click .stattype": function (obj) {
-                        var camp_obj = this;                        
+                        var camp_obj = this;
                         var target = $.getObj(obj, "a");
                         var prevStatus = this.searchTxt;
                         if (target.parent().hasClass('active')) {
@@ -62,7 +62,13 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         if (this.status !== prevStatus) {
                             this.$el.find('#list-search').val('');
                             this.$el.find('#clearsearch').hide();
-                            this.type = 'listNormalCampaigns';
+                            if (type == "SS") {
+                                this.type = 'normalSharedCampaigns';                                
+                            } else if (type == "F") { 
+                                this.type = 'myAllSharedCampaign';                                
+                            } else {
+                                this.type = 'listNormalCampaigns';                                
+                            }
                             this.searchTxt = '';
                         }
                         //var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL;				
@@ -80,27 +86,26 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                     },
                     "click .cstats .closebtn": "closeChart",
                     "click .sortoption_expand": "toggleSortOption",
-             },
+                },
                 createCampaignDialog: function ()
                 {
-                    
                     this.app.showAddDialog(
                     {
-                      app: this.app,
-                      heading : 'Create a new Campaign',
-                      buttnText: 'Create',
-                      bgClass :'campaign-tilt',
-                      plHolderText : 'Enter campaign name here',
-                      emptyError : 'Campaign name can\'t be empty',
-                      createURL : '/pms/io/campaign/saveCampaignData/',
-                      fieldKey : "campName",
-                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
-                      saveCallBack :  _.bind(this.createCampaign,this) // Calling same view for refresh headBadge
+                        app: this.app,
+                        heading: 'Create a new Campaign',
+                        buttnText: 'Create',
+                        bgClass: 'campaign-tilt',
+                        plHolderText: 'Enter campaign name here',
+                        emptyError: 'Campaign name can\'t be empty',
+                        createURL: '/pms/io/campaign/saveCampaignData/',
+                        fieldKey: "campName",
+                        postData: {type: 'create', BMS_REQ_TK: this.app.get('bms_token')},
+                        saveCallBack: _.bind(this.createCampaign, this) // Calling same view for refresh headBadge
                     });
                 },
                 findCampaigns: function (obj)
                 {
-                    var camp_obj = this;                    
+                    var camp_obj = this;
                     var target = $.getObj(obj, "a");
                     var prevStatus = this.status;
                     if (target.html() != 'Date Range')
@@ -112,20 +117,19 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                                 target = $(obj.currentTarget);
                                 target.parents('ul').find('li.font-bold').removeClass('font-bold');
                                 target.addClass('font-bold');
-                            }
-                            else {
+                            } else {
                                 target = $.getObj(obj, "span");
                                 target.parents('ul').find('span.font-bold').removeClass('font-bold');
                                 target.parent().addClass('font-bold');
                                 target = target.parent();
                             }
-                                if(!target.hasClass('clickable_badge')){
-                                  target.removeClass('font-bold');
-                                  return false;
-                              }
+                            if (!target.hasClass('clickable_badge')) {
+                                target.removeClass('font-bold');
+                                return false;
+                            }
                             camp_obj.$el.find('.stattype').parent().removeClass('active');
-                            
-                            switch (target.attr("search"))
+                            var searchTarget = target.attr("search");
+                            switch (searchTarget)
                             {
                                 case "C":
                                     camp_obj.$el.find('.sent').parent().addClass('active');
@@ -143,8 +147,16 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                                     camp_obj.$el.find('.draft').parent().addClass('active');
                                     camp_obj.$el.find(".sortoption_expand").find('.spntext').html(camp_obj.$el.find('.draft').text());
                                     break;
+                                case "SS":
+                                    camp_obj.$el.find('.share').parent().addClass('active');
+                                    camp_obj.$el.find(".sortoption_expand").find('.spntext').html(camp_obj.$el.find('.share').text());
+                                    break;
+                                case "F":
+                                    camp_obj.$el.find('.myshare').parent().addClass('active');
+                                    camp_obj.$el.find(".sortoption_expand").find('.spntext').html(camp_obj.$el.find('.myshare').text());
+                                    break;    
                             }
-                          
+
                         }
                         var dateStart = target.attr('dateStart');
                         var dateEnd = target.attr('dateEnd');
@@ -153,8 +165,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         {
                             schDates[0] = $.datepicker.formatDate('m/d/yy', Date.parse(dateStart));
                             schDates[1] = $.datepicker.formatDate('m/d/yy', Date.parse(dateEnd));
-                        }
-                        else
+                        } else
                         {
                             schDates = this.$('#daterange').val().split(' - ');
                             if (schDates != '' && schDates.length == 1)
@@ -186,8 +197,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         if (schDates != '') {
                             this.toDate = toDate;
                             this.fromDate = fromDate;
-                        }
-                        else {
+                        } else {
                             this.toDate = toDate;
                             this.fromDate = fromDate;
 
@@ -195,11 +205,19 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         if (this.status !== prevStatus) {
                             this.$el.find('#list-search').val('');
                             this.$el.find('#clearsearch').hide();
-                            this.type = 'listNormalCampaigns';
+                            if (type == "SS") {
+                                this.type = 'normalSharedCampaigns';                                
+                            } else if (type == "F") { 
+                                this.type = 'myAllSharedCampaign';                                
+                            } else {
+                                this.type = 'listNormalCampaigns';                                
+                            }
+                            this.searchTxt = '';
                             this.searchTxt = '';
                         }
+
                         this.total_fetch = 0;
-                       
+
                         this.getallcampaigns();
                     }
                 },
@@ -210,7 +228,6 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                 },
                 render: function ()
                 {
-                    this.$el.html(this.template({}));
                     this.app = this.options.app;
                     this.$campaginLoading = this.$(".loadmore");
                     this.offset = 0;
@@ -224,6 +241,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                     this.taglinkVal = false;
                     this.timeout = null;
                     this.total_Count = null;
+                    this.$el.html(this.template({}));
                     var camp_obj = this;
                     camp_obj.getallcampaigns();
                     camp_obj.$el.find('div#campslistsearch').searchcontrol({
@@ -262,15 +280,18 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                     this.tagDiv.hide();
                 },
                 getallcampaigns: function (fcount, filterObj) {
-                    this.$el.find("#template_search_menu").hide();
+                    this.$el.find("#template_search_menu").hide();                    
+                    var remove_cache = false;
                     if (!fcount) {
                         this.offset = 0;
+                        remove_cache = true;
+                        this.campaignCollection = new campaignCollection();
                         this.app.showLoading("Loading Campaigns...", this.$("#target-camps"));
                         this.$el.find('#camps_grid tbody').html('');
                         this.$(".notfound").remove();
 
-                    }
-                    else {
+                    } else {
+                        remove_cache = false;
                         this.offset = parseInt(this.offset) + this.offsetLength;
                         this.$("#camps_grid tbody").append('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more campaigns.</p></div></td></tr>');
                     }
@@ -299,7 +320,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                     _data['status'] = this.status;
                     _data['bucket'] = 20;
 
-                    this.campaigns_request = this.campaignCollection.fetch({data: _data,
+                    this.campaigns_request = this.campaignCollection.fetch({data: _data,remove: true,
                         success: _.bind(function (data1, collection) {
                             // Display items
                             this.$("#camps_grid tbody").find('.loading-campagins').remove();
@@ -320,9 +341,10 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                             _.each(data1.models, _.bind(function (model) {
                                 var rowView = new campaignRowView({model: model, sub: this});
                                 this.$el.find('#camps_grid tbody').append(rowView.el);
-                               // rowView.showEllipsis();
+                                // rowView.showEllipsis();
                             }, this));
                             /*-----Remove loading------*/
+                            this.app.isAutoLoadWorkspace = false;
                             this.app.removeSpinner(this.$el);
                             /*------------*/
                             if (this.total_fetch < parseInt(collection.totalCount)) {
@@ -363,8 +385,7 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                             _this.chartPage.$el.css({"width": "280px", "height": "280px"});
                             _this.loadChart(camp_id);
                         });
-                    }
-                    else {
+                    } else {
                         this.loadChart(camp_id);
                     }
 
@@ -428,7 +449,14 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                     this.type = '';
                     this.searchTxt = txt;
                     this.total_fetch = 0;
-                    this.type = 'searchNormalCampaigns';
+                    if (this.status == "SS") {                        
+                        this.type = 'searchSharedCampaigns';
+                    } 
+                    else if(this.status == "F") {
+                        this.type = 'searchSharedCampaigns';
+                    }else{
+                        this.type = 'searchNormalCampaigns';
+                    }
                     if (this.taglinkVal) {
 
                         this.getallcampaigns();
@@ -462,7 +490,14 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
 
                     this.searchTxt = '';
                     this.total_fetch = 0;
-                    this.type = 'listNormalCampaigns';
+                    if (this.status == "SS") {                        
+                        this.type = 'normalSharedCampaigns';
+                    } 
+                    else if(this.status == "F") {
+                        this.type = 'myAllSharedCampaign';
+                    }else{
+                        this.type = 'listNormalCampaigns';
+                    }
                     this.getallcampaigns();
                 },
                 showTotalCount: function (count) {
@@ -477,27 +512,30 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                         statusType = 'Pending';
                     else if (this.status === 'S')
                         statusType = 'Scheduled';
+                    else if (this.status === 'SS')
+                        statusType = 'Shared';
+                    else if (this.status === 'F')
+                        statusType = 'My Shared';
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong><b>' + statusType + ' </b>';
 
                     if (this.searchTxt) {
                         this.$("#total_templates").html(text_count + _text + " found containing text '<b>" + this.app.encodeHTML(this.searchTxt) + "</b>'");
-                    }
-                    else {
+                    } else {
                         this.$("#total_templates").html(text_count + _text);
                     }
 
                 },
-                addCampaign:function(){
-                   var active_ws = this.$el.parents(".ws-content");                
-                   active_ws.find("#addnew_action").attr("data-original-title", "Add Campaign").click(_.bind(this.createCampaignDialog, this));
-                   active_ws.find("div.create_new").click(_.bind(this.createCampaignDialog, this));  
+                addCampaign: function () {
+                    var active_ws = this.$el.parents(".ws-content");
+                    active_ws.find("#addnew_action").attr("data-original-title", "Add Campaign").click(_.bind(this.createCampaignDialog, this));
+                    active_ws.find("div.create_new").click(_.bind(this.createCampaignDialog, this));
                 },
                 headBadge: function () {
                     var active_ws = this.$el.parents(".ws-content");
-                    var header_title = active_ws.find(".camp_header .edited  h2");                                     
+                    var header_title = active_ws.find(".camp_header .edited  h2");
                     if (active_ws.find('ul.c-current-status').length) {
                         var header_title = active_ws.find(".camp_header .edited");
-                        header_title.find('ul').remove();                        
+                        header_title.find('ul').remove();
                         var progress = $("<ul class='c-current-status'><li style='margin-left:5px;'><a><img src='" + this.options.app.get("path") + "img/greenloader.gif'></a></li></ul>");
                         header_title.append(progress)
                     }
@@ -510,38 +548,42 @@ define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns',
                                 }
                                 var header_title = active_ws.find(".camp_header .edited");
                                 header_title.find('div.workspace-field').remove();
-                                
+
                                 var sentClass = (parseInt(allStats['sent']) > 0) ? "showtooltip showhand" : "defaulthand";
-                                var pendingClass =  (parseInt(allStats['pending']) > 0) ? "showtooltip showhand" : "defaulthand";
-                                var scheduledClass = (parseInt(allStats['scheduled']) > 0) ? "showtooltip showhand" : "defaulthand" ;
-                                var draftClass = (parseInt(allStats['draft']) > 0) ? "showtooltip showhand" : "defaulthand" ;
+                                var pendingClass = (parseInt(allStats['pending']) > 0) ? "showtooltip showhand" : "defaulthand";
+                                var scheduledClass = (parseInt(allStats['scheduled']) > 0) ? "showtooltip showhand" : "defaulthand";
+                                var draftClass = (parseInt(allStats['draft']) > 0) ? "showtooltip showhand" : "defaulthand";
+                                var sharedClass = (parseInt(allStats['shared']) > 0) ? "showtooltip showhand" : "defaulthand";
                                 var stats = '<ul class="c-current-status">';
-                                
-                                stats += '<li search="C" class="'+sentClass+' '+ this.app.getClickableClass(allStats['sent']) +'" data-original-title="Click to view sent campaigns"><span class="badge pclr18  stattype topbadges" tabindex="-1" search="C" >' + allStats['sent'] + '</span>Sent</li>';
-                                stats += '<li search="P" class="'+pendingClass+' '+ this.app.getClickableClass(allStats['pending']) +'" data-original-title="Click to view pending campaigns"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" >' + allStats['pending'] + '</span>Pending</li>';
-                                stats += '<li search="S" class="'+scheduledClass+' '+ this.app.getClickableClass(allStats['scheduled']) +'" data-original-title="Click to view scheduled campaigns"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" >' + allStats['scheduled'] + '</span>Scheduled</li>';
-                                stats += '<li search="D" class="'+draftClass+' '+ this.app.getClickableClass(allStats['draft']) +'" data-original-title="Click to view draft campaigns"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" >' + allStats['draft'] + '</span>Draft</li>';
+
+                                stats += '<li search="C" class="' + sentClass + ' ' + this.app.getClickableClass(allStats['sent']) + '" data-original-title="Click to view sent campaigns"><span class="badge pclr18  stattype topbadges" tabindex="-1" search="C" >' + allStats['sent'] + '</span>Sent</li>';
+                                stats += '<li search="P" class="' + pendingClass + ' ' + this.app.getClickableClass(allStats['pending']) + '" data-original-title="Click to view pending campaigns"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" >' + allStats['pending'] + '</span>Pending</li>';
+                                stats += '<li search="S" class="' + scheduledClass + ' ' + this.app.getClickableClass(allStats['scheduled']) + '" data-original-title="Click to view scheduled campaigns"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" >' + allStats['scheduled'] + '</span>Scheduled</li>';
+                                stats += '<li search="D" class="' + draftClass + ' ' + this.app.getClickableClass(allStats['draft']) + '" data-original-title="Click to view draft campaigns"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" >' + allStats['draft'] + '</span>Draft</li>';
+                                if (this.app.get("user").accountType == "O") {
+                                    stats += '<li search="SS" class="' + sharedClass + ' ' + this.app.getClickableClass(allStats['shared']) + '" title="Click to view all shared campaigns"><span class="badge pclr9 showtooltip stattype topbadges" tabindex="-1" search="D" >' + allStats['shared'] + '</span>Shared</li>';
+                                }
                                 stats += '</ul>';
                                 header_title.find(".c-current-status").remove();
                                 header_title.append(stats);
-                                
+
                                 $(".c-current-status li").click(_.bind(this.findCampaigns, this));
                                 header_title.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                                 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
                             }, this));
                 },
-                toggleSortOption: function (ev) {               
+                toggleSortOption: function (ev) {
                     $(this.el).find("#template_search_menu").slideToggle();
                     ev.stopPropagation();
                 },
-                createCampaign:function(fieldText, _json){                                 
-                    if(this.headBadge){
+                createCampaign: function (fieldText, _json) {
+                    if (this.headBadge) {
                         this.headBadge();
-                       this.total_fetch = 0;
-                       this.getallcampaigns();
+                        this.total_fetch = 0;
+                        this.getallcampaigns();
                     }
-                    this.app.mainContainer.createCampaign(fieldText, _json,this);
-               }
+                    this.app.mainContainer.createCampaign(fieldText, _json, this);
+                }
 
             });
         });

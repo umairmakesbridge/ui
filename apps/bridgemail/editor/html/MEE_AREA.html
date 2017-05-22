@@ -10,8 +10,11 @@
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js" class="system"></script>    
     <script type="text/javascript" src="../../shared/libs/jquery-ui.js?bust=1.444" class="system"></script>
     <script type="text/javascript" src="../../shared/libs/jquery.colresizable.js?bust=1.444" class="system"></script>
+    <script type="text/javascript" src="../../shared/libs/jquery.nearest.js?bust=1.444" class="system"></script>
     <script  type="text/javascript" class="system">
+           var meeObj = null;
            function setDragging(object,mee){
+            meeObj = mee;   
             $(object).on('dragstart', function(e) {
                 var crt = this.parentNode.cloneNode(true);
                 var parentcsHaveData = $(e.currentTarget).parent().parent()
@@ -29,16 +32,16 @@
                 }
                 mee.dragElementIframe =$(e.currentTarget).parent().parent();
                 mee.startDragging(e);            
-                top.$("#top_scroll_page,#bottom_scroll_page").show();
+                parent.$("#top_scroll_page,#bottom_scroll_page").show();
                 e.stopPropagation();    
             }).on('dragend', function(event) {                
                 event.preventDefault();         
                 $("#drag-class").remove();
-                top.$("#top_scroll_page,#bottom_scroll_page").hide();
-                top.$(".file-border").removeClass("file-border");
+                parent.$("#top_scroll_page,#bottom_scroll_page").hide();
+                parent.$(".file-border").removeClass("file-border");
                 mee.stopDragging();                
             });            
-           }                      
+           }
     </script>        
     <!--[if gte mso 15]>
     <style type="text/css">
@@ -68,7 +71,7 @@
             .responsive_video { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
             .responsive_video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
             .pright{text-align: right;}
-            .underline{text-decoration: underline !important;}
+            .underline{text-decoration: underline;}
             p{margin: 0;}
             .img_social{display: inline !important; border: 0 none; height: auto; line-height: 100%; outline: none;}
 
@@ -76,6 +79,7 @@
             body{ width:auto; }
             .box_wrap { width:440px;  }
             table[class="table600"] { width: 450px !important; height: auto!important; text-align: center !important; }
+            table[class="full_width"] {height: auto ! important; text-align: initial ! important; width: 100% ! important; clear: both; }
             table[class="fullCenter"] {height: auto!important; text-align: center!important; width: 100% ! important; clear: both; }
             table[class="fullwidth"] {height: auto!important; width: 100%; clear: both; }
             table[class="fullCenterLC"] {text-align: left!important; width: 100%; clear: both; }
@@ -96,11 +100,16 @@
             td[class="td_height_auto"] {height: auto!important;}
             img[class="img"]{ width: 100%!important; height: auto!important;}
             .pright{text-align: center;}
+            table[class="full_min_width"] {height: auto!important; text-align: center!important; width: 100% !important; clear: both; min-width:100% ! important; }
+            table[class="width_expand_30px"] { width: 30px !important; height: auto!important;}
+            table[class="border_width_expand_30px"] { border-width: 30px ! important;}
+            .padding_20px{ padding-right: 20px; padding-left: 20px; }
             }
             @media only screen and (max-width: 479px){
             body{width:auto;}
             .box_wrap { width:290px;  }
             table[class="table600"] { width: 280px !important; height: auto!important; text-align: center !important; }
+            table[class="full_width"] {height: auto ! important; text-align: initial ! important; width: 100% ! important; clear: both; }
             table[class="fullCenter"] {height: auto!important; text-align: center!important; width: 100% ! important; clear: both; }
             table[class="fullwidth"] {height: auto!important; width: 100%; clear: both; }
             table[class="fullCenterLC"] {text-align: left!important; width: 100%; clear: both; }
@@ -121,6 +130,10 @@
             td[class="td_height_auto"] {height: auto!important;}
             img[class="img"]{ width: 100%!important; height: auto!important;}
             .pright{text-align: center;}
+            table[class="full_min_width"] {height: auto!important; text-align: center!important; width: 100% !important; clear: both; min-width:100% ! important; }
+            table[class="width_expand_30px"] { width: 30px !important; height: auto!important;}
+            table[class="border_width_expand_30px"] { border-width: 30px ! important;}
+            .padding_20px{ padding-right: 20px; padding-left: 20px; }
             }
             iframe[name="google_conversion_frame"] {
                     display:none;

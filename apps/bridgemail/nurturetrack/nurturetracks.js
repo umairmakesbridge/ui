@@ -82,12 +82,14 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                         var header_part = $('<div id="nt-headbages"><ul class="c-current-status">\n\
                         <li class="bmstrackcount showtooltip '+ this.app.getClickableClass(response.systemCount) +'" data-original-title="Click to view system templates"><a><span class="badge pclr2">'+response.systemCount+'</span>Templates</a></li>\n\
                         <li class="usertrackcount showtooltip '+ this.app.getClickableClass(response.userCount) +'"  data-original-title="Click to view user templates"><a class="font-bold"><span class="badge pclr18">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
+                        <li class="killcount showtooltip '+ this.app.getClickableClass(response.killCount) +'"  data-original-title="Click to view killed tracks"><a><span class="badge pclr12">'+response.killCount+'</span>Killed</a></li>\n\
                         </ul>\n\
                         <div class="savedmsg playingcount showtooltip '+ this.app.getClickableClass(response.playCount) +'" style="margin:2px 0 0;cursor:pointer" data-original-title="Click to view play tracks"> <span class="playingicon "></span> '+response.playCount+' Playing </div></div>');
                         var $header_part = $(header_part);                        
                         $header_part.find(".bmstrackcount").click(_.bind(this.showBmsTracks,this));
                         $header_part.find(".usertrackcount").click(_.bind(this.showUserTracks,this));
                         $header_part.find(".playingcount").click(_.bind(this.showPlayTracks,this));
+                        $header_part.find(".killcount").click(_.bind(this.showKillTracks,this));
                         /*$header_part.find(".savedmsg").click(_.bind(function(){                            
                                 this.$(".bms_tracks").hide();
                                 this.$(".user_tracks").fadeIn();                                
@@ -583,18 +585,20 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                  this.isPlaying = false;
                 target.find("a").addClass("font-bold");
                 this.ws_header.find(".bmstrackcount a").removeClass("font-bold");
+                this.ws_header.find(".killcount a").removeClass("font-bold");
                 this.ws_header.find('div.playingcount').removeClass("font-bold");
              //  this.ws_header.find(".bmstrackcount").show();
              //  this.ws_header.find(".usertrackcount").hide();
             },
-            showPlayTracks: function(){
+            showPlayTracks: function(objFromRow){
                  this.isPlaying = true;
                 var target = this.$el.parents('.ws-content.active').find('.camp_header .edited div .playingcount');
                 if(!target.hasClass('clickable_badge')){return false;}
                 this.$(".bms_tracks").hide();
                 this.$(".user_tracks").fadeIn();
-                target.addClass("font-bold");
-                
+                if(!objFromRow){
+                 target.addClass("font-bold");
+                }
                 if(this.$el.find('div.nt_listing').css('display')==='block'){
                     var playing = this.$el.find('#nurturetrack_grid tr h3 .pclr18');
                             if(playing.parents('tr').length){
@@ -610,7 +614,62 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                 }
                 this.ws_header.find(".bmstrackcount a").removeClass("font-bold");
                 this.ws_header.find(".usertrackcount a").removeClass("font-bold");
+                this.ws_header.find(".killcount a").removeClass("font-bold");
                 
+            },
+            showPauseTracks: function(objFromRow){
+                 this.isPlaying = false;
+                //var target = this.$el.parents('.ws-content.active').find('.camp_header .edited div .playingcount');
+                //if(!target.hasClass('clickable_badge')){return false;}
+                this.$(".bms_tracks").hide();
+                this.$(".user_tracks").fadeIn();
+                
+                if(this.$el.find('div.nt_listing').css('display')==='block'){
+                    var playing = this.$el.find('#nurturetrack_grid tr h3 .pclr1');
+                            if(playing.parents('tr').length){
+                            this.$el.find('#nurturetrack_grid tr').hide();
+                            playing.parents('tr').fadeIn();
+                        }
+                }else{
+                     var playing = this.$el.find('.thumbnails li div.temp-thumbnail a.pclr1');
+                      if(playing.parents('li').length){
+                            this.$el.find('.thumbnails li').hide();
+                            playing.parents('li').fadeIn();
+                        }
+                }
+                this.ws_header.find(".bmstrackcount a").removeClass("font-bold");
+                this.ws_header.find(".usertrackcount a").removeClass("font-bold");
+                this.ws_header.find(".killcount a").removeClass("font-bold");
+                
+            },
+            showKillTracks: function(objFromRow){
+                 this.isPlaying = false;
+                 
+                var target = this.$el.parents('.ws-content.active').find('.camp_header .edited div .killcount');
+                if(!target.hasClass('clickable_badge')){return false;}
+                this.$(".bms_tracks").hide();
+                this.$(".user_tracks").fadeIn();
+                if(!objFromRow){
+                    target.find('a').addClass("font-bold");
+                 }
+                
+                
+                if(this.$el.find('div.nt_listing').css('display')==='block'){
+                    var killing = this.$el.find('#nurturetrack_grid tr h3 .pclr12');
+                            if(killing.parents('tr').length){
+                            this.$el.find('#nurturetrack_grid tr').hide();
+                            killing.parents('tr').fadeIn();
+                        }
+                }else{
+                     var killing = this.$el.find('.thumbnails li div.temp-thumbnail a.pclr12');
+                      if(killing.parents('li').length){
+                            this.$el.find('.thumbnails li').hide();
+                            killing.parents('li').fadeIn();
+                        }
+                }
+                this.ws_header.find(".bmstrackcount a").removeClass("font-bold");
+                this.ws_header.find(".usertrackcount a").removeClass("font-bold");
+                this.ws_header.find('div.playingcount').removeClass("font-bold");
             },
             toggleView:function(e){
                 var obj = $.getObj(e,"button");

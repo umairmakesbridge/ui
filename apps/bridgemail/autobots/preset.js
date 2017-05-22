@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
-        function (template) {
+define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-mergefields'],
+        function (template, WaitView) {
             'use strict';
             return Backbone.View.extend({
                 className: "botpanel",
@@ -37,6 +37,7 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
                     var url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + this.options.botId;
                     jQuery.getJSON(url, function (tsv, state, xhr) {
                         var autobot = jQuery.parseJSON(xhr.responseText);
+                        that.autobotData = autobot;
                         if (that.options.app.checkError(autobot)) {
                             return false;
                         }
@@ -67,8 +68,9 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
 
                         }
                         that.mainTags = "";
-                        that.render();
-
+                        that.render();                        
+                        that.options.app.showLoading(false, that.$el);
+                        
 
                     });
                 },
@@ -109,7 +111,9 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
                     this.checkMailMessages();
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-
+                    
+                   
+                    
                     this.options.app.showLoading(false, this.$el);
                 },
                 showButtons: function () {
@@ -174,7 +178,7 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
 
 
 
-                        that.$(".iCheck-helper").on('click', function (ev) {
+                        that.$(".pre_row .iCheck-helper").on('click', function (ev) {
                             var checkDiv = $(this).parents('.checkpanelinput');
                             if (checkDiv.hasClass('checked')) {
                                 checkDiv.parents('.filt_cont').find("select").prop("disabled", false).trigger("chosen:updated");
@@ -183,8 +187,9 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
                                 checkDiv.parents('.filt_cont').find("select").prop("disabled", 'disabled').trigger("chosen:updated");
                                 checkDiv.parents('.filt_cont').find("input[type=text]").prop("disabled", 'disabled')
                             }
-                        })
-
+                        });
+                                               
+                        
                         that.$(".iCheck-helper").hover(
                                 function () {
                                     if ($(this).parents(".checkpanelinput").hasClass('checked'))
@@ -196,7 +201,15 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
                                         return;
                                     $(this).parents(".checkpanelinput").css({"background-color": "#CCDCE5"});
                                 }
-                        )
+                        );
+                        //wait added
+                        that.waitView = new WaitView({page:that,editable:that.editable }); 
+                        that.$(".delayRow").html(that.waitView.$el);
+                        
+                        //wait added
+                        if(that.waitView){
+                            that.waitView.setData(that.autobotData);
+                        }
 
                     });
 
@@ -515,6 +528,12 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
                 saveTagAutobot: function (close, isPlayClicked) {
                     var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                    //wait added
+                     var delayData = this.waitView.getPostData();
+                     if(delayData.isError!==""){
+                        setTimeout(_.bind(function(){this.app.showAlert(delayData.isError, $("body"), {fixed: true})},this),10);
+                        return false;
+                     }
                     if (!isPlayClicked)
                         btnSave.addClass('saving');
                     if (this.status != "D") {
@@ -526,6 +545,11 @@ define(['text!autobots/html/preset.html', 'bms-tags','bms-mergefields'],
                     }
                     var that = this;
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update"};
+                     //wait added
+                    var delayData = this.waitView.getPostData();
+                    if(delayData.isError==""){
+                        $.extend( post_data, delayData.post );
+                    }
                     if (this.botType == "SR") {
                         var alertemails = this.$("#alertemails").val();
                         var alertmessages = this.$("#alertmessage").val();

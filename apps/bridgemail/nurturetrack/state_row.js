@@ -53,14 +53,13 @@ function (template) {
               var count=$.getObj(obj,"div");           
                //this.parent.parent.closeReport();
                 var camp_id=this.model.get('campNum.encode');
-                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.messageNo,trackName:this.parent.model.get("name"),trackId:this.parent.model.get("trackId.encode"),clickType:count.attr("click-type")},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});                
+                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.messageNo,trackName:this.parent.model.get("name"),trackId:this.parent.model.get("trackId.encode"),messageId:this.model.get('messageId.encode'),clickType:count.attr("click-type")},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});                
             },
             reportShow:function(){                                
                 var camp_id=this.model.get('campNum.encode');
-                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.messageNo,trackName:this.parent.model.get("name"),trackId:this.parent.model.get("trackId.encode")},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});                
+                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.messageNo,trackName:this.parent.model.get("name"),trackId:this.parent.model.get("trackId.encode"),messageId:this.model.get('messageId.encode')},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});                
             },
-            previewMessage:function(){
-                
+            previewMessage:function(){                
                 var camp_id = this.model.get("campNum.encode");                                		
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;

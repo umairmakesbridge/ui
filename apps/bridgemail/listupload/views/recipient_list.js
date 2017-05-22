@@ -4,8 +4,8 @@
  * Description: List Grid.
  * Dependency: List Grid Single Grid View
  */
-define(['text!listupload/html/recipient_list.html','text!listupload/html/editlist.html'],
-function (template,elistTemplate) {
+define(['text!listupload/html/recipient_list.html','text!listupload/html/editlist.html', 'common/shareObject'],
+function (template, elistTemplate, shareCommonPage) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',
@@ -13,7 +13,9 @@ function (template,elistTemplate) {
                 'click .percent':'showPercentDiv',
                 'click .edit-list':'editList',
                 'click .delete-list':'deleteList',
-                'click .pageview':'showPageViews'
+                'click .pageview':'showPageViews',
+                'click .share-camp':'shareList',
+                'click .list_shared':'sharedLists'
             },
             initialize: function () {
                 this.app = this.options.app;
@@ -197,7 +199,33 @@ function (template,elistTemplate) {
                 }else{
                     return '1';
                 }
-           }
+           },
+            shareList: function(){                    
+                var dialog = this.app.showDialog({title: "Share List",
+                    css: {"width": "750px", "margin-left": "-375px"},
+                    bodyCss: {"min-height": "350px"},
+                    headerIcon: 'sharecamp',
+                    buttons: {saveBtn: {text: 'Share List',btnicon:'shareicon'}}
+                });
+                this.app.showLoading("Loading...", dialog.getBody());                  
+                var mPage = new shareCommonPage({parent: this.parents, obj_model: this.model, app: this.app, dialog: dialog,itemNum:1});
+                dialog.getBody().html(mPage.$el);
+                dialog.saveCallBack(_.bind(mPage.shareObject, mPage));
+
+            },            
+            sharedLists: function(){
+                var lists_obj = this.parents;
+                lists_obj.status = "F";
+                lists_obj.total_fetch = 0;
+                lists_obj.searchTxt = '';
+                lists_obj.$el.find('#lists-search').val('');
+                lists_obj.$el.find('#clearsearch').hide();
+                lists_obj.type = 'myAllSharedList';
+                lists_obj.$el.find('.stattype').parent().removeClass('active');
+                lists_obj.$el.find(".sortoption_expand").find('.spntext').html("My Shared");
+                lists_obj.$el.find('.myshare').parent().addClass('active');
+                lists_obj.loadLists();
+            }
                 
         });    
 });

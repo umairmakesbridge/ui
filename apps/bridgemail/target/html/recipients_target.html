@@ -7,7 +7,9 @@
             <div class="percent_stats">
                 <a class="icon percent showtooltip" data-original-title="Click to see responsiveness of this target"  data-filter="<%=this.model.get('filterNumber.encode')%>" 
                    style="margin:0px!important;"></a>
-            </div>    
+            </div>               
+           
+           
           <!-- percent_stats  -->
       </h3>
     </div>
@@ -85,7 +87,7 @@
 <td width="75%" style="overflow:visible!important;">
     <div>
     <div class="name-type">
-        <h3><%if(this.model.get('status') =="P" || this.model.get('status') =="S"){%> 
+        <h3><%if(this.model.get('status') =="P" || this.model.get('status') =="S" || this.app.get("user").userId!==this.model.get('userId')){ %> 
                 <a  class=" showtooltip preview" data-original-title="Click to preview" data-id="<%=this.model.get('filterNumber.encode')%>"><%=name%></a>
             <%}else{%>
                 <a  class=" showtooltip edit-target" data-original-title="Click to edit" data-id="<%=this.model.get('filterNumber.encode')%>"><%=name%></a>
@@ -94,6 +96,15 @@
                 <a class="icon percent showtooltip" data-original-title="Click to see responsiveness of this target"  data-filter="<%=this.model.get('filterNumber.encode')%>" 
                    style="margin:0px!important;"></a>
             </div>    
+             <% if(this.model.get('isShared')=== 'Y' || this.parent.status === 'F'){ %>
+                    <div class="target_shared shared-camp showtooltip" title="Click to view my shared targets"><a class="icon shared"></a></div>
+            <%  } %>
+            <% if(this.parent.status === 'SS') { %>
+                  <div class="target_sharedwith target_shared showtooltip" title="This target is shared with you"><a class="icon sharedwith"></a></div>
+            <%  } %>   
+            <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId!==this.model.get('userId')){ %>
+               <div class="sub_accountobj showtooltip" title="This target is created by subaccount '<%=this.model.get('userId') %>'"><a class="icon subaccount"></a></div>
+           <%  } %>  
           <!-- percent_stats  -->
       </h3>
     </div>
@@ -145,7 +156,7 @@
                         <%}%>
                                                          
               </div>  <%if(this.model.get('status') =="D"){%> 
-              <div class="slide-btns <% if(this.showUseButton || this.showRemoveButton){print('five s-clr6')}else{print('four s-clr5')} %>" style="width:;">
+              <div class="slide-btns <% if(this.showUseButton || this.showRemoveButton || (this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId'))){print('five s-clr6')}else{print('four s-clr5')} %>" style="width:;">
                         <span  class="icon setting"></span>
                         <div>
                                 <% if(this.showUseButton) {%>
@@ -154,9 +165,15 @@
                                 <% if(this.showRemoveButton) {%>
                                     <a class="icon remove clr5 row-remove" ><span>Remove</span></a>
                                 <% } %>  
-                                
+                                <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
+                                    <a class="icon share-camp share clr5" ><span>Share</span></a>
+                               <% } %>
                                 <a class="icon refresh clr4 " data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Run Count</span></a>
-                                <a class="icon edit edit-target clr3" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Edit</span></a>
+                                <% if(this.app.get("user").userId==this.model.get('userId')) { %>
+                                 <a class="icon edit edit-target clr3" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Edit</span></a>
+                                <% }  else { %>
+                                 <a class="icon preview preview-target clr3" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Preview</span></a>
+                                <% } %>
                                 <a class="icon copy copy-target clr2" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Copy</span></a>
                                 <% if(this.options.type != "autobots_listing") {%>
                                     <a class="icon delete delete-target clr1" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Delete</span></a>

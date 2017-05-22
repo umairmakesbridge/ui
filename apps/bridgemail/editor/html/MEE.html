@@ -95,25 +95,25 @@
                         <h4 style="margin-top:40px;">Rows</h4>
                         <ul class="b-blocks">
                             
-                            <li class="draggableControl ui-draggable" data-type="oneColumnContainer" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="oneColumnContainer" draggable="true">
                                 <i class="icon col1"></i>
                                 <a >
                                     <span class=" font_75">1 Item</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="twoColumnContainer" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="twoColumnContainer" draggable="true">
                                 <i class="icon col2"></i>
                                 <a >
                                     <span class=" font_75">2 Items</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="threeColumnContainer" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="threeColumnContainer" draggable="true">
                                 <i class="icon col3"></i>
                                 <a >
                                     <span class=" font_75">3 Items</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="fourColumnContainer" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="fourColumnContainer" draggable="true">
                                 <i class="icon col4"></i>
                                 <a >
                                     <span class=" font_75">4 Items</span>
@@ -130,38 +130,39 @@
                     <div class="clearfix first-accordian" data-element="items">
                         <h4 class="">Items</h4>
                         <ul class="b-blocks">
-                            <li class="draggableControl ui-draggable" data-type="text" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="text" draggable="true" data-trigger="manual">
                                 <i class="icon txt"></i>
                                 <a >
                                     <span class=" font_75">Text</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="image" draggable="true">
+                            
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="image" draggable="true" data-trigger="manual">
                                 <i class="icon imag"></i>
                                 <a >
                                     <span class=" font_75">Image</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="textWithImage" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="textWithImage" draggable="true" data-trigger="manual">
                                 <i class="icon txtimag"></i>
                                 <a >
                                     <span class=" font_75">Text + Image</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="imageWithText" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="imageWithText" draggable="true" data-trigger="manual">
                                 <i class="icon imagtxt"></i>
                                 <a >
                                     <span class=" font_75">Image + Text</span>
                                 </a>
                             </li>
                             <% if(options.landingPage) { %>
-                            <li class="draggableControl ui-draggable" data-type="signupForm" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="signupForm" draggable="true" >
                                 <i class="icon signupform"></i>
                                 <a>
                                     <span class=" font_75">SignUp Form</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="embedvideo" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="embedvideo" draggable="true">
                                 <i class="icon embedvideo"></i>
                                 <a>
                                     <span class=" font_75">Embed Video</span>
@@ -173,25 +174,25 @@
                      <div class="clearfix first-accordian" style="display: none;" data-element="spacers">
                         <h4 class="">Spacer</h4>
                         <ul class="b-blocks">
-                            <li class="draggableControl ui-draggable" data-type="spacer5" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="spacer5" draggable="true">
                                 <i class="icon spacer1"></i>
                                 <a >
                                     <span class=" font_75">Spacer 1</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="spacer10" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="spacer10" draggable="true">
                                 <i class="icon spacer2"></i>
                                 <a >
                                     <span class=" font_75">Spacer 2</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="spacer15" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="spacer15" draggable="true">
                                 <i class="icon spacer3"></i>
                                 <a >
                                     <span class=" font_75">Spacer 3</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="spacer20" draggable="true">
+                            <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="spacer20" draggable="true">
                                 <i class="icon spacer4"></i>
                                 <a >
                                     <span class=" font_75">Spacer 4</span>
@@ -241,11 +242,13 @@
                 </div>
             </div>
             <!--  accordian-content  -->
-           <% if(options.landingPage==false &&  options.otopage==false ){ %>     
+           <% if(options.landingPage==false &&  options.otopage==false ){ %>   
+           <% if(!options.isTemplate){ %> 
            <h3 class="DCH3" style="dispaly:none">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
                 Dynamic Content Blocks
             </h3>
+           
             <div class="scrollarea dynamicblock-accordian" style="dispaly:none">
                 <div class="accordian-content active DCCC">
                     <div class="accordianbar">
@@ -281,6 +284,7 @@
                     </div>
                 </div>
             </div>
+            <% } %>
             <%}%>
             
            <% if(options.landingPage==true){ %>      
@@ -312,7 +316,7 @@
                     </div>
                     <div class="clearfix formDroppable">                        
                         <ul class="b-blocks">
-                            <li class="draggableControl ui-draggable newblock" data-type="formBlock" data-isnew="true" draggable="true">
+                            <li class="draggableControl ui-draggable newblock" data-type="formBlock" data-islightbox="Y" data-isnew="true" draggable="true">
                                 <i class="icon plus"></i>
                                 <a >
                                     <span class=" font_75">Add New Form</span>
@@ -329,6 +333,7 @@
                     </div>
                 </div>
             </div>
+            
             <%}%>
             <!--  accordian-content  -->
             <h3>
@@ -363,6 +368,16 @@
                             <a  class="upload uploadFile">
                                 <i class="icon upload"></i>
                             </a>
+                            <div class="clearfix"></div>
+                            <ul class="b-blocks">
+                            <li class="draggableControl ui-draggable newblock" data-type="droppedUrlImage" data-isnew="true" draggable="true">
+                                <i class="icon plus"></i>
+                                <a >
+                                    <span class=" font_75">Add image from url</span>
+                                </a>
+                            </li>
+
+                        </ul>
                         </div>
                         <!--  accordianbar  -->
                         <div class="clearfix">
@@ -400,8 +415,9 @@
                         <select class="nosearch ddlBackgroundLayers ddlBackgroundColorLayers" data-placeholder="Select Parent Layer">
                             <option value=""></option>
                         </select>
+                        <div class="clearfix" id="backgroundColorWrap"></div>
                         <br class="clearfix"/> <br/>
-                        <div class="clearfix"></div>
+                        
                         <div class="minicolors minicolors-theme-default minicolors-position-bottom minicolors-position-left minicolors-inline" style="text-align:center;">
 
                             <div class="divColorPicker"></div>
@@ -436,13 +452,14 @@
             </h3>
             
             <div class="scrollarea images-accordion">
+                <div class="accordian-content ">
                 <div class="clearfix"  style="padding:5px;">
-                        <h4 class="" style="margin: 10px 0px 15px;">Parent Layers</h4>
+                        <h4 class="" style="">Parent Layers</h4>
                         <select class="nosearch ddlBackgroundLayers ddlBackgroundImgLayers" data-placeholder="Select Parent Layer">
                             <option value=""></option>
                         </select>
                         
-                        <div class="clearfix"></div>
+                        <div class="clearfix" id="backgroundImge"></div>
                         <div id="loadingbgimg" style="min-height: 90px;display:none;">
                             <img alt="" src="<%- options._app.get('path')%>img/recurring2.gif">
                             <h4>Loading...</h4>
@@ -521,7 +538,7 @@
                  
                   <div class="clearfix"></div>
                     </div>
-               
+            </div>
             </div>
             
             <!--  accordian-content  -->
@@ -530,7 +547,11 @@
             </h3>
             <div class="scrollarea border-accordion">
                 <div class="accordian-content active">
-                    <div class="clearfix">
+                    <h4 class="" >Parent Layers</h4>
+                        <select class="nosearch ddlBackgroundLayers ddlBackgroundBorderLayers" data-placeholder="Select Parent Layer">
+                            <option value=""></option>
+                        </select>
+                    <div class="clearfix" id="bordersWrap">
                         <h4 class="">Borders</h4>
                         <div style="padding:5px;">
 
@@ -724,8 +745,8 @@
             </li>
             <% } %>
             
-             <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>">
-                <a  class="btn-blue showtooltip" data-original-title="Click to preview" >
+             <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>" >
+                <a  class="btn-blue showtooltip <% if (options.isNewLP) { print('disabled-btn') } %>" data-original-title="Click to preview" >
                     <i class="icon preview"></i>
                     <!--<span>Preview</span>-->
                 </a>
@@ -736,12 +757,14 @@
                     <!--<span>Code</span>-->
                 </a>
             </li>
-            <% if (!options.otopage && !options.landingPage) { %>
+            <% if (!options.otopage && !options.landingPage && !options.isTemplate) { %>
+               
             <li class="MenuCallTextVersion" style="float:right">
                 <a  class="btn-green">
                     <i class="icon plaintext"></i><span>Text Version</span>
                 </a>
             </li>
+              
             <% if (options._app.dcItemsUsers.indexOf(options._app.get("user").userId)>-1 ) { %>
             <li class="MenuCallDCItems" style="float:right">
                 <a  class="btn-yellow">
@@ -774,7 +797,7 @@
  <!-- Image Style Toolbar -->
 <div id="imageToolbar" class="imageToolbar-menu">
     <ul>
-        <li title="Set Link" class="ImageToolbarLinkClass">
+        <li title="Set Link" class="ImageToolbarLinkClass showtooltip">
             <a >
                 <i class="mce-ico mce-i-link" style="margin-top: -5px;"></i>
             </a>
@@ -784,29 +807,40 @@
                 <i class="mce-ico mce-i-unlink" style="margin-top: -5px;"></i>
             </a>
         </li>
-        <li title="Left Align" class="ImageToolbarLeftAlignClass">
+        <li title="Left Align" class="ImageToolbarLeftAlignClass showtooltip">
             <a >
                 <img src="css/images/Image-align-left-icon.png" />
             </a>
         </li>
-        <li title="Center Align" class="ImageToolbarCenterAlignClass">
+        <li title="Center Align" class="ImageToolbarCenterAlignClass showtooltip">
             <a >
                 <img src="css/images/Image-align-center-icon.png" />
             </a>
         </li>
-        <li title="Right Align" class="ImageToolbarRightAlignClass">
+        <li title="Right Align" class="ImageToolbarRightAlignClass showtooltip">
             <a >
                 <img src="css/images/Image-align-right-icon.png" />
             </a>
         </li>
-        <li title="Set Title" class="ImageToolbarTitleSetClass">
+        <li title="Set Title" class="ImageToolbarTitleSetClass showtooltip">
             <a >
-                <img src="css/images/Adobe_Premiere_Pro_Title.png" />
+                <img src="css/images/image_title.png" />
+            </a>
+        </li>
+         <li title="Set alt text" class="ImageToolbarAltSetClass showtooltip">
+            <a >
+                <img src="css/images/brokenimage-icon.png" />
             </a>
         </li>
     </ul>
 </div>
             <!-- Image Style Toolbar -->
+            <div class="lightbox-setting-panel" style="right:-40px;">
+                <ul>
+                    <li class="deleteLg showtooltip" title="Delete lightbox"><a><i class="icon delete"></i></a></li>
+                    <li class="settingLg showtooltip" title="Edit lightbox settings"><a><i class="icon setting"></i></a></li>
+                </ul>
+            </div> 
     </div>
     <!--  tools  -->
 
@@ -943,7 +977,7 @@
                 <td class="tab-header">
 
                     <div class="overlay dcContentName" style="display:none;">            
-                        <div class="image-info" style="width:266px">                          
+                        <div class="image-info" style="width:267px">                          
                             <input type="text" value="" style="width:250px; margin-bottom:10px; dis" class="left tginput txtContentName" placeholder="Content Option Name">
                             <a class="btn-green left btnSaveContent"><span>Create Option</span><i class="icon save"></i></a>
                             <a class="btn-gray right btnCancelContent"><span>Cancel</span><i class="icon cross"></i></a>

@@ -49,7 +49,11 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                             colorName = "red";
                             $(this.el).attr('id', this.id).addClass('error');
                             break;
-
+                        case "SYNCH_PEER_E":
+                        case "SYNCH_E":
+                            colorName = "red";
+                            $(this.el).attr('id', this.id).addClass('error');
+                            break;
                     }
                     var img = "";
                       switch (this.model.get('eventType')) {
@@ -64,6 +68,39 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                             break;
                         case "CSV":
                              img = this.options.app.get("path")+"img/csvicon-"+colorName+".png";
+                            break;
+                        case "SYNCH_C":
+                            img = this.options.app.get("path")+"img/Salesforce_SYNC_completed.png";
+                             break;
+                        case "SYNCH_PEER":
+                             img = this.options.app.get("path")+"img/Salesforce_SYNC_Peer_in_Pogress.png";
+                             break;
+                        case "SYNCH_E":
+                             img = this.options.app.get("path")+"img/Salesforce_SYNC_Error.png";
+                             break;
+                        case "SYNCH_R": 
+                             img = this.options.app.get("path")+"img/Salesforce_SYNC_Reschedule.png";
+                             break;
+                        case "SYNCH_PEER_R":
+                             img = this.options.app.get("path")+"img/Salesforce_SYNC_Peer_Reschedule.png";
+                             break;
+                        case "SYNCH_PEER_E":
+                             img = this.options.app.get("path")+"img/Salesforce_SYNC_Peer_Error.png";
+                             break;
+                        case "SYNCH_PEER_C":
+                            img = this.options.app.get("path")+"img/Salesforce_SYNC_Peer_Completed.png";
+                            break;
+                        case "SYNCH_PEER_A":
+                            img = this.options.app.get("path")+"img/salesforce_SYNCH_PEER-_Activated.png";
+                            break;
+                        case "SYNCH_A_E":
+                            img = this.options.app.get("path")+"img/salesforce-_SYNCH_Import_Export_Activated.png"; 
+                            break;
+                        case "SYNCH_A_I":
+                            img = this.options.app.get("path")+"img/salesforce-_SYNCH_Import_Export_Activated_2.png";
+                            break;
+                        case "SYNCH_A":
+                             img = this.options.app.get("path")+"img/salesforce_synch_general_icon.png";
                             break;
                     }
                     var label = "<img class='msgicon' src='"+img+"'>"
@@ -139,6 +176,18 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                 getLabelText: function() {
                     //TG_PCT CMP_C TG_PCT
                     var label = "";
+                    var message_SYNCH_C = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce sync has been completed";
+                    var message_SYNCH_PEER = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer sync is in progress";
+                    var message_SYNCH_E = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce sync has an error";
+                    var message_SYNCH_R = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce sync is reschuled";
+                    var message_SYNCH_PEER_R = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer sync is reschuled";
+                    var message_SYNCH_PEER_E = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer sync has an error";
+                    var message_SYNCH_PEER_C = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer sync has been completed";
+                    var message_SYNCH_A_E = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer export activated";
+                    var message_SYNCH_A_I = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer import activated";
+                    var message_SYNCH_A = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce import has been schuled";
+                    var message_SYNCH_PEER_A = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer has been activated";
+                    
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
                         case "CMP_ZERO":
@@ -152,6 +201,39 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         case "CSV":
                             label = "<strong>File Name</strong> <span data-original-title='"+this.model.get('csvFileName')+"' class='text-truncated showtooltip'>" + this.model.get('csvFileName') + "</span>"
                             break;
+                        case "SYNCH_C":
+                             label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_C+"'>" + message_SYNCH_C + "</span>";
+                             break;
+                        case "SYNCH_PEER":
+                             label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_PEER+"'>" + message_SYNCH_PEER + "</span>";
+                             break;
+                        case "SYNCH_E":
+                             label = "<strong>Reason</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_E+"'>" + message_SYNCH_E + "</span>";
+                             break;
+                        case "SYNCH_R": 
+                             label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_R+"'>" + message_SYNCH_R + "</span>";
+                             break;
+                        case "SYNCH_PEER_R":
+                             label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_PEER_R+"'>" + message_SYNCH_PEER_R + "</span>";
+                             break;
+                        case "SYNCH_PEER_E":
+                             label = "<strong>Reason</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_PEER_E+"'>" + message_SYNCH_PEER_E + "</span>";
+                             break;
+                        case "SYNCH_PEER_C":
+                            label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_PEER_C+"'>" + message_SYNCH_PEER_C + "</span>";
+                        break;
+                        case "SYNCH_A_E":
+                            label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_A_E+"'>" + message_SYNCH_A_E + "</span>";
+                        break;
+                        case "SYNCH_A_I":
+                            label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_A_I+"'>" + message_SYNCH_A_I + "</span>";
+                        break;
+                        case "SYNCH_PEER_A":
+                            label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_PEER_A+"'>" + message_SYNCH_PEER_A + "</span>";
+                        break;
+                        case "SYNCH_A":
+                            label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_A+"'>" + message_SYNCH_A + "</span>";
+                        break;
                     }
                     return label;
 
@@ -192,6 +274,35 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         case "CSV":
                            label = "<strong>Update Count</strong> <span style='font-weight:normal'>"+this.options.app.addCommas(this.model.get('updateCount'))+"</span>"
                            break;
+                        case "SYNCH_C":
+                            label = "<strong>Sync completed</strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
+                            break;
+                        case "SYNCH_PEER":
+                            label = "<strong>Sync peer </strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
+                            break;
+                        case "SYNCH_E":
+                            label = "<strong>Sync error </strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
+                            break;
+                        case "SYNCH_R": 
+                            label = "<strong>Sync reschule</strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
+                            break;
+                        case "SYNCH_PEER_R":
+                            label = "<strong>Sync peer reschule</strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
+                            break;
+                        case "SYNCH_PEER_C":
+                            label = "<strong>Sync peer completed</strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
+                            break;
+                        case "SYNCH_PEER_E":
+                            label = "<strong>Sync error </strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
+                            break;    
+                        case "SYNCH_PEER_A":
+                        case "SYNCH_A_E":
+                        case "SYNCH_A_I":
+                        case "SYNCH_A":
+                            label = "<strong>Sync completed </strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
+                            break;  
+                            
+                        
                     }
                     return label;
 
@@ -244,6 +355,8 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     var count = "";
                     var date = "";
                     var nameOf = "";
+                    var sfCount = (this.model.get('Count')) ? this.options.app.addCommas(this.model.get('Count')): "";
+   
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
                             caption = this.model.get('campaignName');
@@ -293,6 +406,94 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                             date = this.dateSetting(this.model.get('logTime'));
                             nameOf = "on";
                             break;
+                        case "SYNCH_C":
+                           caption = "Salesforce Synch";
+                            noun = "has been";
+                            to="";
+                            count = "completed"+"&nbsp;"+sfCount+"&nbsp;records&nbsp;";
+                            date= this.dateSetting(this.model.get('logTime'));
+                            nameOf = "on";
+                            break;
+                        case "SYNCH_PEER":
+                            caption = "Salesforce peer ";
+                            noun = "has been";
+                            to="";
+                            count = " Processed ";
+                            date= this.dateSetting(this.model.get('logTime'));
+                            nameOf = "on";
+                            break;
+                        case "SYNCH_E":
+                            caption = "Salesforce Sync";
+                            noun = "has an Error";
+                            to="";
+                            count = "";
+                            date= "";
+                            nameOf = "";
+                            break;
+                        case "SYNCH_R":
+                            caption = "Salesforce Sync";
+                            noun = "has been Reschuled";
+                            to="";
+                            count = "";
+                            date= this.dateSetting(this.model.get('logTime'));;
+                            nameOf = "on";
+                            break;
+                        case "SYNCH_PEER_E":
+                            caption =  "Salesforce Peer Sync";
+                            noun = "has an Error";
+                            to="";
+                            count = "";
+                            date= "";
+                            nameOf = "";
+                            break;
+                        case "SYNCH_PEER_R":
+                            caption = "Salesforce Peer Sync ";
+                            noun = "has been Reschuled";
+                            to="";
+                            count = "";
+                            date= this.dateSetting(this.model.get('logTime'));;
+                            nameOf = "on";
+                            break;
+                        case "SYNCH_PEER_C":
+                            caption = "Salesforce Peer";
+                            noun = "has successfully";
+                            to="";
+                            count = "Synch"+"&nbsp;records&nbsp;";
+                            date= this.dateSetting(this.model.get('logTime'));
+                            nameOf = "on";
+                            break;
+                        case "SYNCH_PEER_A":
+                            caption = "Salesforce Peer";
+                            noun = "has been Activated";
+                            to="";
+                            count = "";
+                            date= this.dateSetting(this.model.get('logTime'));;
+                            nameOf = "at";
+                            break;
+                        case "SYNCH_A_E":
+                            caption = "Salesforce Export";
+                            noun = "has been Activated";
+                            to="";
+                            count = "";
+                            date= this.dateSetting(this.model.get('logTime'));;
+                            nameOf = "at";
+                            break;
+                        case "SYNCH_A_I":
+                            caption = "Salesforce Import";
+                            noun = "has been Activated";
+                            to="";
+                            count = "";
+                            date= this.dateSetting(this.model.get('logTime'));;
+                            nameOf = "at";
+                            break;
+                        case "SYNCH_A":
+                            caption = "Salesforce Import";
+                            noun = "has been Schuled";
+                            to="";
+                            count = "";
+                            date= this.dateSetting(this.model.get('logTime'));;
+                            nameOf = "at";
+                            break;
                     }
                    if(caption){
                     var str ="<a><strong class='text-truncated' style='display:inline;'>"+caption+"&nbsp;</strong></a>";
@@ -303,8 +504,7 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                 } ,
                 getActionButton: function() {
                     var label = "";
-                   
-                          
+                    
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
                         case "CMP_ZERO":
@@ -335,9 +535,10 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     return label;  
                 },
                 dateSetting: function(sentDate) {
-                    var _date = moment(sentDate, 'YYYY-MM-DD');
-                    return _date.format("DD MMM YYYY");
+                    var _date = moment(sentDate, 'YYYY-MM-DD HH:mm');
+                    return _date.format("DD MMM YYYY")+" at "+_date.format("hh:mm a");
                 },
+                
                 previewCampaign:function(e){
                       var camp_name = this.model.get('campaignName');
                       var that = this;

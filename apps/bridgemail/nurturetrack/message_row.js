@@ -191,6 +191,7 @@ function (template) {
                     dialog.getBody().append(sPage.$el);
                     this.app.showLoading(false, sPage.$el.parent());
                     dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
+                    dialog.$el.find('#dialog-title .dialog-title strong').css('float','none'); 
                     var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                     sPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                     this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
@@ -306,7 +307,7 @@ function (template) {
                         var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
                         if(this.isWait){
                             var _data = this.waitView.getPostData(); 
-                            post_data =  _data.post;                        
+                            post_data =  _data.post;                                                    
                         }
                         post_data = $.extend({},post_data,this.getPostData());
                         this.$(".save-message").addClass("saving");
@@ -332,6 +333,7 @@ function (template) {
                        },this));
                     
                 }
+                
                 
             },
              getHour:function(hour){                   

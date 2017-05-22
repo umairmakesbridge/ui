@@ -439,7 +439,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
 
 
                         camp_obj.$("select#campaign_unSubscribeType").val(camp_json.unSubscribeType).trigger("chosen:updated");
-                        camp_obj.$("#campaign_profileUpdate").prop("checked", camp_json.profileUpdate == "N" ? false : true);
+                        //camp_obj.$("#campaign_profileUpdate").prop("checked", camp_json.profileUpdate == "N" ? false : true);
                         camp_obj.$("#campaign_useCustomFooter").prop("checked", camp_json.useCustomFooter == "N" ? false : true);
                         camp_obj.$("#campaign_isFooterText").prop("checked", camp_json.isFooterText == "N" ? false : true);
                         camp_obj.$("#campaign_subscribeInfoUpdate").prop("checked", camp_json.subInfoUpdate == "N" ? false : true);
@@ -874,6 +874,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             that.$('.scroll-text').trigger('forward');
 
                         });
+                        /*if(this.DCExists){
+                            that.$('.step3').find('.selection-boxes').css('width',"420px");
+                        }*/
                     }
                 },
                 fetchServerTime: function () {
@@ -1124,7 +1127,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var fromEmail = el.find('#campaign_from_email').val();//el.find('#campaign_from_email_input').val();
                     var fromEmailDefault = el.find('#fromemail_default_input').val();
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
-
+                                        
 
                     if (el.find('#campaign_subject').val() == '')
                     {
@@ -1417,10 +1420,29 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         post_data['plainText'] = this.states.step2.plainText;
                         post_data['isCampaignText'] = 'N';
                         camp_obj.camp_istext = 'N';
+                       
                     }
                     if (typeof (htmlText) !== "undefined") {
                         post_data['htmlCode'] = "";
-                    }                  
+                    }    
+                    
+                    this.DCExists = false; 
+                    if(typeof (gotoNext)=="undefined" && selected_li == "html_editor_mee"){
+                        var dcMatchRegex = new RegExp("{{BMS_DYNAMIC_VARIATION_[0-9]+}}","g");
+                        if(dcMatchRegex.test(html)){                           
+                           this.$("#choose_tags,#salesforce_import,#netsuite_import,#highrise_import,#google_import").addClass("hideEle");                           
+                           this.DCExists = true;
+                        }
+                        else{                           
+                           this.$("#choose_tags,#salesforce_import,#netsuite_import,#highrise_import,#google_import").removeClass("hideEle");                           
+                           this.DCExists = false;
+                        }
+                    }
+                    else{                        
+                        this.$("#choose_tags,#salesforce_import,#netsuite_import,#highrise_import,#google_import").removeClass("hideEle");                        
+                        this.DCExists = false;
+                    }
+                    
                     if ((this.states.editor_change === true || typeof (gotoNext) !== "undefined")) {
                         if (typeof (gotoNext) === "undefined") {
                             this.app.showLoading("Saving Step 2...", this.$el.parents(".ws-content"));
@@ -1434,6 +1456,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("saving savingbg");
                                     camp_obj.$(".save-step2").css('width','auto');
                                     if (step1_json[0] !== "err") {
+                                        
                                         if(camp_obj.meeView && !camp_obj.meeView.autoSaveFlag && !camp_obj.isSaveCallFromMee){
                                         camp_obj.app.showMessge("Step 2 saved successfully!");
                                         if(camp_obj.options.params.parent !== ""){
@@ -1447,6 +1470,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                             
                                         }
                                         if(camp_obj.meeView){
+                                            camp_obj.$("#mee_editor").saveDCfromCamp();
                                             camp_obj.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
                                             camp_obj.meeView.autoSaveFlag = false;
                                         }
@@ -2420,7 +2444,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 setMEEView: function () {
                     var _html = this.campobjData.editorType == "MEE" ? $('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g, "") : "";
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:43, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2Mee, this), textVersionCallBack: _.bind(this.setTextVersion, this), previewCallback: _.bind(this.previewCallback, this)});
+                        var MEEPage = new MEE({app: this.app, campNum:this.camp_id, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:43, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2Mee, this), textVersionCallBack: _.bind(this.setTextVersion, this), previewCallback: _.bind(this.previewCallback, this)});
                         this.$("#mee_editor").setChange(this.states);
                         this.meeView = MEEPage;
                         this.setMEE(_html);
@@ -2513,8 +2537,16 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 },
                 step3TileClick: function (obj) {
                     var target_li = obj.target.tagName == "LI" ? $(obj.target) : $(obj.target).parents("li");
-                    if (target_li.hasClass("selected"))
+                    if (target_li.hasClass("selected")){
                         return false;
+                    }
+                    
+                    if(target_li.hasClass("hideEle")){
+                        var li_names = {"salesforce_import":"Salesforce Import","netsuite_import":"Netsute Import","choose_tags":"Tags","highrise_import":"Highrise Import","google_import":"Google Import"};
+                        this.app.showAlert('"'+li_names[target_li.attr("id")]+'" option is disabled <b>temporary</b>, because you are using Dynamic Content block in campaign HTML.Please select <b>Lists</b> or <b>Targets</b> as recipients.',this.$el,{type:'Disabled',fixed: true});
+                        return false;
+                    }
+                    
                     this.$(".step3 #choose_soruce li").removeClass("selected");
                     this.$(".step3 .soruces").hide();
                     this.$(".step3 #area_" + target_li.attr("id")).fadeIn("fast");

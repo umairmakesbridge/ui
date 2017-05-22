@@ -15,7 +15,8 @@ function (template,contactsView) {
              'mouseover .link-bar':'showPreview',
               'mouseover .preview2':'showPreview2',
              'mouseout .load-contacts':'hidePreview', 
-             'mouseover .load-contacts':'showPreviewParent'
+             'mouseover .load-contacts':'showPreviewParent',
+             'click .download-lnk-csv':'showCSVMappingDialog'
             },
             showPreview:function(ev){
                 $(ev.target).next(".preview2").css('opacity',1);
@@ -81,9 +82,15 @@ function (template,contactsView) {
                     return url = url.substring(0,100);
                 else return url;
             },
-                closeContactsListing:function(){
+            closeContactsListing:function(){
                 $(".campaign-clickers").empty('');
                 $(".campaign-clickers").hide();
+            },
+            showCSVMappingDialog:function(e){
+                if($(e.target).hasClass("disabled-csv-download"))
+                    return false;
+                var options = {type:'article',articleNum:this.model.get('articleNum.encode'),campNum:this.options.campNum};
+                this.trigger('linkDownloadClick', options);
             }
         });    
 });

@@ -149,7 +149,12 @@
             <%if(this.options.type == "autobots"){%>
                   <strong><span><em><%=this.options.sentAt%></em><%=this.getFullDate(data.execDate)%></span></strong>
             <%}else{%>
-                  <strong><span><em>Subscribed on</em><%=this.dateSetting(this.model.get('creationDate'),"-")%></span></strong> 
+                  <% if(this.model.get('subscriptionData') && this.model.get('subscriptionData')[0].subscribeDate) {  %>
+                    <strong><span><em>Subscribed on</em><%=this.dateSetting(this.model.get('subscriptionData')[0].subscribeDate,"/")%></span></strong> 
+                  <%}else{%>
+                    <strong><span><em>Subscribed on</em><%=this.dateSetting(this.model.get('creationDate'),"-")%></span></strong> 
+                  <%}%>     
+                  
             <%}%>
         </div>
     </div>
