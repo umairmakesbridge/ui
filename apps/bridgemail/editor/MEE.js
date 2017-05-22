@@ -21,6 +21,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.topMinus = 381;
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
                     this.autoSaveFlag = false;
+                    this.isSignupLightbox = false; //signup lightbox script added
                     this.DynamicContentsObj ={}; // DC ADD
                     this.DynamicContentsGlo ={}; // DC ADD
                     this.parentTd = false;
@@ -187,6 +188,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             mee.iframeLoaded = false;
                             mee.isActionScriptSet = '';
                             mee.isActionScriptSetG = '';
+                            mee.isActionScriptSetL = '';
                             mee.CurrentDivId = '';
                             mee.isSameElement = false;
                             this.each(function () {
@@ -321,6 +323,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var pageBackgroundimage_pos = "0% 0%";
                                 var pageActionScriptSet = '';
                                 var pageActionScriptSetG = '';
+                                var pageActionScriptSetL = '';
                                 var undoredo = true;
                                 var _offset = 0;
                                 var forms_offset = 0;
@@ -644,7 +647,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     } else {
                                         pageActionScriptSetG = "";
                                     }
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>' + header_section.html() + pageActionScriptSet + "</head><body style='background-color:" + pageBackgroundColor + ";background-image:url(" + pageBackgroundimage + ");background-repeat:" + pageBackgroundimage_repeat + ";background-position:" + pageBackgroundimage_pos + ";border-left:" + pageBorderLeftProp + ";border-right:" + pageBorderRightProp + ";border-top:" + pageBorderTopProp + ";border-bottom:" + pageBorderBottomProp + " ' >" + outputHTML + pageActionScriptSetG + "</body></html>";
+                                    if(mee.isActionScriptSetL){
+                                         pageActionScriptSetL = mee.isActionScriptSetL;
+                                    }else{
+                                        pageActionScriptSetL = "";
+                                    }
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>' + header_section.html() + pageActionScriptSet + "</head><body style='background-color:" + pageBackgroundColor + ";background-image:url(" + pageBackgroundimage + ");background-repeat:" + pageBackgroundimage_repeat + ";background-position:" + pageBackgroundimage_pos + ";border-left:" + pageBorderLeftProp + ";border-right:" + pageBorderRightProp + ";border-top:" + pageBorderTopProp + ";border-bottom:" + pageBorderBottomProp + " ' >" + outputHTML + pageActionScriptSetG + pageActionScriptSetL + "</body></html>";
 
                                     //"" + outputter.outerHTML();
                                     outputHTML = outputHTML.replace(/&quot;/g, '&#39;')
@@ -995,29 +1003,48 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         mee.saveAjaxActionScript = function (embedObj) {
                                             var dialog = embedObj.dialog
                                             if (embedObj.embedval != "" && embedObj.type == "add" && embedObj.isScriptTrue) {
-                                                options._app.showLoading("Saving tracking Snippet...", dialog.getBody());
+                                                if(dialog){
+                                                    options._app.showLoading("Saving tracking Snippet...", dialog.getBody());
+                                                }
                                                 var saveUrl = "/pms/events/thirdPartyTrackingSnippet.jsp";
                                                 $.ajax({
                                                     url: saveUrl,
                                                     data: {"type": embedObj.type, "userId": embedObj.userId, "snippetType": embedObj.snippetType, "landingPageId": embedObj.landingPageId, "snippetValue": embedObj.snippetValue},
                                                     type: 'POST',
                                                     success: function (data, textStatus, jqXHR) {
-                                                        options._app.showLoading(false, dialog.getBody());
-                                                        var result = jQuery.parseJSON(data);
-                                                        if (result.result == "success") {
-                                                            options._app.showMessge("Tracking Snippet added successfully", $("body"));
-                                                            if (embedObj.snippetType == "facebook") {
-                                                                mee.isActionScriptSet = embedObj.snippetValue;
-                                                            }
-                                                            if (embedObj.snippetType == "google") {
-                                                                mee.isActionScriptSetG = embedObj.snippetValue;
-                                                            }
-                                                            if (embedObj.closeDialog) {
-                                                                dialog.hide();
+                                                        if(dialog){
+                                                            options._app.showLoading(false, dialog.getBody());
+                                                            var result = jQuery.parseJSON(data);
+                                                            
+                                                            if (result.result == "success") {
+                                                                options._app.showMessge("Tracking Snippet added successfully", $("body"));
+                                                                if (embedObj.snippetType == "facebook") {
+                                                                    mee.isActionScriptSet = embedObj.snippetValue;
+                                                                }
+                                                                if (embedObj.snippetType == "google") {
+                                                                    mee.isActionScriptSetG = embedObj.snippetValue;
+                                                                }
+                                                                
+                                                                if (embedObj.closeDialog) {
+                                                                    dialog.hide();
+                                                                }
+                                                                
+                                                        }
+                                                        
 
-                                                            }
-
-                                                        } else {
+                                                        }
+                                                        else if(jQuery.parseJSON(data).result == "success"){
+                                                            mee_view.isSignupLightbox = true; 
+                                                            mee.isActionScriptSetL = embedObj.snippetValue;
+                                                            setTimeout(function(){
+                                                                        options.saveCallBack();
+                                                                },3000);    
+                                                            //options._app.showMessge("Lightbox added successfully", $("body"));
+                                                           
+                                                                //options.formCallBack(embedObj.FormId,true);
+                                                            
+                                                        }
+                                                        else {
                                                             options._app.showAlert("Error while saving", $("body"));
                                                         }
                                                     }
@@ -1034,7 +1061,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     data: {"type": type, "userId": embedObj.userId, "snippetType": embedObj.snippetType, "landingPageId": embedObj.landingPageId},
                                                     type: 'POST',
                                                     success: function (data, textStatus, jqXHR) {
-                                                        options._app.showLoading(false, dialog.getBody());
+                                                        if(dialog){
+                                                            options._app.showLoading(false, dialog.getBody());
+                                                        }
+                                                        
                                                         var result = jQuery.parseJSON(data);
                                                         if (result.result == "success") {
                                                             if (embedObj.snippetType == "facebook") {
@@ -1043,9 +1073,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             if (embedObj.snippetType == "google") {
                                                                 mee.isActionScriptSetG = "";
                                                             }
-
-
-
+                                                            if(embedObj.snippetType =="signup"){
+                                                                options._app.showMessge("Lightbox removed successfully", $("body"));
+                                                                
+                                                                mee.isActionScriptSetL = false;
+                                                                options.saveCallBack();
+                                                            }
+                                                            mee_view.isSignupLightbox = false;
                                                         } else {
                                                             options._app.showAlert("Unfortunetly some error occured", $("body"));
                                                         }
@@ -1073,32 +1107,41 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     var result = jQuery.parseJSON(data);
                                                     if (result.result == "success" && result.message != "No data available.") {
                                                         var myString = result.trackingSnippet[0].snippetValue;
-                                                        if (result.trackingSnippet.length > 1) {
-                                                            var myStringF = result.trackingSnippet[0].snippetValue;
-                                                            var decodeEmbedvalF = myStringF.replace(/(%26amp%3B)/g, "&amp;");
-                                                            decodeEmbedvalF = decodeEmbedvalF.replace(/(%26)/g, "&");
-                                                            mee.isActionScriptSet = decodeEmbedvalF;
-
-                                                            var myStringG = result.trackingSnippet[1].snippetValue;
-                                                            var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
-                                                            decodeEmbedvalG = decodeEmbedvalG.replace(/(%26)/g, "&");
-                                                            mee.isActionScriptSetG = decodeEmbedvalG;
-                                                        } else if (result.trackingSnippet[0].snippetType == "facebook") {
-                                                            var myString = result.trackingSnippet[0].snippetValue;
-                                                            var decodeEmbedval = myString.replace(/(%26amp%3B)/g, "&amp;");
-                                                            decodeEmbedval = decodeEmbedval.replace(/(%26)/g, "&");
-                                                            mee.isActionScriptSet = decodeEmbedval;
-                                                        } else {
-                                                            var myStringG = result.trackingSnippet[0].snippetValue;
-                                                            var decodeEmbedvalG = myStringG.replace(/(%26amp%3B)/g, "&amp;");
-                                                            decodeEmbedval = decodeEmbedvalG.replace(/(%26)/g, "&");
-                                                            mee.isActionScriptSetG = decodeEmbedval;
-                                                        }
+                                                        
+                                                        $.each(result.trackingSnippet,function(key,val){
+                                                              var myStringF = val.snippetValue;
+                                                              var decodeEmbedval = myStringF.replace(/(%26amp%3B)/g, "&amp;");
+                                                                    decodeEmbedval = decodeEmbedval.replace(/(%26)/g, "&");
+                                                              if(val.snippetType=="signup"){
+                                                                  myElement.find( ".lightbox-setting-panel" ).show().animate( {right: "0px"},"slow");
+                                                                  oHtml.find(".formPlaceHolderAlone").hide();
+                                                                  var str = val.snippetValue,
+                                                                    re = /\ssrc=(?:(?:'([^']*)')|(?:"([^"]*)")|([^\s]*))/i, // match src='a' OR src="a" OR src=a
+                                                                    res = str.match(re),
+                                                                    src = res[1]||res[2]||res[3]; // get the one that matched
+                                                                    
+                                                                    
+                                                                    mee.isActionScriptSetL = decodeEmbedval;
+                                                                    var formid = src.split('js');
+                                                                    var dataid = formid[1].substring(1, formid[1].length-1);
+                                                                    
+                                                                    mee.attachLightboxEvents(dataid)
+                                                                  mee_view.isSignupLightbox = true;
+                                                              }else if(val.snippetType == "facebook"){
+                                                                  mee.isActionScriptSet = decodeEmbedval;
+                                                              }else if(val.snippetType == "google"){
+                                                                  mee.isActionScriptSetG = decodeEmbedval;
+                                                              }
+                                                            });
+                                                        
                                                         //myString = myString.substring(1, myString.length-1);
 
                                                     } else {
+                                                        meeIframe.find(".formPlaceHolderAlone").show();
                                                         mee.isActionScriptSet = "";
                                                         mee.isActionScriptSetG = "";
+                                                        mee.isActionScriptSetL = "";
+                                                        mee_view.isSignupLightbox = false;
                                                     }
                                                 }
                                             });
@@ -5554,7 +5597,95 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         setTimeout(_.bind(mee.setColResize, mee, element), 500);
                                     }
                                 }
+                                
+                                mee.attachLightboxEvents = function(formId,formName){
+                                        var self = this;
+                                        formName = (formName) ? formName : "";
+                                        myElement.find( ".lightbox-setting-panel ul" ).attr('data-id',formId);
+                                        myElement.find( ".lightbox-setting-panel ul" ).attr('data-formname',formName);
+                                        myElement.find( ".lightbox-setting-panel li.deleteLg" ).unbind("click");
+                                        myElement.find( ".lightbox-setting-panel li.deleteLg" ).click(function(event){
+                                            myElement.find( ".lightbox-setting-panel").hide().animate( {right: "-40px"},"slow");
+                                            var id = $(this).parent().attr('data-id');
+                                            var formName = $(this).parent().attr('data-formName');
+                                            var userId = options._app.get("user").userId;
+                                            //console.log(id,formName);
+                                            meeIframe.find(".formPlaceHolderAlone").show();
+                                            mee.saveAjaxActionScript({
+                                                embedval: "", 
+                                                dialog: false, 
+                                                userId: userId, 
+                                                formId:formId,
+                                                snippetType: "signup", 
+                                                landingPageId: options.pageId, 
+                                                closeDialog: false, 
+                                                isScriptTrue: true
+                                            });
+                                        });
+                                        myElement.find( ".lightbox-setting-panel li.settingLg" ).click(function(event){
+                                            var id = $(this).parent().attr('data-id');
+                                            var formName = $(this).parent().attr('data-formName');
+                                            mee.openFormDialogAsLightBox(id,formName);
+                                        });
+                                        
+                                    }
+                                  
+                                    mee.openFormDialogAsLightBox = function(formId,formName){
+                                        var dialog_width = $(document.documentElement).width()-60;
+                                        var dialog_height = $(document.documentElement).height()-162;
+                                        var _this = this;
+                                        var userId = options._app.get("user").userId;
+                                        // Save Script
+                                        if(formId){
+                                            mee.saveAjaxActionScript({
+                                                embedval :"<script id='__BMS_LIGHTBOX__' type='text/javascript' src='https://"+options._app.get('host')+"/pms/vform/js/"+formId+"/'></script>",
+                                                snippetValue :"<script id='__BMS_LIGHTBOX__' TYPE='text/javascript' src='https://"+options._app.get('host')+"/pms/vform/js/"+formId+"/'></script>",
+                                                dialog: false, 
+                                                userId: userId, 
+                                                snippetType: "signup", 
+                                                landingPageId: options.pageId, 
+                                                closeDialog: false, 
+                                                type:"add",
+                                                formId: formId,
+                                                isScriptTrue: true
+                                            });
+                                        }
+                                        
+                                        var dialog = options._app.showDialog({title:'Form Builder',
+                                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                                  headerEditable:false,
+                                                  headerIcon : 'dlgformwizard',                              
+                                                  bodyCss:{"min-height":dialog_height+"px"}
+                                        });
+                                        if(formName){
+                                            options._app.showLoading("Loading "+formName+" ...",dialog.getBody());
+                                        }
+                                        else{
+                                            options._app.showLoading("Loading ...",dialog.getBody());
+                                        }
+                                        var formurl = formId ? "&formId="+formId : "";
+                                        dialog_height = parseFloat(dialog_height)-6 ;
+                                        var transport = new easyXDM.Socket({           
+                                            remote:  window.location.protocol+'//'+options._app.get("content_domain")+"/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&fromLP=true&ukey="+options._app.get("user_Key")+formurl,
+                                            onReady: function(){
+                                                options._app.showLoading(false,dialog.getBody());
+                                            },
+                                            onMessage: _.bind(function(message, origin){
+                                                var response = jQuery.parseJSON(message);
+                                                if(response.isRefresh || response.formURL){
+                                                    if(response.isRefresh){
 
+                                                    }                                
+                                                }
+                                                else if(response.showMessage){
+                                                    options._app.showMessge(response.msg);
+                                                }
+
+                                            },this),
+                                            props:{style:{width:"100%",height:dialog_height+"px"},frameborder:0},
+                                            container : dialog.getBody()[0]
+                                        });
+                                    }
                                 function InitializeAndDestroyEvents() {
 
                                     //Destroy plugin events all event
@@ -6208,6 +6339,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
 
                                     this.InitializeOnFormDroppedEvent = function (oHtml) {
+                                        var self = this;
                                         if (oHtml != null) {
 
                                             if (oHtml.find('.MEEFORMCONTAINER').andSelf().filter('.MEEFORMCONTAINER').length > 0) {
@@ -6257,12 +6389,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 if (options.LoadFormContents != null) {
                                                                     options.LoadFormContents(args);
                                                                 }
-
+                                                                
                                                                 if (args.formContents != undefined) {
-                                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
+                                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
+                                                                    
                                                                     var fContents = options._app.decodeHTML(args.formContents).replace("https:", "") + options.pageId + "/";
-
-                                                                    if (args.droppedElement.hasClass("MEEFORMCONTAINER")) {
+                                                                    
+                                                                    if (args.droppedElement.hasClass("MEEFORMCONTAINER") && !args.droppedElement.hasClass("MEEFORMLIGHTBOX")) {
+                                                                        
                                                                         var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
                                                                         oControl.Html = preview_iframe;
                                                                         oControl.Type = "formBlock";
@@ -6273,26 +6407,50 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                         args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
                                                                         oInitDestroyEvents.InitAll(args.droppedElement);
                                                                         args.droppedElement.find(".editformpanel button").attr("data-formid", args.FormId)
-                                                                    } else {
+                                                                    }else if(args.droppedElement.hasClass("MEEFORMLIGHTBOX") || args.droppedElement.parent().hasClass("MEEFORMLIGHTBOX")){
+                                                                        
+                                                                        myElement.find( ".lightbox-setting-panel" ).show().animate( {right: "0px"},"slow");
+                                                                        meeIframe.find(".formPlaceHolderAlone").hide();
+                                                                        oControl.ID = args.FormId;
+                                                                        var formName = ui.draggable[0].innerText;
+                                                                        mee.openFormDialogAsLightBox( oControl.ID,formName);
+                                                                        mee.attachLightboxEvents(oControl.ID,formName);
+                                                                        $(this).hide();
+                                                                        
+                                                                    }else {
                                                                         var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
                                                                         form_ele.find("iframe").attr("src", options._app.decodeHTML(fContents));
                                                                         form_ele.find(".editformpanel button").attr("data-formid", args.FormId);
                                                                     }
-                                                                    options.formCallBack(args.FormId);
+                                                                    if(!args.droppedElement.hasClass("MEEFORMLIGHTBOX")){
+                                                                        options.formCallBack(args.FormId);
+                                                                    }
+                                                                    
                                                                 }
                                                             } else {
-                                                                var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
-                                                                mee.showFormWizard('');
-                                                                if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length == 0) {
-                                                                    oControl.Html = preview_iframe;
-                                                                    oControl.Type = "formBlock";
-                                                                    oControl.ID = args.FormId;
-                                                                    args.predefinedControl = oControl;
-                                                                    args.droppedElement.html(oControl.Html);
-                                                                    args.droppedElement.removeClass("formPlaceHolderAlone");
-                                                                    args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
-                                                                    oInitDestroyEvents.InitAll(args.droppedElement);
+                                                                if(args.droppedElement.hasClass("MEEFORMLIGHTBOX") || args.droppedElement.parent().hasClass("MEEFORMLIGHTBOX")){
+                                                                        
+                                                                        
+                                                                        oControl.ID = args.FormId;
+                                                                        mee.showFormWizard('',true);
+                                                                        //mee.openFormDialogAsLightBox("");
+                                                                        //.mee.attachLightboxEvents(oControl.ID);
+                                                                        $(this).hide();
+                                                                }else{
+                                                                   var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                                    mee.showFormWizard('');
+                                                                    if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length == 0) {
+                                                                        oControl.Html = preview_iframe;
+                                                                        oControl.Type = "formBlock";
+                                                                        oControl.ID = args.FormId;
+                                                                        args.predefinedControl = oControl;
+                                                                        args.droppedElement.html(oControl.Html);
+                                                                        args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                                        args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                                        oInitDestroyEvents.InitAll(args.droppedElement);
+                                                                    } 
                                                                 }
+                                                                
                                                             }
                                                         }
 
@@ -6304,7 +6462,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         }
                                     }
-
+                                    
                                     //Check if Click-able event here in html, apply on click event:
                                     this.InitializeClickEvent = function (oHtml) {
                                         if (oHtml != null) {
@@ -6681,6 +6839,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     oInitDestroyEvents.InitAll(args.droppedElement);
                                                     args.droppedElement = args.droppedElement.find(".MEEFORMCONTAINER");
                                                 }
+                                                
 
                                                 if (!isNew) {
                                                     args.FormId = controlID;
@@ -7076,8 +7235,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                          return;
                                          }*/
                                         RemovePopups();
-                                        if (draggedControlType !== "formBlock" || meeIframe.find(".MEEFORMCONTAINER").length == 0) {
+                                        if(mee.dragElement.data('islightbox')=="Y"){
+                                            if(mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').length == 0 && draggedControlType == "formBlock" && mee_view.isSignupLightbox== false && mainContentHtmlGrand.find('#form-iframe').length == 0){
+                                                    mainContentHtmlGrand.find('ul.mainContentHtml').before('<div class="MEEFORMLIGHTBOX MEEFORMCONTAINER" ><i class="icon lightbox" style="background: url('+options._app.get('path')+'/css/images/lightbox_24x24.png) !important;background-repeat: no-repeat !important;position: absolute;top: 37px;left: 11.8em;"></i><span>Drop Signup form here to open as lightbox</span></div>');
+                                                    var centerMEEFORM = (mainContentHtmlGrand.width()-mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').outerWidth())/2;
+                                                    mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').css({'left':centerMEEFORM+'px'});
+                                                    if(myElement.find('.editorbar.editortoolbar').hasClass('editor-toptoolbar-fixed')){
+                                                        mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').css('top',(options.parentWindowobj.scrollTop()-(myElement.offset().top-30)));
+                                                    }
+                                                    oInitDestroyEvents.InitAll(mainContentHtmlGrand.find('.MEEFORMLIGHTBOX'));
+                                                    meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #94CF1E"});
+                                                    meeIframe.find(".editformpanel,.drop-here").show();
+                                                    meeIframe.find(".editformpanel .edit-form").hide();
+                                            }  
+                                        }
+                                         else if (draggedControlType !== "formBlock" || meeIframe.find(".MEEFORMCONTAINER").length == 0 ) {
                                             ShowDroppables(meeIframe);
+                                            // Show Droppable for lightbox compatiable
+                                           
+                                                
                                             if($(event.currentTarget).hasClass('droppedDynamicBlock')){
                                                 meeIframe.find(".mainContentHtml .dynamicContentContainer li.myDroppable").css('visibility', 'hidden');
                                             }
@@ -7101,6 +7277,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                         } else if (draggedControlType == "formBlock") {
+                                            if(mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').length == 0 && mainContentHtmlGrand.find('#form-iframe').length == 0 && mee_view.isSignupLightbox==false){
+                                                    mainContentHtmlGrand.find('ul.mainContentHtml').before('<div class="MEEFORMLIGHTBOX MEEFORMCONTAINER" ><i class="icon lightbox" style="background: url('+options._app.get('path')+'/css/images/lightbox_24x24.png) !important;background-repeat: no-repeat !important;position: absolute;top: 37px;left: 11.8em;"></i><span>Drop Signup form here to open as lightbox</span></div>');
+                                                    var centerMEEFORM = (mainContentHtmlGrand.width()-mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').outerWidth())/2;
+                                                    mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').css({'left':centerMEEFORM+'px'});
+                                                    if(myElement.find('.editorbar.editortoolbar').hasClass('editor-toptoolbar-fixed')){
+                                                        mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').css('top',(options.parentWindowobj.scrollTop()-(myElement.offset().top-30)));
+                                                    }
+                                                    oInitDestroyEvents.InitAll(mainContentHtmlGrand.find('.MEEFORMLIGHTBOX'));
+                                                    
+                                                }
                                             meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #94CF1E"});
                                             meeIframe.find(".editformpanel,.drop-here").show();
                                             meeIframe.find(".editformpanel .edit-form").hide();
@@ -7110,6 +7296,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         event.preventDefault();
                                         meeIframe.find(".mainContentHtml").removeClass("show-droppables");
                                         meeIframe.find(".MEEFORMCONTAINER").removeInlineStyle("outline");
+                                        mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').remove();
                                         meeIframe.find(".editformpanel").hide();
                                         meeIframe.find(".dropHighlighter").removeClass("dropHighlighter");
                                         RemoveDroppables(meeIframe);
@@ -7290,7 +7477,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         meeIframe.find(".MEEFORMCONTAINER").addClass("formPlaceHolderAlone").children().remove();
                                     }
                                 }
-                                mee.showFormWizard = function (formId) {
+                                mee.showFormWizard = function (formId,isLB) {
                                     var dialog_width = $(document.documentElement).width() - 60;
                                     var dialog_height = $(document.documentElement).height() - 162;
                                     var dialog = options._app.showDialog({title: 'Form Builder',
@@ -7301,12 +7488,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         bodyCss: {"min-height": dialog_height + "px"}
                                     });
                                     var formurl = formId ? "&formId=" + formId : "";
-
+                                    var isLB = (isLB) ? "true" : "false";
                                     options._app.showLoading("Loading form...", dialog.getBody());
 
                                     dialog_height = parseFloat(dialog_height) - 6;
                                     var transport = new easyXDM.Socket({
-                                        remote: window.location.protocol + '//' + options._app.get("content_domain") + "/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token") + "&ukey=" + options._app.get("user_Key") + formurl,
+                                        remote: window.location.protocol + '//' + options._app.get("content_domain") + "/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token") + "&ukey=" + options._app.get("user_Key") + formurl + "&isLgBox=" + isLB,
                                         onReady: function () {
                                             options._app.showLoading(false, dialog.getBody());
                                         },
@@ -7317,7 +7504,28 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length) {
                                                         meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src = meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src.replace("https:", "");
                                                     }
-                                                } else {
+                                                }else if(response.isLgBox){
+                                                    myElement.find( ".lightbox-setting-panel" ).show().animate( {right: "0px"},"slow");
+                                                    meeIframe.find(".formPlaceHolderAlone").hide();
+                                                    mee.attachLightboxEvents(response.formId)
+                                                    var formId = response.formId;
+                                                     mee.saveAjaxActionScript({
+                                                        embedval :"<script id='__BMS_LIGHTBOX__' type='text/javascript' src='https://"+options._app.get('host')+"/pms/vform/js/"+formId+"/'></script>",
+                                                        snippetValue :"<script id='__BMS_LIGHTBOX__' TYPE='text/javascript' src='https://"+options._app.get('host')+"/pms/vform/js/"+formId+"/'></script>",
+                                                        dialog: false, 
+                                                        userId: options._app.get("user_Key"), 
+                                                        snippetType: "signup", 
+                                                        landingPageId: options.pageId, 
+                                                        closeDialog: false, 
+                                                        type:"add",
+                                                        formId: formId,
+                                                        isScriptTrue: true
+                                                    });
+                                                    
+                                                    mee._LoadFormBlocks();
+                                                    //console.log('Ok Lightbox settings need to be done now');
+                                                }
+                                                else {
                                                     meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src", response.formURL.replace("http:", ""));
                                                     if (meeIframe.find(".MEEFORMCONTAINER .editformpanel button").length) {
                                                         meeIframe.find(".MEEFORMCONTAINER .editformpanel button").attr("data-formid", response.formId);
@@ -7826,7 +8034,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //Assigning unique ID here:
                                                 obj[0].ID = obj[0]["formId.encode"];
 
-
+                                                
+                                                
                                                 var block = $("<li class='draggableControl ui-draggable droppedFormBlock showtooltip-dg' title='Drag `"+obj[0].name+"`' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
                                                         "<i class='icon myblck'></i> " +
                                                         "<a><span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
@@ -7836,8 +8045,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         " </div>" +
                                                         "</li>");
 
-
-
+                                                  
+                                                if(obj[0]['lightboxCompatible']=="Y"){
+                                                    block.find('.myblck').after('<i class="icon lightbox" style="background: url('+options._app.get('path')+'/css/images/lightbox_24x24.png) !important;background-repeat: no-repeat !important;position: absolute;top: -6px;right: -22px;"></i>');
+                                                    block.attr('data-islightbox','Y');
+                                                }
                                                 //Initialize with default draggable:
                                                 InitializeMainDraggableControls(block);
 
@@ -8116,6 +8328,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         formCallBack: this.options.formAttach,
                         formid: this.options.formid,
                         _app: this.app,
+                        isNewLP : this.options.isNewLP ? this.options.isNewLP : false,
                         parentWindowobj: this.options.parentWindow,
                         scrollTopMinus: this.options.scrollTopMinus,
                         isTemplate: this.options.isTemplate,

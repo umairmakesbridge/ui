@@ -82,6 +82,7 @@ function (template, CampaignsCollection, campRowView) {
                         _data['toDate'] = this.toDate;
                     }
                     if (this.searchTxt) {
+                        _data['type'] = 'searchNormalCampaigns';
                         _data['searchText'] = this.searchTxt;
 
                     }                    

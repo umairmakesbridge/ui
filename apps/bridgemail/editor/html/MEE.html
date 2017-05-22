@@ -316,7 +316,7 @@
                     </div>
                     <div class="clearfix formDroppable">                        
                         <ul class="b-blocks">
-                            <li class="draggableControl ui-draggable newblock" data-type="formBlock" data-isnew="true" draggable="true">
+                            <li class="draggableControl ui-draggable newblock" data-type="formBlock" data-islightbox="Y" data-isnew="true" draggable="true">
                                 <i class="icon plus"></i>
                                 <a >
                                     <span class=" font_75">Add New Form</span>
@@ -333,6 +333,7 @@
                     </div>
                 </div>
             </div>
+            
             <%}%>
             <!--  accordian-content  -->
             <h3>
@@ -744,8 +745,8 @@
             </li>
             <% } %>
             
-             <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>">
-                <a  class="btn-blue showtooltip" data-original-title="Click to preview" >
+             <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>" >
+                <a  class="btn-blue showtooltip <% if (options.isNewLP) { print('disabled-btn') } %>" data-original-title="Click to preview" >
                     <i class="icon preview"></i>
                     <!--<span>Preview</span>-->
                 </a>
@@ -834,6 +835,12 @@
     </ul>
 </div>
             <!-- Image Style Toolbar -->
+            <div class="lightbox-setting-panel" style="right:-40px;">
+                <ul>
+                    <li class="deleteLg showtooltip" title="Delete lightbox"><a><i class="icon delete"></i></a></li>
+                    <li class="settingLg showtooltip" title="Edit lightbox settings"><a><i class="icon setting"></i></a></li>
+                </ul>
+            </div> 
     </div>
     <!--  tools  -->
 

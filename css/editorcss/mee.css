@@ -3075,6 +3075,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     border: 1px solid #1d3c49;
     padding: 0;
     border-radius: 2px;
+    overflow-x: hidden;
 }
 
 .MEE_EDITOR .editorbar {
@@ -5116,4 +5117,34 @@ div.tooltip.custom-tooltip .tooltip-inner{
 
 .imgurl-container .errortext{
      bottom: 59px;
+}
+ /*====================
+ Lightbox Panel Settings
+ ===============*/
+ .lightbox-setting-panel{
+    position: absolute;
+    right: 0;
+    top: 84px;
+    z-index: 1;
+    display: none;
+ }
+.editorbar .lightbox-setting-panel > ul {
+    background: #01AEEE;
+    width:39px;
+}
+ .editorbar .lightbox-setting-panel li > a > .icon.setting {
+    background: url("../images/setting.png") no-repeat center center;
+}
+.editorbar .lightbox-setting-panel ul li:first-child {
+    margin-left: 0px;
+}
+.editorbar .lightbox-setting-panel ul li {
+    margin: 0;
+    padding: 4px;
+    margin: 0px auto;
+    border: 1px solid #01AEEE;
+    
+}
+.editorbar .lightbox-setting-panel ul li:first-child {
+    border-bottom: 1px solid #00A1DD;
 }

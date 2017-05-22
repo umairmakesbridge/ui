@@ -535,9 +535,10 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     return label;  
                 },
                 dateSetting: function(sentDate) {
-                    var _date = moment(sentDate, 'YYYY-MM-DD');
-                    return _date.format("DD MMM YYYY");
+                    var _date = moment(sentDate, 'YYYY-MM-DD HH:mm');
+                    return _date.format("DD MMM YYYY")+" at "+_date.format("hh:mm a");
                 },
+                
                 previewCampaign:function(e){
                       var camp_name = this.model.get('campaignName');
                       var that = this;
