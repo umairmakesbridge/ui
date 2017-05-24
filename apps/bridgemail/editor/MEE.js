@@ -7114,6 +7114,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #94CF1E"});
                                                     meeIframe.find(".editformpanel,.drop-here").show();
                                                     meeIframe.find(".editformpanel .edit-form").hide();
+                                                    ShowDroppables(meeIframe);
                                             }  
                                         }
                                          else if (draggedControlType !== "formBlock" || meeIframe.find(".MEEFORMCONTAINER").length == 0 ) {
