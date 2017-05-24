@@ -211,6 +211,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             mee.iframeLoaded = true;
                                             $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight, mee));
                                             $this.find("#mee-iframe").contents().find("body").on('dragover',_.bind(mee.dragOverBody, mee));
+                                            $this.parents("body").on('dragover',_.bind(mee.dragLeaveBody, mee));
                                             if (options.landingPage) {
                                                 mee.getActionScript();
                                             }
@@ -407,12 +408,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 mee.dragOverBody = function(e){
                                     if(this.dragElement){
                                         meeIframeWindow.$("li.dropHighlighter").removeClass("dropHighlighter");
-                                        var dropEle = meeIframeWindow.$.nearest({x: e.originalEvent.x, y: e.originalEvent.y}, 'li.myDroppable')
-                                        dropEle.addClass("dropHighlighter")
+                                        var dropEle = meeIframeWindow.$.nearest({x: e.originalEvent.x, y: e.originalEvent.y}, 'li.myDroppable');
+                                        if (dropEle && dropEle.length==1 && dropEle.css("visibility") == "visible") {                                                                                        
+                                            dropEle.addClass("dropHighlighter")
+                                        }
                                         //console.log("x:"+e.originalEvent.x+"-y:"+e.originalEvent.y);
                                     }
                                 }
-
+                                mee.dragLeaveBody = function(){
+                                    if(meeIframeWindow && this.dragElement){                                        
+                                        meeIframeWindow.$("li.dropHighlighter").removeClass("dropHighlighter");                                        
+                                    }
+                                }
+                                
                                 mee.IntializeToolTip = function(flag){
                                     
                                     var tooltip= (flag) ? "custom-full-tooltip"  : "";
@@ -1188,8 +1196,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         accordian_height = 550;
                                     } else {
                                         accordian_height = options.parentWindowobj.height() - 62 - diff;
-                                    }
-                                    console.log("parent window height= "+accordian_height)
+                                    }                                    
                                     this.find(".builder-panel").css("height", accordian_height + "px");
                                     this.find(".style-panel").css("height", accordian_height + "px");
 
@@ -1867,13 +1874,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 ;
 
                                 var InitializeBuildingBlockDroppableArea = function () {
-                                    myElement.find(".buildingBlockDroppableOverlay").on('dragover', function (event) {
-                                        event.preventDefault();
+                                    myElement.find(".buildingBlockDroppableOverlay").on('dragover', function (event) {                                        
+                                        event.preventDefault();                                              
+                                        meeIframe.find(".dropHighlighter").addClass("dragIsOverMe");                                        
                                         if (mee.dragElementIframe) {
                                             $(this).find('.blockdrop').css({"border": "2px dashed #01aeee"});
                                         }
                                     }).on('dragleave', function (event) {
-                                        event.preventDefault();
+                                        event.preventDefault();        
+                                        meeIframe.find(".dragIsOverMe").removeClass("dragIsOverMe");
                                         if (mee.dragElementIframe) {
                                             $(this).find('.blockdrop').css({"border": "1px dashed #fff"});
                                         }
@@ -1998,10 +2007,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 var event = event;
                                                 setTimeout(function () {
                                                             //
-                                                            //console.log('Selected ELEMENT : '+mee_view.selectedDropElement);
+                                                            
                                                             myElement.find('.ddlBackgroundLayers option[selected="selected"]').removeAttr('selected');
                                                             if(myElement.find('.ddlBackgroundImgLayers').length > 0 && ($(myElement.find('.images-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.images-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
-                                                                //alert('DDL BgImage ACCORDIAN : '+mee_view.parentTd);
+                                                            
                                                                 //console.log('DDL IMAGE ACCORDIAN : '+mee_view.parentTd);
                                                                 myElement.find('.bgimg-thumb_imgwrap').show();
                                                                 myElement.find('.ddlBackgroundImgLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
@@ -5867,7 +5876,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             myElement.find('.disabled-toolbar').removeAttr('style');
                                                         });
                                                         editor.on('ExecCommand', function (e) {
-                                                            console.log('ExecCommand event', e);                                                           
+                                                            //('ExecCommand event', e);                                                           
                                                             var fontTagObj = $(e.target.targetElm).find('font');
                                                             if (fontTagObj.length > 0) {
                                                                 $.each(fontTagObj, function (key, val) {
@@ -6254,13 +6263,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //Apply here Droppable Container:
                                                 oHtml.find('.imageContainer').andSelf().filter('.imageContainer').each(function (index, element) {
                                                     $(element).on('dragover', function (event) {
-                                                        event.preventDefault();
-                                                        
-                                                        if ($(this).hasClass("imagePlaceHolderAlone") && mee.dragElement) {
+                                                        event.preventDefault();                                                                                                                 
+                                                        if ($(this).hasClass("imagePlaceHolderAlone") && mee.dragElement && mee.dragElement.hasClass('droppedImage')==true) {
+                                                            meeIframe.find(".dropHighlighter").addClass("dragIsOverMe");                                                                                                                    
                                                             $(this).css({"outline": "2px dashed #94cf1e"});
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
+                                                        meeIframe.find(".dragIsOverMe").removeClass("dragIsOverMe");
                                                         if ($(this).hasClass("imagePlaceHolderAlone") && mee.dragElement) {
                                                             $(this).removeInlineStyle("outline");
                                                         }
@@ -6297,12 +6307,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //Apply here Droppable Container:
                                                 oHtml.find('.resizableImage').andSelf().filter('.resizableImage').each(function (index, element) {
                                                     $(element).on('dragover', function (event) {
-                                                        event.preventDefault();
+                                                        event.preventDefault();                                                               
                                                         if ($(this).hasClass("resizableImage") && mee.dragElement && mee.dragElement.hasClass('droppedImage')==true) {
+                                                            meeIframe.find(".dropHighlighter").addClass("dragIsOverMe");                                                                                                                    
                                                             $(this).css({"outline": "2px dashed #94CF1E"});
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
+                                                        meeIframe.find(".dragIsOverMe").removeClass("dragIsOverMe");
                                                         if ($(this).hasClass("resizableImage") && mee.dragElement) {
                                                             $(this).removeInlineStyle("outline")
                                                         }
@@ -6347,12 +6359,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //Apply here Droppable Container:
                                                 oHtml.find('.MEEFORMCONTAINER').andSelf().filter('.MEEFORMCONTAINER').each(function (index, element) {
                                                     $(element).on('dragover', function (event) {
-                                                        event.preventDefault();
+                                                        event.preventDefault();    
+                                                        if(mee.dragElement.data("type") && mee.dragElement.data("type") == "formBlock"){
+                                                            meeIframe.find(".dropHighlighter").addClass("dragIsOverMe");                                                        
+                                                        }
                                                         if ($(this).hasClass("MEEFORMCONTAINER") && mee.dragElement) {
                                                             $(this).css({"outline": "2px dashed #94CF1E"});
+                                                            console.log("-----2");
                                                         }
                                                     }).on('dragleave', function (event) {
                                                         event.preventDefault();
+                                                        meeIframe.find(".dragIsOverMe").removeClass("dragIsOverMe");                                                        
                                                         if ($(this).hasClass("MEEFORMCONTAINER") && mee.dragElement) {
                                                             $(this).removeInlineStyle("outline")
                                                         }
@@ -6603,14 +6620,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 //Elements Dropping
                                 function InitializeWithDropable(sender) {
 
-
                                     sender.on('dragover', function (event) {
-                                        event.preventDefault();
+                                        event.preventDefault();                                            
                                         if ($(this).html() == "") {
+                                            meeIframe.find(".dropHighlighter").addClass("dragIsOverDrop");                                     
                                             $(this).css({'height': '10px', "background": "#80C000", "box-shadow": "0 0 5px rgba(0, 0, 0, 0.5)"});
                                         }
                                     }).on('dragleave', function (event) {
                                         event.preventDefault();
+                                        meeIframe.find(".dragIsOverDrop").removeClass("dragIsOverDrop");                                        
                                         if ($(this).html() == "") {
                                             $(this).css({'height': '4px', "background": "#80C000", "box-shadow": "none"});
                                         }
@@ -6619,474 +6637,478 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     sender.find('*').andSelf().on('drop', function (event) {
                                         //restore the dropzone after dropevent                                    
                                         event.stopPropagation();
-                                        event.preventDefault();
-                                        
-                                        
+                                        event.preventDefault();                                        
                                         if (changFlag) {
                                             changFlag.editor_change = true;
                                         }
-                                        meeIframe.find(".mainContentHtml").removeClass("show-droppables")
-                                        var ui = {draggable: null};
-                                        
-                                        ui.draggable = mee.dragElementIframe ? mee.dragElementIframe : mee.dragElement;
-                                        
+                                        meeIframe.find(".mainContentHtml").removeClass("show-droppables");                                                                                
                                         if (!$(this).hasClass("myDroppable")) { //|| ui.draggable.data("type") === "droppedImage"
                                             //DO NOTHING
                                             return;
                                         }
-
-                                        if ($(this).css("visibility") == "hidden") {
-                                            //DO NOTHING
-                                            return;
-                                        }
-
-                                        //MUST REMOVE IN ORDER TO WORK PROPER
-                                        $(this).removeAttr("style");
-
-
-
-                                        if (IsFirstDroppableElement) {
-                                            //remove height here:
-                                            //$(this).removeAttr("style");
-                                            IsFirstDroppableElement = false;
-                                        }
-
-                                        //Once dropped Delete myDroppable class here and Remove functionality of Droppable here                                
-                                        $(this).removeClass("myDroppable");
-
-                                        //Dragging and Dropping between elements
-                                        if (ui.draggable.hasClass("csHaveData")) {
-
-                                            //handling DC into DC MOVE
-                                            if (ui.draggable.hasClass("csDynamicData")) {
-                                                if ($(this).parent().hasClass("dcInternalContents")) {
-                                                    return;
-                                                } else {
-                                                    console.log("Dropping DC in Container");
-                                                }
-                                            }
-
-                                            //Add class to newly "SWAPED" elment - will use to delete droppable from container etc;
-                                            $(this).addClass("csHaveData");
-
-                                            //INSERT AND REMOVE DROPPABLES HERE                            
-                                            ui.draggable.next(".myDroppable").remove();
-
-                                            if ($(this).prev(".myDroppable").length == 0) {
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                            }
-
-                                            if ($(this).next(".myDroppable").length == 0) {
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                            }
-                                            /////////////////////////////////////
-
-                                            $(this).replaceWith(ui.draggable);
-
-                                        }
-                                        //Element recieving from controls panel:
-                                        else {   //Add class to newly entered element from control panel - will use to delete droppable from container etc;
-
-                                            $(this).addClass("csHaveData");
-                                            var args = {
-                                                droppedElement: $(this),
-                                                event: event,
-                                                ui: ui,
-                                                predefinedControl: null,
-                                                buildingBlock: null
-                                            };
-
-                                            var typeOfDraggingControl = ui.draggable.data("type");
-                                            var oControl = new Object();
-                                            // -------------- Building Block Controls[Better way] --------------//
-
-                                            if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock") {
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-
-                                                var controlID = ui.draggable.data("id");
-
-                                                //need to apply each for this and then search on each [0]
-
-                                                var bb = undefined;
-                                                if (typeOfDraggingControl == "buildingBlock") {
-                                                    $.each(buildingBlocksGlobal, function (i, obj) {
-                                                        if (obj[0].ID == controlID) {
-                                                            bb = obj[0];
-                                                        }
-
-                                                    });
-                                                } else {
-                                                    
-                                                    $.each(contentBlocksGlobal, function (i, obj) {
-                                                        if (obj[0]["blockId.encode"] == controlID) {
-                                                            bb = obj[0];
-                                                        }
-                                                    });
-                                                    
-                                                }
-                                                if (bb != undefined) {
-                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
-                                                    var decodeHTML = $('<div/>').html(bb.html).text();
-                                                    oControl.Html = $(decodeHTML);
-                                                    oControl.Type = "buildingBlock";
-                                                    oControl.ID = bb.ID;
-
-                                                    args.predefinedControl = oControl;
-
-                                                    //////////////////////////////////////////////////////////////////////////////////////////
-
-                                                    //InitializeAllEvents(args.droppedElement);
-
-                                                    //Place predefined html into dropped area.
-                                                    args.droppedElement.html(oControl.Html);
-
-                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-
-
-                                                }
-                                            } else if (typeOfDraggingControl == "droppedImage") {
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-
-                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");
-                                                var ui = {draggable: null};
-                                                ui.draggable = mee.dragElement;
-                                                var argsThis = {
-                                                    droppedElement: $(this).find(".drapableImageContainer"),
-                                                    event: event,
-                                                    ui: ui
-                                                };
-                                                OnImageDropped(argsThis);
-                                                oInitDestroyEvents.InitAll($(this));
-                                                mee.dragElement = null;
-                                            } else if (typeOfDraggingControl == "droppedUrlImage") {
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-                                                $(this).append("<div class='drapableImageContainer'>Drag image here</div>");
-                                                var ui = {draggable: null};
-                                                ui.draggable = mee.dragElement;
-                                                var argsThis = {
-                                                    droppedElement: $(this).find(".drapableImageContainer"),
-                                                    event: event,
-                                                    ui: ui
-                                                };
-                                                var dialogOptions = {
-                                                    title: "Paste Image URL",
-                                                    css: {
-                                                        "width": "490px",
-                                                        "margin-left": "-230px"
-                                                    },
-                                                    bodyCss: {
-                                                        "min-height": "75px"
-                                                    },
-                                                    headerIcon: 'image',
-                                                    buttons: {
-                                                        saveBtn: {
-                                                            text: 'Insert'
-                                                        }
-                                                    }
-                                                };
-                                                var dialog = null;
-                                                dialog = options._app.showStaticDialog(dialogOptions);
-                                                options._app.showLoading("Loading...", dialog.getBody());
-                                                dialog.$el.css("z-index", "99999");
-                                                $(".modal-backdrop").css("z-index", "99998");                                
-                                                    
-                                                dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 24px;" placeholder="Paste image url here" id="onlineimg_url"></div></div>');
-
-                                                dialog.$el.find('.dialog-backbtn').hide();
-                                                dialog.saveCallBack(function () {
-                                                    var stringImg = dialog.$el.find('#onlineimg_url').val();
-                                                    argsThis['imgurl'] = stringImg;
-                                                    if (/^((https?|ftp):)?\/\/.*(jpeg|jpg|png|gif|bmp)$/.test(stringImg) == true) {
-                                                        OnUrlImageAdded(argsThis, dialog);
-                                                    } else {
-                                                        options._app.showError({
-                                                            control: dialog.$el.find('.imgurl-container'),
-                                                            message: "Invalid image url path."
-                                                        });
-
-                                                    }
-
-                                                });
-                                                options._app.showLoading(false, dialog.getBody());
-
-                                                oInitDestroyEvents.InitAll($(this));
-                                                mee.dragElement = null;
-                                            } else if (typeOfDraggingControl == "formBlock") {
-
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-
-
-                                                var oControl = new Object();
-                                                var controlID = ui.draggable.data("id");
-
-                                                var isNew = ui.draggable.data("isnew");
-                                                //need to apply each for this and then search on each [0]
-
-                                                if (!args.droppedElement.hasClass("MEEFORMCONTAINER") && meeIframe.find(".MEEFORMCONTAINER").length == 0) {
-                                                    args.droppedElement.append("<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>");
-                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-                                                    args.droppedElement = args.droppedElement.find(".MEEFORMCONTAINER");
-                                                }
-                                                
-
-                                                if (!isNew) {
-                                                    args.FormId = controlID;
-                                                    if (options.LoadFormContents != null) {
-                                                        options.LoadFormContents(args);
-                                                    }
-
-                                                    if (args.formContents != undefined) {
-                                                        //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                        var fContents = options._app.decodeHTML(args.formContents).replace("https:", "") + options.pageId + "/";
-
-                                                        if (args.droppedElement.hasClass("MEEFORMCONTAINER")) {
-                                                            var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
-                                                            oControl.Html = preview_iframe;
-                                                            oControl.Type = "formBlock";
-                                                            oControl.ID = args.FormId;
-                                                            args.predefinedControl = oControl;
-                                                            args.droppedElement.html(oControl.Html);
-                                                            args.droppedElement.removeClass("formPlaceHolderAlone");
-                                                            args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
-                                                            oInitDestroyEvents.InitAll(args.droppedElement);
-                                                            args.droppedElement.find(".editformpanel button").attr("data-formid", args.FormId)
-                                                        } else {
-                                                            var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
-                                                            form_ele.find("iframe").attr("src", options._app.decodeHTML(fContents));
-                                                            form_ele.find(".editformpanel button").attr("data-formid", args.FormId);
-                                                        }
-                                                        options.formCallBack(args.FormId);
-                                                    }
-                                                } else {
-                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
-                                                    mee.showFormWizard('');
-                                                    if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length == 0) {
-                                                        oControl.Html = preview_iframe;
-                                                        oControl.Type = "formBlock";
-                                                        oControl.ID = args.FormId;
-                                                        args.predefinedControl = oControl;
-                                                        args.droppedElement.html(oControl.Html);
-                                                        args.droppedElement.removeClass("formPlaceHolderAlone");
-                                                        args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
-                                                        oInitDestroyEvents.InitAll(args.droppedElement);
-                                                    }
-                                                }
-                                            } else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
-                                                
-                                                if ($(this).parent().hasClass("dcInternalContents")) {
-                                                    return;
-                                                } else {
-                                                    console.log("Dropping DC in Container");
-                                                }
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                        $(this).before(CreateDroppableWithAllFunctions());
-                                                        $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-                                                if(meeIframe.find('table[keyword="'+ui.draggable.data("keyword")+'"]').length < 1){
-                                                        
-                                                        
-
-                                                        $(this).addClass("csDynamicData ");
-
-                                                        var isNew = ui.draggable.data("isnew");
-                                                        var predefinedControl = myElement.find(".divDCTemplate").html();
-                                                        oControl.Html = $(predefinedControl);
-                                                        oControl.Type = predefinedControl.type;
-                                                        args.predefinedControl = oControl;
-                                                        args.droppedElement.html(oControl.Html);
-
-                                                        if (!isNew) {
-
-                                                            //Call overridden Method here: will use when exposing properties to developer
-                                                            if (options.OnExistingDynamicControlDropped != null) {
-
-                                                                if (ui.draggable.data("isdummy") != null) {
-                                                                    //Contruct here dummy variation:
-                                                                    var dv = new DynamicVariation();
-                                                                    dv.DynamicVariationID = "v123";
-                                                                    dv.IsUpdate = false;
-                                                                    dv.Label = "adnan123"
-
-                                                                    var dc = new DynamicContents();
-                                                                    dc.Label = "Default";
-                                                                    dc.DynamicContentID = "c123";
-                                                                    dc.IsDefault = true;
-                                                                    dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr>default<td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
-                                                                    dv.ListOfDynamicContents.push(dc);
-
-
-                                                                    var dc = new DynamicContents();
-                                                                    dc.Label = "dc 123";
-                                                                    dc.DynamicContentID = "c123";
-                                                                    dc.IsDefault = false;
-                                                                    dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr><td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
-                                                                    dv.ListOfDynamicContents.push(dc);
-
-                                                                    args.DynamicVariation = dv;
-                                                                    //alert("dummy");
-
-
-                                                                    InitializeDynamicControl(args);
-                                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-
-                                                                } else {
-
-                                                                    // args.ID = ui.draggable.data("id");
-                                                                    args.ID = ui.draggable.data("keyword");
-                                                                    mee_view.DCDrag = true; // DC ADD
-                                                                    args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
-
-                                                                    InitializeDynamicControl(args);
-                                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-
-                                                                }
-                                                            }
-                                                        } else {
-
-                                                            var dcContentVariationWindow = args.predefinedControl.Html.find(".dcVariationName");
-
-                                                            dcContentVariationWindow.height(dcContentVariationWindow.parents("table.dynamicContentContainer").height())
-                                                            dcContentVariationWindow.show();
-                                                            dcContentVariationWindow.find(".btnCancelVariation").click(function (event) {
-                                                                event.stopPropagation();
-                                                                DeleteElement(args.droppedElement);
-                                                                if (dcContentNameWindow) {
-                                                                    dcContentNameWindow.hide();
-                                                                }
-                                                            });
-                                                            var saveContentBlock = function () {
-                                                                var txtVariationName = dcContentVariationWindow.find(".txtPlaceHolder");
-                                                                
-                                                                dcContentVariationWindow.find(".btnSaveVariation").addClass("saving");
-                                                                if ($.trim(txtVariationName.val()) == "")
-                                                                {
-                                                                    txtVariationName.addClass("error-dc");
-                                                                    changFlag.editor_change = false;
-                                                                    //alert("Please enter dynamic control name.");
-
-                                                                } else {
-                                                                    
-                                                                    args.DynamicVariation = new DynamicVariation();
-                                                                    args.DynamicVariation.Label = txtVariationName.val();
-                                                                    args.DynamicVariation.isUpdate = false;
-                                                                    txtVariationName.prop("disabled", true);
-                                                                    var dc = new DynamicContents();
-                                                                    var listOfDC = new Array();
-                                                                    listOfDC.push(dc);
-                                                                    args.DynamicVariation.ListOfDynamicContents = listOfDC;
-                                                                    txtVariationName.removeClass("error-dc");
-                                                                    if (options.OnDynamicControlSave != null) {
-                                                                       
-                                                                        options.OnDynamicControlSave(args.DynamicVariation,mee_view,txtVariationName);
-                                                                    }
-                                                                    if(args.DynamicVariation.DynamicVariationID != 0){
-                                                                        args.DynamicVariation = loadDynamicVariationFromServer('', args.DynamicVariation.DynamicVariationID);
-                                                                        args.ID = args.DynamicVariation.DynamicVariationCode;
-
-                                                                        args.DynamicVariation.Label = txtVariationName.val();
-
-                                                                        txtVariationName.data("variationID", args.DynamicVariation.DynamicVariationID);
-
-
-
-                                                                        _LoadDynamicBlocks();
-
-                                                                        InitializeDynamicControl(args);
-
-                                                                        oInitDestroyEvents.InitAll(args.droppedElement);
-                                                                        txtVariationName.prop("disabled", false);
-
-                                                                        dcContentVariationWindow.hide();
-                                                                    }
-                                                                    
-                                                                }
-                                                                dcContentVariationWindow.find(".btnSaveVariation").removeClass("saving");
-                                                                
-                                                            }
-                                                            setTimeout(_.bind(function () {
-                                                                this.find(".txtPlaceHolder").focus();
-                                                            }, dcContentVariationWindow), 300);
-                                                            dcContentVariationWindow.find(".btnSaveVariation").click(function () {
-                                                                saveContentBlock();
-                                                            });
-                                                            dcContentVariationWindow.find(".txtPlaceHolder").keyup(function (e) {
-                                                                if (e.keyCode === 13) {
-                                                                    saveContentBlock();
-                                                                }
-                                                            })
-                                                        }
-                                                }else{
-                                                                $(this).prev().remove();
-                                                                //$(this).next().remove();
-                                                                $(this).remove();
-                                                                options._app.showAlert('Dynamic Block already exists.', $("body"));
-                                                }
-                                            } else {
-
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-
-                                                // -------------- Predefined Controls[Better way] --------------//
-                                                var predefinedControl = Enumerable.From(predefinedControls).Where("x => x.type == '" + typeOfDraggingControl + "'").FirstOrDefault();
-                                                if (predefinedControl != undefined) {
-                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
-
-                                                    oControl.Html = $(predefinedControl.html);
-                                                    oControl.Type = predefinedControl.type;
-
-                                                    args.predefinedControl = oControl;
-
-                                                    //Place predefined html into dropped area.                                                    
-                                                    args.droppedElement.html(oControl.Html);
-
-
-                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-
-
-
-                                                }
-
-                                            }
-
-                                            //
-
-                                            //Controlling ELEMENT resizing here [Containers]
-                                            //Work on control - CONTROL ONLY
-                                            SetElementSize(args); //$$
-                                            ////////////////////////////////////
-
-
-                                            OnNewElementDropped(args);
-
-
-                                        }
-                                        mee.dragElement = null;
-                                        mee.dragElementIframe = null;
-                                    });
-
-
-                                    var drop = function (event, ui) {
-
-
-                                    }
-
+                                                                             
+                                        
+                                        //Call dropElement Function 
+                                        mee.dropElement($(this),event);
+
+                                        
+                                    });                                   
 
                                     return sender;
                                 }
+                                mee.clearDropEffects = function(){
+                                    meeIframe.find(".mainContentHtml").removeClass("show-droppables");
+                                    meeIframe.find(".MEEFORMCONTAINER").removeInlineStyle("outline");
+                                    mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').remove();
+                                    meeIframe.find(".editformpanel").hide();
+                                    meeIframe.find(".dropHighlighter").removeClass("dropHighlighter");  
+                                    meeIframe.find(".dragIsOverMe").removeClass("dragIsOverMe"); 
+                                    meeIframe.find(".dragIsOverDrop").removeClass("dragIsOverDrop"); 
+                                    $(".file-border").removeClass("file-border");
+                                    
+                                }
+                                mee.dropElement = function (dropArea, event) {
+                                      if (dropArea.css("visibility") == "hidden") {
+                                            //DO NOTHING
+                                            return;
+                                        }   
+                                       //MUST REMOVE IN ORDER TO WORK PROPER
+                                       dropArea.removeAttr("style");
+                                        
+                                       var ui = {draggable: null};                                        
+                                       ui.draggable = mee.dragElementIframe ? mee.dragElementIframe : mee.dragElement; 
+                                       if (IsFirstDroppableElement) {                                           
+                                           IsFirstDroppableElement = false;
+                                       }
+
+                                       //Once dropped Delete myDroppable class here and Remove functionality of Droppable here                                
+                                       dropArea.removeClass("myDroppable");
+
+                                       //Dragging and Dropping between elements
+                                       if (ui.draggable.hasClass("csHaveData")) {
+
+                                           //handling DC into DC MOVE
+                                           if (ui.draggable.hasClass("csDynamicData")) {
+                                               if (dropArea.parent().hasClass("dcInternalContents")) {
+                                                   return;
+                                               } else {
+                                                   //console.log("Dropping DC in Container");
+                                               }
+                                           }
+
+                                           //Add class to newly "SWAPED" elment - will use to delete droppable from container etc;
+                                           dropArea.addClass("csHaveData");
+
+                                           //INSERT AND REMOVE DROPPABLES HERE                            
+                                           ui.draggable.next(".myDroppable").remove();
+
+                                           if (dropArea.prev(".myDroppable").length == 0) {
+                                               dropArea.before(CreateDroppableWithAllFunctions());
+                                           }
+
+                                           if (dropArea.next(".myDroppable").length == 0) {
+                                               dropArea.after(CreateDroppableWithAllFunctions());
+                                           }
+                                           /////////////////////////////////////
+
+                                           dropArea.replaceWith(ui.draggable);
+
+                                       }
+                                       //Element recieving from controls panel:
+                                       else {   //Add class to newly entered element from control panel - will use to delete droppable from container etc;
+
+                                           dropArea.addClass("csHaveData");
+                                           var args = {
+                                               droppedElement: dropArea,
+                                               event: event,
+                                               ui: ui,
+                                               predefinedControl: null,
+                                               buildingBlock: null
+                                           };
+
+                                           var typeOfDraggingControl = ui.draggable.data("type");
+                                           var oControl = new Object();
+                                           // -------------- Building Block Controls[Better way] --------------//
+
+                                           if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock") {
+                                               //INSERT DROPPABLE BEFORE AND AFTER            
+                                               dropArea.before(CreateDroppableWithAllFunctions());
+                                               dropArea.after(CreateDroppableWithAllFunctions());
+                                               ///////
+
+                                               var controlID = ui.draggable.data("id");
+
+                                               //need to apply each for this and then search on each [0]
+
+                                               var bb = undefined;
+                                               if (typeOfDraggingControl == "buildingBlock") {
+                                                   $.each(buildingBlocksGlobal, function (i, obj) {
+                                                       if (obj[0].ID == controlID) {
+                                                           bb = obj[0];
+                                                       }
+
+                                                   });
+                                               } else {
+
+                                                   $.each(contentBlocksGlobal, function (i, obj) {
+                                                       if (obj[0]["blockId.encode"] == controlID) {
+                                                           bb = obj[0];
+                                                       }
+                                                   });
+
+                                               }
+                                               if (bb != undefined) {
+                                                   //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
+                                                   var decodeHTML = $('<div/>').html(bb.html).text();
+                                                   oControl.Html = $(decodeHTML);
+                                                   oControl.Type = "buildingBlock";
+                                                   oControl.ID = bb.ID;
+
+                                                   args.predefinedControl = oControl;
+
+                                                   //////////////////////////////////////////////////////////////////////////////////////////
+
+                                                   //InitializeAllEvents(args.droppedElement);
+
+                                                   //Place predefined html into dropped area.
+                                                   args.droppedElement.html(oControl.Html);
+
+                                                   oInitDestroyEvents.InitAll(args.droppedElement);
+
+
+                                               }
+                                           } else if (typeOfDraggingControl == "droppedImage") {
+                                               //INSERT DROPPABLE BEFORE AND AFTER            
+                                               dropArea.before(CreateDroppableWithAllFunctions());
+                                               dropArea.after(CreateDroppableWithAllFunctions());
+                                               ///////
+
+                                               dropArea.append("<div class='drapableImageContainer'>Drag image here</div>");
+                                               var ui = {draggable: null};
+                                               ui.draggable = mee.dragElement;
+                                               var argsThis = {
+                                                   droppedElement: dropArea.find(".drapableImageContainer"),
+                                                   event: event,
+                                                   ui: ui
+                                               };
+                                               OnImageDropped(argsThis);
+                                               oInitDestroyEvents.InitAll(dropArea);
+                                               mee.dragElement = null;
+                                           } else if (typeOfDraggingControl == "droppedUrlImage") {
+                                               //INSERT DROPPABLE BEFORE AND AFTER            
+                                               dropArea.before(CreateDroppableWithAllFunctions());
+                                               dropArea.after(CreateDroppableWithAllFunctions());
+                                               ///////
+                                               dropArea.append("<div class='drapableImageContainer'>Drag image here</div>");
+                                               var ui = {draggable: null};
+                                               ui.draggable = mee.dragElement;
+                                               var argsThis = {
+                                                   droppedElement: dropArea.find(".drapableImageContainer"),
+                                                   event: event,
+                                                   ui: ui
+                                               };
+                                               var dialogOptions = {
+                                                   title: "Paste Image URL",
+                                                   css: {
+                                                       "width": "490px",
+                                                       "margin-left": "-230px"
+                                                   },
+                                                   bodyCss: {
+                                                       "min-height": "75px"
+                                                   },
+                                                   headerIcon: 'image',
+                                                   buttons: {
+                                                       saveBtn: {
+                                                           text: 'Insert'
+                                                       }
+                                                   }
+                                               };
+                                               var dialog = null;
+                                               dialog = options._app.showStaticDialog(dialogOptions);
+                                               options._app.showLoading("Loading...", dialog.getBody());
+                                               dialog.$el.css("z-index", "99999");
+                                               $(".modal-backdrop").css("z-index", "99998");                                
+
+                                               dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 24px;" placeholder="Paste image url here" id="onlineimg_url"></div></div>');
+
+                                               dialog.$el.find('.dialog-backbtn').hide();
+                                               dialog.saveCallBack(function () {
+                                                   var stringImg = dialog.$el.find('#onlineimg_url').val();
+                                                   argsThis['imgurl'] = stringImg;
+                                                   if (/^((https?|ftp):)?\/\/.*(jpeg|jpg|png|gif|bmp)$/.test(stringImg) == true) {
+                                                       OnUrlImageAdded(argsThis, dialog);
+                                                   } else {
+                                                       options._app.showError({
+                                                           control: dialog.$el.find('.imgurl-container'),
+                                                           message: "Invalid image url path."
+                                                       });
+
+                                                   }
+
+                                               });
+                                               options._app.showLoading(false, dialog.getBody());
+
+                                               oInitDestroyEvents.InitAll(dropArea);
+                                               mee.dragElement = null;
+                                           } else if (typeOfDraggingControl == "formBlock") {
+
+                                               //INSERT DROPPABLE BEFORE AND AFTER            
+                                               dropArea.before(CreateDroppableWithAllFunctions());
+                                               dropArea.after(CreateDroppableWithAllFunctions());
+                                               ///////
+
+
+                                               var oControl = new Object();
+                                               var controlID = ui.draggable.data("id");
+
+                                               var isNew = ui.draggable.data("isnew");
+                                               //need to apply each for this and then search on each [0]
+
+                                               if (!args.droppedElement.hasClass("MEEFORMCONTAINER") && meeIframe.find(".MEEFORMCONTAINER").length == 0) {
+                                                   args.droppedElement.append("<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>");
+                                                   oInitDestroyEvents.InitAll(args.droppedElement);
+                                                   args.droppedElement = args.droppedElement.find(".MEEFORMCONTAINER");
+                                               }
+
+
+                                               if (!isNew) {
+                                                   args.FormId = controlID;
+                                                   if (options.LoadFormContents != null) {
+                                                       options.LoadFormContents(args);
+                                                   }
+
+                                                   if (args.formContents != undefined) {
+                                                       //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
+                                                       var fContents = options._app.decodeHTML(args.formContents).replace("https:", "") + options.pageId + "/";
+
+                                                       if (args.droppedElement.hasClass("MEEFORMCONTAINER")) {
+                                                           var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                           oControl.Html = preview_iframe;
+                                                           oControl.Type = "formBlock";
+                                                           oControl.ID = args.FormId;
+                                                           args.predefinedControl = oControl;
+                                                           args.droppedElement.html(oControl.Html);
+                                                           args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                           args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                           oInitDestroyEvents.InitAll(args.droppedElement);
+                                                           args.droppedElement.find(".editformpanel button").attr("data-formid", args.FormId)
+                                                       } else {
+                                                           var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
+                                                           form_ele.find("iframe").attr("src", options._app.decodeHTML(fContents));
+                                                           form_ele.find(".editformpanel button").attr("data-formid", args.FormId);
+                                                       }
+                                                       options.formCallBack(args.FormId);
+                                                   }
+                                               } else {
+                                                   var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                   mee.showFormWizard('');
+                                                   if (meeIframe.find(".MEEFORMCONTAINER #form-iframe").length == 0) {
+                                                       oControl.Html = preview_iframe;
+                                                       oControl.Type = "formBlock";
+                                                       oControl.ID = args.FormId;
+                                                       args.predefinedControl = oControl;
+                                                       args.droppedElement.html(oControl.Html);
+                                                       args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                       args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                       oInitDestroyEvents.InitAll(args.droppedElement);
+                                                   }
+                                               }
+                                           } else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
+
+                                               if (dropArea.parent().hasClass("dcInternalContents")) {
+                                                   return;
+                                               } else {
+                                                  // console.log("Dropping DC in Container");
+                                               }
+                                               //INSERT DROPPABLE BEFORE AND AFTER            
+                                                       dropArea.before(CreateDroppableWithAllFunctions());
+                                                       dropArea.after(CreateDroppableWithAllFunctions());
+                                               ///////
+                                               if(meeIframe.find('table[keyword="'+ui.draggable.data("keyword")+'"]').length < 1){
+
+
+
+                                                       dropArea.addClass("csDynamicData ");
+
+                                                       var isNew = ui.draggable.data("isnew");
+                                                       var predefinedControl = myElement.find(".divDCTemplate").html();
+                                                       oControl.Html = $(predefinedControl);
+                                                       oControl.Type = predefinedControl.type;
+                                                       args.predefinedControl = oControl;
+                                                       args.droppedElement.html(oControl.Html);
+
+                                                       if (!isNew) {
+
+                                                           //Call overridden Method here: will use when exposing properties to developer
+                                                           if (options.OnExistingDynamicControlDropped != null) {
+
+                                                               if (ui.draggable.data("isdummy") != null) {
+                                                                   //Contruct here dummy variation:
+                                                                   var dv = new DynamicVariation();
+                                                                   dv.DynamicVariationID = "v123";
+                                                                   dv.IsUpdate = false;
+                                                                   dv.Label = "adnan123"
+
+                                                                   var dc = new DynamicContents();
+                                                                   dc.Label = "Default";
+                                                                   dc.DynamicContentID = "c123";
+                                                                   dc.IsDefault = true;
+                                                                   dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr>default<td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
+                                                                   dv.ListOfDynamicContents.push(dc);
+
+
+                                                                   var dc = new DynamicContents();
+                                                                   dc.Label = "dc 123";
+                                                                   dc.DynamicContentID = "c123";
+                                                                   dc.IsDefault = false;
+                                                                   dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr><td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
+                                                                   dv.ListOfDynamicContents.push(dc);
+
+                                                                   args.DynamicVariation = dv;
+                                                                   //alert("dummy");
+
+
+                                                                   InitializeDynamicControl(args);
+                                                                   oInitDestroyEvents.InitAll(args.droppedElement);
+
+                                                               } else {
+
+                                                                   // args.ID = ui.draggable.data("id");
+                                                                   args.ID = ui.draggable.data("keyword");
+                                                                   mee_view.DCDrag = true; // DC ADD
+                                                                   args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
+
+                                                                   InitializeDynamicControl(args);
+                                                                   oInitDestroyEvents.InitAll(args.droppedElement);
+
+                                                               }
+                                                           }
+                                                       } else {
+
+                                                           var dcContentVariationWindow = args.predefinedControl.Html.find(".dcVariationName");
+
+                                                           dcContentVariationWindow.height(dcContentVariationWindow.parents("table.dynamicContentContainer").height())
+                                                           dcContentVariationWindow.show();
+                                                           dcContentVariationWindow.find(".btnCancelVariation").click(function (event) {
+                                                               event.stopPropagation();
+                                                               DeleteElement(args.droppedElement);
+                                                               if (dcContentNameWindow) {
+                                                                   dcContentNameWindow.hide();
+                                                               }
+                                                           });
+                                                           var saveContentBlock = function () {
+                                                               var txtVariationName = dcContentVariationWindow.find(".txtPlaceHolder");
+
+                                                               dcContentVariationWindow.find(".btnSaveVariation").addClass("saving");
+                                                               if ($.trim(txtVariationName.val()) == "")
+                                                               {
+                                                                   txtVariationName.addClass("error-dc");
+                                                                   changFlag.editor_change = false;
+                                                                   //alert("Please enter dynamic control name.");
+
+                                                               } else {
+
+                                                                   args.DynamicVariation = new DynamicVariation();
+                                                                   args.DynamicVariation.Label = txtVariationName.val();
+                                                                   args.DynamicVariation.isUpdate = false;
+                                                                   txtVariationName.prop("disabled", true);
+                                                                   var dc = new DynamicContents();
+                                                                   var listOfDC = new Array();
+                                                                   listOfDC.push(dc);
+                                                                   args.DynamicVariation.ListOfDynamicContents = listOfDC;
+                                                                   txtVariationName.removeClass("error-dc");
+                                                                   if (options.OnDynamicControlSave != null) {
+
+                                                                       options.OnDynamicControlSave(args.DynamicVariation,mee_view,txtVariationName);
+                                                                   }
+                                                                   if(args.DynamicVariation.DynamicVariationID != 0){
+                                                                       args.DynamicVariation = loadDynamicVariationFromServer('', args.DynamicVariation.DynamicVariationID);
+                                                                       args.ID = args.DynamicVariation.DynamicVariationCode;
+
+                                                                       args.DynamicVariation.Label = txtVariationName.val();
+
+                                                                       txtVariationName.data("variationID", args.DynamicVariation.DynamicVariationID);
+
+
+
+                                                                       _LoadDynamicBlocks();
+
+                                                                       InitializeDynamicControl(args);
+
+                                                                       oInitDestroyEvents.InitAll(args.droppedElement);
+                                                                       txtVariationName.prop("disabled", false);
+
+                                                                       dcContentVariationWindow.hide();
+                                                                   }
+
+                                                               }
+                                                               dcContentVariationWindow.find(".btnSaveVariation").removeClass("saving");
+
+                                                           }
+                                                           setTimeout(_.bind(function () {
+                                                               this.find(".txtPlaceHolder").focus();
+                                                           }, dcContentVariationWindow), 300);
+                                                           dcContentVariationWindow.find(".btnSaveVariation").click(function () {
+                                                               saveContentBlock();
+                                                           });
+                                                           dcContentVariationWindow.find(".txtPlaceHolder").keyup(function (e) {
+                                                               if (e.keyCode === 13) {
+                                                                   saveContentBlock();
+                                                               }
+                                                           })
+                                                       }
+                                               }else{
+                                                               dropArea.prev().remove();                                                              
+                                                               dropArea.remove();
+                                                               options._app.showAlert('Dynamic Block already exists.', $("body"));
+                                               }
+                                           } else {
+
+                                               //INSERT DROPPABLE BEFORE AND AFTER            
+                                               dropArea.before(CreateDroppableWithAllFunctions());
+                                               dropArea.after(CreateDroppableWithAllFunctions());
+                                               ///////
+
+                                               // -------------- Predefined Controls[Better way] --------------//
+                                               var predefinedControl = Enumerable.From(predefinedControls).Where("x => x.type == '" + typeOfDraggingControl + "'").FirstOrDefault();
+                                               if (predefinedControl != undefined) {
+                                                   //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
+
+                                                   oControl.Html = $(predefinedControl.html);
+                                                   oControl.Type = predefinedControl.type;
+
+                                                   args.predefinedControl = oControl;
+
+                                                   //Place predefined html into dropped area.                                                    
+                                                   args.droppedElement.html(oControl.Html);
+
+
+                                                   oInitDestroyEvents.InitAll(args.droppedElement);
+
+
+
+                                               }
+
+                                           }
+
+                                           //
+
+                                           //Controlling ELEMENT resizing here [Containers]
+                                           //Work on control - CONTROL ONLY
+                                           SetElementSize(args); //$$
+                                           ////////////////////////////////////
+
+
+                                           OnNewElementDropped(args);
+
+
+                                       }
+                                       mee.dragElement = null;
+                                       mee.dragElementIframe = null;
+
+
+                                } //End of DropElement Function
+                                
                                 mee.startDragging = function (e) {
                                     myElement.find(".divBuildingBlockLoading").parent().height();
                                     var _height = myElement.find(".divBuildingBlockLoading").parent().height() - 30;
@@ -7101,9 +7123,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         //Exclude here dragging element (which is added by jqueryUI)
                                         var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
                                         InsertDroppableInEmpty($(this), firstLevelLiDroppable);
-                                        //Last element FULL height                                           
-                                        SetLastElementHeight($(this));
+                                        //Last element FULL height                                                                                   
+                                        
                                     });
+                                    SetLastElementHeight();
                                     $(e.target).next(".myDroppable").invisible();
                                     $(e.target).prev(".myDroppable").invisible();
                                 }
@@ -7134,7 +7157,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 function attachClickEvent(object) {
                                     var d1;
                                     if (object == null) {
-                                        console.log('object is empty');
+                                        //console.log('object is empty');
                                         //d1 = CreateDroppable();
                                     } else {
                                         d1 = $(object);
@@ -7155,7 +7178,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var droppableElement = null;
                                         droppableElement = CreateDroppableWithAllFunctions();
                                         if (IsFirstDroppableElement) {
-                                            droppableElement.append("<div style='text-align:center; position:relative; top:40px; font-style:italic'> DROP HERE </div>");
+                                            droppableElement.append("<div style='text-align:center; position:relative; top:40px; font-style:italic' class='emptyArea'> DROP HERE </div>");
                                         }
                                         sender.append(droppableElement);
                                     }
@@ -7188,17 +7211,24 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var IsFirstDroppableElement = false;
 
                                 //Last Element get full height here
-                                var SetLastElementHeight = function (element) {
-
+                                var SetLastElementHeight = function () {
+                                    var emptyAreaEle = meeIframe.find(".emptyArea")
+                                    if(emptyAreaEle.length){
+                                        emptyAreaEle.parent().css("cssText","height:400px !important");                                        
+                                    }
                                     // Get parent element height and apply to UL (.sortable)
-                                    var parentHeight = element.parent().height();
+                                    /*var elementParent = element.parent();
+                                    var parentHeight = elementParent.height();
                                     element.height(parentHeight);
+                                    
+                                    if(elementParent.hasClass("mainContentHtml")){
+                                        
+                                    }
 
                                     //Get first level children in UL here:
                                     var firstLevelAllLi = element.children("li:not(.ui-draggable-dragging)");
                                     var firstLevelAllLiLength = firstLevelAllLi.length;
                                     var hightExcludingLast = 0;
-
                                     firstLevelAllLi.each(function (index, element) {
 
                                         if (index != firstLevelAllLiLength - 1) {
@@ -7213,7 +7243,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                             $(this).height(lastDroppableHeight);
                                         }
-                                    });
+                                    });*/
                                 }
 
                                 //---------------------  MAIN DRAGGABLE--------------------------//dragging1
@@ -7223,7 +7253,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                     $(elementToApply).on('dragstart', function (event) {
-                                        event.originalEvent.dataTransfer.setData("text", "dragging");
+                                        event.originalEvent.dataTransfer.setData("text", "");
                                         /*--Hide tooltop--*/
                                         setTimeout(function () {
                                             $('.showtooltip-dg').tooltip('hide')
@@ -7271,7 +7301,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                                 InsertDroppableInEmpty($(this), firstLevelLiDroppable);
                                                 if (indx === 0) {
-                                                    SetLastElementHeight($(this));
+                                                    SetLastElementHeight();
                                                 }
                                             });
 
@@ -7294,14 +7324,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     }).on('dragend', function (event) {
                                         event.preventDefault();
-                                        meeIframe.find(".mainContentHtml").removeClass("show-droppables");
-                                        meeIframe.find(".MEEFORMCONTAINER").removeInlineStyle("outline");
-                                        mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').remove();
-                                        meeIframe.find(".editformpanel").hide();
-                                        meeIframe.find(".dropHighlighter").removeClass("dropHighlighter");
+                                        var dropArea = meeIframe.find(".dropHighlighter");    
+                                        // New drag changes for dropping out side of drop area dragIsOverDrop
+                                        if(dropArea.length && !dropArea.hasClass("dragIsOverMe") && !dropArea.hasClass("dragIsOverDrop")){
+                                            if (changFlag) {
+                                                changFlag.editor_change = true;
+                                            }                                            
+                                            mee.clearDropEffects();
+                                            mee.dropElement(dropArea,event)
+                                        }
+                                        else{
+                                            mee.clearDropEffects();                                            
+                                        }
                                         RemoveDroppables(meeIframe);
-                                        $(".file-border").removeClass("file-border");
-                                        mee.dragElement = null;
+                                        mee.dragElement = null;   
+                                        
                                         //
                                     });
 
@@ -7931,7 +7968,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             //}, 100);
 
                                         } else {
-                                            console.log('All toolbars are disabled');
+                                            //console.log('All toolbars are disabled');
                                         }
                                     })
                                 }
