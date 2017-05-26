@@ -58,13 +58,16 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                         this.$(".subacc-url").val(this.app.decodeHTML(_json.url));                                                                                         
                         this.$(".subacc-address1").val(this.app.decodeHTML(_json.address1));                        
                         this.$(".subacc-address2").val(this.app.decodeHTML(_json.address2));                        
-                        
+                        if(this.app.decodeHTML(_json.isSuppressShared)=="Y"){
+                            this.$("#o-partAsMaster").iCheck('check');
+                        }
                         
                         this.$(".subacc-sendername").val(this.app.decodeHTML(_json.senderName));
                         this.$(".subacc-fromEmail").val(this.app.decodeHTML(_json.fromEmail));
                         this.$(".subacc-fromemail").html(this.app.decodeHTML(_json.fromEmail));                        
                         this.$(".subacc-replyto").val(this.app.decodeHTML(_json.replyToEmail));
                         this.$(".subacc-webaddress").val(this.app.decodeHTML(_json.webAddress));
+                        
                         if(_json.apps){
                             _.each(_json.apps[0],function(val,key){
                                 if(val[0].appShortName=="BridgeMail System"){
@@ -91,7 +94,11 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                     if(this.validateForm()){
                         this.app.showLoading(this.user_id?"Updating ...":"Adding sub account...", dialog.$el);
                         var _type = this.user_id ? "updateOperator":"addOperator";
-                        var URL = "/pms/io/user/setData/?BMS_REQ_TK="+this.app.get('bms_token');        
+                        var pastAsMaster = "N";
+                        var URL = "/pms/io/user/setData/?BMS_REQ_TK="+this.app.get('bms_token');     
+                        if($("#o-partAsMaster").is(':checked')){
+                            pastAsMaster = "Y";
+                        }
                         var post_data = {"type":_type,opUserId:this.$(".subacc-userid").val(),email:this.$(".subacc-email").val()
                                     ,firstName:this.$(".subacc-firstname").val(),lastName:this.$(".subacc-lastname").val()
                                     ,phone:this.$(".subacc-telephone").val(),address1:this.$(".subacc-address1").val()
@@ -99,6 +106,7 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                                     ,senderName:this.$(".subacc-sendername").val(),webAddress:this.$(".subacc-webaddress").val()
                                     ,replyToEmail:this.$(".subacc-replyto").val()
                                     ,fromEmail:this.$(".subacc-fromEmail").val()
+                                    ,isSupressShared:pastAsMaster
                                     ,salesrep:this.$("._salesrep_grid input:checked").map(function() {return $(this).attr("data-salerep");}).get().join(",")
                                     ,pass1:this.$(".subacc-password").val(),pass2:this.$(".subacc-confirm-password").val(),
                                     appId:this.$(".app_subs input:checked").map(function() {return $(this).attr("data-appid");}).get().join(",")};
