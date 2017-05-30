@@ -842,16 +842,16 @@
                                                 var sVal = summaries["summary"+_d];
                                                 if(sVal && c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
                                                     sentData.push(parseInt(sVal[0].sentCount));
-                                                    openData.push(parseInt(sVal[0].openCount));
+                                                    openData.push(parseInt(sVal[0].uniqueOpenCount));
                                                     viewData.push(parseInt(sVal[0].pageViewsCount));
-                                                    clickCount.push(parseInt(sVal[0].clickCount));
+                                                    clickCount.push(parseInt(sVal[0].uniqueClickCount));
                                                     socialData.push(parseInt(sVal[0].socialCount));
                                                     bounceData.push(parseInt(sVal[0].bounceCount));
 
                                                     this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].uniqueClickCount);
                                                     this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].uniqueOpenCount);
                                                     this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                                     this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                                     _d = _d + 1;
@@ -870,16 +870,16 @@
                                             _.each(summary_json.summaries[0], function (sVal) {
                                                 categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
                                                 sentData.push(parseInt(sVal[0].sentCount));
-                                                openData.push(parseInt(sVal[0].openCount));
+                                                openData.push(parseInt(sVal[0].uniqueOpenCount));
                                                 viewData.push(parseInt(sVal[0].pageViewsCount));
-                                                clickCount.push(parseInt(sVal[0].clickCount));
+                                                clickCount.push(parseInt(sVal[0].uniqueClickCount));
                                                 socialData.push(parseInt(sVal[0].socialCount));
                                                 bounceData.push(parseInt(sVal[0].bounceCount));
 
                                                 this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].uniqueClickCount);
                                                 this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].uniqueOpenCount);
                                                 this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                                 this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                             }, this);
@@ -1117,16 +1117,16 @@
                                                 var sVal = summaries["summary"+_d];
                                                 if(sVal && c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
                                                     sentData.push(parseInt(sVal[0].sentCount));
-                                                    openData.push(parseInt(sVal[0].openCount));
+                                                    openData.push(parseInt(sVal[0].uniqueOpenCount));
                                                     viewData.push(parseInt(sVal[0].pageViewsCount));
-                                                    clickCount.push(parseInt(sVal[0].clickCount));
+                                                    clickCount.push(parseInt(sVal[0].uniqueClickCount));
                                                     socialData.push(parseInt(sVal[0].socialCount));
                                                     bounceData.push(parseInt(sVal[0].bounceCount));
 
                                                     this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].uniqueClickCount);
                                                     this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].uniqueOpenCount);
                                                     this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                                     this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                                     _d = _d + 1;
@@ -1145,16 +1145,16 @@
                                             _.each(summary_json.summaries[0], function (sVal) {
                                                 categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
                                                 sentData.push(parseInt(sVal[0].sentCount));
-                                                openData.push(parseInt(sVal[0].openCount));
+                                                openData.push(parseInt(sVal[0].uniqueOpenCount));
                                                 viewData.push(parseInt(sVal[0].pageViewsCount));
-                                                clickCount.push(parseInt(sVal[0].clickCount));
+                                                clickCount.push(parseInt(sVal[0].uniqueClickCount));
                                                 socialData.push(parseInt(sVal[0].socialCount));
                                                 bounceData.push(parseInt(sVal[0].bounceCount));
                                                 //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
                                                 this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].uniqueClickCount);
                                                 this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].uniqueOpenCount);
                                                 this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                                 this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                             }, this);
@@ -1652,16 +1652,16 @@
                                                 var sVal = summaries["summary"+_d];
                                                 if(sVal && c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
                                                     sentData.push(parseInt(sVal[0].sentCount));
-                                                    openData.push(parseInt(sVal[0].openCount));
+                                                    openData.push(parseInt(sVal[0].uniqueOpenCount));
                                                     viewData.push(parseInt(sVal[0].pageViewsCount));
-                                                    clickCount.push(parseInt(sVal[0].clickCount));
+                                                    clickCount.push(parseInt(sVal[0].uniqueClickCount));
                                                     socialData.push(parseInt(sVal[0].socialCount));
                                                     bounceData.push(parseInt(sVal[0].bounceCount));
 
                                                     this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].uniqueClickCount);
                                                     this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].uniqueOpenCount);
                                                     this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                                     this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                                     _d = _d + 1;
@@ -1680,16 +1680,16 @@
                                                 _.each(summary_json.summaries[0], function (sVal) {
                                                     categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
                                                     sentData.push(parseInt(sVal[0].sentCount));
-                                                    openData.push(parseInt(sVal[0].openCount));
+                                                    openData.push(parseInt(sVal[0].uniqueOpenCount));
                                                     viewData.push(parseInt(sVal[0].pageViewsCount));
-                                                    clickCount.push(parseInt(sVal[0].clickCount));
+                                                    clickCount.push(parseInt(sVal[0].uniqueClickCount));
                                                     socialData.push(parseInt(sVal[0].socialCount));
                                                     bounceData.push(parseInt(sVal[0].bounceCount));
                                                     //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
                                                     this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].uniqueClickCount);
                                                     this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].uniqueOpenCount);
                                                     this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                                     this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                                 }, this);

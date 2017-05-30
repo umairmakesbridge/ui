@@ -2046,9 +2046,7 @@ div.textcontent ol{
 .resizableImage .ui-icon-gripsmall-diagonal-se{
     background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(255, 255, 255, 1);
 }
-ul.show-droppables > li:last-child{
-    height:150px !important;
-}
+
 .tagbox .btn-green { float:left !important; margin-left: 5px}
 .tagbox:after {
     border-top: 6px solid #0096FF;
@@ -2279,4 +2277,10 @@ i.icon{
   background:#80C000 !important;
   box-shadow:0 0 5px rgba(0, 0, 0, 0.5)  !important;
   height:10px !important;
+}
+.dragIsOverMe {
+  height:4px !important;   
+}
+.dragIsOverDrop {
+  height:10px !important;   
 }
