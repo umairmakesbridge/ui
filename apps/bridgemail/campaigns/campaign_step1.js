@@ -370,18 +370,24 @@ function (template) {
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
                     if(this.$('#campaign_subject').val() == '')
-                    {            
+                    {         
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                                 control:this.$('.subject-container'),
                                 message:"Subject cannot be empty"
-                        });
+                            });
                         isValid = false;
                     }
                     else if(this.$('#campaign_subject').val().length > 100)
-                    {           
+                    {      
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                                 control:this.$('.subject-container'),
-                                message:"Subject cannot be empty"
+                                message:"Subject cannot have more than 100 characters"
                         });
                         isValid = false;
                     }
@@ -390,7 +396,10 @@ function (template) {
                          this.app.hideError({control:this.$(".subject-container")});
                     }
                     if(this.$('#campaign_from_name').val() == '')
-                    {           
+                    {       
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fname-container'),
                             message:"From name cannot be empty"
@@ -398,7 +407,10 @@ function (template) {
                         isValid = false;
                     }
                     else if(this.$('#campaign_from_name').val().indexOf("{{") && this.$('#campaign_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/)==-1)
-                    {           
+                    {     
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fname-container'),
                             message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & + \''
@@ -410,7 +422,10 @@ function (template) {
                             this.app.hideError({control:this.$(".fname-container")});
                     }
                     if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val()=="")
-                    {           
+                    {    
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fnamedefault-container'),
                             message:"From name cannot be empty"
@@ -418,6 +433,9 @@ function (template) {
                         isValid = false;
                     }
                     else if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/)==-1){
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fnamedefault-container'),
                              message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & + \''
@@ -430,7 +448,10 @@ function (template) {
                     }
                     
                     if(fromEmail === '' || (!merge_field_patt.test(fromEmail) && !this.app.validateEmail(fromEmail)))
-                    {           
+                    {    
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fromeEmail-container'),
                             message:"Please enter correct email address format"
@@ -443,7 +464,10 @@ function (template) {
                     }
                     
                     if(this.$(".femail-default-container").css('display')=="block" && (fromEmailDefault === '' || !this.app.validateEmail(fromEmailDefault)))
-                    {           
+                    {      
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.femail-default-container'),
                             message:"Please enter correct email address format"
@@ -457,7 +481,10 @@ function (template) {
                     merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
                     if(replyto !== '' && !merge_field_patt.test(replyto) && !this.app.validateEmail(replyto))
-                    {           
+                    {  
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                                 control:this.$('.replyto-container'),
                                 message:"Please enter correct email address format"
@@ -469,7 +496,10 @@ function (template) {
                         this.app.hideError({control:this.$(".replyto-container")});
                     }
                     if(this.$('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
-                    {           
+                    {      
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                                 control:this.$('.replyemail-container'),
                                 message:"Reply field cannot be empty"
@@ -477,7 +507,10 @@ function (template) {
                         isValid = false;
                     }
                     else if(this.$('#campaign_reply_to_default').css('display') == 'block' && !this.app.validateEmail(email_addr))
-                    {           
+                    {    
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.replyemail-container'),
                             message:"Please enter correct email address format"
