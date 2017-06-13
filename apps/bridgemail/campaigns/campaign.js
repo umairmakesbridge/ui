@@ -113,12 +113,11 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 render: function () {
                     this.$el.html(this.template({}));
                     this.wizard = this.options.wizard;
-
+                    this.app.showLoading("Loading...",this.wizard.$el.find('.step-contents'));
                     if (this.options.params && this.options.params.camp_id) {
                         this.camp_id = this.options.params.camp_id;
                     }
                     this.loadDataAjax(); // Load intial Calls
-
                     this.$el.find('div#targetssearch').searchcontrol({
                         id: 'target-list-search',
                         width: '300px',
@@ -1141,7 +1140,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     {
                         app.showError({
                             control: el.find('.subject-container'),
-                            message: "Subject cannot be empty"
+                            message: "Subject cannot have more than 100 characters"
                         });
                         isValid = false;
                     }
@@ -1611,11 +1610,16 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 },
                 loadDataAjax: function () {
                     var camp_obj = this;
+                    
                     //Load Defaults 
                     var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=campaignDefaults";
-                    jQuery.getJSON(URL, function (tsv, state, xhr) {
-                        if (xhr && xhr.responseText) {
-                            var defaults_json = jQuery.parseJSON(xhr.responseText);
+                    $.ajax({
+                        type:'GET',
+                        url:URL,
+                        dataType:'json',
+                        async:false,
+                        success:function(data){
+                            var defaults_json = data;
                             if (camp_obj.app.checkError(defaults_json)) {
                                 return false;
                             }
@@ -1631,6 +1635,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             var fromOptions = '';
                             var selected_fromEmail = '';
                             fromEmailsArray.sort();
+                            
                             //if (camp_obj.app.salesMergeAllowed) {
                             //  fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
                             // }
@@ -1643,7 +1648,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 else
                                     fromOptions += '<option value="' + fromEmailsArray[i] + '">' + fromEmailsArray[i] + '</option>';
                             }
-
+                            
                             camp_obj.$el.find('#campaign_from_email').append(fromOptions);
                             //console.log(fromOptions);
                             //if (camp_obj.app.salesMergeAllowed) {
@@ -1676,9 +1681,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 camp_obj.$("#campaign_custom_footer_text").val(camp_obj.app.decodeHTML(defaults_json.customFooter, true));
                             }
                         }
-                    }).fail(function () {
-                        console.log("error in detauls");
                     });
+                    
 
                     this.app.getData({
                         "URL": "/pms/io/salesforce/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=status",
