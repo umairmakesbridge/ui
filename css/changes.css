@@ -9732,3 +9732,10 @@ Download CSV Button
 .hideEle {
     opacity: 0.5;    
 }
+.show-percentage{
+    font-size:8px;
+    position: absolute;
+    left:5px;
+    bottom:-5px;
+    color:#888;
+}
