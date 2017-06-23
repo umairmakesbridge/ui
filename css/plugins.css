@@ -855,9 +855,16 @@ div.pGroup {
 .bmsgrid .subscribers,
 .bmsgrid .time ,
 .bmsgrid .mail  { color:#787983;  font-size: 14px;  line-height:18px; /*margin:15px 15px 2px;*/ margin:0; 	min-height:18px; min-width:120px;background:none; }
-
-
-
+.bmsgrid div.bDiv table#camps_grid_report{
+    margin-bottom: 0px;
+}
+.bmsgrid #camps_grid_report .subscribers{
+    min-width:65px;
+    width:70px;
+}
+.camp_listing .bmsgrid #camps_grid_report .time strong em{
+    margin:0 0 0 -12px;
+}
 
 .bmsgrid .subscribers > strong {
     background: url("../img/subscribersicon.png") no-repeat scroll 8px 23px;

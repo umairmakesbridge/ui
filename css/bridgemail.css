@@ -5089,6 +5089,9 @@ ul.btnslist li.alerticon:hover a i.icon {background: url("../img/alert2.png") no
 
 
 
+.col-cstats .activitybar{
+    padding: 5px 15px;
+}
 .activitybar { background:#C2D4E0; padding:5px; height:39px;
 -webkit-border-radius: 2px 2px 0 0 ;
 	-moz-border-radius: 2px 2px 0 0;

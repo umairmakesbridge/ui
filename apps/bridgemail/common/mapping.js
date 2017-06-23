@@ -68,25 +68,12 @@ function (template,Mapping) {
                                 $.each(selectedFields, function(index, val) {                                                                                                 
                                      self.$("#field_mapping_list_grid tr[id='row_"+val+"'] .use").click()                                                                                            
                                 });
-                            }
-                            /*URL = "/pms/report/getCSV.jsp?BMS_REQ_TK="+self.app.get('bms_token')+"&type=get";
-                            self.app.showLoading("Loading Mapped Fields...",self.$(".map-fields-grid"));                            
-                            jQuery.getJSON(URL,  function(tsv, state, xhr){
-                                self.app.showLoading(false,self.$(".map-fields-grid"));                                
-                                var mapped_fields = jQuery.parseJSON(xhr.responseText);
-                                if(self.app.checkError(mapped_fields)){
-                                    return false;
-                                }
-                                if(mapped_fields[0]!=="err"){
-                                    if(mapped_fields.fields){                                          
-                                        $.each(mapped_fields.fields[0], function(index, val) {                                                                                                 
-                                              self.$("#field_mapping_list_grid tr[id='row_"+val[0].fieldValue+"'] .use").click()                                                                                            
-                                        });
-                                    }
-                                }
-                            });*/
+                            }                            
                             
+                        }else{
+                           this.app.showAlert(import_fields[1],$("body"),{fixed:true});
                         }
+                        
                         
                    });
                    

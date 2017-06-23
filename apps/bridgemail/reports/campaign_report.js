@@ -1,5 +1,5 @@
-define(['text!reports/html/campaign_report.html'],
-function (template) {
+define(['text!reports/html/campaign_report.html',"common/mapping"],
+function (template, mappingPage) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Campaign Reports page 
@@ -87,7 +87,7 @@ function (template) {
                  require(["reports/campaign_pie_chart"],function(chart){
                     _this.app.showLoading(false,_this.$(".cstats"));  
                     _this.chartPage = new chart({page:_this,legend:{position:'right',alignment:'center'},chartArea:{width:"100%",height:"90%",left:'10%',top:'2%'}});
-                    _this.$(".col2 .campaign-chart").html(_this.chartPage.$el);
+                    _this.$(".col-cstats .campaign-chart").html(_this.chartPage.$el);
                     _this.chartPage.$el.css({"width":"100%","height":"280px"});    
                     if(_this.$(".checkedadded").length){
                         _this.createChart();
@@ -138,6 +138,7 @@ function (template) {
                 }                   
                 this.$(".total-camp-count").html(camp_list_json.count);
                 if(camp_list_json.count!=="0"){
+                    this.setCounts = true;
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camps_grid_report"><tbody>';	
                         _.each(camp_list_json.campaigns[0], function(val, index) {
                              list_html += this.makerow(val);					
@@ -154,13 +155,21 @@ function (template) {
                         useRp : false,
                         resizable:false,
                         colresize:false,                        
-                        height:this.app.get('wp_height')-77,                        
+                        height:this.app.get('wp_height')-160,                        
                         usepager : false,
-                        colWidth : ["40px",'100%','140px']
+                        colWidth : ["40px",'100%','60px','60px','60px','60px','60px','60px','60px','60px','132px']
                     });
-                    this.$("#camps_grid_report tr td:nth-child(2)").attr("width","40px");                    
-                    this.$("#camps_grid_report tr td:nth-child(2)").attr("width","100%");                    
-                    this.$("#camps_grid_report tr td:nth-child(3)").attr("width","140px");    
+                    this.$("#camps_grid_report tr td:nth-child(1)").attr("width","40px");                    
+                    this.$("#camps_grid_report tr td:nth-child(2)").attr("width","100%");                                        
+                    this.$("#camps_grid_report tr td:nth-child(3)").attr("width","60px"); 
+                    this.$("#camps_grid_report tr td:nth-child(4)").attr("width","60px"); 
+                    this.$("#camps_grid_report tr td:nth-child(5)").attr("width","60px"); 
+                    this.$("#camps_grid_report tr td:nth-child(6)").attr("width","60px"); 
+                    this.$("#camps_grid_report tr td:nth-child(7)").attr("width","60px"); 
+                    this.$("#camps_grid_report tr td:nth-child(8)").attr("width","60px"); 
+                    this.$("#camps_grid_report tr td:nth-child(9)").attr("width","60px"); 
+                    this.$("#camps_grid_report tr td:nth-child(10)").attr("width","60px"); 
+                    this.$("#camps_grid_report tr td:nth-child(11)").attr("width","132px"); 
                     this.$("#camps_grid_report tr td:nth-child(1) .check-box").click(_.bind(this.addToChart,this));                    
                     this.$("#camps_grid_report tr td:nth-child(2) .campname").click(_.bind(this.previewCampaign,this));
                     // this.$("#camps_grid_report tr td:nth-child(1) .report").click(_.bind(this.showChart,this));
@@ -186,20 +195,24 @@ function (template) {
                 var row_html = "";
                 var max_width = this.$(".camp_listing").width()*.50;
                 var flag_class = this.getCampStatus(val[0].status);                 
-                row_html += '<tr id="row_'+val[0]['campNum.encode']+'">';                        
+                row_html += '<tr id="row_'+val[0]['campNum.encode']+'" data-checksum="'+val[0]['campNum.checksum']+'">';                        
                 var _checked =this.$(".filter-camp li:first-child").hasClass("active")?'class="unchecked check-box"':'class="checkedadded check-box"';
                 row_html += '<td style="padding:0px"><a '+_checked+' id="'+val[0]['campNum.encode']+'" style="margin:0px;position:relative"><i class="icon check"></i></a></td><td><div class="name-type"><h3><span class="campname showtooltip" style="float:left;overflow:hidden;min-width:40px;max-width:'+max_width+'px;" title="Click to Preview">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</span><div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
                 if(this.app.get("user").accountType =='A' && this.app.get("user").userId!==val[0]['userId']){
                     row_html += '<div class="sub_accountobj showtooltip" title="This campaign is created by sub account '+val[0]['userId'] +'"><a class="icon subaccount"></a></div>';
                 }
                 row_html += '</h3><div class="tags tagscont">'+this.app.showTags(val[0].tags)+'</div></td>';                               
-                
-                row_html += '<td><div class="time show" style="width:160px !important;"><strong><span>'+this.getDateFormat(val)+'</strong></div>';
-                row_html += '<div class="sent-pending" style="width:160px !important;"><span><em>Sent</em>'+this.app.addCommas(val[0].sentCount)+'</span><span><em>Pending</em>'+this.app.addCommas(val[0].pendingCount)+'</span></div>'
-                row_html += '</td>';
-                    
-                
-                
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Sent</em><span class="sentCount">'+val[0].sentCount+'</span></span></strong></div></div></td> ';
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Opened</em><span class="openCount">'+0+'</span></span></strong></div></div></td> ';
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Clicked</em><span class="clickCount">'+0+'</span></span></strong></div></div></td> ';
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Converted</em><span class="conversionCount">'+0+'</span></span></strong></div></div></td> ';
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Page Views</em><span class="pageViewsCount">'+0+'</span></span></strong></div></div></td> ';
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Unsubscried</em><span class="unSubscribeCount">'+0+'</span></span></strong></div></div></td> ';
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Supressed</em><span class="supressCount">'+0+'</span></span></strong></div></div></td> ';
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Bounced</em><span class="bounceCount">'+0+'</span></span></strong></div></div></td> ';
+                var _dateTime = this.getDateFormat(val);
+                row_html += '<td width="132px"><div><div style="width:105px" class="time"><strong><span><em>'+_dateTime.dtHead +'</em>'+ _dateTime.dateTime +'</span></strong></div></div></td> ';
+                  
                 row_html += '</tr>';                
                 return row_html;
             }
@@ -243,7 +256,7 @@ function (template) {
                     dateFormat = '';					
                  }
                  
-                 return dtHead + dateFormat;
+                 return {dtHead: dtHead, dateTime: dateFormat}
             },
             slidePanel:function(obj){
                 var handle = $.getObj(obj,"a");
@@ -282,6 +295,32 @@ function (template) {
                 
                 this.createChart();
             },
+            populateTableCount: function(camp){
+                var countKeys = {"bounceCount":{type:'bounce',show:true,showPer:true},"clickCount":{type:'clicker',show:true,showPer:true},"conversionCount":{type:'converted',show:true,showPer:false},
+                    "openCount":{type:'opener',show:true,showPer:true},"pageViewsCount":{type:'webVisit',show:true},"unSubscribeCount":{type:'unsubscribe',show:true,showPer:true},
+                    "supressCount":{type:'supress',show:true,showPer:true},sentCount:{type:'bounce',show:false,showPer:false}}
+                _.each(countKeys,function(val,key){
+                    var countHTML = camp[key];
+                    if(countHTML!=="0"){
+                        if(val.show){
+                            countHTML = "<a class='showtooltip download-count-csv' data-type='"+val.type+"' title='Click to download CSV'>"+camp[key]+"</a>";
+                        }
+                    }
+                    var percentageHTML = "";
+                    if(val.showPer){
+                        var percentage = (parseInt(camp[key])/parseInt(camp.sentCount)) * 100;
+                        if(percentage > 0){
+                          percentage =percentage.toFixed(2); 
+                        }
+                        percentageHTML = "<small class='show-percentage'>( "+percentage+"% )</small>"
+                    }
+                    
+                    this.$("#camps_grid_report tr[data-checksum='"+camp['campNum.checksum']+"'] ."+key).html(countHTML + percentageHTML)                    
+                    this.$("#camps_grid_report tr[data-checksum='"+camp['campNum.checksum']+"'] ."+key+" .download-count-csv").click(_.bind(this.openMappingDialog,this));
+                    
+                },this) 
+                
+            },
             createChart:function(){
                 var _this = this;
                 var _campaigns = $.map(this.$(".checkedadded"),function(el){
@@ -290,7 +329,7 @@ function (template) {
                 
                 if(_campaigns && this.chartPage){
                    this.$(".start-message").hide();
-                   this.$(".col2 .campaign-chart").show();
+                   this.$(".col-cstats .campaign-chart").show();
                    this.app.showLoading("Creating Chart...",this.$(".cstats")); 
                    if(this.states_call){
                        this.states_call.abort();
@@ -304,7 +343,7 @@ function (template) {
                    var post_data = {campNums:_campaigns}    
                    this.states_call =  $.post(URL, post_data).done(function (data) {
                        var camp_json = jQuery.parseJSON(data);
-                       _.each(camp_json.campaigns[0], function(val) {
+                       _.each(camp_json.campaigns[0], function(val) {                          
                            _this.chart_data["bounceCount"] = _this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
                            _this.chart_data["clickCount"] = _this.chart_data["clickCount"] + parseInt(val[0].clickCount);
                            _this.chart_data["conversionCount"] = _this.chart_data["conversionCount"] +parseInt(val[0].conversionCount);
@@ -319,7 +358,15 @@ function (template) {
                            _this.chart_data["supressCount"] = _this.chart_data["supressCount"] + parseInt(val[0].supressCount);
                            _this.chart_data["twitterCount"] = _this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                            _this.chart_data["unSubscribeCount"] = _this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
+                           
+                           if(_this.setCounts==true){
+                               _this.populateTableCount(val[0]);
+                           }
                        });
+                       if(_this.setCounts==true){
+                            _this.$("#camps_grid_report tr .download-count-csv").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                            _this.setCounts = false;
+                       }
                        var _data =[
                         ['Action', 'Count'],
                           ['Opens',   _this.chart_data["openCount"]],
@@ -336,10 +383,10 @@ function (template) {
                             av =av.toFixed(2); 
                           }
                           if(key=="sentCount"){
-                              _this.$(".col2 ."+key).html(_this.app.addCommas(val));
+                              _this.$(".col-cstats ."+key).html(_this.app.addCommas(val));
                           }else{
-                              _this.$(".col2 ."+key).html(_this.app.addCommas(val));
-                              _this.$(".col2 ."+key+"-p").html(_this.app.addCommas(av)+"%");
+                              _this.$(".col-cstats ."+key).html(_this.app.addCommas(val));
+                              _this.$(".col-cstats ."+key+"-p").html(_this.app.addCommas(av)+"%");
                             
                               
                           }
@@ -363,7 +410,7 @@ function (template) {
             },
             showStart:function(){
                 this.$(".start-message").show();                    
-                this.$(".col2 .campaign-chart").hide();
+                this.$(".col-cstats .campaign-chart").hide();
                 this.$(".selected-campaign").html('<option></option>').trigger("chosen:updated");
             },
             showDatePicker:function(){
@@ -549,6 +596,25 @@ function (template) {
             toggleSortOption: function (ev) {               
                 $(this.el).find(".filter-camp").slideToggle();
                 ev.stopPropagation();
+            },
+            openMappingDialog: function(e){
+                var downloadLink = $(e.target);   
+                var campNum = downloadLink.parents("tr").attr("id").split("_")[1];
+                var options = {type:downloadLink.data("type"),campNum:campNum};                
+                this.mapCSVFieldsDialog(options);
+                e.stopPropagation();                     
+            },
+            mapCSVFieldsDialog: function(options){
+                var dialog = this.app.showDialog({title: ' Map Your .CSV Layout',
+                    css: {"width": "1200px", "margin-left": "-600px"},
+                    bodyCss: {"min-height": "400px"},
+                    buttons: {saveBtn: {text: 'Export CSV',btnicon:'downloadcsv'}}
+                });
+                var mPage = new mappingPage({camp: this, app: this.app, dialog: dialog});
+                var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                dialog.getBody().append(mPage.$el);                    
+                mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                dialog.saveCallBack(_.bind(mPage.saveCall, mPage, options));
             }
             
         });

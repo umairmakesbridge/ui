@@ -9742,3 +9742,10 @@ Download CSV Button
 .status_tgl .turnoff.active{
     color:#E74C33 !important;
 }
+.show-percentage{
+    font-size:8px;
+    position: absolute;
+    left:5px;
+    bottom:-5px;
+    color:#888;
+}
