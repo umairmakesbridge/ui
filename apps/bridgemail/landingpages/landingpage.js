@@ -397,7 +397,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                     this.app.showLoading("Loading Preview...",previewArea );
                     var preview_url =  this.app.decodeHTML(this.previewURL).replace("http","https");
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
-                        var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
+                        var tmPr = new templatePreview({frameSrc: preview_url, prevFlag:"LP",app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         previewArea.html(tmPr.$el);
                         if(!isDialog){
                            tmPr.$("iframe").load(function(){

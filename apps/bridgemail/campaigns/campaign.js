@@ -75,6 +75,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.allowedUser = ['admin', 'jayadams', 'demo'];
                     this.campFromName = '';
                     this.isSaveCallFromMee = false;
+                    this.save_states_call = null;
                     this.states = {
                         "step1": {change: false, sf_checkbox: false, ns_checkbox: false, sfCampaignID: '', nsCampaignID: '', hasResultToSalesCampaign: false, hasResultToNetsuiteCampaign: false, pageconversation_checkbox: false, hasConversionFilter: false},
                         "step2": {"templates": false, htmlText: '', plainText: '', change: false, editorType: ''},
@@ -1354,7 +1355,13 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 },
                 saveForStep2Mee: function (obj) {
                     this.isSaveCallFromMee = true;
-                     if(obj){
+                    this.$el.find('#area_html_editor_mee .undo_li a').addClass('disabled-save');
+                    this.$el.find('#area_html_editor_mee .redo_li a').addClass('disabled-save');
+                    this.$el.find('#area_html_editor_mee .MenuCallPreview a').addClass('disabled-save');
+                    if(this.save_states_call){
+                        this.save_states_call.abort();
+                    }
+                    if(obj){
                            this.isNextPress = false;
                             var button = $.getObj(obj, "a");
                                 if (!button.hasClass("disabled-btn")) {
@@ -1374,6 +1381,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var post_data = {type: "saveStep2", campNum: this.camp_id, htmlCode: '', plainText: ''};
                     var campaign_subject_title = $.trim(this.$("#campaign_subject").val());
                     var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
+                    
                     if (selected_li == "html_editor") {                                                
                         html = (this.$(".textdiv").css("display") == "block") ? this.$("#htmlarea").val() : _tinyMCE.get('bmseditor_' + this.wp_id).getContent();
                         //setting email title;                        
@@ -1447,7 +1455,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             this.app.showLoading("Saving Step 2...", this.$el.parents(".ws-content"));
                         }
                         var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token');
-                        $.post(URL, post_data)
+                        this.save_states_call = $.post(URL, post_data)
                                 .done(function (data) {
                                     var step1_json = jQuery.parseJSON(data);
                                     camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
@@ -1487,10 +1495,12 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                         if (typeof (gotoNext) == "undefined") {
                                             camp_obj.wizard.next();
                                         }
+                                        camp_obj.$el.find('#area_html_editor_mee .disabled-save').removeClass('disabled-save');
                                     }
                                     else {
                                         camp_obj.app.showAlert(step1_json[1], $("body"));
                                     }
+                                    camp_obj.save_states_call = null;
                                 });
 
                         proceed = 1

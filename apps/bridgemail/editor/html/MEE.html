@@ -541,6 +541,41 @@
             </div>
             </div>
             
+            <h3>
+                Custom Class
+            </h3>
+            
+            <div class="scrollarea customCss-accordion">
+                <div class="accordian-content ">
+                <div class="clearfix"  style="padding:5px;">
+                        <h4 class="" style="">Parent Layers</h4>
+                        <select class="nosearch ddlBackgroundLayers ddlBackgroundCSSLayers" data-placeholder="Select Parent Layer">
+                            <option value=""></option>
+                        </select>
+                        <h4 class="" style="">Provide Your Own Class</h4>
+                        
+                        <div class="clearfix"></div>
+                        <span style="float:left;line-height: 36px;margin-right:1px;background: rgba(208,208,208,0.2);height: 30px;display: inline-block;padding: 4px;color: #AEAEAE;">_cmce__</span>
+                        <input type="text" class="urlCode acco-input" placeholder="Enter Class Name" style="margin-right:1px;width:106px;float:left;" id="cmce_class">
+                        <input type="button" id="addCCSSButton" value="ADD" data-value="500" class="small-button acco-button btnContainerSize" style="width: 49px;height: 38px;">
+                <!--<input type="button" class="acco-button medium-button active openUpGallery" value="Open Gallery">-->
+                        <ul>
+                            <li class="MenuLoadCssBox">
+                                    <a  class="btn-blue showtooltip" data-original-title="Apply custom CSS">
+                                        <i class="icon setcssscript"></i>
+                                        <span>Custom CSS</span>
+                                    </a>
+                                </li>
+                        </ul>
+
+                         
+                <div class="clearfix"></div>
+                 
+                  <div class="clearfix"></div>
+                    </div>
+            </div>
+            </div>
+            
             <!--  accordian-content  -->
             <h3 class="active">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> Borders & Paddings
@@ -772,13 +807,18 @@
                     <span>Dynamic Content Items</span>
                 </a>
             </li>
-            <% } %>
             
+            <% } %>
+            <!-- <li class="MenuLoadCssBox" style="float:right">
+                    <a  class="btn-blue showtooltip"  data-original-title="Apply custom CSS">
+                        <i class="icon setcssscript"></i>
+                    </a>
+            </li>-->
             <% } 
             if(options.landingPage) { %>
                 <li class="MenuSetTitle" style="float:right">
-                    <a  class="btn-green">
-                        <i class="icon setpagetitle"></i><span>Set Page Title</span>
+                    <a  class="btn-green showtooltip" data-original-title="Set Page Title">
+                        <i class="icon setpagetitle"></i>
                     </a>
                  </li>
                  
@@ -788,7 +828,11 @@
                     </a>
                  </li>
                  
-                 
+                <!-- <li class="MenuLoadCssBox" style="float:right">
+                    <a  class="btn-blue showtooltip" data-original-title="Apply custom CSS">
+                        <i class="icon setactionscript"></i>
+                    </a>
+                </li>-->
             <% } %>
             <span class="lastSaveInfo"></span>
         </ul>

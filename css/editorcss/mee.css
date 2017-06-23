@@ -2518,6 +2518,11 @@ a,
     opacity: 0.4;
     filter: alpha(opacity=40);
 }
+.MEE_EDITOR a.disabled-save
+{
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+}
 
 .btn-gray i, .btn-blue i, .btn-green i, .btn-red i, .btn-yellow i,.MEE_EDITOR .tagscont ul li > a i {
     -webkit-border-radius:  2px 2px;
@@ -2645,6 +2650,7 @@ a,
 .MEE_EDITOR .icon.dcitems { background: url("../images/dynamic-content.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.setpagetitle { background-position: -390px 0px; }
 .MEE_EDITOR .icon.setactionscript { background-position: -390px -30px; }
+.MEE_EDITOR .icon.setcssscript {background-position: -417px -27px;}
 .header-icon .pagetitleicon {
     background: url("../images/meeicons.png") no-repeat -360px -118px;
     height: 30px;
@@ -2652,6 +2658,10 @@ a,
 .header-icon .actionScripicon {
     background: rgba(0, 0, 0, 0) url("../images/meeicons.png") no-repeat scroll -410px -118px;
     height: 30px;
+}
+.header-icon .actionCssScripicon {
+    background: rgba(0, 0, 0, 0) url("../images/meeicons.png") no-repeat scroll -400px -68px;
+    width: 45px !important;
 }
 .MEE_EDITOR .icon.cross {
     background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);

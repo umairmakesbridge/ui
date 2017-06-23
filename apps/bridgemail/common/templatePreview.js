@@ -17,7 +17,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     'click .show-original-btn': 'showOrginalClick',
                     'click .annonymous-btn': 'anonymousbtnClick',
                     'click .prev-iframe-campaign': 'htmlTextClick',
-                    'click .contact-remove-prev': 'removeContact'
+                    'click .contact-remove-prev': 'removeContact',
+                    'click .turnon':'turnOnImages',
+                    'click .turnoff':'turnOffImages'
                 },
                 /**
                  * Initialize view - backbone .
@@ -93,7 +95,14 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                 showFrame: function () { // Show Iframe on default load
                     if (this.options.prevFlag === 'C') {
                         this.setiFrameSrc();
-                    } else {
+                        //console.log('Hit Iframe');
+                        // REMOTE Communication 
+                    
+                    
+                        
+                    }else if(this.options.prevFlag=== 'LP'){
+                        this.loadPrevForLP();
+                    }else {
                        this.$('#email-template-iframe').attr('src', this.options.frameSrc).css('height', this.options.frameHeight);
                     }
                 },
@@ -141,9 +150,50 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         this.$('#email-template-iframe').css('height', newFrameheight);    
                     }
                     else{
-                        this.$('#email-template-iframe').attr('src', frame).css('height', newFrameheight);
+                        this.$('#email-template-iframe').remove();
+                        if(!this.transport){
+                          var _this = this;
+                          this.transport = new easyXDM.Socket({
+                                        remote: frame,
+                                        onReady: function () {
+                                           
+                                        },
+                                        onMessage: _.bind(function (message, origin) {
+                                            var response = jQuery.parseJSON(message);
+                                             _this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();  
+                                            console.log(message)
+
+                                        }, this),
+                                        props: {style: {width: "100%", height: (newFrameheight-15) + "px"}, frameborder: 0},
+                                        container: this.$el.find('#template-wrap-iframe')[0]
+                                    });  
+                        }
+                        
+                    
+                        //this.$('#email-template-iframe').attr('src', frame).css('height', newFrameheight);
                     }
                     
+                    
+                },
+                loadPrevForLP : function(){
+                    this.$('#email-template-iframe').remove();
+                    if(!this.transport){
+                          var _this = this;
+                          this.transport = new easyXDM.Socket({
+                                        remote: this.options.frameSrc,
+                                        onReady: function () {
+                                           
+                                        },
+                                        onMessage: _.bind(function (message, origin) {
+                                            var response = jQuery.parseJSON(message);
+                                             _this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();  
+                                            console.log(message)
+
+                                        }, this),
+                                        props: {style: {width: "100%", height: this.options.frameHeight + "px"}, frameborder: 0},
+                                        container: this.$el.find('#template-wrap-iframe')[0]
+                                    });  
+                        }
                 },
                 loadPrevTemplates: function () {
                     this.$('.previewbtns').hide();
@@ -199,7 +249,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                 loadContact: function (ev) {                    
                     var active_ws = $(".modal-body");
                     active_ws.find('.campaign-clickers').remove();                    
-                    active_ws.find('#camp-prev-contact-search').append(new contactsView({page: this, searchCss: '489px', contactHeight: '274px', hideCross: true, isCamPreview: true, placeholderText: 'Search for a contact to use for testing merge tag values'}).el)
+                    active_ws.find('#camp-prev-contact-search').append(new contactsView({page: this, searchCss: '360px', contactHeight: '274px', hideCross: true, isCamPreview: true, placeholderText: 'Search for a contact to use for testing merge tag values'}).el)
                     active_ws.find('#prev-closebtn').css({'top': '18px'});                    
                     return;
                 },
@@ -283,6 +333,18 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         this.loadCampaignData = false;
                         this.init();
                     }, this));
+                },
+                turnOnImages : function(){
+                    console.log('turnOnImages called');
+                    this.$el.find('.status_tgl a').removeClass('active');
+                    this.$el.find('.turnon').addClass('active');
+                    this.transport.postMessage("{\"isImage\":\"on\"}");      
+                },
+                turnOffImages : function(){
+                    console.log('turnOffImages called');
+                    this.$el.find('.status_tgl a').removeClass('active');
+                    this.$el.find('.turnoff').addClass('active');
+                    this.transport.postMessage("{\"isImage\":\"off\"}"); 
                 }
             });
 

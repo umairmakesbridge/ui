@@ -189,6 +189,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             mee.isActionScriptSet = '';
                             mee.isActionScriptSetG = '';
                             mee.isActionScriptSetL = '';
+                            mee.styleScript = '';
+                            mee.CSSLink = '';
+                            mee.CSSLinkTag = '';
                             mee.CurrentDivId = '';
                             mee.isSameElement = false;
                             this.each(function () {
@@ -322,6 +325,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var pageBackgroundimage = "none";
                                 var pageBackgroundimage_repeat = "no-repeat";
                                 var pageBackgroundimage_pos = "0% 0%";
+                                var pageCustomCSS = '';
                                 var pageActionScriptSet = '';
                                 var pageActionScriptSetG = '';
                                 var pageActionScriptSetL = '';
@@ -638,7 +642,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                     }
                                     var emailWidthScale = (emailWidth && emailWidth.indexOf("%") > -1) ? "%" : "";
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='" + parseFloat(emailWidth) + emailWidthScale + "' ><tr><td  data-bgcolor='" + pageBackgroundColor + "' data-pagetitle='" + pageTitle + "' data-bgimg='" + pageBackgroundimage + "' data-bgleftborder='" + pageBorderLeftProp + "' data-bgrightborder='" + pageBorderRightProp + "' data-bgtopborder='" + pageBorderTopProp + "' data-bgbottomborder='" + pageBorderBottomProp + "' data-bgimgrepeat='" + pageBackgroundimage_repeat + "' data-bgimgpos='" + pageBackgroundimage_pos + "' style='width: 100%;" + parentTd + "outline:none;vertical-align:top;' width='" + parseFloat(emailWidth) + emailWidthScale + "' id='__OUTERTD'><!-- MEE_DOCUMENT --><div >" + cleanedupHTML + "</div></td></tr></table>"
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='" + parseFloat(emailWidth) + emailWidthScale + "' ><tr><td  data-bgcolor='" + pageBackgroundColor + "' data-pagetitle='" + pageTitle + "' data-bgimg='" + pageBackgroundimage + "' data-bgleftborder='" + pageBorderLeftProp + "' data-bgrightborder='" + pageBorderRightProp + "' data-bgtopborder='" + pageBorderTopProp + "' data-bgbottomborder='" + pageBorderBottomProp + "' data-bgimgrepeat='" + pageBackgroundimage_repeat + "' data-bgimgpos='" + pageBackgroundimage_pos + "' data-cucss='"+pageCustomCSS+"' style='width: 100%;" + parentTd + "outline:none;vertical-align:top;' width='" + parseFloat(emailWidth) + emailWidthScale + "' id='__OUTERTD'><!-- MEE_DOCUMENT --><div >" + cleanedupHTML + "</div></td></tr></table>"
 
 
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
@@ -660,7 +664,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }else{
                                         pageActionScriptSetL = "";
                                     }
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>' + header_section.html() + pageActionScriptSet + "</head><body style='background-color:" + pageBackgroundColor + ";background-image:url(" + pageBackgroundimage + ");background-repeat:" + pageBackgroundimage_repeat + ";background-position:" + pageBackgroundimage_pos + ";border-left:" + pageBorderLeftProp + ";border-right:" + pageBorderRightProp + ";border-top:" + pageBorderTopProp + ";border-bottom:" + pageBorderBottomProp + " ' >" + outputHTML + pageActionScriptSetG + pageActionScriptSetL + "</body></html>";
+                                    console.log(mee.styleScript,mee.CSSLink);
+                                    if(mee.styleScript){
+                                        var styleTag = "<style id='__custom_mks_css'>"+mee.styleScript+"</style>";
+                                    }else{
+                                        var styleTag = "";
+                                    }
+                                    if(mee.CSSLink){
+                                        var styleLink = "<link id='__custom_mks_link' href='"+mee.CSSLink+"' rel='stylesheet' type='text/css' />";
+                                    }else{
+                                        var styleLink = "";
+                                    }
+                                    if(mee.CSSLinkTag){
+                                        var linkStyleTage = mee.CSSLinkTag;
+                                    }else{
+                                        var linkStyleTage = "";
+                                    }
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>' + header_section.html() + pageActionScriptSet + "</head><body style='background-color:" + pageBackgroundColor + ";background-image:url(" + pageBackgroundimage + ");background-repeat:" + pageBackgroundimage_repeat + ";background-position:" + pageBackgroundimage_pos + ";border-left:" + pageBorderLeftProp + ";border-right:" + pageBorderRightProp + ";border-top:" + pageBorderTopProp + ";border-bottom:" + pageBorderBottomProp + " ' class='"+pageCustomCSS+"'>" + outputHTML + pageActionScriptSetG + pageActionScriptSetL + linkStyleTage + styleTag+ styleLink +"</body></html>";
 
                                     //"" + outputter.outerHTML();
                                     outputHTML = outputHTML.replace(/&quot;/g, '&#39;')
@@ -680,6 +700,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
 
                                     pageBackgroundimage = outerTD.length ? outerTD.attr("data-bgimg") : "none";
+                                    pageCustomCSS = outerTD.length ? outerTD.attr("data-cucss") : "";
                                     pageBackgroundimage_repeat = outerTD.length ? outerTD.attr("data-bgimgrepeat") : "no-repeat";
                                     pageBackgroundimage_pos = outerTD.length ? outerTD.attr("data-bgimgpos") : "0% 0%";
                                     pageBorderLeftProp = outerTD.length ? outerTD.attr("data-bgleftborder") : "none";
@@ -693,6 +714,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var mainTable = this.find("#mee-iframe").contents().find(".mainTable");
                                         emailWidth = mainTable.css("width");
                                     }
+                                    
+                                    //set CUSTOM CSS/Link value 
+                                    //htmlOBJ[19].attributes[0].value
+                                    //htmlOBJ[20].attributes[1].value
+                                    $.each(htmlOBJ,function(key,val){
+                                        if(val.attributes && val.attributes[0]){
+                                              if(val.attributes[0].value=="__custom_mks_css"){
+                                                  console.log(val.innerHTML);
+                                                  mee.styleScript = val.innerHTML;
+                                              }else if(val.attributes[0].value=="__custom_mks_link"){
+                                                  mee.CSSLink = val.attributes[1].value;
+                                              }
+                                              else if(val.id == "__custom_mks_link_tag"){
+                                                  var str= val.outerHTML;
+                                                   var encodeString = String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                                                  mee.CSSLinkTag = encodeString;
+                                              } 
+                                        }
+                                        
+                                    })
+                                    
                                     options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);
                                     mee.setHTML();
@@ -728,6 +770,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 myElement.find('#bgimg_repeaty').iCheck('check');
                                                 myElement.find('#bgimg_repeatx').iCheck('check');
                                             }
+                                        }
+                                        if(pageCustomCSS){
+                                            meeIframe.find("body").addClass(pageCustomCSS);
                                         }
                                         if (pageBorderLeftProp) {
                                             meeIframe.find('body').css('border-left', pageBorderLeftProp);
@@ -963,6 +1008,64 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                             }
                                         },
+                                        mee.saveCSSScript = function (dialog){
+                                                 var cssSricpt = dialog.$el.find('.divPixelCode').val();
+                                                var cssLink = dialog.$el.find('.divPixelCodeGoogle').val();
+                                                var cssLinkTag = dialog.$el.find('.divPixelCodeLink').val();
+                                                
+                                                var dialogValid = false;
+                                                if(cssSricpt != ""){
+                                                    if(!cssSricpt.match(/[<|</]style>/g)){
+                                                    mee.styleScript = cssSricpt;
+                                                    dialogValid = true;
+                                                    }else{
+                                                        dialogValid = false;
+                                                        options._app.showError({
+                                                            control: dialog.$el.find('.cssStylings-container'),
+                                                            message: "Style tag are not necessary to add."
+                                                        });
+                                                        dialog.$el.find('.cssStylings-container .errortext').css({right: "2px", bottom: "402px","line-height": "34px"});
+                                                        dialog.$el.find('.cssStylings-container .errortext em').show().css('margin','0');
+                                                    }
+                                                }
+                                                if(cssLink != ""){
+                                                    if(cssLink.match(/(http(s?):)([/|.|\w|\s|-])*\.(?:css)/g)){
+                                                        mee.CSSLink = cssLink;
+                                                        dialogValid = true
+                                                    }else{
+                                                        dialogValid = false;
+                                                        options._app.showError({
+                                                            control: dialog.$el.find('.cssStyle-container'),
+                                                            message: "Paste URL link here i.e https://www.yourdomain.com/css/your-styles-file.css"
+                                                        });
+                                                        dialog.$el.find('.cssStyle-container .errortext').css({right: "2px", bottom: "54px",'line-height': "34px"});
+                                                        dialog.$el.find('.cssStyle-container .errortext em').show().css('margin','0');
+                                                    }
+                                                }
+                                                if(cssLinkTag != ""){
+                                                    if(cssLinkTag.match(/(http(s?):)([/|.|\w|\s|-])*\.(?:css)/g) && cssLinkTag.match(/[<]link/g)){
+                                                        mee.CSSLinkTag = $(cssLinkTag).attr('id','__custom_mks_link_tag');
+                                                        mee.CSSLinkTag = mee.CSSLinkTag[0];
+                                                        mee.CSSLinkTag = mee.CSSLinkTag.outerHTML;
+                                                        dialogValid = true;
+                                                    }else{
+                                                        dialogValid = false;
+                                                        var str = "<link href='https://www.yourdomain.com/css/your-styles-file.css' rel='stylesheet' type='text/css' />";
+                                                        var encodeString = String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                                                        options._app.showError({
+                                                            control: dialog.$el.find('.cssStyleT-wrap'),
+                                                            message: "Paste complete CSS tag i.e '"+encodeString+"' "
+
+                                                        });
+                                                        dialog.$el.find('.cssStyle-container .errortext').css({right: "2px", bottom: "54px",'line-height': "34px"});
+                                                        dialog.$el.find('.cssStyle-container .errortext em').show().css('margin','0');
+                                                    }
+                                                }
+                                                
+                                                if(dialogValid){
+                                                    dialog.hide();
+                                                }
+                                        },
                                         mee.saveActionScript = function (dialog) {
                                             var embedval = dialog.$el.find('.divPixelCode').val();
                                             var embedvalG = dialog.$el.find('.divPixelCodeGoogle').val();
@@ -1008,6 +1111,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                         },
+                                        
                                         mee.saveAjaxActionScript = function (embedObj) {
                                             var dialog = embedObj.dialog
                                             if (embedObj.embedval != "" && embedObj.type == "add" && embedObj.isScriptTrue) {
@@ -1238,6 +1342,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var lnkTextVersion = myElement.find(".MenuCallTextVersion");
                                     var lnkSetTitle = myElement.find(".MenuSetTitle");
                                     var loadScriptBox = myElement.find(".MenuLoadScriptBox");
+                                    var cssScriptBox = myElement.find(".MenuLoadCssBox");
                                     var lnkDCItems = myElement.find(".MenuCallDCItems");
                                     var divPreviewCode = myElement.find(".divPreviewCode");
                                     var lnkHtmlCode = myElement.find(".MenuCallCode");
@@ -1384,6 +1489,55 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
                                         }, this, dialog))
 
+                                    });
+                                    cssScriptBox.click(function () {
+                                        var dialog_width = 1000;
+                                        var dialog_height = 450;
+                                        var fbpixel = (mee.isActionScriptSet) ? mee.isActionScriptSet : "";
+                                        var gpixel = (mee.isActionScriptSetG) ? mee.isActionScriptSetG : "";
+                                        var dialog = options._app.showStaticDialog({
+                                            title: 'Add Your Custom Styles',
+                                            css: {
+                                                "width": dialog_width + "px",
+                                                "margin-left": "-" + (dialog_width / 2) + "px",
+                                                "top": "20px"
+                                            },
+                                            bodyCss: {
+                                                "min-height": dialog_height + "px"
+                                            },
+                                            headerEditable: false,
+                                            headerIcon: 'actionCssScripicon',
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Save'
+                                                }
+                                            }
+                                        });
+                                        var meeStyle =mee.styleScript;
+                                        meeStyle = meeStyle.replace(/[;][}]|[;][ ][}]/g, ';}\n');
+                                        meeStyle = meeStyle.replace(/[{]|[{][ ]/g,'{\n');
+                                        meeStyle = meeStyle.replace(/[;]/g,';\n');
+                                        var preview_html = '<div class="divScriptVersion">';
+                                        
+                                        
+                                        preview_html += '<ul  class="pixelTab tabs-btns clearfix"><li class="active" data-snippet="customCSS"><a data-toggle="tab" href="#fbpixel">Custom Styles</a></li><li data-snippet="externalCss"><a  data-toggle="tab" href="#ganalytics">External Stylesheet</a></li></ul><div class="ui-code-area"><div class="cssStylings-container divPixelCodeFB-wrap" style="" id="cssStylings-wrap"><div class="inputcont" style="float:right;width:100%;"><textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 60) + 'px;margin-bottom:0px;" class="divPixelCode" cols="1000" rows="250" placeholder="Add your styling properties directly into this box." >'+meeStyle+'</textarea></div></div><div class="cssStyle-container divPixelCodeGoogle-wrap" style="display:none;overflow:hidden;border:2px solid #EAF4F9;padding: 5px;" id="cssStyle-wrap"><div class="cssStyleT-wrap"><div class="inputcont" style="float:right;width:100%;"><label style="text-align:left;">Add Complete Tag</label><textarea style="font-size:12px;width:' + (dialog_width - 66) + 'px;height:' + (dialog_height / 3)+'px;margin-bottom:15px;padding: 5px 10px;display:none;" type="text" class="divPixelCodeLink" placeholder="Paste complete CSS tag i.e <link href=\'https://www.yourdomain.com/css/your-styles-file.css\' rel=\'stylesheet\' type=\'text/css\' >">'+mee.CSSLinkTag+'</textarea></div></div><div class="inputcont" style="float:right;width:100%;"><label style="text-align:left;">Add Link</label><textarea style="font-size:12px;width:' + (dialog_width - 66) + 'px;height:' + (dialog_height / 4)+'px;margin-bottom:15px;padding: 5px 10px;display:none;" type="text"  class="divPixelCodeGoogle" placeholder="Paste URL link here i.e https://www.yourdomain.com/css/your-styles-file.css">'+mee.CSSLink+'</textarea></div></div></div>';
+                                        preview_html += '</div>';
+                                        preview_html = $(preview_html);
+                                        dialog.getBody().append(preview_html);
+                                        dialog.getBody().find('.pixelTab li').click(function () {
+                                            if ($(this).data('snippet') == "customCSS") {
+                                                        dialog.getBody().find('.divPixelCode,.divPixelCodeFB-wrap').show();
+                                                        dialog.getBody().find('.divPixelCodeGoogle,.divPixelCodeGoogle-wrap,.divPixelCodeLink').hide();
+                                                    } else {
+                                                        dialog.getBody().find('.divPixelCode,.divPixelCodeFB-wrap').hide();
+                                                        dialog.getBody().find('.divPixelCodeGoogle,.divPixelCodeGoogle-wrap,.divPixelCodeLink').show();
+                                                    }
+                                        })
+                                        //dialog.$el.find('.divPixelCode').val(fbpixel);
+                                        //dialog.$el.find('.divPixelCodeGoogle').val(gpixel);
+                                        //dialog.$el.find('.divPixelCode').focus()
+
+                                        dialog.saveCallBack(_.bind(mee.saveCSSScript, mee, dialog));
                                     });
                                     loadScriptBox.click(function () {
                                         var dialog_width = $(document.documentElement).width() - 60;
@@ -2025,6 +2179,26 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 if(SelectedElementForStyle.prop("tagName").toLowerCase() =="body"){
                                                                     mee.setBodyBorders();
                                                                 }
+                                                            }else if(($(myElement.find('.customCss-accordion')[0]).hasClass('ui-accordion-content-active') == true ||  $(myElement.find('.customCss-accordion')[1]).hasClass('ui-accordion-content-active') == true) && SelectedElementForStyle.hasClass('mainContentHtmlGrand') == false){
+                                                                var classString = SelectedElementForStyle.attr('class');
+                                                                var isFoundClass = false;
+                                                                myElement.find('.ddlBackgroundCSSLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
+                                                                myElement.find('.ddlBackgroundCSSLayers').trigger('change');
+                                                                if(classString){
+                                                                    classString = classString.split(' ');
+                                                                    $.each(classString,function(key,value){
+                                                                        //console.log(value);
+                                                                        if (value.indexOf('_cmce__') > -1) {
+                                                                            isFoundClass = true;
+                                                                            var val = value.split('__')[1];
+                                                                            myElement.find('#cmce_class').val(val);
+                                                                        }
+                                                                    });
+                                                                    if(!isFoundClass){
+                                                                        myElement.find('#cmce_class').val('');
+                                                                    }
+                                                                }
+                                                                
                                                             }
                                                             else{
                                                                 if (SelectedElementForStyle.hasClass('mainContentHtmlGrand')) {
@@ -2034,12 +2208,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 myElement.find('.ddlBackgroundImgLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
                                                                  myElement.find('.ddlBackgroundColorLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
                                                                  myElement.find('.ddlBackgroundBorderLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
+                                                                 myElement.find('.ddlBackgroundCSSLayers > option:eq('+mee_view.parentTd+')').prop('selected', true);
                                                                 
                                                                 //SelectedElementForStyle = meeIframe.find("body");    
                                                             }
                                                             myElement.find('.ddlBackgroundImgLayers').chosen("destroy").chosen();
+                                                            myElement.find('.ddlBackgroundImgLayers').chosen("destroy").chosen();
                                                             myElement.find('.ddlBackgroundColorLayers').chosen("destroy").chosen();
-                                                            myElement.find('.ddlBackgroundBorderLayers').chosen("destroy").chosen();
+                                                            myElement.find('.ddlBackgroundCSSLayers').chosen("destroy").chosen();
                                                             
                                                     
 
@@ -2197,6 +2373,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 } else if (myElement.find('.border-accordion').hasClass('ui-accordion-content-active')) {
                                                     myElement.find('.ddlBackgroundBorderLayers option').eq(1).attr('selected', 'selected');
                                                     myElement.find('.ddlBackgroundBorderLayers').trigger("chosen:updated")
+                                                }else if(myElement.find('.customCss-accordion').hasClass('ui-accordion-content-active')){
+                                                     
+                                                    myElement.find('.ddlBackgroundCSSLayers option').eq(1).attr('selected', 'selected');
+                                                    myElement.find('.ddlBackgroundCSSLayers').trigger("chosen:updated")
+                                                    myElement.find('.ddlBackgroundCSSLayers').trigger('change');
+                                                    var classString = SelectedElementForStyle.attr('class');
+                                                    var isFoundClass = false;
+                                                                if(classString){
+                                                                    classString = classString.split(' ');
+                                                                    $.each(classString,function(key,value){
+                                                                        //console.log(value);
+                                                                        if (value.indexOf('_cmce__') > -1) {
+                                                                            isFoundClass = true;
+                                                                            var val = value.split('__')[1];
+                                                                            myElement.find('#cmce_class').val(val);
+                                                                        }
+                                                                    })
+                                                                     if(!isFoundClass){
+                                                                        myElement.find('#cmce_class').val('');
+                                                                    }
+                                                                }
                                                 }
                                                 mee_view.parentTd = 1;
                                                 //////////////////////////////////////////////////
@@ -2361,7 +2558,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 });
 
                                             }
-
+                                           var ddlBackgroundLayersCss = myElement.find(".ddlBackgroundCSSLayers");
+                                           if(ddlBackgroundLayersCss.length > 0){
+                                               ddlBackgroundLayersCss.on('change', function (event) {                                                   
+                                                    ddlBackgroundLayersCssChange($(this),arguments.length);
+                                                });
+                                           }
 
                                             var ddlBackgroundLayersBorder = myElement.find(".ddlBackgroundBorderLayers");
                                             if (ddlBackgroundLayersBorder.length > 0) {
@@ -2513,7 +2715,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                 }
                                 
-
+                               
                                 function ddlBackgroundImgLayerChange(obj,args) {
                                     if ($(this).find(':selected').val() != "-1") {
                                         //RemoveAllOutline(); 
@@ -2616,6 +2818,28 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         SelectedElementForStyle.css("outline", "2px solid #94CF1E");
                                         // undoManager.registerAction(mainContentHtmlGrand.html());
                                          if(!args){
+                                            makeCloneAndRegister();
+                                        }
+                                        else if(args && args.length==2){
+                                            makeCloneAndRegister();
+                                        }
+                                    }
+                                }
+                                function ddlBackgroundLayersCssChange(obj,args){
+                                    console.log('Change CSS HIT');
+                                    if (obj.find(':selected').val() != "-1") {
+                                        RemoveAllOutline();
+                                        SelectedElementForStyle = obj.find(':selected').val() == "body" ? meeIframe.find("body") : obj.find(':selected').data('el');
+                                        /*if(SelectedElementForStyle.hasClass('mainContentHtmlGrand')==true){
+                                         mee_view.parentTd = true;
+                                         }else{
+                                         mee_view.parentTd = false;
+                                         }*/
+
+                                        mee_view.parentTd = obj.prop('selectedIndex');
+                                        SelectedElementForStyle.css("outline", "2px solid #94CF1E");
+                                        // undoManager.registerAction(mainContentHtmlGrand.html());
+                                        if(!args){
                                             makeCloneAndRegister();
                                         }
                                         else if(args && args.length==2){
@@ -2947,7 +3171,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         mee_view.isRepeatY = false;
                                         changFlag.editor_change = true;
                                         if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
-
+                                            //pageCustomCSS
                                             pageBackgroundimage = data;
                                             pageBackgroundimage_repeat = 'no-repeat';
                                             pageBackgroundimage_pos = '0% 0%';
@@ -4346,6 +4570,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                  $(this).val('');
                                  }
                                  })*/
+                                myElement.find('#addCCSSButton').on('click',function(e){
+                                    console.log(SelectedElementForStyle);
+                                    if($('#cmce_class').val() != ""){
+                                        SelectedElementForStyle.addClass('_cmce__'+$('#cmce_class').val());
+                                        if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                            pageCustomCSS = '_cmce__'+$('#cmce_class').val();
+                                        }
+                                    }
+                                   
+                                });
                                 myElement.find('#bgUrlCode').bind('paste', function (e) {
                                     var _this = $(this)
                                     var url = '';

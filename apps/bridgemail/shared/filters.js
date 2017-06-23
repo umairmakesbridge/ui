@@ -904,7 +904,9 @@
                 $.each($('#__list_grid .selected'), function (k, v) {
                     $(this).find('.check-list').iCheck('check');
                 })
-
+                if($('#__list_grid .selected').length ==0 && params && params["listNumbers.checksums"]){
+                    self.checkSharedTargetList(filter, '#__list_grid', params);
+                }
                 if (list_arr[0] && filter.find('#__list_grid input[list_checksum=' + list_arr[0] + ']').length == 0) {
                     this.options.app.showLoading("Loading Lists...", filter.find('#__list_grid'));
                     filter.find('#__list_grid .loading p').css({'margin-left': '-150px', 'margin-right': '0'});
@@ -939,6 +941,43 @@
             //highlight the search text 
 
             this.listFilter.find("a.btn-green").removeClass("saving")
+        },
+        checkSharedTargetList : function(filter, tableGrid, params){
+            console.log('Ok i am ready to send a shared call');
+            var _filter = filter;
+            var _tableGrid = tableGrid;
+            var URL = "/pms/io/list/getListData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=list_csv&listNum_csv=" + params["listNumbers"];
+            $.ajax({
+                url: URL,
+                dataType: 'json',
+//            async: true,
+                type: 'GET',
+                success: function (data) {
+                    var list_array = data.lists[0];
+                    debugger;
+                    console.log(list_array);
+                    $.each(list_array, function (index, val) {
+                        console.log(val);
+                    });
+                    /*$.each(list_array.lists[0], function (index, val) {
+                        filter_html += '<tr id="row_' + val[0]["listNumber.encode"] + '" checksum="' + val[0]["listNumber.checksum"] + '">';
+                        filter_html += '<td width="100px"><div><input class="check-list" type="checkbox" value="' + val[0]["listNumber.encode"] + '" list_checksum="' + val[0]["listNumber.checksum"] + '" /></div></td>'
+                        filter_html += '<td width="100%"><div><div class="name-type"><h3 class="lists-name">' + val[0].name + '</h3><div class="tags tagscont">' + self.options.app.showTags(val[0].tags) + '</div></div></div></td>';
+                        filter_html += '<td width="100px"><div><div class="subscribers" style="min-width:80px"><span  class=""></span>' + self.options.app.addCommas(val[0].subscriberCount) + '</div><div id="' + val[0]["listNumber.encode"] + '" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></div></td>';
+                        filter_html += '</tr>';
+
+                    });*/
+                    //self.offsetLengthLists = data.nextOffset;
+                    //self.options.app.showLoading(false, filter.find('#__list_grid'));
+                    /*if (data.totalCount !== "0") {
+
+                        self.generateListFilter(data, filter, params);
+                    } else {
+                        console.log('no record found');
+                    }*/
+                }
+            })
+            
         }
         , addFormFilter: function (obj, e, params) {
             this.isScrollattachform = false;

@@ -1,9 +1,11 @@
 <div class="previewbar" id='temp-camp-previewbar' style="display:none;">
 
-    <div class="dddiv-prevCam-wrap"><% if(this.options.prevFlag==='C') {%> <div id="camp-prev-contact-search" class="dddiv-prevCam-temp"></div><% } %></div>
+    <div class="dddiv-prevCam-wrap"><% if(this.options.prevFlag==='C') {%> <div id="camp-prev-contact-search" class="dddiv-prevCam-temp" style="float:left;width:430px;"></div><% } %></div>
 
-    <div class="scontct previewbtns"><span class='contact-name contact-name-prev' style="float:left;"></span><a class="close-icon contact-remove-prev" id="contact-name-prev" style="float:left;margin-left: 6px;margin-top: 8px;display: none;"></a></div>
-
+    <div class="scontct previewbtns">
+        <span class='contact-name contact-name-prev' style="float:left;"></span><a class="close-icon contact-remove-prev" id="contact-name-prev" style="float:left;margin-left: 6px;margin-top: 8px;display: none;"></a>
+    </div>
+    <% if(this.options.prevFlag!="LP"){ %>
     <form id="sendtemp-preview" onSubmit="return false;" style="margin: 0 27px 20px;"> 
         <div class="" id="prevtem-sendpreview" style="float:right;">
             <div class="row "style="margin-top: -2px;float: left;">
@@ -14,6 +16,15 @@
             </div>
         </div> <!--  selectcontact  -->
     </form>
+    <% } %>
+    <div class="contacts-switch" style="position: relative;<% if(this.options.prevFlag=='LP'){ %>top:-6px;<% }else{%> top: -26px;<% }%>float: left;<% if(this.options.prevFlag=='T' || this.options.prevFlag=='LP'){ %>left: 15px;<% }else{%> left: 454px;<% }%>">
+        <span style="position: relative;top: 13px;float: left;">Turn</span>
+        <div class="status_tgl" style="display: block;float: left;">
+            <a class="draft toggletags turnoff showtooltip" data-original-title="Turn Off Images">Off</a>
+            <a class="published active turnon togglecontact showtooltip" data-original-title="Turn On Images">On</a>
+      </div>
+        <span style="display: block;float: left;top: 13px;position:relative;">Images</span>
+            </div>
 </div>
 <div class="selection-boxes previewbtns" style="width: 280px; margin:10px auto 0;">
     <div style="width:auto; margin:0 5px;animation-name:fadeInUp !important;display:none" class="messagebox info animated"><p>This campaign is using <strong>Text Version</strong> only.</p></div>
@@ -24,4 +35,5 @@
     <div class="clearfix"></div>
 </div>
 <div class="dddiv campaign-clickers" style="top: 150px; right: 50%; display: none;"></div>
+<div class='template-wrap' id='template-wrap-iframe' style='width: 100%;'></div> 
 <iframe class="email-iframe" id="email-template-iframe" frameborder="0" src="about:blank"></iframe>
