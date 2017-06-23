@@ -1009,12 +1009,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
                                         },
                                         mee.saveCSSScript = function (dialog){
+                                               
                                                  var cssSricpt = dialog.$el.find('.divPixelCode').val();
                                                 var cssLink = dialog.$el.find('.divPixelCodeGoogle').val();
                                                 var cssLinkTag = dialog.$el.find('.divPixelCodeLink').val();
                                                 
-                                                var dialogValid = false;
-                                                if(cssSricpt != ""){
+                                                var dialogValid = true;
+                                                 if(dialog.$el.find('.pixelTab li.active').data('snippet') == "customCSS"){
+                                                    if(cssSricpt != ""){
                                                     if(!cssSricpt.match(/[<|</]style>/g)){
                                                     mee.styleScript = cssSricpt;
                                                     dialogValid = true;
@@ -1027,7 +1029,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         dialog.$el.find('.cssStylings-container .errortext').css({right: "2px", bottom: "402px","line-height": "34px"});
                                                         dialog.$el.find('.cssStylings-container .errortext em').show().css('margin','0');
                                                     }
-                                                }
+                                                 }
+                                                }else{
+                                                    
                                                 if(cssLink != ""){
                                                     if(cssLink.match(/(http(s?):)([/|.|\w|\s|-])*\.(?:css)/g)){
                                                         mee.CSSLink = cssLink;
@@ -1038,7 +1042,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             control: dialog.$el.find('.cssStyle-container'),
                                                             message: "Paste URL link here i.e https://www.yourdomain.com/css/your-styles-file.css"
                                                         });
-                                                        dialog.$el.find('.cssStyle-container .errortext').css({right: "2px", bottom: "54px",'line-height': "34px"});
+                                                        dialog.$el.find('.cssStyle-container .errortext').css({right: "8px", bottom: "141px",'line-height': "34px"});
                                                         dialog.$el.find('.cssStyle-container .errortext em').show().css('margin','0');
                                                     }
                                                 }
@@ -1057,9 +1061,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             message: "Paste complete CSS tag i.e '"+encodeString+"' "
 
                                                         });
-                                                        dialog.$el.find('.cssStyle-container .errortext').css({right: "2px", bottom: "54px",'line-height': "34px"});
+                                                        dialog.$el.find('.cssStyle-container .errortext').css({right: "8px", bottom: "178px",'line-height': "34px"});
                                                         dialog.$el.find('.cssStyle-container .errortext em').show().css('margin','0');
                                                     }
+                                                }
+                                                
                                                 }
                                                 
                                                 if(dialogValid){
