@@ -641,6 +641,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             pageBorderBottomProp = '';
                                         }
                                     }
+                                    
                                     var emailWidthScale = (emailWidth && emailWidth.indexOf("%") > -1) ? "%" : "";
                                     var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='fullCenter' width='" + parseFloat(emailWidth) + emailWidthScale + "' ><tr><td  data-bgcolor='" + pageBackgroundColor + "' data-pagetitle='" + pageTitle + "' data-bgimg='" + pageBackgroundimage + "' data-bgleftborder='" + pageBorderLeftProp + "' data-bgrightborder='" + pageBorderRightProp + "' data-bgtopborder='" + pageBorderTopProp + "' data-bgbottomborder='" + pageBorderBottomProp + "' data-bgimgrepeat='" + pageBackgroundimage_repeat + "' data-bgimgpos='" + pageBackgroundimage_pos + "' data-cucss='"+pageCustomCSS+"' style='width: 100%;" + parentTd + "outline:none;vertical-align:top;' width='" + parseFloat(emailWidth) + emailWidthScale + "' id='__OUTERTD'><!-- MEE_DOCUMENT --><div >" + cleanedupHTML + "</div></td></tr></table>"
 
@@ -680,7 +681,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }else{
                                         var linkStyleTage = "";
                                     }
-                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>' + header_section.html() + pageActionScriptSet + "</head><body style='background-color:" + pageBackgroundColor + ";background-image:url(" + pageBackgroundimage + ");background-repeat:" + pageBackgroundimage_repeat + ";background-position:" + pageBackgroundimage_pos + ";border-left:" + pageBorderLeftProp + ";border-right:" + pageBorderRightProp + ";border-top:" + pageBorderTopProp + ";border-bottom:" + pageBorderBottomProp + " ' class='"+pageCustomCSS+"'>" + outputHTML + pageActionScriptSetG + pageActionScriptSetL + linkStyleTage + styleTag+ styleLink +"</body></html>";
+                                    if(pageCustomCSS){
+                                        var pageCustomCSSNoS = pageCustomCSS.split('__')[1];
+                                    }
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>' + header_section.html() + pageActionScriptSet + "</head><body style='background-color:" + pageBackgroundColor + ";background-image:url(" + pageBackgroundimage + ");background-repeat:" + pageBackgroundimage_repeat + ";background-position:" + pageBackgroundimage_pos + ";border-left:" + pageBorderLeftProp + ";border-right:" + pageBorderRightProp + ";border-top:" + pageBorderTopProp + ";border-bottom:" + pageBorderBottomProp + " ' class='"+pageCustomCSS+" "+pageCustomCSSNoS+"'>" + outputHTML + pageActionScriptSetG + pageActionScriptSetL + linkStyleTage + styleTag+ styleLink +"</body></html>";
 
                                     //"" + outputter.outerHTML();
                                     outputHTML = outputHTML.replace(/&quot;/g, '&#39;')
@@ -773,6 +777,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                         if(pageCustomCSS){
                                             meeIframe.find("body").addClass(pageCustomCSS);
+                                            meeIframe.find("body").addClass(pageCustomCSS.split('__')[1]);
                                         }
                                         if (pageBorderLeftProp) {
                                             meeIframe.find('body').css('border-left', pageBorderLeftProp);
@@ -2844,6 +2849,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         mee_view.parentTd = obj.prop('selectedIndex');
                                         SelectedElementForStyle.css("outline", "2px solid #94CF1E");
+                                        var classString = SelectedElementForStyle.attr('class');
+                                        var isFoundClass = false;
+                                                                if(classString){
+                                                                    classString = classString.split(' ');
+                                                                    $.each(classString,function(key,value){
+                                                                        //console.log(value);
+                                                                        if (value.indexOf('_cmce__') > -1) {
+                                                                            isFoundClass = true;
+                                                                            var val = value.split('__')[1];
+                                                                            myElement.find('#cmce_class').val(val);
+                                                                        }
+                                                                    })
+                                                                     if(!isFoundClass){
+                                                                        myElement.find('#cmce_class').val('');
+                                                                    }
+                                                                }
+                                                                
                                         // undoManager.registerAction(mainContentHtmlGrand.html());
                                         if(!args){
                                             makeCloneAndRegister();
@@ -4580,6 +4602,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     console.log(SelectedElementForStyle);
                                     if($('#cmce_class').val() != ""){
                                         SelectedElementForStyle.addClass('_cmce__'+$('#cmce_class').val());
+                                        SelectedElementForStyle.addClass($('#cmce_class').val());
                                         if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
                                             pageCustomCSS = '_cmce__'+$('#cmce_class').val();
                                         }
