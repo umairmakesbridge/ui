@@ -5158,3 +5158,12 @@ div.tooltip.custom-tooltip .tooltip-inner{
 .editorbar .lightbox-setting-panel ul li:first-child {
     border-bottom: 1px solid #00A1DD;
 }
+.customCSSInput{
+    margin-right:1px;
+    width:165px;
+    float:left;
+}
+#addCCSSButton{
+    width: 49px;
+    height: 38px;
+}

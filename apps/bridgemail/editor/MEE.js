@@ -727,13 +727,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                               if(val.attributes[0].value=="__custom_mks_css"){
                                                   console.log(val.innerHTML);
                                                   mee.styleScript = val.innerHTML;
+                                                  meeIframe.find('body').append("<style id='__custom_mks_css'>"+mee.styleScript+"</style>");
                                               }else if(val.attributes[0].value=="__custom_mks_link"){
                                                   mee.CSSLink = val.attributes[1].value;
+                                                  meeIframe.find('body').append("<link id='__custom_mks_link' href='"+mee.CSSLink+"' rel='stylesheet' type='text/css' />");
                                               }
                                               else if(val.id == "__custom_mks_link_tag"){
                                                   var str= val.outerHTML;
                                                    var encodeString = String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
                                                   mee.CSSLinkTag = encodeString;
+                                                  meeIframe.find('body').append(mee.CSSLinkTag);
                                               } 
                                         }
                                         
@@ -808,7 +811,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find('.editortoolbar').css('margin-bottom', '0');
                                         // Ends Abdullah test
                                         mainObj.html(innerHTML);
-
+                                        
+                                        if(mee.styleScript){
+                                                  meeIframe.find('body').append("<style id='__custom_mks_css'>"+mee.styleScript+"</style>");
+                                              }else if(mee.CSSLink){
+                                                  meeIframe.find('body').append("<link id='__custom_mks_link' href='"+mee.CSSLink+"' rel='stylesheet' type='text/css' />");
+                                              }
+                                              else if(mee.CSSLinkTag){
+                                                  meeIframe.find('body').append(mee.CSSLinkTag);
+                                              } 
+                                        
                                         if (!options.landingPage && _emailWidth) {
                                             myElement.find(".email-width input.btnContainerSize").removeClass("active");
                                             if (myElement.find(".email-width input.btnContainerSize#" + _emailWidth).length && emailWidthScale == "px") {
@@ -1026,14 +1038,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     mee.styleScript = cssSricpt;
                                                     dialogValid = true;
                                                     }else{
+                                                        dialog.$el.find('.cssStylings-container .errortext').remove();
                                                         dialogValid = false;
                                                         options._app.showError({
                                                             control: dialog.$el.find('.cssStylings-container'),
                                                             message: "Style tag are not necessary to add."
                                                         });
+                                                        
                                                         dialog.$el.find('.cssStylings-container .errortext').css({right: "2px", bottom: "402px","line-height": "34px"});
                                                         dialog.$el.find('.cssStylings-container .errortext em').show().css('margin','0');
                                                     }
+                                                 }else{
+                                                    mee.styleScript = ""; 
                                                  }
                                                 }else{
                                                     
@@ -1042,14 +1058,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         mee.CSSLink = cssLink;
                                                         dialogValid = true
                                                     }else{
+                                                        dialog.$el.find('.cssStyle-container .errorCSSLink').remove();
                                                         dialogValid = false;
                                                         options._app.showError({
                                                             control: dialog.$el.find('.cssStyle-container'),
                                                             message: "Paste URL link here i.e https://www.yourdomain.com/css/your-styles-file.css"
                                                         });
-                                                        dialog.$el.find('.cssStyle-container .errortext').css({right: "8px", bottom: "141px",'line-height': "34px"});
+                                                        dialog.$el.find('.cssStyle-container .errortext').addClass('errorCSSLink');
+                                                        dialog.$el.find('.cssStyle-container .errorCSSLink').css({right: "8px", bottom: "141px",'line-height': "34px"});
                                                         dialog.$el.find('.cssStyle-container .errortext em').show().css('margin','0');
                                                     }
+                                                }else {
+                                                    mee.CSSLink = "";
+                                                    dialog.$el.find('.cssStyle-container .errorCSSLink').remove();
                                                 }
                                                 if(cssLinkTag != ""){
                                                     if(cssLinkTag.match(/(http(s?):)([/|.|\w|\s|-])*\.(?:css)/g) && cssLinkTag.match(/[<]link/g)){
@@ -1058,6 +1079,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         mee.CSSLinkTag = mee.CSSLinkTag.outerHTML;
                                                         dialogValid = true;
                                                     }else{
+                                                        dialog.$el.find('.cssStyle-container .errorCSSTag').remove();
                                                         dialogValid = false;
                                                         var str = "<link href='https://www.yourdomain.com/css/your-styles-file.css' rel='stylesheet' type='text/css' />";
                                                         var encodeString = String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -1066,14 +1088,42 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             message: "Paste complete CSS tag i.e '"+encodeString+"' "
 
                                                         });
-                                                        dialog.$el.find('.cssStyle-container .errortext').css({right: "8px", bottom: "178px",'line-height': "34px"});
+                                                        dialog.$el.find('.cssStyleT-wrap .errortext').addClass('errorCSSTag');
+                                                        dialog.$el.find('.cssStyleT-wrap .errorCSSLink.errorCSSTag').remove();
+                                                        dialog.$el.find('.cssStyle-container .errorCSSTag').css({right: "8px", bottom: "178px",'line-height': "34px"});
+                                                        if(dialog.$el.find('.cssStyle-container .errorCSSLink').length > 1){
+                                                         dialog.$el.find('.cssStyle-container .errorCSSLink').css({right: "8px", bottom: "141px",'line-height': "34px"});
+                                                        }
                                                         dialog.$el.find('.cssStyle-container .errortext em').show().css('margin','0');
                                                     }
-                                                }
+                                                }else{
+                                                   dialog.$el.find('.cssStyle-container .errorCSSTag').remove();
+                                                   mee.CSSLinkTag = "";
+                                                 }
                                                 
                                                 }
                                                 
                                                 if(dialogValid){
+                                                    if(mee.styleScript){
+                                                            meeIframe.find('#__custom_mks_css').remove();
+                                                            var styleTag = "<style id='__custom_mks_css'>"+mee.styleScript+"</style>";
+                                                            meeIframe.find('body').append(styleTag);
+                                                        }else{
+                                                            meeIframe.find('#__custom_mks_css').remove();
+                                                        }
+                                                    if(mee.CSSLink){
+                                                        meeIframe.find('#__custom_mks_link').remove();
+                                                        var styleLink = "<link id='__custom_mks_link' href='"+mee.CSSLink+"' rel='stylesheet' type='text/css' />";
+                                                        meeIframe.find('body').append(styleTag);
+                                                    }else{
+                                                        meeIframe.find('#__custom_mks_link').remove();
+                                                    }
+                                                    if(mee.CSSLinkTag){
+                                                        meeIframe.find('#__custom_mks_link_tag').remove();
+                                                        meeIframe.find('body').append(mee.CSSLinkTag);
+                                                    }else{
+                                                        meeIframe.find('#__custom_mks_link_tag').remove();
+                                                    }
                                                     dialog.hide();
                                                 }
                                         },
