@@ -190,6 +190,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             mee.isActionScriptSetG = '';
                             mee.isActionScriptSetL = '';
                             mee.styleScript = '';
+                            mee.isStylesSpaceApplied = false;
                             mee.CSSLink = '';
                             mee.CSSLinkTag = '';
                             mee.CurrentDivId = '';
@@ -1575,9 +1576,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
                                         });
                                         var meeStyle =mee.styleScript;
-                                        meeStyle = meeStyle.replace(/[;][}]|[;][ ][}]/g, ';}\n');
-                                        meeStyle = meeStyle.replace(/[{]|[{][ ]/g,'{\n');
-                                        meeStyle = meeStyle.replace(/[;]/g,';\n');
+                                        if(!mee.isStylesSpaceApplied){
+                                            meeStyle = meeStyle.replace(/[;][}]|[;][ ][}]/g, ';}\n');
+                                            meeStyle = meeStyle.replace(/[{]|[{][ ]/g,'{\n');
+                                            meeStyle = meeStyle.replace(/[;]/g,';\n');
+                                            mee.isStylesSpaceApplied = true;
+                                        }
+                                        
                                         var preview_html = '<div class="divScriptVersion">';
                                         
                                         
@@ -2257,6 +2262,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     });
                                                                     if(!isFoundClass){
                                                                         myElement.find('#cmce_class').val('');
+                                                                        myElement.find('.acco-button-red').addClass('acco-button-disabled');
+                                                                    }else{
+                                                                        myElement.find('.acco-button-red').removeClass('acco-button-disabled');
                                                                     }
                                                                 }
                                                                 
@@ -2276,6 +2284,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             myElement.find('.ddlBackgroundImgLayers').chosen("destroy").chosen();
                                                             myElement.find('.ddlBackgroundImgLayers').chosen("destroy").chosen();
                                                             myElement.find('.ddlBackgroundColorLayers').chosen("destroy").chosen();
+                                                            myElement.find('.ddlBackgroundBorderLayers').chosen("destroy").chosen();
                                                             myElement.find('.ddlBackgroundCSSLayers').chosen("destroy").chosen();
                                                             
                                                     
@@ -2453,6 +2462,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     })
                                                                      if(!isFoundClass){
                                                                         myElement.find('#cmce_class').val('');
+                                                                        myElement.find('.acco-button-red').addClass('acco-button-disabled');
+                                                                    }else{
+                                                                        myElement.find('.acco-button-red').removeClass('acco-button-disabled');
                                                                     }
                                                                 }
                                                 }
@@ -2913,6 +2925,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     })
                                                                      if(!isFoundClass){
                                                                         myElement.find('#cmce_class').val('');
+                                                                        myElement.find('.acco-button-red').addClass('acco-button-disabled');
+                                                                    }else{
+                                                                        myElement.find('.acco-button-red').removeClass('acco-button-disabled');
                                                                     }
                                                                 }
                                                                 
@@ -4649,15 +4664,39 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                  }
                                  })*/
                                 myElement.find('#addCCSSButton').on('click',function(e){
-                                    console.log(SelectedElementForStyle);
                                     if($('#cmce_class').val() != ""){
+                                        myElement.find('.acco-button-red').removeClass('acco-button-disabled');
                                         SelectedElementForStyle.addClass('_cmce__'+$('#cmce_class').val());
                                         SelectedElementForStyle.addClass($('#cmce_class').val());
                                         if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
                                             pageCustomCSS = '_cmce__'+$('#cmce_class').val();
                                         }
+                                        myElement.find('.css-sucmsg').fadeIn("slow").delay(800).fadeOut("fast");
                                     }
                                    
+                                });
+                                myElement.find('#removeCCSSButton').on('click',function(e){
+                                   var classString = SelectedElementForStyle.attr('class');
+                                   var isFoundClass = false;
+                                                                if(classString && !SelectedElementForStyle.hasClass('acco-button-disabled')){
+                                                                    
+                                                                    classString = classString.split(' ');
+                                                                    $.each(classString,function(key,value){
+                                                                        //console.log(value);
+                                                                        isFoundClass = true;
+                                                                        if (value.indexOf('_cmce__') > -1) {
+                                                                            var val = value.split('__')[1];
+                                                                            var className = '_cmce__'+val;
+                                                                            SelectedElementForStyle.removeClass(className);
+                                                                            SelectedElementForStyle.removeClass(val);
+                                                                            $('#cmce_class').val('');
+                                                                        }
+                                                                    });
+                                                                    if(isFoundClass){
+                                                                        myElement.find('.acco-button-red').addClass('acco-button-disabled');
+                                                                    }
+                                                                    myElement.find('.css-errmsg').fadeIn("slow").delay(800).fadeOut("fast");
+                                                                }
                                 });
                                 myElement.find('#bgUrlCode').bind('paste', function (e) {
                                     var _this = $(this)

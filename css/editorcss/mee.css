@@ -5160,10 +5160,43 @@ div.tooltip.custom-tooltip .tooltip-inner{
 }
 .customCSSInput{
     margin-right:1px;
-    width:165px;
+    width: 195px;
     float:left;
 }
-#addCCSSButton{
-    width: 49px;
+#addCCSSButton,#removeCCSSButton{
+    width: 107px;
     height: 38px;
+}
+#addCCSSButton{
+    background: rgb(148, 207, 30);
+}
+.acco-button-red,.acco-button-red:hover{
+    background: none repeat scroll 0 0 #f71a1a;
+}
+
+.acco-button-disabled{
+    opacity: 0.4;
+    background: #91abbc !important;
+    cursor: default;
+}
+.css-sucmsg{
+    background: #F2C054;
+    padding: 0px 30px;
+    color: #fff;
+    border-radius: 2px;
+    display: none;
+    position: fixed;
+    height: 35px;
+    z-index: 1;
+}
+
+.css-errmsg{
+    background: #F71A1A;
+    padding: 0px 20px;
+    color: #fff;
+    border-radius: 2px;
+    display: none;
+    position: fixed;
+    height: 35px;
+    z-index: 1;
 }
