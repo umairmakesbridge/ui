@@ -548,12 +548,12 @@
             <div class="scrollarea customCss-accordion">
                 <div class="accordian-content ">
                 <div class="clearfix"  style="padding:5px;">
-                        <div class="css-sucmsg">
-                            <h5 style="font-weight: normal;line-height: 17px;">CSS Class Added Successfully</h5>
+                <!--    <div class="css-sucmsg">
+                            <span style="font-weight: normal;line-height: 17px;">CSS Class Added Successfully</span>
                         </div>
                         <div class="css-errmsg">
                             <h5 style="font-weight: normal;line-height: 17px;">CSS Class Removed Successfully</h5>
-                        </div>
+                        </div>-->
                         <h4 class="" style="">Add Custom CSS</h4>
                           <ul>
                             <li class="MenuLoadCssBox">
@@ -567,7 +567,13 @@
                         <select class="nosearch ddlBackgroundLayers ddlBackgroundCSSLayers" data-placeholder="Select Parent Layer">
                             <option value=""></option>
                         </select>
-                        <h4 class="" style="">Provide Your Own Class</h4>
+                        <h4 class="" style="position: relative;">Enter Your Class <span class="css-sucmsg">
+                            <span style="font-weight: normal;line-height: 17px;">(Class added)</span>
+                        </span>
+                        <span class="css-errmsg">
+                            <span style="font-weight: normal;line-height: 17px;">(Class removed)</span>
+                        </span>
+                        </h4>
                         
                         <div class="clearfix"></div>
                         <input type="text" class="urlCode acco-input customCSSInput" placeholder="Enter Class Name" id="cmce_class">

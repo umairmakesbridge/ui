@@ -4671,14 +4671,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
                                             pageCustomCSS = '_cmce__'+$('#cmce_class').val();
                                         }
-                                        myElement.find('.css-sucmsg').fadeIn("slow").delay(800).fadeOut("fast");
+                                        myElement.find('.css-sucmsg').fadeIn("slow").delay(800).fadeOut("slow");
                                     }
                                    
                                 });
                                 myElement.find('#removeCCSSButton').on('click',function(e){
                                    var classString = SelectedElementForStyle.attr('class');
                                    var isFoundClass = false;
-                                                                if(classString && !SelectedElementForStyle.hasClass('acco-button-disabled')){
+                                                                if(classString && !$(this).hasClass('acco-button-disabled')){
                                                                     
                                                                     classString = classString.split(' ');
                                                                     $.each(classString,function(key,value){
@@ -4695,7 +4695,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     if(isFoundClass){
                                                                         myElement.find('.acco-button-red').addClass('acco-button-disabled');
                                                                     }
-                                                                    myElement.find('.css-errmsg').fadeIn("slow").delay(800).fadeOut("fast");
+                                                                    myElement.find('.css-errmsg').fadeIn("slow").delay(800).fadeOut("slow");
                                                                 }
                                 });
                                 myElement.find('#bgUrlCode').bind('paste', function (e) {

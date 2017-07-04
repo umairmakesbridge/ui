@@ -5180,23 +5180,31 @@ div.tooltip.custom-tooltip .tooltip-inner{
     cursor: default;
 }
 .css-sucmsg{
-    background: #F2C054;
-    padding: 0px 30px;
-    color: #fff;
-    border-radius: 2px;
-    display: none;
-    position: fixed;
-    height: 35px;
-    z-index: 1;
+    /*background: #F2C054;*/
+padding: 0px 20px;
+color: #F2C054;
+border-radius: 2px;
+display: none;
+position: absolute;
+height: 20px;
+z-index: 1;
+float: left;
+top: 4px;
+right: 35px;
+
+
 }
 
 .css-errmsg{
-    background: #F71A1A;
-    padding: 0px 20px;
-    color: #fff;
-    border-radius: 2px;
-    display: none;
-    position: fixed;
-    height: 35px;
-    z-index: 1;
+   /*background: #F71A1A;*/
+padding: 0px 15px;
+color: #F71A1A;
+border-radius: 2px;
+display: none;
+position: absolute;
+height: 20px;
+z-index: 1;
+top: 5px;
+right: 24px;
+
 }
