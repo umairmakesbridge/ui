@@ -2937,6 +2937,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     })
                                                                      if(!isFoundClass){
                                                                         myElement.find('#cmce_class').val('');
+                                                                        myElement.find('#cmce_class').removeClass('css-greeborder');
                                                                         myElement.find('.acco-button-red').addClass('acco-button-disabled');
                                                                     }else{
                                                                         myElement.find('.acco-button-red').removeClass('acco-button-disabled');
@@ -2945,6 +2946,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                         str = str.replace(/,\s*$/, "");
                                                                         myElement.find('#cmce_class').val(str);
                                                                     }
+                                                                }else{
+                                                                    myElement.find('#cmce_class').val('');
+                                                                    myElement.find('.acco-button-red').addClass('acco-button-disabled');
+                                                                    myElement.find('#cmce_class').removeClass('css-greeborder');
                                                                 }
                                                                 
                                         // undoManager.registerAction(mainContentHtmlGrand.html());
@@ -2958,6 +2963,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 function RemoveAllOutline() {
                                     meeIframe.find(".mainContentHtmlGrand").removeInlineStyle("outline");
+                                    meeIframe.find('.mce-edit-focus').removeClass('mce-edit-focus');
                                     meeIframe.find("*").removeInlineStyle("outline");
                                 }
 
@@ -4702,7 +4708,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }  
                                         }
                                         if(PageCustomCssL){
-                                            PageCustomCss = PageCustomCssL;
+                                            pageCustomCSS = PageCustomCssL;
                                         }
                                         
                                         myElement.find('#cmce_class').addClass('css-greeborder');

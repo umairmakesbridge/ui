@@ -5218,3 +5218,6 @@ right: 24px;
     min-width: 80px;
     display: block;
 }
+.fieldinfo i.icon {
+    background: url("../../img/info2.png") no-repeat scroll center center #73D2F5;
+}
