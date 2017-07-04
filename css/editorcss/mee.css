@@ -5182,7 +5182,7 @@ div.tooltip.custom-tooltip .tooltip-inner{
 .css-sucmsg{
     /*background: #F2C054;*/
 padding: 0px 20px;
-color: #F2C054;
+color: rgb(148, 207, 30);
 border-radius: 2px;
 display: none;
 position: absolute;
@@ -5191,10 +5191,11 @@ z-index: 1;
 float: left;
 top: 4px;
 right: 35px;
-
-
 }
 
+.css-greeborder {
+    border:2px solid #94CF1E !important;
+}
 .css-errmsg{
    /*background: #F71A1A;*/
 padding: 0px 15px;
@@ -5207,4 +5208,13 @@ z-index: 1;
 top: 5px;
 right: 24px;
 
+}
+.css-errmsg span{
+    min-width: 95px;
+    display: block;
+}
+.css-sucmsg span
+{
+    min-width: 80px;
+    display: block;
 }

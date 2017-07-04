@@ -2254,9 +2254,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     classString = classString.split(' ');
                                                                     $.each(classString,function(key,value){
                                                                         //console.log(value);
+                                                                        var val = "";
                                                                         if (value.indexOf('_cmce__') > -1) {
                                                                             isFoundClass = true;
-                                                                            var val = value.split('__')[1];
+                                                                            val += value.split('__')[1]+",";
                                                                             myElement.find('#cmce_class').val(val);
                                                                         }
                                                                     });
@@ -2265,6 +2266,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                         myElement.find('.acco-button-red').addClass('acco-button-disabled');
                                                                     }else{
                                                                         myElement.find('.acco-button-red').removeClass('acco-button-disabled');
+                                                                        myElement.find('#cmce_class').addClass('css-greeborder');
+                                                                        var str = myElement.find('#cmce_class').val();
+                                                                        str = str.replace(/,\s*$/, "");
+                                                                         myElement.find('#cmce_class').val(str);
+                                                                        
                                                                     }
                                                                 }
                                                                 
@@ -2452,11 +2458,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     var isFoundClass = false;
                                                                 if(classString){
                                                                     classString = classString.split(' ');
+                                                                    var val ="";
                                                                     $.each(classString,function(key,value){
                                                                         //console.log(value);
                                                                         if (value.indexOf('_cmce__') > -1) {
                                                                             isFoundClass = true;
-                                                                            var val = value.split('__')[1];
+                                                                            val += value.split('__')[1]+",";
                                                                             myElement.find('#cmce_class').val(val);
                                                                         }
                                                                     })
@@ -2465,6 +2472,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                         myElement.find('.acco-button-red').addClass('acco-button-disabled');
                                                                     }else{
                                                                         myElement.find('.acco-button-red').removeClass('acco-button-disabled');
+                                                                        myElement.find('#cmce_class').addClass('css-greeborder');
+                                                                        var str = myElement.find('#cmce_class').val();
+                                                                        str = str.replace(/,\s*$/, "");
+                                                                        myElement.find('#cmce_class').val(str);
                                                                     }
                                                                 }
                                                 }
@@ -2915,11 +2926,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var isFoundClass = false;
                                                                 if(classString){
                                                                     classString = classString.split(' ');
+                                                                    var val = "";
                                                                     $.each(classString,function(key,value){
                                                                         //console.log(value);
                                                                         if (value.indexOf('_cmce__') > -1) {
                                                                             isFoundClass = true;
-                                                                            var val = value.split('__')[1];
+                                                                            val += value.split('__')[1]+",";
                                                                             myElement.find('#cmce_class').val(val);
                                                                         }
                                                                     })
@@ -2928,6 +2940,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                         myElement.find('.acco-button-red').addClass('acco-button-disabled');
                                                                     }else{
                                                                         myElement.find('.acco-button-red').removeClass('acco-button-disabled');
+                                                                        myElement.find('#cmce_class').addClass('css-greeborder');
+                                                                        var str = myElement.find('#cmce_class').val();
+                                                                        str = str.replace(/,\s*$/, "");
+                                                                        myElement.find('#cmce_class').val(str);
                                                                     }
                                                                 }
                                                                 
@@ -4666,12 +4682,32 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 myElement.find('#addCCSSButton').on('click',function(e){
                                     if($('#cmce_class').val() != ""){
                                         myElement.find('.acco-button-red').removeClass('acco-button-disabled');
-                                        SelectedElementForStyle.addClass('_cmce__'+$('#cmce_class').val());
-                                        SelectedElementForStyle.addClass($('#cmce_class').val());
-                                        if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
-                                            pageCustomCSS = '_cmce__'+$('#cmce_class').val();
+                                        var cmce_class = $('#cmce_class').val();
+                                        var splitPk = cmce_class.split(',');
+                                        var PageCustomCssL =""; 
+                                        if(splitPk.length > 1){
+                                          $.each(splitPk,function(key,val){
+                                              SelectedElementForStyle.addClass('_cmce__'+val);
+                                              SelectedElementForStyle.addClass(val);
+                                              if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                                      PageCustomCssL += ' _cmce__'+val;
+                                                  }
+                                          })
+                                            
+                                        }else{
+                                          SelectedElementForStyle.addClass('_cmce__'+$('#cmce_class').val());
+                                          SelectedElementForStyle.addClass($('#cmce_class').val());
+                                          if (SelectedElementForStyle[0].tagName.toLowerCase() == "body") {
+                                                pageCustomCSS = '_cmce__'+$('#cmce_class').val();
+                                            }  
                                         }
-                                        myElement.find('.css-sucmsg').fadeIn("slow").delay(800).fadeOut("slow");
+                                        if(PageCustomCssL){
+                                            PageCustomCss = PageCustomCssL;
+                                        }
+                                        
+                                        myElement.find('#cmce_class').addClass('css-greeborder');
+                                        myElement.find('.css-sucmsg').fadeIn("slow").delay(1000).fadeOut("slow");
+                                        myElement.find('.css-sucmsg span').effect('bounce', {times:3}, 500)
                                     }
                                    
                                 });
@@ -4694,8 +4730,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     });
                                                                     if(isFoundClass){
                                                                         myElement.find('.acco-button-red').addClass('acco-button-disabled');
+                                                                        myElement.find('#cmce_class').removeClass('css-greeborder');
                                                                     }
-                                                                    myElement.find('.css-errmsg').fadeIn("slow").delay(800).fadeOut("slow");
+                                                                    myElement.find('.css-errmsg').fadeIn("slow").delay(1000).fadeOut("slow"); 
+                                                                    myElement.find('.css-errmsg span').effect('bounce', {times:3}, 500)
                                                                 }
                                 });
                                 myElement.find('#bgUrlCode').bind('paste', function (e) {
