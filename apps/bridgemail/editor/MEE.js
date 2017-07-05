@@ -1105,6 +1105,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 }
                                                 
                                                 if(dialogValid){
+                                                    
+                                                    mee.isStylesSpaceApplied = true;
                                                     if(mee.styleScript){
                                                             meeIframe.find('#__custom_mks_css').remove();
                                                             var styleTag = "<style id='__custom_mks_css'>"+mee.styleScript+"</style>";
@@ -1580,7 +1582,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             meeStyle = meeStyle.replace(/[;][}]|[;][ ][}]/g, ';}\n');
                                             meeStyle = meeStyle.replace(/[{]|[{][ ]/g,'{\n');
                                             meeStyle = meeStyle.replace(/[;]/g,';\n');
-                                            mee.isStylesSpaceApplied = true;
                                         }
                                         
                                         var preview_html = '<div class="divScriptVersion">';
