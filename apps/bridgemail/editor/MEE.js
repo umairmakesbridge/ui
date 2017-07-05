@@ -4712,8 +4712,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                         
                                         myElement.find('#cmce_class').addClass('css-greeborder');
-                                        myElement.find('.css-sucmsg').fadeIn("slow").delay(1000).fadeOut("slow");
-                                        myElement.find('.css-sucmsg span').effect('bounce', {times:3}, 500)
+                                        myElement.find('.css-sucmsg').fadeIn("slow").delay(1500).fadeOut("slow");
+                                        myElement.find('.css-sucmsg span').effect('bounce', {times:5}, "slow")
                                     }
                                    
                                 });
@@ -4739,7 +4739,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                         myElement.find('#cmce_class').removeClass('css-greeborder');
                                                                     }
                                                                     myElement.find('.css-errmsg').fadeIn("slow").delay(1000).fadeOut("slow"); 
-                                                                    myElement.find('.css-errmsg span').effect('bounce', {times:3}, 500)
+                                                                    myElement.find('.css-errmsg span').effect('bounce', {times:5}, "slow")
                                                                 }
                                 });
                                 myElement.find('#bgUrlCode').bind('paste', function (e) {
