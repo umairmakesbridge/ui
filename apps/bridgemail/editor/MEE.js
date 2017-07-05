@@ -1603,8 +1603,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         //dialog.$el.find('.divPixelCode').val(fbpixel);
                                         //dialog.$el.find('.divPixelCodeGoogle').val(gpixel);
                                         //dialog.$el.find('.divPixelCode').focus()
-
                                         dialog.saveCallBack(_.bind(mee.saveCSSScript, mee, dialog));
+                                        if(!options.fromDialog){
+                                            dialog.getBody().parent().find('.dialog-backbtn').hide();
+                                        }
                                     });
                                     loadScriptBox.click(function () {
                                         var dialog_width = $(document.documentElement).width() - 60;
@@ -4688,6 +4690,24 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                  })*/
                                 myElement.find('#addCCSSButton').on('click',function(e){
                                     if($('#cmce_class').val() != ""){
+                                        var classString = SelectedElementForStyle.attr('class');
+                                        var isFoundClass = false;
+                                        // Remove Class if Found
+                                        if (classString) {
+
+                                            classString = classString.split(' ');
+                                            $.each(classString, function (key, value) {
+                                                //console.log(value);
+                                                isFoundClass = true;
+                                                if (value.indexOf('_cmce__') > -1) {
+                                                    var val = value.split('__')[1];
+                                                    var className = '_cmce__' + val;
+                                                    SelectedElementForStyle.removeClass(className);
+                                                    SelectedElementForStyle.removeClass(val);
+                                                }
+                                            });
+                                        }
+                                        
                                         myElement.find('.acco-button-red').removeClass('acco-button-disabled');
                                         var cmce_class = $('#cmce_class').val();
                                         var splitPk = cmce_class.split(',');
