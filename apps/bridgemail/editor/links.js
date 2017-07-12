@@ -352,9 +352,9 @@ function (template) {
                     if(selected_node.nodeName ==="B" || $(selected_node).find("b").length){
                         selected_text_decoration = selected_text_decoration + "font-weight:bold;";
                     }
-                    //if(this.$("input.checkinput:checked").length){
+                    if(this.$("input.checkinput:checked").length){
                         text_underline = 'text-decoration:underline;';
-                    //}
+                    }
                 }
                  if(!postBackupLink){return false}
                  
@@ -410,14 +410,11 @@ function (template) {
                     if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font" || $(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="a"){
                         $(this.tiny_editor_selection.getStart()).remove();
                     }
-                    //if(this.$("input.checkinput:checked").length){
-                    if(this.tiny_editor_selection.getStart().tagName.toLowerCase()=="strong" || this.tiny_editor_selection.getStart().parentNode.tagName.toLowerCase()=="strong"){
-                        myTextLink = '<strong><font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font></strong>'
-                    }else{
-                        myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
-                    }
+                    if(this.$("input.checkinput:checked").length){
                     
-                    //}
+                        myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
+                    
+                    }
                     
                     this.tiny_editor_selection.setContent(myTextLink);
                 }
