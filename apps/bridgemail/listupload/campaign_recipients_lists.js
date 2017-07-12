@@ -12,7 +12,9 @@ function (template, ListsCollection, ListsView,moment) {
                 'className':'ListsViewWrap',
                 events: {                   
                       "click .sortoption_expand": "toggleSortOption",
-                      "click .stattype": "fitlerLists"
+                      "click .stattype": "fitlerLists",
+                      "click .status_tgl a": "toggleOrderOption",
+                      "click .sortoption_sort": "toggleSortedOption"
                  },
                 initialize: function () {
                         this.template = _.template(template);				
@@ -29,6 +31,8 @@ function (template, ListsCollection, ListsView,moment) {
                         this.status = "A";
                         this.type = "batches";
                         this.offsetLength = 0;
+                        this.order = 'asc';
+                        this.orderBy = 'name';
                         this.source = this.options.source?this.options.source:'';
                         this.render();
                 },
@@ -60,7 +64,9 @@ function (template, ListsCollection, ListsView,moment) {
                             gridHeight:345                            
                     });
                     this.col2 =  this.$("#choose_lists").data("shuffle").getCol2();
-                    this.col1 = this.$("#list_grid tbody")
+                    this.col1 = this.$("#list_grid tbody");
+                    this.$("#list_grid").addClass('campaign_list_3col');
+                    this.$("#recipients").addClass('campaign_list_3col');
                     this.scrollElement = this.$(".leftcol .bDiv");
                     this.loadLists();
                     this.scrollElement.scroll(_.bind(this.liveLoading,this));
@@ -72,6 +78,22 @@ function (template, ListsCollection, ListsView,moment) {
                     this.$(".col1 #lists_search").on("keyup",_.bind(this.search,this));
                     this.$(".col1 #clearsearch").on("click",_.bind(this.clearSearch,this));
                     this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    var _this = this;
+                    this.$("#test-chosen").chosen({no_results_text: 'Oops, nothing found!', width: "170px !important", disable_search: "true"}).change(function () {
+                       var ptype = $(this).val();
+                       if (ptype == "SS") {
+                         _this.type = 'sharedList';                                
+                        }else if (ptype == "name"){
+                         _this.orderBy = 'name';
+                        } else if(ptype == "date"){
+                            _this.orderBy = 'date';
+                        }else if(ptype=="A"){
+                            _this.type = 'batches'; 
+                        } 
+                        _this.searchTxt = '';
+                        _this.total_fetch = 0;
+                        _this.loadLists();
+                    });
                 },
              
                 loadLists:function(fcount){
@@ -95,6 +117,10 @@ function (template, ListsCollection, ListsView,moment) {
                     }
                     var that = this; // internal access
                     _data['type'] = this.type;
+                    if(this.orderBy){
+                        _data['orderBy'] = this.orderBy;
+                    }
+                    _data['order'] = this.order;
                     _data['campNum'] = this.options.campNum;
                     this.objTargets = new ListsCollection();
                     this.$el.find('#list_grid tbody .load-tr').remove();
@@ -147,6 +173,23 @@ function (template, ListsCollection, ListsView,moment) {
                                 that.updateRunningModels();
                             },30000);*/
                         }});
+                },
+                toggleOrderOption : function(ev){
+                    var target = ev.currentTarget;
+                    this.$el.find('.status_tgl a').removeClass('active');
+
+                    if($(target).hasClass('dsctag')){
+                       this.order = 'desc'; 
+                       this.$el.find('.status_tgl a.asctag').addClass('active');
+                    }else if($(target).hasClass('asctag')){
+                        this.order = 'asc'; 
+                        this.$el.find('.status_tgl a.dsctag').addClass('active');
+                    }
+                    this.loadLists();
+                },
+                toggleSortedOption: function (ev) {
+                    $(this.el).find("#template_search_menu_sort").slideToggle();
+                    ev.stopPropagation();
                 },
                 addToCol2:function(model){
                     this.$el.find('.recp_empty_info').hide();
@@ -361,7 +404,7 @@ function (template, ListsCollection, ListsView,moment) {
                 }
             },
             toggleSortOption: function (ev) {
-                $(this.el).find("#template_search_menu").slideToggle();
+                $(this.el).find(".shared-all-dropdown").slideToggle();
                 ev.stopPropagation();
             },
             fitlerLists: function(obj){                               
@@ -374,6 +417,7 @@ function (template, ListsCollection, ListsView,moment) {
                 target.parent().addClass('active');
                 var html = target.clone();
                 $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());                               
+                $(this.el).find(".sortoption_sort").find('.spntext').html(html.html());                               
 
                 var type = target.attr("search");
                 if (!type){
@@ -387,7 +431,12 @@ function (template, ListsCollection, ListsView,moment) {
                          this.type = 'sharedList';                                
                      } else if (type == "F") { 
                          this.type = 'myAllSharedList';                                
-                     } else {
+                     }else if (type == "name"){
+                         this.orderBy = 'name';
+                     } else if(type == "date"){
+                         this.orderBy = 'date';
+                     } 
+                     else {
                          this.type = 'batches';                                
                      }
                     this.searchTxt = '';

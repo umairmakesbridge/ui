@@ -191,7 +191,7 @@ function (template) {
                 var _a_href = anchorObj.attr("href").toLowerCase();
                 var actual_href = anchorObj.attr("href");
                 var actual_target = anchorObj.attr("target");
-                if(anchorObj.parent().hasClass("underline")){
+                if(anchorObj.parent().hasClass("underline") || anchorObj.css('text-decoration') == "underline"){
                     this.$(".underline-checkbox input").prop("checked",true);
                     this.$(".right_columnLinkGUI textarea").css("text-decoration","underline");
                 }
@@ -390,7 +390,7 @@ function (template) {
                       
                           $(selected_node.parentNode).removeClass('underline');
                           selected_node.style.textDecoration = "none";  
-                       
+                          selected_node.parentNode.style.textDecoration = "none";
                         
                         //$(selected_node).unwrap();
                     }
