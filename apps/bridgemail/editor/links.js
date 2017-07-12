@@ -352,9 +352,9 @@ function (template) {
                     if(selected_node.nodeName ==="B" || $(selected_node).find("b").length){
                         selected_text_decoration = selected_text_decoration + "font-weight:bold;";
                     }
-                    //if(this.$("input.checkinput:checked").length){
+                    if(this.$("input.checkinput:checked").length){
                         text_underline = 'text-decoration:underline;';
-                    //}
+                    }
                 }
                  if(!postBackupLink){return false}
                  
@@ -392,17 +392,25 @@ function (template) {
                     }
                     else{
                       
-                          $(selected_node.parentNode).removeClass('underline');
+                          
+                          var cnt = $(selected_node.parentNode).contents();
+                          $(selected_node.parentNode).replaceWith(cnt);
+                          //$(selected_node.parentNode).removeClass('underline');
+                          //$(selected_node.parentNode).removeAttr('data-mce-style');
                           selected_node.style.textDecoration = "none";  
+                          
                           selected_node.parentNode.style.textDecoration = "none";
                         
                         //$(selected_node).unwrap();
                     }
                 }
-                else { 
-                    //if(this.$("input.checkinput:checked").length){
+                else {
+                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font"){
+                        $(this.tiny_editor_selection.getStart()).remove();
+                    }
+                    if(this.$("input.checkinput:checked").length){
                         myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
-                    //}
+                    }
                     
                     this.tiny_editor_selection.setContent(myTextLink);
                 }
