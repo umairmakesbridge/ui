@@ -407,11 +407,16 @@ function (template) {
                     }
                 }
                 else {
-                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font"){
+                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font" || $(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="a"){
                         $(this.tiny_editor_selection.getStart()).remove();
                     }
                     //if(this.$("input.checkinput:checked").length){
+                    if(this.tiny_editor_selection.getStart().tagName.toLowerCase()=="strong" || this.tiny_editor_selection.getStart().parentNode.tagName.toLowerCase()=="strong"){
+                        myTextLink = '<strong><font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font></strong>'
+                    }else{
                         myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
+                    }
+                    
                     //}
                     
                     this.tiny_editor_selection.setContent(myTextLink);
