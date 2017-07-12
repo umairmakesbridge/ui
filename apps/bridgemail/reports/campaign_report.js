@@ -440,9 +440,13 @@ function (template, mappingPage) {
                           }
                           if(key=="sentCount"){
                               _this.$(".col-cstats ."+key).html(_this.app.addCommas(val));
+                              _this.$(".total-row-stats ."+key) .html(_this.app.addCommas(val));
                           }else{
                               _this.$(".col-cstats ."+key).html(_this.app.addCommas(val));
-                              _this.$(".col-cstats ."+key+"-p").html(_this.app.addCommas(av)+"%");
+                              _this.$(".total-row-stats ."+key) .html(_this.app.addCommas(val));
+                              
+                              _this.$(".col-cstats ."+key+"-p").html(_this.app.addCommas(av)+"%");                              
+                              _this.$(".total-row-stats ."+key+"-p").html(_this.app.addCommas(av)+"%");
                             
                               
                           }

@@ -6624,13 +6624,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         event.preventDefault();                                            
                                         if ($(this).html() == "") {
                                             meeIframe.find(".dropHighlighter").addClass("dragIsOverDrop");                                     
-                                            $(this).css({'height': '10px', "background": "#80C000", "box-shadow": "0 0 5px rgba(0, 0, 0, 0.5)"});
+                                            $(this).css({'height': '10px'});
                                         }
                                     }).on('dragleave', function (event) {
                                         event.preventDefault();
                                         meeIframe.find(".dragIsOverDrop").removeClass("dragIsOverDrop");                                        
                                         if ($(this).html() == "") {
-                                            $(this).css({'height': '4px', "background": "#80C000", "box-shadow": "none"});
+                                            $(this).css({'height': '0px'});
                                         }
                                     });
 

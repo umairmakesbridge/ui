@@ -5917,6 +5917,7 @@ width: 100%;
 -webkit-border-radius: 2px ;
 	-moz-border-radius: 2px;
 	border-radius: 2px;}
+
 	
 .stats-panel > div { height:70px; overflow:hidden;}
 
@@ -5950,15 +5951,18 @@ width: 100%;
 }
 .socpc li i,.s-u-b li i,.si-p {
     font-style: normal;
-    float: right;
+    float: left;
     bottom: 1px;
     position: relative;
-    right: -7px;
+    left: 0px;
 }
 .si-p {
     font-size: 12px;
-    right:9px;
+    left:37px;
     position: absolute;
+}
+.s-u-b li i {
+    left:3px;
 }
 .toggle-up-1 .socpc li i,.toggle-up-1 .s-u-b li i{
     bottom:-3px;
@@ -11718,6 +11722,41 @@ right: 66px;
     .ac-webstat{
     background-position: -176px -102px;
     }
+    
+ .total-row-stats {
+    background: none repeat scroll 0 0 #91adc2;
+    border-radius: 2px;    
+    -webkit-border-radius: 2px ;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    height:55px;
+    margin-top:-5px;
+    margin-bottom: 10px;
+ }
+ .total-row-stats .total-counts{
+     width:70px;         
+     display: inline-block;
+     padding:8px 5px;
+     background: url("../img/subscribersiconw.png") no-repeat scroll 14px 8px;
+ }
+ .total-row-stats .total-counts strong{
+     color:#fff;
+     font-size:16px;
+     margin-left:35px;
+ }
+ .total-row-stats .total-counts i{
+     display:block;
+     color:#fff;
+     font-size:10px;
+     margin-left:10px;
+ }
+ .total-row-stats  .total-row-text{
+     font-size:18px;
+     padding:8px 11px;     
+     color:#fff;
+ }
+ 
+
     
     
 /****---------------------offline-------------------****/
