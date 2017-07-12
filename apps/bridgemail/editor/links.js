@@ -385,7 +385,9 @@ function (template) {
                     if(this.$("input.checkinput:checked").length){
                       if(selected_node.parentNode.nodeName.toLowerCase()=="font"){
                             $(selected_node.parentNode).addClass('underline');
+                            $(selected_node.parentNode).attr('data-mce-style',"text-decoration: underline;");
                         }else{
+                            $(selected_node).wrap('<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;"></font>')
                             selected_node.style.textDecoration = "underline";
                         }
                         
