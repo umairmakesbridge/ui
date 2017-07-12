@@ -290,11 +290,11 @@ function (template,recipientsCollection,recipientView,listModel,app,addContactVi
                                               
                 
                 var type = target.attr("search");
-                if(type=="name" || type=="date"){
-                    $(this.el).find(".sortoption_sort").find('.spntext').html(html.html()); 
-                }else{
-                    this.$('.stattype').parent().removeClass('active');
+                 this.$('.stattype').parent().removeClass('active');
                     target.parent().addClass('active');
+                if(type=="name" || type=="date"){
+                    $(this.el).find(".sortoption_sort").find('.spntext').html(html.html());
+                }else{
                     $(this.el).find(".sortoption_expand").find('.spntext').html(html.html()); 
                 }
                 if (!type){

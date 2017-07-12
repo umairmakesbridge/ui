@@ -5886,6 +5886,38 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 })
                                                             }
                                                             //console.log(editor.theme.panel._id);
+                                                            if(e.value == "underline"){
+                                                                if($(editor.bodyElement).parents('body').find('.mce-floatpanel.fixed-panel .mce-active .mce-i-underline').length > 0){
+                                                                    console.log('Ok we had the class');
+                                                                }else{
+                                                                    var tiny_editor_selection = editor.selection;
+                                                                    var currentNode = tiny_editor_selection.getNode();
+                                                                    
+                                                                    if(tiny_editor_selection.getStart().tagName.toLowerCase()== "a" && $(tiny_editor_selection.getStart()).hasClass('MEE_LINK')){
+                                                                        currentNode = tiny_editor_selection.getStart();
+                                                                    }
+                                                                    else if(($(tiny_editor_selection.getStart()).children().length > 0) && (tiny_editor_selection.getStart().nodeName.toLowerCase() !== "span" && tiny_editor_selection.getStart().nodeName.toLowerCase() !=="a")){
+                                                                           if($(tiny_editor_selection.getStart()).find('a').length > 0 && tiny_editor_selection.getContent().indexOf('href=') > -1) {
+                                                                               currentNode = $(tiny_editor_selection.getStart()).find('a')[0];
+                                                                           }
+                                                                    }
+                                                                    
+                                                                    console.log(currentNode); // provide the current block
+                                                                    if (fontTagObj.length > 0) {
+                                                                            $.each(fontTagObj, function (key, val) {
+                                                                                $(val).removeClass('underline');
+                                                                                $(val).css('text-decoration','none');
+                                                                                
+                                                                            });
+
+                                                                        }    
+                                                                    if (currentNode.nodeName == "a" || currentNode.nodeName == "A") { 
+                                                                        $(currentNode.parentNode).removeClass('underline');
+                                                                        currentNode.style.textDecoration = "none";  
+                                                                        currentNode.parentNode.style.textDecoration = "none";
+                                                                    }
+                                                                }
+                                                            }
                                                             if (e.command == "FontSize") {
                                                                 mee.reAdjusToolBarByID(meeIframe.find('#' + editor.theme.panel._id))
                                                             } else if (e.command == "Undo") {

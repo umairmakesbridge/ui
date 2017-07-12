@@ -12423,3 +12423,10 @@ right: 66px;
 .offline-ui.offline-ui-down.offline-ui-reconnect-failed-2s .offline-ui-content:before {
   content: "Connection attempt failed.";
 }
+
+.bmsgrid div.bDiv table.campaign_list_3col tbody tr > td {
+    padding: 5px 0;
+}
+.bmsgrid .bDiv table.campaign_list_3col tbody tr > td:last-child {
+    padding-right: 18px;
+}

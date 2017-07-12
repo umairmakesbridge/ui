@@ -1,4 +1,4 @@
-<td width="100%" style="overflow:visible!important; opacity:<%=this.getOpacity()%>">
+<td width="80%" style="overflow:visible!important; opacity:<%=this.getOpacity()%>">
     <div>
         <div class="name-type">
             <h3><a class="edit-list" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"><%=name%></a>
@@ -31,14 +31,22 @@
         </div>
     </div>
 </td>
-<td width="90px" style="opacity:<%=this.getOpacity()%>">
+<td width="50px" style="opacity:<%=this.getOpacity()%>">
     <div>
         <div class="subscribers ">
            <strong><span><em>Contacts</em><%if(this.model.get('subscriberCount') !="0"){%><a class="pageview showtooltip" data-original-title="Click to view population detail"  data-id="<%=this.model.get('listNumber.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriberCount'))%></a><%}else{%><%=subscriberCount%><%}%></span></strong>
         </div> 
-
-
-           <%if (this.model.get('isSupressList')=="true" || this.model.get('isBounceSupressList')=="true"){%>
+            </div>
+            </td>
+ <td width="102px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em>Creation Date</em>
+                        <% var date = moment(this.app.decodeHTML(this.model.get('creationDate')), 'YYYY-M-D H:m') %>
+                        <% dateFormat = date.format("DD MMM, YYYY"); %>
+                        <%- dateFormat  %></span></strong>
+        </div>
+         <%if (this.model.get('isSupressList')=="true" || this.model.get('isBounceSupressList')=="true"){%>
               <div class="slide-btns one s-clr2" style="width:;">
                   <span  class="icon setting"></span>
                     <div>
@@ -82,10 +90,6 @@
 
                 </div>    
                     <% } }%>
-             
 
-
-
-
-            </div>
-            </td>
+    </div>
+</td>
