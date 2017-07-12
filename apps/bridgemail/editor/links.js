@@ -323,12 +323,13 @@ function (template) {
                 if(linkName){
                     linkNameAttr = "name='"+linkName+"'";
                 }
-                this.meeIframeWindow.﻿tinyMCE.activeEditor.﻿selection.moveToBookmark(this.selection);
+                this.meeIframeWindow.tinyMCE.activeEditor.selection.moveToBookmark(this.selection);
                 this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
                 var selected_node = this.tiny_editor_selection.getNode();
-                var selected_color = 'color:inherit';
+                var selected_color = 'color:inherit;';
                 //var selected_text_decoration = this.$("input.checkinput:checked").length?'text-decoration:underline;':'';
                 var selected_text_decoration = '';
+                var text_underline = '';
                 //console.log(selected_node);
                 //console.log($(this.tiny_editor_selection.getStart()).children().length);
                 if(($(this.tiny_editor_selection.getStart()).children().length > 0) && (this.tiny_editor_selection.getStart().nodeName.toLowerCase() !== "span" && this.tiny_editor_selection.getStart().nodeName.toLowerCase() !=="a")){
@@ -351,10 +352,13 @@ function (template) {
                     if(selected_node.nodeName ==="B" || $(selected_node).find("b").length){
                         selected_text_decoration = selected_text_decoration + "font-weight:bold;";
                     }
+                    if(this.$("input.checkinput:checked").length){
+                        text_underline = 'text-decoration:underline;';
+                    }
                 }
                  if(!postBackupLink){return false}
                  
-                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
+                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+text_underline+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
@@ -388,16 +392,24 @@ function (template) {
                     }
                     else{
                       
-                          $(selected_node.parentNode).removeClass('underline');
+                          
+                          var cnt = $(selected_node.parentNode).contents();
+                          $(selected_node.parentNode).replaceWith(cnt);
+                          //$(selected_node.parentNode).removeClass('underline');
+                          //$(selected_node.parentNode).removeAttr('data-mce-style');
                           selected_node.style.textDecoration = "none";  
+                          
                           selected_node.parentNode.style.textDecoration = "none";
                         
                         //$(selected_node).unwrap();
                     }
                 }
-                else { 
+                else {
+                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font"){
+                        $(this.tiny_editor_selection.getStart()).remove();
+                    }
                     if(this.$("input.checkinput:checked").length){
-                        myTextLink = '<font class="underline" style="text-decoration:underline">'+myTextLink+'</font>';
+                        myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
                     }
                     
                     this.tiny_editor_selection.setContent(myTextLink);
