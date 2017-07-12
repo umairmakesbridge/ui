@@ -352,13 +352,13 @@ function (template) {
                     if(selected_node.nodeName ==="B" || $(selected_node).find("b").length){
                         selected_text_decoration = selected_text_decoration + "font-weight:bold;";
                     }
-                    if(this.$("input.checkinput:checked").length){
+                    //if(this.$("input.checkinput:checked").length){
                         text_underline = 'text-decoration:underline;';
-                    }
+                    //}
                 }
                  if(!postBackupLink){return false}
                  
-                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+text_underline+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
+                  myTextLink = "<a class='MEE_LINK' data-mce-href='"+postBackupLink+"' href='" + postBackupLink + "'  data-mce-style='"+selected_text_decoration+selected_color+"' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
@@ -410,9 +410,9 @@ function (template) {
                     if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font"){
                         $(this.tiny_editor_selection.getStart()).remove();
                     }
-                    if(this.$("input.checkinput:checked").length){
+                    //if(this.$("input.checkinput:checked").length){
                         myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
-                    }
+                    //}
                     
                     this.tiny_editor_selection.setContent(myTextLink);
                 }
