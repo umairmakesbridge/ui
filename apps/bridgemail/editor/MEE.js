@@ -5903,14 +5903,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     }
                                                                     
                                                                     console.log(currentNode); // provide the current block
-                                                                    if (fontTagObj.length > 0) {
-                                                                            $.each(fontTagObj, function (key, val) {
-                                                                                $(val).removeClass('underline');
-                                                                                $(val).css('text-decoration','none');
-                                                                                
-                                                                            });
-
-                                                                        }    
+                                                                     
                                                                     if (currentNode.nodeName == "a" || currentNode.nodeName == "A") { 
                                                                         $(currentNode.parentNode).removeClass('underline');
                                                                         currentNode.style.textDecoration = "none";  
