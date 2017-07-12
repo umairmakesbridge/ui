@@ -358,7 +358,7 @@ function (template) {
                 }
                  if(!postBackupLink){return false}
                  
-                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+text_underline+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
+                  myTextLink = "<a class='MEE_LINK' data-mce-href='"+postBackupLink+"' href='" + postBackupLink + "'  data-mce-style='"+selected_text_decoration+selected_color+"' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
@@ -407,11 +407,13 @@ function (template) {
                     }
                 }
                 else {
-                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font"){
+                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font" || $(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="a"){
                         $(this.tiny_editor_selection.getStart()).remove();
                     }
                     if(this.$("input.checkinput:checked").length){
+                    
                         myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
+                    
                     }
                     
                     this.tiny_editor_selection.setContent(myTextLink);
