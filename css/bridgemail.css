@@ -11736,19 +11736,18 @@ right: 66px;
  .total-row-stats .total-counts{
      width:80px;         
      display: inline-block;
-     padding:8px 5px;
-     background: url("../img/subscribersiconw.png") no-repeat scroll 14px 8px;
+     padding:8px 5px;     
  }
  .total-row-stats .total-counts strong{
      color:#fff;
      font-size:16px;
-     margin-left:35px;
+     margin-left:7px;
  }
  .total-row-stats .total-counts i{
      display:block;
      color:#fff;
      font-size:10px;
-     margin-left:10px;
+     margin-left:7px;
  }
  .total-row-stats  .total-row-text{
      font-size:18px;
