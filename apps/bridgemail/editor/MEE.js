@@ -405,8 +405,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
 
                                 }
-                                mee.dragOverBody = function(e){
-                                    if(this.dragElement){
+                                mee.dragOverBody = function(e){                                    
+                                    if(this.dragElement || this.dragElementIframe){
                                         meeIframeWindow.$("li.dropHighlighter").removeClass("dropHighlighter");
                                         var dropEle = meeIframeWindow.$.nearest({x: e.originalEvent.x, y: e.originalEvent.y}, 'li.myDroppable');
                                         if (dropEle && dropEle.length==1 && dropEle.css("visibility") == "visible") {                                                                                        
@@ -7216,6 +7216,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     //Releted to last element dropped full height:
                                     meeIframe.find(".sortable").removeAttr("style");
                                     meeIframe.find(".myDroppable").removeInlineStyle("height");
+                                    meeIframe.$("li.dropHighlighter").removeClass("dropHighlighter");
                                     myElement.find(".hide-footer").remove();
                                     if (!undo) {
                                         makeCloneAndRegister();
