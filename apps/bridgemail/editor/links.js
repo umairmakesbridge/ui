@@ -329,7 +329,7 @@ function (template) {
                 var selected_color = 'color:inherit;';
                 //var selected_text_decoration = this.$("input.checkinput:checked").length?'text-decoration:underline;':'';
                 var selected_text_decoration = '';
-                var text_underline = '';
+                var text_underline = 'text-decoration:none;';
                 //console.log(selected_node);
                 //console.log($(this.tiny_editor_selection.getStart()).children().length);
                 if(($(this.tiny_editor_selection.getStart()).children().length > 0) && (this.tiny_editor_selection.getStart().nodeName.toLowerCase() !== "span" && this.tiny_editor_selection.getStart().nodeName.toLowerCase() !=="a")){
@@ -358,7 +358,7 @@ function (template) {
                 }
                  if(!postBackupLink){return false}
                  
-                  myTextLink = "<a class='MEE_LINK' data-mce-href='"+postBackupLink+"' href='" + postBackupLink + "'  data-mce-style='"+selected_text_decoration+selected_color+"' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
+                  myTextLink = "<a class='MEE_LINK' data-mce-href='"+postBackupLink+"' href='" + postBackupLink + "'  data-mce-style='"+selected_text_decoration+selected_color+"' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+text_underline+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
