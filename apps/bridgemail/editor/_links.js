@@ -174,6 +174,9 @@ function (template) {
                 
                 if(selection.getNode().nodeName.toLowerCase()=="a"){
                     selectedNode = _node;
+                }else if($(this.tiny_editor_selection.getNode()).closest('a.MEE_LINK').length > 0){
+                    selectedNode = $(this.tiny_editor_selection.getNode()).closest('a.MEE_LINK');
+                    
                 }
                 else if(selection.getContent({format: 'text'})!==""){
                     _node.find("a").each(function(){
@@ -182,6 +185,9 @@ function (template) {
                         }
                     });
                 }
+                if(selectedNode && ((selectedNode[0].innerHTML && selectedNode[0].innerHTML.match(/<[a-z][\s\S]*>/g)) || (selectedNode.innerHTML && selectedNode.innerHTML.match(/<[a-z][\s\S]*>/g)))){
+                        this.$("."+this.activeTab+"Div textarea.linkTextArea").attr('readonly','readonly');
+                    }
                 return selectedNode ;
             },
             showLinkDetails:function(anchorObj){    
@@ -329,7 +335,7 @@ function (template) {
                 var selected_color = 'color:inherit;';
                 //var selected_text_decoration = this.$("input.checkinput:checked").length?'text-decoration:underline;':'';
                 var selected_text_decoration = '';
-                var text_underline = 'text-decoration:none;';
+                var text_underline = '';
                 //console.log(selected_node);
                 //console.log($(this.tiny_editor_selection.getStart()).children().length);
                 if(($(this.tiny_editor_selection.getStart()).children().length > 0) && (this.tiny_editor_selection.getStart().nodeName.toLowerCase() !== "span" && this.tiny_editor_selection.getStart().nodeName.toLowerCase() !=="a")){
@@ -339,7 +345,10 @@ function (template) {
                            selected_node = $(this.tiny_editor_selection.getStart()).find('a')[0];
                        }
                     //}
+                }else if($(this.tiny_editor_selection.getNode()).closest('a.MEE_LINK').length){
+                     selected_node = $(this.tiny_editor_selection.getNode()).closest('a.MEE_LINK')[0];
                 }
+                
                 if(selected_node){
                     if(selected_node.style && selected_node.style.color){
                         selected_color = "color:"+selected_node.style.color+";";
@@ -358,7 +367,7 @@ function (template) {
                 }
                  if(!postBackupLink){return false}
                  
-                  myTextLink = "<a class='MEE_LINK' data-mce-href='"+postBackupLink+"' href='" + postBackupLink + "'  data-mce-style='"+selected_text_decoration+selected_color+"' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+text_underline+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
+                  myTextLink = "<a class='MEE_LINK' id='"+this.selection.id+"_meelink' data-mce-href='"+postBackupLink+"' href='" + postBackupLink + "'  data-mce-style='"+selected_text_decoration+selected_color+"' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+"'>" + this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({format: 'html'}) + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
@@ -366,6 +375,7 @@ function (template) {
                  }*/
                 
                 if (selected_node.nodeName == "a" || selected_node.nodeName == "A") {                    
+                    
                     selected_node.setAttribute("href", postBackupLink);
                     if(target){ 
                         selected_node.setAttribute("target", target);
@@ -379,8 +389,11 @@ function (template) {
                     else{
                         selected_node.removeAttribute("name")
                     }
-                    if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val()){
+                    
+                    
+                    if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val() && !selected_node.innerHTML.match(/<[a-z][\s\S]*>/g)){
                         selected_node.innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
+                        //$(selected_node).text(this.$("."+this.activeTab+"Div textarea.linkTextArea").val());
                     }
                     if(this.$("input.checkinput:checked").length){
                       if(selected_node.parentNode.nodeName.toLowerCase()=="font"){
@@ -405,26 +418,32 @@ function (template) {
                         
                         //$(selected_node).unwrap();
                     }
-                }else {
-                    
-                    
-                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font"){
+                }
+                else {
+                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font" || $(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="a"){
                         $(this.tiny_editor_selection.getStart()).remove();
-                    }else if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="a"){
-                        $(this.tiny_editor_selection.getStart().parentNode).remove();
                     }
-                    if(this.$("input.checkinput:checked").length){
+                    /*if(this.$("input.checkinput:checked").length){
                     
                         myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
                     
-                    }else if(selected_node.tagName.toLowerCase() == "strong"){
-                        var cnt = $(selected_node.parentNode).contents();
-                        $(selected_node.parentNode).replaceWith(cnt);
-                        selected_node.parentNode.style.textDecoration = "none";
-                        $(selected_node).find('a.MEE_LINK').css('text-decoration',"none");
-                    }
+                    }*/
                     
-                    this.tiny_editor_selection.setContent(myTextLink);
+                   //this.tiny_editor_selection.setContent(myTextLink);
+                   
+                   var activeEditor = this.meeIframeWindow.tinyMCE.activeEditor;
+                   activeEditor.execCommand('mceInsertContent', true, myTextLink);
+                   var marker = activeEditor.dom.get(this.selection.id+'_meelink');
+                   activeEditor.selection.select(marker);
+                   if(this.$("input.checkinput:checked").length){
+                    this.meeIframeWindow.tinyMCE.execCommand('Underline');
+                   }else{
+                          var cnt = $(selected_node.parentNode).contents();
+                          $(selected_node.parentNode).replaceWith(cnt);
+                          selected_node.style.textDecoration = "none"; 
+                          selected_node.parentNode.style.textDecoration = "none";
+                   }
+                   console.log($(marker).removeAttr('id'));
                 }
                 //tinymce.activeEditor.focus();               
                 return postBackupLink;
