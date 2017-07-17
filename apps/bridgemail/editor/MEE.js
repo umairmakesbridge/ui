@@ -1906,6 +1906,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             oInitDestroyEvents: oInitDestroyEvents
                                         });
                                         mee.dragElementIframe = null;
+                                        mee.stopDragging(); 
                                     })
                                 }
                                 function InitializeControls() {
@@ -7214,9 +7215,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     //Remove height from destination's parent and source's parent (.sortable UL)
                                     //Releted to last element dropped full height:
-                                    meeIframe.find(".sortableli.dropHighlighter").removeAttr("style");
+                                    meeIframe.find(".sortable").removeAttr("style");
                                     meeIframe.find(".myDroppable").removeInlineStyle("height");
-                                    meeIframe.$(".dropHighlighter").removeClass("dropHighlighter");
+                                    meeIframe.find(".dropHighlighter").removeClass("dropHighlighter");
                                     myElement.find(".hide-footer").remove();
                                     if (!undo) {
                                         makeCloneAndRegister();
