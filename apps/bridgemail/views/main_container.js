@@ -132,6 +132,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .report-flow':'reportFlow',
                     'click .tipntestlistings':'tipandtestlistings',
                     'click .view-ftpuploads':'ftpUploadPage',
+                    'click .dc-listing' : 'dcTemplateGallery',
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
                     }
@@ -1061,6 +1062,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 templateGallery: function () {
                     this.addWorkSpace({type: '', title: 'Template Gallery', sub_title: 'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates'});
+                },
+                dcTemplateGallery: function () {
+                    this.addWorkSpace({type: '', title: 'Dynamic Content Gallery', sub_title: 'Gallery', url: 'dctemplates/dctemplates', workspace_id: 'dctemplates', 'addAction': false, tab_icon: 'mydctemplates', noTags: true});
                 },
                 camapignReport: function () {
                     this.addWorkSpace({type: '', title: 'Mass Email Reports', sub_title: 'Analytic', url: 'reports/campaign_report', workspace_id: 'camp_reports', tab_icon: 'reports', noTags: true});
