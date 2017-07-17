@@ -430,9 +430,11 @@ define([
                     });
                     if (message.callback)
                         message.callback();
+                    
                 });
 
                 dialog.find(".btn-gray").click(function () {
+                    
                     dialog.fadeOut("fast", function () {
                         $(this).remove();
                     })

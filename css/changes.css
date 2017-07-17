@@ -9742,6 +9742,16 @@ Download CSV Button
 .hideEle {
     opacity: 0.5;    
 }
+
+.status_tgl .turnoff,.status_tgl .turnon{
+    padding: 4px 20px !important; 
+} 
+.status_tgl .turnon.active{
+    padding-left: 20px !important;
+}
+.status_tgl .turnoff.active{
+    color:#E74C33 !important;
+}
 .show-percentage{
     font-size:8px;
     position: absolute;

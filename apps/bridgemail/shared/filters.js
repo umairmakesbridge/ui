@@ -904,7 +904,9 @@
                 $.each($('#__list_grid .selected'), function (k, v) {
                     $(this).find('.check-list').iCheck('check');
                 })
-
+                if($('#__list_grid .selected').length ==0 && params && params["listNumbers.checksums"]){
+                    self.checkSharedTargetList(filter, '#__list_grid', params);
+                }
                 if (list_arr[0] && filter.find('#__list_grid input[list_checksum=' + list_arr[0] + ']').length == 0) {
                     this.options.app.showLoading("Loading Lists...", filter.find('#__list_grid'));
                     filter.find('#__list_grid .loading p').css({'margin-left': '-150px', 'margin-right': '0'});
@@ -972,9 +974,7 @@
                         this.closeDelError(filter);
                     }
                 }
-            })
-            
-            
+            })                       
         }
         , addFormFilter: function (obj, e, params) {
             this.isScrollattachform = false;
