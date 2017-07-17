@@ -4689,7 +4689,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                  }
                                  })*/
                                 myElement.find('#addCCSSButton').on('click',function(e){
-                                    if($('#cmce_class').val() != ""){
+                                    if(myElement.find('#cmce_class').val() != ""){
                                         var classString = SelectedElementForStyle.attr('class');
                                         var isFoundClass = false;
                                         // Remove Class if Found
