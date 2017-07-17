@@ -407,8 +407,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 mee.dragOverBody = function(e){                                    
                                     if(this.dragElement || this.dragElementIframe){
-                                        meeIframeWindow.$("li.dropHighlighter").removeClass("dropHighlighter");
-                                        var dropEle = meeIframeWindow.$.nearest({x: e.originalEvent.x, y: e.originalEvent.y}, 'li.myDroppable');
+                                        meeIframeWindow.$(".dropHighlighter").removeClass("dropHighlighter");
+                                        var dropEle = meeIframeWindow.$.nearest({x: e.originalEvent.x, y: e.originalEvent.y}, '.myDroppable');
                                         if (dropEle && dropEle.length==1 && dropEle.css("visibility") == "visible") {                                                                                        
                                             dropEle.addClass("dropHighlighter")
                                         }
@@ -417,7 +417,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 mee.dragLeaveBody = function(){
                                     if(meeIframeWindow && this.dragElement){                                        
-                                        meeIframeWindow.$("li.dropHighlighter").removeClass("dropHighlighter");                                        
+                                        meeIframeWindow.$(".dropHighlighter").removeClass("dropHighlighter");                                        
                                     }
                                 }
                                 
@@ -7214,9 +7214,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     //Remove height from destination's parent and source's parent (.sortable UL)
                                     //Releted to last element dropped full height:
-                                    meeIframe.find(".sortable").removeAttr("style");
+                                    meeIframe.find(".sortableli.dropHighlighter").removeAttr("style");
                                     meeIframe.find(".myDroppable").removeInlineStyle("height");
-                                    meeIframe.$("li.dropHighlighter").removeClass("dropHighlighter");
+                                    meeIframe.$(".dropHighlighter").removeClass("dropHighlighter");
                                     myElement.find(".hide-footer").remove();
                                     if (!undo) {
                                         makeCloneAndRegister();
@@ -7312,9 +7312,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            
                                                 
                                             if($(event.currentTarget).hasClass('droppedDynamicBlock')){
-                                                meeIframe.find(".mainContentHtml .dynamicContentContainer li.myDroppable").css('visibility', 'hidden');
+                                                meeIframe.find(".mainContentHtml .dynamicContentContainer .myDroppable").css('visibility', 'hidden');
                                             }
-                                            if (meeIframe.find(".mainContentHtml li.myDroppable").length > 1) {
+                                            if (meeIframe.find(".mainContentHtml .myDroppable").length > 1) {
                                                 meeIframe.find(".mainContentHtml").addClass("show-droppables")
                                             }
                                             var totalLiLength = meeIframe.find(".sortable li").length;
