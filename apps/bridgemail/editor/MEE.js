@@ -410,10 +410,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
 
                                 }
-                                mee.dragOverBody = function(e){
-                                    if(this.dragElement){
-                                        meeIframeWindow.$("li.dropHighlighter").removeClass("dropHighlighter");
-                                        var dropEle = meeIframeWindow.$.nearest({x: e.originalEvent.x, y: e.originalEvent.y}, 'li.myDroppable');
+                                mee.dragOverBody = function(e){                                    
+                                    if(this.dragElement || this.dragElementIframe){
+                                        meeIframeWindow.$(".dropHighlighter").removeClass("dropHighlighter");
+                                        var dropEle = meeIframeWindow.$.nearest({x: e.originalEvent.x, y: e.originalEvent.y}, '.myDroppable');
                                         if (dropEle && dropEle.length==1 && dropEle.css("visibility") == "visible") {                                                                                        
                                             dropEle.addClass("dropHighlighter")
                                         }
@@ -422,7 +422,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 mee.dragLeaveBody = function(){
                                     if(meeIframeWindow && this.dragElement){                                        
-                                        meeIframeWindow.$("li.dropHighlighter").removeClass("dropHighlighter");                                        
+                                        meeIframeWindow.$(".dropHighlighter").removeClass("dropHighlighter");                                        
                                     }
                                 }
                                 
@@ -2129,6 +2129,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             oInitDestroyEvents: oInitDestroyEvents
                                         });
                                         mee.dragElementIframe = null;
+                                        mee.stopDragging(); 
                                     })
                                 }
                                 function InitializeControls() {
@@ -6312,6 +6313,31 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 })
                                                             }
                                                             //console.log(editor.theme.panel._id);
+                                                            if(e.value == "underline"){
+                                                                if($(editor.bodyElement).parents('body').find('.mce-floatpanel.fixed-panel .mce-active .mce-i-underline').length > 0){
+                                                                    console.log('Ok we had the class');
+                                                                }else{
+                                                                    var tiny_editor_selection = editor.selection;
+                                                                    var currentNode = tiny_editor_selection.getNode();
+                                                                    
+                                                                    if(tiny_editor_selection.getStart().tagName.toLowerCase()== "a" && $(tiny_editor_selection.getStart()).hasClass('MEE_LINK')){
+                                                                        currentNode = tiny_editor_selection.getStart();
+                                                                    }
+                                                                    else if(($(tiny_editor_selection.getStart()).children().length > 0) && (tiny_editor_selection.getStart().nodeName.toLowerCase() !== "span" && tiny_editor_selection.getStart().nodeName.toLowerCase() !=="a")){
+                                                                           if($(tiny_editor_selection.getStart()).find('a').length > 0 && tiny_editor_selection.getContent().indexOf('href=') > -1) {
+                                                                               currentNode = $(tiny_editor_selection.getStart()).find('a')[0];
+                                                                           }
+                                                                    }
+                                                                    
+                                                                    console.log(currentNode); // provide the current block
+                                                                     
+                                                                    if (currentNode.nodeName == "a" || currentNode.nodeName == "A") { 
+                                                                        $(currentNode.parentNode).removeClass('underline');
+                                                                        currentNode.style.textDecoration = "none";  
+                                                                        currentNode.parentNode.style.textDecoration = "none";
+                                                                    }
+                                                                }
+                                                            }
                                                             if (e.command == "FontSize") {
                                                                 mee.reAdjusToolBarByID(meeIframe.find('#' + editor.theme.panel._id))
                                                             } else if (e.command == "Undo") {
@@ -7041,13 +7067,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         event.preventDefault();                                            
                                         if ($(this).html() == "") {
                                             meeIframe.find(".dropHighlighter").addClass("dragIsOverDrop");                                     
-                                            $(this).css({'height': '10px', "background": "#80C000", "box-shadow": "0 0 5px rgba(0, 0, 0, 0.5)"});
+                                            $(this).css({'height': '10px'});
                                         }
                                     }).on('dragleave', function (event) {
                                         event.preventDefault();
                                         meeIframe.find(".dragIsOverDrop").removeClass("dragIsOverDrop");                                        
                                         if ($(this).html() == "") {
-                                            $(this).css({'height': '4px', "background": "#80C000", "box-shadow": "none"});
+                                            $(this).css({'height': '0px'});
                                         }
                                     });
 
@@ -7608,6 +7634,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     //Releted to last element dropped full height:
                                     meeIframe.find(".sortable").removeAttr("style");
                                     meeIframe.find(".myDroppable").removeInlineStyle("height");
+                                    meeIframe.find(".dropHighlighter").removeClass("dropHighlighter");
                                     myElement.find(".hide-footer").remove();
                                     if (!undo) {
                                         makeCloneAndRegister();
@@ -7703,9 +7730,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            
                                                 
                                             if($(event.currentTarget).hasClass('droppedDynamicBlock')){
-                                                meeIframe.find(".mainContentHtml .dynamicContentContainer li.myDroppable").css('visibility', 'hidden');
+                                                meeIframe.find(".mainContentHtml .dynamicContentContainer .myDroppable").css('visibility', 'hidden');
                                             }
-                                            if (meeIframe.find(".mainContentHtml li.myDroppable").length > 1) {
+                                            if (meeIframe.find(".mainContentHtml .myDroppable").length > 1) {
                                                 meeIframe.find(".mainContentHtml").addClass("show-droppables")
                                             }
                                             var totalLiLength = meeIframe.find(".sortable li").length;

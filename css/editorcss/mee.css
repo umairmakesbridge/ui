@@ -4102,7 +4102,7 @@ input[type="button"].small-button {
 }
 
 .chosen-container-single .chosen-single div b {
-    background: url("../images/arrow-up-down.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: url("../images/arrow-up-down.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
     display: block;
 }
 

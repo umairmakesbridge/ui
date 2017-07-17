@@ -18,7 +18,8 @@ function (template, mappingPage) {
               "click #clearcal":'hideDatePicker',
               "click .calendericon":'showDatePickerFromClick',
               "click .chart-dialog .closebtn":"closeChart",
-              "click .sortoption_expand": "toggleSortOption"
+              "click .sortoption_expand": "toggleSortOption",
+              "click .download-csv":"downloadCSV"
             },
             /**
              * Initialize view - backbone .
@@ -26,7 +27,7 @@ function (template, mappingPage) {
             initialize:function(){              
                this.template = _.template(template);		               
                this.render();
-               this.outside = false;
+               this.outside = false;               
             },
             /**
              * Initialize view .
@@ -70,15 +71,20 @@ function (template, mappingPage) {
                 this.current_ws = this.$el.parents(".ws-content");
                 //this.current_ws.find(".camp_header #workspace-header").css("margin-top","10px")
                 this.$('.campslistsearch').searchcontrol({
-                        id:'list-search',
-                        width:'300px',
-                        height:'22px',
-                        placeholder: 'Search Campaigns',
-                        gridcontainer: 'camps_grid_report',
-                        showicon: 'yes',
-                        iconsource: 'campaigns',
-                        countcontainer: 'no_of_camps'
-                 });	                 
+                     id:'list-search',
+                     width:'300px',
+                     height:'22px',
+                     gridcontainer: 'camps_grid_report',
+                     placeholder: 'Search Campaigns',                     
+                     showicon: 'yes',
+                     tdNo:2,
+                     iconsource: 'campaigns',
+                     searchFunc:_.bind(this.searchCampaigns,this),
+                     searchCountEl : this.$(".total-camp-count"),
+                     searchTextEl : this.$(".total-text"),
+                     searchText : 'Camapigns'
+                     
+              });
                  this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                  this.$(".selected-campaign").chosen({ width: "220px",disable_search: "true"});
                  var _this = this;                 
@@ -93,6 +99,9 @@ function (template, mappingPage) {
                         _this.createChart();
                     }
                 });
+                
+            },
+            searchCampaigns: function(){
                 
             },
             getCampaigns:function(obj){
@@ -139,6 +148,7 @@ function (template, mappingPage) {
                 this.$(".total-camp-count").html(camp_list_json.count);
                 if(camp_list_json.count!=="0"){
                     this.setCounts = true;
+                    this.reportCSVData = [["CampaignName","ScheduledDate","SentCount","Opened/Open Rate","Clicked/Open CTR","Converted","PageViews","Unsubscribed","Supressed","Bounced"]]
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camps_grid_report"><tbody>';	
                         _.each(camp_list_json.campaigns[0], function(val, index) {
                              list_html += this.makerow(val);					
@@ -155,7 +165,7 @@ function (template, mappingPage) {
                         useRp : false,
                         resizable:false,
                         colresize:false,                        
-                        height:this.app.get('wp_height')-160,                        
+                        height: 377, //this.app.get('wp_height')-160,                        
                         usepager : false,
                         colWidth : ["40px",'100%','60px','60px','60px','60px','60px','60px','60px','60px','132px']
                     });
@@ -200,20 +210,20 @@ function (template, mappingPage) {
                 row_html += '<td style="padding:0px"><a '+_checked+' id="'+val[0]['campNum.encode']+'" style="margin:0px;position:relative"><i class="icon check"></i></a></td><td><div class="name-type"><h3><span class="campname showtooltip" style="float:left;overflow:hidden;min-width:40px;max-width:'+max_width+'px;" title="Click to Preview">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</span><div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
                 if(this.app.get("user").accountType =='A' && this.app.get("user").userId!==val[0]['userId']){
                     row_html += '<div class="sub_accountobj showtooltip" title="This campaign is created by sub account '+val[0]['userId'] +'"><a class="icon subaccount"></a></div>';
-                }
+                }                
                 row_html += '</h3><div class="tags tagscont">'+this.app.showTags(val[0].tags)+'</div></td>';                               
                 row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Sent</em><span class="sentCount">'+val[0].sentCount+'</span></span></strong></div></div></td> ';
                 row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Opened</em><span class="openCount">'+0+'</span></span></strong></div></div></td> ';
                 row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Clicked</em><span class="clickCount">'+0+'</span></span></strong></div></div></td> ';
                 row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Converted</em><span class="conversionCount">'+0+'</span></span></strong></div></div></td> ';
                 row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Page Views</em><span class="pageViewsCount">'+0+'</span></span></strong></div></div></td> ';
-                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Unsubscried</em><span class="unSubscribeCount">'+0+'</span></span></strong></div></div></td> ';
+                row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em style="margin-left:-32px">Unsubscribed</em><span class="unSubscribeCount">'+0+'</span></span></strong></div></div></td> ';
                 row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Supressed</em><span class="supressCount">'+0+'</span></span></strong></div></div></td> ';
                 row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Bounced</em><span class="bounceCount">'+0+'</span></span></strong></div></div></td> ';
                 var _dateTime = this.getDateFormat(val);
-                row_html += '<td width="132px"><div><div style="width:105px" class="time"><strong><span><em>'+_dateTime.dtHead +'</em>'+ _dateTime.dateTime +'</span></strong></div></div></td> ';
-                  
+                row_html += '<td width="132px"><div><div style="width:105px" class="time"><strong><span><em>'+_dateTime.dtHead +'</em>'+ _dateTime.dateTime +'</span></strong></div></div></td> ';                  
                 row_html += '</tr>';                
+                this.reportCSVData.push([val[0].name,this.getCSVDate(val),0,0,0,0,0,0,0,0]);
                 return row_html;
             }
             ,
@@ -258,6 +268,27 @@ function (template, mappingPage) {
                  
                  return {dtHead: dtHead, dateTime: dateFormat}
             },
+            getCSVDate:function(val){
+                var datetime = '';
+                if(val[0].status != 'D')
+                {                    
+                    datetime = val[0].scheduledDate;
+                }
+                else
+                {                 
+                    if(val[0].updationDate)
+                        datetime = val[0].updationDate;
+                    else
+                        datetime = val[0].creationDate;
+                }
+                var dateFormat = "";
+                if(datetime)
+                {
+                    var _date = moment(this.app.decodeHTML(datetime),'YYYY-M-D H:m');                        
+                    dateFormat = _date.format("DD/MM/YYYY");
+                }                
+                return  dateFormat
+            },
             slidePanel:function(obj){
                 var handle = $.getObj(obj,"a");
                 if(handle.hasClass("close")){
@@ -296,18 +327,20 @@ function (template, mappingPage) {
                 this.createChart();
             },
             populateTableCount: function(camp){
-                var countKeys = {"bounceCount":{type:'bounce',show:true,showPer:true},"clickCount":{type:'clicker',show:true,showPer:true},"conversionCount":{type:'converted',show:true,showPer:false},
-                    "openCount":{type:'opener',show:true,showPer:true},"pageViewsCount":{type:'webVisit',show:true},"unSubscribeCount":{type:'unsubscribe',show:true,showPer:true},
-                    "supressCount":{type:'supress',show:true,showPer:true},sentCount:{type:'bounce',show:false,showPer:false}}
+                var countKeys = {"bounceCount":{type:'bounce',show:true,showPer:true},"clickCount":{type:'clicker',show:true,showPer:true},"conversionCount":{type:'converted',show:true,showPer:true},
+                    "openCount":{type:'opener',show:true,showPer:true},"pageViewsCount":{type:'webVisit',show:true,showPer:true},"unSubscribeCount":{type:'unsubscribe',show:true,showPer:true},
+                    "supressCount":{type:'supress',show:true,showPer:true},sentCount:{type:'sent',show:false,showPer:false}}
                 _.each(countKeys,function(val,key){
                     var countHTML = camp[key];
+                    var iconCSV = "";
                     if(countHTML!=="0"){
                         if(val.show){
-                            countHTML = "<a class='showtooltip download-count-csv' data-type='"+val.type+"' title='Click to download CSV'>"+camp[key]+"</a>";
+                            countHTML = "<a class='showtooltip download-count-csv' data-type='"+val.type+"' title='Click to download as CSV'>"+camp[key]+"</a>";
+                            iconCSV = "<div class='download-csv-icon showtooltip download-count-csv' data-type='"+val.type+"' title='Click to download as CSV'></div>";
                         }
                     }
                     var percentageHTML = "";
-                    if(val.showPer){
+                    if(val.showPer && parseInt(camp.sentCount)!==0){
                         var percentage = (parseInt(camp[key])/parseInt(camp.sentCount)) * 100;
                         if(percentage > 0){
                           percentage =percentage.toFixed(2); 
@@ -315,11 +348,24 @@ function (template, mappingPage) {
                         percentageHTML = "<small class='show-percentage'>( "+percentage+"% )</small>"
                     }
                     
-                    this.$("#camps_grid_report tr[data-checksum='"+camp['campNum.checksum']+"'] ."+key).html(countHTML + percentageHTML)                    
+                    this.$("#camps_grid_report tr[data-checksum='"+camp['campNum.checksum']+"'] ."+key).html(countHTML + iconCSV + percentageHTML)                    
                     this.$("#camps_grid_report tr[data-checksum='"+camp['campNum.checksum']+"'] ."+key+" .download-count-csv").click(_.bind(this.openMappingDialog,this));
                     
                 },this) 
                 
+            },
+            calcPer: function(u,d){
+                var percentage = "";
+                if(d!=="0"){
+                    percentage = (parseInt(u)/parseInt(d)) * 100;
+                    if(percentage > 0){
+                      percentage =" ("+percentage.toFixed(2) + "% )"; 
+                    }
+                    else{
+                     percentage = "";   
+                    }
+                }
+                return percentage;
             },
             createChart:function(){
                 var _this = this;
@@ -343,25 +389,35 @@ function (template, mappingPage) {
                    var post_data = {campNums:_campaigns}    
                    this.states_call =  $.post(URL, post_data).done(function (data) {
                        var camp_json = jQuery.parseJSON(data);
+                       var camp_index = 1;                       
                        _.each(camp_json.campaigns[0], function(val) {                          
                            _this.chart_data["bounceCount"] = _this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
+                           _this.reportCSVData[camp_index][9] = parseInt(val[0].bounceCount) + _this.calcPer(val[0].bounceCount,val[0].sentCount);
                            _this.chart_data["clickCount"] = _this.chart_data["clickCount"] + parseInt(val[0].clickCount);
+                           _this.reportCSVData[camp_index][4] = parseInt(val[0].clickCount) + _this.calcPer(val[0].clickCount,val[0].sentCount);
                            _this.chart_data["conversionCount"] = _this.chart_data["conversionCount"] +parseInt(val[0].conversionCount);
+                           _this.reportCSVData[camp_index][5] = parseInt(val[0].conversionCount)+ _this.calcPer(val[0].conversionCount,val[0].sentCount);
                            _this.chart_data["facebookCount"] = _this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
                            _this.chart_data["googlePlusCount"] = _this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
                            _this.chart_data["linkedInCount"] = _this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
                            _this.chart_data["openCount"] = _this.chart_data["openCount"] + parseInt(val[0].openCount);
+                           _this.reportCSVData[camp_index][3] = parseInt(val[0].openCount) + _this.calcPer(val[0].openCount,val[0].sentCount);
                            _this.chart_data["pageViewsCount"] = _this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
+                           _this.reportCSVData[camp_index][6] = parseInt(val[0].pageViewsCount) + _this.calcPer(val[0].pageViewsCount,val[0].sentCount);
                            _this.chart_data["pendingCount"] = _this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
                            _this.chart_data["pinterestCount"] = _this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
                            _this.chart_data["sentCount"] = _this.chart_data["sentCount"] + parseInt(val[0].sentCount);
+                           _this.reportCSVData[camp_index][2] = parseInt(val[0].sentCount);
                            _this.chart_data["supressCount"] = _this.chart_data["supressCount"] + parseInt(val[0].supressCount);
+                           _this.reportCSVData[camp_index][8] = parseInt(val[0].supressCount) + _this.calcPer(val[0].supressCount,val[0].sentCount);
                            _this.chart_data["twitterCount"] = _this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                            _this.chart_data["unSubscribeCount"] = _this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
+                           _this.reportCSVData[camp_index][7] = parseInt(val[0].unSubscribeCount)+ _this.calcPer(val[0].unSubscribeCount,val[0].sentCount);;
                            
                            if(_this.setCounts==true){
                                _this.populateTableCount(val[0]);
                            }
+                           camp_index++;
                        });
                        if(_this.setCounts==true){
                             _this.$("#camps_grid_report tr .download-count-csv").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
@@ -384,9 +440,13 @@ function (template, mappingPage) {
                           }
                           if(key=="sentCount"){
                               _this.$(".col-cstats ."+key).html(_this.app.addCommas(val));
+                              _this.$(".total-row-stats ."+key) .html(_this.app.addCommas(val));
                           }else{
                               _this.$(".col-cstats ."+key).html(_this.app.addCommas(val));
-                              _this.$(".col-cstats ."+key+"-p").html(_this.app.addCommas(av)+"%");
+                              _this.$(".total-row-stats ."+key) .html(_this.app.addCommas(val));
+                              
+                              _this.$(".col-cstats ."+key+"-p").html(_this.app.addCommas(av)+"%");                              
+                              _this.$(".total-row-stats ."+key+"-p").html(_this.app.addCommas(av)+"%");
                             
                               
                           }
@@ -615,7 +675,57 @@ function (template, mappingPage) {
                 dialog.getBody().append(mPage.$el);                    
                 mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
                 dialog.saveCallBack(_.bind(mPage.saveCall, mPage, options));
+            },
+            downloadCSV:function(){          
+               var _date = new Date();
+               var timeStamp = Date.UTC(_date.getFullYear(), _date.getMonth(), _date.getDate(), _date.getHours(), _date.getMinutes(), _date.getSeconds(), _date.getMilliseconds())
+               this.csvGenerator(this.reportCSVData, timeStamp+'_CSV_Campaign_Summary.csv');               
+            },
+            csvGenerator :function (dataArray, fileName) {
+                this.dataArray = dataArray;
+                this.fileName = fileName;                                                            
+                var linkElement = this.getLinkElement();
+                linkElement.style.display = 'none';
+                document.body.appendChild(linkElement);
+                linkElement.click();                        
+                document.body.removeChild(linkElement);                                            
+            },
+            getDownloadLink: function () {
+                var separator = ',';
+                var addQuotes = this.addQuotes;
+                var rows = this.dataArray.map(function (row) {
+                    var rowData = row.join(separator);
+                    if (rowData.length && addQuotes) {
+                        return '"' + rowData + '"';
+                    }
+                    return rowData;
+                });
+
+                var type = 'data:text/csv;charset=utf-8';
+                var data = rows.join('\n');
+
+                if (typeof btoa === 'function') {
+                    type += ';base64';
+                    data = btoa(data);
+                } else {
+                    data = encodeURIComponent(data);
+                }
+
+                return type + ',' + data;
+            },
+            getLinkElement: function (){
+                var downloadLink = this.getDownloadLink();
+                var fileName = this.fileName;
+                var linkElement = (function() {
+                    var a = document.createElement('a');
+                    a.innerHTML ='';
+                    a.href = downloadLink;
+                    a.download = fileName;
+                    return a;
+                }());
+                return linkElement;
             }
+            
             
         });
 });
