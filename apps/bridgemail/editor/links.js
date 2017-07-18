@@ -340,9 +340,11 @@ function (template) {
                        }
                     //}
                 }
+                var eleColor = "";
                 if(selected_node){
-                    if(selected_node.style && selected_node.style.color){
-                        selected_color = "color:"+selected_node.style.color+";";
+                    eleColor = this.getParentColor(selected_node);
+                    if(eleColor){
+                        selected_color = "color:"+eleColor+";";
                     }
                     var parent_table = $(selected_node).parents("table");
                     if(parent_table.length && parent_table.eq(0)[0].style.borderRadius){
@@ -378,6 +380,9 @@ function (template) {
                     }
                     else{
                         selected_node.removeAttribute("name")
+                    }
+                    if(selected_node.style && selected_node.style.color=="inherit"){
+                        selected_node.style.color = eleColor;
                     }
                     if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val()){
                         selected_node.innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
@@ -420,6 +425,19 @@ function (template) {
                 }
                 //tinymce.activeEditor.focus();               
                 return postBackupLink;
+            },
+            getParentColor: function(selectedNode){
+                var node = selectedNode;
+                var color = "";
+                if(node.style && node.style.color && node.style.color!="inherit"){
+                    color = node.style.color;                    
+                }
+                else {
+                    if(node.className!=="sortable mainContentHtml"){
+                        color = this.getParentColor(node.parentNode)
+                    }
+                }
+                return color;
             },
             previewLink:function(){
                 var link = this.getURL(true);

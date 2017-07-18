@@ -6703,13 +6703,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         
                                        var ui = {draggable: null};                                        
                                        ui.draggable = mee.dragElementIframe ? mee.dragElementIframe : mee.dragElement; 
+                                       if(!ui.draggable){
+                                           mee.clearDropEffects();
+                                           return false;
+                                       }
                                        if (IsFirstDroppableElement) {                                           
                                            IsFirstDroppableElement = false;
                                        }
 
                                        //Once dropped Delete myDroppable class here and Remove functionality of Droppable here                                
-                                       dropArea.removeClass("myDroppable");
-
+                                       dropArea.removeClass("myDroppable");                                       
                                        //Dragging and Dropping between elements
                                        if (ui.draggable.hasClass("csHaveData")) {
 
