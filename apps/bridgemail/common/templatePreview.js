@@ -122,6 +122,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         }
                         else {
                             this.html = 'N';
+                            setTimeout(_.bind(function(){
+                                this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();
+                            },this),2000);
                         }
                         if (this.options.isText && this.options.isText == 'Y') {
                             this.html = 'N';
@@ -173,7 +176,6 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     
                         //this.$('#email-template-iframe').attr('src', frame).css('height', newFrameheight);
                     }
-                    
                     
                 },
                 loadPrevForLP : function(){
@@ -258,6 +260,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     var tabID = ev.currentTarget.id;
                     this.$('.prev-iframe-campaign').removeClass('selected');
                     this.$('#' + tabID).addClass('selected');
+                    this.transport.destroy();
+                    this.transport="";
+                    this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').show();
                     this.setiFrameSrc();
                 },
                 sendTempKey: function (ev) {
