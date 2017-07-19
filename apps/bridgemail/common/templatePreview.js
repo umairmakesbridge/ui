@@ -42,6 +42,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     this.$el.html(this.template());
                     this.app = this.options.app;
                     this.loadCampaignData = this.options.loadCampaignData;
+                    this.lpstatus = (this.options.lpStatus) ? this.options.lpStatus:"";
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 init: function () {
@@ -65,7 +66,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
 
                         // IFrame Loaded Successfully 
                         this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="display: inline-block;left: 0.1%;position: relative;top: 0;z-index: 111;"></div>');
-                        if(typeof(this.options.prevFlag)!=="undefined"){
+                        if(typeof(this.options.prevFlag)!=="undefined" && this.lpstatus != "P"){
                             this.$('#temp-camp-previewbar').delay(600).slideDown(500);
                         }
                         this.$("#email-template-iframe").load(_.bind(function () {
