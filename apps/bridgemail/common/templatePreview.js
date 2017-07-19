@@ -119,12 +119,14 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         /*check contact selected or not*/
                         if (this.$('.selected').attr('id') === "prev-iframe-html") {
                             this.html = 'Y';
+                            this.$el.parents('.modal').find('.contacts-switch').show();
                         }
                         else {
                             this.html = 'N';
                             setTimeout(_.bind(function(){
                                 this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();
                             },this),2000);
+                            this.$el.parents('.modal').find('.contacts-switch').hide();
                         }
                         if (this.options.isText && this.options.isText == 'Y') {
                             this.html = 'N';
