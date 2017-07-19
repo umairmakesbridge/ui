@@ -11,8 +11,8 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                  * Attach events on elements in view.addRowMessage
                  */
                 events: {                    
-                    "click .published" : "publishPage",
-                    "click .draft" :     "draftPage",
+                    "click .publishedlp" : "publishPage",
+                    "click .draftlp" :     "draftPage",
                     'click .message-image':'imageDialog',
                     "click .btn-link" : "linkPageDialog"
                 },
