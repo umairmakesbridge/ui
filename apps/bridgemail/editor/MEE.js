@@ -30,6 +30,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.isRepeatX = false;
                     this.isRepeatY = false;
                     this.DCDrag = false; // DC ADD
+                    this.isDCTemplateContentSet = false;
                    
                     var mee_view = this;
                     var predefinedControls = [
@@ -831,14 +832,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 myElement.find(".email-width select.selectEmailSize").val(emailWidthScale);
                                             }
                                         }
+                                        
+                                        
                                         IsStyleActivated = false;
                                         mee.checkForm();
                                         oInitDestroyEvents.InitAll(mainObj);
                                         makeCloneAndRegister();
+                                        
                                     } else {
                                         setTimeout(_.bind(mee.setHTML, mee), 200);
                                     }
                                 }
+                                
+                                
 
                                 mee.checkForm = function () {
                                     if (!options.landingPage)
@@ -5261,8 +5267,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     }
 
                                                 });
-                                                
-                                                getDCGlobally(args.DynamicVariation.DynamicVariationCode,args.DynamicVariation.DynamicVariationID);
+                                                if(!options.isDcTemplate){
+                                                    getDCGlobally(args.DynamicVariation.DynamicVariationCode,args.DynamicVariation.DynamicVariationID); 
+                                                }
                                                 var isNewCampaign = false;
                                                 //console.log('Local DynamicObj',mee_view.DynamicContentsObj); //DC ADD
                                                 if(meeIframe.find('table[keyword="'+args.ID+'"]').length == 1){
@@ -5756,7 +5763,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var getPart = keyword ? ("keyword=" + keyword) : "dynamicNumber=" + dynamicNumber;
                                     var dynamicKey = keyword;
                                     var URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&" + getPart;
-                                    if(!mee_view.DCDrag && !options.isTemplate){
+                                    if(!mee_view.DCDrag && !options.isTemplate && !options.isDcTemplate){
                                        URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&" + getPart + "&campaignNumber="+options.camp_id;
                                     }else if(options.isTemplate){
                                        URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&" + getPart+"&isSingle=Y"; 
@@ -6974,6 +6981,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     this.DestroyPluginsEvents(oHtml);
                                                 }
                                             }
+                                            if(options.isDcTemplate && !mee_view.isDCTemplateContentSet){
+                                                console.log('We are getting started again',options.dynamicDataGallery);
+                                                mee.generateDynamicContentGallery(options.dynamicDataGallery);
+                                            }
                                             this.InitializePluginsEvents(oHtml);
 
                                             this.ReInitializeDragDropHoverAll(oHtml);
@@ -7894,6 +7905,37 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
                                     });
                                 }
+                                mee.generateDynamicContentGallery = function(e){
+                                   
+                                        var keyword = e.keyword;
+                                        var parentTable = meeIframe.find('.mainContentHtmlGrand .mainContentHtml');
+                                        var dcWrapper = $('<li class="csHaveData csDynamicData"></li>');
+                                        var oControl = new Object();
+                                        var args = {
+                                            droppedElement: dcWrapper,
+                                            // event: event,
+                                            // ui: ui,
+                                            predefinedControl: null,
+                                            buildingBlock: null
+                                        };
+                                        parentTable.append(dcWrapper);
+                                        var predefinedControl = myElement.find(".divDCTemplate").html();
+                                        // variation = $(predefinedControl);
+                                        // oControl.Html = variation;
+                                        oControl.Html = $(predefinedControl);
+                                        oControl.Type = predefinedControl.type;
+                                        args.predefinedControl = oControl;
+
+                                        args.droppedElement.html(oControl.Html);
+
+                                        args.ID = keyword;
+                                        args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
+                                        InitializeDynamicControl(args);
+                                        mee_view.isDCTemplateContentSet = true;
+                                        console.log(args.predefinedControl.Html);
+                                        //variation.replaceWith(args.predefinedControl.Html.clone(true, true));
+                                           
+                                }
                                 mee._LoadBuildingBlocks = function (args) {
 
                                     if (args == null) {
@@ -8812,6 +8854,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         previewdesignTemplateCallback: this.options.previewCallback,
                         textVersion: this.options.text,
                         formCallBack: this.options.formAttach,
+                        isDcTemplate: this.options.isDcTemplate,
+                        dynamicDataGallery : this.options.dynamicData,
                         formid: this.options.formid,
                         _app: this.app,
                         isNewLP : this.options.isNewLP ? this.options.isNewLP : false,
@@ -8884,7 +8928,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var contentURL = "";
                             var postData;
                             // DC ADD
-                            if(gloFlag){
+                            debugger;
+                            if(gloFlag || _self.isDcTemplate){
                                 contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber+"&contentNumber="+content.DynamicContentID;
                                 postData = {"campaignSubject":content.Label,"contents":content.InternalContents,"contentLabel":content.Label,"isDefault":(content.IsDefault =="Y"? "Y" : "N")}
                             }else if(this.isTemplate){
@@ -9073,7 +9118,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 postObj["isSingle"] = "Y";
                             }
                             else if(!gloFlag && !this.isTemplate){
-                                contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber+"&campaignNumber="+this.camp_id;
+                                if(!this.isDcTemplate){
+                                   contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber+"&campaignNumber="+this.camp_id;
+                                }
                                 postObj={};
                                 
                                 // making postObj content rich

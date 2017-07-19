@@ -195,10 +195,11 @@ define(['text!dctemplates/html/template_row.html'],
                         __dialog.saveCallBack(_.bind(mPage.copyTemplate, mPage));
                     //}, this));
                 },*/
-                updateTemplate: function (tempNum, isTotal) {
+                updateTemplate: function () {
                     var _this = this.parent;
                     var self = this;
-                    if (typeof (tempNum) === "object") {
+                    this.getDynamicBlock();
+                    /*if (typeof (tempNum) === "object") {
                         _this.template_id = this.model.get('templateNumber.encode');
                     } else {
                         _this.template_id = tempNum;
@@ -231,8 +232,24 @@ define(['text!dctemplates/html/template_row.html'],
                     });
                     this.parent.$el.find('#new_template').unbind("click"); // Unbind the add Tile event for reattach
                     this.parent.templateTotalFlag = true;
-                    this.parent.loadTemplates(this.parent.offset, isTotal);
+                    this.parent.loadTemplates(this.parent.offset, isTotal);*/
                 },
+                getDynamicBlock : function(fieldText, _json){
+                       var _this = this;
+                       var _parent = this.parent;
+                       var URL = "/pms/io/publish/getDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&isGallery=Y&type=get&dynamicNumber="+this.model.get('dynamicNumber.encode');
+                       jQuery.getJSON(URL,  function(tsv, state, xhr){
+                           if(xhr && xhr.responseText){                                                       
+                                var _json = jQuery.parseJSON(xhr.responseText);                                                                                               
+                                if(_this.app.checkError(_json)){
+                                    return false;
+                                 }
+                                 _parent.dynamicData = _json;
+                                 _parent.loadMeeForDynamic(_json.label);
+                               
+                           }
+                     }).fail(function() { console.log( "error in loading popular tags for templates" ); });
+                   },
                 deleteTemplate: function () {
                     this.app.showAlertDetail({heading: 'Confirm Deletion',
                         detail: "Are you sure you want to delete this '"+this.model.get('label')+"' block?",

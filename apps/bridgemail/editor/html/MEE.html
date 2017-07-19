@@ -267,7 +267,7 @@
                     <div class="clearfix">
                         <div id="DCResultDiv" class="no-results"  style="display: none;"> No results Found </div>
                     </div>
-
+                    <% if(!options.isDCTemplate){ %>
                     <div class="clearfix">
                         <ul class="b-blocks">
                             <li class="draggableControl ui-draggable newblock" data-type="dynamicContentContainer" data-isnew="true" draggable="true">
@@ -282,6 +282,7 @@
 
                         </ul>
                     </div>
+                    <% } %>
                 </div>
             </div>
             <% } %>

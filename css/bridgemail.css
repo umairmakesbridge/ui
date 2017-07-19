@@ -218,6 +218,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.copy-header {   background: url("../img/copy48.png") no-repeat scroll center center ;}
 .icon.template {   background: url("../img/template.png") no-repeat scroll center center ;}
 .icon.template_gallery {   background: url("../img/template2.png") no-repeat scroll center center ;}
+.icon.dctemplate {   background: url("../img/dc_block_icon.png") no-repeat scroll center center ;}
 .icon.dlgformwizard {   background: url("../img/formwizard-w.png") no-repeat scroll center center ;}
 .icon.dlgsnippet {   background: url("../img/snippet.png") no-repeat scroll center center ; width:25px !important;height: 23px !important;}
 .icon.dlgworkflow {   background: url("../img/workflow30.png") no-repeat scroll center center ;}
