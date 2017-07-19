@@ -1560,7 +1560,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var fbpixel = (mee.isActionScriptSet) ? mee.isActionScriptSet : "";
                                         var gpixel = (mee.isActionScriptSetG) ? mee.isActionScriptSetG : "";
                                         var dialog = options._app.showStaticDialog({
-                                            title: 'Add Your Custom Styles',
+                                            title: 'Add CSS',
                                             css: {
                                                 "width": dialog_width + "px",
                                                 "margin-left": "-" + (dialog_width / 2) + "px",
