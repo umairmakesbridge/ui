@@ -1688,6 +1688,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             options.textVersion = preview_html.find("textarea").val();
                                             options.saveTextVersionCallBack(preview_html.find("textarea").val());
                                             changFlag.editor_change = true;
+                                            if(options && options.saveCallBack){
+                                                options.saveCallBack();
+                                            }
                                             if (options.fromDialog) {
                                                 dialog.showPrevious();
                                             } else {
