@@ -310,9 +310,9 @@ function (template,templateCollection,templateRowView,templateView) {
                         else{
                             this.$("#total_templates").html("<img src='img/recurring.gif'> templates");                         
                         }*/
-                        this.$("#total_templates").html("<img src='img/recurring.gif'> dynamic blocks");      
-                        _data['orderBy'] = this.orderBy;
-                         
+                        this.$("#total_templates").html("<img src='img/recurring.gif'> Dynamic Blocks");      
+                        _data['orderBy'] = "";
+                        // _data['order'] = "asc";
                         
                         if(search && searchType){
                             if(searchType === 'tag' || searchType=== 'nameTag'){
@@ -427,7 +427,7 @@ function (template,templateCollection,templateRowView,templateView) {
                                                         this.$el.find('.thumbnails').append(this.rowView.$el);
                                                        //this.rowView.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll p a'});
                                                     },this));
-                                                    this.$("#total_templates").html("<strong class='badge'>"+this.totalCount+"</strong> <span>dynamic blocks</span>"); 
+                                                    this.$("#total_templates").html("<strong class='badge'>"+this.totalCount+"</strong> <span>Dynamic Blocks</span>"); 
                                                     /*-----Remove loading------*/
                                                         this.app.removeSpinner(this.$el);
                                                          this.app.showLoading(false,this.$(".template-container"));
@@ -516,7 +516,7 @@ function (template,templateCollection,templateRowView,templateView) {
                        this.loadDCBlocks();
                        console.log(fieldText,_json);
                        var _this = this;
-                       var URL = "/pms/io/publish/getDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&isGallery=Y&type=get&dynamicNumber="+_json[1];
+                       var URL = "/pms/io/publish/getDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=get&dynamicNumber="+_json[1];
                        jQuery.getJSON(URL,  function(tsv, state, xhr){
                            if(xhr && xhr.responseText){                                                       
                                 var _json = jQuery.parseJSON(xhr.responseText);                                                                                               
@@ -526,6 +526,7 @@ function (template,templateCollection,templateRowView,templateView) {
                                  _this.dynamicData = _json;
                                  
                                  _this.loadMeeForDynamic(fieldText);
+                                 
                                
                            }
                      }).fail(function() { console.log( "error in loading popular tags for templates" ); });
@@ -543,17 +544,21 @@ function (template,templateCollection,templateRowView,templateView) {
                             buttons: {saveBtn: {text: 'Save'}}
                         });
                         this.app.showLoading("Loading...", dialog.getBody());  
+                        this.loadDCSingleTemplate(dialog)
                         //require(["dctemplates/dctemplate"], function (templatePage) {
-                        var mPage = new templateView({template: this, dialog: dialog,dynamicData:this.dynamicData});
-                        dialog.getBody().append(mPage.$el);
-                        this.app.showLoading(false, dialog.getBody());
-                        mPage.init();
-                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage, true));
+                        
                         
                     //});
                         
                    },
-                   
+                   loadDCSingleTemplate: function(dialog){
+                       var mPage = new templateView({template: this, dialog: dialog,dynamicData:this.dynamicData});
+                        dialog.getBody().append(mPage.$el);
+                        this.app.showLoading(false, dialog.getBody());
+                        mPage.init();
+                        this.$el.find('.refresh_btn').trigger('click');
+                        dialog.saveCallBack(_.bind(mPage.saveDyanamicGalleryCall, mPage, true));
+                   },
                    showTotalCount:function(count,isTotal){                    
                        
                           var emailtext ='';
@@ -615,43 +620,6 @@ function (template,templateCollection,templateRowView,templateView) {
                 toggleSortOption: function(ev) {
                     $(this.el).find("#template_search_menu").slideToggle();
                     ev.stopPropagation();
-                },
-                createOTODialog : function(obj){
-                    if(obj){
-                        var currentobj = $.getObj(obj,"a");
-                        if(currentobj.hasClass('ono-built-scratch')){
-                            this.otoTemplateFlag=false;
-                        }
-                    }else{
-                        this.otoTemplateFlag=true;
-                    }
-                    var dialog_width = $(document.documentElement).width()-60;
-                        var dialog_height = $(document.documentElement).height()-182;
-                        this.parent = this.options.page;
-                        var dialog = this.app.showDialog({title:'New Message',
-                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
-                        headerEditable:false,
-                        headerIcon : 'messageicon',
-                        closeCD: true,
-                        bodyCss:{"min-height":dialog_height+"px"},
-                        buttons: {saveBtn:{text:'Send Message',btnicon:'next',btncolor:'btn-green'} }
-                        });
-                        this.app.showLoading("Loading...",dialog.getBody());
-                        var _this = this;
-                        require(["onetooneemails/createmessage"],function(createMessagePage){                                                     
-                           var mPage = new createMessagePage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,template_id:_this.parent.template_id,otoTemplateFlag:_this.otoTemplateFlag,subNum:_this.subNum,directContactFlag:_this.directContactFlag});               
-                           var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
-                           dialog.getBody().append(mPage.$el);
-                           mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
-                           _this.app.showLoading(false, mPage.$el.parent());                     
-                            mPage.init();
-                            mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                             // dialog.saveCallBack(_.bind(mPage.sendEmail,mPage));
-                            dialog.saveCallBack(_.bind(mPage.sendEmail,mPage));
-                            _this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
-                            _this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
-                            _this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.sendEmail,mPage); // New Dialog
-                        })
                 },
                 ReattachEvents: function () {
                     this.$el.parents('.modal').find('#oto_total_templates').html('Total <b>'+this.templateTotalCount+'</b>').fadeIn().css('cursor','pointer');

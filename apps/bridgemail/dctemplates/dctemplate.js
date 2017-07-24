@@ -29,7 +29,7 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                 render: function () {
                     this.app = this.options.template.app;
                     this.createTempOnly = this.options.createTempOnly;
-                    this.isEasyEditorCompatibleFlag = (this.options.isEasyEditorCompatibleFlag == 'Y') ? true : false;
+                    this.isEasyEditorCompatibleFlag = true;
                     this.$el.html(this.template({}));
                     this.page = this.options.template;
                     this.editor_change = false;
@@ -64,16 +64,13 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                     
                     this.imageval = null;
                     this.$('#file_control').attr('title', '');
-                    //this.head_action_bar = this.modal.find(".modal-header .edited  h2");
-                    this.head_action_bar.find(".preview").remove();
-                    var previewIconTemplate = $('<a class="icon preview showtooltip" data-original-title="Preview template"></a>').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    this.head_action_bar.find(".edit").hide();
-                   // var copyIconTemplate = this.head_action_bar.find(".copy");
-                    //copyIconTemplate.attr('data-original-title', 'Copy template').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    this.head_action_bar.find(".delete").attr('data-original-title', 'Delete template').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    this.head_action_bar.append(previewIconTemplate);
-                    this.tagDiv.addClass("template-tag");
-                    //this.loadTemplate();
+                    this.dialog.$(".dialog-title").html(this.dynamicData.label).attr("data-original-title", "Click to rename").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.dialog.$(".pointy .edit").attr("data-original-title", "Edit Dynamic Block").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.dialog.$(".pointy .delete").attr("data-original-title", "Delete Dynamic Block").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.dialog.$('#dialog-title').parent().addClass('dc-header-template');
+                    this.dialog.$('.modal-header').addClass('header-editable-highlight'); 
+                    
+                    this.dialog.$(".pointy .copy").hide();
                     this.iThumbnail = this.$(".droppanel");
                     this.iThumbImage = null;
                     this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");
@@ -98,62 +95,29 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                         _eletop: 142
                     });
 
-                    // Merge Field Abdullah 
-                    //this.$('#merge_field_plugin-wrap').mergefields({app: this.app, view: this, config: {links: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: 'Merge Tags'});
-                    /*copyIconTemplate.click(_.bind(function (e) {
-                        if (this.options.rowtemplate) {
-                            this.options.rowtemplate.copyTemplate()
-                        }
-                        else {
-                            this.copyTemplate();
-                        }
-                    }, this));*/
-                   /* previewIconTemplate.click(_.bind(function (e) {
-                        var dialog_width = $(document.documentElement).width() - 60;
-                        var dialog_height = $(document.documentElement).height() - 162;
-                        var dialog = this.app.showDialog({title: 'Template Preview',
-                            css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
-                            headerEditable: false,
-                            headerIcon: 'dlgpreview',
-                            bodyCss: {"min-height": dialog_height + "px"}
-                        });
-                        var preview_iframe = "https://" + this.app.get("preview_domain") + "/pms/events/viewtemp.jsp?templateNumber=" + this.template_id;
-                        require(["common/templatePreview"], _.bind(function (templatePreview) {
-                            var tmPr = new templatePreview({frameSrc: preview_iframe, app: this.app, frameHeight: dialog_height, prevFlag: 'T', tempNum: this.template_id});
-                            dialog.getBody().append(tmPr.$el);
-                            this.app.showLoading(false, tmPr.$el.parent());
-                            tmPr.init();
-                            var dialogArrayLength = this.app.dialogArray.length; // New Dialog
-                            tmPr.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                            dialog.$el.find('#dialog-title .preview').remove();
-                        }, this));
-//                    dialog.getBody().html(preview_iframe);                                         
-                        e.stopPropagation();
-                    }, this));*/
-
-                    /*this.dialog.$(".pointy .edit").click(_.bind(function () {
+                    
+                    this.dialog.$(".pointy .edit").click(_.bind(function () {
                         this.showHideTargetTitle(true);
                     }, this));
 
                     this.dialog.$("#dialog-title span").click(_.bind(function (obj) {
                         this.showHideTargetTitle(true);
-                    }, this));*/
+                    }, this))
 
                     this.dialog.$(".savebtn").click(_.bind(function (obj) {
                         //this.saveTemplateName(obj)
+                        this.saveDCName(obj)
                     }, this));
 
                     this.dialog.$(".cancelbtn").click(_.bind(function (obj) {
-                        if (this.template_id) {
                             this.showHideTargetTitle();
-                        }
                     }, this));
                     this.dialog.$(".pointy .delete").click(_.bind(function (obj) {
                         var _this = this;
                         this.app.showAlertDetail({heading: 'Confirm Deletion',
-                            detail: "Are you sure you want to delete this template?",
+                            detail: "Are you sure you want to delete this dynamic block?",
                             callback: _.bind(function () {
-                                _this.deleteTemplate(_this.template_id);
+                                _this.deleteTemplate();
                             }, _this)},
                         _this.dialog.$el);
 
@@ -169,78 +133,6 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                     else {
                         this.loadMEE();
                     }
-                },
-                /**
-                 * Load template contents and flag doing a get Ajax call.
-                 *
-                 * @param {o} textfield simple object.             
-                 * 
-                 * @param {txt} search text, passed from search control.
-                 * 
-                 * @returns .
-                 */
-                loadTemplate: function (o, txt) {
-                    var _this = this;
-
-                    this.app.showLoading("Loading Template...", this.$el);
-                    var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=get&templateNumber=" + this.template_id;
-                    this.getTemplateCall = jQuery.getJSON(URL, function (tsv, state, xhr) {
-                        if (xhr && xhr.responseText) {
-
-                            var template_json = jQuery.parseJSON(xhr.responseText);
-                            if (_this.app.checkError(template_json)) {
-                                return false;
-                            }
-
-                            //_this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title", "Click to rename").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                            _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;
-                            if (template_json.isEasyEditorCompatible == "N" && !_this.createTempOnly) {
-                                _this.editorContent = _this.app.decodeHTML(template_json.htmlText, true);
-                                _this.loadEditor('editor');
-                            }
-                            else {
-                                _this.editorContentMEE = template_json.htmlText
-                                _this.loadMEE();
-                            }
-                            if (template_json.isFeatured == 'Y') {
-                                _this.$(".featured").iCheck('check');
-                            }
-                            if (_this.app.get("isMEETemplate")) {
-                                _this.$("#bmseditor_template").val(_this.app.decodeHTML(template_json.htmlText, true));
-                            }
-                            if (template_json.isAdmin == "Y") {
-                                if (template_json.isReturnPath == 'Y') {
-                                    _this.$(".return-path").closest('.btnunchecked').css('display', 'inline-block');
-                                    _this.$(".return-path").iCheck('check');
-                                }
-                            } else {
-                                _this.$(".return-path").closest('.btnunchecked').remove();
-                            }
-                            if (template_json.isMobile == 'Y') {
-                                _this.$(".mobile-comp").iCheck('check');
-                            }
-                            if (template_json.categoryID) {
-                                _this.$(".category-input").val(template_json.categoryID)
-                            }
-                            if (template_json.thumbURL) {
-                                _this.iThumbnail.find("h4").hide();
-                                _this.iThumbnail.find("img").attr("src", _this.app.decodeHTML(template_json.thumbURL)).show();
-                            }
-                            _this.app.dialogArray[_this.app.dialogArray.length - 1].tags = template_json.tags;
-                            _this.tagDiv.tags({app: _this.app,
-                                url: '/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=' + _this.app.get('bms_token'),
-                                params: {type: 'tags', templateNumber: _this.template_id, tags: ''}
-                                , showAddButton: true,
-                                tags: template_json.tags,
-                                fromDialog: _this.dialog.$el,
-                                callBack: _.bind(_this.newTags, _this),
-                                typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + _this.app.get('bms_token') + "&type=allTemplateTags"
-                            });
-                            _this.app.showLoading(false, _this.$el);
-                        }
-                    }).fail(function () {
-                        console.log("error in loading template");
-                    });
                 },
                 addCategory: function (val) {
                     val = this.app.encodeHTML(val);
@@ -299,76 +191,15 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                         __dialog.saveCallBack(_.bind(mPage.copyTemplate, mPage));
                     }, this));
                 },
-                saveTemplateCall: function (obj) {
-                    var _this = this;
-                    var button = '';
-                    if (this.meeView && !this.meeView.autoSaveFlag) {                        
-                        if (obj && typeof obj !== "boolean") {
-                            button = $.getObj(obj, "a");
-                        } else {
-                            this.meeView.autoSaveFlag = true;
-                        }
-                        if (button && button.hasClass("disabled-btn")) {
-                            return false;
-                        }
-                    }else {
-                        if(obj && typeof obj !== "boolean"){
-                            button = $.getObj(obj, "a");
-                        }else if(!obj && !this.meeView.autoSaveFlag){
-                            obj = false;
-                        }
+                saveDyanamicGalleryCall: function (obj) {
+                    console.log(this.meeView)
+                    if(obj){
+                        this.meeView.showSaveMsgNow = true;
+                        this.app.showLoading("Saving Dynamic Block...", this.dialog.getBody().parent());
                     }
-
-                    var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token');
-                    var isReturnPath = this.$(".return-path").prop("checked") ? 'Y' : 'N';
-                    var isFeatured = this.$(".featured").prop("checked") ? 'Y' : 'N';
-                    var isMobile = this.$(".mobile-comp").prop("checked") ? 'Y' : 'N';
-                    this.dataObj = {type: 'update', templateNumber: this.template_id,
-                        imageId: this.imageCheckSum,
-                        isFeatured: isFeatured,
-                        isReturnPath: isReturnPath,
-                        isMobile: isMobile,
-                        categoryID: this.$(".category-input").val()
-                    };
-                    if (this.$("#mee_editor").getMEEHTML && (this.isEasyEditorCompatibleFlag || this.createTempOnly)) {
-                        this.dataObj["isMEE"] = 'Y';
-                        this.dataObj["templateHtml"] = this.$("#mee_editor").getMEEHTML();
-                    }
-                    else {
-                        this.dataObj["templateHtml"] = _tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
-                    }
-                    if (button && !button.hasClass("disabled-btn")) {
-                        button.addClass("disabled-btn");
-                        _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
-                    } else if (typeof obj === "boolean") {
-                        _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
-                    }
-                    $.post(URL, this.dataObj)
-                            .done(function (data) {
-                                _this.app.showLoading(false, _this.$el.parents('.modal'));
-                                var _json = jQuery.parseJSON(data);
-                                if (_json[0] !== 'err') {
-                                    if (typeof obj === "boolean"|| (_this.meeView && !_this.meeView.autoSaveFlag)) {
-                                        _this.app.showMessge("Template Updated Successfully!");
-                                    }
-                                    if (button) {
-                                        button.removeClass("disabled-btn");
-                                    }
-                                    if(_this.meeView){
-                                        _this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: ' + moment().format('h:mm:ss a'));
-                                        _this.meeView.autoSaveFlag = false;
-                                    }
-                                    _this.editor_change = false;
-                                    if (_this.modelTemplate) {
-                                        _this.modelSave();
-                                    }
-                                }
-                                else {
-                                    _this.app.showAlert(_json[1], $("body"), {fixed: true});
-                                }
-                            });
-
-
+                    this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: ' + moment().format('h:mm:ss a'));
+                    this.$("#mee_editor").saveDCfromCamp();
+                    
                 },
                 initEditor: function () {
                     if (this.tinymceEditor == true) {
@@ -380,7 +211,7 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                     _tinyMCE.init({
                         // General options
                         mode: "exact",
-                        elements: "bmseditor_template",
+                        elements: "bmseditor_dctemplate",
                         theme: "advanced",
                         plugins: "contextmenu,fullscreen,inlinepopups,paste,searchreplace,iespell,style,table,visualchars,fullpage,preview,imagemanager",
                         //browsers : "msie,gecko,opera,safari",
@@ -453,7 +284,7 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                                 _this.$("#bmseditor_template_ifr").css("height", (editor_heigt) + "px");
                                 _this.$("#bmseditor_template_tbl").css("height", (editor_heigt - 100) + "px");
                                 if (_this.editorContent) {
-                                    _tinyMCE.get('bmseditor_template').setContent(_this.editorContent);
+                                    _tinyMCE.get('bmseditor_dctemplate').setContent(_this.editorContent);
                                 }
                             })
                         }
@@ -461,30 +292,37 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                     });
                     this.$('#Tiny').show();
                 },
-                saveTemplateName: function (obj) {
-                    var _this = this;
-                    var template_name_input = $(obj.target).parents(".edited").find("input");
-                    var dailog_head = this.dialog;
-                    var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token');
-                    $(obj.target).addClass("saving");
-                    $.post(URL, {type: "rename", templateName: template_name_input.val(), templateNumber: this.template_id})
-                            .done(function (data) {
-                                var _json = jQuery.parseJSON(data);
-                                if (_json[0] !== "err") {
-                                    dailog_head.$("#dialog-title span").html(_this.app.encodeHTML(template_name_input.val()));
-                                    _this.showHideTargetTitle();
-                                    _this.app.showMessge("Templated Renamed");
-                                    //_this.page.$("#template_search_menu li:first-child").removeClass("active").click();
-                                    if (_this.modelTemplate) {
-                                        _this.modelTemplate.model.set("name", template_name_input.val());
-                                    }
-                                }
-                                else {
-                                    _this.app.showAlert(_json[1], _this.$el);
+                saveDCName: function (obj) {
+                             var _this = this;
+                             var template_name_input = $(obj.target).parents(".edited").find("input");
+                             var dailog_head = this.dialog;
+                             $(obj.target).addClass("saving");
+                             $.ajax({
+                                    url: "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=relabel&label=" + template_name_input.val() + "&dynamicNumber=" + this.dynamicData['dynamicNumber.encode'],
+                                    //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                                    type: "POST",
+                                    contentType: "application/json; charset=latin1",
+                                    dataType: "json",
+                                    cache: false,
+                                    async: false,
+                                    success: function (e) {
+                                        if(e[0]=="success"){
+                                            dailog_head.$("#dialog-title span").html(_this.app.encodeHTML(template_name_input.val()));
+                                            _this.showHideTargetTitle();
+                                            _this.app.showMessge("Dynamic Block Renamed");
+                                            _this.options.template.$el.find('.refresh_btn').trigger('click');
+                                            this.dynamicData['label'] = template_name_input.val();
+                                        }else{
+                                            _this.app.showAlert(e[1], _this.$el);
+                                        }
+                                        
+                                        //LoadBuildingBlocks();
+                                    },
+                                    error: function (e) {
 
-                                }
-                                $(obj.target).removeClass("saving");
-                            });
+                                    }
+
+                                });
                 },
                 showHideTargetTitle: function (show, isNew) {
                     if (show) {
@@ -559,9 +397,9 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                                 }
                             }, this));
                 },
-                deleteTemplate: function (templateNum) {
-                    this.app.showLoading("Deleting Template...", this.$el, {fixed: 'fixed'});
-                    var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token');
+                deleteTemplate: function () {
+                    this.app.showLoading("Deleting Dynamic...", this.$el, {fixed: 'fixed'});
+                   /* var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token');
                     $.post(URL, {type: 'delete', templateNumber: templateNum})
                             .done(_.bind(function (data) {
                                 this.app.showLoading(false, this.$el);
@@ -578,7 +416,38 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                                 else {
                                     this.app.showAlert(_json[1], $("body"), {fixed: true});
                                 }
-                            }, this));
+                            }, this));*/
+                    var url = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=delete&dynamicNumber=" + this.dynamicData['dynamicNumber.encode']+"&isGlobal=Y";
+                                var _this = this;
+                                $.ajax({
+                                    url: url,
+                                    //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                                    type: "POST",
+                                    contentType: "application/json; charset=latin1",
+                                    dataType: "json",
+                                    cache: false,
+                                    async: true,
+                                    success: function (e) {
+                                        //LoadBuildingBlocks();
+                                        if(e[0]=="success"){
+                                            /*if(args.mee_view){
+                                                args.mee_view.app.showMessge('Dynamic content block deleted successfully',$('body'));
+                                            }*/
+                                            _this.options.template.$el.find('.refresh_btn').trigger('click');
+                                            _this.app.showMessge('Dynamic content block deleted successfully',$('body'));
+                                            _this.dialog.hide();
+                                            /*if(args.allOptions){
+                                                args.allOptions.saveCallBack();
+                                            }*/
+                                        }else{
+                                            _this.app.showMessge(e[1],$('body'));
+                                        }
+                                    },
+                                    error: function (e) {
+                                        console.log("delete dynamicVariation failed:" + e);
+                                    }
+
+                                });
                 },
                 modelSave: function () {
                     this.modelTemplate.model.set("isFeatured", this.dataObj.isFeatured);
@@ -676,9 +545,9 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                 },
                 setMEEView: function () {
                     var _html = this.editorContent !== "" ? $('<div/>').html(this.editorContentMEE).text().replace(/&line;/g, "") : "";
-                    var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 21); // Scroll Top Minus from Body
+                    var topaccordian = 31; // Scroll Top Minus from Body
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, isDcTemplate:true,margin: {top: 236, left: 0},dynamicData : this.dynamicData,_el: this.$("#mee_editor"), parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: topaccordian, html: '', saveClick: _.bind(this.saveTemplateCall, this), fromDialog: true, saveBtnText: 'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});
+                        var MEEPage = new MEE({app: this.app, isDcTemplate:true,isDCTemplateContentSet:false,margin: {top: 236, left: 0},dynamicData : this.dynamicData,_el: this.$("#mee_editor"), parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: topaccordian, html: '', saveClick: _.bind(this.saveDyanamicGalleryCall, this), fromDialog: true, saveBtnText: 'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});
                         this.$("#mee_editor").setChange(this);
                         this.meeView = MEEPage;
                         this.setMEE(_html);

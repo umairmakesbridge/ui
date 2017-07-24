@@ -198,43 +198,24 @@ define(['text!dctemplates/html/template_row.html'],
                 updateTemplate: function () {
                     var _this = this.parent;
                     var self = this;
-                    this.getDynamicBlock();
-                    /*if (typeof (tempNum) === "object") {
-                        _this.template_id = this.model.get('templateNumber.encode');
-                    } else {
-                        _this.template_id = tempNum;
-                    }
-                    var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 182;
-                    var dialog = this.app.showDialog({title: 'Loading ...',
-                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
-                        headerEditable: true,
-                        headerIcon: 'dctemplate',
-                        bodyCss: {"min-height": dialog_height + "px"},
-                        tagRegen: true,
-                        buttons: {saveBtn: {text: 'Save Template'}}
-                    });
-                    this.app.showLoading("Loading...", dialog.getBody());
-                    require(["bmstemplates/template"], function (templatePage) {
-                        var mPage = new templatePage({template: _this, dialog: dialog, rowtemplate: self, isEasyEditorCompatibleFlag: self.model.get('isEasyEditorCompatible')});
-                        var dialogArrayLength = self.app.dialogArray.length; // New Dialog
-                        dialog.getBody().append(mPage.$el);
-                        mPage.$el.addClass('dialogWrap-' + dialogArrayLength);
-                        self.app.showLoading(false, mPage.$el.parent());
-                        mPage.init();
-                        mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage ,true));
-                        self.app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
-                        self.app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
-                        self.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveTemplateCall, mPage); // New Dialog
-                        self.app.dialogArray[dialogArrayLength - 1].copyCall = _.bind(self.copyTemplate, self); // New Dialog
-                        self.app.dialogArray[dialogArrayLength - 1].tags = mPage.jsonTag; // New Dialog
-                    });
-                    this.parent.$el.find('#new_template').unbind("click"); // Unbind the add Tile event for reattach
-                    this.parent.templateTotalFlag = true;
-                    this.parent.loadTemplates(this.parent.offset, isTotal);*/
+                    
+                     var dialog_width = $(document.documentElement).width() - 60;
+                        var dialog_height = $(document.documentElement).height() - 182;
+                        var dialog = 
+                            this.app.showDialog({title: this.model.get('label'),
+                            css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
+                            headerEditable: false,
+                            headerIcon: 'dctemplate',
+                            bodyCss: {"min-height": dialog_height + "px"},
+                            tagRegen: false,
+                            buttons: {saveBtn: {text: 'Save'}}
+                        });
+                        this.app.showLoading("Loading...", dialog.getBody());  
+                       
+                    this.getDynamicBlock(dialog);
+                    
                 },
-                getDynamicBlock : function(fieldText, _json){
+                getDynamicBlock : function(dialog){
                        var _this = this;
                        var _parent = this.parent;
                        var URL = "/pms/io/publish/getDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&isGallery=Y&type=get&dynamicNumber="+this.model.get('dynamicNumber.encode');
@@ -245,7 +226,7 @@ define(['text!dctemplates/html/template_row.html'],
                                     return false;
                                  }
                                  _parent.dynamicData = _json;
-                                 _parent.loadMeeForDynamic(_json.label);
+                                 _parent.loadDCSingleTemplate(dialog);
                                
                            }
                      }).fail(function() { console.log( "error in loading popular tags for templates" ); });
