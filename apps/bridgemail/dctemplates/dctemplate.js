@@ -103,13 +103,7 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                 },
                 loadEditor: function (obj) {
                     //var target_li =$.getObj(obj,"li");   
-                    if (obj === 'editor') {
-                        this.initEditor();
-
-                    }
-                    else {
-                        this.loadMEE();
-                    }
+                    this.loadMEE();
                 },
                 
                 saveDyanamicGalleryCall: function (obj) {

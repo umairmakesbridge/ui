@@ -80,31 +80,7 @@ define(['text!dctemplates/html/template_row.html'],
                     templates_html += '<a class="deletebtn clr1"><span >Delete</span></a>';
                     return templates_html;
                 },
-                CPCEDWrap: function () {
-                    var returnClass = '';
-                    var createCampClass = '';
-                    var adminTemplate = this.model.get('isAdmin') === 'Y' ? "admin-template" : "";
-                    if (adminTemplate === "admin-template") {
-                        this.$('.thumbnail').addClass(adminTemplate);
-                        if (this.isAdmin === "Y") {
-                            returnClass = 'five s-clr6';
-                            createCampClass = 'clr9';
-                        } else {
-                            returnClass = 'three s-clr4';
-                            createCampClass = 'clr9'
-                        }
-                    }
-                    else if (this.options.OnOFlag) {
-                        returnClass = 'three s-clr4';
-                        createCampClass = 'clr9';
-                    }
-                    else {
-                        returnClass = 'five s-clr6';
-                        createCampClass = 'clr9'
-                    }
-                    return {returnClass: returnClass, campClass: createCampClass};
-
-                },
+                
                 
                 updateTemplate: function () {
                     var _this = this.parent;

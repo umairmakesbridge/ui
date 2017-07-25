@@ -91,9 +91,6 @@ function (template,templateCollection,templateRowView,templateView) {
                     
                     this.$("#template_search_menu li").click(_.bind(this.searchTemplate,this));
                     this.$("#template_layout_menu li").click(_.bind(this.searchTemplateLayout,this));
-                    this.$("#search-template-input").keyup(_.bind(this.searchTemplateNameTag,this));
-                    this.$("#search-template-input").keydown(_.bind(this.searchNameTagVal,this));
-                    this.$("#search-text-btn").click(_.bind(this.searchTemplateNameTagFromButton,this));
                     this.$("#remove-template-tag-list").click(function(){
                         $(this).hide();
                          camp_obj.$("#search-popular-input").val('');
@@ -121,70 +118,6 @@ function (template,templateCollection,templateRowView,templateView) {
                          li.addClass("active");
                     }
                     
-                },
-                searchNameTagVal:function(obj){
-                    var _input = $.getObj(obj,"input");
-                    this.searchValue = $.trim(_input.val());
-                },
-                searchTemplateNameTag:function(obj){
-                    var _input = $.getObj(obj,"input");
-                    var val = $.trim(_input.val());
-                        this.$('#clearsearch').hide();            
-                    this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                          
-                    //this.getTemplateCall.abort();
-                    var keyCode = this.keyvalid(obj);
-                    if(keyCode){
-                            if(val!==""){
-                                this.$('#clearsearch').show();
-                                this.timeout = setTimeout(_.bind(function() {
-                                        clearTimeout(this.timeout);
-                                        this.loadTemplates('search','nameTag',{text:val});
-                                    }, this), 500);
-                                this.$('#search-template-input').keydown(_.bind(function() {
-                                    clearTimeout(this.timeout);
-                                }, this));
-                            }
-                            else{
-                                this.loadTemplates();
-                                this.$("#search-template-input").val('');
-                                //this.$("#template_search_menu li:first-child").click();
-                            }
-                      }
-                      else
-                      {
-                          if(val!==""){
-                            this.$('#clearsearch').show();
-                            }
-                      }
-                   
-                    if(val==""){
-                        if(this.searchValue!=val){
-                            this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                          
-                            //this.getTemplateCall.abort();
-                            if(val!==""){
-                                this.loadTemplates();
-                            }
-                            else{
-                                this.loadTemplates();
-                                this.$("#search-template-input").val('');
-                                //this.$("#template_search_menu li:first-child").click();
-                            }
-                        }
-                    }
-                    
-                    
-                },
-                searchTemplateNameTagFromButton:function(){
-                    var val = $.trim(this.$("#search-template-input").val());
-                    if(val!==""){
-                        this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                                                 
-                        this.loadTemplates('search','nameTag',{text:val});
-                    }
-                },
-                searchTemplateByTags:function(obj){
-                    var li = $.getObj(obj,"li");                   
-                    var tag_text = li.find("a").text();                    
-                    this.loadTemplates('search','tag',{text:tag_text});
                 },
                 searchTemplate:function(obj){
                     var li = $.getObj(obj,"li");
@@ -221,54 +154,7 @@ function (template,templateCollection,templateRowView,templateView) {
                         this.app.showLoading('Loading Dynamic Blocks....',this.$(".template-container"));
                         this.$("#total_templates").html("<img src='img/recurring.gif'> Dynamic Blocks");      
                         _data['orderBy'] = "";
-                        if(search && searchType){
-                            if(searchType === 'tag' || searchType=== 'nameTag'){
-                            _data['searchType'] = searchType;    
-                            }else{
-                                if(searchType === 'name'){
-                                    _data['orderBy'] = '';
-                                }else{
-                                    _data['orderBy'] = searchType;
-                                }
-                            }
-                            if(options && options.layout_id){
-                                _data['layoutId'] = options.layout_id;
-                                _data['orderBy'] = this.orderBy;
-                            }
-                            else if(options && options.text){
-                                _data['searchText'] = options.text;
-                                _data['orderBy'] = this.orderBy;
-                            }
-                            else if(options && options.user_type){
-                                _data['userType'] = options.user_type;
-                                _data['orderBy'] = this.orderBy;
-                            }
-                            else if(options && options.category_id){
-                                this.categoryName = this.app.encodeHTML(options.category_id);
-                                _data['categoryId'] = this.categoryName;
-                                _data['orderBy'] = this.orderBy;
-                            }                            
-                            if(searchType=="featured"){
-                                _data['isFeatured'] = "Y";
-                                _data['orderBy'] = this.orderBy;
-                            }
-                            if(searchType=="mobile"){
-                                 _data['isMobile'] ="Y";
-                                 _data['orderBy'] = this.orderBy;
-                            }
-                            if(searchType=="returnpath"){
-                                _data['isReturnPath'] ="Y";
-                                _data['orderBy'] = this.orderBy;
-                            }
-                            if(searchType=="easyeditor"){
-                                _data['isMEE'] ="Y";
-                                _data['orderBy'] = this.orderBy;
-                            }
-                        }
-                        if(this.OnOFlag){
-                              _data['isMEE'] = "Y";
-                              _data['orderBy'] = this.orderBy;
-                          }
+                        
                         this.offset = 0;
                         this.totalcount = 0;
                         this.searchString = _data;
