@@ -543,6 +543,8 @@ function (template,templateCollection,templateRowView,templateView) {
                             tagRegen: false,
                             buttons: {saveBtn: {text: 'Save'}}
                         });
+                        this.$el.find('#nuture-search').val('');
+                        this.$el.find('#clearsearch').hide();
                         this.app.showLoading("Loading...", dialog.getBody());  
                         this.loadDCSingleTemplate(dialog)
                         //require(["dctemplates/dctemplate"], function (templatePage) {
@@ -553,11 +555,17 @@ function (template,templateCollection,templateRowView,templateView) {
                    },
                    loadDCSingleTemplate: function(dialog){
                        var mPage = new templateView({template: this, dialog: dialog,dynamicData:this.dynamicData});
-                        dialog.getBody().append(mPage.$el);
+                       
+                        dialog.getBody().html(mPage.$el);
                         this.app.showLoading(false, dialog.getBody());
                         mPage.init();
                         this.$el.find('.refresh_btn').trigger('click');
+                        var dialogArrayLength = this.app.dialogArray.length;
                         dialog.saveCallBack(_.bind(mPage.saveDyanamicGalleryCall, mPage, true));
+                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveDyanamicGalleryCall,mPage,true); 
+                        this.app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
                    },
                    showTotalCount:function(count,isTotal){                    
                        

@@ -195,6 +195,7 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                     console.log(this.meeView)
                     if(obj){
                         this.meeView.showSaveMsgNow = true;
+                        this.dialog.getBody().parent().attr('data-dcsave','true');
                         this.app.showLoading("Saving Dynamic Block...", this.dialog.getBody().parent());
                     }
                     this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: ' + moment().format('h:mm:ss a'));
@@ -457,84 +458,41 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
 
                 },
                 ReattachEvents: function () {
-                    var copyIconTemplate = this.head_action_bar.find(".copy");
+                    
                     var _this = this;
                     var dialogArrayLength = this.app.dialogArray.length;
-                    this.head_action_bar.find('.preview').remove();
-                    var previewIconTemplate = $('<a class="icon preview showtooltip" data-original-title="Preview template"></a>').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    //this.head_action_bar = this.modal.find(".modal-header .edited  h2");
-                    this.head_action_bar.append(previewIconTemplate);
-                    this.dialog.$(".pointy").show();
-                    if (this.dialog.$el.find('.c-current-status').length > 0) {
-                        this.dialog.$el.find('.c-current-status').remove();
-                    }
-                    copyIconTemplate.click(_.bind(function (e) {
-                        // this.rowtemplate.copyTemplate(this);
-                        if (this.app.dialogArray[dialogArrayLength - 1].copyCall) {
-                            this.app.dialogArray[dialogArrayLength - 1].copyCall(this);
-                        } else {
-                            this.copyTemplate(); // call from dashboard
-                        }
-                    }, this));
-                    this.dialog.$('.pointy .edit').hide();
+                    
+                    this.dialog.$(".dialog-title").html(this.dynamicData.label).attr("data-original-title", "Click to rename").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.dialog.$(".pointy .edit").attr("data-original-title", "Edit Dynamic Block").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.dialog.$(".pointy .delete").attr("data-original-title", "Delete Dynamic Block").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.dialog.$('#dialog-title').parent().addClass('dc-header-template');
+                    this.dialog.$('.modal-header').addClass('header-editable-highlight'); 
+                    
+                    this.dialog.$(".pointy .copy").hide();
                     this.dialog.$(".pointy .edit").click(_.bind(function () {
                         this.showHideTargetTitle(true);
                     }, this));
 
                     this.dialog.$("#dialog-title span").click(_.bind(function (obj) {
                         this.showHideTargetTitle(true);
-                    }, this));
+                    }, this))
 
                     this.dialog.$(".savebtn").click(_.bind(function (obj) {
-                        this.saveTemplateName(obj)
-                    }, this));
-
-                    this.dialog.$(".cancelbtn").click(_.bind(function (obj) {
-                        if (this.template_id) {
-                            this.showHideTargetTitle();
-                        }
+                        //this.saveTemplateName(obj)
+                        this.saveDCName(obj)
                     }, this));
                     this.dialog.$(".pointy .delete").click(_.bind(function (obj) {
                         var _this = this;
                         this.app.showAlertDetail({heading: 'Confirm Deletion',
-                            detail: "Are you sure you want to delete this template?",
+                            detail: "Are you sure you want to delete this dynamic block?",
                             callback: _.bind(function () {
                                 _this.deleteTemplate();
                             }, _this)},
                         _this.dialog.$el);
 
                     }, this));
-                    this.tagDiv.tags({app: this.app,
-                        url: '/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=' + this.app.get('bms_token'),
-                        params: {type: 'tags', templateNumber: this.template_id, tags: ''}
-                        , showAddButton: true,
-                        tags: this.app.dialogArray[this.app.dialogArray.length - 1].tags,
-                        fromDialog: this.dialog.$el,
-                        callBack: _.bind(this.newTags, this),
-                        typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=allTemplateTags"
-                    });
-                    previewIconTemplate.click(_.bind(function (e) {
-                        var dialog_width = $(document.documentElement).width() - 60;
-                        var dialog_height = $(document.documentElement).height() - 162;
-                        var dialog = this.app.showDialog({title: 'Template Preview',
-                            css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
-                            headerEditable: false,
-                            headerIcon: 'dlgpreview',
-                            bodyCss: {"min-height": dialog_height + "px"}
-                        });
-                        var preview_iframe = "https://" + this.app.get("preview_domain") + "/pms/events/viewtemp.jsp?templateNumber=" + this.template_id;
-                        require(["common/templatePreview"], _.bind(function (templatePreview) {
-                            var tmPr = new templatePreview({frameSrc: preview_iframe, app: this.app, frameHeight: dialog_height, prevFlag: 'T', tempNum: this.template_id});
-                            dialog.getBody().append(tmPr.$el);
-                            this.app.showLoading(false, tmPr.$el.parent());
-                            tmPr.init();
-                            var dialogArrayLength = this.app.dialogArray.length; // New Dialog
-                            tmPr.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                            dialog.$el.find('#dialog-title .preview').remove();
-                        }, this));
-//                    dialog.getBody().html(preview_iframe);                                         
-                        e.stopPropagation();
-                    }, this));
+                    
+                    
                 },
                 loadMEE: function () {
                     if (!this.meeEditor) {

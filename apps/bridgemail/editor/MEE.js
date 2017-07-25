@@ -25,7 +25,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.DynamicContentsObj ={}; // DC ADD
                     this.DynamicContentsGlo ={}; // DC ADD
                     this.parentTd = false;
-                    this.showSaveMsgNow = false;
+                    this.showSaveMsgNow;
                     this.selectedDropElement = null;
                     this.timer = false;
                     this.isRepeatX = false;
@@ -554,7 +554,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 /* ===============Auto Save======================== */
                                 function recursiveSaveCall() {
-                                    if (changFlag.editor_change && options.otopage !== true && myElement.find("#mee-iframe").contents().find('.mainContentHtml').html().trim() !== "") {
+                                    if (changFlag.editor_change && options.otopage !== true && ( myElement.find("#mee-iframe").contents().find('.mainContentHtml').html() && myElement.find("#mee-iframe").contents().find('.mainContentHtml').html().trim() !== "")) {
                                         //console.log(mee.iframeLoaded);
                                         options.saveCallBack();
                                     } else {
@@ -6666,8 +6666,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     $(this).find(".topHandlers .myHandlerSave").css('background','transparent');
                                                                 }
                                                                 
-                                                                if(options.isDcTemplate){
-                                                                    $(this).find(".topHandlers").hide();
+                                                                if(options.isDcTemplate && $(this).parent().hasClass('mainContentHtml')){
+                                                                    //$(this).find(".topHandlers").hide();
+                                                                    $(this).addClass('dcTemplateGallery');
                                                                 }
                                                                 //Assign DELETE functionality here
                                                                 InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
@@ -9048,7 +9049,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     dataType: "json",
                                     method:"POST",
                                     url: contentURL,
-                                    data: {'contents': content.InternalContents,'campaignSubject': content.Label,'contentNumber':dynamicNumberContent},
+                                    data: {'contents': content.InternalContents,'contentLabel':content.Label,'campaignSubject': content.Label,'contentNumber':dynamicNumberContent},
                                     async: false,
                                     success: function (tsv, state, xhr) {
                                         if (xhr && xhr.responseText) {
@@ -9186,17 +9187,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             if(content.dcLi){
                                                 content.dcLi.find('.global-save-overlay').remove();
                                             }
-                                            if(mee_view.options.isDcTemplate && mee_view.showSaveMsgNow){
+                                            if(mee_view.options.isDcTemplate && $('.modal').attr('data-dcsave')){
                                                 _self._app.showMessge('This Dynamic Block template has been saved.');
-                                                _self._app.showLoading(false,mee_view._$el.parents('.modal'));
-                                                mee_view.showSaveMsgNow = false;
+                                                _self._app.showLoading(false,$('.modal'));
+                                                $('.modal').removeAttr('data-dcsave');
                                             }
                                             if(globalMsg=="showGlobalMsg"){
                                                 _self._app.showMessge('This Dynamic Block template has been updated.');
-                                            }
-                                            
-                                            
-                                           
+                                            } 
                                     });
                         },
                         onSaveContentFilters : function(postData){
