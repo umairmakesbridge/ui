@@ -78,7 +78,10 @@ define(['text!editor/DC/html/filters.html','bms-filters'],
                 var URL = "";
                 if(this.args.isTemplate){
                     URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&isSingle=Y";                            
-                }else{
+                }else if(this.args.isDcTemplate){
+                    URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token');
+                }
+                else{
                     URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&campaignNumber="+this.args.camp_id;                            
                 }
                                                                       
