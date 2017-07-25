@@ -1425,6 +1425,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         html = this.$("#mee_editor").getMEEHTML();
                         post_data['htmlCode'] = html;
                         post_data['plainText'] = this.states.step2.plainText;
+                        plain = this.states.step2.plainText;
                         post_data['isCampaignText'] = 'N';
                         camp_obj.camp_istext = 'N';
                        
