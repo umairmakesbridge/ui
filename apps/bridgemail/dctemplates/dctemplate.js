@@ -11,9 +11,6 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                  * Attach events on elements in view.
                  */
                 events: {
-                    'change #file_control': 'uploadImage',
-                    'click #btn_image_url': "TryDialog",
-                    'click .btn-opengallery': "TryDialog",
                     'click #myTab li': 'loadEditor'
                 },
                 /**
@@ -74,27 +71,7 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                     this.iThumbnail = this.$(".droppanel");
                     this.iThumbImage = null;
                     this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");
-                    this.$(".droppanel").dragfile({
-                        post_url: '/pms/io/publish/saveImagesData/?BMS_REQ_TK=' + this.app.get('bms_token') + '&type=add&allowOverwrite=N&th_width=240&th_height=320',
-                        callBack: _.bind(this.processUpload, this),
-                        app: this.app,
-                        module: 'template',
-                        progressElement: this.$('.droppanel')
-                    });
-                    this.$('#file_control').on('mouseover', _.bind(function (obj) {
-                        this.$("#list_file_upload").css({'background': '#00A1DD', 'color': '#ffffff'});
-                    }, this));
-                    this.$('#file_control').on('mouseout', _.bind(function (obj) {
-                        this.$("#list_file_upload").css({'background': '#01AEEE', 'color': '#ffffff'});
-                    }, this));
-
-                    this.$(".add-cat").addbox({app: this.app,
-                        addCallBack: _.bind(this.addCategory, this),
-                        placeholder_text: 'Please enter category',
-                        fromDialog: this.dialog.$el,
-                        _eletop: 142
-                    });
-
+                    
                     
                     this.dialog.$(".pointy .edit").click(_.bind(function () {
                         this.showHideTargetTitle(true);
@@ -134,65 +111,9 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                         this.loadMEE();
                     }
                 },
-                addCategory: function (val) {
-                    val = this.app.encodeHTML(val);
-                    this.$(".category-input").val(val);
-                    return true;
-                },
-                uploadImage: function (obj) {
-                    var input_obj = obj.target;
-                    var files = input_obj.files;
-                    if (this.iThumbnail.data("dragfile")) {
-                        this.iThumbnail.data("dragfile").handleFileUpload(files);
-                    }
-                },
-                newTags: function (data) {
-                    this.modelTemplate.model.set("tags", data);
-                },
-                processUpload: function (data) {
-                    var _image = jQuery.parseJSON(data);
-                    this.$('.droppanel #progress').remove();
-                    this.$('.csv-opcbg').hide();
-                    if (_image.success) {
-
-                        _.each(_image.images[0], function (val) {
-                            this.iThumbnail.remove("file-border");
-                            this.imageCheckSum = val[0]['imageId.encode'];
-                            this.iThumbnail.find("h4").hide();
-                            this.iThumbnail.find("img").attr("src", this.app.decodeHTML(val[0]['thumbURL'])).show();
-                            this.iThumbImage = this.app.decodeHTML(val[0]['thumbURL']);
-                            this.saveUserImage();
-
-                        }, this)
-                    }
-                    else {
-                        this.app.showAlert(_image.err1, $("body"), {fixed: true});
-                    }
-                },
-                copyTemplate: function () {
-                    var dialog_title = "Copy Template";
-                    var self;
-                    var __dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "600px", "margin-left": "-300px"},
-                        bodyCss: {"min-height": "260px"},
-                        headerIcon: 'copy',
-                        overlay: true,
-                        buttons: {saveBtn: {text: 'Create Template'}}
-                    });
-                    this.app.showLoading("Loading...", __dialog.getBody());
-                    require(["bmstemplates/copytemplate"], _.bind(function (copyTemplatePage) {
-                        var mPage = new copyTemplatePage({templ: self, template_id: this.template_id, app: this.app, templatesDialog: __dialog});
-                        __dialog.getBody().append(mPage.$el);
-                        this.app.showLoading(false, mPage.$el.parent());
-                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
-                        mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.copyTemplate, mPage); // New Dialog
-                        __dialog.$el.find('#dialog-title .preview').remove();
-                        __dialog.saveCallBack(_.bind(mPage.copyTemplate, mPage));
-                    }, this));
-                },
+                
                 saveDyanamicGalleryCall: function (obj) {
-                    console.log(this.meeView)
+                    //console.log(this.meeView)
                     if(obj){
                         this.meeView.showSaveMsgNow = true;
                         this.dialog.getBody().parent().attr('data-dcsave','true');
@@ -201,97 +122,6 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                     this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: ' + moment().format('h:mm:ss a'));
                     this.$("#mee_editor").saveDCfromCamp();
                     
-                },
-                initEditor: function () {
-                    if (this.tinymceEditor == true) {
-                        return false
-                    }
-                    this.tinymceEditor = true;
-                    this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");
-                    var _this = this;
-                    _tinyMCE.init({
-                        // General options
-                        mode: "exact",
-                        elements: "bmseditor_dctemplate",
-                        theme: "advanced",
-                        plugins: "contextmenu,fullscreen,inlinepopups,paste,searchreplace,iespell,style,table,visualchars,fullpage,preview,imagemanager",
-                        //browsers : "msie,gecko,opera,safari",
-
-                        doctype: '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
-                        element_format: "html",
-                        //plugins : "safari",
-                        convert_urls: false,
-                        relative_urls: false,
-                        remove_script_host: false,
-                        // paste options
-                        paste_auto_cleanup_on_paste: true,
-                        paste_retain_style_properties: "none",
-                        paste_convert_middot_lists: false,
-                        paste_strip_class_attributes: "all",
-                        paste_remove_spans: true,
-                        paste_remove_styles: true,
-                        paste_text_use_dialog: true,
-                        //paste_text_sticky : false,
-                        paste_text_linebreaktype: "<br>",
-                        // for <br>
-                        forced_root_block: "",
-                        force_br_newlines: true,
-                        force_p_newlines: false,
-                        // clean code
-                        //apply_source_formatting : true,
-                        //convert_newlines_to_brs : true,
-                        convert_fonts_to_spans: false,
-                        valid_elements: "*[*]",
-                        height: 450,
-                        // Theme options
-                        theme_advanced_buttons1: "newdocument,bold,italic,underline,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect",
-                        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,search,replace,bullist,numlist,outdent,indent,blockquote,undo,redo,hr,removeformat,sub,sup,forecolor,backcolor,link,unlink,anchor,image,cleanup,code,fullscreen,preview",
-                        theme_advanced_buttons3: "",
-                        //preview options
-                        plugin_preview_width: "950",
-                        plugin_preview_height: "750",
-                        //theme_advanced_buttons4 : "styleprops",
-                        theme_advanced_toolbar_location: "top",
-                        theme_advanced_toolbar_align: "left",
-                        theme_advanced_statusbar_location: "bottom",
-                        theme_advanced_font_sizes: "8=8px,9=9px,10=10px,11=11px,12=12px,13=13px,14=14px,15=15px,16=16px,18=18px,20=20px,22=22px,24=24px,26=26px,28=28px,30=30px,36=36px",
-                        theme_advanced_fonts: "Arial=Arial;Comic Sans MS=Comic Sans MS;Courier=Courier;Courier New=Courier New;Georgia=Georgia;Tahoma=Tahoma;" +
-                                "Times New Roman=Times New Roman;Trebuchet MS=Trebuchet MS;Lucinda Sans Unicode=Lucinda Sans Unicode;Verdana=Verdana",
-                        theme_advanced_resizing: true,
-                        // Example content CSS (should be your site CSS)
-                        content_css: "/pms/css/tiny_mce.css",
-                        //font_size_style_values : "10px,12px,13px,14px,16px,18px,20px",
-
-                        // Drop lists for link/image/media/template dialogs
-                        template_external_list_url: "/pms/js/tiny_mce_templates.js",
-                        external_link_list_url: "lists/link_list.js",
-                        external_image_list_url: "lists/image_list.js",
-                        media_external_list_url: "lists/media_list.js",
-                        // Replace values for the template plugin
-                        template_replace_values: {
-                            username: "Some User",
-                            staffid: "991234"
-                        },
-                        setup: function (ed) {
-                            /*ed.onChange.add(function(ed, l) {
-                             editor.page.states.editor_change = true;                                               
-                             });*/
-                            ed.onInit.add(function (ed, l) {
-                                var _height = _this.$("#area_create_template").parents(".modal-body").height();
-                                var editor_heigt = _height - 350;
-                                if (editor_heigt < 600) {
-                                    editor_heigt = 504;
-                                }
-                                _this.$("#bmseditor_template_ifr").css("height", (editor_heigt) + "px");
-                                _this.$("#bmseditor_template_tbl").css("height", (editor_heigt - 100) + "px");
-                                if (_this.editorContent) {
-                                    _tinyMCE.get('bmseditor_dctemplate').setContent(_this.editorContent);
-                                }
-                            })
-                        }
-
-                    });
-                    this.$('#Tiny').show();
                 },
                 saveDCName: function (obj) {
                              var _this = this;
@@ -338,86 +168,9 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                         this.dialog.$(".tagscont").show();
                     }
                 },
-                TryDialog: function (obj) {
-                    this.image_obj = $.getObj(obj, "a");
-                    var that = this;
-                    var app = this.app;
-                    this.$el.parents('body').find('#merge-field-plug-wrap').hide();
-                    var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 162;
-                    var dialog = this.app.showDialog({title: 'Images',
-                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
-                        headerEditable: true,
-                        headerIcon: '_graphics',
-                        tagRegen: true,
-                        bodyCss: {"min-height": dialog_height + "px"}
-                    });
-                    //// var _options = {_select:true,_dialog:dialog,_page:this}; // options pass to
-                    this.app.showLoading("Loading...", dialog.getBody());
-                    require(["userimages/userimages", 'app'], _.bind(function (pageTemplate, app) {
-                        var mPage = new pageTemplate({app: app, fromDialog: true, _select_dialog: dialog, _select_page: this, callBack: _.bind(this.insertImage, this)});
-                        var dialogArrayLength = that.app.dialogArray.length; // New Dialog
-                        dialog.getBody().append(mPage.$el);
-                        that.app.showLoading(false, mPage.$el.parent());
-                        mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        that.app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
-                        that.app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
-                        // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
-                        // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();
-                        //dialog.saveCallBack(_.bind(mPage.returnURL,mPage,dialog,_.bind(that.useImage,that)));
-                    }, this));
-
-                },
-                insertImage: function (data) {
-                    if (this.image_obj.hasClass('btn-opengallery')) {
-                        this.iThumbnail.remove("file-border");
-                        this.imageCheckSum = data.imgencode;
-                        this.iThumbnail.find("h4").hide();
-                        this.iThumbImage = data.imgthumb;
-                        this.iThumbnail.find("img").attr("src", this.iThumbImage).show();
-                        this.saveUserImage();
-                    } else {
-                        this.$el.find("#image_url").val(data.imgurl);
-                    }
-                    //console.log();
-                },
-                saveUserImage: function () {
-                    var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token');
-                    $.post(URL, {type: 'thumbnail', templateNumber: this.template_id,
-                        imageId: this.imageCheckSum
-                    })
-                            .done(_.bind(function (data) {
-                                var _json = jQuery.parseJSON(data);
-                                if (_json[0] !== 'err') {
-                                    this.app.showMessge("Thumbnail Saved Successfully");
-                                    if (this.modelTemplate) {
-                                        this.modelTemplate.model.set("thumbURL", this.iThumbImage);
-                                    }
-                                } else {
-                                    this.app.showAlert(_json[1], $("body"), {fixed: true});
-                                }
-                            }, this));
-                },
                 deleteTemplate: function () {
                     this.app.showLoading("Deleting Dynamic...", this.$el, {fixed: 'fixed'});
-                   /* var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token');
-                    $.post(URL, {type: 'delete', templateNumber: templateNum})
-                            .done(_.bind(function (data) {
-                                this.app.showLoading(false, this.$el);
-                                var _json = jQuery.parseJSON(data);
-                                if (_json[0] !== 'err') {
-                                    if (this.options.rowtemplate) {
-                                        this.page.offset = 0;
-                                        this.page.callTemplates(this.page.offset, true);
-                                    }
-                                    this.$el.parents('.modal').find('.btn-close').click();
-                                    //this.parent.$el.find("#template_search_menu li:first-child").removeClass("active").click();
-
-                                }
-                                else {
-                                    this.app.showAlert(_json[1], $("body"), {fixed: true});
-                                }
-                            }, this));*/
+                  
                     var url = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=delete&dynamicNumber=" + this.dynamicData['dynamicNumber.encode']+"&isGlobal=Y";
                                 var _this = this;
                                 $.ajax({
@@ -449,13 +202,6 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                                     }
 
                                 });
-                },
-                modelSave: function () {
-                    this.modelTemplate.model.set("isFeatured", this.dataObj.isFeatured);
-                    this.modelTemplate.model.set("isReturnPath", this.dataObj.isReturnPath);
-                    this.modelTemplate.model.set("isMobile", this.dataObj.isMobile);
-                    this.modelTemplate.model.set("categoryID", this.dataObj.categoryID);
-
                 },
                 ReattachEvents: function () {
                     

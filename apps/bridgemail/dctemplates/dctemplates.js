@@ -57,12 +57,8 @@ function (template,templateCollection,templateRowView,templateView) {
             */
             render: function () {
                 
-               this.$el.html(this.template({}));               
-              /* this.selectText  = this.options.selectAction?this.options.selectAction:'Select Template';
-               this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
-               if(this.options.hideCreateButton){
-                   this.$(".iconpointy").hide();
-               }*/
+               this.$el.html(this.template({}));        
+               
               
             }
             /**
@@ -71,7 +67,6 @@ function (template,templateCollection,templateRowView,templateView) {
             ,
             init:function(){                
                this.attachEvents();
-               this.getUserType();
                this.loadDCBlocks();
                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                
@@ -91,46 +86,9 @@ function (template,templateCollection,templateRowView,templateView) {
                      
               });
             },
-            getUserType:function(){
-                 var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=isAdmin";
-                 jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
-                    var _json = jQuery.parseJSON(xhr.responseText);
-                    if(this.app.checkError(_json)){
-                          return false;
-                    }
-                    this.app.set("isAdmin",_json[1]);
-                
-                },this));
-            },
-            loadTemplateAutoComplete:function(results){
-                var templates_array = [];
-                var map = {};
-                $.each(results.templates[0], function(index, val) { 
-                    templates_array.push(val[0].name);//{"name":val[0].name,"tags":val[0].tags});
-                    map[val[0].name] = {"name":val[0].name,"tags":val[0].tags};
-                });
-                this.$("#search-template-input").typeahead({
-                       source: templates_array,                            
-                       highlighter: function (item) {
-                          var regex = new RegExp( '(' + this.query + ')', 'gi' );
-                          return item.replace( regex, "<strong>$1</strong>" ) +  "<div><b>Tags:</b> "+map[item].tags.replace( regex, "<strong>$1</strong>" )+"</div>";
-                       },
-                        matcher: function (item) {
-                           if (map[item].name.toLowerCase().indexOf(this.query.trim().toLowerCase()) != -1 || map[item].tags.toLowerCase().indexOf(this.query.trim().toLowerCase()) != -1) {
-                               return true;
-                           }
-                       },
-                       items:8,                             
-                       minLength:2
-                   });
-                    //$('#camp_tag_text').typeahead({source: camp_obj.tags_common,items:10})
-                },
-                attachEvents:function(){                    
+            attachEvents:function(){                    
                     var camp_obj = this;
-                    this.$("#search-popular-tags").click(function(e){
-                        e.stopPropagation();
-                    });
-                    this.$("#search-popular-tags").keyup(_.bind(this.searchTemplateTags,this))
+                    
                     this.$("#template_search_menu li").click(_.bind(this.searchTemplate,this));
                     this.$("#template_layout_menu li").click(_.bind(this.searchTemplateLayout,this));
                     this.$("#search-template-input").keyup(_.bind(this.searchTemplateNameTag,this));
@@ -148,34 +106,8 @@ function (template,templateCollection,templateRowView,templateView) {
 
                 },
                 
-                loadTemplateTags:function(){
-                    var camp_obj = this;
-                    var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=allTemplateTags";
-                    jQuery.getJSON(URL,  function(tsv, state, xhr){
-                           if(xhr && xhr.responseText){                                                       
-                                var tags_template_json = jQuery.parseJSON(xhr.responseText);                                                                                               
-                                if(camp_obj.app.checkError(tags_template_json)){
-                                    return false;
-                                 }
-                                var tags = tags_template_json.tags.split(",");
-                                var p_tags_html = "";
-                                $.each(tags,function(key,val){
-                                    p_tags_html +="<li><a >"+val+"</a></li>";
-                                });
-                                camp_obj.$("#popular_template_tags").html(p_tags_html);
-                                camp_obj.$("#popular_template_tags").click(_.bind(camp_obj.searchTemplateByTags,camp_obj));
-                           }
-                     }).fail(function() { console.log( "error in loading popular tags for templates" ); });
-                },
                 searchdynamicContentL : function(){
-                    /*if(this.$(".notfound").length){
-                        var nf = this.$(".notfound").html();
-                       // this.$(".notfound").remove();
-                        this.$('#total_templates .total-count,#total_templates .total-text').hide();
-                        this.$('#total_templates').append('<p class="notfound nf_overwrite">'+nf+'</p>');
-                    }else{
-                      this.$('#total_templates .total-count,#total_templates .total-text').show();
-                    }*/
+                    
                     this.$(".template-container .thumbnails li:first-child").show();
                 },
                 searchTemplateLayout:function(obj){
@@ -249,22 +181,6 @@ function (template,templateCollection,templateRowView,templateView) {
                         this.loadTemplates('search','nameTag',{text:val});
                     }
                 },
-                searchTemplateTags:function(obj){
-                    var input_field = $.getObj(obj,"input");
-                    var searchterm = $.trim(input_field.val());
-                    if(searchterm!==""){
-                        this.$("#popular_template_tags li").hide();                                                                                                       
-                        this.$("#remove-template-tag-list").show();
-                        searchterm = searchterm.toLowerCase();
-                        this.$("#popular_template_tags li").filter(function() {                                                               
-                             return $(this).find("a").text().toLowerCase().indexOf(searchterm) > -1;
-                         }).show();
-                    }
-                    else{
-                        this.$("#remove-template-tag-list").hide();
-                        this.$("#popular_template_tags li").show();  
-                    }
-                },
                 searchTemplateByTags:function(obj){
                     var li = $.getObj(obj,"li");                   
                     var tag_text = li.find("a").text();                    
@@ -303,17 +219,8 @@ function (template,templateCollection,templateRowView,templateView) {
                     if(!this.templates || search){
                         this.$(".thumbnails").children().remove();                        
                         this.app.showLoading('Loading Dynamic Blocks....',this.$(".template-container"));
-                        /*if(camp_obj.$("#template_search_menu li.active").length){
-                            var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":this.$("#template_search_menu li.active").attr("text-info").toLowerCase();
-                            this.$("#total_templates").html("<img src='img/recurring.gif'>  "+text+" "+emailtext+" templates");                         
-                        }
-                        else{
-                            this.$("#total_templates").html("<img src='img/recurring.gif'> templates");                         
-                        }*/
                         this.$("#total_templates").html("<img src='img/recurring.gif'> Dynamic Blocks");      
                         _data['orderBy'] = "";
-                        // _data['order'] = "asc";
-                        
                         if(search && searchType){
                             if(searchType === 'tag' || searchType=== 'nameTag'){
                             _data['searchType'] = searchType;    
@@ -474,14 +381,6 @@ function (template,templateCollection,templateRowView,templateView) {
                        this.$(".footer-loading").show();
                        this.callTemplates(20); 
                     }  
-                },                                
-                showCategoryTemplate:function(categories){
-                     var _array = categories.split(",");
-                     var _html ="";
-                    $.each(_array,function(key,val){
-                        _html +="<a class='cat' cat_id='"+val+"' >"+val+"</a>";                        
-                    });
-                    return _html
                 },
                 createDynamicContent:function(){
                     this.app.showAddDialog(
@@ -514,7 +413,6 @@ function (template,templateCollection,templateRowView,templateView) {
                    },
                    createDynamicBlock : function(fieldText, _json){
                        this.loadDCBlocks();
-                       console.log(fieldText,_json);
                        var _this = this;
                        var URL = "/pms/io/publish/getDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=get&dynamicNumber="+_json[1];
                        jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -546,11 +444,7 @@ function (template,templateCollection,templateRowView,templateView) {
                         this.$el.find('#nuture-search').val('');
                         this.$el.find('#clearsearch').hide();
                         this.app.showLoading("Loading...", dialog.getBody());  
-                        this.loadDCSingleTemplate(dialog)
-                        //require(["dctemplates/dctemplate"], function (templatePage) {
-                        
-                        
-                    //});
+                        this.loadDCSingleTemplate(dialog);
                         
                    },
                    loadDCSingleTemplate: function(dialog){
@@ -583,33 +477,6 @@ function (template,templateCollection,templateRowView,templateView) {
                         var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":(this.$("#template_search_menu li.active").attr("text-info").toLowerCase()+" ");  
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b> "+text+"</b> "+emailtext+" templates found");  
                     }
-                    else if(this.searchString.searchText && this.searchString.searchType ==="nameTag"){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
-                    }    
-                    else if(this.searchString.searchType==='tag'){                        
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for tag '"+this.searchString.searchText+"'</b>");                         
-                    }
-                    else if(this.searchString.categoryId){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for category '"+ this.categoryName+"'</b>");                         
-                        
-                    }else if(this.searchString.isFeatured === 'Y'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong><b>Featured</b> enabled  "+emailtext+" templates found");                             
-                    }
-                    else if(this.searchString.isMobile === 'Y'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Mobile</b> enabled "+emailtext+" templates found");                             
-                    }
-                    else if(this.searchString.isAdmin === 'Y'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Makesbridge</b> "+emailtext+" templates found"); 
-                    }
-                    else if(this.searchString.userType === 'A'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Makesbridge</b> "+emailtext+" templates found"); 
-                    }
-                    else if(this.searchString.isReturnPath === "Y"){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Return Path</b> "+emailtext+" enabled templates found"); 
-                    }
-                    else if(this.searchString.isMEE === "Y"){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Easy Editor</b> enabled "+emailtext+" templates found"); 
-                    }
                     else{
                         this.$("#total_templates").html("<strong class='badge'>"+count +"</strong> "+emailtext+" templates");
                         this.$el.parents('.ws-content.active').find('.temp-count').text(count);
@@ -619,11 +486,6 @@ function (template,templateCollection,templateRowView,templateView) {
                        this.$el.parents('.ws-content.active').find('.temp-count').text(count);
                        this.$el.parents('.modal').find('#oto_total_templates').text(count);
                    }
-                },
-                triggerAll: function(){
-                        var target=this.$el.parents('.ws-content.active').find('.camp_header div .c-current-status li');
-                        if(!target.hasClass('clickable_badge')){return false;}
-                    this.$("#template_search_menu li:nth-child(2)").click(); 
                 },
                 toggleSortOption: function(ev) {
                     $(this.el).find("#template_search_menu").slideToggle();
