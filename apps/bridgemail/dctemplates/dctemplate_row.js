@@ -13,20 +13,8 @@ define(['text!dctemplates/html/template_row.html'],
                  * Attach events on elements in view.
                  */
                 events: {
-                    //'click .copybtn': 'copyTemplate',
-                    'click .createcamp': 'createCampaign',
-                    "click .previewbtn": 'previewTemplate',
                     'click .deletebtn': 'deleteTemplate',
                     'click .editbtn,.single-template': 'updateTemplate',
-                    'click .cat': 'searchByCategory',
-                    'click .feat_temp': 'featureClick',
-                    'click .rpath': 'returnPath',
-                    'click .mobile': 'mobileClick',
-                    'click .builtin': 'mksBridge',
-                    'click .mail': 'mailIconClick',
-                    'click .view': 'viewIconClick',
-                    'click .selecttemp': 'selectTemplate',
-                    'click .easyEditorCompatible': 'meeClick',
                     //'click .t-scroll p i.ellipsis':'expandTags',
                     'mouseleave .thumbnail': 'collapseTags'
                 },
@@ -79,8 +67,6 @@ define(['text!dctemplates/html/template_row.html'],
                  * Initializing all controls here which need to show in view.
                  */
                 initControls: function () {
-
-                    this.showTagsTemplate();
                     if (this.parent.searchString) {
                         this.$(".template-name").highlight($.trim(this.parent.searchString.searchText));
                         this.$(".tag").highlight($.trim(this.parent.searchString.searchText));
@@ -88,113 +74,14 @@ define(['text!dctemplates/html/template_row.html'],
                         this.$(".tag").highlight($.trim(this.parent.searchTags));
                     }
                 },
-                showTagsTemplate: function () {
-                    /*this.tmPr = new tagView(
-                            {parent: this,
-                                app: this.app,
-                                parents: this.parent,
-                                rowElement: this.$el,
-                                helpText: 'Templates',
-                                tags: this.model.get('tags')});
-                    this.$('.t-scroll').append(this.tmPr.$el);*/
-
-                },
                 showCPCEDButtons: function () {
                     var templates_html = '';
-                    /*var adminTemplate = this.model.get('isAdmin') === 'Y' ? "admin-template" : "";
-                    if (adminTemplate === "admin-template") {
-                        this.$('.thumbnail').addClass(adminTemplate);
-                        if (this.isAdmin === "Y") {
-                            templates_html += '<a class="previewbtn clr4"  ><span >Preview</span></a>';
-                            templates_html += '<a class="editbtn clr3" ><span >Edit</span></a>';
-                            templates_html += '<a class="copybtn clr2" ><span >Copy</span></a>';
-                            templates_html += '<a class="deletebtn clr1"><span >Delete</span></a>';
-                        } else {
-                            templates_html += '<a class="previewbtn clr2"  style="width:50%" ><span >Preview</span></a>';
-                            templates_html += '<a class="copybtn clr1"  style="width:50%" ><span >Copy</span></a>';
-                        }
-                    }
-                    else if (this.options.OnOFlag) {
-                        templates_html += '<a class="previewbtn clr2"  style="width:50%"  ><span >Preview</span></a>';
-                        templates_html += '<a class="deletebtn clr1" style="width:50%"><span >Delete</span></a>';
-                    }
-                    else {*/
-//                        templates_html += '<a class="previewbtn clr4" ><span >Preview</span></a>';
-                        templates_html += '<a class="editbtn clr2"><span >Edit</span></a>';
-//                        templates_html += '<a class="copybtn clr2" ><span >Copy</span></a>';
-                        templates_html += '<a class="deletebtn clr1"><span >Delete</span></a>';
-                    //}
+                    templates_html += '<a class="editbtn clr2"><span >Edit</span></a>';
+                    templates_html += '<a class="deletebtn clr1"><span >Delete</span></a>';
                     return templates_html;
                 },
-                CPCEDWrap: function () {
-                    var returnClass = '';
-                    var createCampClass = '';
-                    var adminTemplate = this.model.get('isAdmin') === 'Y' ? "admin-template" : "";
-                    if (adminTemplate === "admin-template") {
-                        this.$('.thumbnail').addClass(adminTemplate);
-                        if (this.isAdmin === "Y") {
-                            returnClass = 'five s-clr6';
-                            createCampClass = 'clr9';
-                        } else {
-                            returnClass = 'three s-clr4';
-                            createCampClass = 'clr9'
-                        }
-                    }
-                    else if (this.options.OnOFlag) {
-                        returnClass = 'three s-clr4';
-                        createCampClass = 'clr9';
-                    }
-                    else {
-                        returnClass = 'five s-clr6';
-                        createCampClass = 'clr9'
-                    }
-                    return {returnClass: returnClass, campClass: createCampClass};
-
-                },
-                previewTemplate: function (obj, tag) {
-
-                    var bms_token = this.app.get('bms_token');
-                    var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 162;
-                    var srcUrl = "https://" + this.app.get("preview_domain") + "/pms/events/viewtemp.jsp?templateNumber=" + this.model.get('templateNumber.encode');
-                    var dialog = this.app.showDialog({title: 'Template Preview',
-                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
-                        headerEditable: false,
-                        headerIcon: 'dlgpreview',
-                        bodyCss: {"min-height": dialog_height + "px"}
-                    });
-                    require(["common/templatePreview"], _.bind(function (templatePreview) {
-                        var tmPr = new templatePreview({frameSrc: srcUrl, app: this.app, frameHeight: dialog_height, prevFlag: 'T', tempNum: this.model.get('templateNumber.encode')});
-                        dialog.getBody().append(tmPr.$el);
-                        this.app.showLoading(false, tmPr.$el.parent());
-                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
-                        tmPr.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        dialog.$el.find('#dialog-title .preview').remove();
-                        tmPr.init();
-                    }, this));
-                },
-                /*copyTemplate: function () {
-                    var dialog_title = "Copy Template";
-                    var self;
-                    var __dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "600px", "margin-left": "-300px"},
-                        bodyCss: {"min-height": "260px"},
-                        headerIcon: 'copy',
-                        overlay: true,
-                        buttons: {saveBtn: {text: 'Create Template'}}
-                    });
-                    this.app.showLoading("Loading...", __dialog.getBody());
-                    //require(["bmstemplates/copytemplate"], _.bind(function (copyTemplatePage) {
-                        var mPage = new copyTemplatePage({templ: self, template_id: this.model.get('templateNumber.encode'), _current: this, app: this.app, templatesDialog: __dialog});
-                        __dialog.getBody().append(mPage.$el);
-                        this.app.showLoading(false, mPage.$el.parent());
-                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
-                        mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.copyTemplate, mPage); // New Dialog
-                        __dialog.$el.find('#dialog-title .preview').remove();
-                        __dialog.saveCallBack(_.bind(mPage.copyTemplate, mPage));
-                    //}, this));
-                },*/
+                
+                
                 updateTemplate: function () {
                     var _this = this.parent;
                     var self = this;
@@ -251,17 +138,10 @@ define(['text!dctemplates/html/template_row.html'],
                                     cache: false,
                                     async: true,
                                     success: function (e) {
-                                        //LoadBuildingBlocks();
                                         if(e[0]=="success"){
-                                            /*if(args.mee_view){
-                                                args.mee_view.app.showMessge('Dynamic content block deleted successfully',$('body'));
-                                            }*/
                                             _this.parent.loadDCBlocks();
                                             _this.app.showMessge('Dynamic content block deleted successfully',$('body'));
                                             
-                                            /*if(args.allOptions){
-                                                args.allOptions.saveCallBack();
-                                            }*/
                                         }else{
                                             _this.app.showMessge(e[1],$('body'));
                                         }
@@ -273,62 +153,6 @@ define(['text!dctemplates/html/template_row.html'],
                                 });
                             
                 },
-                createCampaign: function (obj) {
-                    if (this.selectCallback) {
-                        this.selectCallback(obj);
-                    }
-                },
-                selectTemplate: function (obj) {
-                    if (this.selectCallback) {
-                        this.selectCallback(obj);
-                    }
-                },
-                /*Search on Different icon*/
-                searchByCategory: function (obj) {
-                    var cat = $.getObj(obj, "a");
-                    this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
-                    this.parent.$('#search-template-input').val('');
-                    this.parent.$('#clearsearch').hide();
-                    this.parent.loadTemplates('search', 'category', {category_id: this.model.get('categoryID')});
-                },
-                featureClick: function () {
-                    this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
-                    this.parent.$('#search-template-input').val('');
-                    this.parent.$('#clearsearch').hide();
-                    this.parent.loadTemplates('search', 'featured');
-                },
-                returnPath: function () {
-                    this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
-                    this.parent.$('#search-template-input').val('');
-                    this.parent.$('#clearsearch').hide();
-                    this.parent.loadTemplates('search', 'returnpath');
-                },
-                mobileClick: function () {
-                    this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
-                    this.parent.$('#search-template-input').val('');
-                    this.parent.$('#clearsearch').hide();
-                    this.parent.loadTemplates('search', 'mobile');
-                },
-                mksBridge: function () {
-                    this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
-                    this.parent.$('#search-template-input').val('');
-                    this.parent.$('#clearsearch').hide();
-                    this.parent.loadTemplates('search', 'admin', {user_type: 'A'});
-                },
-                mailIconClick: function () {
-                    this.parent.$("#template_search_menu li:first-child").click();
-                },
-                viewIconClick: function () {
-                    this.parent.$("#template_search_menu li:nth-child(4)").click();
-                },
-                meeClick: function () {
-                    this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
-                    this.parent.$('#search-template-input').val('');
-                    this.parent.$('#clearsearch').hide();
-                    this.parent.loadTemplates('search', 'easyeditor');
-                }
-
-
             });
 
         });
