@@ -10,7 +10,7 @@ define([
 	return Backbone.Collection.extend({
 		model: dctemplate,
 		url: function () {
-                    return  "/pms/io/publish/getDynamicVariation/?BMS_REQ_TK="+app.get('bms_token')+"&type=list"
+                    return  "/pms/io/publish/getDynamicVariation/?BMS_REQ_TK="+app.get('bms_token')+"&type=list&isSort=Y"
 		},
                 parse: function(response,sent) {
                     var result = []

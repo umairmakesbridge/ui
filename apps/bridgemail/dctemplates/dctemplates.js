@@ -191,28 +191,7 @@ function (template,templateCollection,templateRowView,templateView) {
                                                     if(response.count){
                                                         this.totalCount = response.count;
                                                     }
-                                                    /*if(this.templateTotalCount === 0 || this.templateTotalFlag){
-                                                        this.templateTotalCount  = response.totalCount;
-                                                        if(this.OnOFlag){
-                                                            this.$el.parents('.modal').find('#oto_total_templates').html('Total <b>'+this.templateTotalCount+'</b>').fadeIn().css('cursor','pointer');
-                                                            this.$el.parents('.modal').find('#oto_total_templates').click(_.bind(function(){this.loadTemplates();},this))
-                                                        }
-                                                    }
-                                                    this.showTotalCount(this.totalCount,isTotal);
-                                                    this.app.showLoading(false,this.$(".template-container"));
-                                                    
-                                                    if(this.$el.find('.thumbnails #new_template').length == 0){
-                                                        if(this.OnOFlag){
-                                                            this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag"><div class="droppanel" style="height: 375px;"><h4 style="margin: 0px; padding: 150px 0px 0px;"><img alt="" src="'+this.app.get('path')+'img/easyeditor-g.png"><br class="clearfix"><span>Use EasyEditor </span></h4></div><a class="btn-blue g-btn ono-built-scratch" style="width: 190px;"><span>Start from Scratch </span><i class="icon next"></i></a></div></div></li>');
-                                                            this.$('#new_template').find('.ono-built-scratch').click(_.bind(this.createOTODialog,this));
-                                                            
-                                                           // this.$('.create-tempalte').click(_.bind(this.createOTODialog,this));
-                                                        }
-                                                        else{
-                                                            this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Add Template </span></div></div></li>');
-                                                            this.$('#new_template').click(_.bind(this.createTemplate,this));
-                                                            }
-                                                    }*/
+                                                   
                                                 this.$el.find('.thumbnails').append('<li class="span3" id="new_dctemplate" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Add Dynamic Content </span></div></div></li>');
                                                 this.$('#new_dctemplate').click(_.bind(this.createDynamicContent,this));
                                                 _.each(collection.models, _.bind(function(model){
@@ -226,20 +205,13 @@ function (template,templateCollection,templateRowView,templateView) {
                                                          this.app.showLoading(false,this.$(".template-container"));
                                                     /*------------*/
                                                    
-                                                   /*newCount = this.totalCount - this.offset;
-                                                   //console.log('Total Count : '+ this.totalCount + ' Offset : ' + this.offset + ' New Count : ' + newCount + ' Collection Length '+ collection.length);
-                                                   if(collection.length<parseInt(newCount)){
-                                                     this.$(".thumbnails li:last-child").attr("data-load","true");
-                                                    }*/
                                                     if(collection.length==0){
                                                         var search_message  ="";
                                                         var email = "";
                                                         if(this.searchString && this.searchString.searchText){
                                                           search_message +=" containing '"+this.searchString.searchText+"'" ;
                                                         }
-                                                        if(this.OnOFlag){
-                                                            email = "email";
-                                                        }
+                                                        
                                                         //console.log(this.searchString);
                                                         //this.$(".template-container").append('<p class="notfound">No Templates found'+search_message+'</p>');
                                                         this.$("#total_templates").html('<p class="notfound nf_overwrite">No '+email+' Templates found'+search_message+'</p>');

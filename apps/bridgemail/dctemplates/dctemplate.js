@@ -245,7 +245,8 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                     var _html = this.editorContent !== "" ? $('<div/>').html(this.editorContentMEE).text().replace(/&line;/g, "") : "";
                     var topaccordian = 31; // Scroll Top Minus from Body
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, isDcTemplate:true,isDCTemplateContentSet:false,margin: {top: 236, left: 0},dynamicData : this.dynamicData,_el: this.$("#mee_editor"), parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: topaccordian, html: '', saveClick: _.bind(this.saveDyanamicGalleryCall, this), fromDialog: true, saveBtnText: 'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});
+                        // fix top
+                        var MEEPage = new MEE({app: this.app, isDcTemplate:true,isDCTemplateContentSet:false,margin: {top: 5, left: 0},dynamicData : this.dynamicData,_el: this.$("#mee_editor"), parentWindow: this.$el.parents(".modal-body"), scrollTopMinus: topaccordian, html: '', saveClick: _.bind(this.saveDyanamicGalleryCall, this), fromDialog: true, saveBtnText: 'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});
                         this.$("#mee_editor").setChange(this);
                         this.meeView = MEEPage;
                         this.setMEE(_html);
@@ -323,7 +324,7 @@ define(['text!dctemplates/html/dctemplate.html', 'bms-dragfile'],
                         var scrollTop = this.$win.scrollTop();
                         //var scrollPosition = scrollTop - 500;
 
-                        var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 31); // h3 + padding
+                        var topaccordian = 31; // h3 + padding *fix
                         var scrollTop = scrollTop - topaccordian;
 
                         if (scrollTop >= (this.navTop - 270) && scrollTop > 0) {
