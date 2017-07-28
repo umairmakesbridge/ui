@@ -70,7 +70,7 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                                     inputs: {},
                                     outputs: {
                                         output_1: {
-                                            label: 'Email',
+                                            label: 'Journey',
                                         }
                                     }
                                 }

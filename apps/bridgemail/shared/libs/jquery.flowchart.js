@@ -506,7 +506,7 @@ $(function () {
             $operator_title.appendTo($operator);
             
             if(!infos.remove){
-                var $operator_delete = $('<div class="flowchart-cross"></div>');
+                var $operator_delete = $('<div class="flowchart-cross" title="Delete Node"></div>');
                 $operator_delete.appendTo($operator);
             }
 
