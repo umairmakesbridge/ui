@@ -122,6 +122,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-scorebot': 'newAutobot',
                     'click .landing-pages': 'landingPageslist',
                     'click .workflow-listing': 'workflowListing',
+                    'click .journey-canvas': 'journeCanvas',
                     'click .bridge-statz': 'openBridgeStatz',
                     'click .exportsubscribers': 'exportsubscribers',
                     'click .removesubscribers': 'removeSubscribers',
@@ -1020,6 +1021,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 workflowListing: function () {
                     this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
+                },
+                journeCanvas:function(){
+                    this.addWorkSpace({type: '', title: 'Journey', sub_title: 'Create your journey', url: 'workflow/journey', workspace_id: 'journeycanvas', 'addAction': false, tab_icon: 'workflowlisting', noTags: true});
                 },
                 ftpUploadPage: function(){
                     this.addWorkSpace({type: '', title: 'FTP Uploads', sub_title: 'Schedule FTP Uploads', url: 'common/ftpupload', workspace_id: 'ftpupload', 'addAction': false, tab_icon: 'ftpuploadlisting', noTags: true});
