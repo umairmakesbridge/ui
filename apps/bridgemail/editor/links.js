@@ -191,7 +191,7 @@ function (template) {
                 var _a_href = anchorObj.attr("href").toLowerCase();
                 var actual_href = anchorObj.attr("href");
                 var actual_target = anchorObj.attr("target");
-                if(anchorObj.parent().hasClass("underline")){
+                if(anchorObj.parent().hasClass("underline") || anchorObj.css('text-decoration') == "underline"){
                     this.$(".underline-checkbox input").prop("checked",true);
                     this.$(".right_columnLinkGUI textarea").css("text-decoration","underline");
                 }
@@ -323,12 +323,13 @@ function (template) {
                 if(linkName){
                     linkNameAttr = "name='"+linkName+"'";
                 }
-                this.meeIframeWindow.﻿tinyMCE.activeEditor.﻿selection.moveToBookmark(this.selection);
+                this.meeIframeWindow.tinyMCE.activeEditor.selection.moveToBookmark(this.selection);
                 this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
                 var selected_node = this.tiny_editor_selection.getNode();
-                var selected_color = 'color:inherit';
+                var selected_color = 'color:inherit;';
                 //var selected_text_decoration = this.$("input.checkinput:checked").length?'text-decoration:underline;':'';
                 var selected_text_decoration = '';
+                var text_underline = 'text-decoration:none;';
                 //console.log(selected_node);
                 //console.log($(this.tiny_editor_selection.getStart()).children().length);
                 if(($(this.tiny_editor_selection.getStart()).children().length > 0) && (this.tiny_editor_selection.getStart().nodeName.toLowerCase() !== "span" && this.tiny_editor_selection.getStart().nodeName.toLowerCase() !=="a")){
@@ -339,9 +340,11 @@ function (template) {
                        }
                     //}
                 }
+                var eleColor = "";
                 if(selected_node){
-                    if(selected_node.style && selected_node.style.color){
-                        selected_color = "color:"+selected_node.style.color+";";
+                    eleColor = this.getParentColor(selected_node);
+                    if(eleColor){
+                        selected_color = "color:"+eleColor+";";
                     }
                     var parent_table = $(selected_node).parents("table");
                     if(parent_table.length && parent_table.eq(0)[0].style.borderRadius){
@@ -351,10 +354,13 @@ function (template) {
                     if(selected_node.nodeName ==="B" || $(selected_node).find("b").length){
                         selected_text_decoration = selected_text_decoration + "font-weight:bold;";
                     }
+                    if(this.$("input.checkinput:checked").length){
+                        text_underline = 'text-decoration:underline;';
+                    }
                 }
                  if(!postBackupLink){return false}
                  
-                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
+                  myTextLink = "<a class='MEE_LINK' data-mce-href='"+postBackupLink+"' href='" + postBackupLink + "'  data-mce-style='"+selected_text_decoration+selected_color+"' "+targetAttr+" "+linkNameAttr+" style='"+selected_text_decoration+selected_color+text_underline+"'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
@@ -375,35 +381,63 @@ function (template) {
                     else{
                         selected_node.removeAttribute("name")
                     }
+                    if(selected_node.style && selected_node.style.color=="inherit"){
+                        selected_node.style.color = eleColor;
+                    }
                     if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val()){
                         selected_node.innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
                     }
                     if(this.$("input.checkinput:checked").length){
                       if(selected_node.parentNode.nodeName.toLowerCase()=="font"){
                             $(selected_node.parentNode).addClass('underline');
+                            $(selected_node.parentNode).attr('data-mce-style',"text-decoration: underline;");
                         }else{
+                            $(selected_node).wrap('<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;"></font>')
                             selected_node.style.textDecoration = "underline";
                         }
                         
                     }
                     else{
                       
-                          $(selected_node.parentNode).removeClass('underline');
+                          
+                          var cnt = $(selected_node.parentNode).contents();
+                          $(selected_node.parentNode).replaceWith(cnt);
+                          //$(selected_node.parentNode).removeClass('underline');
+                          //$(selected_node.parentNode).removeAttr('data-mce-style');
                           selected_node.style.textDecoration = "none";  
-                       
+                          
+                          selected_node.parentNode.style.textDecoration = "none";
                         
                         //$(selected_node).unwrap();
                     }
                 }
-                else { 
+                else {
+                    if($(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="font" || $(this.tiny_editor_selection.getStart())[0].tagName.toLowerCase()=="a"){
+                        $(this.tiny_editor_selection.getStart()).remove();
+                    }
                     if(this.$("input.checkinput:checked").length){
-                        myTextLink = '<font class="underline" style="text-decoration:underline">'+myTextLink+'</font>';
+                    
+                        myTextLink = '<font class="underline" style="text-decoration:underline;" data-mce-style="text-decoration: underline;">'+myTextLink+'</font>';
+                    
                     }
                     
                     this.tiny_editor_selection.setContent(myTextLink);
                 }
                 //tinymce.activeEditor.focus();               
                 return postBackupLink;
+            },
+            getParentColor: function(selectedNode){
+                var node = selectedNode;
+                var color = "";
+                if(node.style && node.style.color && node.style.color!="inherit"){
+                    color = node.style.color;                    
+                }
+                else {
+                    if(node.className!=="sortable mainContentHtml"){
+                        color = this.getParentColor(node.parentNode)
+                    }
+                }
+                return color;
             },
             previewLink:function(){
                 var link = this.getURL(true);

@@ -4,6 +4,7 @@
   <div class="temp-filters clearfix" id="contacts_count">
      <input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" checked="checked" />
      <h2><strong class="badge total-camp-count">0</strong> sent or pending campaigns found</h2>
+     <a class="cstatus pclr2 download-csv showtooltip" title="Download this report as CSV" style="margin-left:10px !important;margin-top:11px;">CSV</a>
      <div style=" " class="srt-div">
        <div class="template-filter_expand right" id="autobots" style="position: relative;"> <strong class="sort left">Filter</strong>
            <span class="sortoption_expand active text-truncated showtooltip" title="Click to expand/collapse" style="position: relative;"><span class="spntext">Last 5</span> <b class="caret right" style="position:absolute; top:0px; right:10px; margin: 16px 0 0 8px;"> </b></span>
@@ -24,26 +25,46 @@
  </div>
 <div class="template-container">
   <div class="target-listing copy_camp" id="copy-camp-listing">
- <div class="col1 ">
-
+ <div class="">
   <div class="template-container">
     <div class="camp_listing camp_reports">      
     </div>
   </div>
   <!-- template-container  --> 
+  <div class="total-row-stats">
+      <table cellpadding="0" cellspacing="0" border="0" class="total-row-table"> 
+          <tbody>
+              <tr>
+                  <td style="width: 40px"><div style="width:40px">&nbsp;</div></td>
+                  <td style="width: 100%"><div class="total-row-text"><strong>Total Count</strong></div></td>
+                  <td style="width: 70px; vertical-align: top"><span class="total-counts"><strong class="sentCount">0</strong></span></td>
+                  <td style="width: 70px"><span class="total-counts"><strong class="openCount">0</strong><i class="openCount-p"></i></span></td>
+                  <td style="width: 70px"><span class="total-counts"><strong class="clickCount">0</strong><i class="clickCount-p"></i></span></td>
+                  <td style="width: 70px"><span class="total-counts"><strong class="conversionCount">0</strong><i class="conversionCount-p"></i></span></td>
+                  <td style="width: 70px"><span class="total-counts"><strong class="pageViewsCount">0</strong><i class="pageViewsCount-p"></i></span></td>
+                  <td style="width: 70px"><span class="total-counts"><strong class="unSubscribeCount">0</strong><i class="unSubscribeCount-p"></i></span></td>
+                  <td style="width: 70px"><span class="total-counts"><strong class="supressCount">0</strong><i class="supressCount-p"></i></span></td>
+                  <td style="width: 70px"><span class="total-counts"><strong class="bounceCount">0</strong><i class="bounceCount-p"></i></span></td>
+                  <td style="width: 140px"><div style="width:140px">&nbsp;</div></td>
+              </tr>
+          </tbody>
+      </table>        
+ </div>
 </div>
 
 
-<div class="col2 col-cstats">
+<div class="col-cstats">
+  <div class="activitybar">
+        <h3 id="total_activities">Pie Chart View</h3>                      
+    </div>  
   <div class="cstats"> 
       <div class="mask start-message"><div class="init-message">Add Campaigns to see graph</div></div>  
       <div class="campaign-select-box">
         <select class="nosearch selected-campaign" data-placeholder="No Campaign Selected">
             <option></option>            
         </select>
-      </div>
-    <!--<h5>Jay's Campaign <span>25 May 2013</span></h5>-->
-    <div class="chart campaign-chart">
+      </div>    
+    <div class="chart campaign-chart" style="width:50%;margin:30px auto;">
        
     </div>
     <div class="stats-panel">

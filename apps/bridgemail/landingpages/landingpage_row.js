@@ -218,7 +218,7 @@ define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylanding
                     this.app.showLoading("Loading Page...", dialog.getBody());
                     var preview_url =  this.app.decodeHTML(this.model.get('previewURL')).replace("http","https");
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
-                        var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
+                        var tmPr = new templatePreview({frameSrc: preview_url, prevFlag:"LP",app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         dialog.getBody().html(tmPr.$el);
                         tmPr.init();
                     }, this));

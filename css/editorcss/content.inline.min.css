@@ -318,21 +318,10 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 }
 .myDroppable
 {
-    border: 0px dotted black;
-    background-color: #80C000 !important;
+    border-top: 2px dashed #82BC42 !important;    
     margin:0 !important;    
-    height:4px;
+    height:0px;
 }
-
-
-
-
-
-
-
-
-
-
 
 /* ---------------------------------------------------------- *//* ---------------------------------------------------------- *//* ---------------------------------------------------------- *//* ---------------------------------------------------------- *//* ---------------------------------------------------------- *//* ---------------------------------------------------------- *//* ---------------------------------------------------------- *//* ---------------------------------------------------------- */
 
@@ -1976,7 +1965,7 @@ div.textcontent ol{
     background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(255, 255, 255, 1);
 }
 .sortable > li{
-    border: 1px dotted rgba(0, 0, 0, 0.2);    
+    border:1px dotted rgba(0, 0, 0, 0.2); 
     /*margin:22px 0 22px 0;*/
     position:relative;
 }
@@ -2279,7 +2268,7 @@ i.icon{
   height:10px !important;
 }
 .dragIsOverMe {
-  height:4px !important;   
+  height:0px !important;   
 }
 .dragIsOverDrop {
   height:10px !important;   

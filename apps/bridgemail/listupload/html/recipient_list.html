@@ -56,9 +56,16 @@
         
            <%if (this.model.get('isSupressList')=="true" || this.model.get('isBounceSupressList')== "true"){%>
                   
-                <%}else{%>
-                <div class="slide-btns <% if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {print('three s-clr4')} else {print('two s-clr3')} %>">
-
+                <%}else{
+                    if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {                    
+                %>                     
+                    <div class="slide-btns three s-clr4">
+                <%  } else { %>
+                    <% if(this.parents.status === 'SS') { %>
+                        <div class="slide-btns one s-clr2">
+                    <% } else {%>    
+                        <div class="slide-btns two s-clr3">
+                <% }} %>
                     <span  class="icon setting"></span>
                     <div>
                         <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
@@ -66,8 +73,9 @@
                         <% } %>
                         
                         <a class="icon edit edit-list clr2" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Edit</span></a>
-
-                        <a class="icon delete delete-list clr1" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Delete</span></a>
+                        <% if(this.parents.status !== 'SS') { %>
+                            <a class="icon delete delete-list clr1" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Delete</span></a>
+                        <% } %>
                     </div> <!-- slide-btns two  -->
 
                 </div>    

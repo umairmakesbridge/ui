@@ -156,33 +156,42 @@
                         <%}%>
                                                          
               </div>  <%if(this.model.get('status') =="D"){%> 
-              <div class="slide-btns <% if(this.showUseButton || this.showRemoveButton || (this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId'))){print('five s-clr6')}else{print('four s-clr5')} %>" style="width:;">
-                        <span  class="icon setting"></span>
-                        <div>
-                                <% if(this.showUseButton) {%>
-                                    <a class="icon check clr5 row-move" ><span>Use</span></a>
-                                <% } %>  
-                                <% if(this.showRemoveButton) {%>
-                                    <a class="icon remove clr5 row-remove" ><span>Remove</span></a>
-                                <% } %>  
-                                <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
-                                    <a class="icon share-camp share clr5" ><span>Share</span></a>
-                               <% } %>
-                                <a class="icon refresh clr4 " data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Run Count</span></a>
-                                <% if(this.app.get("user").userId==this.model.get('userId')) { %>
-                                 <a class="icon edit edit-target clr3" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Edit</span></a>
-                                <% }  else { %>
-                                 <a class="icon preview preview-target clr3" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Preview</span></a>
-                                <% } %>
-                                <a class="icon copy copy-target clr2" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Copy</span></a>
-                                <% if(this.options.type != "autobots_listing") {%>
+              <% if(this.showUseButton || this.showRemoveButton || (this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId'))){ %>                
+                    <div class="slide-btns five s-clr6" >
+              <%  } else { %>
+                   <% if(this.parent.status === 'SS') { %> 
+                    <div class="slide-btns three s-clr4">
+                   <% } else { %>             
+                     <div class="slide-btns four s-clr5">    
+              <% } } %>
+                    <span  class="icon setting"></span>
+                    <div>
+                            <% if(this.showUseButton) {%>
+                                <a class="icon check clr5 row-move" ><span>Use</span></a>
+                            <% } %>  
+                            <% if(this.showRemoveButton) {%>
+                                <a class="icon remove clr5 row-remove" ><span>Remove</span></a>
+                            <% } %>  
+                            <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
+                                <a class="icon share-camp share clr5" ><span>Share</span></a>
+                           <% } %>
+                            <a class="icon refresh clr4 " data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Run Count</span></a>
+                            <% if(this.app.get("user").userId==this.model.get('userId')) { %>
+                             <a class="icon edit edit-target clr3" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Edit</span></a>
+                            <% }  else { %>
+                             <a class="icon preview preview-target clr3" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Preview</span></a>
+                            <% } %>
+                            <a class="icon copy copy-target clr2" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Copy</span></a>
+                            <% if(this.options.type != "autobots_listing") {%>
+                                <% if(this.parent.status !== 'SS') { %>
                                     <a class="icon delete delete-target clr1" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Delete</span></a>
-                                <% }else{%>  
+                                <% } %>
+                            <% }else{%>  
                                 <a class="icon remove remove-target clr1" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Remove</span></a>
-                                <% }%>
-                        </div> <!-- slide-btns two  -->
+                            <% }%>
+                    </div> <!-- slide-btns two  -->
 
-                    </div>
+                </div>
               </div> <%}else{%>
                 <div class="slide-btns <% if(this.showUseButton || this.showRemoveButton){print('three s-clr4')}else{print('two s-clr3')} %>" style="width:;">
                         <span  class="icon setting"></span>

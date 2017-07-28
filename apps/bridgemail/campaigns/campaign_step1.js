@@ -291,74 +291,80 @@ function (template) {
            loadData:function(){
                this.app.showLoading("Loading Campaign...",this.$el);  
                var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=campaignDefaults";
-                    jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
-                        if(xhr && xhr.responseText){
-                            this.app.showLoading(false,this.$el);  
-                            var defaults_json = jQuery.parseJSON(xhr.responseText);
-                            if(this.app.checkError(defaults_json)){
-                                return false;
-                            }                            
-                            this.campDefaults = defaults_json;
-                            this.$("#campaign_footer_text").val(this.app.decodeHTML(defaults_json.footerText));
-                            this.$("#campaign_from_email").val(this.app.decodeHTML(defaults_json.fromEmail));
-                            this.$("#campaign_from_name").val(this.app.decodeHTML(defaults_json.fromName));
-                            if(!this.parent.camp_id) {
-                                this.$("#campaign_reply_to").val(this.app.decodeHTML(defaults_json.fromEmail));
-                            }
-                            var fromEmails = defaults_json.fromEmail;
-                            if(defaults_json.optionalFromEmails)
-                                    fromEmails += ',' + defaults_json.optionalFromEmails;
-                            var fromEmailsArray = fromEmails.split(',');
-                            var fromOptions = '';
-                            var selected_fromEmail = '';
-                            //if(this.app.salesMergeAllowed){
-                            //    fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
-                           // }
-                            for(var i=0;i<fromEmailsArray.length;i++)
-                            {
-                                if(fromEmailsArray[i] == defaults_json.fromEmail){
-                                        fromOptions += '<option value="'+ fromEmailsArray[i] +'" selected="selected">'+fromEmailsArray[i] + '</option>';
-                                        selected_fromEmail = fromEmailsArray[i];
-                                     }
-                                else
-                                     fromOptions += '<option value="'+ fromEmailsArray[i] +'">'+fromEmailsArray[i] + '</option>';
-                            }
-                            this.$el.find('#campaign_from_email').append(fromOptions);
-                           // if(this.app.salesMergeAllowed){
-                                this.$("#campaign_from_email").chosen().change(_.bind(function(obj){
-                                    if(obj.target.value === '{{BMS_SALESREP.EMAIL}}'){
-                                        this.$('#campaign_from_email_default').show();
-                                    }else{
-                                        this.$('#campaign_from_email_default').hide();
+                    $.ajax({
+                        type:'GET',
+                        url:URL,
+                        dataType:'json',
+                        async:false,
+                        success:_.bind(function(data){
+                                if(data){
+                                    this.app.showLoading(false,this.$el);  
+                                    var defaults_json = data;
+                                    if(this.app.checkError(defaults_json)){
+                                        return false;
+                                    }                            
+                                    this.campDefaults = defaults_json;
+                                    this.$("#campaign_footer_text").val(this.app.decodeHTML(defaults_json.footerText));
+                                    this.$("#campaign_from_email").val(this.app.decodeHTML(defaults_json.fromEmail));
+                                    this.$("#campaign_from_name").val(this.app.decodeHTML(defaults_json.fromName));
+                                    if(!this.parent.camp_id) {
+                                        this.$("#campaign_reply_to").val(this.app.decodeHTML(defaults_json.fromEmail));
                                     }
-                                },this));
-                            //}
-                            this.$el.find('#fromemail_default').append(fromOptions);
-                            this.$el.find('#fromemail_default option:contains({{BMS_SALESREP.EMAIL}})').remove();
-                            this.$("#campaign_from_email").trigger("chosen:updated");
-                            this.$('#fromemail_default').trigger("chosen:updated");
-                            this.$(".flyinput").val(selected_fromEmail);
-                            setTimeout(_.bind(this.setFromNameField,this),300);                            
-                            
-                            var subj_w = this.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck                               
-                            //this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
-                            
-                            if(defaults_json.customFooter==""){
-                                this.$("#campaign_useCustomFooter_div").hide();                                
-                            }
-                            else{
-                                this.$("#campaign_useCustomFooter_div").show();
-                                this.$(".step1col1").css("min-height","427px");
-                                this.$("#campaign_custom_footer_text").val(this.app.decodeHTML(defaults_json.customFooter,true));
-                            }
-                            if(this.camp_json){
-                                this.loadCampaign(this.camp_json);
-                            }
-                            else{
-                               this.parent.loadCallCampaign(); 
-                            }                            
-                        }
-                    },this)).fail(function() { console.log( "error in detauls" ); });      
+                                    var fromEmails = defaults_json.fromEmail;
+                                    if(defaults_json.optionalFromEmails)
+                                            fromEmails += ',' + defaults_json.optionalFromEmails;
+                                    var fromEmailsArray = fromEmails.split(',');
+                                    var fromOptions = '';
+                                    var selected_fromEmail = '';
+                                    //if(this.app.salesMergeAllowed){
+                                    //    fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
+                                   // }
+                                    for(var i=0;i<fromEmailsArray.length;i++)
+                                    {
+                                        if(fromEmailsArray[i] == defaults_json.fromEmail){
+                                                fromOptions += '<option value="'+ fromEmailsArray[i] +'" selected="selected">'+fromEmailsArray[i] + '</option>';
+                                                selected_fromEmail = fromEmailsArray[i];
+                                             }
+                                        else
+                                             fromOptions += '<option value="'+ fromEmailsArray[i] +'">'+fromEmailsArray[i] + '</option>';
+                                    }
+                                    this.$el.find('#campaign_from_email').append(fromOptions);
+                                   // if(this.app.salesMergeAllowed){
+                                        this.$("#campaign_from_email").chosen().change(_.bind(function(obj){
+                                            if(obj.target.value === '{{BMS_SALESREP.EMAIL}}'){
+                                                this.$('#campaign_from_email_default').show();
+                                            }else{
+                                                this.$('#campaign_from_email_default').hide();
+                                            }
+                                        },this));
+                                    //}
+                                    this.$el.find('#fromemail_default').append(fromOptions);
+                                    this.$el.find('#fromemail_default option:contains({{BMS_SALESREP.EMAIL}})').remove();
+                                    this.$("#campaign_from_email").trigger("chosen:updated");
+                                    this.$('#fromemail_default').trigger("chosen:updated");
+                                    this.$(".flyinput").val(selected_fromEmail);
+                                    setTimeout(_.bind(this.setFromNameField,this),300);                            
+
+                                    var subj_w = this.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck                               
+                                    //this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
+
+                                    if(defaults_json.customFooter==""){
+                                        this.$("#campaign_useCustomFooter_div").hide();                                
+                                    }
+                                    else{
+                                        this.$("#campaign_useCustomFooter_div").show();
+                                        this.$(".step1col1").css("min-height","427px");
+                                        this.$("#campaign_custom_footer_text").val(this.app.decodeHTML(defaults_json.customFooter,true));
+                                    }
+                                    if(this.camp_json){
+                                        this.loadCampaign(this.camp_json);
+                                    }
+                                    else{
+                                       this.parent.loadCallCampaign(); 
+                                    }                            
+                                }
+                            },this)
+                    });
            },
            saveStep1:function(validate){            
                     var isValid = true;
@@ -370,18 +376,24 @@ function (template) {
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
                     if(this.$('#campaign_subject').val() == '')
-                    {            
+                    {         
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                                 control:this.$('.subject-container'),
                                 message:"Subject cannot be empty"
-                        });
+                            });
                         isValid = false;
                     }
                     else if(this.$('#campaign_subject').val().length > 100)
-                    {           
+                    {      
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                                 control:this.$('.subject-container'),
-                                message:"Subject cannot be empty"
+                                message:"Subject cannot have more than 100 characters"
                         });
                         isValid = false;
                     }
@@ -390,7 +402,10 @@ function (template) {
                          this.app.hideError({control:this.$(".subject-container")});
                     }
                     if(this.$('#campaign_from_name').val() == '')
-                    {           
+                    {       
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fname-container'),
                             message:"From name cannot be empty"
@@ -398,7 +413,10 @@ function (template) {
                         isValid = false;
                     }
                     else if(this.$('#campaign_from_name').val().indexOf("{{") && this.$('#campaign_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/)==-1)
-                    {           
+                    {     
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fname-container'),
                             message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & + \''
@@ -410,7 +428,10 @@ function (template) {
                             this.app.hideError({control:this.$(".fname-container")});
                     }
                     if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val()=="")
-                    {           
+                    {    
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fnamedefault-container'),
                             message:"From name cannot be empty"
@@ -418,6 +439,9 @@ function (template) {
                         isValid = false;
                     }
                     else if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/)==-1){
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fnamedefault-container'),
                              message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & + \''
@@ -430,7 +454,10 @@ function (template) {
                     }
                     
                     if(fromEmail === '' || (!merge_field_patt.test(fromEmail) && !this.app.validateEmail(fromEmail)))
-                    {           
+                    {    
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.fromeEmail-container'),
                             message:"Please enter correct email address format"
@@ -443,7 +470,10 @@ function (template) {
                     }
                     
                     if(this.$(".femail-default-container").css('display')=="block" && (fromEmailDefault === '' || !this.app.validateEmail(fromEmailDefault)))
-                    {           
+                    {      
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.femail-default-container'),
                             message:"Please enter correct email address format"
@@ -457,7 +487,10 @@ function (template) {
                     merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
                     if(replyto !== '' && !merge_field_patt.test(replyto) && !this.app.validateEmail(replyto))
-                    {           
+                    {  
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                                 control:this.$('.replyto-container'),
                                 message:"Please enter correct email address format"
@@ -469,7 +502,10 @@ function (template) {
                         this.app.hideError({control:this.$(".replyto-container")});
                     }
                     if(this.$('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
-                    {           
+                    {      
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                                 control:this.$('.replyemail-container'),
                                 message:"Reply field cannot be empty"
@@ -477,7 +513,10 @@ function (template) {
                         isValid = false;
                     }
                     else if(this.$('#campaign_reply_to_default').css('display') == 'block' && !this.app.validateEmail(email_addr))
-                    {           
+                    {    
+                        if(!this.parent.$el.find('#accordion_setting').accordion( "option", "active" )){
+                            this.parent.$el.find('#accordion_setting').accordion( "option", "active",0 );
+                        }
                         this.app.showError({
                             control:this.$('.replyemail-container'),
                             message:"Please enter correct email address format"

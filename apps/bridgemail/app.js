@@ -7,7 +7,7 @@ define([
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
-                env: 'test',
+                env: 'production',
                 complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
@@ -430,9 +430,11 @@ define([
                     });
                     if (message.callback)
                         message.callback();
+                    
                 });
 
                 dialog.find(".btn-gray").click(function () {
+                    
                     dialog.fadeOut("fast", function () {
                         $(this).remove();
                     })

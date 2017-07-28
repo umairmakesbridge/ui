@@ -13,17 +13,55 @@
       
       
       <div style=" " class="srt-div">
-       <% if(this.app.get("user").accountType=="O"){ %>   
-        <div class="template-filter_expand right" id="autobots" style="position: relative;"> <strong class="sort left">Filter</strong>
-                <span class="sortoption_expand active text-truncated showtooltip" data-original-title="Click to expand/collapse" style="position: relative;max-width: 80px;"><span class="spntext">All</span> <b class="caret right" style="position:absolute; top:0px; right:10px; margin: 16px 0 0 8px;"> </b></span>
-                <ul id="template_search_menu" class="breadcrumb template_search_menu" style="display: none; right: 0;top:41px;width:100px">
-                   <li class="showtooltip active" data-original-title="Show all lists"><a search="A" class="stattype" tabindex="-1">All</a></li>                                     
-                   <li class="showtooltip" title="Click to view shared lists"><a search="SS" class="stattype share" tabindex="-1">Shared</a></li>                   
-                  
+       <% if(this.app.get("user").accountType=="O"){ %>
+       <div class="template-filter_expand right" style="position: relative;">
+<!-- <div class="template-filter_expand right" id="autobots" style="position: relative;"> <strong class="sort left">Filter</strong>
+                        <span class="sortoption_expand sortoption_dropdown active text-truncated showtooltip" data-original-title="Click to expand/collapse" style="position: relative;max-width: 80px;"><span class="spntext">All</span> <b class="caret right" style="position:absolute; top:0px; right:10px; margin: 16px 0 0 8px;"> </b></span>
+                        <ul id="template_search_menu" class="breadcrumb template_search_menu shared-all-dropdown" style="display: none; right: 0;top:41px;width:100px">
+                           <li class="showtooltip active" data-original-title="Show all lists"><a search="A" class="stattype" tabindex="-1">All</a></li>                                     
+                           <li class="showtooltip" title="Click to view shared lists"><a search="SS" class="stattype share" tabindex="-1">Shared</a></li>
+                        </ul>
+                 </div>-->
+           <div class="template-filter_expand_filter_sort right" style="position: relative;">
+               <strong class="sort left" style="position: relative;top: 1px;left: 2px;height: 25px;"><img src="<%- this.app.get('path')%>/images/menu2.png"></strong>
+               <select data-placeholder="Sort/Filter By" class="chosen-select" id="test-chosen" tabindex="-1" >
+                <option value=""></option>
+                <optgroup label="Filter Lists By">
+                  <option value="A">My Lists</option>
+                  <option value="SS">Shared</option>
+                </optgroup>
+                <optgroup label="Sort Lists By">
+                  <option value="name">Name</option>
+                  <option value="date">Date</option>
+                </optgroup>
+              </select>
+           </div>
+           <div class="contacts-switch right">
+                <div class="status_tgl" style="padding: 6px;border-radius: 2px;margin: 1px 0px 0;background:#4FC8F5">
+                    <a class="asctag active showtooltip" data-original-title="Click to view in ascending order"><i class="togglecontact-icon"></i></a>
+                    <a class="dsctag showtooltip" data-original-title="Click to view in descending order"><i class="togglecontact-icon"></i></a>
+              </div>
+            </div>
+       </div>   
+         
+         <% }else{ %>
+         <div class="template-filter_sort right" id="rec_sort" style="position: relative;"> <strong class="sort left">Sort By:</strong>
+                <span class="sortoption_sort active text-truncated showtooltip" data-original-title="Click to expand/collapse" style="position: relative;max-width: 90px;"><span class="spntext">Name</span> <b class="caret right" style="position:absolute; top:0px; right:10px; margin: 16px 0 0 8px;"> </b></span>
+                <ul id="template_search_menu_sort" class="breadcrumb template_search_menu" style="display: none; right: 0;top:41px;">
+                   <li class="showtooltip active" data-original-title="Sort by name"><a search="name" class="stattype" tabindex="-1">Name</a></li>                  
+                   <li class="showtooltip" data-original-title="Sort by creation date"><a search="date" class="stattype" tabindex="-1">Date</a></li>                  
+                   
                 </ul>
-         </div>  
+         </div>
+         <div class="contacts-switch right">
+                <div class="status_tgl" style="padding: 6px;border-radius: 2px;margin: 1px 0px 0;background:#4FC8F5">
+                    <a class="asctag active showtooltip" data-original-title="Click to view in ascending order"><i class="togglecontact-icon"></i></a>
+                    <a class="dsctag showtooltip" data-original-title="Click to view in descending order"><i class="togglecontact-icon"></i></a>
+              </div>
+                    </div>
          <% } %>
-        <a class="refresh_btn showtooltip" data-original-title="Refresh listing"><i>Refresh</i></a>     
+        <a class="refresh_btn showtooltip" data-original-title="Refresh listing"><i>Refresh</i></a> 
+        
 	<div id="" class="input-append search">         
       <span class="icon list"></span><input type="text" id="lists_search" placeholder="Search lists" class="search-control show-image" style="width:160px;"><a class="close-icon list-search-close" id="clearsearch" style="display:none"></a><div class="btn-group"><button tabindex="-1" class="searchbtn" id="searchbtn"><span class="icon-search icon-white"></span></button></div></div>
         

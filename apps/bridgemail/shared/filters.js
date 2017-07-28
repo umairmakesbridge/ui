@@ -904,16 +904,16 @@
                 $.each($('#__list_grid .selected'), function (k, v) {
                     $(this).find('.check-list').iCheck('check');
                 })
-
+                if($('#__list_grid .selected').length ==0 && params && params["listNumbers.checksums"]){
+                    self.checkSharedTargetList(filter, '#__list_grid', params);
+                }
                 if (list_arr[0] && filter.find('#__list_grid input[list_checksum=' + list_arr[0] + ']').length == 0) {
                     this.options.app.showLoading("Loading Lists...", filter.find('#__list_grid'));
                     filter.find('#__list_grid .loading p').css({'margin-left': '-150px', 'margin-right': '0'});
                     if (self.offsetLengthLists !== "-1") {
                         self.loadLists(self.offsetLengthLists, filter, params)
                     } else {
-                        self.options.app.showLoading(false, filter.find('#__list_grid'));
-                        filter.find('.nolist').show();
-                        self.closeDelError(filter);
+                        self.checkSharedList(filter,params)
                     }
                 } else {
 
@@ -939,6 +939,42 @@
             //highlight the search text 
 
             this.listFilter.find("a.btn-green").removeClass("saving")
+        },
+        checkSharedList: function(filter,params){
+            var self = this;
+            var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=list_csv&listNum_csv="+params.listNumbers;
+            this.ajaxrequest = $.ajax({
+                url: URL,
+                dataType: 'json',
+                type: 'GET',
+                success: function (data) {
+                    self.options.app.showLoading(false, filter.find('#__list_grid'));
+                    if(data.count!=="0"){
+                        var list_array = data.lists[0];
+                        $.each(list_array, function (index, val) {
+                            var filter_html = "";
+                            if(filter.find("input.check-list[list_checksum='"+val[0]["listNumber.checksum"]+"']").length==0){
+                                filter_html += '<tr id="row_' + val[0]["listNumber.encode"] + '" checksum="' + val[0]["listNumber.checksum"] + '" class="selected">';
+                                filter_html += '<td width="100px"><div><input class="check-list" type="checkbox" checked="checked" value="' + val[0]["listNumber.encode"] + '" list_checksum="' + val[0]["listNumber.checksum"] + '" /></div></td>'
+                                filter_html += '<td width="100%"><div><div class="name-type"><h3 class="lists-name">' + val[0].name + ' <small style="font-size:8;font-style: italic;">(This list is shared with you)</small> </h3><div class="tags tagscont">' + self.options.app.showTags(val[0].tags) + '</div></div></div></td>';
+                                filter_html += '<td width="100px"><div><div class="subscribers" style="min-width:80px"><span  class=""></span>' + self.options.app.addCommas(val[0].subscriberCount) + '</div><div id="' + val[0]["listNumber.encode"] + '" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></div></td>';
+                                filter_html += '</tr>';
+                                
+                                $(filter_html).insertBefore(filter.find("#__list_grid tbody").first())
+                                filter.find("#__list_grid input[list_checksum='" + val[0]["listNumber.checksum"] + "']").parents("tr").find('.check-list').iCheck({
+                                    checkboxClass: 'checkpanelinput filtercheck',
+                                    insert: '<div class="icheck_line-icon" style="margin: 22px 0 0 10px;"></div>'
+                                });
+                            }
+                        });
+                        
+                    }
+                    else{                        
+                        filter.find('.nolist').show();
+                        this.closeDelError(filter);
+                    }
+                }
+            })                       
         }
         , addFormFilter: function (obj, e, params) {
             this.isScrollattachform = false;

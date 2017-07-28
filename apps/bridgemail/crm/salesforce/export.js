@@ -217,16 +217,21 @@ function (template,moment) {
                     .done(_.bind(function(data) {  
                         this.app.showLoading(false,this.$el);     
                         var _json = jQuery.parseJSON(data);                         
-                        if(_json.tId){
-                            this.tId = _json.tId;                            
-                        }
-                        if(post_data['type']=='deactivate'){
-                            this.showHideButton(false);
+                        if(_json[0]!=="err"){
+                            if(_json.tId){
+                                this.tId = _json.tId;                            
+                            }
+                            if(post_data['type']=='deactivate'){
+                                this.showHideButton(false);
+                            }
+                            else{
+                                this.showHideButton(true);
+                            }
+                            this.app.showMessge("Salesforce export transaction has been activated/updated successfully.");
                         }
                         else{
-                            this.showHideButton(true);
+                            this.app.showAlert(_json[1],$("body"),{fixed:true}); 
                         }
-                        this.app.showMessge("Salesforce export transaction has been activated/updated successfully.");
                         
                     },this));
                 },

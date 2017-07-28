@@ -2518,6 +2518,11 @@ a,
     opacity: 0.4;
     filter: alpha(opacity=40);
 }
+.MEE_EDITOR a.disabled-save
+{
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+}
 
 .btn-gray i, .btn-blue i, .btn-green i, .btn-red i, .btn-yellow i,.MEE_EDITOR .tagscont ul li > a i {
     -webkit-border-radius:  2px 2px;
@@ -2645,6 +2650,7 @@ a,
 .MEE_EDITOR .icon.dcitems { background: url("../images/dynamic-content.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.setpagetitle { background-position: -390px 0px; }
 .MEE_EDITOR .icon.setactionscript { background-position: -390px -30px; }
+.MEE_EDITOR .icon.setcssscript {background-position: -417px -27px;}
 .header-icon .pagetitleicon {
     background: url("../images/meeicons.png") no-repeat -360px -118px;
     height: 30px;
@@ -2652,6 +2658,10 @@ a,
 .header-icon .actionScripicon {
     background: rgba(0, 0, 0, 0) url("../images/meeicons.png") no-repeat scroll -410px -118px;
     height: 30px;
+}
+.header-icon .actionCssScripicon {
+    background: rgba(0, 0, 0, 0) url("../images/meeicons.png") no-repeat scroll -400px -68px;
+    width: 45px !important;
 }
 .MEE_EDITOR .icon.cross {
     background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);
@@ -4092,7 +4102,7 @@ input[type="button"].small-button {
 }
 
 .chosen-container-single .chosen-single div b {
-    background: url("../images/arrow-up-down.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: url("../images/arrow-up-down.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
     display: block;
 }
 
@@ -5147,4 +5157,67 @@ div.tooltip.custom-tooltip .tooltip-inner{
 }
 .editorbar .lightbox-setting-panel ul li:first-child {
     border-bottom: 1px solid #00A1DD;
+}
+.customCSSInput{
+    margin-right:1px;
+    width: 195px;
+    float:left;
+}
+#addCCSSButton,#removeCCSSButton{
+    width: 107px;
+    height: 38px;
+}
+#addCCSSButton{
+    background: rgb(148, 207, 30);
+}
+.acco-button-red,.acco-button-red:hover{
+    background: none repeat scroll 0 0 #f71a1a;
+}
+
+.acco-button-disabled{
+    opacity: 0.4;
+    background: #91abbc !important;
+    cursor: default;
+}
+.css-sucmsg{
+    /*background: #F2C054;*/
+padding: 0px 20px;
+color: rgb(148, 207, 30);
+border-radius: 2px;
+display: none;
+position: absolute;
+height: 20px;
+z-index: 1;
+float: left;
+top: 4px;
+right: 18px;
+}
+
+.css-greeborder {
+    border:2px solid #94CF1E !important;
+}
+.css-errmsg{
+   /*background: #F71A1A;*/
+padding: 0px 15px;
+color: #F71A1A;
+border-radius: 2px;
+display: none;
+position: absolute;
+height: 20px;
+z-index: 1;
+top: 5px;
+right: 10px;
+
+}
+.css-errmsg span{
+    min-width: 95px;
+    display: block;
+}
+.css-sucmsg span
+{
+    min-width: 80px;
+    display: block;
+}
+.fieldinfo i.icon {
+    background: url("../../img/info2.png") no-repeat scroll center center #73D2F5;
 }
