@@ -9759,3 +9759,22 @@ Download CSV Button
     bottom:-5px;
     color:#888;
 }
+/* Journey CSS changes */
+.MEE_EDITOR .editorbox.journey-grid{
+    background: url('../img/grid.png') repeat transparent;
+    
+}
+
+.moveable-ele{
+    z-index: 1000;
+    background:#a9c2d5;
+    border-radius: 2px;
+    display: inline-block;    
+    height: 20px;        
+    position:absolute;
+    cursor: move;
+    padding: 75px 5px 5px 5px;
+    text-align: center;
+    width: 95px;     
+    color:#fff;
+}

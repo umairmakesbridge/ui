@@ -4395,3 +4395,197 @@ border-color: #0096FF #0096FF transparent transparent;
 }
 /* ================================================End jquery.mCustomScrollbar.css================================================ */
 
+/* ================================================Start jquery.flowchart.css================================================ */
+
+.flowchart-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.flowchart-links-layer, .flowchart-operators-layer, .flowchart-temporary-link-layer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.flowchart-operators-layer, .flowchart-temporary-link-layer {
+    pointer-events: none;
+}
+
+.flowchart-temporary-link-layer {
+    display: none;
+}
+
+
+
+.flowchart-link, .flowchart-operator {
+    cursor: default;
+   
+}
+
+
+.flowchart-operator-connector {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.flowchart-operator-connector-label {
+    font-size: small;
+}
+
+.flowchart-operator-inputs .flowchart-operator-connector-label {
+    margin-left: 14px;
+}
+
+.flowchart-operator-outputs .flowchart-operator-connector-label {
+    text-align: right;
+    margin-right: 5px;
+}
+
+.flowchart-operator-connector-arrow {
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid rgb(204, 204, 204);
+    position: absolute;
+    top: 5px;
+    cursor:pointer;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    -o-user-select: none;
+    user-select: none;   
+}
+
+.flowchart-operator-connector-small-arrow {
+    width: 0px;
+    height: 0px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid transparent; /*rgb(100, 100, 100);*/
+    position: absolute;
+    top: 10px;
+    pointer-events: none;
+}
+.flowchart-operator-connector-delete{       
+    background: red;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    z-index: 12;
+    cursor: pointer;
+    position: absolute;
+    top: 7px;
+    right:-26px;
+}
+.flowchart-operator-connector-delete div{
+    background: red url('../img/drag-delete.png') center center;
+    width: 8px;
+    height: 8px;
+    border-radius: 3px;
+    margin: 4px auto;
+}
+
+.flowchart-operator-connector:hover .flowchart-operator-connector-arrow {
+    border-left: 10px solid #01AEEE;
+}
+
+.flowchart-operator-inputs .flowchart-operator-connector-arrow {
+    left: -1px;
+}
+
+.flowchart-operator-outputs .flowchart-operator-connector-arrow {
+    right: -10px;
+}
+
+.flowchart-operator-inputs .flowchart-operator-connector-small-arrow {
+    left: -1px;
+}
+
+.flowchart-operator-outputs .flowchart-operator-connector-small-arrow {
+    right: -7px;
+}
+
+.unselectable {
+   -moz-user-select: none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+
+   /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+}
+
+
+/* Default Operator */
+
+.flowchart-operator {
+    position: absolute;
+    width: 150px;
+    min-height:70px; 
+    border: 1px solid #e9e9e9;
+    background: #FFFFFF;
+    pointer-events: initial;
+    -webkit-border-radius: 2px 2px;
+    -moz-border-radius: 2px 2px;
+    border-radius: 2px 2px;
+    
+}
+.flowchart-cross{
+    background: url("../img/cross2.png") no-repeat center center ;
+    width:20px;
+    height:20px;
+    position: absolute;
+    top:5px;
+    right:5px;
+    cursor: pointer;
+}
+
+.flowchart-operator.hover {
+    border-color: #999;
+}
+
+.flowchart-operator.selected {
+    border-color: #01AEEE;
+    border-width: 2px;
+}
+
+
+
+.flowchart-operator .flowchart-operator-title {
+    width: 100%;
+    padding: 5px;
+    font-weight: bold;
+    box-sizing: border-box;
+    border-bottom: 1px solid #01AEEE;
+    background: #01AEEE;
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: move;
+    color:#ffffff;
+    font-size:12px;
+}
+
+.flowchart-operator .flowchart-operator-inputs-outputs {
+    display: table;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.flowchart-operator .flowchart-operator-inputs, .flowchart-default-operator .flowchart-operator-outputs {
+    display: table-cell;
+    width: 50%;
+}
+/* ================================================End jquery.flowchart.css================================================ */
