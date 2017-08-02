@@ -241,6 +241,7 @@ function (template) {
                          html =this.$("#mee_editor").getMEEHTML?this.$("#mee_editor").getMEEHTML():"";
                          post_data['htmlCode'] = html;       
                          post_data['plainText'] = this.plainText;
+                         plain = this.plainText;
                          
                      }  
                      if(typeof(htmlText)!=="undefined"){
