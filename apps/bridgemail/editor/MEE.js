@@ -6617,7 +6617,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             });
                                                         },
                                                         onselect: function (e) {
-                                                            $(editor.selection.getNode()).css('line-height', this.value());
+                                                            var selected_node = $(editor.selection.getNode());
+                                                            selected_node.css('line-height', this.value());
+                                                            //Span fix for outlook
+                                                            if(editor.selection.getNode().tagName=="SPAN"){
+                                                                var parent_p = selected_node.parent("p");
+                                                                if(parent_p.length){
+                                                                    if(selected_node.text()==parent_p.text()){
+                                                                        parent_p.css('line-height', this.value());
+                                                                    }
+                                                                }
+                                                            }
                                                         },
                                                     });
                                                 },
