@@ -9998,11 +9998,11 @@ a[data-viewtype="desktop-preview"] {
    transition: all ease-in 1s;
 }
 #template-wrap-iframe iframe[data-device="tablet"][data-orientation="landscape"] {
-    /*height: 768px !important;*/
+    height: 740px !important;
     width: 1024px !important;
 }
 #template-wrap-iframe iframe[data-device="tablet"][data-orientation="portrait"] {
-    /*height: 1024px !important;*/
+    height: 740px !important;
     width: 768px !important;
     transform: scale(1,1);
     position: relative;
