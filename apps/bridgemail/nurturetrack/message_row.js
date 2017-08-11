@@ -211,7 +211,7 @@ function (template) {
                 var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=basic&campNum="+camp_id;
                 var _this = this;
                 var dialog_width = $(document.documentElement).width()-60;
-                var dialog_height = $(document.documentElement).height()-182;
+                var dialog_height = $(document.documentElement).height()-146;
                 var dialog = this.app.showDialog({title:'Message Preview' ,
                                   css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                   headerEditable:false,

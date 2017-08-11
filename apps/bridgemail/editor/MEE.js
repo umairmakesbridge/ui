@@ -9116,7 +9116,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             delete mee_view.DynamicContentsObj[content.DCkey][content.checksum];
                                         }
                                         $('.global-save-overlay').remove();
-                                        mee_view._$el.parents('body').find('.modal iframe').contents().find('.global-save-overlay').remove();
+                                        $('body').find('.modal iframe').contents().find('.global-save-overlay').remove();
                                         mee_view.app.showMessge('Dynamic content deleted successfully',$('body'));
                                         mee_view.allOptions.saveCallBack();
                                     }
