@@ -187,7 +187,7 @@ define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign', 'comm
                     var camp_obj = this.sub;
                     var isTextOnly = this.model.get('isTextOnly');                    			
                     var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog_height = $(document.documentElement).height() - 146;
                     var dialog = camp_obj.app.showDialog({title: 'Campaign Preview of &quot;' + this.model.get('name') + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,

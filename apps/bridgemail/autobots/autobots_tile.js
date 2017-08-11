@@ -435,7 +435,7 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                     var camp_name = this.label;
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog_height = $(document.documentElement).height() - 146;
                     var dialog = that.options.app.showDialog({title: 'Campaign Preview of &quot;' + camp_name + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,

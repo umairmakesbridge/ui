@@ -62,7 +62,7 @@ function (template) {
             previewMessage:function(){                
                 var camp_id = this.model.get("campNum.encode");                                		
                 var dialog_width = $(document.documentElement).width()-60;
-                var dialog_height = $(document.documentElement).height()-182;
+                var dialog_height = $(document.documentElement).height()-146;
                 var dialog = this.app.showDialog({title:'Message Preview' ,
                                   css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                   headerEditable:false,

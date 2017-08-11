@@ -84,7 +84,7 @@ function (template) {
                 var camp_id = this.camp_id;                                	
                 if(!camp_id){return false}
                 var dialog_width = $(document.documentElement).width()-60;
-                var dialog_height = $(document.documentElement).height()-182;
+                var dialog_height = $(document.documentElement).height()-146;
                 var dialog = this.app.showDialog({title:'Message Preview' ,
                                   css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                   headerEditable:false,
@@ -185,7 +185,7 @@ function (template) {
                  }
                  else{
                      var camp_id = this.camp_id;                
-                     var dialog_height = $(document.documentElement).height()-182;
+                     var dialog_height = $(document.documentElement).height()-146;
                      var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                         require(["common/templatePreview"],_.bind(function(MessagePreview){
                         var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
