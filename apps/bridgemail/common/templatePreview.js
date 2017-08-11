@@ -102,10 +102,10 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                 switchView : function(ev){
                     var currentObj = ev.currentTarget;
                     var _this = this;
-                    
+                    var templateWrapHeight = this.options.prevFlag=="LP" ? this.options.frameHeight : (_this.options.frameHeight - 180);
                     this.$el.find('.deviceIcons span').addClass('hide');
                     this.$el.find('.deviceIcons span').removeClass('show');
-                    this.$el.find('.outerScroll').css('height',(_this.options.frameHeight - 180)+'px');
+                    this.$el.find('.outerScroll').css('height',templateWrapHeight+'px');
                     if($(currentObj).attr('data-viewtype')=="tablet-preview"){
                         if($(currentObj).find('span').hasClass('hide')){
                            $(currentObj).find('span').addClass('show'); 
@@ -123,14 +123,14 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
                             _this.$el.find('.outerScroll').show();
-                            _this.$el.find('#template-wrap-iframe').css('height',(_this.options.frameHeight - 180)+'px');
+                            _this.$el.find('#template-wrap-iframe').css('height',(templateWrapHeight)+'px');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-device','tablet');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-orientation','portrait');
                              _this.$el.find('.iframeWrapper').attr('data-viewtype','tablet');
                             _this.$el.find('.iframeWrapper').attr('data-orientation','portrait');
                             _this.$el.find('.inner').hide();
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
-                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow','hidden');
+                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.responsiveResizeIframe();
                             //_this.$el.find('.innerScroll').css('height',_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()+'px');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
@@ -145,14 +145,14 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             $(e.currentTarget).parent().find('i').removeClass('active');
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
-                            _this.$el.find('#template-wrap-iframe,.outerScroll').css('height',(_this.options.frameHeight - 180)+'px');
+                            _this.$el.find('#template-wrap-iframe,.outerScroll').css('height',(templateWrapHeight)+'px');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-device','tablet');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-orientation','landscape');
                             _this.$el.find('.iframeWrapper').attr('data-viewtype','tablet');
                             _this.$el.find('.iframeWrapper').attr('data-orientation','landscape');
                             //_this.$el.find('.inner').show();
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
-                             _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow','hidden');
+                             _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                             _this.responsiveResizeIframe();
                             _this.$el.find('.deviceIcons span').addClass('hide');
@@ -178,7 +178,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             $(e.currentTarget).parent().find('i').removeClass('active');
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
-                            _this.$el.find('#template-wrap-iframe').css('height',(_this.options.frameHeight - 180)+'px');
+                            _this.$el.find('#template-wrap-iframe').css('height',(templateWrapHeight)+'px');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-device','phone');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-orientation','portrait');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
@@ -187,7 +187,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-viewtype','phone');
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-orientation','portrait');
                             _this.$el.find('#template-wrap-iframe iframe').css({'top':0,'left':0,'overflow': 'hidden','height':_this.$el.find('.iframeWrapper').outerHeight()+'px'});
-                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow','hidden');
+                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.$el.find('.deviceIcons span').addClass('hide');
                             _this.$el.find('.deviceIcons span').removeClass('show');
                             e.stopPropagation();
@@ -201,12 +201,12 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
                              _this.$el.find('.inner').hide();
-                            _this.$el.find('#template-wrap-iframe').css('height',(_this.options.frameHeight - 180)+'px');
+                            _this.$el.find('#template-wrap-iframe').css('height',(templateWrapHeight)+'px');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-device','phone');
                             _this.$el.find('#template-wrap-iframe iframe,#template-wrap-iframe .iframeWrapper').attr('data-orientation','landscape');
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-viewtype','phone');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
-                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow','hidden');
+                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.responsiveResizeIframe({'type':'mobile'}); 
                             _this.$el.find('.deviceIcons span').addClass('hide');
                             _this.$el.find('.deviceIcons span').removeClass('show');
@@ -242,7 +242,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                 if($obj.type=="mobile"){
                                     _this.$el.find('.innerScroll').css('height',_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() +'px');
                                 }else{
-                                    _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()-244) +'px');
+                                    _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()- (244+50)) +'px');
                                 }
                             },1500);
                     if(!this.scrollactive){
