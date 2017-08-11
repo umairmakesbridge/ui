@@ -796,6 +796,10 @@ ul.tabs-btns li.active a{
 .ws-notags .camp_header .pointy{
     display: none !important;
 }
+.ws-notags .dc-header-template > h2 > .pointy {
+    display: block !important;
+}
+
 .ws-notags .camp_header .tagscont{
     display: none !important;
 }
@@ -865,6 +869,11 @@ ul.tabs-btns li.active a{
 .c-name .edited{
     margin-top:15px;
 }
+.dc-header-template .edited {
+    margin-top: 7px;
+    margin: 7px 0 0 15px;
+}
+
 .saveing-blue {
     background: url("../img/greenloader.gif") no-repeat scroll 25px center #01AEEE !important;
     font-size: 0;
@@ -3762,6 +3771,10 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 .no-tilt .watermark_tilt{
     background: none !important;
 }
+.dctemplate-tilt .watermark_tilt {
+    background-position: 6px -980px;
+}
+
 /*-------------------------------
     Styling Of One to One Email 
 --------------------------------*/
@@ -5672,6 +5685,10 @@ a#drop4 { background-color:#fff; }
 .wtab-graphiclisting {
     background: url("../img/ws-icons.png") no-repeat scroll 0 -90px rgba(0, 0, 0, 0);
 }
+.wtab-mydctemplates {
+    background-position: -60px -125px;
+}
+
 ::-webkit-input-placeholder { color:#b4b4b4!important; }
 ::-moz-placeholder { color:#b4b4b4!important; } /* firefox 19+ */
 :-ms-input-placeholder { color:#b4b4b4!important; } /* ie */
@@ -9758,4 +9775,23 @@ Download CSV Button
     left:5px;
     bottom:-5px;
     color:#888;
+}
+/* Journey CSS changes */
+.MEE_EDITOR .editorbox.journey-grid{
+    background: url('../img/grid.png') repeat transparent;
+    
+}
+
+.moveable-ele{
+    z-index: 1000;
+    background:#a9c2d5;
+    border-radius: 2px;
+    display: inline-block;    
+    height: 20px;        
+    position:absolute;
+    cursor: move;
+    padding: 75px 5px 5px 5px;
+    text-align: center;
+    width: 95px;     
+    color:#fff;
 }

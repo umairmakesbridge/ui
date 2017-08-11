@@ -17,7 +17,7 @@ define(['text!contacts/html/timeline_row.html'],
                     , "OP": {"name": "Opened", "action": "Campaign", "cssClass": "open"}
                     , "CK": {"name": "Clicked", "action": "Campaign", "cssClass": "click"}
                     , "WV": {"name": "Page Viewed", "action": "Web", "cssClass": "pageview"}
-                    , "CT": {"name": "Coverted", "action": "Campaign", "cssClass": "conversion"}
+                    , "CT": {"name": "Converted", "action": "Campaign", "cssClass": "conversion"}
                     , "TF": {"name": "Tell a friend", "action": "Campaign", "cssClass": "tellfriend"}
                     , "UN": {"name": "Unsubscribed", "action": "Campaign", "cssClass": "unsubscribe"}
                     , "SP": {"name": "Suppressed", "action": "Campaign", "cssClass": "suppress"}

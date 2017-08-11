@@ -654,7 +654,9 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
 .topHandlers .icon.copy  { background-position: right center; margin:0px !important;}
 .topHandlers .icon.delete  { background-position: right center;}
 .topHandlers .icon.move  { background-position: 4px center; width:55px;}
-
+.dcTemplateGallery > .topHandlers{
+    display:none !important;
+}
 .myDroppable.hover { border:1px solid #03d3ff; 
                      -webkit-box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);
                      -moz-box-shadow: 0 0px 8px rgba(3, 211, 255, 0.8);

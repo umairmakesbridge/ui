@@ -25,6 +25,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.DynamicContentsObj ={}; // DC ADD
                     this.DynamicContentsGlo ={}; // DC ADD
                     this.parentTd = false;
+                    this.showSaveMsgNow;
                     this.selectedDropElement = null;
                     this.timer = false;
                     this.isRepeatX = false;
@@ -553,7 +554,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 /* ===============Auto Save======================== */
                                 function recursiveSaveCall() {
-                                    if (changFlag.editor_change && options.otopage !== true && myElement.find("#mee-iframe").contents().find('.mainContentHtml').html().trim() !== "") {
+                                    if (changFlag.editor_change && options.otopage !== true && ( myElement.find("#mee-iframe").contents().find('.mainContentHtml').html() && myElement.find("#mee-iframe").contents().find('.mainContentHtml').html().trim() !== "")) {
                                         //console.log(mee.iframeLoaded);
                                         options.saveCallBack();
                                     } else {
@@ -831,14 +832,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 myElement.find(".email-width select.selectEmailSize").val(emailWidthScale);
                                             }
                                         }
+                                        
+                                        
                                         IsStyleActivated = false;
                                         mee.checkForm();
                                         oInitDestroyEvents.InitAll(mainObj);
                                         makeCloneAndRegister();
+                                        
                                     } else {
                                         setTimeout(_.bind(mee.setHTML, mee), 200);
                                     }
                                 }
+                                
+                                
 
                                 mee.checkForm = function () {
                                     if (!options.landingPage)
@@ -3339,7 +3345,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                     
                                     element.find(".myHandlerSave").click(function(){
-                                        
+                                        console.log('Time to save globallay using mee_view');
                                         var dynamicKey = element.parent().find('table').attr('keyword');
                                         var dynmicID = element.parent().find('table').attr('id')
                                         var dcLiObj = element.parent();
@@ -3413,8 +3419,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                           activeLi++;
                                           coi++;
                                        });
-                                      
-
                                     });
                                 }
                                 
@@ -4783,7 +4787,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find('.removeThumb').click();
                                             _this.val(url);
                                             e.stopPropagation();
-                                            options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                            options._app.showAlert("Your file name contains blank spaces or illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
                                         } else {
                                             setTimeout(function () {
                                                 myElement.find('#bgUrlCode').trigger('change');
@@ -5264,8 +5268,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     }
 
                                                 });
-                                                
-                                                getDCGlobally(args.DynamicVariation.DynamicVariationCode,args.DynamicVariation.DynamicVariationID);
+                                                if(!options.isDcTemplate){
+                                                    getDCGlobally(args.DynamicVariation.DynamicVariationCode,args.DynamicVariation.DynamicVariationID); 
+                                                }
                                                 var isNewCampaign = false;
                                                 //console.log('Local DynamicObj',mee_view.DynamicContentsObj); //DC ADD
                                                 if(meeIframe.find('table[keyword="'+args.ID+'"]').length == 1){
@@ -5294,6 +5299,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         //require(["editor/DC/filters"], function (filterPage) {
                                         args['camp_id'] = options.camp_id;  
                                         args['isTemplate'] = options.isTemplate;
+                                        args['isDcTemplate'] = options.isDcTemplate;
                                         var mPage = new filterPage({
                                             opt: options,
                                             args: args
@@ -5321,6 +5327,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var _ele = $(this);
                                             var ele_offset = _ele.offset();
                                             var top = ele_offset.top + 80;
+                                            if(options.isDcTemplate && parseInt(myElement.find('.editorbar.editortoolbar').css('margin-bottom'))==45){
+                                                top = top + 50;
+                                            }
                                             var left = ele_offset.left + 50 - 220;
                                             OpenRulesWindow(args, top, left);
                                             
@@ -5759,7 +5768,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var getPart = keyword ? ("keyword=" + keyword) : "dynamicNumber=" + dynamicNumber;
                                     var dynamicKey = keyword;
                                     var URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&" + getPart;
-                                    if(!mee_view.DCDrag && !options.isTemplate){
+                                    if(!mee_view.DCDrag && !options.isTemplate && !options.isDcTemplate){
                                        URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&" + getPart + "&campaignNumber="+options.camp_id;
                                     }else if(options.isTemplate){
                                        URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&" + getPart+"&isSingle=Y"; 
@@ -6608,7 +6617,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             });
                                                         },
                                                         onselect: function (e) {
-                                                            $(editor.selection.getNode()).css('line-height', this.value());
+                                                            var selected_node = $(editor.selection.getNode());
+                                                            selected_node.css('line-height', this.value());
+                                                            //Span fix for outlook
+                                                            if(editor.selection.getNode().tagName=="SPAN"){
+                                                                var parent_p = selected_node.parent("p");
+                                                                if(parent_p.length){
+                                                                    if(selected_node.text()==parent_p.text()){
+                                                                        parent_p.css('line-height', this.value());
+                                                                    }
+                                                                }
+                                                            }
                                                         },
                                                     });
                                                 },
@@ -6635,7 +6654,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 if(options.isTemplate){
                                                    var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>"; 
                                                 }else{
-                                                   var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerSave' title='Save Dynamic Block Globally' style='display:none;'><i class='icon save'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>"; 
+                                                   var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>"; 
                                                 }
                                                 var myobject = meeIframeWindow.$(topHandlersHTML);
                                                 oHtml.hover(
@@ -6656,8 +6675,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 // DC ADD 
                                                                 if($(this).hasClass('csDynamicData')){
                                                                     $(this).find(".topHandlers .myHandlerSave").show();
-                                                                    $(this).find(".topHandlers").css('width','135px');
+                                                                    $(this).find(".topHandlers").css('width','110px');
                                                                     $(this).find(".topHandlers .myHandlerSave").css('background','transparent');
+                                                                }
+                                                                
+                                                                if(options.isDcTemplate && $(this).parent().hasClass('mainContentHtml')){
+                                                                    //$(this).find(".topHandlers").hide();
+                                                                    $(this).addClass('dcTemplateGallery');
                                                                 }
                                                                 //Assign DELETE functionality here
                                                                 InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
@@ -6976,6 +7000,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                     this.DestroyPluginsEvents(oHtml);
                                                 }
+                                            }
+                                            if(options.isDcTemplate && !options.isDCTemplateContentSet){
+                                                console.log('We are getting started again',options.dynamicDataGallery);
+                                                mee.generateDynamicContentGallery(options.dynamicDataGallery);
                                             }
                                             this.InitializePluginsEvents(oHtml);
 
@@ -7633,6 +7661,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         if (IsFirstDroppableElement) {
                                             droppableElement.append("<div style='text-align:center; position:relative; top:40px; font-style:italic' class='emptyArea'> DROP HERE </div>");
                                         }
+                                        
                                         sender.append(droppableElement);
                                     }
                                 }
@@ -7754,13 +7783,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     //For first time dropping element                                
                                                     IsFirstDroppableElement = true;
                                                 }
+                                                
                                                 InsertDroppableInEmpty($(this), firstLevelLiDroppable);
                                                 if (indx === 0) {
                                                     SetLastElementHeight();
                                                 }
                                             });
 
-
+                                            if(options.isDcTemplate){
+                                                    meeIframe.find(".mainContentHtml .myDroppable").last().remove();
+                                                }
                                         } else if (draggedControlType == "formBlock") {
                                             if(mainContentHtmlGrand.find('.MEEFORMLIGHTBOX').length == 0 && mainContentHtmlGrand.find('#form-iframe').length == 0 && mee_view.isSignupLightbox==false){
                                                     mainContentHtmlGrand.find('ul.mainContentHtml').before('<div class="MEEFORMLIGHTBOX MEEFORMCONTAINER" ><i class="icon lightbox" style="background: url('+options._app.get('path')+'/css/images/lightbox_24x24.png) !important;background-repeat: no-repeat !important;position: absolute;top: 37px;left: 11.8em;"></i><span>Drop Signup form here to open as lightbox</span></div>');
@@ -7899,6 +7931,37 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         }
                                     });
+                                }
+                                mee.generateDynamicContentGallery = function(e){
+                                   
+                                        var keyword = e.keyword;
+                                        var parentTable = meeIframe.find('.mainContentHtmlGrand .mainContentHtml');
+                                        var dcWrapper = $('<li class="csHaveData csDynamicData"></li>');
+                                        var oControl = new Object();
+                                        var args = {
+                                            droppedElement: dcWrapper,
+                                            // event: event,
+                                            // ui: ui,
+                                            predefinedControl: null,
+                                            buildingBlock: null
+                                        };
+                                        parentTable.append(dcWrapper);
+                                        var predefinedControl = myElement.find(".divDCTemplate").html();
+                                        // variation = $(predefinedControl);
+                                        // oControl.Html = variation;
+                                        oControl.Html = $(predefinedControl);
+                                        oControl.Type = predefinedControl.type;
+                                        args.predefinedControl = oControl;
+
+                                        args.droppedElement.html(oControl.Html);
+
+                                        args.ID = keyword;
+                                        args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
+                                        InitializeDynamicControl(args);
+                                        options.isDCTemplateContentSet = true;
+                                        console.log(args.predefinedControl.Html);
+                                        //variation.replaceWith(args.predefinedControl.Html.clone(true, true));
+                                           
                                 }
                                 mee._LoadBuildingBlocks = function (args) {
 
@@ -8494,7 +8557,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 /// For Forms handling
 
                                 var _AjaxParameters = {Url: '', Data: {}, DataType: 'json', Type: 'GET', ContentType: 'application/json; charset=latin1'}
-
+                                
                                 mee._LoadFormBlocks = function (offset) {
                                     var ulFormBlocks = myElement.find(".formDroppable .ulFormBlocks");
                                     if (offset) {
@@ -8818,6 +8881,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         previewdesignTemplateCallback: this.options.previewCallback,
                         textVersion: this.options.text,
                         formCallBack: this.options.formAttach,
+                        isDcTemplate: this.options.isDcTemplate ? true : false,
+                        isDCTemplateContentSet : this.options.isDCTemplateContentSet,
+                        dynamicDataGallery : this.options.dynamicData,
                         formid: this.options.formid,
                         _app: this.app,
                         isNewLP : this.options.isNewLP ? this.options.isNewLP : false,
@@ -8890,7 +8956,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var contentURL = "";
                             var postData;
                             // DC ADD
-                            if(gloFlag){
+                            if(gloFlag || _self.isDcTemplate){
                                 contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=newContent&dynamicNumber=" + dynamicNumber+"&contentNumber="+content.DynamicContentID;
                                 postData = {"campaignSubject":content.Label,"contents":content.InternalContents,"contentLabel":content.Label,"isDefault":(content.IsDefault =="Y"? "Y" : "N")}
                             }else if(this.isTemplate){
@@ -8999,7 +9065,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     dataType: "json",
                                     method:"POST",
                                     url: contentURL,
-                                    data: {'contents': content.InternalContents,'campaignSubject': content.Label,'contentNumber':dynamicNumberContent},
+                                    data: {'contents': content.InternalContents,'contentLabel':content.Label,'campaignSubject': content.Label,'contentNumber':dynamicNumberContent},
                                     async: false,
                                     success: function (tsv, state, xhr) {
                                         if (xhr && xhr.responseText) {
@@ -9019,7 +9085,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             // DC ADD
                             
                             var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=deleteContent&dynamicNumber=" + dynamicNumber + "&contentNumber=" + dynamicNumberContent+"&campaignNumber="+this.camp_id;
-                            if(GloFlg){
+                            if(GloFlg || this.isDcTemplate){
                                 contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=deleteContent&dynamicNumber=" + dynamicNumber + "&contentNumber=" + dynamicNumberContent;
                             }else if(this.isTemplate){
                                 contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=deleteContent&dynamicNumber=" + dynamicNumber + "&contentNumber=" + dynamicNumberContent+"&isSingle=Y";
@@ -9050,6 +9116,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             delete mee_view.DynamicContentsObj[content.DCkey][content.checksum];
                                         }
                                         $('.global-save-overlay').remove();
+                                        mee_view._$el.parents('body').find('.modal iframe').contents().find('.global-save-overlay').remove();
                                         mee_view.app.showMessge('Dynamic content deleted successfully',$('body'));
                                         mee_view.allOptions.saveCallBack();
                                     }
@@ -9080,6 +9147,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             }
                             else if(!gloFlag && !this.isTemplate){
                                 contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber+"&campaignNumber="+this.camp_id;
+                                if(this.isDcTemplate){
+                                  contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber; 
+                                }
                                 postObj={};
                                 
                                 // making postObj content rich
@@ -9133,12 +9203,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             if(content.dcLi){
                                                 content.dcLi.find('.global-save-overlay').remove();
                                             }
-                                            
+                                            if(mee_view.options.isDcTemplate && $('.modal').attr('data-dcsave')){
+                                                _self._app.showMessge('This Dynamic Block template has been saved.');
+                                                _self._app.showLoading(false,$('.modal'));
+                                                $('.modal').removeAttr('data-dcsave');
+                                            }
                                             if(globalMsg=="showGlobalMsg"){
                                                 _self._app.showMessge('This Dynamic Block template has been updated.');
-                                            }
-                                            
-                                           
+                                            } 
                                     });
                         },
                         onSaveContentFilters : function(postData){
@@ -9147,7 +9219,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 var URL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&campaignNumber="+this.camp_id;
                             }else if(this.isTemplate || this.otopage){
                                  var URL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&isSingle=Y";  
-                            }else{
+                            }else if(this.isDcTemplate){
+                                var URL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN;
+                            }
+                            else{
                                  var URL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN;   
                             }                                              
                             var post_data = postData;               

@@ -122,6 +122,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-scorebot': 'newAutobot',
                     'click .landing-pages': 'landingPageslist',
                     'click .workflow-listing': 'workflowListing',
+                    'click .journey-canvas': 'journeCanvas',
                     'click .bridge-statz': 'openBridgeStatz',
                     'click .exportsubscribers': 'exportsubscribers',
                     'click .removesubscribers': 'removeSubscribers',
@@ -132,6 +133,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .report-flow':'reportFlow',
                     'click .tipntestlistings':'tipandtestlistings',
                     'click .view-ftpuploads':'ftpUploadPage',
+                    'click .dc-listing' : 'dcTemplateGallery',
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
                     }
@@ -1020,6 +1022,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 workflowListing: function () {
                     this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
                 },
+                journeCanvas:function(){
+                    this.addWorkSpace({type: '', title: 'Journey', sub_title: 'Create your journey', url: 'workflow/journey', workspace_id: 'journeycanvas', 'addAction': false, tab_icon: 'workflowlisting', noTags: true});
+                },
                 ftpUploadPage: function(){
                     this.addWorkSpace({type: '', title: 'FTP Uploads', sub_title: 'Schedule FTP Uploads', url: 'common/ftpupload', workspace_id: 'ftpupload', 'addAction': false, tab_icon: 'ftpuploadlisting', noTags: true});
                 },
@@ -1061,6 +1066,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 templateGallery: function () {
                     this.addWorkSpace({type: '', title: 'Template Gallery', sub_title: 'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates'});
+                },
+                dcTemplateGallery: function () {
+                    this.addWorkSpace({type: '', title: 'Dynamic Content Gallery', sub_title: 'Gallery', url: 'dctemplates/dctemplates', workspace_id: 'dctemplates', 'addAction': false, tab_icon: 'mydctemplates', noTags: true});
                 },
                 camapignReport: function () {
                     this.addWorkSpace({type: '', title: 'Mass Email Reports', sub_title: 'Analytic', url: 'reports/campaign_report', workspace_id: 'camp_reports', tab_icon: 'reports', noTags: true});

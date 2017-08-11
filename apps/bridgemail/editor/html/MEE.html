@@ -206,7 +206,7 @@
             <!--  accordian-content  -->
 
             <h3>
-                <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>My Building Blocks
+                <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>  My Building Blocks
             </h3>
             <div class="scrollarea dropblock-accordian">
                  <div class="dropblockpanel divLoading divBuildingBlockLoading buildingBlockDroppableOverlay" style="display: none;">
@@ -219,6 +219,7 @@
                     <div class="accordianbar">
                         <div>
                             <div class="search" style="width: 223px;">
+                                
                                 <input type="text" value="" name="" style="width: 195px;" id="searchBB" />
                                 <a class="close-icon" id="clearsearch-blocks" style="display: none"></a>
                                 <a  class="search searchBBLink">
@@ -243,7 +244,7 @@
             </div>
             <!--  accordian-content  -->
            <% if(options.landingPage==false &&  options.otopage==false ){ %>   
-           <% if(!options.isTemplate){ %> 
+           <% if(options.isDcTemplate!=true){ %> 
            <h3 class="DCH3" style="dispaly:none">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
                 Dynamic Content Blocks
@@ -267,7 +268,6 @@
                     <div class="clearfix">
                         <div id="DCResultDiv" class="no-results"  style="display: none;"> No results Found </div>
                     </div>
-
                     <div class="clearfix">
                         <ul class="b-blocks">
                             <li class="draggableControl ui-draggable newblock" data-type="dynamicContentContainer" data-isnew="true" draggable="true">
@@ -787,17 +787,19 @@
             <% if (!options.otopage) { %>
             <li class="save MenuCallBackSave" style="float:right;margin-right:5px;">
                 <a  class="btn-green save-step2 showtooltip" data-original-title="Click to save">
-                    <% if(options.saveBtnText){ %>
+                    <% if(options.saveBtnText && options.isDcTemplate!=true){ %>
                     <i class="icon save"></i>
                     <!--<span><%= options.saveBtnText %></span>-->
-                    <% }else{ %>
+                    <% }else if(options.isDcTemplate==true)%>
+                    <i class="icon save"></i><span>Save Dynamic Block</span>
+                    <%else{ %>
                     <i class="icon save"></i>
                     <!--<span>Save Email Body</span>-->
                     <% } %>
                 </a>
             </li>
             <% } %>
-            
+            <% if(options.isDcTemplate!=true){ %> 
              <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>" >
                 <a  class="btn-blue showtooltip <% if (options.isNewLP) { print('disabled-btn') } %>" data-original-title="Click to preview" >
                     <i class="icon preview"></i>
@@ -810,22 +812,24 @@
                     <!--<span>Code</span>-->
                 </a>
             </li>
+            <% } %>
             <% if (!options.otopage && !options.landingPage && !options.isTemplate) { %>
-               
+             <% if(options.isDcTemplate!=true){ %>  
             <li class="MenuCallTextVersion" style="float:right">
                 <a  class="btn-green">
                     <i class="icon plaintext"></i><span>Text Version</span>
                 </a>
             </li>
-              
+              <% } %>
             <% if (options._app.dcItemsUsers.indexOf(options._app.get("user").userId)>-1 ) { %>
+            <% if(options.isDcTemplate!=true){ %>
             <li class="MenuCallDCItems" style="float:right">
                 <a  class="btn-yellow">
                     <i class="icon dcitems"></i>
                     <span>Dynamic Content Items</span>
                 </a>
             </li>
-            
+            <% } %>
             <% } %>
             <!-- <li class="MenuLoadCssBox" style="float:right">
                     <a  class="btn-blue showtooltip"  data-original-title="Apply custom CSS">
