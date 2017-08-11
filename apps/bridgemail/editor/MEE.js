@@ -4787,7 +4787,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find('.removeThumb').click();
                                             _this.val(url);
                                             e.stopPropagation();
-                                            options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                            options._app.showAlert("Your file name contains blank spaces or illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
                                         } else {
                                             setTimeout(function () {
                                                 myElement.find('#bgUrlCode').trigger('change');
