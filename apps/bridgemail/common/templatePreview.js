@@ -119,7 +119,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         $(currentObj).find('.tablet-p').click(function(e){
                             e.preventDefault();
                             _this.$el.find('.deviceIcons').removeClass('active');
-                            $(e.currentTarget).parent().find('i').removeClass('active');
+                            _this.$('.switchView .show i').removeClass('active');
+                            _this.$('.switchView .hide i').removeClass('active');
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
                             _this.$el.find('.outerScroll').show();
@@ -142,7 +143,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             e.preventDefault();
                             _this.$el.find('.outerScroll').show();
                             _this.$el.find('.deviceIcons').removeClass('active');
-                            $(e.currentTarget).parent().find('i').removeClass('active');
+                            _this.$('.switchView .show i').removeClass('active');
+                            _this.$('.switchView .hide i').removeClass('active');
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
                             _this.$el.find('#template-wrap-iframe,.outerScroll').css('height',(templateWrapHeight)+'px');
@@ -175,7 +177,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             e.preventDefault();
                             _this.$el.find('.outerScroll').show();
                             _this.$el.find('.deviceIcons').removeClass('active');
-                            $(e.currentTarget).parent().find('i').removeClass('active');
+                            _this.$('.switchView .show i').removeClass('active');
+                            _this.$('.switchView .hide i').removeClass('active');
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
                             _this.$el.find('#template-wrap-iframe').css('height',(templateWrapHeight)+'px');
@@ -197,7 +200,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             e.preventDefault();
                             _this.$el.find('.outerScroll').show();
                             _this.$el.find('.deviceIcons').removeClass('active');
-                            $(e.currentTarget).parent().find('i').removeClass('active');
+                            _this.$('.switchView .show i').removeClass('active');
+                            _this.$('.switchView .hide i').removeClass('active');
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
                              _this.$el.find('.inner').hide();

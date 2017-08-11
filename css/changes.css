@@ -9876,7 +9876,7 @@ a[data-viewtype="desktop-preview"] {
     transform: rotate(90deg);
     background-repeat: no-repeat;
 }
-.deviceIcons[data-viewtype="mobile-preview"] .show {
+.deviceIcons[data-viewtype="mobile-preview"] .show,.deviceIcons[data-viewtype="tablet-preview"] .show {
     right: 0;
 }
 #template-wrap-iframe .iframeWrapper[data-viewtype="tablet"][data-orientation="portrait"]{
@@ -9892,12 +9892,12 @@ a[data-viewtype="desktop-preview"] {
 }
 #template-wrap-iframe .iframeWrapper[data-viewtype="tablet"][data-orientation="landscape"]{
     border: 7px solid #333;
-    transform: scale(0.397881, 0.477881);
+    transform: scale(0.49, 0.49);
     width: 1024px;
     margin: 0 auto;
     position: relative;
-    top: -209px;
-    height: 740px;
+    top: -216px;
+    height: 786px;
 }
 #template-wrap-iframe .iframeWrapper[data-viewtype="phone"][data-orientation="landscape"] {
     height: 320px;
@@ -9909,7 +9909,7 @@ a[data-viewtype="desktop-preview"] {
     overflow: hidden;
     position: relative;
     margin:0 auto;
-    padding-bottom: 40px;
+    transform: scale(0.809804, 0.809804);
 }
 #template-wrap-iframe .iframeWrapper[data-viewtype="phone"][data-orientation="portrait"] {
     transform: scale(0.809804, 0.809804);
@@ -9998,7 +9998,7 @@ a[data-viewtype="desktop-preview"] {
    transition: all ease-in 1s;
 }
 #template-wrap-iframe iframe[data-device="tablet"][data-orientation="landscape"] {
-    height: 740px !important;
+    height: 786px !important;
     width: 1024px !important;
 }
 #template-wrap-iframe iframe[data-device="tablet"][data-orientation="portrait"] {
