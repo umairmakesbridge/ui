@@ -9813,6 +9813,12 @@ a[data-viewtype="desktop-preview"] {
 .chngBg-tm{
     background: #FAFAFA;
     padding-top: 20px;
+    overflow: hidden !important;
+}
+.outerScroll-relative{
+    width: 100%;
+    position: relative;
+    right: 0;
 }
 .chngBg-tm iframe{
     box-shadow: 0 3px 70px -7px rgba(0, 0, 0, 0.17);
@@ -9903,9 +9909,9 @@ a[data-viewtype="desktop-preview"] {
     height: 320px;
     width: 480px;
     border-top: 5px solid #333;
-    border-right: 15px solid #333;
+    border-right: 5px solid #333;
     border-bottom: 5px solid #333;
-    border-left: 15px solid #333;
+    border-left: 5px solid #333;
     overflow: hidden;
     position: relative;
     margin:0 auto;
@@ -9915,9 +9921,9 @@ a[data-viewtype="desktop-preview"] {
     transform: scale(0.809804, 0.809804);
     height: 420px;
     width: 320px;
-    border-top: 15px solid #333;
+    border-top: 5px solid #333;
     border-left: 5px solid #333;
-    border-bottom: 15px solid #333;
+    border-bottom: 5px solid #333;
     border-right: 5px solid #333;
     overflow: hidden;
     position: relative;

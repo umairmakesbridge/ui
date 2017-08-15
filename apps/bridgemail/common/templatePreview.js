@@ -106,6 +106,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     this.$el.find('.deviceIcons span').addClass('hide');
                     this.$el.find('.deviceIcons span').removeClass('show');
                     this.$el.find('.outerScroll').css('height',templateWrapHeight+'px');
+                    this.$el.find('.outerScroll-relative').css('height',templateWrapHeight+'px');
                     if($(currentObj).attr('data-viewtype')=="tablet-preview"){
                         if($(currentObj).find('span').hasClass('hide')){
                            $(currentObj).find('span').addClass('show'); 
@@ -132,7 +133,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('.inner').hide();
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
                             _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
-                            _this.responsiveResizeIframe();
+                            _this.responsiveResizeIframe({'type':'tablet','orientation':'p'});
                             //_this.$el.find('.innerScroll').css('height',_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()+'px');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                             _this.$el.find('.deviceIcons span').addClass('hide');
@@ -147,7 +148,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$('.switchView .hide i').removeClass('active');
                             $(e.currentTarget).addClass('active');
                             $(currentObj).addClass('active');
-                            _this.$el.find('#template-wrap-iframe,.outerScroll').css('height',(templateWrapHeight)+'px');
+                            _this.$el.find('#template-wrap-iframe,.outerScroll,.outerScroll-relative').css('height',(templateWrapHeight)+'px');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-device','tablet');
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-orientation','landscape');
                             _this.$el.find('.iframeWrapper').attr('data-viewtype','tablet');
@@ -156,7 +157,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
                              _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
-                            _this.responsiveResizeIframe();
+                            _this.responsiveResizeIframe({'type':'tablet','orientation':'ls'});
                             _this.$el.find('.deviceIcons span').addClass('hide');
                             _this.$el.find('.deviceIcons span').removeClass('show');
                             e.stopPropagation();
@@ -186,7 +187,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-orientation','portrait');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                              _this.$el.find('.inner').hide();
-                            _this.responsiveResizeIframe({'type':'mobile'});
+                            _this.responsiveResizeIframe({'type':'mobile','orientation':'p'});
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-viewtype','phone');
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-orientation','portrait');
                             _this.$el.find('#template-wrap-iframe iframe').css({'top':0,'left':0,'overflow': 'hidden','height':_this.$el.find('.iframeWrapper').outerHeight()+'px'});
@@ -211,7 +212,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-viewtype','phone');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                             _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
-                            _this.responsiveResizeIframe({'type':'mobile'}); 
+                            _this.responsiveResizeIframe({'type':'mobile','orientation':'ls'}); 
                             _this.$el.find('.deviceIcons span').addClass('hide');
                             _this.$el.find('.deviceIcons span').removeClass('show');
                             e.stopPropagation();
@@ -221,7 +222,6 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         $(currentObj).addClass('active');
                         this.$el.find('.switchView i').removeClass('active');
                         this.$el.find('.outerScroll').hide();
-                        this.$el.find('.inner').hide();
                         this.$el.find('#template-wrap-iframe iframe').removeAttr('data-device');
                         this.$el.find('#template-wrap-iframe iframe').removeAttr('data-orientation');
                         this.$el.find('#template-wrap-iframe .iframeWrapper').removeAttr('data-viewtype');
@@ -244,9 +244,18 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                     _this.$el.find('#template-wrap-iframe iframe').css('height',(_this.options.frameHeight - 200)+'px'); 
                                 }
                                 if($obj.type=="mobile"){
-                                    _this.$el.find('.innerScroll').css('height',_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() +'px');
+                                    if($obj.orientation=="ls"){
+                                        _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height()+139))) +'px');
+                                    }else{
+                                        _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height()+80))) +'px');
+                                    }
                                 }else{
-                                    _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()- (244+50)) +'px');
+                                    if(_this.options.prevFlag=="LP"){
+                                       _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height()+80))) +'px'); 
+                                    }else{
+                                       _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()- (244+50)) +'px');
+                                    }
+                                    
                                 }
                             },1500);
                     if(!this.scrollactive){

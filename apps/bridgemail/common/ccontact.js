@@ -80,6 +80,8 @@ function (template) {
                 }
                 this.$('.use-preview-btn').hide();
                 //this.$('.checkedadded-preview').show();
+                this.parent.parent.transport.destroy();
+                this.parent.parent.transport="";
                 this.parent.parent.setiFrameSrc();
                 }
             },
@@ -89,6 +91,8 @@ function (template) {
                 this.$('.use-preview-btn').show();
                 this.$('.checkedadded-preview').hide();
                 this.parent.parent.subNum = null;
+                this.parent.parent.transport.destroy();
+                this.parent.parent.transport="";
                 this.parent.parent.setiFrameSrc();
             },
             openVisitCard:function(){

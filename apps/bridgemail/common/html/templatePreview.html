@@ -58,12 +58,14 @@
     <div class="clearfix"></div>
 </div>
 <div class="dddiv campaign-clickers" style="top: 150px; right: 50%; display: none;"></div>
-
+<div class="outerScroll" style="display:none;height: 366px;width: 100%;position: absolute;right: 0;<% if(this.options.prevFlag =='LP'){ %>top: 50px;<% }else{ %>top: 186px;<% } %>overflow-y: scroll;"> 
+  <div class="outerScroll-relative">
+      <div class="innerScroll" style="height: 1164px;"></div>
+  </div>    
+</div>
 <div class='template-wrap' id='template-wrap-iframe' style='width: 100%;'>
     <div class="iframeWrapper"></div>
 </div> 
 
-<div class="outerScroll" style="display:none;height: 366px;width: 50%;position: absolute;right: 0;<% if(this.options.prevFlag =='LP'){ %>top: 50px;<% }else{ %>top: 186px;<% } %>overflow-y: scroll;"> 
-  <div class="innerScroll" style="height: 1164px;"></div>
-</div>
+
 <iframe class="email-iframe" id="email-template-iframe" frameborder="0" src="about:blank"></iframe>
