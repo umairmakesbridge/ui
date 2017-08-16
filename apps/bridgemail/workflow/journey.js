@@ -80,7 +80,8 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                     this.$('.journey-builder').flowchart({
                         data: data,
                         defaultLinkColor: "#82bc42",
-                        linkWidth: 3
+                        linkWidth: 4,
+                        multipleLinksOnOutput: true
                     });
                 },
                 createNode: function (obj) {

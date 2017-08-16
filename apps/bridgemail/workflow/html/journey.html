@@ -3,46 +3,84 @@
         <div class="accordian" style="margin-top:0px;height:585px;">            
             <!--  accordian-content  -->
             <h3 class="active">
-                Triggers
+                Journey Builder
             </h3>            
             <div class="bb-scrollarea-wrapper" style="position:relative;">                   
-                <div class="scrollarea" style="overflow-y:hidden;">                    
+                <div class="scrollarea" style="overflow-y:auto;height:550px">                    
                     <div class="accordian-content ">                                        
                         <div class="clearfix first-accordian" data-element="items">                    
+                            <h4 style="margin-top:5px;">Triggers</h4>
                             <ul class="b-blocks">
+                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="target" data-trigger="manual">
+                                    <i class="icon cblock"></i>
+                                    <a >
+                                        <span class=" font_75">Smart Target</span>
+                                    </a>
+                                </li>
+                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="time" data-trigger="manual">
+                                    <i class="icon cblock"></i>
+                                    <a >
+                                        <span class=" font_75">Time Trigger</span>
+                                    </a>
+                                </li>
+                                                                                          
+                            </ul>
+                            <div class="clearfix"></div>
+                             <h4 style="margin-top:5px;">Actions</h4>
+                             <ul class="b-blocks">
                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="campaign" data-trigger="manual">
                                     <i class="icon cblock"></i>
                                     <a >
-                                        <span class=" font_75">Campaign</span>
+                                        <span class=" font_75">Send Email</span>
                                     </a>
                                 </li>
-
+                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="exit" data-trigger="manual">
+                                    <i class="icon cblock"></i>
+                                    <a >
+                                        <span class=" font_75">Exit Journey</span>
+                                    </a>
+                                </li>   
                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="wait" data-trigger="manual">
                                     <i class="icon cblock"></i>
                                     <a >
-                                        <span class=" font_75">Wait</span>
+                                        <span class=" font_75">Add Delay</span>
                                     </a>
                                 </li>
-                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="condition" data-trigger="manual">
+                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="score" data-trigger="manual">
                                     <i class="icon cblock"></i>
                                     <a >
-                                        <span class=" font_75">Condition</span>
+                                        <span class=" font_75">Change Score</span>
                                     </a>
                                 </li>
-                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="list" data-trigger="manual">
+                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="alert" data-trigger="manual">
                                     <i class="icon cblock"></i>
                                     <a >
-                                        <span class=" font_75">List Trigger</span>
+                                        <span class=" font_75">Send Alert</span>
                                     </a>
-                                </li>
+                                </li>                                                             
                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="end" data-trigger="manual">
                                     <i class="icon cblock"></i>
                                     <a >
-                                        <span class=" font_75">End</span>
+                                        <span class=" font_75">Do Nothing</span>
+                                    </a>
+                                </li>   
+                                
+                            </ul>
+                             <h4 style="margin-top:5px;">Decisions</h4>
+                             <ul class="b-blocks">
+                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="decision" data-trigger="manual">
+                                    <i class="icon cblock"></i>
+                                    <a >
+                                        <span class=" font_75">Decision</span>
                                     </a>
                                 </li>
-
-                            </ul>
+                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="split" data-trigger="manual">
+                                    <i class="icon cblock"></i>
+                                    <a >
+                                        <span class=" font_75">Split</span>
+                                    </a>
+                                </li>
+                             </ul>    
                         </div>
 
                     </div>
