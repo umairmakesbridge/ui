@@ -10015,10 +10015,9 @@ a[data-viewtype="desktop-preview"] {
     top: 0px !important;
 }
 #template-wrap-iframe iframe[data-device="phone"][data-orientation="landscape"] {
-    /*height: 320px !important;*/
+    height: 320px !important;
     width: 480px !important;
-    transform: scale(1,0.83);
-    top: -39px !important;
+    transform: scale(1,1);
     position: relative;
 }
 #template-wrap-iframe iframe[data-device="phone"][data-orientation="portrait"] {
