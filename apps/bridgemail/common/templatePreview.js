@@ -245,19 +245,19 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                 }
                                 if($obj.type=="mobile"){
                                     if($obj.orientation=="ls"){
-                                        _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height()+80))) +'px');
+                                        _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px');
                                     }else{
-                                        _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height()+80))) +'px');
+                                        _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px');
                                     }
                                 }else{
                                     if(_this.options.prevFlag=="LP"){
-                                       _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height()+80))) +'px'); 
+                                       _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px'); 
                                     }else{
-                                       _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height() +80)) )+'px');
+                                       _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80)+'px');
                                     }
                                     
                                 }
-                            },1500);
+                            },1000);
                     if(!this.scrollactive){
                        this.$el.find('.outerScroll').scroll(function(){
                         _this.$el.find('#template-wrap-iframe iframe').contents().scrollTop($(this).scrollTop());

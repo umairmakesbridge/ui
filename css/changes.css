@@ -10001,7 +10001,7 @@ a[data-viewtype="desktop-preview"] {
 #template-wrap-iframe iframe{
     display:block;
     margin:0 auto;
-   transition: all ease-in 1s;
+   transition: all ease-in 0.5s;
 }
 #template-wrap-iframe iframe[data-device="tablet"][data-orientation="landscape"] {
     height: 786px !important;
