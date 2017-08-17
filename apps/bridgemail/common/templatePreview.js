@@ -245,7 +245,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         this.$el.find('#template-wrap-iframe').css('overflow-y','scroll');
                         var $this = this;
                         setTimeout(function(){
-                            $this.$el.find('#template-wrap-iframe iframe').css('height',_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()+'px'); 
+                            _this.transport.postMessage("{\"getIframeHeight\":\"on\"}")
+                            //$this.$el.find('#template-wrap-iframe iframe').css('height',_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()+'px'); 
                         },1500);
                     } 
                     ev.stopPropagation();
@@ -278,13 +279,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     if(!this.scrollactive){
                       var topleft = {top:0,left:0};
                        this.$el.find('.outerScroll').scroll(function(){
-                           /*if($(this).scrollLeft() > topleft.left){
-                               console.log('left scroll' + $(this).scrollLeft());
-                           }else if($(this).scrollTop() > topleft.top){
-                               console.log('left scroll' + $(this).scrollTop());
-                           }*/
-                        _this.$el.find('#template-wrap-iframe iframe').contents().scrollLeft($(this).scrollLeft());
-                        _this.$el.find('#template-wrap-iframe iframe').contents().scrollTop($(this).scrollTop());
+                           _this.transport.postMessage("{\"scrollHeight\":\""+$(this).scrollTop()+"\"}")
+                        //_this.$el.find('#template-wrap-iframe iframe').contents().scrollTop($(this).scrollTop());
                         
                        })  
                        this.scrollactive = true;
@@ -375,7 +371,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                                 _this.innerIframeHeight = obj.docHeight;
                                                 _this.responsiveResizeIframe();
                                             }
-
+                                            if(obj && obj.iframeHeight){
+                                                _this.$el.find('#template-wrap-iframe iframe').css('height',obj.iframeHeight+'px');
+                                            }
                                         }, this),
                                         props: {style: {width: "100%", height: (newFrameheight-15) + "px"}, frameborder: 0},
                                         container: this.$el.find('#template-wrap-iframe .iframeWrapper')[0]
@@ -408,7 +406,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                                 _this.innerIframeHeight = obj.docHeight;
                                                 _this.responsiveResizeIframe();
                                             }
-
+                                            if(obj && obj.iframeHeight){
+                                                _this.$el.find('#template-wrap-iframe iframe').css('height',obj.iframeHeight+'px');
+                                            }
                                         }, this),
                                         props: {style: {width: "100%", height: this.options.frameHeight + "px"}, frameborder: 0},
                                         container: this.$el.find('#template-wrap-iframe .iframeWrapper')[0]
