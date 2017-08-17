@@ -134,7 +134,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('.iframeWrapper').attr('data-orientation','portrait');
                             _this.$el.find('.inner').hide();
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
-                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
+                            //_this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                              setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
                             _this.previewDevice['type']='tablet';
                             _this.previewDevice['orientation']='p';
@@ -160,7 +160,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('.iframeWrapper').attr('data-orientation','landscape');
                             //_this.$el.find('.inner').show();
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
-                             _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
+                             //_this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                             setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
                             _this.previewDevice['type']='tablet';
@@ -202,7 +202,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-viewtype','phone');
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-orientation','portrait');
                             _this.$el.find('#template-wrap-iframe iframe').css({'top':0,'left':0,'overflow': 'hidden','height':_this.$el.find('.iframeWrapper').outerHeight()+'px'});
-                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
+                            //_this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.$el.find('.deviceIcons span').addClass('hide');
                             _this.$el.find('.deviceIcons span').removeClass('show');
                             e.stopPropagation();
@@ -222,7 +222,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe iframe,#template-wrap-iframe .iframeWrapper').attr('data-orientation','landscape');
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-viewtype','phone');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
-                            _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
+                            //_this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
                             _this.previewDevice['type']='mobile';
                             _this.previewDevice['orientation']='ls';
