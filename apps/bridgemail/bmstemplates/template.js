@@ -116,6 +116,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         require(["common/templatePreview"], _.bind(function (templatePreview) {
                             var tmPr = new templatePreview({frameSrc: preview_iframe, app: this.app, frameHeight: dialog_height, prevFlag: 'T', tempNum: this.template_id});
                             dialog.getBody().append(tmPr.$el);
+                            dialog.getBody().css('overflow','hidden');
                             this.app.showLoading(false, tmPr.$el.parent());
                             tmPr.init();
                             var dialogArrayLength = this.app.dialogArray.length; // New Dialog
@@ -652,6 +653,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         require(["common/templatePreview"], _.bind(function (templatePreview) {
                             var tmPr = new templatePreview({frameSrc: preview_iframe, app: this.app, frameHeight: dialog_height, prevFlag: 'T', tempNum: this.template_id});
                             dialog.getBody().append(tmPr.$el);
+                            dialog.getBody().css('overflow','hidden');
                             this.app.showLoading(false, tmPr.$el.parent());
                             tmPr.init();
                             var dialogArrayLength = this.app.dialogArray.length; // New Dialog

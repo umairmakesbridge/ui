@@ -166,6 +166,7 @@ define(['text!bmstemplates/html/template_row.html', 'common/tags_row', 'bmstempl
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: srcUrl, app: this.app, frameHeight: dialog_height, prevFlag: 'T', tempNum: this.model.get('templateNumber.encode')});
                         dialog.getBody().append(tmPr.$el);
+                        dialog.getBody().css('overflow','hidden');
                         this.app.showLoading(false, tmPr.$el.parent());
                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                         tmPr.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog

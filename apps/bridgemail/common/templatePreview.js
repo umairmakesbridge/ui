@@ -104,7 +104,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                 switchView : function(ev){
                     var currentObj = ev.currentTarget;
                     var _this = this;
-                    var templateWrapHeight = this.options.prevFlag=="LP" ? this.options.frameHeight : (_this.options.frameHeight - 180);
+                    var templateWrapHeight = (this.options.prevFlag=="LP" || this.options.prevFlag=="T") ? this.options.frameHeight : (_this.options.frameHeight - 180);
                     this.$el.find('.deviceIcons span').addClass('hide');
                     this.$el.find('.deviceIcons span').removeClass('show');
                     this.$el.find('.outerScroll').css('height',templateWrapHeight+'px');
@@ -268,7 +268,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                         _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px');
                                     }
                                 }else{
-                                    if(_this.options.prevFlag=="LP"){
+                                    if(_this.options.prevFlag=="LP" || _this.options.prevFlag=="T"){
                                        _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px'); 
                                     }else{
                                        _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80)+'px');
