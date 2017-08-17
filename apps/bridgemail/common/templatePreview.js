@@ -34,6 +34,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                     this.html = 'Y';
                     this.subNum = null;
                     this.scrollactive = false;
+                    this.innerIframeHeight= 0;
+                    this.previewDevice={};
                     this.render();
                 },
                 /**
@@ -133,7 +135,10 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('.inner').hide();
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
                             _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
-                            _this.responsiveResizeIframe({'type':'tablet','orientation':'p'});
+                             setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
+                            _this.previewDevice['type']='tablet';
+                            _this.previewDevice['orientation']='p';
+                            //_this.responsiveResizeIframe({'type':'tablet','orientation':'p'});
                             //_this.$el.find('.innerScroll').css('height',_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()+'px');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                             _this.$el.find('.deviceIcons span').addClass('hide');
@@ -157,7 +162,10 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
                              _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
-                            _this.responsiveResizeIframe({'type':'tablet','orientation':'ls'});
+                            setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
+                            _this.previewDevice['type']='tablet';
+                            _this.previewDevice['orientation']='ls';
+                            //_this.responsiveResizeIframe({'type':'tablet','orientation':'ls'});
                             _this.$el.find('.deviceIcons span').addClass('hide');
                             _this.$el.find('.deviceIcons span').removeClass('show');
                             e.stopPropagation();
@@ -187,7 +195,10 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe iframe').attr('data-orientation','portrait');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                              _this.$el.find('.inner').hide();
-                            _this.responsiveResizeIframe({'type':'mobile','orientation':'p'});
+                             setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
+                            _this.previewDevice['type']='mobile';
+                            _this.previewDevice['orientation']='p';
+                            //_this.responsiveResizeIframe({'type':'mobile','orientation':'p'});
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-viewtype','phone');
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-orientation','portrait');
                             _this.$el.find('#template-wrap-iframe iframe').css({'top':0,'left':0,'overflow': 'hidden','height':_this.$el.find('.iframeWrapper').outerHeight()+'px'});
@@ -212,7 +223,11 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             _this.$el.find('#template-wrap-iframe .iframeWrapper').attr('data-viewtype','phone');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                             _this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
-                            _this.responsiveResizeIframe({'type':'mobile','orientation':'ls'}); 
+                            setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
+                            _this.previewDevice['type']='mobile';
+                            _this.previewDevice['orientation']='ls';
+                            
+                            //_this.responsiveResizeIframe({'type':'mobile','orientation':'ls'}); 
                             _this.$el.find('.deviceIcons span').addClass('hide');
                             _this.$el.find('.deviceIcons span').removeClass('show');
                             e.stopPropagation();
@@ -237,30 +252,40 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                 },
                 responsiveResizeIframe : function(object){
                     var _this = this;
-                    var $obj = object?object : "";
+                    var $obj = ($.isEmptyObject(this.previewDevice))? "" : this.previewDevice;
                     _this.$el.parents('.modal-body').css('overflow','hidden');
+                    
                     setTimeout(function(){
-                                if(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() < 120){
+                                console.log(_this.innerIframeHeight);
+                                if(_this.innerIframeHeight < 120){
                                     _this.$el.find('#template-wrap-iframe iframe').css('height',(_this.options.frameHeight - 200)+'px'); 
                                 }
                                 if($obj.type=="mobile"){
                                     if($obj.orientation=="ls"){
-                                        _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px');
+                                        _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px');
                                     }else{
-                                        _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px');
+                                        _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px');
                                     }
                                 }else{
                                     if(_this.options.prevFlag=="LP"){
-                                       _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px'); 
+                                       _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px'); 
                                     }else{
-                                       _this.$el.find('.innerScroll').css('height',(_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height() + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80)+'px');
+                                       _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80)+'px');
                                     }
                                     
                                 }
                             },1000);
                     if(!this.scrollactive){
+                      var topleft = {top:0,left:0};
                        this.$el.find('.outerScroll').scroll(function(){
+                           /*if($(this).scrollLeft() > topleft.left){
+                               console.log('left scroll' + $(this).scrollLeft());
+                           }else if($(this).scrollTop() > topleft.top){
+                               console.log('left scroll' + $(this).scrollTop());
+                           }*/
+                        _this.$el.find('#template-wrap-iframe iframe').contents().scrollLeft($(this).scrollLeft());
                         _this.$el.find('#template-wrap-iframe iframe').contents().scrollTop($(this).scrollTop());
+                        
                        })  
                        this.scrollactive = true;
                     }else{
@@ -345,6 +370,11 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                             var response = jQuery.parseJSON(message);
                                              _this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();  
                                             console.log(message);
+                                            var obj = JSON.parse(message);
+                                            if(obj && obj.docHeight){
+                                                _this.innerIframeHeight = obj.docHeight;
+                                                _this.responsiveResizeIframe();
+                                            }
 
                                         }, this),
                                         props: {style: {width: "100%", height: (newFrameheight-15) + "px"}, frameborder: 0},
@@ -373,6 +403,11 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                             var response = jQuery.parseJSON(message);
                                              _this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();  
                                             console.log(message)
+                                            var obj = JSON.parse(message);
+                                            if(obj && obj.docHeight){
+                                                _this.innerIframeHeight = obj.docHeight;
+                                                _this.responsiveResizeIframe();
+                                            }
 
                                         }, this),
                                         props: {style: {width: "100%", height: this.options.frameHeight + "px"}, frameborder: 0},
