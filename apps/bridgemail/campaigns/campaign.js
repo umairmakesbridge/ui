@@ -567,7 +567,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         //active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                         var camp_name = active_ws.find("#workspace-header").html();
                         var dialog_width = $(document.documentElement).width() - 60;
-                        var dialog_height = $(document.documentElement).height() - 182;
+                        var dialog_height = $(document.documentElement).height() - 146;
                         var dialog = camp_obj.app.showDialog({title: 'Campaign Preview of &quot;' + camp_name + '&quot;',
                             css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                             headerEditable: false,
@@ -3565,7 +3565,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var active_ws = this.$el.parents(".ws-content");
                     var camp_name = active_ws.find("#workspace-header").html();
                     var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog_height = $(document.documentElement).height() - 146;
                     var dialog = this.app.showDialog({title: 'Campaign Preview of &quot;' + camp_name + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,

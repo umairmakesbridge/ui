@@ -5,8 +5,27 @@
     <div class="scontct previewbtns">
         <span class='contact-name contact-name-prev' style="float:left;"></span><a class="close-icon contact-remove-prev" id="contact-name-prev" style="float:left;margin-left: 6px;margin-top: 8px;display: none;"></a>
     </div>
+    <div class="contacts-switch-2">
+            <a class="deviceIcons switchView showtooltip active" data-original-title="Desktop Version" data-viewtype="desktop-preview" style=""><i class="icon desktop"></i></a>
+            <a class="deviceIcons switchView" data-viewtype="tablet-preview" style="">
+                <i class="icon tablet"></i>
+                <b class="caret right" style="position:absolute; top:0px; right:6px; margin: 16px 0 0 8px;"> </b>
+                <span class="hide">
+                    <i class="icon tablet-p showtooltip" data-original-title="Tablet Portrait Version" >Portrait</i>
+                    <i class="icon tablet-ls showtooltip" data-original-title="Tablet Landscape Version">Landscape</i>
+                </span>
+            </a>
+            <a class="deviceIcons switchView" data-viewtype="mobile-preview" style="">
+                <i class="icon mobile"></i>
+                <b class="caret right" style="position:absolute; top:0px; right:6px; margin: 16px 0 0 8px;"> </b>
+                <span class="hide">
+                    <i class="icon mobile-p showtooltip" data-original-title="Mobile Portrait Version" >Portrait</i>
+                    <i class="icon mobile-ls showtooltip" data-original-title="Mobile Landscape Version">Landscape</i>
+                </span>
+            </a>
+        </div>
     <% if(this.options.prevFlag!="LP"){ %>
-    <form id="sendtemp-preview" onSubmit="return false;" style="margin: 0 27px 20px;"> 
+    <form id="sendtemp-preview" onSubmit="return false;" style="margin: 0 27px 20px;">
         <div class="" id="prevtem-sendpreview" style="float:right;">
             <div class="row "style="margin-top: -2px;float: left;">
                 <div class="input-append ">
@@ -23,8 +42,12 @@
             <a class="draft toggletags turnoff showtooltip" data-original-title="Turn Off Images">Off</a>
             <a class="published active turnon togglecontact showtooltip" data-original-title="Turn On Images">On</a>
       </div>
+        
         <span style="display: block;float: left;top: 13px;position:relative;">Images</span>
+        
             </div>
+    
+    
 </div>
 <div class="selection-boxes previewbtns" style="width: 280px; margin:10px auto 0;">
     <div style="width:auto; margin:0 5px;animation-name:fadeInUp !important;display:none" class="messagebox info animated"><p>This campaign is using <strong>Text Version</strong> only.</p></div>
@@ -35,5 +58,14 @@
     <div class="clearfix"></div>
 </div>
 <div class="dddiv campaign-clickers" style="top: 150px; right: 50%; display: none;"></div>
-<div class='template-wrap' id='template-wrap-iframe' style='width: 100%;'></div> 
+<div class="outerScroll" style="display:none;height: 366px;width: 100%;position: absolute;right: 0;<% if(this.options.prevFlag =='LP' || this.options.prevFlag =='T'){ %>top: 50px;<% }else{ %>top: 186px;<% } %>overflow-y: scroll;"> 
+  <div class="outerScroll-relative">
+      <div class="innerScroll" style="height: 1164px;"></div>
+  </div>    
+</div>
+<div class='template-wrap' id='template-wrap-iframe' style='width: 100%;'>
+    <div class="iframeWrapper"></div>
+</div> 
+
+
 <iframe class="email-iframe" id="email-template-iframe" frameborder="0" src="about:blank"></iframe>

@@ -155,6 +155,7 @@ define(['text!landingpages/html/landingpage_template_row.html'],
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         dialog.getBody().html(tmPr.$el);
+                        dialog.getBody().css('overflow','hidden');
                         tmPr.init();
                     }, this));
                 },

@@ -212,6 +212,8 @@ function (template,Contacts,viewContact) {
                        if(this.parent.subNum != null){
                            this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').show();
                            this.parent.subNum=null;
+                           this.parent.transport.destroy();
+                           this.parent.transport="";
                            if(!this.isOTOFlag){this.parent.setiFrameSrc();}
                        }
                    };
