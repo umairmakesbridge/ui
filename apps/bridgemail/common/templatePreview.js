@@ -104,7 +104,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                 switchView : function(ev){
                     var currentObj = ev.currentTarget;
                     var _this = this;
-                    var templateWrapHeight = this.options.prevFlag=="LP" ? this.options.frameHeight : (_this.options.frameHeight - 180);
+                    var templateWrapHeight = (this.options.prevFlag=="LP" || this.options.prevFlag=="T") ? this.options.frameHeight : (_this.options.frameHeight - 180);
                     this.$el.find('.deviceIcons span').addClass('hide');
                     this.$el.find('.deviceIcons span').removeClass('show');
                     this.$el.find('.outerScroll').css('height',templateWrapHeight+'px');
@@ -121,6 +121,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         $(currentObj).find('.tablet-ls').unbind('click');
                         $(currentObj).find('.tablet-p').click(function(e){
                             e.preventDefault();
+                            _this.app.showLoading('Loading Tablet Portrait View',_this.$('#template-wrap-iframe'));
+                            _this.$el.find('.loading').css({'background': '#fff','opacity': '0.97'});
                             _this.$el.find('.deviceIcons').removeClass('active');
                             _this.$('.switchView .show i').removeClass('active');
                             _this.$('.switchView .hide i').removeClass('active');
@@ -128,14 +130,19 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             $(currentObj).addClass('active');
                             _this.$el.find('.outerScroll').show();
                             _this.$el.find('#template-wrap-iframe').css('height',(templateWrapHeight)+'px');
-                            _this.$el.find('#template-wrap-iframe iframe').attr('data-device','tablet');
-                            _this.$el.find('#template-wrap-iframe iframe').attr('data-orientation','portrait');
-                             _this.$el.find('.iframeWrapper').attr('data-viewtype','tablet');
-                            _this.$el.find('.iframeWrapper').attr('data-orientation','portrait');
-                            _this.$el.find('.inner').hide();
+                            
                             _this.$el.find('#template-wrap-iframe iframe').css({'top': '0px','position': 'relative','left': '0px','overflow': 'hidden','height':_this.$el.find('.device-display').height()+'px'});
                             //_this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                              setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
+                             _this.$el.find('#template-wrap-iframe iframe').attr('data-device','tablet');
+                            _this.$el.find('#template-wrap-iframe iframe').attr('data-orientation','portrait');
+                             _this.$el.find('.iframeWrapper').attr('data-viewtype','tablet');
+                            _this.$el.find('.iframeWrapper').attr('data-orientation','portrait');
+                            _this.$el.find('.iframeWrapper').css('position','absolute');
+                            setTimeout(function(){_this.$el.find('.iframeWrapper').css('position','relative');},50); 
+                            
+                            
+                            _this.$el.find('.inner').hide();
                             _this.previewDevice['type']='tablet';
                             _this.previewDevice['orientation']='p';
                             //_this.responsiveResizeIframe({'type':'tablet','orientation':'p'});
@@ -147,6 +154,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         });
                         $(currentObj).find('.tablet-ls').click(function(e){
                             e.preventDefault();
+                            _this.app.showLoading('Loading Tablet Landscape View',_this.$('#template-wrap-iframe'));
                             _this.$el.find('.outerScroll').show();
                             _this.$el.find('.deviceIcons').removeClass('active');
                             _this.$('.switchView .show i').removeClass('active');
@@ -163,6 +171,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                              //_this.$el.find('#template-wrap-iframe iframe').contents().find('body').css('overflow-y','hidden');
                             _this.$el.find('#template-wrap-iframe').addClass('chngBg-tm');
                             setTimeout(function(){_this.transport.postMessage("{\"getHeight\":\"on\"}")},1000); 
+                            _this.$el.find('.iframeWrapper').css('position','absolute');
+                            setTimeout(function(){_this.$el.find('.iframeWrapper').css('position','relative');},50); 
                             _this.previewDevice['type']='tablet';
                             _this.previewDevice['orientation']='ls';
                             //_this.responsiveResizeIframe({'type':'tablet','orientation':'ls'});
@@ -184,6 +194,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         
                         $(currentObj).find('.mobile-p').click(function(e){
                             e.preventDefault();
+                            _this.app.showLoading('Loading Mobile Portrait View',_this.$('#template-wrap-iframe'));
                             _this.$el.find('.outerScroll').show();
                             _this.$el.find('.deviceIcons').removeClass('active');
                             _this.$('.switchView .show i').removeClass('active');
@@ -210,6 +221,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         
                         $(currentObj).find('.mobile-ls').click(function(e){
                             e.preventDefault();
+                            _this.app.showLoading('Loading Mobile Landscape View',_this.$('#template-wrap-iframe'));
                             _this.$el.find('.outerScroll').show();
                             _this.$el.find('.deviceIcons').removeClass('active');
                             _this.$('.switchView .show i').removeClass('active');
@@ -233,6 +245,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             e.stopPropagation();
                         });
                     }else{
+                        _this.app.showLoading('Loading Desktop View',_this.$('#template-wrap-iframe'));
                         this.$el.find('.deviceIcons').removeClass('active');
                         $(currentObj).addClass('active');
                         this.$el.find('.switchView i').removeClass('active');
@@ -245,7 +258,8 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         this.$el.find('#template-wrap-iframe').css('overflow-y','scroll');
                         var $this = this;
                         setTimeout(function(){
-                            _this.transport.postMessage("{\"getIframeHeight\":\"on\"}")
+                            _this.transport.postMessage("{\"getIframeHeight\":\"on\"}");
+                            setTimeout(function(){_this.$el.find('.loading').remove();},500);
                             //$this.$el.find('#template-wrap-iframe iframe').css('height',_this.$el.find('#template-wrap-iframe iframe').contents().find('body').height()+'px'); 
                         },1500);
                     } 
@@ -268,13 +282,14 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                         _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px');
                                     }
                                 }else{
-                                    if(_this.options.prevFlag=="LP"){
+                                    if(_this.options.prevFlag=="LP" || _this.options.prevFlag=="T"){
                                        _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80) +'px'); 
                                     }else{
                                        _this.$el.find('.innerScroll').css('height',(_this.innerIframeHeight + (_this.options.frameHeight - (_this.$el.find('.iframeWrapper').height())) + 80)+'px');
                                     }
                                     
                                 }
+                                setTimeout(function(){_this.$el.find('.loading').remove();},1000);
                             },1000);
                     if(!this.scrollactive){
                       var topleft = {top:0,left:0};
@@ -344,7 +359,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         else
                             newFrameheight = this.options.frameHeight - 170;
                     }
-                    else if (this.options.prevFlag === 'T' || this.options.prevFlag === 'E'){
+                    else if (this.options.prevFlag === 'T'){
+                        newFrameheight = this.options.frameHeight;
+                    }else if(this.options.prevFlag === 'E'){
                         newFrameheight = this.options.frameHeight - 50;
                     }
                     else {

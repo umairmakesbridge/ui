@@ -5,7 +5,6 @@
     <div class="scontct previewbtns">
         <span class='contact-name contact-name-prev' style="float:left;"></span><a class="close-icon contact-remove-prev" id="contact-name-prev" style="float:left;margin-left: 6px;margin-top: 8px;display: none;"></a>
     </div>
-    <% if(this.options.prevFlag != 'T') {%>
     <div class="contacts-switch-2">
             <a class="deviceIcons switchView showtooltip active" data-original-title="Desktop Version" data-viewtype="desktop-preview" style=""><i class="icon desktop"></i></a>
             <a class="deviceIcons switchView" data-viewtype="tablet-preview" style="">
@@ -25,7 +24,6 @@
                 </span>
             </a>
         </div>
-    <% } %>
     <% if(this.options.prevFlag!="LP"){ %>
     <form id="sendtemp-preview" onSubmit="return false;" style="margin: 0 27px 20px;">
         <div class="" id="prevtem-sendpreview" style="float:right;">
@@ -60,7 +58,7 @@
     <div class="clearfix"></div>
 </div>
 <div class="dddiv campaign-clickers" style="top: 150px; right: 50%; display: none;"></div>
-<div class="outerScroll" style="display:none;height: 366px;width: 100%;position: absolute;right: 0;<% if(this.options.prevFlag =='LP'){ %>top: 50px;<% }else{ %>top: 186px;<% } %>overflow-y: scroll;"> 
+<div class="outerScroll" style="display:none;height: 366px;width: 100%;position: absolute;right: 0;<% if(this.options.prevFlag =='LP' || this.options.prevFlag =='T'){ %>top: 50px;<% }else{ %>top: 186px;<% } %>overflow-y: scroll;"> 
   <div class="outerScroll-relative">
       <div class="innerScroll" style="height: 1164px;"></div>
   </div>    
