@@ -105,7 +105,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     }, this));
                     previewIconTemplate.click(_.bind(function (e) {
                         var dialog_width = $(document.documentElement).width() - 60;
-                        var dialog_height = $(document.documentElement).height() - 162;
+                        var dialog_height = $(document.documentElement).height() - 146;
                         var dialog = this.app.showDialog({title: 'Template Preview',
                             css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
                             headerEditable: false,
@@ -114,7 +114,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                         });
                         var preview_iframe = "https://" + this.app.get("preview_domain") + "/pms/events/viewtemp.jsp?templateNumber=" + this.template_id;
                         require(["common/templatePreview"], _.bind(function (templatePreview) {
-                            var tmPr = new templatePreview({frameSrc: preview_iframe, app: this.app, frameHeight: dialog_height, prevFlag: 'T', tempNum: this.template_id});
+                            var tmPr = new templatePreview({frameSrc: preview_iframe, app: this.app, frameHeight: (dialog_height - 50), prevFlag: 'T', tempNum: this.template_id});
                             dialog.getBody().append(tmPr.$el);
                             dialog.getBody().css('overflow','hidden');
                             this.app.showLoading(false, tmPr.$el.parent());
@@ -642,7 +642,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                     });
                     previewIconTemplate.click(_.bind(function (e) {
                         var dialog_width = $(document.documentElement).width() - 60;
-                        var dialog_height = $(document.documentElement).height() - 162;
+                        var dialog_height = $(document.documentElement).height() - 222;
                         var dialog = this.app.showDialog({title: 'Template Preview',
                             css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
                             headerEditable: false,
