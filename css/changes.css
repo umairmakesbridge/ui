@@ -9778,8 +9778,7 @@ Download CSV Button
 }
 /* Journey CSS changes */
 .MEE_EDITOR .editorbox.journey-grid{
-    background: url('../img/grid.png') repeat transparent;
-    
+    background: url('../img/grid.png') repeat transparent;   
 }
 .moveable-ele{
     z-index: 1000;
@@ -10045,5 +10044,4 @@ a[data-viewtype="desktop-preview"] {
     top: -5px !important;
     position: relative;
     transform: scale(1,0.97);
-
 }
