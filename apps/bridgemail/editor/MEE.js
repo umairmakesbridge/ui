@@ -4787,7 +4787,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             myElement.find('.removeThumb').click();
                                             _this.val(url);
                                             e.stopPropagation();
-                                            options._app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                                            options._app.showAlert("Your file name contains blank spaces or illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
                                         } else {
                                             setTimeout(function () {
                                                 myElement.find('#bgUrlCode').trigger('change');
@@ -9116,7 +9116,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             delete mee_view.DynamicContentsObj[content.DCkey][content.checksum];
                                         }
                                         $('.global-save-overlay').remove();
-                                        mee_view._$el.parents('body').find('.modal iframe').contents().find('.global-save-overlay').remove();
+                                        $('body').find('.modal iframe').contents().find('.global-save-overlay').remove();
                                         mee_view.app.showMessge('Dynamic content deleted successfully',$('body'));
                                         mee_view.allOptions.saveCallBack();
                                     }

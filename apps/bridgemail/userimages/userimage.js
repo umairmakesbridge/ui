@@ -276,7 +276,7 @@ define(['text!userimages/html/userimage.html'],
                     var str = decodeURIComponent(filename);
                     if(imgurl!== "" &&  /^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
                          ev.stopPropagation();
-                        this.options.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
+                        this.options.app.showAlert("Your file name contains blank spaces or illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true});
                     }else{
                           if (this.options.callBack) {
                             this.options.callBack({imgurl: $(ev.target).data('url'), imgencode: this.model.get('imageId.encode'), imgthumb: $(ev.target).data('thumb')});

@@ -309,7 +309,7 @@
             var str = file.name;
             if(/^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
                 //alert('your file name contain illegal character');
-                this.app.showAlert("Your file name contain illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true})
+                this.app.showAlert("Your file name contains blank spaces or illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true})
                 isImage = false;
             }
             if(file.type.indexOf("image") < 0){

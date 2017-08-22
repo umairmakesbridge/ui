@@ -9776,3 +9776,272 @@ Download CSV Button
     bottom:-5px;
     color:#888;
 }
+/* Journey CSS changes */
+.MEE_EDITOR .editorbox.journey-grid{
+    background: url('../img/grid.png') repeat transparent;   
+}
+.moveable-ele{
+    z-index: 1000;
+    background:#a9c2d5;
+    border-radius: 2px;
+    display: inline-block;    
+    height: 20px;        
+    position:absolute;
+    cursor: move;
+    padding: 75px 5px 5px 5px;
+    text-align: center;
+    width: 95px;     
+    color:#fff;
+}
+
+.contacts-switch-2{
+   position: relative;
+   top: 0px;
+   float: right;
+   right: 0px;
+   z-index: 999;
+   padding: 0px;
+}
+.contacts-switch-2 .deviceIcons{
+    margin: 0;
+    background: none repeat scroll 0 0 #EFF7FA;
+    display:inline-block;
+    padding-right: 10px;
+    position:relative;
+}
+a[data-viewtype="desktop-preview"] {
+    padding-right: 0 !important;
+}
+
+.previewbar .deviceIcons i.desktop {
+    background-image: url("../img/Desktop.png");
+    padding: 0;
+    background-position: center center;
+}
+.previewbar .deviceIcons i.tablet {
+    background-image: url("../img/tablet.png");
+    padding: 0;
+    background-position: center center;
+}
+.previewbar .deviceIcons i.mobile {
+    background-image: url("../img/mobile.png");
+    padding: 0;
+    background-position: center center;
+}
+.chngBg-tm{
+    background: #FAFAFA;
+    padding-top: 20px;
+    overflow: hidden !important;
+}
+.outerScroll-relative{
+    width: 100%;
+    position: relative;
+    right: 0;
+}
+.chngBg-tm iframe{
+    box-shadow: 0 3px 70px -7px rgba(0, 0, 0, 0.17);
+}
+.deviceIcons span{
+    display: none;
+    min-width: 35px;
+    min-height: 20px;
+    background: #fff;
+    position: absolute;
+    top: 33px;
+    box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.4);
+    z-index: 9;
+}
+.icon.tablet-p {
+   background-image: url("../img/tablet_white.png");
+   padding: 0;
+   background-position: left center;
+   background-color: #A9C2D6;
+   float: none;
+   background-repeat: no-repeat;
+   width: 68px;
+   border-bottom: 1px solid #fff;
+   color: #fff;
+   padding-left: 31px;
+   line-height: 34px;
+   font-style: unset;
+
+}
+.icon.tablet-ls {
+    background-image: unset;
+    padding: 0;
+    padding-right: 0px;
+    padding-left: 0px;
+    background-position: left center;
+    background-color: #A9C2D6;
+    float: none;
+    background-repeat: no-repeat;
+    width: 62px;
+    height: 35px;
+    color: #fff;
+    padding-left: 32px;
+    line-height: 36px;
+    font-style: unset;
+    padding-right: 5px;
+}
+.icon.tablet-ls::before {
+    content: "";
+    position: absolute;
+    width: 76%;
+    height: 154%;
+    top: 30%;
+    left: -60%;
+    z-index: 2;
+
+    background: url("../img/tablet_white.png") ;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    background-repeat: no-repeat;
+}
+.deviceIcons[data-viewtype="mobile-preview"] .show,.deviceIcons[data-viewtype="tablet-preview"] .show {
+    right: 0;
+}
+#template-wrap-iframe .iframeWrapper[data-viewtype="tablet"][data-orientation="portrait"]{
+    border: 7px solid #333;
+    transform: scale(0.397881, 0.477881);
+    width: 768px !important;
+    margin: 0 auto;
+    position: relative;
+    top: -210px;
+    height: 740px;
+
+
+}
+#template-wrap-iframe .iframeWrapper[data-viewtype="tablet"][data-orientation="landscape"]{
+    border: 7px solid #333;
+    transform: scale(0.49, 0.49);
+    width: 1024px;
+    margin: 0 auto;
+    position: relative;
+    top: -216px;
+    height: 786px;
+}
+#template-wrap-iframe .iframeWrapper[data-viewtype="phone"][data-orientation="landscape"] {
+    height: 320px;
+    width: 480px;
+    border-top: 5px solid #333;
+    border-right: 5px solid #333;
+    border-bottom: 5px solid #333;
+    border-left: 5px solid #333;
+    overflow: hidden;
+    position: relative;
+    margin:0 auto;
+    transform: scale(0.809804, 0.809804);
+}
+#template-wrap-iframe .iframeWrapper[data-viewtype="phone"][data-orientation="portrait"] {
+    transform: scale(0.809804, 0.809804);
+    height: 420px;
+    width: 320px;
+    border-top: 5px solid #333;
+    border-left: 5px solid #333;
+    border-bottom: 5px solid #333;
+    border-right: 5px solid #333;
+    overflow: hidden;
+    position: relative;
+    margin:0 auto;
+    top:-59px;
+}
+
+.icon.mobile-p {
+    background-image: url("../img/mobile_white.png");
+    background-position: left center;
+    background-color: #A9C2D6;
+    float: none;
+    background-repeat: no-repeat;
+    width: 67px;
+    border-bottom: 1px solid #fff;
+    position: relative;
+    padding-left: 32px;
+    color: #fff;
+    line-height: 33px;
+    font-style: normal;
+
+}
+.icon.mobile-ls {
+    background-image: unset;
+    padding: 0;
+    padding-right: 0px;
+    padding-left: 0px;
+    background-position: left center;
+    background-color: #A9C2D6;
+    float: none;
+    background-repeat: no-repeat;
+    width: 62px;
+    height: 35px;
+    padding-left: 32px;
+    color: #fff;
+    font-style: normal;
+    line-height: 35px;
+    padding-right: 5px;
+
+}
+.icon.mobile-ls::before {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 154%;
+    top: 3%;
+    left: -41%;
+    z-index: 2;
+    background: url("../img/mobile_white.png");
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    background-repeat: no-repeat;
+}
+
+.deviceIcons span .icon:hover,.deviceIcons span .icon.active,.deviceIcons.active{
+    background-color: #94CF1E;
+}
+.deviceIcons.active i.desktop{
+     background-image: url("../img/Desktop_white.png");
+}
+.deviceIcons.active i.tablet{
+     background-image: url("../img/tablet_white.png");
+}
+.deviceIcons.active i.mobile{
+     background-image: url("../img/mobile_white.png");
+}
+.deviceIcons span.show{
+    display:block;
+}
+
+/*========Responsive Emails======*/
+#template-wrap-iframe iframe{
+    display:block;
+    margin:0 auto;
+   transition: all ease-in 0.5s;
+}
+#template-wrap-iframe iframe[data-device="tablet"][data-orientation="landscape"] {
+    height: 786px !important;
+    width: 1024px !important;
+}
+#template-wrap-iframe iframe[data-device="tablet"][data-orientation="portrait"] {
+    height: 740px !important;
+    width: 768px !important;
+    transform: scale(1,1);
+    position: relative;
+    top: 0px !important;
+}
+#template-wrap-iframe iframe[data-device="phone"][data-orientation="landscape"] {
+    height: 320px !important;
+    width: 480px !important;
+    transform: scale(1,1);
+    position: relative;
+}
+#template-wrap-iframe iframe[data-device="phone"][data-orientation="portrait"] {
+    /*height: 480px !important;*/
+    width: 320px !important;
+    top: -5px !important;
+    position: relative;
+    transform: scale(1,0.97);
+}

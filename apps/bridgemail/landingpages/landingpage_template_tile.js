@@ -102,6 +102,7 @@ define(['text!landingpages/html/landingpage_template_tile.html', 'common/tags_ro
                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                         tmPr.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
                         dialog.$el.find('#dialog-title .preview').remove();
+                        dialog.getBody().css('overflow','hidden');
                     }, this));
                                                            
                 },

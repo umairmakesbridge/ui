@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.472_918" ,       
+       urlArgs: "bust=1.472_9191" ,       
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
@@ -44,7 +44,8 @@
            'scrollbox':'shared/jquery.scrollbox',
            'highcharts':'shared/libs/charts/highcharts',          
            'jspdf' : 'reports/summary/vendors/jspdf',
-           'offline':'shared/libs/offline'
+           'offline':'shared/libs/offline',
+           'jquery.flowchart':'shared/libs/jquery.flowchart'
        },
         shim: {
                 backbone: {
@@ -135,6 +136,10 @@
                },
                'jquery.scrollbox':{
                    deps: ['jquery']
+               },
+               'jquery.flowchart':{
+                   deps: ['jquery','jquery-ui'],
+                   exports: 'jQuery.fn.flowchart'
                }
          }
     });

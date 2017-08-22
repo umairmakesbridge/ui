@@ -459,7 +459,7 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                     var camp_name = this.label;
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog_height = $(document.documentElement).height() - 146;
                     var app = that.options.app ? that.options.app : this.app;
                     var dialog = app.showDialog({title: 'Preview of &quot;' + camp_name + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
