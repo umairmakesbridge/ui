@@ -132,7 +132,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     var camp_name = this.model.get('label');
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
-                var dialog_height = $(document.documentElement).height() - 146;
+                var dialog_height = $(document.documentElement).height() - 172;
                     var dialog = that.options.app.showDialog({title: 'Campaign Preview of &quot;' + camp_name + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,

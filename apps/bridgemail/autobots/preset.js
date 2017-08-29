@@ -331,7 +331,7 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                     var camp_name = this.model.get('presetLabel');
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 146;
+                    var dialog_height = $(document.documentElement).height() - 172;
                     var dialog = that.options.app.showDialog({title: 'Campaign Preview of &quot;' + camp_name + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
