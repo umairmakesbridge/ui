@@ -27,7 +27,7 @@ define([
                 app_data: {}
             }, window.sz_config || {}));
             this.testUsers = ['admin', 'jayadams', 'demo', 'MKS-Training2', 'mansoor@makesbridge.com','babar','umair','mansoor'];
-            this.dcItemsUsers = ['admin', 'jayadams', 'demo', 'fisglobal'];                                                                                  
+            this.dcItemsUsers = ['admin', 'jayadams', 'demo', 'fisglobal','terry.arnold@hartehanks.com'];                                                                                  
 
             //Convenience for accessing the app object in the console
             if (this.get('env') != 'production') {
