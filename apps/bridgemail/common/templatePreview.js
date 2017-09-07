@@ -78,8 +78,14 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                             this.$('#temp-camp-previewbar').delay(600).slideDown(500);
                         }
                         this.$("#email-template-iframe").load(_.bind(function () {
-                            this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();                        
+                            this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();
                         }, this));
+                        this.$("#template-wrap-iframe iframe").load(_.bind(function () {
+                            this.$el.parents('.modal').find('.modal-footer .btn-close').before('<div style="width:100%; animation-name:fadeInUp !important;position: absolute;left: 0;top: -20px;" class="messagebox caution animated"><p>Previews are approximate. To ensure you know how your email will look in specific email clients and devices, make sure you run an Inbox Test.</p></div>')
+                            this.$el.parents('.modal').find('.modal-footer').addClass('modal-bg-footer');
+                        }, this));
+                        
+                        
 
                         //this.loadTemplates();
                         if (this.options.prevFlag === 'C')
@@ -250,6 +256,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         $(currentObj).addClass('active');
                         this.$el.find('.switchView i').removeClass('active');
                         this.$el.find('.outerScroll').hide();
+                        _this.$el.find('#template-wrap-iframe').css('height',(templateWrapHeight+20)+'px');
                         this.$el.find('#template-wrap-iframe iframe').removeAttr('data-device');
                         this.$el.find('#template-wrap-iframe iframe').removeAttr('data-orientation');
                         this.$el.find('#template-wrap-iframe .iframeWrapper').removeAttr('data-viewtype');
@@ -391,8 +398,9 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                             if(obj && obj.iframeHeight){
                                                 _this.$el.find('#template-wrap-iframe iframe').css('height',obj.iframeHeight+'px');
                                             }
+                                            
                                         }, this),
-                                        props: {style: {width: "100%", height: (newFrameheight-15) + "px"}, frameborder: 0},
+                                        props: {style: {width: "100%", height: (newFrameheight+10) + "px"}, frameborder: 0},
                                         container: this.$el.find('#template-wrap-iframe .iframeWrapper')[0]
                                     });  
                                     
