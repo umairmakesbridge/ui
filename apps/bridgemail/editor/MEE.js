@@ -604,14 +604,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
 
                                     mainHTMLELE.find('.global-save-overlay').remove(); // Removing the saving di
+                                    
                                     mainHTMLELE.find(".bgimage").each(function () {
                                         $(this).attr("mee-style", $(this).attr("style"));
                                         $(this).removeAttr("style");
                                     });
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
+                                    $.each(constructedHTML.find('.myImage img[data-imgSrc]'),function(key,value){
+                                          var attrSrc = $(value).attr('data-imgSrc');
+                                          $(value).attr('src',attrSrc);
+                                    })
                                     var cleanedCode = CleanCode(constructedHTML);
 
                                     var cleanedupHTML = mee.encodeSpecialHTML(cleanedCode.html());
+                                    
+                                    
                                     mainHTMLELE.find(".bgimage").each(function () {
                                         $(this).attr("style", $(this).attr("mee-style"));
                                         $(this).removeAttr("mee-style");
@@ -686,6 +693,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     if(pageCustomCSS){
                                         var pageCustomCSSNoS = pageCustomCSS.split('__')[1];
                                     }
+                                    
                                     outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>' + header_section.html() + pageActionScriptSet + "</head><body style='background-color:" + pageBackgroundColor + ";background-image:url(" + pageBackgroundimage + ");background-repeat:" + pageBackgroundimage_repeat + ";background-position:" + pageBackgroundimage_pos + ";border-left:" + pageBorderLeftProp + ";border-right:" + pageBorderRightProp + ";border-top:" + pageBorderTopProp + ";border-bottom:" + pageBorderBottomProp + " ' class='"+pageCustomCSS+" "+pageCustomCSSNoS+"'>" + outputHTML + pageActionScriptSetG + pageActionScriptSetL + linkStyleTage + styleTag+ styleLink +"</body></html>";
 
                                     //"" + outputter.outerHTML();
@@ -746,6 +754,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     
                                     options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);
+                                    oHtml.find('.img[data-imgSrc]').attr('src','http://dlrf62yghsb05.cloudfront.net/templates/mail_images/img_mee_placeholder.png');
                                     mee.setHTML();
                                 };
 
@@ -4090,7 +4099,66 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             _newTitleHTML.find("input#image_alttext").val($(workingObject).attr("alt"));
                                         }
                                         _newTitleHTML.find("input#image_alttext").focus();
+                                    },
+                                    
+                                    addImageSource : function(myHtmlInstance, workingObject){
+                                        var dialogOptions = {
+                                                   title: "Image Source URL",
+                                                   css: {
+                                                       "width": "650px",
+                                                       "margin-left": "-270px"
+                                                   },
+                                                   bodyCss: {
+                                                       "min-height": "75px"
+                                                   },
+                                                   headerIcon: 'image newImg-icon',
+                                                   buttons: {
+                                                       saveBtn: {
+                                                           text: 'Insert'
+                                                       }
+                                                   }
+                                               };
+                                               
+                                               var dialog = null;
+                                               dialog = options._app.showStaticDialog(dialogOptions);
+                                               options._app.showLoading("Loading...", dialog.getBody());
+                                               dialog.$el.css("z-index", "99999");
+                                               $(".modal-backdrop").css("z-index", "99998");                                
+
+                                               dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left" style="width: 96%;"> <input type="text" style="height: 22px; margin-left: 5px; width: 98%; margin-top: 20px; margin-bottom: 12px;" placeholder="Paste image url here" id="onlineimg_url"></div><div style="padding-left: 9px;"><p style="line-height: 20px;color: #8C8C8F;">Enter valid URL i.e http://www.example.com/xyz.jpg<span style="clear: both;display: block;font-weight: 700;line-height: 15px;color: #60626c;"> OR </span> You can enter any merge field as image url i.e {{imageURL}}</p></div></div>');
+                                               dialog.$el.find('.dialog-backbtn').hide();
+                                               if($(workingObject).attr('data-imgSrc')){
+                                                   dialog.$el.find('#onlineimg_url').val($(workingObject).attr('data-imgSrc'))
+                                               }else{
+                                                   dialog.$el.find('#onlineimg_url').val($(workingObject).attr('src'))
+                                               }
+                                               dialog.saveCallBack(function () {
+                                                   var stringImg = dialog.$el.find('#onlineimg_url').val();
+                                                   var argsThis = {'imgurl': stringImg,'toolbar':true};
+                                                   var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
+                                                   if (/^((https?|ftp):)?\/\/.*(jpeg|jpg|png|gif|bmp)$/.test(stringImg) == true) {
+                                                       $(workingObject).removeAttr('data-imgSrc');
+                                                       $(workingObject).attr('src',stringImg);
+                                                       //OnUrlImageAdded(argsThis, dialog);
+                                                   }else if(merge_field_patt.test(stringImg)){
+                                                       $(workingObject).attr('data-imgSrc',stringImg);
+                                                       $(workingObject).attr('src','http://dlrf62yghsb05.cloudfront.net/templates/mail_images/img_mee_placeholder.png');
+                                                       //OnUrlMergeImageAddedPanel(argsThis, dialog,workingObject);
+                                                       console.log('Ok we had the image merge tag');
+                                                   } else {
+                                                       options._app.showError({
+                                                           control: dialog.$el.find('.imgurl-container'),
+                                                           message: "Invalid image url path."
+                                                       });
+
+                                                   }
+                                                   dialog.hide();
+
+                                               });
+                                               options._app.showLoading(false, dialog.getBody());
+
                                     }
+                                    
                                 }
                                 // == Enabling VideoFunctionality before access 
                                 var videoFunctionality = {
@@ -4149,7 +4217,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     makeCloneAndRegister();
                                     return false;
                                 });
-
+                                myElement.find(".ImageToolbarSourceClass").click(function(){
+                                    imageFunctionality.addImageSource(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
+                                    return false;
+                                });
                                 myElement.find(".ImageToolbarLinkClass").click(function () {
                                     //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     showLinkGUI();
@@ -4240,6 +4311,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                     var imageSrc = args.imgurl;
                                     var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + imageSrc + "' style='display:block;' /></div></div>");
+
+                                    meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
+                                        aspectRatio: false,
+                                        start: function (event, ui) {
+                                            $(this).find(".resizeable-tooltip").remove();
+                                            $(this).append("<div class='resizeable-tooltip'></div>")
+                                        },
+                                        resize: function (event, ui) {
+                                            $(this).find("img").css({"width": $(this).css("width"), "height": $(this).css("height")});
+                                            $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width")) + " × " + parseInt($(this).css("height")));
+                                        },
+                                        stop: function (event, ui) {
+                                            $(this).find(".resizeable-tooltip").remove();
+                                        }
+                                    });
+                                    args.droppedElement.html(htmlToPlace);
+                                    oInitDestroyEvents.InitializeClickEvent(args.droppedElement.parent());
+                                    dialog.hide();
+                                    makeCloneAndRegister();
+                                }
+                                var OnUrlMergeImageAdded = function (args, dialog) {
+
+                                    var imageSrc = args.imgurl;
+                                    var htmlToPlace = $("<div class='myImage myMergeImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' data-imgSrc='"+imageSrc+"' src='http://dlrf62yghsb05.cloudfront.net/templates/mail_images/img_mee_placeholder.png' style='display:block;' /></div></div>");
 
                                     meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
                                         aspectRatio: false,
@@ -7297,27 +7392,36 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                    bodyCss: {
                                                        "min-height": "75px"
                                                    },
-                                                   headerIcon: 'image',
+                                                   headerIcon: 'image newImg-icon',
                                                    buttons: {
                                                        saveBtn: {
                                                            text: 'Insert'
                                                        }
                                                    }
                                                };
+                                               
                                                var dialog = null;
                                                dialog = options._app.showStaticDialog(dialogOptions);
                                                options._app.showLoading("Loading...", dialog.getBody());
                                                dialog.$el.css("z-index", "99999");
                                                $(".modal-backdrop").css("z-index", "99998");                                
 
-                                               dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 24px;" placeholder="Paste image url here" id="onlineimg_url"></div></div>');
+                                               dialog.getBody().append('<div class="takename imgurl-container"><div class="inputcont left"> <input type="text" style="height: 22px; margin-left: 5px; width: 435px; margin-top: 20px; margin-bottom: 12px;" placeholder="Paste image url here" id="onlineimg_url"></div><div style="padding-left: 9px;"><p style="line-height: 20px;color: #8C8C8F;">Enter valid URL i.e http://www.example.com/xyz.jpg<span style="clear: both;display: block;font-weight: 700;line-height: 15px;color: #60626c;"> OR </span> You can enter any merge field as image url i.e {{imageURL}}</p></div></div>');
 
+                                               dialog.$el.find('.btn-close,.close').on('click',function(){
+                                                  dropArea.remove();
+                                               });
                                                dialog.$el.find('.dialog-backbtn').hide();
+                                               
                                                dialog.saveCallBack(function () {
                                                    var stringImg = dialog.$el.find('#onlineimg_url').val();
                                                    argsThis['imgurl'] = stringImg;
+                                                   var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
                                                    if (/^((https?|ftp):)?\/\/.*(jpeg|jpg|png|gif|bmp)$/.test(stringImg) == true) {
                                                        OnUrlImageAdded(argsThis, dialog);
+                                                   }else if(merge_field_patt.test(stringImg)){
+                                                       OnUrlMergeImageAdded(argsThis, dialog);
+                                                       console.log('Ok we had the image merge tag');
                                                    } else {
                                                        options._app.showError({
                                                            control: dialog.$el.find('.imgurl-container'),
