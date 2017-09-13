@@ -18,7 +18,8 @@ function (template,editorView) {
                'change #handcodedhtml':'editorChange',
                'change #plain-text':'editorChange',
                'change #htmlarea':'editorChange',
-               'click .save-step2': 'saveForStep2'
+               'click .save-step2': 'saveForStep2',
+               'click .dynamic-cotnent-items': 'dcItemsDialog'
             },
             /**
              * Initialize view - backbone
@@ -487,7 +488,32 @@ function (template,editorView) {
              },
              previewCallback : function(){
                  this.parent.previewCampaign();
-             }
+             },
+            dcItemsDialog: function () {
+                var dialog_width = $(document.documentElement).width() - 60;
+                var dialog_height = $(document.documentElement).height() - 182;
+                var dialog = this.app.showDialog({title: 'Dynamic Content Items',
+                    css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                    headerEditable: false,
+                    bodyCss: {"min-height": dialog_height + "px"}
+                });
+                this.app.showLoading("Loading Dynamic Content...", dialog.getBody());
+                var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK=" + this.app.get('bms_token') + "&fromNewUI=true";
+                var iframHTML = $("<div class='DCBlockItems'><iframe src=\"" + URL + "\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe></div>")
+                dialog.getBody().append(iframHTML);
+                var that = this;
+                $('iframe.dcItemsIframe').ready(function () {
+                    setTimeout(function () {
+                        that.app.showLoading(false, dialog.getBody());
+                    }, 3000);
+                });
+                
+                var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                dialog.getBody().find(".DCBlockItems").addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                this.app.dialogArray[dialogArrayLength-1].currentView = this; // New Dialog
+
+            }
             
         });
 });

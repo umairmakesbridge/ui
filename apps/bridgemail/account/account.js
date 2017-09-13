@@ -19,8 +19,7 @@ define(['text!account/html/account.html', 'bms-dragfile'],
                 {
                     this.app = this.options.app;      
                     this.$el.html(this.template({}));                                                                          
-                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    
+                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});                    
                     this.$(".droppanel").dragfile({
                         post_url: '/pms/io/publish/saveImagesData/?BMS_REQ_TK=' + this.app.get('bms_token') + '&type=add&allowOverwrite=N&th_width=100&th_height=100',
                         callBack: _.bind(this.processUpload, this),

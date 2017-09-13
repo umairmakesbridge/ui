@@ -1734,8 +1734,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                         });
                                         var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK=" + options._app.get('bms_token') + "&fromNewUI=true";
-                                        var iframHTML = "<iframe src=\"" + URL + "\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe>"
-                                        dialog.getBody().html(iframHTML);
+                                        var iframHTML = "<div class='DCBlockItems'><iframe src=\"" + URL + "\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe><div>"
+                                        var iframe_html = $(iframHTML)
+                                        dialog.getBody().append(iframe_html);
                                         options._app.showLoading("Loading Dynamic Content...", dialog.getBody());
                                         $('iframe.dcItemsIframe').ready(function () {
 
@@ -1743,6 +1744,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 options._app.showLoading(false, dialog.getBody());
                                             }, 3000);
                                         });
+                                        if (options.fromDialog) {
+                                            var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                            dialog.getBody().find(".DCBlockItems").addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                                            options._app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
+                                            options._app.dialogArray[dialogArrayLength - 1].currentView = iframe_html; // New Dialog                                                                                        
+
+                                        }
                                     });
 
                                 }
