@@ -266,7 +266,8 @@
             var URL = ""
             var self = this
             if (this.basicFields.length === 0) {
-                var fieldsType = self.options.DCFilter?"merge_tags":"fields_all";
+                //var fieldsType = self.options.DCFilter?"merge_tags":"fields_all";
+                var fieldsType = "fields_all";
                 URL = "/pms/io/getMetaData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type="+fieldsType;
                 $.ajax({
                     dataType: "json",
@@ -283,7 +284,7 @@
                             var cust_field_html = '<optgroup label="Custom Fields">'
                             $.each(fields_json, function (key, val) {
                                 var selected_field = (params && params.fieldName == val[0]) ? "selected" : ""
-                                if(self.options.DCFilter){
+                                /*if(self.options.DCFilter){
                                     if (val[2] == "B") {
                                         self.basicFields.push(val)
                                         bas_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
@@ -292,7 +293,7 @@
                                         cust_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
                                     }
                                 }
-                                else {
+                                else {*/
                                     if (val[2] == "true") {
                                         self.basicFields.push(val)
                                         bas_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
@@ -300,7 +301,7 @@
                                         self.customFields.push(val)
                                         cust_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
                                     }
-                                }
+                               // }
                             });
                             bas_field_html += '</optgroup>'
                             cust_field_html += '</optgroup>'
