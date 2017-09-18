@@ -8977,6 +8977,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         camp_id : this.options.campNum, // DC ADD
                         formWizURL: _formWizURL,
                         fromDialog: this.fromDialog,
+                        wsType: this.options.wsType,
                         reAttachEvents: reattachEvents,
                         formDeleteURL: _formDeleteURL,
                         saveCallBack: this.options.saveClick,

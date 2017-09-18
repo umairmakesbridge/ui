@@ -174,7 +174,7 @@ function (template) {
                 if(this.editable){
                     require(["campaigns/campaign_body"],_.bind(function(page){    
                          this.app.showLoading(false,this.$bodyInner);                    
-                         this.messagebody_page = new page({page:this,ABtype:this.ABtype ,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
+                         this.messagebody_page = new page({page:this,ABtype:this.ABtype ,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable,workspaceType:this.options.type})                       
                          this.$bodyInner.append(this.messagebody_page.$el); 
                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                          this.messagebody_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
