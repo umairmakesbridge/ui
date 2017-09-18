@@ -36,7 +36,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     var predefinedControls = [
                         {
                             "type": "text",
-                            "html": "<div class='textcontent'>This is sample text</div>"
+                            "html": "<div class='textcontent' style='font-family:Arial,sans-serif;font-size:10pt;'><span style='font-family:Arial,sans-serif;font-size:10pt;'>This is sample text</span></div>"
                         },
                         {
                             "type": "image",

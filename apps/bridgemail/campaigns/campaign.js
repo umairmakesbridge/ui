@@ -564,7 +564,11 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         e.stopPropagation();
                     });
                     previewIconCampaign.click(function (e) {
-                        //active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
+                        if(camp_obj.wizard.active_step==1){
+                            if(camp_obj.states.step1.change){
+                                camp_obj.saveStep1(true);
+                            }
+                        }
                         var camp_name = active_ws.find("#workspace-header").html();
                         var dialog_width = $(document.documentElement).width() - 60;
                         var dialog_height = $(document.documentElement).height() - 172;
@@ -1114,7 +1118,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     }
                     obj.stopPropagation();
                 },
-                saveStep1: function () {
+                saveStep1: function (notNext) {
                     var camp_obj = this;
                     var app = camp_obj.app;
                     var proceed = -1;
@@ -1324,7 +1328,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                         if (step1_json[0] !== "err") {
                                             camp_obj.app.showMessge("Step 1 saved successfully!");
                                             camp_obj.states.step1.change = false;
-                                            camp_obj.wizard.next();
+                                            if(typeof(notNext)=="undefined"){
+                                                camp_obj.wizard.next();
+                                            }
                                         }
                                         else {
                                             camp_obj.app.showAlert(step1_json[1], $("body"));
