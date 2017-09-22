@@ -89,9 +89,20 @@ function (template,calendario) {
                             this.CampObjData = jQuery.parseJSON(xhr.responseText);
                             if(this.app.checkError(this.CampObjData)){
                                 return false;
-                            }
-                            
+                            }                            
                             this.fetchServerTime();
+                            if(this.CampObjData.isThirdPartySMTP=="Y"){
+                                this.app.getData({
+                                    "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=gmailAPILimit",
+                                    "key": "gmailLimit",
+                                    "callback" : _.bind(function(){
+                                        var gmailLimitData = this.app.getAppData("gmailLimit");
+                                        if(gmailLimitData.maxLimit){
+                                             $(".gmailLimitloading").html(parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit));
+                                        }
+                                    },this)
+                                });
+                            }
                         }
                    },this));
            },
@@ -661,14 +672,16 @@ function (template,calendario) {
                         if(parseInt(dayDate) <= 9){
                             dayDate = "0"+dayDate;
                         }
+                  var thirdPartyEmailSentNote = this.getThirdPartySMTPMessage();      
+                    
                   if(this.sendNow){
                        this.$el.parents('body').find('.reschedule-dialog-wrap').css({'width':'560px','margin-left':'-280px'});
                        var currentServerDateHObj = moment(this.serverDate, ["YYYY-M-D H:m:s"]);
                             var currentServerDateHFormat = currentServerDateHObj.format('YYYY-MM-DD HH:mm:ss A');
                             
-                       var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Campaign Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><p style="float: left;" class="">On</p><span class="schdate-span"><i style="background-color: transparent ! important; height: 18px; width: 22px;" class="icon schedulesn left"></i>'+currentServerDateHFormat+' PST</span><div class="clearfix"></div><div class="btns right" style="margin:10px 0"><a class="btn-green btn-run" ><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
+                       var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Campaign Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><p style="float: left;" class="">On</p><span class="schdate-span"><i style="background-color: transparent ! important; height: 18px; width: 22px;" class="icon schedulesn left"></i>'+currentServerDateHFormat+' PST</span><div class="clearfix"></div>'+thirdPartyEmailSentNote+'<div class="btns right" style="margin:10px 0"><a class="btn-green btn-run" ><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
                       }else{
-                       var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Schedule Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><hr><div class="clearfix"></div><p class="note" style="padding-top: 0px;text-align:left;margin-top:10px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><p style="padding-top: 8px; text-align: left; float: left;padding-right:5px;" class="note">* The time is according to Pacific Standard Time  </p><div class="btns right" style="margin:0 0 10px;"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
+                       var appendHtml = '<div class="schedule-panel" id="schedule-panel-2" style="height:140px"><h1 style="color:#01AEEE;">Schedule Details:</h1><a class="closebtn closebtn-2" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.model.get("name")+'\'</b>?</p><h4>Send to the following '+this.parent.model.get('recipientType')+ '&nbsp;'+recipientArray.camp+':</h4><ul>'+recipients+'</ul><hr><div class="clearfix"></div><p class="note" style="padding-top: 0px;text-align:left;margin-top:10px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><div class="clearfix"></div>'+thirdPartyEmailSentNote+'<p style="padding-top: 8px; text-align: left; float: left;padding-right:5px;" class="note">* The time is according to Pacific Standard Time  </p><div class="btns right" style="margin:0 0 10px;"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel closebtn-2"><span>No</span><i class="icon cross"></i></a></div></div>'
                       }
                   this.$el.parents('body').find('.reschedule-dialog-wrap').find('.scheduled-campaign').removeClass('saving')
                   this.$el.parents('body').find('.reschedule-dialog-wrap').find('.lst-sch-btn-nown').removeClass('saving')
@@ -703,6 +716,19 @@ function (template,calendario) {
                       this.$el.parents('body').find('.reschedule-dialog-wrap #schedule-panel-1').show();
                       this.$el.parents('body').find('.reschedule-dialog-wrap #schedule-panel-2').remove();
                   },this));
+              },
+              getThirdPartySMTPMessage: function(){
+                  var thirdPartyEmailSentNote = "";
+                  if(this.CampObjData.isThirdPartySMTP=="Y"){
+                    var gmailLimitText = "<span class='gmailLimitloading'>[Calculating...]</span>";
+                    var gmailLimitData = this.app.getAppData("gmailLimit");
+                    if(gmailLimitData.maxLimit){
+                        gmailLimitText = parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit)
+                    }
+                    thirdPartyEmailSentNote = "<div class='messagebox caution animated' style='margin:-5px 0px 10px 0px;width:auto'><p>This campaign will be sent using third party email \""+this.CampObjData.fromEmail+"\". Your daily sent count for today is <b>"+gmailLimitText+"</b>.</p></div>"; 
+                    thirdPartyEmailSentNote +="<div class='clearfix'></div>"
+                }  
+                return thirdPartyEmailSentNote;
               },
               /*
                * 
@@ -780,9 +806,13 @@ function (template,calendario) {
                            post_data["scheduleDate"] =this.snServerDate;
                        }else{
                            post_data["scheduleDate"] =_date+" "+time;   
-                       }
+                       }                       
                                                         
-                   } 
+                   }
+                   if(this.CampObjData.isThirdPartySMTP=="Y"){
+                        post_data["isThirdPartySMTP"] = "Y";
+                        post_data["thirdPartySMTPName"] = "Gmail";
+                   }
                    
                    var _message = message?message:'Changing mode...';
                    this.app.showLoading(_message,this.$el.parents(".ws-content"));  
@@ -1108,14 +1138,16 @@ function (template,calendario) {
                                           frecipients = "<li class='recepient_type'><i class='icon "+this.parent.states.step3.recipientType.toLowerCase()+"'></i>"+val+"</li>";
                                       } 
                         },this));
+                        var thirdPartyEmailSentNote = this.getThirdPartySMTPMessage();                        
+                        
                         if(this.sendNow){
                             var currentServerDateHObj = moment(this.serverDate, ["YYYY-M-D H:m:s"]);
                             var currentServerDateHFormat = currentServerDateHObj.format('YYYY-MM-DD hh:mm:ss A');
                             
-                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Campaign Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4><ul>'+frecipients+'</ul><p style="float: left;" class="">On</p><span class="schdate-span"><i style="background-color: transparent ! important; height: 18px; width: 22px;" class="icon schedulesn left"></i>'+currentServerDateHFormat+' PST</span><div class="clearfix"></div><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>'; 
+                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Campaign Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to send campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4><ul>'+frecipients+'</ul><p style="float: left;" class="">On</p><span class="schdate-span"><i style="background-color: transparent ! important; height: 18px; width: 22px;" class="icon schedulesn left"></i>'+currentServerDateHFormat+' PST</span><div class="clearfix"></div>'+thirdPartyEmailSentNote+'<div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>'; 
                         }else{
                          
-                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Schedule Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4>  <ul>'+frecipients+'</ul><div class="clearfix"></div><p class="note" style="padding-top: 0px; text-align: left; margin-top: 10px; margin-bottom: 5px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><p class="note" style="padding-top: 8px; text-align: left; float: left;">* The time is according to Pacific Standard Time  </p><div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>';
+                            var appendHtml = '<div class="schedule-panel" style="height:140px"><h1 style="">Schedule Details:</h1><a class="closebtn" style="display:none;"></a><p class="note sch-note" style="padding-top: 8px;text-align:left;">Do you want to schedule campaign <b>\''+this.parent.campobjData.name+'\'</b>?</p><h4>Send to the following '+this.parent.states.step3.recipientType+' '+helpingText+':</h4>  <ul>'+frecipients+'</ul><div class="clearfix"></div><p class="note" style="padding-top: 0px; text-align: left; margin-top: 10px; margin-bottom: 5px;"><p class="" style="float: left;">On</p> <span class="schdate-span"><i class="icon schedulesn left" style="background-color: transparent ! important; height: 18px; width: 22px;"></i>'+dayDate+'&nbsp;'+this.$el.parents('body').find('#custom-month').html()+' '+this.$el.parents('body').find('#custom-year').html()+' at '+this.$el.find('.schedule-panel .set-time .timebox-hour').val()+':'+this.$el.find('.schedule-panel .set-time .timebox-min').val()+'&nbsp;'+this.$el.find('.schedule-panel .set-time .timebox-hours .active').text()+' PST</span></p><p class="note" style="padding-top: 8px; text-align: left; float: left;">* The time is according to Pacific Standard Time  </p><div class="clearfix"></div>'+thirdPartyEmailSentNote+'<div class="btns right"><a class="btn-green btn-run"><span>&nbsp;&nbsp;&nbsp;Yes&nbsp;</span><i class="icon next"></i></a><a class="btn-gray btn-cancel"><span>No</span><i class="icon cross"></i></a></div></div>';
                         }
                         
                         this.$el.parents('body').find('.reschedule-dialog-wrap').html(appendHtml);

@@ -10079,3 +10079,8 @@ ul.sourceCampPreview{
 ul.sourceCampPreview li{
     margin: 0px 5px;
 }
+.bg-warning{
+    background-color:#fcf8e3;
+    padding:15px;
+    marign-bottom:10px;
+}

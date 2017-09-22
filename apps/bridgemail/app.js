@@ -377,7 +377,7 @@ define([
                     cl = 'caution';
                     title = 'Caution';
                 }
-                else if (option && option.type == 'Disabled')
+                else if (option && option.type)
                 {
                     cl = 'caution';
                     title = option.type;

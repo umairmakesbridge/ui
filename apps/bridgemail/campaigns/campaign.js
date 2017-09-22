@@ -77,7 +77,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.isSaveCallFromMee = false;
                     this.save_states_call = null;
                     this.states = {
-                        "step1": {change: false, sf_checkbox: false, ns_checkbox: false, sfCampaignID: '', nsCampaignID: '', hasResultToSalesCampaign: false, hasResultToNetsuiteCampaign: false, pageconversation_checkbox: false, hasConversionFilter: false},
+                        "step1": {change: false, sf_checkbox: false, ns_checkbox: false, sfCampaignID: '', nsCampaignID: '', hasResultToSalesCampaign: false, hasResultToNetsuiteCampaign: false, pageconversation_checkbox: false, hasConversionFilter: false, isThirdPartySMTP:'N'},
                         "step2": {"templates": false, htmlText: '', plainText: '', change: false, editorType: ''},
                         "step3": {"target_id": 0, highrise: false, salesforce: false, netsuite: false, recipientType: "", recipientDetial: null, change: false, netsuitegroups: null, targetDialog: null,
                             csvupload: null, mapdataview: null, tags: null, sf_filters: {lead: "", contact: "", opportunity: ""},
@@ -1298,7 +1298,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         if (proceed !== 0 && (this.states.step1.change || this.camp_id == 0)) {
                             this.app.showLoading("Saving Step 1...", this.$el.parents(".ws-content"));
                             var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token');
-                            $.post(URL, {type: "saveStep1", campNum: this.camp_id,
+                            var _postData = {type: "saveStep1", campNum: this.camp_id,
                                 subject: subject_field,
                                 senderName: this.$("#campaign_from_name").val(),
                                 fromEmail: fromEmail,
@@ -1320,8 +1320,14 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 twitterShareIcon: this.$("#campaign_twitter")[0].checked ? 'Y' : 'N',
                                 linkedInShareIcon: this.$("#campaign_linkedin")[0].checked ? 'Y' : 'N',
                                 googlePlusShareIcon: this.$("#campaign_gplus")[0].checked ? 'Y' : 'N',
-                                pinterestShareIcon: this.$("#campaign_pintrest")[0].checked ? 'Y' : 'N'
-                            })
+                                pinterestShareIcon: this.$("#campaign_pintrest")[0].checked ? 'Y' : 'N',
+                                isThirdPartySMTP : 'N'
+                            };
+                            if(camp_obj.states.step1.isThirdPartySMTP=="Y"){
+                                _postData.isThirdPartySMTP="Y"
+                                _postData.thirdPartySMTPName="Gmail"
+                            }
+                            $.post(URL, _postData)
                                     .done(function (data) {
                                         var step1_json = jQuery.parseJSON(data);
                                         camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
@@ -1662,8 +1668,35 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     fromOptions += '<option value="' + fromEmailsArray[i] + '" selected="selected">' + fromEmailsArray[i] + '</option>';
                                     selected_fromEmail = fromEmailsArray[i];
                                 }
-                                else
+                                else{
                                     fromOptions += '<option value="' + fromEmailsArray[i] + '">' + fromEmailsArray[i] + '</option>';
+                                }
+                            }
+                            //Add Gmail Address to fromEmail box
+                            if(defaults_json.thirdpartysmtp && defaults_json.thirdpartysmtp[0].Gmail){
+                                var gmailSMTPExists = false;
+                                var gmailAddresses = defaults_json.thirdpartysmtp[0].Gmail;
+                                if(gmailAddresses.length){
+                                    for(var i=0;i<gmailAddresses.length;i++){
+                                        if(gmailAddresses[i].fromAddress){
+                                            fromOptions += '<option value="' + gmailAddresses[i].fromAddress + '" isThirdPartySMTP="Y" thirdPartySMTPName="Gmail" gmailFromName="'+gmailAddresses[i].gmailFromName+'">' + gmailAddresses[i].fromAddress + '</option>';
+                                            gmailSMTPExists = true;
+                                        }
+                                    }
+                                }
+                                
+                                if(gmailSMTPExists){
+                                    camp_obj.app.getData({
+                                        "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + camp_obj.app.get('bms_token') + "&type=gmailAPILimit",
+                                        "key": "gmailLimit",
+                                        "callback" : _.bind(function(){
+                                            var gmailLimitData = this.app.getAppData("gmailLimit");
+                                            if(gmailLimitData.maxLimit){
+                                                 $(".gmailLimitloading").html(parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit));
+                                            }
+                                        },camp_obj)
+                                    });
+                                }
                             }
                             
                             camp_obj.$el.find('#campaign_from_email').append(fromOptions);
@@ -1675,6 +1708,29 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 } else {
                                     camp_obj.$('#campaign_from_email_default').hide();
                                 }
+                                //Gmail settings
+                                var selected_fromEmail = $(this).find(":selected");
+                                if(selected_fromEmail.attr("isThirdPartySMTP") && selected_fromEmail.attr("isThirdPartySMTP")=="Y"){
+                                    var gmailLimitText = "<span class='gmailLimitloading'>[Calculating...]</span>";
+                                    var gmailLimitData = camp_obj.app.getAppData("gmailLimit");
+                                    if(gmailLimitData.maxLimit){
+                                        gmailLimitText = parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit)
+                                    }
+                                    setTimeout(function(){camp_obj.app.showAlert('This campaign will be sent using third party email "'+obj.target.value+'".<br/><br/>Your daily sent count for today is <b>'+gmailLimitText+'</b>.',$("body"),{type:'Sent From Gmail',fixed: true}) }
+                                    ,50);
+                                    setTimeout(function(){$(".messsage_alert").remove()},4000);
+                                    camp_obj.$("#campaign_reply_to").val(obj.target.value);
+                                    if(selected_fromEmail.attr("gmailFromName")){
+                                        camp_obj.$("#campaign_from_name").val(selected_fromEmail.attr("gmailFromName"))
+                                    }
+                                    camp_obj.states.step1.isThirdPartySMTP = "Y";
+                                }
+                                else{
+                                    camp_obj.states.step1.isThirdPartySMTP = "N";        
+                                    camp_obj.$("#campaign_from_name").val(defaults_json.fromName)
+                                    camp_obj.$("#campaign_reply_to").val(defaults_json.fromEmail);
+                                }
+                                
                             });
                             //}
                             camp_obj.$el.find('#fromemail_default').append(fromOptions);

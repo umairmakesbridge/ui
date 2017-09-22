@@ -98,11 +98,12 @@ define(['text!account/html/gmailaccounts.html'],
                             return false;
                         }
                         if (_json[0] !== "err" && _json.id) {
-                            this.$(".gmail-account-name").html(_json.name ? _json.name : _json.email);
+                            this.$(".gmail-account-name").html(_json.name ? _json.name : "&nbsp;");
                             this.$(".gmail-account-email").html(_json.email);
                             if(_json.picture){
                                 this.$(".gmail-account-image").attr("src",_json.picture)
                             }
+                            this.loadDailyLimit();
                             
                         }
                         else{
@@ -140,6 +141,18 @@ define(['text!account/html/gmailaccounts.html'],
                             this.app.showAlert(_json[1],this.$el);
                         }
                     },this));
+                },
+                loadDailyLimit:function(){
+                    this.app.getData({
+                        "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=gmailAPILimit",
+                        "key": "gmailLimit",
+                        "callback" : _.bind(function(){
+                            var gmailLimitData = this.app.getAppData("gmailLimit");
+                            if(gmailLimitData.maxLimit){
+                                 this.$(".dialyGmailLimit").html(parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit));
+                            }
+                        },this)
+                    });
                 }
 
 
