@@ -60,7 +60,8 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         case "CMP_C": 
                         case "CMP_ZERO":
                         case "CMP_RR":    
-                        case "CMP_ANZ":    
+                        case "CMP_ANZ":
+                        case "GMAIL_L_R":    
                             img = this.options.app.get("path")+"img/campaign-"+colorName+".png";
                             break;
                         case "TG_PCT":
@@ -187,6 +188,7 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     var message_SYNCH_A_I = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer import activated";
                     var message_SYNCH_A = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce import has been schuled";
                     var message_SYNCH_PEER_A = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer has been activated";
+                    var message_GMAIL_L_R = (this.model.get('Message')) ? this.model.get('Message') : "User Gmail API limit reached at Makesbridge.";
                     
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
@@ -233,6 +235,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         break;
                         case "SYNCH_A":
                             label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_SYNCH_A+"'>" + message_SYNCH_A + "</span>";
+                        break;
+                        case "GMAIL_L_R":
+                            label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_GMAIL_L_R+"'>" + message_GMAIL_L_R + "</span>";
                         break;
                     }
                     return label;
@@ -301,6 +306,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         case "SYNCH_A":
                             label = "<strong>Sync completed </strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+ "</span>";
                             break;  
+                        case "GMAIL_L_R":
+                           label = "<strong>Updated Count at</strong> <span style='font-weight:normal'>"+this.dateSetting(this.model.get('logTime'))+"</span>"
+                           break;    
                             
                         
                     }
@@ -342,6 +350,16 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                             break;
                         case "CSV":
                              label = "<strong>List Name</strong> <span data-original-title='"+this.model.get('listName')+"' class='text-truncated showtooltip'><a class='list-name'>" + this.model.get('listName') + "<a/></span>"
+                             break;
+                        case "GMAIL_L_R":                                
+                                if(this.model.get("campaignNames")){
+                                    label = "<strong>Campaigns can effect</strong>";
+                                    var cList = [];
+                                    _.each(this.model.get("campaignNames")[0],function(val,key){
+                                        cList.push("<span data-original-title='"+val+"' class='text-truncated showtooltip'>"+val+"</span>");
+                                    },this)
+                                    label += cList.join(","); 
+                                }
                                 break;
                     }
                     return label;
@@ -494,6 +512,14 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                             date= this.dateSetting(this.model.get('logTime'));;
                             nameOf = "at";
                             break;
+                        case "GMAIL_L_R":
+                            caption = "Gmail Limit";
+                            noun = "has been reached";
+                            to="";
+                            count = "";
+                            date= this.dateSetting(this.model.get('logTime'));;
+                            nameOf = "at";
+                            break;    
                     }
                    if(caption){
                     var str ="<a><strong class='text-truncated' style='display:inline;'>"+caption+"&nbsp;</strong></a>";

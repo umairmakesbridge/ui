@@ -9759,7 +9759,7 @@ Download CSV Button
     min-height:160px;
 }
 
-.hideEle {
+.hideEle,.hideForGmail {
     opacity: 0.5;    
 }
 

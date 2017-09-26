@@ -9214,6 +9214,7 @@ top:50%; margin:-250px 0 0 -310px; z-index:999999;}
 .messages_dialogue  .alertmsg.info h3 {color: #3db5ff;}
 .messages_dialogue  .alertmsg.error h3 {color: #f65f5f;}
 .messages_dialogue  .alertmsg.warning h3 {color: #ffb137;}
+.messages_dialogue  .alertmsg.warning h3 a{color: #ffb137;}
 
 
 

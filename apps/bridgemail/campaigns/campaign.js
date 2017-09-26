@@ -347,6 +347,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     jQuery.getJSON(URL, function (tsv, state, xhr) {
                         var camp_json = jQuery.parseJSON(xhr.responseText);
                         camp_obj.campobjData = camp_json;
+                        camp_obj.states.step1.isThirdPartySMTP=camp_json.isThirdPartySMTP;
                         $("#campMenubtn").attr("disabled", false).html("Load");
 
                         if (camp_obj.app.checkError(camp_json)) {
@@ -396,13 +397,23 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         if (camp_json.senderName != '') {
                             camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));
                         }
+                        /*else if(camp_json.isThirdPartySMTP=="Y"){
+                            camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));
+                        }*/
                         else {
                             camp_obj.states.step1.change = true;
                         }
+                        
+                        
+                       
                         //states.step1.change
                         camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));
                         if (camp_obj.wizard.options.isCreateCamp) {
                             camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
+                        }
+                        var smtp_setting = camp_obj.$("#campaign_from_email").find(":selected").attr("isThirdPartySMTP");
+                        if(smtp_setting && smtp_setting=="Y"){
+                            camp_obj.$("#campaign_from_name,#campaign_reply_to").prop("readonly",true);
                         }
                         if (camp_json.isFooterText == 'Y') {
                             camp_obj.$("#campaign_footer_text").val(camp_obj.app.decodeHTML(camp_json.footerText, true));
@@ -1155,11 +1166,13 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     }
                     if (el.find('#campaign_from_name').val() == '')
                     {
-                        app.showError({
-                            control: el.find('.fname-container'),
-                            message: "From name cannot be empty"
-                        });
-                        isValid = false;
+                        //if(this.states.step1.isThirdPartySMTP=="N"){
+                            app.showError({
+                                control: el.find('.fname-container'),
+                                message: "From name cannot be empty"
+                            });
+                            isValid = false;
+                        //}                        
                     }
                     else if (el.find('#campaign_from_name').val().indexOf("{{") && el.find('#campaign_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/) == -1) {
                         app.showError({
@@ -1446,6 +1459,13 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         post_data['htmlCode'] = "";
                     }    
                     
+                    if(this.states.step1.isThirdPartySMTP=="Y"){
+                        this.$("#salesforce_import,#netsuite_import,#highrise_import,#google_import").addClass("hideForGmail"); 
+                    }
+                    else{
+                        this.$("#salesforce_import,#netsuite_import,#highrise_import,#google_import").removeClass("hideForGmail"); 
+                    }
+                    
                     this.DCExists = false; 
                     if(typeof (gotoNext)=="undefined" && selected_li == "html_editor_mee"){
                         var dcMatchRegex = new RegExp("{{BMS_DYNAMIC_VARIATION_[0-9]+}}","g");
@@ -1686,7 +1706,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 }
                                 
                                 if(gmailSMTPExists){
-                                    camp_obj.app.getData({
+                                    camp_obj.app.getData({                                        
                                         "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + camp_obj.app.get('bms_token') + "&type=gmailAPILimit",
                                         "key": "gmailLimit",
                                         "callback" : _.bind(function(){
@@ -1695,7 +1715,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                                  $(".gmailLimitloading").html(parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit));
                                             }
                                         },camp_obj)
-                                    });
+                                    });                                    
+                                    camp_obj.$("#lblFromemail .fieldinfo").show();
+                                    camp_obj.$("#lblFromemail .fieldinfo .fieldinfo em").html("You can use, added gmail address as From Email.");
                                 }
                             }
                             
@@ -1714,22 +1736,34 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     var gmailLimitText = "<span class='gmailLimitloading'>[Calculating...]</span>";
                                     var gmailLimitData = camp_obj.app.getAppData("gmailLimit");
                                     if(gmailLimitData.maxLimit){
-                                        gmailLimitText = parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit)
+                                        gmailLimitText = parseInt(gmailLimitData.limitUsed) + "/" + parseInt(gmailLimitData.maxLimit)
                                     }
-                                    setTimeout(function(){camp_obj.app.showAlert('This campaign will be sent using third party email "'+obj.target.value+'".<br/><br/>Your daily sent count for today is <b>'+gmailLimitText+'</b>.',$("body"),{type:'Sent From Gmail',fixed: true}) }
-                                    ,50);
-                                    setTimeout(function(){$(".messsage_alert").remove()},4000);
-                                    camp_obj.$("#campaign_reply_to").val(obj.target.value);
+                                    var maxLimitReachedText = "";
+                                    var fromNameEmpty = "";
                                     if(selected_fromEmail.attr("gmailFromName")){
-                                        camp_obj.$("#campaign_from_name").val(selected_fromEmail.attr("gmailFromName"))
+                                        camp_obj.$("#campaign_from_name").val(selected_fromEmail.attr("gmailFromName")).prop("readonly",true);
                                     }
+                                    else{
+                                        var fromEmail = obj.target.value;
+                                        camp_obj.$("#campaign_from_name").val(fromEmail.substring(0,fromEmail.indexOf("@"))).prop("readonly",true);
+                                        fromNameEmpty = "<br><br><i>From Name is empty for gmail address. Your email will not have a from name. We are filling it to process campaign successfully.</i>"
+                                    }
+                                    if(parseInt(gmailLimitData.limitUsed) >= parseInt(gmailLimitData.maxLimit)){ 
+                                        maxLimitReachedText = "<br/><br/><i>Your daily Makesbridge Gmail API usage limit has been reached. You will not able to send campaign <b>today</b>. Either schedule your campaign or change From Email.</i>";
+                                    }
+                                    setTimeout(function(){camp_obj.app.showAlert('This campaign will be sent using third party email "'+obj.target.value+'".<br/><br/>Your daily sent count for today is <b>'+gmailLimitText+'</b>.'+maxLimitReachedText+fromNameEmpty,$("body"),{type:'Sent From Gmail',fixed: true}) }
+                                    ,50);
+                                    //setTimeout(function(){$(".messsage_alert").remove()},10000);
+                                    camp_obj.$("#campaign_reply_to").val(obj.target.value).prop("readonly",true); 
+                                                                        
                                     camp_obj.states.step1.isThirdPartySMTP = "Y";
                                 }
                                 else{
-                                    camp_obj.states.step1.isThirdPartySMTP = "N";        
-                                    camp_obj.$("#campaign_from_name").val(defaults_json.fromName)
-                                    camp_obj.$("#campaign_reply_to").val(defaults_json.fromEmail);
+                                    camp_obj.states.step1.isThirdPartySMTP = "N";                                            
+                                    camp_obj.$("#campaign_from_name").val(defaults_json.fromName).prop("readonly",false);  
+                                    camp_obj.$("#campaign_reply_to").val(defaults_json.fromEmail).prop("readonly",false);  ;
                                 }
+                                camp_obj.app.hideError({control: camp_obj.$el.find(".fname-container")});
                                 
                             });
                             //}
@@ -2618,9 +2652,15 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         return false;
                     }
                     
-                    if(target_li.hasClass("hideEle")){
-                        var li_names = {"salesforce_import":"Salesforce Import","netsuite_import":"Netsute Import","choose_tags":"Tags","highrise_import":"Highrise Import","google_import":"Google Import"};
-                        this.app.showAlert('"'+li_names[target_li.attr("id")]+'" option is disabled <b>temporary</b>, because you are using Dynamic Content block in campaign HTML.Please select <b>Lists</b> or <b>Targets</b> as recipients.',this.$el,{type:'Disabled',fixed: true});
+                    if(target_li.hasClass("hideEle") || target_li.hasClass("hideForGmail")){
+                        if(this.DCExists){
+                            var li_names = {"salesforce_import":"Salesforce Import","netsuite_import":"Netsute Import","choose_tags":"Tags","highrise_import":"Highrise Import","google_import":"Google Import"};
+                            this.app.showAlert('"'+li_names[target_li.attr("id")]+'" option is disabled <b>temporary</b>, because you are using Dynamic Content block in campaign HTML.Please select <b>Lists</b> or <b>Targets</b> as recipients.',this.$el,{type:'Disabled',fixed: true});
+                        }
+                        else if(this.states.step1.isThirdPartySMTP=="Y" && this.DCExists==false){
+                            var li_names = {"salesforce_import":"Salesforce Import","netsuite_import":"Netsute Import","highrise_import":"Highrise Import","google_import":"Google Import"};
+                            this.app.showAlert('"'+li_names[target_li.attr("id")]+'" option is disabled, because you are using third party from email. Please select <b>Lists</b> or <b>Targets</b> or <b>Tags</b> as recipients.',this.$el,{type:'Disabled',fixed: true});
+                        }
                         return false;
                     }
                     

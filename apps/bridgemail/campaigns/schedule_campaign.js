@@ -234,10 +234,16 @@ function (template,calendario) {
                 },
                 scheduleCampNow: function(event){
                   if(!$(event.currentTarget).hasClass('disabled-btn') && !$(event.currentTarget).hasClass('send-confirm')){
-                      this.sendNow = true;  
-                     
-                      this.getScheduleDate(event); 
-                      this.scheduleCamp(event);
+                      var gmailLimitData = this.app.getAppData("gmailLimit");
+                      if(gmailLimitData && parseInt(gmailLimitData.limitUsed) >= parseInt(gmailLimitData.maxLimit)){
+                           var gmailLimitText = parseInt(gmailLimitData.limitUsed) + "/" + parseInt(gmailLimitData.maxLimit)
+                           setTimeout(_.bind(function(){this.app.showAlert("Your daily Makesbridge Gmail API usage limit has been reached <b>"+gmailLimitText+"</b>. You can either schedule your campaign for another day or change From Email on Step1.",$("body")) } ,this),20);    
+                      }
+                      else{
+                        this.sendNow = true;                       
+                        this.getScheduleDate(event); 
+                        this.scheduleCamp(event);
+                    }
                   }
                   
                 },
@@ -723,10 +729,13 @@ function (template,calendario) {
                     var gmailLimitText = "<span class='gmailLimitloading'>[Calculating...]</span>";
                     var gmailLimitData = this.app.getAppData("gmailLimit");
                     if(gmailLimitData.maxLimit){
-                        gmailLimitText = parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit)
+                        gmailLimitText = parseInt(gmailLimitData.limitUsed) + "/" + parseInt(gmailLimitData.maxLimit)
                     }
+                    
                     thirdPartyEmailSentNote = "<div class='messagebox caution animated' style='margin:-5px 0px 10px 0px;width:auto'><p>This campaign will be sent using third party email \""+this.CampObjData.fromEmail+"\". Your daily sent count for today is <b>"+gmailLimitText+"</b>.</p></div>"; 
                     thirdPartyEmailSentNote +="<div class='clearfix'></div>"
+                    
+                    
                 }  
                 return thirdPartyEmailSentNote;
               },
