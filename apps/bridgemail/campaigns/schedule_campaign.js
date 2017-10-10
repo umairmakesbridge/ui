@@ -93,7 +93,7 @@ function (template,calendario) {
                             this.fetchServerTime();
                             if(this.CampObjData.isThirdPartySMTP=="Y"){
                                 this.app.getData({
-                                    "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=gmailAPILimit",
+                                    "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=gmailAPILimit&userId="+this.getUserId(),
                                     "key": "gmailLimit",
                                     "callback" : _.bind(function(){
                                         var gmailLimitData = this.app.getAppData("gmailLimit");
@@ -105,6 +105,14 @@ function (template,calendario) {
                             }
                         }
                    },this));
+           },
+           getUserId:function(){
+               var user_id= this.app.get("user").userId;
+               var smtpuser_id= this.CampObjData.thirdPartySMTPUserId;
+               if(smtpuser_id && user_id!= smtpuser_id){
+                   user_id=smtpuser_id;
+               }                       
+               return user_id;
            },
            fetchServerTime:function(){
                    var URL = '/pms/io/getMetaData/?type=time&BMS_REQ_TK='+this.app.get('bms_token');

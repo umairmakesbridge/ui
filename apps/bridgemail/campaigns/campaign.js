@@ -366,6 +366,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
 
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
                         var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
+                        camp_obj.setGmailSMTPSettings();
                         if (camp_json.fromEmail != '')
                         {
                             if (merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
@@ -411,6 +412,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         if (camp_obj.wizard.options.isCreateCamp) {
                             camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
                         }
+                        
                         var smtp_setting = camp_obj.$("#campaign_from_email").find(":selected").attr("isThirdPartySMTP");
                         if(smtp_setting && smtp_setting=="Y"){
                             camp_obj.$("#campaign_from_name,#campaign_reply_to").prop("readonly",true);
@@ -1694,31 +1696,17 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             }
                             //Add Gmail Address to fromEmail box
                             if(defaults_json.thirdpartysmtp && defaults_json.thirdpartysmtp[0].Gmail){
-                                var gmailSMTPExists = false;
+                                camp_obj.states.step1.gmailSMTPExists = false;
                                 var gmailAddresses = defaults_json.thirdpartysmtp[0].Gmail;
                                 if(gmailAddresses.length){
                                     for(var i=0;i<gmailAddresses.length;i++){
                                         if(gmailAddresses[i].fromAddress){
                                             fromOptions += '<option value="' + gmailAddresses[i].fromAddress + '" isThirdPartySMTP="Y" thirdPartySMTPName="Gmail" gmailFromName="'+gmailAddresses[i].gmailFromName+'">' + gmailAddresses[i].fromAddress + '</option>';
-                                            gmailSMTPExists = true;
+                                            camp_obj.states.step1.gmailSMTPExists = true;
                                         }
                                     }
                                 }
-                                
-                                if(gmailSMTPExists){
-                                    camp_obj.app.getData({                                        
-                                        "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + camp_obj.app.get('bms_token') + "&type=gmailAPILimit",
-                                        "key": "gmailLimit",
-                                        "callback" : _.bind(function(){
-                                            var gmailLimitData = this.app.getAppData("gmailLimit");
-                                            if(gmailLimitData.maxLimit){
-                                                 $(".gmailLimitloading").html(parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit));
-                                            }
-                                        },camp_obj)
-                                    });                                    
-                                    camp_obj.$("#lblFromemail .fieldinfo").show();
-                                    camp_obj.$("#lblFromemail .fieldinfo .fieldinfo em").html("You can use, added gmail address as From Email.");
-                                }
+                               
                             }
                             
                             camp_obj.$el.find('#campaign_from_email').append(fromOptions);
@@ -1803,6 +1791,38 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         "callback": _.bind(this.showNetsuiteArea, this)
                     });
 
+                },
+                getUserId:function(){
+                    var user_id= this.app.get("user").userId;
+                    var smtpuser_id= this.campobjData.thirdPartySMTPUserId;
+                    if(smtpuser_id && user_id!= smtpuser_id){
+                        user_id=smtpuser_id;
+                    }                       
+                    return user_id;
+                },
+                setGmailSMTPSettings: function(){
+                     //For shared campaign 
+                    if(this.campobjData.isThirdPartySMTP=="Y" && this.app.get("user").userId!=this.campobjData.userId){
+                        var fromOptions = $('<option value="' + this.campobjData.fromEmail + '" isThirdPartySMTP="Y" thirdPartySMTPName="Gmail" gmailFromName="'+this.campobjData.senderName+'">' + this.campobjData.fromEmail + '</option>');
+                        $("#campaign_from_email").append(fromOptions);
+                        this.$("#campaign_from_email").trigger("chosen:updated");
+                        this.states.step1.gmailSMTPExists = true;
+                    }
+
+                    if(this.states.step1.gmailSMTPExists){
+                        this.app.getData({                                        
+                            "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=gmailAPILimit&userId="+this.getUserId(),
+                            "key": "gmailLimit",
+                            "callback" : _.bind(function(){
+                                var gmailLimitData = this.app.getAppData("gmailLimit");
+                                if(gmailLimitData.maxLimit){
+                                     $(".gmailLimitloading").html(parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit));
+                                }
+                            },this)
+                        });                                    
+                        this.$("#lblFromemail .fieldinfo").show();
+                        this.$("#lblFromemail .fieldinfo .fieldinfo em").html("You can use, added gmail address as From Email.");
+                    }
                 },
                 step1Change: function () {
                     this.states.step1.change = true;

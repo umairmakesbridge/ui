@@ -61,7 +61,8 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         case "CMP_ZERO":
                         case "CMP_RR":    
                         case "CMP_ANZ":
-                        case "GMAIL_L_R":    
+                        case "GMAIL_L_R":
+                        case "CMP_D":    
                             img = this.options.app.get("path")+"img/campaign-"+colorName+".png";
                             break;
                         case "TG_PCT":
@@ -189,12 +190,13 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     var message_SYNCH_A = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce import has been schuled";
                     var message_SYNCH_PEER_A = (this.model.get('Message')) ? this.model.get('Message') : "Salesforce peer has been activated";
                     var message_GMAIL_L_R = (this.model.get('Message')) ? this.model.get('Message') : "User Gmail API limit reached at Makesbridge.";
+                    var message_CMP_D = (this.model.get('Message')) ? this.model.get('Message') : "Campaign Draft due to invalid Gmail Credentials";
                     
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
                         case "CMP_ZERO":
                         case "CMP_RR":    
-                        case "CMP_ANZ":
+                        case "CMP_ANZ":                        
                             label = "<strong>Campaign Name</strong> <span data-original-title='"+this.model.get('campaignName')+"' class='text-truncated showtooltip'>" + this.model.get('campaignName') + "</span><a id='campaign_analytics' style='display: inline-block; margin-bottom:-3px;' data-original-title='Click to view message report' class='icon report showtooltip'></a>"
                             break;
                         case "TG_PCT":
@@ -239,6 +241,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         case "GMAIL_L_R":
                             label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_GMAIL_L_R+"'>" + message_GMAIL_L_R + "</span>";
                         break;
+                        case "CMP_D":
+                            label = "<strong>Message</strong> <span class='text-truncated showtooltip' data-original-title='"+message_CMP_D+"'>" + message_CMP_D + "</span>";
+                        break;    
                     }
                     return label;
 
@@ -269,7 +274,8 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         case "CMP_C":
                         case "CMP_ZERO":
                         case "CMP_RR":    
-                        case "CMP_ANZ":    
+                        case "CMP_ANZ":
+                        case "CMP_D":    
                             label = "<strong>Schedule Date</strong> <span>" + this.dateSetting(this.model.get('scheduledDate')) + "</span>"
                             break;
                         case "TG_PCT":
@@ -338,7 +344,8 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                         case "CMP_C":
                         case "CMP_ZERO":
                         case "CMP_RR":    
-                        case "CMP_ANZ":      
+                        case "CMP_ANZ":     
+                        case "CMP_D":    
                             label = "<strong>Subject</strong> <span data-original-title='"+this.model.get('subject')+"' class='text-truncated showtooltip'>" + this.model.get('subject') + "</span><a id='campaign_analytics' style='display: inline-block; margin-bottom:-3px;' data-original-title='Click to view message report' class='icon report showtooltip'></a>"
                             break;
                         case "TG_PCT":
@@ -519,7 +526,15 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                             count = "";
                             date= this.dateSetting(this.model.get('logTime'));;
                             nameOf = "at";
-                            break;    
+                            break;  
+                        case "CMP_D":
+                            caption = this.model.get('campaignName');
+                            noun = "has been changed to Draft";
+                            to="";
+                            count = "";
+                            date= this.dateSetting(this.model.get('logTime'));;
+                            nameOf = "at";
+                            break;  
                     }
                    if(caption){
                     var str ="<a><strong class='text-truncated' style='display:inline;'>"+caption+"&nbsp;</strong></a>";

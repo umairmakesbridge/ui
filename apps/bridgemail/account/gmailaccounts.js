@@ -144,7 +144,7 @@ define(['text!account/html/gmailaccounts.html'],
                 },
                 loadDailyLimit:function(){
                     this.app.getData({
-                        "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=gmailAPILimit",
+                        "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=gmailAPILimit&userId="+this.app.get("user").userId,
                         "key": "gmailLimit",
                         "callback" : _.bind(function(){
                             var gmailLimitData = this.app.getAppData("gmailLimit");
