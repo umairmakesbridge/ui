@@ -178,7 +178,7 @@ define(['text!contacts/html/multipleadd.html', 'app', "contacts/subscriber_field
                         }
                     }, this));
                     if (parseInt(camp_list_json.count) === i) {
-                        list_html += '<tr><td colspan="2"><p class="notfound">No lists found.Please create new list</p><a class="btn-green left create-new-list" style="width: 139px; float: none ! important; margin: 5px auto;"><span>Create New</span><i class="icon plus"></i></td></tr>';
+                        list_html += '<tr><td colspan="2"><p class="notfound">No lists found. Please create new list.</p><a class="btn-green left create-new-list" style="width: 139px; float: none ! important; margin: 5px auto;"><span>Create New</span><i class="icon plus"></i></td></tr>';
                     }
                     list_html += '</tbody></table>';
 
@@ -223,8 +223,10 @@ define(['text!contacts/html/multipleadd.html', 'app', "contacts/subscriber_field
 //                               this.dialog.$el.find('.btn-close').click(_.bind(function(){
 //                                   this.dialog.$el.remove();
 //                               },this))
-                    //this.dialog.getBody().find('.create-new-list').addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});
-                    //.this.loadData(this.editImport);
+                    this.dialog.getBody().find('.create-new-list').click(_.bind(function(){
+                        setTimeout(_.bind(function(){this.dialog.getBody().find(".add-list").click()},this),50);
+                    },this));
+                    
                     this.dialog.getBody().find(".taglink").click(_.bind(this.tagClick, this));
                     this.dialog.getBody().find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     if (this.newList) {

@@ -109,7 +109,7 @@ function (template,calendario) {
            getUserId:function(){
                var user_id= this.app.get("user").userId;
                var smtpuser_id= this.CampObjData.thirdPartySMTPUserId;
-               if(smtpuser_id && user_id!= smtpuser_id){
+               if(smtpuser_id && smtpuser_id!=="N" && user_id!= smtpuser_id){
                    user_id=smtpuser_id;
                }                       
                return user_id;

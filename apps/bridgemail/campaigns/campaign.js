@@ -958,6 +958,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
 
                     var settings_field = this.$(".step1-settings .inputlabel");
                     var settings_html = "", recipients_html = "";
+                    settings_html +='<div  class="row fluidlabel"><label class="checked">' + this.$("#campaign_unSubscribeType option:selected").text() + '</label></div>'
                     $.each(settings_field, function () {
                         if ($(this).find("input").attr("id") !== "campaign_isFooterText") {
                             if ($(this).find("input").prop("checked")) {
@@ -1795,9 +1796,11 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 getUserId:function(){
                     var user_id= this.app.get("user").userId;
                     var smtpuser_id= this.campobjData.thirdPartySMTPUserId;
-                    if(smtpuser_id && user_id!= smtpuser_id){
-                        user_id=smtpuser_id;
-                    }                       
+                    if(this.campobjData.userId !=user_id){
+                        if(smtpuser_id && smtpuser_id!=="N" && user_id!= smtpuser_id){
+                            user_id=smtpuser_id;
+                        }                       
+                    }
                     return user_id;
                 },
                 setGmailSMTPSettings: function(){
@@ -3635,6 +3638,12 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                         camp_obj.$(".step3 #area_choose_tags .col1 li[checksum='" + tags[i] + "'] .move-row").click();
                                     }
                                 }
+                                if(rec_josn.count=="0"){
+                                    camp_obj.states.step3.change = true;
+                                }
+                                else{
+                                    camp_obj.states.step3.change = false;
+                                }
                             }
                             else {
                                 if (source_type == "salesforce") {
@@ -3643,8 +3652,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 else if (source_type == "netsuite") {
                                     camp_obj.setNetSuiteData();
                                 }
-                            }
-                            camp_obj.states.step3.change = false;
+                                camp_obj.states.step3.change = false;
+                            }                             
                         }
                     }).fail(function () {
                         console.log("Receipts data load failed");
