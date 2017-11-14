@@ -25,3 +25,5 @@ js/myUsers.js
 apps/bridgemail/templates/.DS_Store
 
 apps/bridgemail/templates/.DS_Store
+
+build/
