@@ -567,8 +567,10 @@ function (Wizard,template,moment) {
                      var that = this;
                     $.getJSON(URL, data)
                             .done(_.bind(function(json) {
-                                 that.spreadSheets = json.spreadsheetList[0];
-                                 that.getLists();
+                                if(json.spreadsheetList){
+                                   that.spreadSheets = json.spreadsheetList[0];
+                                }
+                                that.getLists();
                                 that.setHeaderDialog();
                                 that.showHideButton(false);
                                           }, this))

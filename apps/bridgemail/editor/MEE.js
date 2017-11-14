@@ -6117,6 +6117,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 //**************************************************** DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) **************************************************** //Section5            
                                 mee.initTinyMCE = function () {
                                     if (meeIframeWindow && meeIframeWindow.tinymce) {
+                                        console.log("Fake Div added");
                                         meeIframeWindow.$("body").append($("<div id='load_css'></div>"))
                                         meeIframeWindow.tinymce.init({
                                             selector: "div#load_css",
@@ -6129,7 +6130,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             statusbar: true,
                                             object_resizing: false
                                         })
-                                        meeIframeWindow.$("div#load_css").remove();
+                                        
+                                        setTimeout(_.bind(function(){
+                                            meeIframeWindow.$("div#load_css").remove();
+                                        }, meeIframeWindow),100)
                                     } else {
                                         setTimeout(_.bind(mee.initTinyMCE, mee), 200);
                                     }

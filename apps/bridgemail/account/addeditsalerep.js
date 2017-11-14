@@ -47,7 +47,7 @@ define(['text!account/html/addeditsalerep.html'],
                             return false;
                         }
                         _.each(_json,function(val,key){
-                            this.$("[name='"+key+"']").val(val);                            
+                            this.$("[name='"+key+"']").val(this.app.decodeHTML(val));                            
                         },this)
                         if(_json.sendAlert=="Y"){
                             this.$('input.salerep-sendalert').iCheck('check');

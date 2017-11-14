@@ -136,6 +136,7 @@ function (template) {
            loadCampaign:function(camp_json){              
                 this.$("#campaign_subject").val(this.app.decodeHTML(camp_json.subject));
                 var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                this.setGmailSMTPSettings();
                 if(camp_json.fromEmail != '')
                  {
                      if(merge_field_patt.test(this.app.decodeHTML(camp_json.fromEmail)))
@@ -165,6 +166,10 @@ function (template) {
                  if(camp_json.senderName != ''){
                      this.$("#campaign_from_name").val(this.app.decodeHTML(camp_json.senderName));                        
                  }                    
+                 var smtp_setting = this.$("#campaign_from_email").find(":selected").attr("isThirdPartySMTP");
+                 if(smtp_setting && smtp_setting=="Y"){
+                    this.$("#campaign_from_name,#campaign_reply_to").prop("readonly",true);
+                 }
                  this.$("#campaign_reply_to").val(this.app.decodeHTML(camp_json.replyTo));
                  if(this.options.isCreateCamp){
                      this.$("#campaign_reply_to").val(this.app.decodeHTML(camp_json.fromEmail));
@@ -328,6 +333,25 @@ function (template) {
                                         else
                                              fromOptions += '<option value="'+ fromEmailsArray[i] +'">'+fromEmailsArray[i] + '</option>';
                                     }
+                                    
+                                    
+                                    //Add Gmail Address to fromEmail box
+                                    //if(this.parent.type == "autobots"){
+                                        if(defaults_json.thirdpartysmtp && defaults_json.thirdpartysmtp[0].Gmail){
+                                            this.gmailSMTPExists = false;
+                                            var gmailAddresses = defaults_json.thirdpartysmtp[0].Gmail;
+                                            if(gmailAddresses.length){
+                                                for(var i=0;i<gmailAddresses.length;i++){
+                                                    if(gmailAddresses[i].fromAddress){
+                                                        fromOptions += '<option value="' + gmailAddresses[i].fromAddress + '" isThirdPartySMTP="Y" thirdPartySMTPName="Gmail" gmailFromName="'+gmailAddresses[i].gmailFromName+'">' + gmailAddresses[i].fromAddress + '</option>';
+                                                        this.gmailSMTPExists = true;
+                                                    }
+                                                }
+                                            }
+
+                                        }
+                                    //}
+                                    
                                     this.$el.find('#campaign_from_email').append(fromOptions);
                                    // if(this.app.salesMergeAllowed){
                                         this.$("#campaign_from_email").chosen().change(_.bind(function(obj){
@@ -336,6 +360,42 @@ function (template) {
                                             }else{
                                                 this.$('#campaign_from_email_default').hide();
                                             }
+                                            
+                                            //Gmail settings
+                                            var selected_fromEmail = $(obj.target).find(":selected");
+                                            if(selected_fromEmail.attr("isThirdPartySMTP") && selected_fromEmail.attr("isThirdPartySMTP")=="Y"){
+                                                var gmailLimitText = "<span class='gmailLimitloading'>[Calculating...]</span>";
+                                                var gmailLimitData = this.app.getAppData("gmailLimit");
+                                                if(gmailLimitData.maxLimit){
+                                                    gmailLimitText = parseInt(gmailLimitData.limitUsed) + "/" + parseInt(gmailLimitData.maxLimit)
+                                                }
+                                                var maxLimitReachedText = "";
+                                                var fromNameEmpty = "";
+                                                if(selected_fromEmail.attr("gmailFromName")){
+                                                    this.$("#campaign_from_name").val(selected_fromEmail.attr("gmailFromName")).prop("readonly",true);
+                                                }
+                                                else{
+                                                    var fromEmail = obj.target.value;
+                                                    this.$("#campaign_from_name").val(fromEmail.substring(0,fromEmail.indexOf("@"))).prop("readonly",true);
+                                                    fromNameEmpty = "<br><br><i>From Name is empty for gmail address. Your email will not have a from name. We are filling it to process campaign successfully.</i>"
+                                                }
+                                                if(parseInt(gmailLimitData.limitUsed) >= parseInt(gmailLimitData.maxLimit)){ 
+                                                    maxLimitReachedText = "<br/><br/><i>Your daily Makesbridge Gmail API usage limit has been reached. You will not able to send message <b>today</b>.</i>";
+                                                }
+                                                setTimeout( _.bind(function(){this.app.showAlert('This message will be sent using third party email "'+obj.target.value+'".<br/><br/>Your daily sent count for today is <b>'+gmailLimitText+'</b>.'+maxLimitReachedText+fromNameEmpty,$("body"),{type:'Sent From Gmail',fixed: true}) },this)
+                                                ,50);
+                                                
+                                                this.$("#campaign_reply_to").val(obj.target.value).prop("readonly",true); 
+
+                                                this.isThirdPartySMTP = "Y";
+                                            }
+                                            else{
+                                                this.isThirdPartySMTP = "N";                                            
+                                                this.$("#campaign_from_name").val(defaults_json.fromName).prop("readonly",false);  
+                                                this.$("#campaign_reply_to").val(defaults_json.fromEmail).prop("readonly",false);  ;
+                                            }
+                                            this.app.hideError({control: this.$el.find(".fname-container")});
+                                            
                                         },this));
                                     //}
                                     this.$el.find('#fromemail_default').append(fromOptions);
@@ -366,6 +426,38 @@ function (template) {
                             },this)
                     });
            },
+            setGmailSMTPSettings: function(){
+                 //For shared campaign 
+                if(this.camp_obj.isThirdPartySMTP=="Y" && this.app.get("user").userId!=this.camp_obj.userId){
+                    var fromOptions = $('<option value="' + this.camp_obj.fromEmail + '" isThirdPartySMTP="Y" thirdPartySMTPName="Gmail" gmailFromName="'+this.camp_obj.senderName+'">' + this.camp_obj.fromEmail + '</option>');
+                    $("#campaign_from_email").append(fromOptions);
+                    this.$("#campaign_from_email").trigger("chosen:updated");
+                    this.gmailSMTPExists = true;
+                }
+
+                if(this.gmailSMTPExists){
+                    this.app.getData({                                        
+                        "URL": "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=gmailAPILimit&userId="+this.getUserId(),
+                        "key": "gmailLimit",
+                        "callback" : _.bind(function(){
+                            var gmailLimitData = this.app.getAppData("gmailLimit");
+                            if(gmailLimitData.maxLimit){
+                                 $(".gmailLimitloading").html(parseInt(gmailLimitData.maxLimit)-parseInt(gmailLimitData.remainingLimit) + "/" + parseInt(gmailLimitData.maxLimit));
+                            }
+                        },this)
+                    });                                                        
+                }
+            },
+                getUserId:function(){
+                    var user_id= this.app.get("user").userId;
+                    var smtpuser_id= this.camp_obj.thirdPartySMTPUserId;
+                    if(this.camp_obj.userId !=user_id){
+                        if(smtpuser_id && smtpuser_id!=="N" && user_id!= smtpuser_id){
+                            user_id=smtpuser_id;
+                        }                       
+                    }
+                    return user_id;
+                },
            saveStep1:function(validate){            
                     var isValid = true;
                     var defaultSenderName = "",defaultReplyToEmail="";
@@ -549,7 +641,7 @@ function (template) {
                         if( this.settingchange || this.parent.camp_id==0){
                                 this.app.showLoading("Saving settings...",this.parent.dialog.$el);
                                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                                $.post(URL, { type: "saveStep1",campNum:this.parent.camp_id,
+                                var _postData = { type: "saveStep1",campNum:this.parent.camp_id,
                                         subject : this.$("#campaign_subject").val(),
                                         senderName :this.$("#campaign_from_name").val(),
                                         fromEmail : fromEmail,
@@ -569,8 +661,15 @@ function (template) {
                                         googlePlusShareIcon :this.$("#campaign_gplus")[0].checked?'Y':'N',
                                         pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N',
                                         useCustomFooter :this.$("#campaign_useCustomFooter")[0].checked?'Y':'N',
-                                        isShareIcons :this.$("#campaign_socail_share input[type='checkbox']:checked").length?'Y':'N'
-                                  })
+                                        isShareIcons :this.$("#campaign_socail_share input[type='checkbox']:checked").length?'Y':'N',
+                                        isThirdPartySMTP : 'N'
+                                  }
+                                //Gmail settings flag  
+                                if(this.isThirdPartySMTP=="Y"){
+                                      _postData.isThirdPartySMTP="Y"
+                                      _postData.thirdPartySMTPName="Gmail"
+                                  }
+                                $.post(URL, _postData)
                                  .done(_.bind(function(data) {                                 
                                     var step1_json = jQuery.parseJSON(data);
                                     this.app.showLoading(false,this.parent.dialog.$el);
@@ -598,6 +697,9 @@ function (template) {
                                 }
                                 
                         }
+                    }
+                    else {
+                        this.parent.dialog.$(".modal-body").animate({scrollTop: 0}, 300)
                     }
                     
                 },
