@@ -42,7 +42,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                var type = "";
                if(this.autobotId)
                 type = "bot";
-                
+               
+               this.hideCSVDownloadUsers = ['ron@salesleadautomation.com'];
                this.stats = new Stats({type:type});
                this.objSummary = new Summary();
                this.render();
@@ -62,10 +63,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                  }
             },
             init:function(){
-              
+               
             },
             addLinks:function(){
-               var linksView = new ViewLinks({clickCount:this.stats.get('clickCount'),app:this.options.app,campNum:this.campNum});                
+               var linksView = new ViewLinks({clickCount:this.stats.get('clickCount'),app:this.options.app,campNum:this.campNum, parent:this});                
                this.$el.find('.links-container').prepend(linksView.el);  
                linksView.on('linksDownloadClick',this.mapCSVFieldsDialog);
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
@@ -151,6 +152,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                         } 
                          
                         self.addLinks();
+                        self.hideCSVDownloadLink();
                         self.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});    
                     });
                     /*self.objSummary.fetch({data:_data,success:function(dataS){
@@ -638,6 +640,11 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage
                     dialog.getBody().append(mPage.$el);                    
                     mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
                     dialog.saveCallBack(_.bind(mPage.saveCall, mPage, options));
+                },
+                hideCSVDownloadLink: function(){
+                    if(this.hideCSVDownloadUsers.indexOf(this.options.app.get("user").userId) > -1){
+                        this.$(".download-lnk-csv, .download-csv, .download-sub-csv").hide();
+                    }
                 }
             
         });    

@@ -18,6 +18,7 @@ define(['reports/summary/collections/links', 'reports/summary/views/link', 'text
                 initialize: function () {
                     this.template = _.template(template);
                     this.campNum = this.options.campNum;
+                    this.parent = this.options.parent;
                     this.type = "topLinks";
                     this.total = 0;
                     this.objLinks = new Links();
@@ -52,6 +53,7 @@ define(['reports/summary/collections/links', 'reports/summary/views/link', 'text
                             if(uniqueSubscribersCount==0){
                                 that.$(".download-csv").addClass("disabled-csv-download")
                             }
+                            that.parent.hideCSVDownloadLink();
                         }});
                 },
                 viewAll: function (ev) {
