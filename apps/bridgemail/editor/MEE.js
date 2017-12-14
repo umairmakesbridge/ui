@@ -8341,8 +8341,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             var label = obj[0].name;
                                             if (label.startsWith(textForSearch)) {
                                                 counter++;
+                                                var cssImage = obj[obj[0]["blockId.checksum"]] ? obj[obj[0]["blockId.checksum"]] : "";
+                                                    var blockIcon = "<i class='icon cblock " + cssImage + "'></i> ";
+                                                    if (obj[0]["thumbURL"]) {
+                                                        blockIcon = "<img src='" + obj[0]["thumbURL"] + "' class='blockimg' />"
+                                                    }
                                                 var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock showtooltip-dg' title='Drag' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
-                                                        "<i class='icon myblck'></i> " +
+                                                        blockIcon +
                                                         "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                         "<div class='imageicons' > " +
                                                         "<i class='imgicons edit action' data-actiontype='bbedit'  data-index='" + i + "' data-id='" + obj[0]["blockId.encode"] + "'></i> " +

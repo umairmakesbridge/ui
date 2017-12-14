@@ -133,9 +133,10 @@ function (template) {
                    active_workspace.find("#fromemail_default_input").css("width",active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()-6+"px");   // Abdullah Check
                  } 
             },
-           loadCampaign:function(camp_json){              
+           loadCampaign:function(camp_json){                     
+                this.camp_obj = camp_json;
                 this.$("#campaign_subject").val(this.app.decodeHTML(camp_json.subject));
-                var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");                
                 this.setGmailSMTPSettings();
                 if(camp_json.fromEmail != '')
                  {
@@ -336,7 +337,7 @@ function (template) {
                                     
                                     
                                     //Add Gmail Address to fromEmail box
-                                    //if(this.parent.type == "autobots"){
+                                    //if(this.parent.type !== "workflow"){
                                         if(defaults_json.thirdpartysmtp && defaults_json.thirdpartysmtp[0].Gmail){
                                             this.gmailSMTPExists = false;
                                             var gmailAddresses = defaults_json.thirdpartysmtp[0].Gmail;
@@ -421,14 +422,17 @@ function (template) {
                                     }
                                     else{
                                        this.parent.loadCallCampaign(); 
-                                    }                            
+                                    } 
+                                    if(this.parent.type=="workflow" && !this.parent.camp_id){
+                                        this.createWorkFlowMessage();                                                 
+                                    }
                                 }
                             },this)
                     });
            },
             setGmailSMTPSettings: function(){
-                 //For shared campaign 
-                if(this.camp_obj.isThirdPartySMTP=="Y" && this.app.get("user").userId!=this.camp_obj.userId){
+                 //For shared campaign                 
+                if(this.camp_obj && this.camp_obj.isThirdPartySMTP=="Y" && this.app.get("user").userId!=this.camp_obj.userId){
                     var fromOptions = $('<option value="' + this.camp_obj.fromEmail + '" isThirdPartySMTP="Y" thirdPartySMTPName="Gmail" gmailFromName="'+this.camp_obj.senderName+'">' + this.camp_obj.fromEmail + '</option>');
                     $("#campaign_from_email").append(fromOptions);
                     this.$("#campaign_from_email").trigger("chosen:updated");
@@ -627,10 +631,7 @@ function (template) {
                     
                     if(isValid)
                     {
-                        if(this.parent.type=="workflow" && !this.parent.camp_id){
-                            this.createWorkFlowMessage();                        
-                            return false;
-                        }    
+                            
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                         defaultSenderName = merge_field_patt.test(this.$('#campaign_from_name').val())?this.$("#campaign_default_from_name").val():"";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
@@ -730,11 +731,12 @@ function (template) {
                             this.parent.camp_id = message_json[1];
                             this.parent.parent.campNum = message_json[1];  
                             this.parent.messagebody_page.$(".save-step2").show();
-                            this.saveStep1();   
+                            //this.saveStep1();   
                             var workflowIframe = $(".workflowiframe");
                             if(workflowIframe.length && workflowIframe[0].contentWindow.submitAndRefreshPage){
                                 workflowIframe[0].contentWindow.submitAndRefreshPage();
                             }
+                            
                         }
                         else{
                                this.app.showAlert(message_json[1],this.$el); 

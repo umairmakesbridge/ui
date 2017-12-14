@@ -906,7 +906,7 @@
                     $(this).find('.check-list').iCheck('check');
                 })
                 if($('#__list_grid .selected').length ==0 && params && params["listNumbers.checksums"]){
-                    self.checkSharedTargetList(filter, '#__list_grid', params);
+                    //self.checkSharedList(filter, params);
                 }
                 if (list_arr[0] && filter.find('#__list_grid input[list_checksum=' + list_arr[0] + ']').length == 0) {
                     this.options.app.showLoading("Loading Lists...", filter.find('#__list_grid'));
@@ -916,6 +916,7 @@
                     } else {
                         self.checkSharedList(filter,params)
                     }
+                    
                 } else {
 
                     $.each(list_arr, function (k, v) {
@@ -950,6 +951,9 @@
                 type: 'GET',
                 success: function (data) {
                     self.options.app.showLoading(false, filter.find('#__list_grid'));
+                    if(data[0]=="err"){
+                        return false;
+                    }
                     if(data.count!=="0"){
                         var list_array = data.lists[0];
                         $.each(list_array, function (index, val) {
