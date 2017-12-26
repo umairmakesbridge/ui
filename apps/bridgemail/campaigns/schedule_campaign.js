@@ -89,7 +89,10 @@ function (template,calendario) {
                             this.CampObjData = jQuery.parseJSON(xhr.responseText);
                             if(this.app.checkError(this.CampObjData)){
                                 return false;
-                            }                            
+                            }         
+                            if(this.parent && this.parent.$("#campaign_preview_defaultSenderName").length){
+                                this.parent.$("#campaign_preview_defaultSenderName").html(this.CampObjData.senderName);
+                            }
                             this.fetchServerTime();
                             if(this.CampObjData.isThirdPartySMTP=="Y"){
                                 this.app.getData({
