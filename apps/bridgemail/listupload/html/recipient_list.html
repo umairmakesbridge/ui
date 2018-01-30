@@ -59,19 +59,21 @@
                 <%}else{
                     if(this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId')) {                    
                 %>                     
-                    <div class="slide-btns three s-clr4">
+                    <div class="slide-btns four s-clr5">
                 <%  } else { %>
                     <% if(this.parents.status === 'SS') { %>
-                        <div class="slide-btns one s-clr2">
-                    <% } else {%>    
                         <div class="slide-btns two s-clr3">
+                    <% } else {%>    
+                        <div class="slide-btns three s-clr4">
                 <% }} %>
                     <span  class="icon setting"></span>
-                    <div>
-                        <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
+                    <div>                        
+                        <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>                             
+                             <a class="icon edit addaction clr4"><span>Add Contacts</span></a>
                              <a class="icon share-camp share clr3" ><span>Share</span></a>
+                        <% }  else {%>
+                           <a class="icon edit addaction clr3"><span>Add Contacts</span></a>    
                         <% } %>
-                        
                         <a class="icon edit edit-list clr2" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Edit</span></a>
                         <% if(this.parents.status !== 'SS') { %>
                             <a class="icon delete delete-list clr1" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Delete</span></a>

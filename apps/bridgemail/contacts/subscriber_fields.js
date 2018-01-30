@@ -60,6 +60,40 @@ function (template,jqueryui) {
                 else{
                     this.$("input").prop("readonly",true);
                 }
+                if(this.emailsFlag){
+                    this.$(".addEmailFiedls").click(_.bind(function(){
+                        this.createEmailsFields(1);
+                    },this))
+                    this.createEmailsFields(2);
+                }
+            },
+            createEmailsFields: function(noLines){
+                var html = "";
+                for(var i=0;i<noLines;i++){
+                    html ="<div class='input-container' style='magin-top:12px;'><div class='input-append' style='width:404px'><div class='inputcont'><input type='text' style='width:380px' placeholder='Enter email address to add' ></input> </div></div><a class='btn-red showtooltip' title='Click to remove' style='margin: -10px 10px;'><i class='icon delete'></i></a></div>"
+                    var emailHTML = $(html);
+                    if(this.$(".multiple_fields .left-area").children().length ==this.$(".multiple_fields .right-area").children().length){
+                        this.$(".multiple_fields .left-area").append(emailHTML);
+                    }
+                    else if(this.$(".multiple_fields .left-area").children().length > this.$(".multiple_fields .right-area").children().length){
+                        this.$(".multiple_fields .right-area").append(emailHTML);
+                    }
+                      else if(this.$(".multiple_fields .left-area").children().length < this.$(".multiple_fields .right-area").children().length){
+                        this.$(".multiple_fields .left-area").append(emailHTML);
+                    }
+                    
+                    emailHTML.find("i.delete").click(function(){
+                        $(this).parents(".input-container").remove();
+                    })
+                    emailHTML.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    if(noLines==1){
+                        emailHTML.find("input").focus();
+                    }
+                }
+                
+                
+                
+                                
             },
             /**
              * Create fields and Append dialog view
@@ -210,7 +244,9 @@ function (template,jqueryui) {
                       var _this = this;
                         _this.app.showLoading("Create Multiple Subscribers...",dialog.$el);
                         var URL = "/pms/io/subscriber/setData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=addByEmailOnly";
-                        var serializedData = this.$("#sub_fields_viaEmails_form").serialize();
+                        var serializedData = "&emails="+this.$( ".input-container input" ).map(function() {
+                                                            return this.value
+                                                          }).get().join();//this.$("#sub_fields_viaEmails_form").serialize();
                         var listNum = (_this.options.listNum) ? _this.options.listNum : dialog.$el.find('#import-list-grid .selected').attr('id').split('_')[1];
                         serializedData = serializedData+"&listNum="+listNum;
                         $.post(URL,  serializedData)
@@ -227,7 +263,7 @@ function (template,jqueryui) {
                              }
                              if(!_this.options.listNum){
                                  _this.subscriber.ws_header.find('.tcount').html("0")
-                              _this.refreshContactList();
+                                 _this.refreshContactList();
                              }else{
                                  _this.options.sub.loadLists()
                              }
@@ -481,32 +517,34 @@ function (template,jqueryui) {
                     
                     var isValid = true;
                     var inValidEmail = false;
-                    var email = $.trim(this.$(".contactsEmails").val());
-                     var _this = this;
-                   $.each(email.split(','),function(key,val){
-                       if(_this.app.validateEmail(val)==false){
-                           inValidEmail = true;
-                       }
-                   })
+                    var _this = this;
+                    var email = $.trim(this.$( ".input-container input" ).map(function() {
+                                    _this.app.hideError({control:$(this).parents(".input-append")}); 
+                                    if(_this.app.validateEmail(this.value)==false){
+                                         _this.app.showError({
+                                            control:$(this).parents(".input-append"),
+                                            message: "Please provide valid email."
+                                        });
+                                        inValidEmail = true;
+                                    }
+                                    
+                                    return this.value
+                                  }).get().join());                    
+                   
                     if(email==""){
-                        this.app.showError({
+                        /*this.app.showError({
                             control:this.$('.contactsEmails').parents(".input-append"),
                             message: "Atleast one Email is required."
                         });
-                        this.$('.contactsEmails').parent().find('.errortext').css('bottom','153px');
+                        this.$('.contactsEmails').parent().find('.errortext').css('bottom','153px');*/
+                        setTimeout(_.bind(function(){this.app.showAlert("Atleast one Email is required.",this.$el)},this));
                         isValid = false;
                     }else if(inValidEmail==true){
-                        this.app.showError({
-                            control:this.$('.contactsEmails').parents(".input-append"),
-                            message: "Please provide valid email."
-                        });
-                        this.$('.contactsEmails').parent().find('.errortext').css('bottom','153px');
+                       
+                        //this.$('.contactsEmails').parent().find('.errortext').css('bottom','153px');
                         isValid = false;
                     }
-                    else{
-                        this.$('.contactsEmails').parent().find('.errortext').removeAttr('style');
-                        this.app.hideError({control:this.$('.contactsEmails').parents(".input-append")}); 
-                    }                    
+                                       
                     return isValid ;
                 },
                 

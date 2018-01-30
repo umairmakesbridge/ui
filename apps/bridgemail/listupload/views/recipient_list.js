@@ -4,8 +4,8 @@
  * Description: List Grid.
  * Dependency: List Grid Single Grid View
  */
-define(['text!listupload/html/recipient_list.html','text!listupload/html/editlist.html', 'common/shareObject'],
-function (template, elistTemplate, shareCommonPage) {
+define(['text!listupload/html/recipient_list.html','text!listupload/html/editlist.html', 'common/shareObject','contacts/multipleadd'],
+function (template, elistTemplate, shareCommonPage, addContactView) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',
@@ -15,7 +15,8 @@ function (template, elistTemplate, shareCommonPage) {
                 'click .delete-list':'deleteList',
                 'click .pageview':'showPageViews',
                 'click .share-camp':'shareList',
-                'click .list_shared':'sharedLists'
+                'click .list_shared':'sharedLists',
+                'click .addaction':'addSubscriber'
             },
             initialize: function () {
                 this.app = this.options.app;
@@ -225,6 +226,20 @@ function (template, elistTemplate, shareCommonPage) {
                 lists_obj.$el.find(".sortoption_expand").find('.spntext').html("My Shared");
                 lists_obj.$el.find('.myshare').parent().addClass('active');
                 lists_obj.loadLists();
+            },
+            addSubscriber: function(){                 
+                   $("body #new_autobot").remove();
+                   $("body .autobots-modal-in").remove();
+                   $('body').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
+                   $("body").append("<div id='new_autobot' style='width: 710px;  top: 120px;left:50%' class='modal in'><div class='modal-body' style='min-height: 300px;'></div></div>");
+                   $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
+                   this.app.showLoading("Loading....",$("body #new_autobot .modal-body"));
+                   this.addContactView = new addContactView({ sub:this ,app:this.app, listobj:{"newList":this.model.get('listNumber.encode'),"listChecksum":this.model.get('listNumber.checksum')} }); 
+                  // var addContactView = new addContactView({ sub:this ,app:this.app});  
+                   $("body #new_autobot").html(this.addContactView.el);
+            },
+            loadLists: function(){
+                this.parents.loadLists();
             }
                 
         });    

@@ -7357,6 +7357,7 @@ ul.dd-menu li.active  a:after {
 .slide-btns .icon.check { background-image: url("../img/check48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.uncheck { background-image: url("../img/unpublish48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.share { background-image: url("../img/share35.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.addaction { background-image: url("../img/uploadaction.png"); background-position:center center; background-repeat:no-repeat; }
 
 .slide-btns div .icon:hover  {background-position:center 10px !important;}
 
@@ -8167,9 +8168,11 @@ ul#template_search_menu_expand li a i.icon {
 
 .choosebot ul li:hover { background:#1F94E5; }
 
+.choosebot ul li:hover span{
+    color:#fff;
+}
 
 
-.choosebot ul li span { display:block; text-align:center; color:#fff; font-weight:bold; }
 
 .choosebot .row {
     margin: 38px auto;
@@ -8533,7 +8536,7 @@ ul#autobots_search_menu li.active a, ul#autobots_search_menu li a:hover  {   bac
 
 
 
-.choosebot ul li span { display:block; text-align:center; color:#fff; font-weight:bold; }
+.choosebot ul li span { display:block; text-align:center; color:#4391b2; font-weight:bold; }
 
 .choosebot .row {
     margin: 38px auto;
@@ -10083,4 +10086,12 @@ ul.sourceCampPreview li{
     background-color:#fcf8e3;
     padding:15px;
     marign-bottom:10px;
+}
+.line {
+  width:934px;
+  height:1px;
+  background:#fff;
+  border-top:solid 1px #000;
+  opacity:0.1;
+  padding:10px 0px 0px 0px;
 }

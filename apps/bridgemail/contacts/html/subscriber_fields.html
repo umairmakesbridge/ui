@@ -1,16 +1,23 @@
 
 <% if(this.emailsFlag){ %>
-<form id="sub_fields_viaEmails_form"  style="margin: 12px 0 14px;"> 
+<form id="sub_fields_viaEmails_form"  style="margin: 12px 0 14px;height: 358px;"> 
     <div class="blockname-container" style="margin-top:0px;">
-        <!--<div class="label-text">Email:</div>-->
-        <div class="input-append sort-options blockname-container" style="margin-bottom: 0;">
-            <div class="inputcont" style="margin-bottom: 0px;">
-               <textarea placeholder="Please Enter Comma Separated Emails" class="header-info textfield contactsEmails" name="emails" style="height: 130px;width:570px;" autofocus></textarea>
+        <!--<div class="label-text">Email:</div>-->        
+        <div class="blockname-container" style="margin-bottom: 0;">
+            <div style="font-size: 14px;margin-top: -10px;position: absolute">
+                <i>Please enter separated email, to add new email press <b>Add</b> button</i>
+            </div> 
+            <div class="inputcont multiple_fields row-fluid" style="margin-bottom: 0px;max-height: 295px;overflow: auto;padding-top: 28px;margin-top:-5px">
+                <div class="left-area span6"></div> 
+                <div class="right-area span6"></div>
+               <!--<textarea placeholder="Please Enter Comma Separated Emails" class="header-info textfield contactsEmails" name="emails" style="height: 130px;width:570px;" autofocus></textarea>-->
+               
             </div>
+            <div class="line"></div>
+            <a class="btn-green left addEmailFiedls"><span>Add</span><i class="icon plus"></i></a>
+            
         </div>
-        <div style="font-size: 12px;margin-top:0px">
-            <i>Please enter comma separated emails</i>
-        </div> 
+        
     </div>
 </form
  <%} else { %>

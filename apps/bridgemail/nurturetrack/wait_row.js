@@ -82,7 +82,7 @@ function (template) {
                         this.$(".wait-container").html(": "+_json.dayLapse + dayText + " - "+_json.hourLapse+hourText+" - "+_json.minLapse + minText);
                     }
                     else{
-                        var _date = moment(_json.scheduleDate,'MM-DD-YY');                                                        
+                        var _date = moment(_json.scheduleDate,'MM-DD-YYYY');                                                        
                         this.$("#waitdatetime").val(_date.format("DD-MM-YYYY"));
                         this.$(".btn-group button:first-child").removeClass("active");
                         this.$(".btn-group button:last-child").addClass("active");
@@ -187,7 +187,7 @@ function (template) {
                             var date1 = moment(date_today.getDate()+ '-' + (date_today.getMonth() + 1) + '-' + date_today.getFullYear() , 'DD-MM-YYYY');                            
                             var diffDays = _date.diff(date1, 'days');;
                             if(diffDays>=0){                                                       
-                                post_data['scheduleDate'] = _date.format("MM-DD-YY");
+                                post_data['scheduleDate'] = _date.format("MM-DD-YYYY");
                                 this.$(".wait-container").html(": "+_date.format("DD MMM YYYY"));
                             }
                             else {
