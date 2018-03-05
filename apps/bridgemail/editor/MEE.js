@@ -3349,8 +3349,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            delete mee_view.DynamicContentsObj[dynamicKey]; 
                                         }
                                         DeleteElement(meeIframeWindow.$(this));
-                                        
-                                        options.OnDeleteDynamicVariation({DCID:dynmicID,delLocal:true,mee_view:mee_view,allOptions:options});
+                                        if(dynmicID)
+                                            options.OnDeleteDynamicVariation({DCID:dynmicID,delLocal:true,mee_view:mee_view,allOptions:options}); // delete only if dynamic id is available
                                         
                                         
                                         makeCloneAndRegister();
