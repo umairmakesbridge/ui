@@ -815,7 +815,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         }
 
                                         var emailWidthScale = (emailWidth && emailWidth.indexOf("%") > -1) ? "%" : "px";
-                                        var _emailWidth = parseFloat(emailWidth);
+                                        var _emailWidth = (emailWidth) ? parseFloat(emailWidth) : "600";
                                         meeIframe.find(".mainTable").css("width", _emailWidth + emailWidthScale);
                                         // For Toolbar Test Purpose Abdullah 
                                         meeIframe.find(".mainTable").css("margin-top", "45px");

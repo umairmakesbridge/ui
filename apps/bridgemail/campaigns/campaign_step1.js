@@ -356,7 +356,7 @@ function (template) {
                                     this.$el.find('#campaign_from_email').append(fromOptions);
                                    // if(this.app.salesMergeAllowed){
                                         this.$("#campaign_from_email").chosen().change(_.bind(function(obj){
-                                            if(obj.target.value === '{{BMS_SALESREP.EMAIL}}'){
+                                            if(obj.target.value === '{{BMS_SALESREP.EMAIL}}' || obj.target.value=='{{Owner.Email}}'){
                                                 this.$('#campaign_from_email_default').show();
                                             }else{
                                                 this.$('#campaign_from_email_default').hide();

@@ -21,6 +21,7 @@
             this.options = this.getOptions(options);
             this.configs = this.options.config;
             this.app = this.options.app;
+            this.view = this.options.view;
             this.$mergefieldWrap = $(this.options.dialog); // Dialog Box
             this.$topScroll = null; 
             this.isRequest = 0;
@@ -379,6 +380,10 @@
                         var caretPos = $thisDialog.find("#" + input_field)[0].selectionStart;
                         var textAreaTxt = $thisDialog.find("#" + input_field).val();
                         $thisDialog.find("#" + input_field).val(textAreaTxt.substring(0, caretPos) + merge_field + textAreaTxt.substring(caretPos));
+                    }
+                    if(this.view && this.view.step1Change)
+                    {
+                        this.view.step1Change();
                     }
                     /*Check for open Workspace or Dialog*/
                     var active_workspace = '';
