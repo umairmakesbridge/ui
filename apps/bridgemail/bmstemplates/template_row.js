@@ -212,7 +212,7 @@ define(['text!bmstemplates/html/template_row.html', 'common/tags_row', 'bmstempl
                         headerIcon: 'template',
                         bodyCss: {"min-height": dialog_height + "px"},
                         tagRegen: true,
-                        buttons: {saveBtn: {text: 'Save Template'}}
+                        buttons: {saveBtn: {text: 'Save Template',btncolor:'btn-green'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
                     require(["bmstemplates/template"], function (templatePage) {

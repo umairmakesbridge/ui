@@ -220,6 +220,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                             this.dialogFooter(this.app.dialogArray[showElement-1]);
                             this.dialogHeader(this.app.dialogArray[showElement-1]);
                             this.saveCallBack(this.app.dialogArray[showElement-1].saveCall);
+                            if(this.app.dialogArray[showElement-1] && this.app.dialogArray[showElement-1].headerIcon=="template"){
+                                $(".modal-body").css('overflow','auto');
+                            }
                            //this.render(this.optionObj[showElement]);
                             var newLength = this.app.dialogArray.length;
                             if(newLength === 1){

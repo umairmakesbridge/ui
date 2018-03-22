@@ -242,7 +242,7 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                     };
 
                     if(isEdit){
-                        dialog_object["buttons"]=  {saveBtn:{text:'Save Message'} }
+                        dialog_object["buttons"]=  {saveBtn:{text:'Save Message',btncolor:'btn-green'} }
                     }
 
                     var dialog = this.app.showDialog(dialog_object);

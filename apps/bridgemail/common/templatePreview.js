@@ -351,7 +351,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                         if (this.options.isText && this.options.isText == 'Y') {
                             this.html = 'N';
                         }                        
-                        frame = this.options.frameSrc + "&html=" + this.html + "&original=" + this.original;
+                        frame = this.options.frameSrc + "&html=" + this.html + "&original=" + this.original+"&userId="+this.app.get("user").userId;
                         /*Check if Contact is selected or not*/
                         if (this.subNum !== null) {
                             frame += "&snum=" + this.subNum;

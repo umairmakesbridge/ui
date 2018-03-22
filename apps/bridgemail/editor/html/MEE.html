@@ -766,6 +766,7 @@
 
 <div class="editorpanel">
     <div class="editorbar editortoolbar ">
+        <div class="save-editor" style="display:none">Saving Contents...</div>
         <ul style="margin-top:5px;margin-left: 5px;width:100%">
             <li class="undo undo_li">
                 <a  class="btn-gray">
@@ -786,12 +787,12 @@
             <% } %>
             <% if (!options.otopage) { %>
             <li class="save MenuCallBackSave" style="float:right;margin-right:5px;">
-                <a  class="btn-green save-step2 showtooltip" data-original-title="Click to save">
+                <a  class="btn-green save-step2 showtooltip" data-original-title="Click to save">                    
                     <% if(options.saveBtnText && options.isDcTemplate!=true){ %>
-                    <i class="icon save"></i>
+                    <i class="icon save <%if(options.fromDialog) {print('hideSaveBtn')} %>"></i>
                     <!--<span><%= options.saveBtnText %></span>-->
                     <% }else if(options.isDcTemplate==true)%>
-                    <i class="icon save"></i><span>Save Dynamic Block</span>
+                    <!--<i class="icon save"></i><span>Save Dynamic Block</span>-->
                     <%else{ %>
                     <i class="icon save"></i>
                     <!--<span>Save Email Body</span>-->

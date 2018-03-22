@@ -182,7 +182,7 @@ function (template) {
                         bodyCss:{"min-height":dialog_height+"px"}                        
                         };
                 if(this.editable){
-                    dialog_object["buttons"]=  {saveBtn:{text:'Save Message'} }
+                    dialog_object["buttons"]=  {saveBtn:{text:'Save Message',btncolor:'btn-green'} }
                 }
                 var dialog = this.app.showDialog(dialog_object);                        
                 this.app.showLoading("Loading Settings...",dialog.getBody());

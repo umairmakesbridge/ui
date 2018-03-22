@@ -537,7 +537,7 @@ function (template, mappingPage) {
                         buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
                     });	
                     camp_obj.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
-                    var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id+"&html=Y&original=N";                                
+                    var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id+"&html=Y&original=N&userId="+this.app.get("user").userId;                                
                     var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                                                            
                     dialog.getBody().html(preview_iframe);
                     dialog.saveCallBack(_.bind(this.sendTextPreview,this,camp_id));

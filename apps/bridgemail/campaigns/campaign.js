@@ -103,9 +103,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     
                 },
                 initMergeFields: function () {
-                    this.$('#campaign_subject-wrap').mergefields({app: this.app, elementID: 'campaign_subject', config: {state: 'workspace', isrequest: true}, placeholder_text: 'Enter subject'});
-                    this.$('#campaign_reply_to-wrap').mergefields({app: this.app, config: {salesForce: true, emailType: true, state: 'workspace', isrequest: true}, elementID: 'campaign_reply_to', placeholder_text: 'Enter reply to'});
-                    this.$('#campaign_from_name-wrap').mergefields({app: this.app, config: {salesForce: true, state: 'workspace'}, elementID: 'campaign_from_name', placeholder_text: 'Enter from name'});
+                    this.$('#campaign_subject-wrap').mergefields({app: this.app, view: this, elementID: 'campaign_subject', config: {state: 'workspace', isrequest: true}, placeholder_text: 'Enter subject'});
+                    this.$('#campaign_reply_to-wrap').mergefields({app: this.app, view: this, config: {salesForce: true, emailType: true, state: 'workspace', isrequest: true}, elementID: 'campaign_reply_to', placeholder_text: 'Enter reply to'});
+                    this.$('#campaign_from_name-wrap').mergefields({app: this.app, view: this, config: {salesForce: true, state: 'workspace'}, elementID: 'campaign_from_name', placeholder_text: 'Enter from name'});
                     //this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_from_email',placeholder_text:'Enter from email'});                    
                     this.$('#merge_field_plugin-wrap').mergefields({app: this.app, view: this, config: {links: true, state: 'workspace'}, elementID: 'merge-field-editor', placeholder_text: 'Merge Tags'});
                     this.$('#merge_field_plugin-wrap-hand').mergefields({app: this.app, view: this, config: {links: true, state: 'workspace'}, elementID: 'merge-field-hand', placeholder_text: 'Merge Tags'});
@@ -236,6 +236,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         this.states.step1.change = true;
                         $(this).trigger("chosen:updated");
                     }, this));
+                    this.$(".campaign_reply_email").chosen({no_results_text: 'Oops, nothing found!', width: "290px", disable_search: "true"});
                     var camp_obj = this;
                     this.$("#fromemail_default").chosen({no_results_text: 'Oops, nothing found!', width: "67%", disable_search: "true"});
                     this.$("#sf_campaigns_combo").chosen({no_results_text: 'Oops, nothing found!', width: "280px", disable_search: "true"});
@@ -407,10 +408,18 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         
                         
                        
-                        //states.step1.change
+                        //states.step1.change 
                         camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));
+                        /*if(camp_json.replyTo.toLowerCase().indexOf("@bridgemailsystem.com")>-1){
+                            camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_obj.app.get("user").userEmail));
+                            camp_obj.states.step1.change = true;
+                        }
+                        else{
+                            camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));
+                        }*/
                         if (camp_obj.wizard.options.isCreateCamp) {
                             camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
+                            //camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_obj.app.get("user").userEmail));
                         }
                         
                         var smtp_setting = camp_obj.$("#campaign_from_email").find(":selected").attr("isThirdPartySMTP");
@@ -535,6 +544,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         camp_obj.states.step4.sch_date = camp_json.scheduledDate;
 
                         camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
+                        camp_obj.loadTemplatesView();
 
 
                     });
@@ -577,6 +587,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         e.stopPropagation();
                     });
                     previewIconCampaign.click(function (e) {
+                        if($(e.target).hasClass("disabled-preview")){
+                            return false;
+                        }
                         if(camp_obj.wizard.active_step==1){
                             if(camp_obj.states.step1.change){
                                 camp_obj.saveStep1(true);
@@ -763,6 +776,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var _width = this.$el.width() - 24;
                     this.$(".html-text,.editor-text").css({"height": _height + "px", "width": _width + "px"});
                     this.$("#htmlarea").css({"height": _height + "px", "width": (_width - 2) + "px"});
+                    setTimeout(_.bind(this.initStep3,this),1000);
+                    setTimeout(_.bind(this.fetchServerTime,this),1000);
 
                 },
                 initScroll: function (el) {
@@ -897,14 +912,18 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     }
                 },
                 fetchServerTime: function () {
-                    this.app.showLoading("Loading Calendar...", this.$(".schedule-box2"));
-                    require(["campaigns/schedule_campaign"], _.bind(function (scheduleCalnder) {
-                        var tmPr = new scheduleCalnder({app: this.app, parent: this, currentStates: this.states.step4, campNum: this.camp_id, rescheduled: this.rescheduled, hidecalender: this.hidecalender, scheduleFlag: 'draft'});
-                        //tmPr.init(); // Call view functions
-                        this.$el.find('.schedule-box2').append(tmPr.$el);
-                        this.$el.find('.schedule-box2').removeAttr('style');
-                        this.app.showLoading(false, this.$(".schedule-box2"));
-                    }, this));
+                    if(!this.$el.find('.schedule-box2').attr("added")){
+                        this.app.showLoading("Loading Calendar...", this.$(".schedule-box2"));
+                        require(["campaigns/schedule_campaign"], _.bind(function (scheduleCalnder) {
+
+                                var tmPr = new scheduleCalnder({app: this.app, parent: this, currentStates: this.states.step4, campNum: this.camp_id, rescheduled: this.rescheduled, hidecalender: this.hidecalender, scheduleFlag: 'draft'});
+                                //tmPr.init(); // Call view functions                        
+                                this.$el.find('.schedule-box2').html(tmPr.$el);
+                                this.$el.find('.schedule-box2').removeAttr('style');
+                                this.$el.find('.schedule-box2').attr("added","true");
+                                this.app.showLoading(false, this.$(".schedule-box2"));                        
+                        }, this));
+                    }
                 },
                 initStep4: function () {
                     if (this.states.step4.init === false) {
@@ -1025,7 +1044,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.$el.find('.email-preview iframe').remove();
                     var transport = new easyXDM.Socket({           
 
-                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum=" + this.camp_id + "&html="+html+"&original="+this.camp_istext+"&xdm=true",
+                        remote:  window.location.protocol+'//'+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum=" + this.camp_id + "&html="+html+"&original="+this.camp_istext+"&xdm=true&userId="+this.app.get("user").userId,
 
                         onReady: function(){
                               //  this._app.showLoading(false,dialog.getBody());
@@ -1243,6 +1262,14 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         });
                         isValid = false;
                     }
+                    /*else if (replyto.toLowerCase().indexOf("@bridgemailsystem.com")>-1)
+                    {
+                        app.showError({
+                            control: el.find('.replyto-container'),
+                            message: "Reply to should not containt bridgemailsystem domain"
+                        });
+                        isValid = false;
+                    }*/
                     else
                     {
                         app.hideError({control: el.find(".replyto-container")});
@@ -1254,7 +1281,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             message: "Reply field cannot be empty"
                         });
                         isValid = false;
-                    }
+                    }                     
                     else if (el.find('#campaign_reply_to_default').css('display') == 'block' && !app.validateEmail(email_addr))
                     {
                         app.showError({
@@ -1263,6 +1290,14 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         });
                         isValid = false;
                     }
+                    /*else if (email_addr.toLowerCase().indexOf("@bridgemailsystem.com")>-1)
+                    {
+                        app.showError({
+                            control: el.find('.replyemail-container'),
+                            message: "Default Reply to should not containt bridgemailsystem domain"
+                        });
+                        isValid = false;
+                    }*/
                     else
                     {
                         app.hideError({control: el.find(".replyemail-container")});
@@ -1385,7 +1420,11 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.isSaveCallFromMee = true;
                     this.$el.find('#area_html_editor_mee .undo_li a').addClass('disabled-save');
                     this.$el.find('#area_html_editor_mee .redo_li a').addClass('disabled-save');
+                    this.$el.find('.save-step2').addClass('disabled-save');
                     this.$el.find('#area_html_editor_mee .MenuCallPreview a').addClass('disabled-save');
+                    this.$el.find("#area_html_editor_mee .save-editor").show();
+                    
+                    this.previewEnableDisable(true);
                     if(this.save_states_call){
                         this.save_states_call.abort();
                     }
@@ -1532,6 +1571,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                             camp_obj.wizard.next();
                                         }
                                         camp_obj.$el.find('#area_html_editor_mee .disabled-save').removeClass('disabled-save');
+                                        camp_obj.$el.find("#area_html_editor_mee .save-editor").hide();
+                                        camp_obj.previewEnableDisable(false);
                                     }
                                     else {
                                         camp_obj.app.showAlert(step1_json[1], $("body"));
@@ -1658,14 +1699,14 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var camp_obj = this;
                     
                     //Load Defaults 
-                    var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=campaignDefaults";
-                    $.ajax({
+                    //var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=campaignDefaults";
+                    /*$.ajax({
                         type:'GET',
                         url:URL,
                         dataType:'json',
                         async:false,
-                        success:function(data){
-                            var defaults_json = data;
+                        success:function(data){*/
+                            var defaults_json = this.app.getAppData("camp_defaults");
                             if (camp_obj.app.checkError(defaults_json)) {
                                 return false;
                             }
@@ -1749,8 +1790,15 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 }
                                 else{
                                     camp_obj.states.step1.isThirdPartySMTP = "N";                                            
+                                    var fromEmail = obj.target.value;                                    
                                     camp_obj.$("#campaign_from_name").val(defaults_json.fromName).prop("readonly",false);  
-                                    camp_obj.$("#campaign_reply_to").val(defaults_json.fromEmail).prop("readonly",false);  ;
+                                    camp_obj.$("#campaign_reply_to").val(defaults_json.fromEmail).prop("readonly",false);
+                                    /*if(fromEmail.toLowerCase().indexOf("@bridgemailsystem.com")>-1){
+                                        camp_obj.$("#campaign_reply_to").val(camp_obj.app.get("user").userEmail).prop("readonly",false);  
+                                    }
+                                    else{
+                                        camp_obj.$("#campaign_reply_to").val(fromEmail).prop("readonly",false);  
+                                    }*/
                                 }
                                 camp_obj.app.hideError({control: camp_obj.$el.find(".fname-container")});
                                 
@@ -1776,8 +1824,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                 camp_obj.$(".step1col1").css("min-height", "427px");
                                 camp_obj.$("#campaign_custom_footer_text").val(camp_obj.app.decodeHTML(defaults_json.customFooter, true));
                             }
-                        }
-                    });
+                    //    }
+                    //});
                     
 
                     this.app.getData({
@@ -3575,7 +3623,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var camp_obj = this;
                     if (this.states.step3.recipientDetial)
                         return false;
-                    this.app.showLoading("Loading Recipients...", this.$el.parents(".ws-content"));
+                    this.app.showLoading("Loading Recipients...", this.$el.parents(".ws-content .step3"));
                     var URL = "";
                     var source_type = camp_obj.states.step3.recipientType.toLowerCase();
                     if (source_type == "salesforce") {
@@ -3591,7 +3639,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.camp_id + "&type=recipientType";
                     }
                     jQuery.getJSON(URL, function (tsv, state, xhr) {
-                        camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
+                        camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content .step3"));
                         if (xhr && xhr.responseText) {
                             var rec_josn = jQuery.parseJSON(xhr.responseText);
                             if (camp_obj.app.checkError(rec_josn)) {
@@ -4598,6 +4646,18 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var active_ws = this.$el.parents(".ws-content");
                     var header_title = active_ws.find(".camp_header .edited  h2");
                     header_title.find('.preview').trigger('click');
+                },
+                previewEnableDisable: function(disable){
+                    var active_ws = this.$el.parents(".ws-content");
+                    var header_title = active_ws.find(".camp_header .edited  h2");
+                    if(disable){
+                        header_title.find('.preview').addClass("disabled-preview");
+                        active_ws.find(".nextbtn").addClass("disabled-preview");
+                    }
+                    else{
+                        header_title.find('.preview').removeClass("disabled-preview");
+                        active_ws.find(".nextbtn").removeClass("disabled-preview");
+                    }
                 }
 
             });

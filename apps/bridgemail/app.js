@@ -275,6 +275,21 @@ define([
                 
             }, this));
             this.checkFromCRM();
+            this.loadCampaignDefaults();
+        },
+        loadCampaignDefaults:function(){
+            var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.get('bms_token') + "&type=campaignDefaults";
+            $.ajax({
+                type:'GET',
+                url:URL,
+                dataType:'json',
+                async:true,
+                success:_.bind(function(data){
+                    this.setAppData("camp_defaults", data);
+                },this)
+               });
+            
+            
         },
         checkFromCRM: function () {
             if (this.mainContainer) {
@@ -597,6 +612,7 @@ define([
                 delete cache[k];
             })
             this.clearCache();
+            this.loadCampaignDefaults();
             console.log("Cache is cleared now time=" + (new Date()));
         },
         removeCache: function (key) {

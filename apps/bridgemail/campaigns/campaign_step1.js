@@ -170,6 +170,7 @@ function (template) {
                  var smtp_setting = this.$("#campaign_from_email").find(":selected").attr("isThirdPartySMTP");
                  if(smtp_setting && smtp_setting=="Y"){
                     this.$("#campaign_from_name,#campaign_reply_to").prop("readonly",true);
+                    this.isThirdPartySMTP = "Y";
                  }
                  this.$("#campaign_reply_to").val(this.app.decodeHTML(camp_json.replyTo));
                  if(this.options.isCreateCamp){

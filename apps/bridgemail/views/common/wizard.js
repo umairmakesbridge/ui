@@ -13,10 +13,16 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                                 obj.preventDefault();
                             },
                             'click a.nextbtn':function(obj){
-                                //this.next(obj); 
-                                 obj.stopPropagation();
-                                obj.preventDefault();
-                                this.validateStep();
+                                //this.next(obj);
+                               var target = $(obj.target);
+                                if(obj.target.tagName!="A"){
+                                    target = $(obj.target).parent();
+                                }
+                                if(!target.hasClass("disabled-preview")){
+                                    obj.stopPropagation();
+                                    obj.preventDefault();
+                                    this.validateStep();
+                                }
                             },
                             'click ol.progressbar li':function(obj){
                                 return false;

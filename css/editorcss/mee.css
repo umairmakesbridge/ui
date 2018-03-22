@@ -3203,7 +3203,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 
 
 .MEE_EDITOR ul.imageLib > li > span.img { width:100%; height:110px; display:block; overflow:hidden; margin:0; }
-.MEE_EDITOR ul.imageLib > li > span.img img { height:100%;}
+.MEE_EDITOR ul.imageLib > li > span.img img { height:100%;display:inline-block;}
 
 
 
@@ -5220,4 +5220,23 @@ right: 10px;
 }
 .fieldinfo i.icon {
     background: url("../../img/info2.png") no-repeat scroll center center #73D2F5;
+}
+.hideSaveBtn{
+    display: none !important;
+}
+
+.save-editor{
+    position:absolute;
+    left:50%;
+    top:3px;
+    margin-left: -66px;
+    width:120px;
+    text-align: center;
+    background: #f9edbe;
+    color:#222;
+    box-shadow:0 2px 4px rgba(0,0,0,0.2);
+    padding:6px 10px;
+    border-radius: 2px;
+    border:1px solid #f0c36d;
+    font-weight:bold;
 }

@@ -1428,7 +1428,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     //previeCodeTabs.tabs();
 
                                     lnkPreviewCode.click(function () {
-                                        options.previewdesignTemplateCallback();
+                                        if(!$(this).find("a").hasClass("disabled-save")){
+                                            options.previewdesignTemplateCallback();
+                                        }
                                     });
                                     lnkHtmlCode.click(function () {
                                         var mainHTMLELE = meeIframe.find(".mainContentHtml");
@@ -6028,8 +6030,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var element = $(this);
 
                                     var args = new Object();
-                                    args.DCID = element.data("id");
-
+                                    args.DCID = element.attr("data-id");
+                                    if(!args.DCID){
+                                        options._app.showAlert('Dynamic Block id is not available.', $("body"));
+                                        return false;
+                                    }
                                     //Call overridden Method here: will use when exposing properties to developer
                                     if (options.OnDeleteDynamicVariation != null) {
                                         options.OnDeleteDynamicVariation(args);

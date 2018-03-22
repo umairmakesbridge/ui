@@ -10095,3 +10095,7 @@ ul.sourceCampPreview li{
   opacity:0.1;
   padding:10px 0px 0px 0px;
 }
+.disabled-preview{
+    opacity: 0.5;
+    cursor: default;
+}

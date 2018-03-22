@@ -200,7 +200,7 @@ function (template) {
                  this.saveEditorType();
                  var html = "",plain="";                  
                  var post_data = {type: "saveStep2",campNum:this.camp_id};                 
-                 var campaign_subject_title = $.trim(this.$("#campaign_subject").val());
+                 var campaign_subject_title = $.trim(this.$("#campaign_subject").val());                 
                  var selected_li = this.$("#choose_soruce li.selected").attr("id");
                     post_data['isCampaignText'] = 'N';                        
                      if(selected_li=="html_editor"){
@@ -215,7 +215,8 @@ function (template) {
                         }
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html; 
-                        post_data['plainText'] = plain;                        
+                        post_data['plainText'] = plain;      
+                        
                      }else if(selected_li=="html_code"){
                         html = this.$("textarea#handcodedhtml").val();                     
                         post_data['htmlCode'] = html;                        
@@ -227,6 +228,7 @@ function (template) {
                         post_data['htmlCode'] = '';
                         
                      }else if(selected_li=="html_editor_mee"){
+                         this.$("#area_html_editor_mee .save-editor").show();
                          if(campaign_subject_title!==""){
                             var newTitle = '<title>'+campaign_subject_title+'</title>';
                             var meeElement = this.$("#mee-iframe").contents();
@@ -287,6 +289,7 @@ function (template) {
                                     this.camp_json.isTextOnly = 'N';
                                 }
                                 this.messagebody_page.states.editor_change = false;
+                                this.$("#area_html_editor_mee .save-editor").hide();
                                 
                             }
                             else{

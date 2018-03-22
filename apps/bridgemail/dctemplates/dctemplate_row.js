@@ -95,7 +95,7 @@ define(['text!dctemplates/html/template_row.html'],
                             headerIcon: 'dctemplate',
                             bodyCss: {"min-height": dialog_height + "px"},
                             tagRegen: false,
-                            buttons: {saveBtn: {text: 'Save'}}
+                            buttons: {saveBtn: {text: 'Save Dynamic Block',btncolor:'btn-green'}}
                         });
                         this.app.showLoading("Loading...", dialog.getBody());  
                        
