@@ -226,7 +226,7 @@ define(['text!bmstemplates/html/template_row.html', 'common/tags_row', 'bmstempl
                         dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage ,true));
                         self.app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
                         self.app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
-                        self.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveTemplateCall, mPage); // New Dialog
+                        self.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveTemplateCall, mPage, true); // New Dialog
                         self.app.dialogArray[dialogArrayLength - 1].copyCall = _.bind(self.copyTemplate, self); // New Dialog
                         self.app.dialogArray[dialogArrayLength - 1].tags = mPage.jsonTag; // New Dialog
                     });

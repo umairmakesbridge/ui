@@ -148,7 +148,7 @@ function (template, mappingPage) {
                 this.$(".total-camp-count").html(camp_list_json.count);
                 if(camp_list_json.count!=="0"){
                     this.setCounts = true;
-                    this.reportCSVData = [["CampaignName","ScheduledDate","SentCount","Opened/Open Rate","Clicked/Open CTR","Converted","PageViews","Unsubscribed","Supressed","Bounced"]]
+                    this.reportCSVData = [["CampaignName","CampaignID","ScheduledDate","SentCount","Opened/Open Rate","Clicked/Open CTR","Converted","PageViews","Unsubscribed","Supressed","Bounced"]]
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camps_grid_report"><tbody>';	
                         _.each(camp_list_json.campaigns[0], function(val, index) {
                              list_html += this.makerow(val);					
@@ -223,7 +223,7 @@ function (template, mappingPage) {
                 var _dateTime = this.getDateFormat(val);
                 row_html += '<td width="132px"><div><div style="width:105px" class="time"><strong><span><em>'+_dateTime.dtHead +'</em>'+ _dateTime.dateTime +'</span></strong></div></div></td> ';                  
                 row_html += '</tr>';                
-                this.reportCSVData.push([val[0].name,this.getCSVDate(val),0,0,0,0,0,0,0,0]);
+                this.reportCSVData.push([val[0].name,'',this.getCSVDate(val),0,0,0,0,0,0,0,0]);
                 return row_html;
             }
             ,
@@ -392,28 +392,30 @@ function (template, mappingPage) {
                        var camp_index = 1;                       
                        _.each(camp_json.campaigns[0], function(val) {                          
                            _this.chart_data["bounceCount"] = _this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
-                           _this.reportCSVData[camp_index][9] = parseInt(val[0].bounceCount) + _this.calcPer(val[0].bounceCount,val[0].sentCount);
+                           _this.reportCSVData[camp_index][10] = parseInt(val[0].bounceCount) + _this.calcPer(val[0].bounceCount,val[0].sentCount);
                            _this.chart_data["clickCount"] = _this.chart_data["clickCount"] + parseInt(val[0].clickCount);
-                           _this.reportCSVData[camp_index][4] = parseInt(val[0].clickCount) + _this.calcPer(val[0].clickCount,val[0].sentCount);
+                           _this.reportCSVData[camp_index][5] = parseInt(val[0].clickCount) + _this.calcPer(val[0].clickCount,val[0].sentCount);
                            _this.chart_data["conversionCount"] = _this.chart_data["conversionCount"] +parseInt(val[0].conversionCount);
-                           _this.reportCSVData[camp_index][5] = parseInt(val[0].conversionCount)+ _this.calcPer(val[0].conversionCount,val[0].sentCount);
+                           _this.reportCSVData[camp_index][6] = parseInt(val[0].conversionCount)+ _this.calcPer(val[0].conversionCount,val[0].sentCount);
                            _this.chart_data["facebookCount"] = _this.chart_data["facebookCount"] + parseInt(val[0].facebookCount);
                            _this.chart_data["googlePlusCount"] = _this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
                            _this.chart_data["linkedInCount"] = _this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
                            _this.chart_data["openCount"] = _this.chart_data["openCount"] + parseInt(val[0].openCount);
-                           _this.reportCSVData[camp_index][3] = parseInt(val[0].openCount) + _this.calcPer(val[0].openCount,val[0].sentCount);
+                           _this.reportCSVData[camp_index][4] = parseInt(val[0].openCount) + _this.calcPer(val[0].openCount,val[0].sentCount);
                            _this.chart_data["pageViewsCount"] = _this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
-                           _this.reportCSVData[camp_index][6] = parseInt(val[0].pageViewsCount) + _this.calcPer(val[0].pageViewsCount,val[0].sentCount);
+                           _this.reportCSVData[camp_index][7] = parseInt(val[0].pageViewsCount) + _this.calcPer(val[0].pageViewsCount,val[0].sentCount);
                            _this.chart_data["pendingCount"] = _this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
                            _this.chart_data["pinterestCount"] = _this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
                            _this.chart_data["sentCount"] = _this.chart_data["sentCount"] + parseInt(val[0].sentCount);
-                           _this.reportCSVData[camp_index][2] = parseInt(val[0].sentCount);
+                           _this.reportCSVData[camp_index][3] = parseInt(val[0].sentCount);
                            _this.chart_data["supressCount"] = _this.chart_data["supressCount"] + parseInt(val[0].supressCount);
-                           _this.reportCSVData[camp_index][8] = parseInt(val[0].supressCount) + _this.calcPer(val[0].supressCount,val[0].sentCount);
+                           _this.reportCSVData[camp_index][9] = parseInt(val[0].supressCount) + _this.calcPer(val[0].supressCount,val[0].sentCount);
                            _this.chart_data["twitterCount"] = _this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                            _this.chart_data["unSubscribeCount"] = _this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
-                           _this.reportCSVData[camp_index][7] = parseInt(val[0].unSubscribeCount)+ _this.calcPer(val[0].unSubscribeCount,val[0].sentCount);;
-                           
+                           _this.reportCSVData[camp_index][8] = parseInt(val[0].unSubscribeCount)+ _this.calcPer(val[0].unSubscribeCount,val[0].sentCount);
+                           if(val[0].isContainCampMergeTag=="Y"){
+                            _this.reportCSVData[camp_index][1] = val[0].campNum;
+                           }
                            if(_this.setCounts==true){
                                _this.populateTableCount(val[0]);
                            }
