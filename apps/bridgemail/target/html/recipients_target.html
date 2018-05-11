@@ -157,24 +157,25 @@
                                                          
               </div>  <%if(this.model.get('status') =="D"){%> 
               <% if(this.showUseButton || this.showRemoveButton || (this.app.get('user').accountType =='A' && this.app.get('user').userId==this.model.get('userId'))){ %>                
-                    <div class="slide-btns five s-clr6" >
+                    <div class="slide-btns six s-clr7" >
               <%  } else { %>
                    <% if(this.parent.status === 'SS') { %> 
-                    <div class="slide-btns three s-clr4">
+                    <div class="slide-btns four s-clr5">
                    <% } else { %>             
-                     <div class="slide-btns four s-clr5">    
+                     <div class="slide-btns five s-clr6">    
               <% } } %>
                     <span  class="icon setting"></span>
                     <div>
                             <% if(this.showUseButton) {%>
-                                <a class="icon check clr5 row-move" ><span>Use</span></a>
+                                <a class="icon check clr6 row-move" ><span>Use</span></a>
                             <% } %>  
                             <% if(this.showRemoveButton) {%>
-                                <a class="icon remove clr5 row-remove" ><span>Remove</span></a>
+                                <a class="icon remove clr6 row-remove" ><span>Remove</span></a>
                             <% } %>  
                             <% if(this.app.get("user").accountType =='A' && this.app.get("user").userId==this.model.get('userId')) { %>
-                                <a class="icon share-camp share clr5" ><span>Share</span></a>
+                                <a class="icon share-camp share clr6" ><span>Share</span></a>
                            <% } %>
+                            <a class="icon download-csv-target clr5 " data-id="<%=this.model.get('filterNumber.encode')%>" ><span>CSV</span></a>
                             <a class="icon refresh clr4 " data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Run Count</span></a>
                             <% if(this.app.get("user").userId==this.model.get('userId')) { %>
                              <a class="icon edit edit-target clr3" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Edit</span></a>

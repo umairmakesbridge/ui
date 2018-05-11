@@ -22,7 +22,8 @@ function (template,copytargetPage, shareCommonPage) {
                 "click .row-remove":"removeRowToCol2",
                 "click .stop-target":"stopTargetDialog",
                 "click .share-camp":'shareTarget',
-                "click .target_shared":'sharedTargets'
+                "click .target_shared":'sharedTargets',
+                "click .download-csv-target":"downloadTargetAsCVS"
                    
             },
             initialize: function () {
@@ -269,7 +270,7 @@ function (template,copytargetPage, shareCommonPage) {
                         });     
                 this.app.showLoading("Loading...",dialog.getBody());
                 require(["recipientscontacts/rcontacts"],function(Contacts){
-                  var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target',dialogHeight:dialog_height});
+                  var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target',targetNum:that.model.get('filterNumber.encode'),dialogHeight:dialog_height});
                   var dialogArrayLength = that.app.dialogArray.length; // New Dialog
                     dialog.getBody().append(objContacts.$el);
                     that.app.showLoading(false, objContacts.$el.parent());
@@ -400,6 +401,27 @@ function (template,copytargetPage, shareCommonPage) {
                 targets_obj.$el.find(".sortoption_expand").find('.spntext').html("My Shared");
                 targets_obj.$el.find('.myshare').parent().addClass('active');
                 targets_obj.loadTargets();
+            },
+            downloadTargetAsCVS:function(){
+                this.app.showLoading("Downloading Target CSV...",this.$el);
+                var URL = "/pms/report/getCSV.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&type=TargetSubscriber&filterNum="+this.model.get('filterNumber.encode');
+                jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){                    
+                    this.app.showLoading(false,this.$el);
+                    var url_json = jQuery.parseJSON(xhr.responseText);                              
+                    if(url_json[0]!=="err"){                           
+                       if(this.parent.$("iframe.download-iframe").length){
+                           this.parent.$("iframe.download-iframe").attr("src",url_json.url.replace("http","https"));
+                       }
+                       else{
+                          var iframHTML = "<iframe src=\"" + url_json.url.replace("http","https") + "\"  width=\"1px\" class=\"download-iframe\" frameborder=\"0\" style=\"height:1px\"></iframe>" ;
+                          this.parent.$el.append($(iframHTML));
+                       }
+                       
+                    }
+                    else{                                  
+                        this.app.showAlert(url_json[1],this.$el,{fixed:true});
+                    }                        
+               },this)); 
             }
                 
         });    

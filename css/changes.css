@@ -7358,6 +7358,7 @@ ul.dd-menu li.active  a:after {
 .slide-btns .icon.uncheck { background-image: url("../img/unpublish48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.share { background-image: url("../img/share35.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.addaction { background-image: url("../img/uploadaction.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.download-csv-target { background-image: url("../img/download_csv_target.png"); background-position:center center; background-repeat:no-repeat; }
 
 .slide-btns div .icon:hover  {background-position:center 10px !important;}
 

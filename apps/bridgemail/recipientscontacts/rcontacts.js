@@ -19,6 +19,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     "keyup #daterange": 'showDatePicker',                    
                     "click #clearcal": 'hideDatePicker',
                     "click .calendericon": 'showDatePickerFromClick',
+                    "click .download-csv":'downloadTargetAsCVS'
                 },
                 initialize: function() {                    
                     if (this.options.params) {
@@ -45,6 +46,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     this.total = 0;
                     this.timer = 0;
                     this.dialogHeight = this.options.dialogHeight;
+                    this.targetNum = this.options.targetNum;
                     this.disableCalender = false;
                     
                     this.render();
@@ -85,7 +87,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange, this));
                         this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
                     }
-                    
+                    this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     
                     
 
@@ -96,6 +98,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("<ul><li style='color:#fff'><span class='workflow-header'></span>&nbsp;"+this.options.params.wfName+" </li></ul>");
                         this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> Option <b>"+ this.options.params.optionNumber +"</b>  </strong>")
                     }
+                    
                 },
                 loadRContacts: function(offset) {
                     if (typeof this.options.sentAt != "undefined") {
@@ -121,6 +124,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                         _data['tag'] = this.listNum;
                         this.objRContacts.url = '/pms/io/user/getTagPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');                        
                     } else if (this.options.type == "target") {
+                        this.$(".download-csv").show();
                         _data['filterNumber'] = this.listNum;
                         this.objRContacts.url = '/pms/io/filters/getTargetPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');                        
                     } else if (this.options.type == "autobots") {
@@ -362,6 +366,27 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                     if (!target.hasClass("ui-daterangepicker-dateRange")) {                        
                         this.setDateRange();
                     }
+                },
+                downloadTargetAsCVS:function(){
+                    this.app.showLoading("Downloading Target CSV...",this.$el);
+                    var URL = "/pms/report/getCSV.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&type=TargetSubscriber&filterNum="+this.targetNum;
+                    jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){                    
+                        this.app.showLoading(false,this.$el);
+                        var url_json = jQuery.parseJSON(xhr.responseText);                              
+                        if(url_json[0]!=="err"){                           
+                           if(this.$el.find("iframe.download-iframe").length){
+                               this.$el.find("iframe.download-iframe").attr("src",url_json.url.replace("http","https"));
+                           }
+                           else{
+                              var iframHTML = "<iframe src=\"" + url_json.url.replace("http","https") + "\"  width=\"1px\" class=\"download-iframe\" frameborder=\"0\" style=\"height:1px\"></iframe>" ;
+                              this.$el.append($(iframHTML));
+                           }
+
+                        }
+                        else{                                  
+                            this.app.showAlert(url_json[1],this.$el,{fixed:true});
+                        }                        
+                   },this)); 
                 }
 
             });
