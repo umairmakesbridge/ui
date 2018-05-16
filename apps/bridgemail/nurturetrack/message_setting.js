@@ -26,6 +26,7 @@ function (template) {
                 this.camp_json = this.parent.camp_json;
                 this.editable=this.options.editable;
                 this.triggerOrder = this.options.triggerOrder;
+                this.saveRequest = null;
                 this.plainText = "";
                 this.htmlText = "";   
                 this.type = this.options.type;
@@ -198,7 +199,8 @@ function (template) {
             saveStep2:function(showLoading,htmlText){       
                  if(!this.camp_id){return false}
                  this.saveEditorType();
-                 var html = "",plain="";                  
+                 var html = "",plain="";             
+                 this.$("#area_html_editor_mee .save-editor").hide();
                  var post_data = {type: "saveStep2",campNum:this.camp_id};                 
                  var campaign_subject_title = $.trim(this.$("#campaign_subject").val());                 
                  var selected_li = this.$("#choose_soruce li.selected").attr("id");
@@ -250,12 +252,18 @@ function (template) {
                          post_data['htmlCode'] = "";
                      }
                         
-                 if(this.messagebody_page.states.editor_change ===true || typeof(showLoading)!=="undefined"){
-                   if(typeof(showLoading)=="undefined"){  
+                   if(this.saveRequest){
+                       this.saveRequest.abort();
+                   }     
+                   if(typeof(showLoading)=="undefined"){                      
                     this.app.showLoading("Saving settings...",this.dialog.$el); 
+                    this.$(".MenuCallPreview a").removeClass("disabled-save");
+                   }
+                   else{
+                       this.$(".MenuCallPreview a").addClass("disabled-save");
                    }
                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                   $.post(URL,post_data )
+                   var saveReq = $.post(URL,post_data )
                         .done(_.bind(function(data) {                                 
                             var step1_json = jQuery.parseJSON(data);
                             this.app.showLoading(false,this.dialog.$el);
@@ -289,6 +297,7 @@ function (template) {
                                     this.camp_json.isTextOnly = 'N';
                                 }
                                 this.messagebody_page.states.editor_change = false;
+                                this.$(".MenuCallPreview a").removeClass("disabled-save");
                                 this.$("#area_html_editor_mee .save-editor").hide();
                                 
                             }
@@ -297,7 +306,12 @@ function (template) {
                             }
                    },this));
                    
-                 }  
+                   if(typeof(showLoading)!=="undefined"){
+                       this.saveRequest =  saveReq;
+                   }
+                   else{
+                        this.saveRequest =  null;
+                   }
                 
                 },
                 saveCall:function(){

@@ -682,12 +682,12 @@ function (template) {
                                                     this.parent.dialog.$(".dialog-title").html("'"+this.$("#campaign_subject").val()+"' Settings")
                                                 }
                                             }
-                                            if(this.parent.messagebody_page.states.editor_change === true ){
+                                            //if(this.parent.messagebody_page.states.editor_change === true ){
                                                 this.parent.saveStep2();                                                
-                                            }
-                                            else{
-                                                this.app.showMessge("Message settings saved successfully!");
-                                            }                                                                                                                                   
+                                            //}
+                                            //else{
+                                              //  this.app.showMessge("Message settings saved successfully!");
+                                            //}                                                                                                                                   
                                     }
                                     else{
                                            this.app.showAlert(step1_json[1],this.$el); 
