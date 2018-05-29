@@ -216,6 +216,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     this.app.showLoading("Loading Nurture Tracks...",this.$tracksArea);             
                     this.$(".user_tracks .notfound").remove();
                     this.$(".scroll-content .notfound").remove();
+                    this.checkStatus = [];
                 }
                 else{
                     this.offset = this.offset + 20;

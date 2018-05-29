@@ -117,6 +117,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         that.$el.find("#autobots_listing  .create_new").remove();
                         that.$el.find("#tblAutobots tbody").html('');
                         this.app.showLoading("Loading Autobots...", that.$el);
+                        this.checkStatus = [];
                     } else {
                         this.offset = this.offset + this.offsetLength;
                     }
