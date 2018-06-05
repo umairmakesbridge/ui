@@ -60,6 +60,7 @@ define(['text!account/html/gmailaccounts.html'],
                         this.$(".gmail-account-new").hide();
                         this.$(".gmail-account-added").show();
                         this.loadGmailAccount();
+                        
                     }
                 },
                 getStarted: function () {
@@ -80,6 +81,7 @@ define(['text!account/html/gmailaccounts.html'],
                                 if (childWindow && childWindow.closed) {
                                     window.clearInterval(intervalID);
                                     that.checkGmailStatus();
+                                    that.refreshDefaults();
                                 }
                             }, 200);
 
@@ -135,7 +137,8 @@ define(['text!account/html/gmailaccounts.html'],
                         if (_json[0] !== "err") {
                             this.app.showMessge(_json.msg?_json.msg:"This account access has be revoked successfully."); 
                             this.gmailSetup = false;                                                                       
-                            this.forceLoadSetupArea("N");                                                                
+                            this.forceLoadSetupArea("N");       
+                            this.refreshDefaults();
                         }
                         else{
                             this.app.showAlert(_json[1],this.$el);
@@ -153,6 +156,15 @@ define(['text!account/html/gmailaccounts.html'],
                             }
                         },this)
                     });
+                },
+                refreshDefaults:function(){
+                    this.app.loadCampaignDefaults();
+                    var _this = this;
+                    _.each($(".tabs-menu li"),function(val,key){
+                        if($(val).attr("workspace_id") && $(val).attr("workspace_id").indexOf("campaign_")>-1){
+                            _this.app.showAlert('Please reload opened campaign(s) to load gmail account updates.',$("body"),{type:'Reload Campaigns',fixed: true});
+                        }
+                    })
                 }
 
 

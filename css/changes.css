@@ -8259,6 +8259,39 @@ ul#template_search_menu_expand li a i.icon {
 .refresh_btn:hover {background: none repeat scroll 0 0 #97D61D;}
 .refresh_btn:hover i  { color:#fff; }
 
+.refresh_btn_small {
+    background: none repeat scroll 0 0 #eaf4f9;
+    border-radius: 2px;
+    display: block;
+    position: absolute;
+    right:0px;
+    height: 38px;
+    top:1px;
+    width: 38px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+.refresh_btn_small i {
+    color: #748592;
+    display: block;
+    font-size: 0;
+    line-height:0;
+    text-indent:-999em;
+    font-weight: normal;
+    margin: 0 auto;
+    width: 38px;
+    height:38px;
+    background: url("../img/refresh-g.png") no-repeat scroll center center ;
+}
+.refresh_btn_small i.disabled{
+    opacity:0.6;
+    background: url("../img/refresh-g.gif") no-repeat scroll center center ;
+}
+
+.refresh_btn_small:hover {background: none repeat scroll 0 0 #97D61D;}
+.refresh_btn_small:hover i  { color:#fff; }
+
 /* ------------------------------------------------------*/
 
 

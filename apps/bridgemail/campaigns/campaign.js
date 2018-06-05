@@ -35,6 +35,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     'click .prev-iframe-campaign': 'htmlTextClick',
                     'click .save-step2': 'saveForStep2',
                     'click .dynamic-cotnent-items': 'dcItemsDialog',
+                    'click .refresh-fromemail':'fetchFromEmails',
                     'click .editorbtnshow': function () {
                         this.$(".textdiv").hide();
                         this.$(".editor_box").show();
@@ -4659,6 +4660,59 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         header_title.find('.preview').removeClass("disabled-preview");
                         active_ws.find(".nextbtn").removeClass("disabled-preview");
                     }
+                },
+                fetchFromEmails: function(obj){
+                    var target = $(obj.target);
+                    if(!target.hasClass("disabled")){
+                        target.addClass("disabled");
+                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=campaignDefaults";
+                        this.$("#campaign_from_email").html("<option>Loading From Email(s)...</option>").prop("disabled",true).trigger('chosen:updated');
+                        $.ajax({
+                            type:'GET',
+                            url:URL,
+                            dataType:'json',
+                            async:true,
+                            success:_.bind(function(data){
+                                //error handling 
+                                target.removeClass("disabled");
+                                this.app.setAppData("camp_defaults", data);
+                                var defaults_json = this.app.getAppData("camp_defaults");                           
+                                var fromEmails = defaults_json.fromEmail;
+                                if (defaults_json.optionalFromEmails)
+                                    fromEmails += ',' + defaults_json.optionalFromEmails;
+                                var fromEmailsArray = fromEmails.split(',');
+                                var fromOptions = '';
+
+                                fromEmailsArray.sort();
+                                for (var i = 0; i < fromEmailsArray.length; i++)
+                                {
+                                    if (fromEmailsArray[i] == defaults_json.fromEmail) {
+                                        fromOptions += '<option value="' + fromEmailsArray[i] + '" selected="selected">' + fromEmailsArray[i] + '</option>';                                    
+                                    }
+                                    else{
+                                        fromOptions += '<option value="' + fromEmailsArray[i] + '">' + fromEmailsArray[i] + '</option>';
+                                    }
+                                }
+                                //Add Gmail Address to fromEmail box
+                                if(defaults_json.thirdpartysmtp && defaults_json.thirdpartysmtp[0].Gmail){
+                                    this.states.step1.gmailSMTPExists = false;
+                                    var gmailAddresses = defaults_json.thirdpartysmtp[0].Gmail;
+                                    if(gmailAddresses.length){
+                                        for(var i=0;i<gmailAddresses.length;i++){
+                                            if(gmailAddresses[i].fromAddress){
+                                                fromOptions += '<option value="' + gmailAddresses[i].fromAddress + '" isThirdPartySMTP="Y" thirdPartySMTPName="Gmail" gmailFromName="'+gmailAddresses[i].gmailFromName+'">' + gmailAddresses[i].fromAddress + '</option>';
+                                                this.states.step1.gmailSMTPExists = true;
+                                            }
+                                        }
+                                    }
+
+                                }
+                                this.$("#campaign_from_email").html(fromOptions).prop("disabled",false).trigger('chosen:updated');
+                                this.$("#campaign_from_email").change();
+                            },this)
+                        });
+                    }
+                    
                 }
 
             });

@@ -13,7 +13,7 @@ function (template) {
              * Attach events on elements in view.
             */
             events: {
-              
+              "click .refresh-fromemail":"fetchFromEmails"
             },
             /**
              * Initialize view - backbone
@@ -124,7 +124,7 @@ function (template) {
             setFromNameField:function(){
                var active_workspace = this.$el;
                var subj_w = this.$('#campaign_subject').width(); // Abdullah Check
-               active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+82)+"px"});   // Abdullah Try
+               active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+42)+"px","margin-right":"40px"});   // Abdullah Try
                 if(active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()){  
                    active_workspace.find("#campaign_from_email_input").css({"width":active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px","margin-right":"61px"}); // Abdullah Check
                    active_workspace.find("#campaign_from_email_chosen .chosen-drop").css("width",(parseInt(active_workspace.find('#campaign_from_email_chosen').width()))+"px");
@@ -764,6 +764,59 @@ function (template) {
                                this.app.showAlert(message_json[1],this.$el); 
                         }
                     },this));
+                },
+                fetchFromEmails: function(obj){
+                    var target = $(obj.target);
+                    if(!target.hasClass("disabled")){
+                        target.addClass("disabled");
+                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=campaignDefaults";
+                        this.$("#campaign_from_email").html("<option>Loading From Email(s)...</option>").prop("disabled",true).trigger('chosen:updated');
+                        $.ajax({
+                            type:'GET',
+                            url:URL,
+                            dataType:'json',
+                            async:true,
+                            success:_.bind(function(data){
+                                //error handling 
+                                target.removeClass("disabled");
+                                this.app.setAppData("camp_defaults", data);
+                                var defaults_json = this.app.getAppData("camp_defaults");                           
+                                var fromEmails = defaults_json.fromEmail;
+                                if (defaults_json.optionalFromEmails)
+                                    fromEmails += ',' + defaults_json.optionalFromEmails;
+                                var fromEmailsArray = fromEmails.split(',');
+                                var fromOptions = '';
+
+                                fromEmailsArray.sort();
+                                for (var i = 0; i < fromEmailsArray.length; i++)
+                                {
+                                    if (fromEmailsArray[i] == defaults_json.fromEmail) {
+                                        fromOptions += '<option value="' + fromEmailsArray[i] + '" selected="selected">' + fromEmailsArray[i] + '</option>';                                    
+                                    }
+                                    else{
+                                        fromOptions += '<option value="' + fromEmailsArray[i] + '">' + fromEmailsArray[i] + '</option>';
+                                    }
+                                }
+                                //Add Gmail Address to fromEmail box
+                                if(defaults_json.thirdpartysmtp && defaults_json.thirdpartysmtp[0].Gmail){
+                                    this.gmailSMTPExists = false;
+                                    var gmailAddresses = defaults_json.thirdpartysmtp[0].Gmail;
+                                    if(gmailAddresses.length){
+                                        for(var i=0;i<gmailAddresses.length;i++){
+                                            if(gmailAddresses[i].fromAddress){
+                                                fromOptions += '<option value="' + gmailAddresses[i].fromAddress + '" isThirdPartySMTP="Y" thirdPartySMTPName="Gmail" gmailFromName="'+gmailAddresses[i].gmailFromName+'">' + gmailAddresses[i].fromAddress + '</option>';
+                                                this.gmailSMTPExists = true;
+                                            }
+                                        }
+                                    }
+
+                                }
+                                this.$("#campaign_from_email").html(fromOptions).prop("disabled",false).trigger('chosen:updated');
+                                this.$("#campaign_from_email").change();
+                            },this)
+                        });
+                    }
+                    
                 }            
         });
 });
