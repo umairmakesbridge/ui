@@ -9,27 +9,11 @@ define(['text!contacts/html/subscriber_row.html', 'common/tags_row','contacts/li
             return Backbone.View.extend({
                 tagName: 'li',
                 className: 'contact-li',
-                detailFields: {"firstName": {"label": "First Name"}, "lastName": {"label": "Last Name"}, "email": {"label": "Email"}, "company": {"label": "Company"}, "city": {"label": "City"},
-                    "country": {"label": "Country"}, "state": {"label": "State"}, "zip": {"label": "Zip"}, "address1": {"label": "Address 1"}, "address2": {"label": "Address 2"},
-                    "areaCode": {"label": "Area Code"}, "telephone": {"label": "Telephone"}, "jobStatus": {"label": "Job Status"}, "industry": {"label": "Industry"}, "salesRep": {"label": "Sales Rep"},
-                    "source": {"label": "Source"}, "salesStatus": {"label": "Sales Status"}, "occupation": {"label": "Occupation"}, "birthDate": {"label": "Birthday"}},
-                    mapping: {"SU": {"name": "Signup Form"}, "CS": {"name": "Campaign Sent"}, "OP": {"name": "Campaign Open"}, "CK": {"name": "Email Click"}, "MT": {"name": "Single Message Sent"}
-                    , "MO": {"name": "Single Message Open"}, "MC": {"name": "Single Message URL Click"}, "MS": {"name": "Single Message Surpress"}, "WM": {"name": "WF C2Y Trigger Mail"}
-                    , "MM": {"name": "MY C2Y Trigger Mail"}, "UN": {"name": "Unsubscribe"}, "SP": {"name": "Suppress"}, "SC": {"name": "Score Change"}, "TF": {"name": "Tell a friend"}
-                    , "WV": {"name": "Web Visit"}, "WA": {"name": "Workflow Alert"}, "S": {"name": "Sent"}, "O": {"name": "Opened"}, "C": {"name": "Clicked"}},
                 /**
                  * Attach events on elements in view.
                  */
-                events: {
-                    'click .more-detail': 'showDetail',
-                    'click .closebtn': 'hideDetail',
-                    'click .tag': 'tagSearch',
-                    'click .oto-sendmail': 'sendEmail',
-                    'click .show-detail': 'editProfile',
-                    'click .show-contact-detail': 'openContact',
-                    'click .add-to-salesforce': "synctoSF",
-                    'click .salesforce-view': "viewSyncedSF",
-                    'click .add-to-lists':"add2list"
+                events: {                    
+                   
                 },
                 /**
                  * Initialize view - backbone
@@ -41,7 +25,7 @@ define(['text!contacts/html/subscriber_row.html', 'common/tags_row','contacts/li
                     this.tmPr = '';
                     this.dialogStyles = {};
                     this.render();
-                    this.model.on('change', this.renderRow, this);
+//                    this.model.on('change', this.renderRow, this);
                 },
                 /**
                  * Render view on page.
@@ -49,10 +33,8 @@ define(['text!contacts/html/subscriber_row.html', 'common/tags_row','contacts/li
                 render: function () {
 
                     this.$el.html(this.template({
-                        model: this.model,
-                        time: this.getActivityDate(this.model.get("lastActivityDate")),
-                        contact_name: this.getContactName(),
-                        activity_type: this.mapping[this.model.get("lastActivityType")] ? this.mapping[this.model.get("lastActivityType")].name : this.model.get("lastActivityType")
+                        model: this.model,                        
+                        contact_name: this.getContactName(),                        
                     }));
                     this.initControls();
                 },
@@ -67,31 +49,7 @@ define(['text!contacts/html/subscriber_row.html', 'common/tags_row','contacts/li
                  * Initializing all controls here which need to show in view.
                  */
                 initControls: function () {
-                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    this.$('input.contact-row-check').iCheck({
-                        checkboxClass: 'checkpanelinput',
-                        insert: '<div class="icheck_line-icon"></div>'
-                    });
-
-                    this.$('input.contact-row-check').on('ifChecked', _.bind(function (event) {
-                        this.trigger('updatecount');
-                        return false;
-                    }, this))
-
-                    this.$('input.contact-row-check').on('ifUnchecked', _.bind(function (event) {
-                        this.trigger('updatecount');
-                        return false;
-                    }, this))
-
-                    if (this.model.get("supress") == "S") {
-                        this.$el.addClass("suppressed");
-                        this.$(".checkpanelinput").addClass("disabled");
-                        this.$('.suppressed-icon').show();
-                    }
-
-                    this.showTagsTemplate();
-                    this.getFirstAlphabet();
-                    this.lastOpenActivityDate();
+                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});                    
 
                 },
                 lastOpenActivityDate: function () {

@@ -439,7 +439,7 @@ input[type="text"].search-template{
     margin-top:5px;
     margin-left:5px !important;
 }
-.temp-filters > h2{
+.temp-filters > h2, .contants-area > h2{
     margin-left: 5px;
 }
 
@@ -5318,7 +5318,7 @@ div.tooltip.right .tooltip-inner { border-radius:6px; }
     margin:7px 4px 4px 15px;
     border-radius:0;
 }
-.temp-filters > h2,.h2-count {
+.temp-filters > h2,.h2-count, .contants-area > h2{
     color: #748592;
     float: left;
     font-size: 13px;
@@ -10133,3 +10133,688 @@ ul.sourceCampPreview li{
     opacity: 0.5;
     cursor: default;
 }
+/*****New Contact Area*****/
+
+.column-contact {
+    float: left;
+    width: 33.33%;
+    padding: 0px;
+    height: auto; 
+    box-sizing: border-box;
+    min-height: 550px;    
+}
+.row-contact:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.contact-detail-area{
+    border-right: 1px solid #c4d8e2;
+}
+.contants-area{
+    position: relative;
+}
+.contants-area > h2{
+    margin-left:5px;
+}
+.contants-area .status_tgl{
+    margin:5px;
+}
+.contants-area .contact-search .subscribers{
+    display:none;
+}
+.contants-area .contact-search .btn-group .searchbtn{
+    margin-left:-40px;
+    background-color:#fff !important;
+    margin-top:2px;
+}
+.contants-area .contact-search .btn-group .searchbtn .icon-search{
+ background: url("../images/search2.png") no-repeat scroll center center rgba(0, 0, 0, 0);   
+}
+.sharedBox .chosen-container-single .chosen-single{
+    border-width: 1px;
+}
+.sharedBox .chosen-container-single .chosen-single div{
+    background:transparent;
+}
+.contants-area .contact-search{
+    margin:0px;
+    width:100%;
+}
+.contants-area .contact-search input.search-control
+{
+    padding-left:10px !important;    
+    border-color:#c4d8e2 !important;
+    width:100% !important;
+    border-width: 1px;
+    box-sizing: border-box;
+    height: 45px;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;    
+}
+.sharedBox{
+    position: absolute;
+    top: 46px;
+    right: 43px;
+    z-index: 99;
+}
+
+.contants-area .contacts-switch .status_tgl a{
+    padding: 4px 8px;
+}
+.contact-list{
+    clear: both;
+}
+.contact-list ul{
+    margin:0px;
+    padding:0px;
+    list-style-type: none;
+}
+
+.contact-list .contact-row{    
+    padding:5px 0px 5px 10px ;
+    border: 1px solid #c4d8e2;
+    border-top:0px;
+    cursor:pointer;
+}
+.contact-list .contact-row:hover,.contact-list .contact-row.selected-contact {
+    background-color:#02aeee;
+    color:#fff;
+}
+.contact-list .contact-row .name{
+    font-size:14px;
+    color:#738a9a;
+}
+.contact-list .contact-row:hover .name, .contact-list .contact-row:hover .email, 
+.contact-list .contact-row.selected-contact .name, .contact-list .contact-row.selected-contact .email{
+    color:#fff;
+}
+.contact-list .contact-row .email{
+    font-size:12px;
+    color:#b9ccd6;
+}
+
+.contact_found {
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 2px;
+    display: block;
+    border-bottom: 1px solid rgb(248, 248, 251);
+    border-top: 1px solid rgb(248, 248, 251);
+
+}
+.top-header.contact_found {
+    color: rgb(185, 194, 201);
+    font-weight: 100;
+    font-size: 12px;
+    margin-bottom: 5px;
+    position: relative;
+}
+.top-header.contact_found .click-label {
+    margin-right: 5px;
+}
+.top-header.contact_found ul {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+}
+.top-header.contact_found ul li {
+    list-style-type: none;
+    display: inline-block;
+    margin-right: 0px;
+    cursor: pointer;
+}
+.contact-detail-area,.contact-activity-area{
+    padding:10px 10px;
+}
+/*================================================
+       Managers Lists,Suppress
+   =================================================*/
+   ul.top_manager_ul_wraps.four .sf_icons{
+     display:none;
+   }
+   .top_manage_lists{
+
+   }
+   .scf_o_icon{
+     color: #ffffff;
+     line-height: 24px;
+     -webkit-transition: all 0.3s cubic-bezier(1, 0.04, 0.01, 1.01);
+     -moz-transition: all 0.3s ease-in-out;
+     -o-transition: all 0.3s ease-in-out;
+   }
+   .wrap_scf_o_i{
+       height: 71px;
+       width: 60px;
+       background: #0064e8;
+       display: table;
+   }
+   .wrap_scf_o_i_md{
+       display: table-cell;
+       vertical-align: middle;
+       padding: 6px 0 0 0;
+   }
+   .scf_o_edit{
+       font-size: 20px;
+       margin: auto auto;
+       width: 100%;
+       text-align: center;
+   }
+   .top_manage_lists .wrap_scf_o_i{
+     background: transparent;
+     width: 70px;
+     height: 48px;
+   }
+   .top_manage_lists .mks_manageList_wrap{
+     font-size: 24px;
+     color: #748592;
+   }
+   .top_manage_lists .scf_o_txt{
+     color: #748592;
+   }
+   
+  .mks_hideRightBorder .top_manage_lists .mks_manageList_wrap::after {
+    background-color:transparent;
+  }
+
+   .top_manage_lists .mks_manageList_wrap::after {
+       content: "";
+       display: inline-block;
+       width: 1px;
+       background: rgb(116, 133, 146);
+       height: 14px;
+       position: absolute;
+       right: 0;
+       top: 21px;
+   }
+   .ripple {
+     position: relative;
+     overflow: hidden;
+     transform: translate3d(0, 0, 0);
+    }
+
+    .ripple:after {
+     content: "";
+     display: block;
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     top: 0;
+     left: 0;
+     pointer-events: none;
+     background-image: radial-gradient(circle, #000 10%, transparent 10.01%);
+     background-repeat: no-repeat;
+     background-position: 50%;
+     transform: scale(10, 10);
+     opacity: 0;
+     transition: transform .5s, opacity 1s
+    }
+
+    .ripple:active:after {
+     transform: scale(0, 0);
+     opacity: .2;
+     transition: 0s
+    }s
+
+   ul.top_manager_ul_wraps li:last-child div::after {
+       width: 0;
+   }
+   /* ul.top_manager_ul_wraps.five li:nth-child(5) div::after {
+       width: 0;
+   } */
+   ul.top_manager_ul_wraps.four li:nth-child(4) div::after {
+       width: 0;
+   }
+   ul.top_manager_ul_wraps.six .top_manage_lists .wrap_scf_o_i {
+       width: 45px;
+   }
+   ul.top_manager_ul_wraps.five .top_manage_lists .wrap_scf_o_i{
+   width: 58px;
+   }
+   ul.top_manager_ul_wraps.six .scf_o_txt{
+       font-size: 7px;
+   }
+   ul.top_manager_ul_wraps.seven .top_manage_lists .wrap_scf_o_i {
+    width: 54px;
+   }
+   .SuppressNotify{
+     position: relative;
+     top: 9px;
+     margin: 0 auto;
+     width: 190px;
+   }
+   .SuppressNotify::after {
+       background: url("assets/img/info.png") no-repeat scroll center center #e09387;
+     }
+   .suppress_S .SuppressNotify{
+     display: block !important;
+   }
+   .SuppressNotify.info h3, .SuppressNotify.info p {
+       color: #8a2020;
+   }   
+   .s_contact_found{
+     background: #fff;
+     padding: 18px;
+     border-radius: 2px;
+   }
+   .scf_silhouette{
+       width: 50px;
+       float: left;
+   }
+
+   .scf_silhouette_text{
+       height: 40px;
+       width: 40px;
+       text-align: center;
+       display: table;
+       background: #abe4c3;
+       border-radius: 35px;
+       margin-top:10px;
+       
+   }
+   .scf_silhouette_text p{
+       display: table-cell;
+       vertical-align: middle;
+       color: #fff;
+       font-weight: bold;
+       font-size: 16px;
+       line-height: 7px;
+   }
+   .scf_email_wrap{
+       width: 100%;
+       padding-left: 50px;
+       -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+       box-sizing: border-box;
+   }
+   .scf_email{
+     height: 35px;
+     display: table;
+   }
+
+   .scf_email p{
+       margin: 0;
+       font-size: 16px;
+       display: table-cell;
+       vertical-align: middle;
+   }
+   .clr {
+      clear: both;
+    }
+   .contact-box {       
+       background: #fff;
+       padding: 10px;    
+       margin-top:5px;
+       position: relative;
+    }
+    .mksph_cardbox h3 {
+       font-weight: 200;
+       color: rgb(71, 71, 71);
+       font-size: 16px;
+       margin-bottom: 5px;
+    }
+    .mkb_btn {
+        background: #ddd;
+        position: relative;
+        right: 0;
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 2px;
+        margin-right: 3px;
+        font-size: 12px;
+        cursor: pointer;
+        color: #9a8b8b;
+    }
+    .mkb_greenbtn{
+      background: rgb(35, 206, 140);
+      color:#fff !important;
+    }
+    .add-button{
+        position: absolute;        
+        top: 15px;
+        right: 15px;        
+        cursor:pointer;        
+        color: #fff;
+        text-decoration: none;
+     }
+    .contact-detail-area .tags-contents {
+        min-height: 20px;
+        max-height: 165px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0px 0 0px;
+        position: relative;
+   }
+   .mksph_cardbox p.not-found {
+       color: #c5c9cc;
+       font-weight: 100;
+       font-size: 12px;
+       font-style: italic;
+       padding-top: 13px;
+    }
+    
+    .contact-group button {
+        background-color: #fff; 
+        border: 1px solid #c4d8e2; 
+        color: #bac2ca;
+        padding: 10px 5px; 
+        cursor: pointer; 
+        float: left;
+        width:33.3%;
+        font-size: 12px;
+    }
+    .contact-group:after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    .contact-group button:not(:last-child) {
+        border-right: none; /* Prevent double borders */
+    }
+    .contact-group button:hover {
+        background-color:#02aeee;
+        color:#fff;
+    }
+    .contactsdiv .show-image{
+        background: url("../images/search2.png") no-repeat scroll center center #transparent;
+    }
+    
+/*** Icons start******/
+@font-face {
+  font-family: 'mks_icon';
+  src:  url('images/plugin_icon/mks_icon.eot?d1rxm2');
+  src:  url('images/plugin_icon/mks_icon.eot?d1rxm2#iefix') format('embedded-opentype'),
+    url('images/plugin_icon/mks_icon.ttf?d1rxm2') format('truetype'),
+    url('images/plugin_icon/mks_icon.woff?d1rxm2') format('woff'),
+    url('images/plugin_icon/mks_icon.svg?d1rxm2#mks_icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[data-icon]:before {
+    font-family: 'mks_icon';
+    content: attr(data-icon);
+    speak: none;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="mksicon-"], [class*=" mksicon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'mks_icon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="icon-"] {
+*/
+
+.mksicon-Breakfast, .mksicon-Demo, .mksicon-Discovery, .mksicon-First-Touch, .mksicon-Lunch, .mksicon-Meeting, .mksicon-Proposal, .mksicon-calendar3, .mksicon-comment, .mksicon-Add_Contact, .mksicon-Phone, .mksicon-Task_List, .mksicon-Triangle_Down, .mksicon-Triangle_Up, .mksicon-course_contacts, .mksicon-CPlay, .mksicon-CPlayNext, .mksicon-Delete, .mksicon-Nurture_Track, .mksicon-Pause, .mksicon-Play, .mksicon-Prohibition, .mksicon-course_correct, .mksicon-add_to_salesforce, .mksicon-jump_to_salesforce_record, .mksicon-netsuite, .mksicon-salesforcelog, .mksicon-users, .mksicon-tag, .mksicon-file, .mksicon-logout, .mksicon-startflag, .mksicon-act_alert, .mksicon-act_bounce, .mksicon-act_click, .mksicon-act_conversion, .mksicon-act_form, .mksicon-act_linkicon, .mksicon-act_pageview, .mksicon-act_score, .mksicon-act_suppress, .mksicon-act_tellfriend, .mksicon-act_unsubscribe, .mksicon-act_wait, .mksicon-act_workflow, .mksicon-act_wtmail, .mksicon-User1, .mksicon-Silhouette, .mksicon-SendEmail, .mksicon-Search, .mksicon-Save2, .mksicon-Save, .mksicon-Pie, .mksicon-OpenMail, .mksicon-Notepad, .mksicon-More, .mksicon-Menu, .mksicon-ManageLists, .mksicon-MakesbridgeBot3, .mksicon-MakesbridgeBot2, .mksicon-MakesbridgeBot, .mksicon-Makesbridge, .mksicon-Mail, .mksicon-Gear, .mksicon-Funnel, .mksicon-Eye, .mksicon-Edit, .mksicon-Close, .mksicon-Clock, .mksicon-Check, .mksicon-Calendar2, .mksicon-AwardRibbon, .mksicon-ArrowNext, .mksicon-ArrowBack, .mksicon-Addlist, .mksicon-Add, .mksicon-ActSent {
+  font-family: 'mks_icon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+.mksicon-Breakfast:before {
+  content: "\e948";
+}
+.mksicon-Demo:before {
+  content: "\e949";
+}
+.mksicon-Discovery:before {
+  content: "\e94a";
+}
+.mksicon-First-Touch:before {
+  content: "\e94b";
+}
+.mksicon-Lunch:before {
+  content: "\e94c";
+}
+.mksicon-Meeting:before {
+  content: "\e94d";
+}
+.mksicon-Proposal:before {
+  content: "\e94e";
+}
+.mksicon-calendar3:before {
+  content: "\e941";
+}
+.mksicon-comment:before {
+  content: "\e942";
+}
+.mksicon-Add_Contact:before {
+  content: "\e943";
+}
+.mksicon-Phone:before {
+  content: "\e944";
+}
+.mksicon-Task_List:before {
+  content: "\e945";
+}
+.mksicon-Triangle_Down:before {
+  content: "\e946";
+}
+.mksicon-Triangle_Up:before {
+  content: "\e947";
+}
+.mksicon-course_contacts:before {
+  content: "\e939";
+}
+.mksicon-CPlay:before {
+  content: "\e93a";
+}
+.mksicon-CPlayNext:before {
+  content: "\e93b";
+}
+.mksicon-Delete:before {
+  content: "\e93c";
+}
+.mksicon-Nurture_Track:before {
+  content: "\e93d";
+}
+.mksicon-Pause:before {
+  content: "\e93e";
+}
+.mksicon-Play:before {
+  content: "\e93f";
+}
+.mksicon-Prohibition:before {
+  content: "\e940";
+}
+.mksicon-course_correct:before {
+  content: "\e938";
+}
+.mksicon-add_to_salesforce:before {
+  content: "\e934";
+}
+.mksicon-jump_to_salesforce_record:before {
+  content: "\e935";
+}
+.mksicon-netsuite:before {
+  content: "\e936";
+}
+.mksicon-salesforcelog:before {
+  content: "\e937";
+}
+.mksicon-users:before {
+  content: "\e931";
+}
+.mksicon-tag:before {
+  content: "\e932";
+}
+.mksicon-file:before {
+  content: "\e933";
+}
+.mksicon-logout:before {
+  content: "\e930";
+}
+.mksicon-startflag:before {
+  content: "\e92f";
+}
+.mksicon-act_alert:before {
+  content: "\e91f";
+}
+.mksicon-act_bounce:before {
+  content: "\e920";
+}
+.mksicon-act_click:before {
+  content: "\e921";
+}
+.mksicon-act_conversion:before {
+  content: "\e922";
+}
+.mksicon-act_form:before {
+  content: "\e923";
+}
+.mksicon-act_linkicon:before {
+  content: "\e924";
+}
+.mksicon-act_pageview:before {
+  content: "\e925";
+}
+.mksicon-act_score:before {
+  content: "\e926";
+}
+.mksicon-act_suppress:before {
+  content: "\e927";
+}
+.mksicon-act_tellfriend:before {
+  content: "\e928";
+}
+.mksicon-act_unsubscribe:before {
+  content: "\e929";
+}
+.mksicon-act_wait:before {
+  content: "\e92a";
+}
+.mksicon-act_workflow:before {
+  content: "\e92b";
+}
+.mksicon-act_wtmail:before {
+  content: "\e92c";
+}
+.mksicon-act_score_c .path1:before {
+  content: "\e92d";
+  color: rgb(91, 186, 71);
+}
+.mksicon-act_score_c .path2:before {
+  content: "\e92e";
+  margin-left: -1.21875em;
+  color: rgb(241, 102, 103);
+}
+.mksicon-User1:before {
+  content: "\e900";
+}
+.mksicon-Silhouette:before {
+  content: "\e901";
+}
+.mksicon-SendEmail:before {
+  content: "\e902";
+}
+.mksicon-Search:before {
+  content: "\e903";
+}
+.mksicon-Save2:before {
+  content: "\e904";
+}
+.mksicon-Save:before {
+  content: "\e905";
+}
+.mksicon-Pie:before {
+  content: "\e906";
+}
+.mksicon-OpenMail:before {
+  content: "\e907";
+}
+.mksicon-Notepad:before {
+  content: "\e908";
+}
+.mksicon-More:before {
+  content: "\e909";
+}
+.mksicon-Menu:before {
+  content: "\e90a";
+}
+.mksicon-ManageLists:before {
+  content: "\e90b";
+}
+.mksicon-MakesbridgeBot3:before {
+  content: "\e90c";
+}
+.mksicon-MakesbridgeBot2:before {
+  content: "\e90d";
+}
+.mksicon-MakesbridgeBot:before {
+  content: "\e90e";
+}
+.mksicon-Makesbridge:before {
+  content: "\e90f";
+}
+.mksicon-Mail:before {
+  content: "\e910";
+}
+.mksicon-Gear:before {
+  content: "\e911";
+}
+.mksicon-Funnel:before {
+  content: "\e912";
+}
+.mksicon-Eye:before {
+  content: "\e913";
+}
+.mksicon-Edit:before {
+  content: "\e914";
+}
+.mksicon-Close:before {
+  content: "\e915";
+}
+.mksicon-Clock:before {
+  content: "\e916";
+}
+.mksicon-Check:before {
+  content: "\e917";
+}
+.mksicon-Calendar2:before {
+  content: "\e918";
+}
+.mksicon-AwardRibbon:before {
+  content: "\e919";
+}
+.mksicon-ArrowNext:before {
+  content: "\e91a";
+}
+.mksicon-ArrowBack:before {
+  content: "\e91b";
+}
+.mksicon-Addlist:before {
+  content: "\e91c";
+}
+.mksicon-Add:before {
+  content: "\e91d";
+}
+.mksicon-ActSent:before {
+  content: "\e91e";
+}
+/*** Icons End******/

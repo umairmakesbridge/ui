@@ -102,7 +102,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                this.current_ws.find("#campaign_tags").hide();
                this.ws_header = this.current_ws.find(".camp_header .edited"); 
                //this.ws_header.find(".add-action").remove();
-               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
+               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                 
                this.addCountHeader();
                this.fetchCount();
             },
@@ -141,7 +141,10 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                 },this))
 
                //this.$(".filter-by").chosen({ width: "220px",disable_search: "true"});
-               this.$(".recent-activities").chosen({ width: "220px",disable_search: "true"});
+               //Shared Contact box added. 
+               this.$(".shared-select-box").chosen({ width: "140px",disable_search: "true"});
+               
+               this.$(".recent-activities").chosen({ width: "220px",disable_search: "true"});               
                this.$(".recent-activities").change(_.bind(this.sortContacts,this));
                this.$(".contact-search").searchcontrol({
                      id:'contact-search',
@@ -290,17 +293,17 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                         this.$contactLoading.hide();
                         if(collection.length!=0 && this.$el.find('.thumbnails.cards .open-csv').length == 0){
                         
-                        this.$('.thumbnails.cards').append('<li class="open-csv"><div style="height:;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Contact </span></div></div></li>');
-                        this.$('.open-csv').click(_.bind(this.addSubscriber,this));    
+                        //this.$('.thumbnails.cards').append('<li class="open-csv"><div style="height:;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Contact </span></div></div></li>');
+                        //this.$('.open-csv').click(_.bind(this.addSubscriber,this));    
                         }else if(collection.length==0){
                             this.$el.find('.thumbnails.cards .open-csv').remove();
                         }
                         for(var s=this.offset;s<collection.length;s++){
                             var subscriberView = new SubscriberRowView({ model: collection.at(s),sub:this ,app:this.app});    
-                            subscriberView.on('tagclick',this.searchByTag);
-                            subscriberView.on('updatecount',this.updateRefreshCount);
-                            this.$contactList.find('.thumbnails.cards').append(subscriberView.$el);
-                            subscriberView.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll li'});
+                            //subscriberView.on('tagclick',this.searchByTag);
+                            //subscriberView.on('updatecount',this.updateRefreshCount);
+                            this.$('.contact-list').append(subscriberView.$el);
+                            //subscriberView.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll li'});
 
                         }                        
                         /*-----Remove loading------*/
@@ -308,7 +311,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                     /*------------*/
                        
                         if(collection.length<parseInt(response.totalCount)){
-                            this.$(".thumbnails.cards li.contact-li").last().attr("data-load","true");
+                            //this.$(".thumbnails.cards li.contact-li").last().attr("data-load","true");
                         } 
                         if(collection.length==0){
                             var search_message  ="";
@@ -324,8 +327,8 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                                  },this))
                                  
                             }else{
-                                         this.$('.filter_seven').parent().remove();
-                                         this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p>');
+                                  this.$('.filter_seven').parent().remove();
+                                  this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p>');
                             }
                             // Show all contact if zero clicker or visitors
                             this.$('.show_all_contacts').click(_.bind(function(){
