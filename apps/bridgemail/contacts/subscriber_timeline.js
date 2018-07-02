@@ -150,7 +150,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                     }
                 });
                 // add into enqueueAjax Request
-                this.sub.enqueueAjaxReq.push(this._request); 
+                this.sub.pPage.enqueueAjaxReq.push(this._request); 
                
             },
             validEvent: function(model){
@@ -224,14 +224,14 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                             
                     }
                 });
-                this.sub.enqueueAjaxReq.push(this._request);
+                this.sub.pPage.enqueueAjaxReq.push(this._request);
             }
              /**
              * Fetching current server time.
             */
             ,
             fetchTime:function(){
-               this.app.showLoading("Loading Timeline...",this.$el);  
+               //this.app.showLoading("Loading Timeline...",this.$el);  
                var URL = '/pms/io/getMetaData/?type=time&BMS_REQ_TK='+this.app.get('bms_token');
                 jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
                     var _json = jQuery.parseJSON(xhr.responseText);

@@ -1,240 +1,106 @@
-
+<div class="temp-filters clearfix">
+    <h2 id="contacts_count" style="display:none;">
+        <input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" />        
+        <h2 id="total_templates"><strong class="badge total-count">0</strong> <span class="total-text">Contacts</span></h2>
+        <h2 id="total_selected" style="display:none"><strong class="badge total-selected-count">0</strong> <span class="total-selected-text">Contacts</span></h2>
+        <a class=" btn-green actionbtn"  style="display:none;"><i class="icon mbaction"></i><span>Apply Action</span></a>
+        <a class="badge badgebtn" style="display:none;"><strong>164</strong> Hidden </a>
+        
+        <ul class="c-current-status new-status">
+            <li class='task-panel showtooltip hide' title='Show Tasks'><span class="badge pclr22 clickCount">1</span>Tasks</li>
+            <li style="border-left:1px solid #fff;padding-left:15px;">Last 24 hrs :</li>
+            <li search="CK" ><span class="badge pclr23 tempCount clickCount">0</span>Clickers </li>
+            <li search="WV" ><span class="badge pclr19 tempCount visitCount">0</span>Visitors </li>
+        </ul>
+    </h2>
+    
+    <div class="srt-div">
+        <a class="refresh_btn showtooltip" title="Refresh listing"><i>Refresh</i></a>
+        <select class="nosearch filter-by" data-placeholder="Filter By" style="display:none">
+            <option></option>            
+        </select>
+        <select class="nosearch recent-activities" data-placeholder="Sort By">                               
+            <option value="lastActivityDate">Recent Activity</option>     
+            <option value="score">Score</option>        
+            <option value="firstName">First Name</option>     
+            <option value="creationTime">Creation Date</option>            
+            <option value="CK_7">Last 7 Days Clickers</option>                                       
+            <option value="WV_7">Last 7 Days Visitors</option>                                       
+            <option value="CK_30">Last 30 Days Clickers</option>                                       
+            <option value="WV_30">Last 30 Days Visitors</option>                                       
+           <!-- <option value="webVisit">Web Visit</option>            
+            <option value="wfAlert">Alert</option>-->                        
+        </select>              
+     
+    </div>         
+    <div class="refreshbtn" style="display: none;float:left!important"><img src="<%- this.options.app.get('path')%>img/recurring2.gif" alt="" /></div> 
+    <label class="right top-label" style="width: 5%;">Sort By:</label>
+  </div>
 
   <div class="contactsdiv tileview" style="clear:both;">
-    <div class="row-contact contacts-new" style="min-height: 550px;margin:5px;">      
+    <div class="row-contact contacts-new" style="margin:5px;">      
        <div class="column-contact contants-area" style="background-color:#fff">
-           <h2 id="total_templates"><strong class="badge total-count">0</strong> <span class="total-text">Contacts</span></h2>
-           <div class="contacts-switch">
-                <div class="status_tgl">
-                    <a class="published active togglecontact showtooltip" title="Search by Contacts"><i class="togglecontact-icon"></i>Contacts</a>
-                    <a class="draft toggletags showtooltip" title="Search by Tags"><i class="toggletag-icon"></i>Tags</a>                    
-              </div>
-           </div>
-           <div class="sharedBox">
-            <select class="shared-select-box">
-                <option>My Contacts</option>
-                <option>Shared Contacts</option>
-            </select>
-           </div>
-           <div class="input-append search contact-search" >         
-              
-           </div>
-           <ul class="contact-list">
-               <!--<li class="contact-li">
-                   <div class="contact-row selected-contact">
-                    <div class="name">Umair Shahid</div>
-                    <div class="email">theumairshahid@gamil.com</div>
+          <div class="contacts-listing">
+                <h2 id="total_templates"><strong>Contacts</strong></h2>
+                <div class="contacts-switch">
+                     <div class="status_tgl">
+                         <a class="published active togglecontact showtooltip" title="Search by Contacts"><i class="togglecontact-icon"></i>Contacts</a>
+                         <a class="draft toggletags showtooltip" title="Search by Tags"><i class="toggletag-icon"></i>Tags</a>                    
                    </div>
-               </li>
-               <li class="contact-li">
-                   <div class="contact-row">
-                    <div class="name">demo Email</div>
-                    <div class="email">demo_email@gamil.com</div>
-                   </div>
-               </li>
-               <li class="contact-li">
-                   <div class="contact-row">
-                    <div class="name">Umair Test</div>
-                    <div class="email">umairmakesbridge@gamil.com</div>
-                   </div>
-               </li>-->
-           </ul>
-           <div class="loadmore" style="display:none">
-                <img src="<%- this.options.app.get('path')%>img/loading.gif" alt=""/>
+                </div>
+                <div class="sharedBox hide">
+                 <select class="shared-select-box">
+                     <option>My Contacts</option>
+                     <option>Shared Contacts</option>
+                 </select>
+                </div>
+                <div class="input-append search contact-search" >         
+
+                </div>
+                <ul class="contact-list">               
+                </ul>
+                <div class="loadmore" style="display:none">
+                     <img src="<%- this.options.app.get('path')%>img/loading.gif" alt=""/>
+                </div>
+           </div>
+           <div class="tasks-listing hide">
+                <h2 id="total_templates"><strong>Tasks</strong></h2>
+                <div class="tasks-switch">
+                     <div class="status_tgl">
+                         <a class="published active toggletoday showtooltip" title="Today's Tasks">Today's Tasks</a>
+                         <a class="draft toggleall showtooltip" title="All Tasks"><i class="toggletag-icon"></i>All Tasks</a>                    
+                      </div>
+                </div>                
+                <div class='tasks-dashboard'>                    
+                    <div class="content-wrapper task_expand_height mks_outlook_tasks_wrapper heighAuto" style="position: relative;">                                    
+                        <div class="tags-not-found">
+                            <p class="not-found">Loading...</p>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="loadmore" style="display:none">
+                     <img src="<%- this.options.app.get('path')%>img/loading.gif" alt=""/>
+                </div>
            </div>
       </div>
-      <div class="column-contact contact-detail-area" style="background-color:#f8f8fb;height: 550px;overflow: auto;">
-          <div class="top-header contact_found top_managerLists_wrappers">
-            <div class="scf_o_right">
-              <ul class="top_manager_ul_wraps seven">
-                <li title="Add to Sequence" class="addSequence showtooltip">
-                  <div class="scf_option_icon ripple top_manage_lists">
-                    <a href="#" style="text-decoration: none;" class="">
-                      <div class="wrap_scf_o_i">
-                        <div class="wrap_scf_o_i_md" style="padding-top: 5px;">
-                          <div class="scf_o_icon scf_o_edit mksicon-act_workflow mks_manageList_wrap">
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>                  
-                </li><li title="Manage list subscription" class="showtooltip" currentitem="false">
-                    <div class="scf_option_icon ripple top_manage_lists">
-                      <a href="#" style="text-decoration: none;">
-                        <div class="wrap_scf_o_i">
-                          <div class="wrap_scf_o_i_md">
-                            <div class="scf_o_icon scf_o_edit mksicon-ManageLists mks_manageList_wrap"></div>
-                          </div>
-                        </div>
-                      </a>
-                    </div>                   
-                  </li><li title="Add to list" class="showtooltip" currentitem="false">
-                    <div class="scf_option_icon ripple top_manage_lists">
-                      <a href="#" style="text-decoration: none;">
-                        <div class="wrap_scf_o_i">
-                          <div class="wrap_scf_o_i_md">
-                            <div class="scf_o_icon scf_o_edit  mksicon-Addlist mks_manageList_wrap"></div></div></div>
-                          </a>
-                        </div>                        
-                      </li><li title="Suppress contact" class="showtooltip" currentitem="false">
-                        <div class="scf_option_icon ripple top_manage_lists">
-                          <a href="#" style="text-decoration: none;">
-                            <div class="wrap_scf_o_i">
-                              <div class="wrap_scf_o_i_md">
-                                <div class="scf_o_icon scf_o_edit mksicon-User1 mks_manageList_wrap"></div>
-                              </div>
-                            </div>
-                          </a>
-                        </div>                        
-                      </li><li title="Course Correct" class="mks_cc_li_wrap showtooltip" currentitem="false">
-                        <div class="scf_option_icon ripple top_manage_lists">
-                          <a href="#" style="text-decoration: none;">
-                            <div class="wrap_scf_o_i">
-                              <div class="wrap_scf_o_i_md">
-                                <div class="scf_o_icon scf_o_edit mksicon-course_correct mks_manageList_wrap"></div>
-                              </div>
-                            </div></a>
-                          </div>                          
-                        </li><li title="Add Notes" class="showtooltip">
-                                <div class="scf_option_icon ripple top_manage_lists">
-                                    <a href="#" style="text-decoration: unset;">
-                                        <div class="wrap_scf_o_i">
-                                            <div class="wrap_scf_o_i_md">
-                                                <div class="scf_o_icon scf_o_edit mksicon-Notepad mks_manageList_wrap"></div>                                                    
-                                            </div>                                                
-                                        </div>
-                                    </a>                                        
-                                </div>
-                            </li><li title="Add to Salesforce" class="hide addSf sf_icons showtooltip mks_hideRightBorder" currentitem="false">
-                          <div class="scf_option_icon ripple top_manage_lists">
-                            <a href="#" style="text-decoration: unset;">
-                              <div class="wrap_scf_o_i">
-                                <div class="wrap_scf_o_i_md" style="padding-top: 5px">
-                                  <div class="scf_o_icon scf_o_edit mksicon-add_to_salesforce mks_manageList_wrap" style="padding-top: 0px;"></div>
-                                </div>
-                              </div>
-                            </a>
-                          </div>                          
-                        </li><!--<li title="Jump Salesforce" class="jumpSf showtooltip sf_icons mks_hideRightBorder" currentitem="false">
-                          <div class="scf_option_icon ripple top_manage_lists">
-                            <a href="#" style="text-decoration: unset;">
-                              <div class="wrap_scf_o_i">
-                                <div class="wrap_scf_o_i_md">
-                                  <div class="scf_o_icon scf_o_edit mksicon-jump_to_salesforce_record mks_manageList_wrap" style="padding-top: 0px;"></div>
-                                </div>
-                              </div></a>
-                            </div>                            
-                            </li>-->
-
-                          </ul>
-                    </div>
-            </div>
-          
-            <div class="scf_option">                
-              <div class="s_contact_found">
-                <div class="scf_silhouette">
-                  <div class="scf_silhouette_text"><p>a</p></div>
-                </div>
-                <div class="scf_email_wrap edit_top_slider_title">
-                  <div class="scf_email">
-                    <span>Umair</span>&nbsp;
-                    <span>Shahid</span>
-                    <div class="clr"></div>
-                    <span>theumairshahid@gmail.com</span>
-                    <div class="clr"></div>
-                    <span>555-555-1212</span>
-                  </div>
-                </div>
-                <div class="clr"></div>
-              </div>
-          </div>
-          
-          <div class="contacts-wrap">
-              <div id="Tags" class="contact-box mksph_cardbox">
-                <h3>Tags</h3>
-                                        
-                <a class="add-button mkb_btn mkb_greenbtn ">Add Tag</a>
-                <span class="addTagWrapper" style="display: none;">
-                  <div class="autocomplete">
-
-                    <div class="autocomplete__menu--wrap">
-                      <div class="autocomplete__menu">
-                        <input type="text" class="autocomplete__input tag__input_mks focusThis" value="" id="addTagName" placeholder="add or apply a tag to this contact...">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="">
-                    <input type="text" value="" class="hide">
-                    <div class="scfe_control_option">
-                      <div class="scfe_close_wrap">
-                        <a class="scfe_c_ach" href="#">
-                          <div class="scfe_close_t">
-                            <span>Close</span>
-                          </div>
-                          <div class="scfe_close_i_md">
-                            <div class="scfe_close_i" aria-hidden="true" data-icon=""></div>
-                          </div>
-                        </a>
-                      </div>
-                      <div class="scfe_save_wrap disable_false">
-                        <a class="scfe_ach" href="#">
-                          <div class="scfe_save_t">
-                            <span>Save</span>
-                          </div>
-                          <div class="scfe_save_i_md">
-                            <div class="scfe_save_i" aria-hidden="true" data-icon=""></div>
-                          </div>
-                        </a>
-                      </div>
-                      <div class="clr"></div>
-                    </div>
-                  </div>
-                </span>
-                <div class="tags-contents">
-                  <div class="tags-not-found">
-                    <p class="not-found">No tags available.</p>
-                  </div>
-                  <div class="tags_content hide">
-                      <ul class="autocomplete__items mks_tag_ul"></ul>
-                  </div>
-                </div>
-              </div>
-              <div id="Task" class="contact-box mksph_cardbox">
-                <h3>Task</h3>
-                                        
-                <a class="add-button mkb_btn mkb_greenbtn ">Add Task</a>
-                
-                <div class="tags-contents">
-                  <div class="tags-not-found">
-                    <p class="not-found">No tasks found.</p>
-                  </div>
-                  <div class="tasks_content hide">
-                      
-                  </div>
-                </div>
-              </div>
-              <div id="Task" class="contact-box mksph_cardbox">
-                <h3>Notes</h3>
-                                        
-                <a class="add-button mkb_btn mkb_greenbtn ">Save</a>
-                <textarea placeholder="Add your notes here" maxlength="500" id="note_textarea" style="min-height: 60px; font-size: 13px; width:94%;"></textarea>
-                <div class="tags-contents">
-                  <div class="tags-not-found">
-                    <p class="not-found">No Notes found.</p>
-                  </div>
-                  <div class="tasks_content hide">
-                      
-                  </div>
-                </div>
-              </div>
-          </div>
-        
+      <div class="column-contact contact-detail-area" style="background-color:#f8f8fb;overflow-y: auto;">
+          <p class="no-contact-found">No Contact Selected</p>        
       </div>
       <div class="column-contact contact-activity-area" style="background-color:#f8f8fb">
             <div class="contact-group" style="width:100%">
-                <button>Contact Information</button>
-                <button>Activities</button>
-                <button>Compose Email</button>
+                <button id="contact-info">Contact Information</button>
+                <button id="contact-activity">Activities</button>                
+          </div>
+          <div class="activity-container">
+              <div class="contact-info" style="height:635px;overflow-y:auto;position: relative">
+                  
+              </div>
+              <div class="contact-activity hide" style="height:635px;overflow-y:auto;">
+                  
+              </div>
+              <div class="contact-email hide">
+                  
+              </div>
           </div>
       </div>
     </div>

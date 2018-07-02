@@ -439,7 +439,7 @@ input[type="text"].search-template{
     margin-top:5px;
     margin-left:5px !important;
 }
-.temp-filters > h2, .contants-area > h2{
+.temp-filters > h2, .contants-area .contacts-listing > h2, .tasks-listing > h2{
     margin-left: 5px;
 }
 
@@ -3449,8 +3449,12 @@ ul#template_search_menu li,ul#template_search_menu_sort li {
 .nf_overwrite{
     margin-top: 7px !important;
 }
-.notfound, .notfound p {
+.notfound, .notfound p, .no-contact-found {
     color: #6292ad;
+}
+.no-contact-found{
+    font-size:16px;
+    margin-top:100px;
 }
 .nodata p {color: #6292ad;font-size:17px;font-weight:normal;text-align:center;font-style:italic;}
 
@@ -5068,7 +5072,7 @@ h2.header-list > span { margin-left:0; /*font-weight:bold;*/ font-size:15px; col
     min-width:inherit;
     min-height:inherit;
 }
-.notfound
+.notfound, .no-contact-found
 {
     text-align:center; margin-top:50px; font-style:italic;
 }
@@ -5318,7 +5322,7 @@ div.tooltip.right .tooltip-inner { border-radius:6px; }
     margin:7px 4px 4px 15px;
     border-radius:0;
 }
-.temp-filters > h2,.h2-count, .contants-area > h2{
+.temp-filters > h2,.h2-count, .contants-area .contacts-listing > h2, .tasks-listing > h2{
     color: #748592;
     float: left;
     font-size: 13px;
@@ -10137,24 +10141,37 @@ ul.sourceCampPreview li{
 
 .column-contact {
     float: left;
-    width: 33.33%;
+    width: 100%;
     padding: 0px;
     height: auto; 
     box-sizing: border-box;
-    min-height: 550px;    
+    min-height: 550px;     
+    height:700px;
 }
 .row-contact:after {
     content: "";
     display: table;
     clear: both;
 }
+.row-contact{
+    overflow: hidden;
+    display: flex;
+    x-justify-content: space-around;
+    x-align-items: stretch;
+}
 .contact-detail-area{
     border-right: 1px solid #c4d8e2;
 }
-.contants-area{
-    position: relative;
+.contact-detail-area textarea{
+    font-family: 'PT Sans',sans-serif;
 }
-.contants-area > h2{
+.contants-area{
+    position: relative;   
+    width: 400px;
+    flex: 0 0 400px;
+    
+}
+.contants-area .contacts-listing > h2, .tasks-listing > h2{
     margin-left:5px;
 }
 .contants-area .status_tgl{
@@ -10168,6 +10185,10 @@ ul.sourceCampPreview li{
     background-color:#fff !important;
     margin-top:2px;
 }
+.contants-area .search .close-icon{
+    right: 40px;
+    top: 13px !important;
+}
 .contants-area .contact-search .btn-group .searchbtn .icon-search{
  background: url("../images/search2.png") no-repeat scroll center center rgba(0, 0, 0, 0);   
 }
@@ -10179,7 +10200,7 @@ ul.sourceCampPreview li{
 }
 .contants-area .contact-search{
     margin:0px;
-    width:100%;
+    width:100%;    
 }
 .contants-area .contact-search input.search-control
 {
@@ -10195,21 +10216,25 @@ ul.sourceCampPreview li{
 }
 .sharedBox{
     position: absolute;
-    top: 46px;
+    top: 42px;
     right: 43px;
     z-index: 99;
 }
 
 .contants-area .contacts-switch .status_tgl a{
-    padding: 4px 8px;
+    padding: 4px 8px;    
 }
 .contact-list{
-    clear: both;
+    clear: both;    
+}
+.scroll-contact{
+    height:615px;
+    overflow:auto;
 }
 .contact-list ul{
     margin:0px;
     padding:0px;
-    list-style-type: none;
+    list-style-type: none;   
 }
 
 .contact-list .contact-row{    
@@ -10265,8 +10290,82 @@ ul.sourceCampPreview li{
     margin-right: 0px;
     cursor: pointer;
 }
+.contact-detail-area{
+    width: 420px;
+    flex: 0 0 420px;
+}
 .contact-detail-area,.contact-activity-area{
     padding:10px 10px;
+}
+.load-more-contacts div{
+    padding:7px 5px;
+}
+.contact-phone{
+ color:#bac2ca;   
+ font-style: italic;
+}
+.height90{
+  max-height: 120px;
+  overflow: hidden;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+}
+.height200{
+  max-height: 200px;
+  overflow: hidden;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+}
+.scfe_save_t{
+    float: left;
+    background: #23ce8c;
+    padding: 0 7px 0 9px;
+    color: #fff;
+    height: 30px;
+    text-align: center;
+    display: table;
+    font-size: 12px;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+}
+.scfe_save_t span{
+    display: table-cell;
+    vertical-align: middle;
+    text-decoration: none;
+}
+.scfe_save_i_md{
+    height: 30px;
+    text-align: center;
+    display: table;
+    background: #1fb97e;
+}
+.scfe_save_i{
+    padding: 0px 9px 0 8px;
+    color: #fff;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 0;
+    margin: 0;
+    text-decoration: none;
+    font-size: 12px;
+ }
+ .scfe_save_wrap{
+    overflow: hidden;
+    border-radius: 2px;
+    width: 73px;
+    float: right;
+ }
+ .scfe_ach:hover > .scfe_save_t{
+    background: #1fb97e;
+ }
+ .mksicon-jump_to_salesforce_record,.mksicon-add_to_salesforce{
+    position: relative;
+    top:-1px;
+}
+.heighAuto {
+    max-height: 5000px;
 }
 /*================================================
        Managers Lists,Suppress
@@ -10366,26 +10465,24 @@ ul.sourceCampPreview li{
    ul.top_manager_ul_wraps.four li:nth-child(4) div::after {
        width: 0;
    }
-   ul.top_manager_ul_wraps.six .top_manage_lists .wrap_scf_o_i {
-       width: 45px;
-   }
+   
    ul.top_manager_ul_wraps.five .top_manage_lists .wrap_scf_o_i{
-   width: 58px;
-   }
-   ul.top_manager_ul_wraps.six .scf_o_txt{
-       font-size: 7px;
+    width: 44px;
+   }   
+   ul.top_manager_ul_wraps.six .top_manage_lists .wrap_scf_o_i {
+    width: 64px;
    }
    ul.top_manager_ul_wraps.seven .top_manage_lists .wrap_scf_o_i {
     width: 54px;
    }
    .SuppressNotify{
      position: relative;
-     top: 9px;
+     top: 0px;
      margin: 0 auto;
-     width: 190px;
+     width: 304px;
    }
    .SuppressNotify::after {
-       background: url("assets/img/info.png") no-repeat scroll center center #e09387;
+       background: url("../img/info.png") no-repeat scroll center center #e09387 !important;
      }
    .suppress_S .SuppressNotify{
      display: block !important;
@@ -10479,12 +10576,26 @@ ul.sourceCampPreview li{
         text-decoration: none;
      }
     .contact-detail-area .tags-contents {
-        min-height: 20px;
+        min-height: 60px;
         max-height: 165px;
         overflow-y: auto;
         overflow-x: hidden;
         padding: 0px 0 0px;
         position: relative;
+        float:none;
+        margin:0px;
+        max-width:auto;
+        width:auto;
+   }
+   .contact-detail-area .tags_contents {
+       min-height: 70px;
+       max-height: 165px;
+       overflow-y: auto;
+       overflow-x: hidden;
+       position: relative;
+   }
+   .contact-detail-area .tagscont ul{
+       height:auto;
    }
    .mksph_cardbox p.not-found {
        color: #c5c9cc;
@@ -10493,7 +10604,9 @@ ul.sourceCampPreview li{
        font-style: italic;
        padding-top: 13px;
     }
-    
+    .contact-group {
+        margin-bottom: 5px;
+    }
     .contact-group button {
         background-color: #fff; 
         border: 1px solid #c4d8e2; 
@@ -10501,7 +10614,7 @@ ul.sourceCampPreview li{
         padding: 10px 5px; 
         cursor: pointer; 
         float: left;
-        width:33.3%;
+        width:50%;
         font-size: 12px;
     }
     .contact-group:after {
@@ -10512,13 +10625,724 @@ ul.sourceCampPreview li{
     .contact-group button:not(:last-child) {
         border-right: none; /* Prevent double borders */
     }
-    .contact-group button:hover {
+    .contact-group button:hover,.contact-group button.selected  {
         background-color:#02aeee;
         color:#fff;
+    }
+    .contact-group button.selected{
+        font-weight: bold;
     }
     .contactsdiv .show-image{
         background: url("../images/search2.png") no-repeat scroll center center #transparent;
     }
+    
+    .contants-area .notfound {
+        margin:50px 0 0 0;
+        font-size:15px;
+    }
+    .mkb_basicField_wrap{
+      position: relative;
+    }
+    .mkb_basic_edit,.mkb_basic_done,.mkb_basic_cancel{
+        top: 10px;
+        right: 20px;
+        position: absolute;
+    }
+    span.mksph_contact_title {
+        color: #748592;
+        font-weight: 100;
+        font-size: 14px;
+        display: inline-block;
+     }
+    span.mksph_contact_value {
+        color: #016EFD;
+        max-width: 150px;
+        display: inline-block;        
+        white-space: nowrap;
+     }
+     /*.mkb_elipsis{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+     }*/
+    .collapse,.expand{
+      color: #b3aeae;
+      font-size: 13px;
+      text-transform: capitalize;
+      text-align: center;
+      cursor: pointer;
+      padding-top: 12px;
+    }
+    .expand .mksicon-ArrowNext{
+      -ms-transform: rotate(90deg);
+      -webkit-transform: rotate(90deg);
+      transform: rotate(90deg);
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 11px;
+      -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+     -o-transition: all 0.5s ease;
+     transition: all 0.5s ease;
+    }
+    .collapse .mksicon-ArrowNext{
+      -ms-transform: rotate(-90deg);
+      -webkit-transform: rotate(-90deg);
+      transform: rotate(-90deg);
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 11px;
+      -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+     -o-transition: all 0.5s ease;
+     transition: all 0.5s ease;
+    }    
+    .mks_expandable{
+        height:20px;
+    }
+    
+    div#custom-fields ul li {
+        list-style-type: none;
+        padding-left: 2px;
+     }
+     .customField_ul_wraps{
+       position: relative;
+     }
+     .mkb_cf_btn {
+         position: absolute;
+         top: -43px;
+     }
+     .mkb_cf_btn.mkb_cf_done {
+         right: 60px;
+     }
+     .mkb_btn.mkb_basic_done {
+         right: 80px;
+     }
+     .addCF {
+        color: #fff;
+        right: 45px;
+    }
+    .scfe_field{}
+    .scfe_field input[type='text']{
+       width: 50%;
+       border-top: none;
+       border-left: none;
+       border-right: none;
+       border-bottom: 1px solid #f1f4f9;
+       padding: 4px 0 4px 5px;
+       color: #474747;
+       background: #fff;
+       font-size: 14px;
+       margin-left: 5px;
+       display:inline-block;
+    }
+    .scfe_field input[type='text']::placeholder {
+     color: #bac2ca;
+    }
+    .scfe_field input[type='text']:focus {
+       -webkit-transition: 0.5s;
+       transition: 0.5s;
+       outline: none;
+       border-color: #0e7bf7;
+    }
+    .scfe_field input:-webkit-autofill,
+    .scfe_field input:-webkit-autofill:hover,
+    .scfe_field input:-webkit-autofill:focus
+    .scfe_field input:-webkit-autofill,
+    .scfe_field input[type='text']:-webkit-autofill,
+    .scfe_field input[type='text']:-webkit-autofill:hover,
+    .scfe_field input[type='text']:-webkit-autofill:focus
+    .scfe_field input[type='text']:-webkit-autofill,
+    .scfe_field textarea:-webkit-autofill,
+    .scfe_field textarea:-webkit-autofill:hover
+    .scfe_field textarea:-webkit-autofill:focus,
+    .scfe_field select:-webkit-autofill,
+    .scfe_field select:-webkit-autofill:hover,
+    .scfe_field select:-webkit-autofill:focus {
+     background-color: #fff ! important;
+     background-image: none;
+     color: #474747;
+     -webkit-text-fill-color: #474747;
+     -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+     transition: background-color 5000s ease-in-out 0s;
+    }
+    input.hasError {
+        border-color: #e83434 !important;
+    }
+    
+/******Notes CSS *****/
+
+._mks_NotesWrap{
+    position: relative;
+  }
+  .notes_lists_wrap ul{
+    list-style-type: none;
+  }
+  .notes_lists_wrap ul li._mks_item .cf_silhouette i{
+    color: #fff;
+    line-height: 23px;
+  }
+  .notes_lists_wrap li._mks_item .cf_silhouette::before {
+      width: 0px;
+      content: "";
+      height: 20px;
+      background: rgb(116, 133, 146);
+      display: block;
+      position: relative;
+      left: 11px;
+      top: -15px;
+  }
+  .notes_lists_wrap li .cf_silhouette_text{
+      height: 25px;
+      width: 25px;
+      top: -23px;
+      border-radius:25px;
+      text-align: center;
+      position: relative;
+  }
+  .notes_lists_wrap li._mks_item .cf_silhouette::after {
+      width: 0px;
+      content: "";
+      height: 13px;
+      background: rgb(116, 133, 146);
+      display: block;
+      position: relative;
+      left: 11px;
+      top: -23px;
+  }
+  .notes_lists_wrap ul li._mks_item {
+      display: inline-block;
+      position: relative;
+      top: 11px;
+      height: auto;
+  }
+  .notes_lists_wrap ul li._mks_item .cf_silhouette {
+    position: absolute;
+    z-index: 2;
+  }
+  .notes_lists_wrap ul li._mks_item .cf_email_wrap{
+    padding-left: 25px;
+    border-left: 2px solid rgb(116, 133, 146);
+    left: 12px;
+    position: relative;
+  }
+  .notes_lists_wrap ul li._mks_item .cf_email{
+    color: rgb(1, 110, 253);
+    font-size: 16px;
+    position: relative;
+    top: -5px;
+  }
+  .notes_lists_wrap ul li._mks_item .cf_email p{
+    color: rgb(156, 160, 162);
+    clear: both;
+    display: block;
+    font-size: 10px;
+    padding-top: 4px;
+    margin-bottom:0px;
+  }
+  .notes_lists_wrap ul li._mks_item .cf_email p strong{
+    color: rgb(71, 71, 71);
+  }
+  .mks-notestEdit-wrap,.mks-notestDel-wrap{
+    cursor: pointer;
+  }
+  ._mks_item:hover .mks-notestEdit-wrap,._mks_item:hover .mks-notestDel-wrap{
+    display: block !important;
+  }
+  ._mks_item:hover .mks-notestNote-wrap{
+    display: none;
+  }
+  .mks-notestDel-wrap{
+      top: -48px !important;
+      left: 26px;
+      z-index: 1;
+  }
+  
+  
+/***Tasks CSS***/
+.tasks_content{
+    position: relative;
+}
+.mkb_tast_completed_btn{
+    display: none;
+  }
+  .task_status_C .mkb_task_compBtn{
+    display: none;
+  }
+  .task_status_C .mkb_tast_completed_btn{
+    display : block !important;
+    background: transparent;
+  color: rgb(1, 110, 253) !important;
+  }
+  .task_status_C .mks_task_edit_delete_wrap{
+    display: none;
+  }
+  .cf_email_wrap {
+        width: 100%;
+        padding-left: 32px;
+    }
+  .cf_email {
+        height: 25px;
+        display: table;
+        width: 100%;
+    }
+    .cf_email p {
+      font-size: 16px;
+      display: table-cell;
+      vertical-align: middle;
+      padding-bottom: 4px;
+      margin: 0px;
+    }
+  .task_status_C .cf_email p{
+    text-decoration: line-through;
+  }
+  .task_status_C:hover{
+    color:#000;
+  }
+  .task_status_C{
+      opacity:0.7;
+  }
+  .task_status_C ._mks_task_delete_task{       
+      display: block !important;      
+  }
+  .task_status_P ._mks_task_delete_task{       
+    left:37px !important;
+  }
+  
+  ._mks_task_delete_task .c_txt_s_blue{
+      background-color: #FB4C2F !important;
+  }
+ul.mks_priorty_wrap {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+}
+ul.mks_priorty_wrap li {
+    cursor: pointer;
+    list-style-type: none;
+    display: inline-block;
+    border-left: 1px solid #ddd;
+    margin: 0px 0 0px;
+    padding: 5px 0px;
+    text-align: center;
+    font-size: 14px;
+    color: #bac2cb;
+       width:140px;
+}
+ul.mks_priorty_wrap li:first-child {
+    border-left: 0;
+}
+ul.mks_priorty_wrap li.active {
+    background: rgb(35, 206, 140);
+    color: #fff;
+}
+ul.mks_ecc_wrap {
+    margin: 3px 0px 10px;
+}
+ul.mks_ecc_wrap li {
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    margin: 0px;
+    padding: 6px 11px !important;
+    background-color: transparent;
+    border: 1px solid rgb(221, 221, 221);
+    color: rgb(186, 194, 203);
+    border-right: unset;
+    font-size: 24px;
+}
+ul.mks_ecc_wrap li.active {
+    color: #006ffd;
+}
+ul.mks_ecc_wrap li:last-child {
+    border-right: 1px solid #ddd;
+}
+.tasks_content .mks-task-icons,i.mks-tasklists-icons{
+  color: #fff;
+  line-height: 24px !important;
+}
+
+.mks_priority_icon{
+  width: 19px;
+  height: 19px;
+  display: block;
+  float: right;  
+  position: relative;
+  right: 60px;
+  border-radius: 50%;
+}
+.mks_priority_icon i{
+  line-height: 18px;
+  text-align: center;
+  padding: 0;
+  color: #fff;
+  position: relative;
+  top: -1px;
+  font-size: 7px;
+  left: 5px;
+}
+.mks_priority_icon i.mksicon-More{
+  font-size: 12px;
+  left: 3px;
+  top: 1px;
+
+}
+.mks_priority_icon .cf_silhouette_text{
+  text-transform: capitalize !important;
+}
+.mks_priority_high i{
+  top:-2px;
+}
+.mks_tasks_lists_user{
+  position: relative;
+}
+.mks_tasks_lists_user:hover{
+  background: #fff;
+  cursor: default;
+  color: #000;
+
+}
+.mks_tasks_lists_user:hover > .cf_email p,.mks_tasks_lists_user:hover .ckvwicon{color: rgb(79, 135, 171);}
+.mks_tasks_lists_user span.ckvwicon,.mks_tasks_lists_user:hover .ckvwicon {
+    color: rgb(156, 160, 162);
+}
+.mks_tasks_lists_user span.ckvwicon strong,.mks_tasks_lists_user:hover .ckvwicon strong{
+    color: #000;
+}
+.mkb_task_compBtn i{
+  position: relative;
+    left: -3px;
+    top: 1px;
+}
+.mks_task_edit_delete_wrap{
+  opacity: 0;
+  position: absolute;
+  margin-top:-43px;
+  left: 6px;    
+}
+.mks_tasks_lists_user:hover .mks_task_edit_delete_wrap{
+    opacity: 1;
+    
+}
+.mks_task_edit_delete_wrap .cf_silhouette{
+    cursor: pointer;
+}
+.mks_task_time{
+  display: inline-block;
+font-size: 12px;
+float: right;
+right: 20px;
+width: AUTO;
+top: -12px;
+color: rgb(79, 135, 171);
+}
+.cf_task_right{
+    width:100px;
+    margin-top:-30px;        
+    float: right;
+    height: 18px;
+    position: relative;
+}
+._mks_lists_tasks .mks_task_time{
+    position: relative;
+    display: inline-block;
+    float: unset;
+    top: 0;
+    left: 0px;
+    width: 50px;
+}
+._mks_lists_tasks .mks_task_time i{
+  position: relative;
+    top: 2px;
+    font-size: 12px;
+}
+._mks_lists_tasks .ckvwicon{
+  width: 140px;
+}
+._mks_lists_tasks .mks_priority_icon{
+  width: 19px;
+    height: 19px;
+    right: 85px;
+    top: -18px;
+}
+
+._mks_lists_tasks .mks_priority_icon i{
+  left:5px;
+}
+
+._mks_lists_tasks .mks_priority_high i{
+  font-size: 10px;
+    line-height: 0px;
+    top: -2px;
+    position: relative;
+}
+._mks_lists_tasks .cf_email_wrap{
+  position: relative;
+}
+._mks_lists_tasks .mks_priority_medium i{
+  font-size: 12px;
+  top: 0px;
+left: 3px;
+}
+._mks_lists_tasks .mks_priority_high i.mksicon-Triangle_Up{
+  font-size: 8px;
+  top: -2px;
+  left: 4px
+}
+.show_tasks_list{
+    font-size: 11px;
+    text-transform: capitalize;
+    border-radius: 0px 15px 15px 0px;
+    background: rgb(88, 160, 255);
+    box-shadow: rgb(88, 160, 255) 1px 1px 8px -2px;
+  }
+.mks_task_lists_dash_wrapper h2{
+  margin-right: 7px;
+}
+
+.mks_task_lists_dash_wrapper .contacts-switch{
+  top:-4px;
+}
+.mks_task_lists_dash_wrapper .searchBar h3 {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 100;
+    line-height: 31px;
+}
+.mks_task_lists_dash_wrapper .status_tgl {
+    margin: 9px 0px 0px;
+    font-size: 11px;
+}
+.mks_task_lists_dash_wrapper{
+    padding: 5px 6px 0;
+    background: #fff;
+    margin-top: 30px;
+    position: relative;
+}
+.mks_task_lists_dash_wrapper .contacts-switch .status_tgl a.published.active,.mks_task_lists_dash_wrapper .contacts-switch .status_tgl a.draft.active {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.mks_task_lists_dash_wrapper .contacts-select-by{
+  right: 3px;
+  top: 10px;
+}
+.mks_task_lists_dash_wrapper .contacts-select-by select {
+    width: 97px;
+}
+.mks_task_lists_dash_wrapper .contacts-switch{
+    clear: both;
+    display: block;
+    float: left;
+}
+.mks_task_lists_dash_wrapper .searchBar{
+  clear: both;
+}
+
+.mks_tasks_lists_empty_icon,.mks_tasks_lists_fill_icon{
+   margin-top: 0px;
+   float: right;
+   margin-right: 10px;  
+}
+.mks_tasks_lists_empty_icon:hover .c_txt_s_empty,.mks_tasks_lists_empty_icon:hover .c_txt_s_empty,.mks_tasks_lists_fill_icon  .c_txt_s_empty{
+    background: #23ce8c !important;
+    border-color: #23ce8c;
+}
+.mks_tasks_lists_empty_icon:hover .c_txt_s_empty i.mksicon-Check, .mks_tasks_lists_fill_icon .c_txt_s_empty i.mksicon-Check{
+    font-size: 12px;
+    line-height: 16px !important;
+    display:block !important;
+}
+
+.mks_task_lists_dash_wrapper .cf_email_taskdash{
+    display: block;
+    width: 215px;
+}
+#notes {
+    font-size: 100%;
+    font-family: arial,sans-serif;
+    width:91%;
+    margin: 0;
+}
+.date_wrapper__mks, .timePicker_wrap{
+    display: inline-block;
+    width: 205px;
+    margin: 0px 3px;
+}
+.date_wrapper__mks input, .timePicker_wrap input {
+    padding-left: 10px !important;
+}
+.date_wrapper__mks #datepicker, .timePicker_wrap .timepicker{
+    width: 90%;
+    position: relative;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(221, 221, 221);
+    border-image: initial;
+    padding: 5px 0px 5px 0px;
+}
+.contacts-select-by{
+    display: inline;
+    position: relative;
+    float: right;
+    top: 5px;
+    right: -4px;
+}
+.contacts-select-by select{
+  width: 124px;
+font-size: 13px;
+}
+.c_txt_s_blue{
+    background: #58a0ff ! important;
+   }
+.mks_task_lists_dash_wrapper .cf_silhouette_text{
+    height: 18px;
+    width: 18px;
+}
+.c_txt_s_empty {
+    line-height: 0;    
+    position: relative;    
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(221, 221, 221);
+    border-image: initial;
+    background: transparent !important;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    display: table;
+    border-radius: 16px;
+}
+.mks_task_lists_dash_wrapper .mks_priority_icon{
+    width: 18px;
+      height: 19px;
+      right: 44px;
+      top: -20px;
+  }
+  .gap-created {
+    margin-right: 63px;  
+  }
+  .c_txt_s_completed {
+    width: 16px;
+    height: 16px;
+    top: 10px;
+    position: relative;    
+    background: rgb(35, 206, 140) !important;
+}
+.mks_task_lists_dash_wrapper i.mks-tasklists-icons {
+    line-height: 12px !important;
+    font-size: 12px;
+}
+._mks_task_dash_board_icon_silhouette{
+    top: -18px;
+    position: relative;
+}
+.mks_task_lists_dash_wrapper .total-count-head strong.total-count{
+    padding: 1px 7px;
+}
+._mks_complete_tasks .cf_email p {
+    text-decoration: line-through;
+}
+.cf_email p {
+      font-size: 16px;
+      display: table-cell;
+      vertical-align: middle;
+      padding-bottom: 4px;
+      margin: 0px;
+    }
+._mks_complete_tasks:hover {
+    background: transparent;
+    cursor: default;
+    color: #000;
+}
+._mks_complete_tasks:hover .ckvwicon{
+    color: #4f87ab;
+}
+._mks_completed_tasks{
+    max-height: 260px;
+    overflow-y: scroll;
+    display: inline-block;
+    overflow-x: hidden;
+}
+.tasks_content .cf_silhouette_text{
+       height: 25px;
+       width: 25px;
+       text-align: center;
+       display: table;
+       background: #abe4c3;
+       border-radius: 25px;
+       text-transform: uppercase;  
+}
+.tasks_content .cf_silhouette {
+    width: 20px;
+    float: left;
+    margin-top:5px;
+}
+.cf_email span.ckvwicon{
+    display: table-row;
+    font-size: 11px;
+    color: #4f87ab;
+}
+.cf_email span.ckvwicon span{
+    margin-right: 5px;
+}
+ul.c-current-status.new-status li {
+    color: #8c99a2 !important;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 18px;
+}
+ul.c-current-status.new-status li .badge{
+    font-size: 13px;
+}
+ul.c-current-status.new-status{
+    margin-top: 11px;
+}
+
+.tasks-switch .status_tgl{
+    background: none repeat scroll 0 0 #91bed6;
+    border-radius: 20px;
+    float: right;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 16px;
+    margin: 9px 10px 0;
+    opacity: 1;
+    padding: 2px;
+}
+.tasks-switch .status_tgl a { float:left; color:#fff; display:block; padding: 4px 10px; border-radius: 20px; }
+.tasks-switch .status_tgl a.draft.active  {
+    background: #fff;
+    color: #2A99F8;
+    padding-left: 10px;
+    border-radius: 20px;
+    position:relative;
+}
+.tasks-switch .status_tgl a.asctag.active {
+    display:block !important;
+}
+.tasks-switch .status_tgl a.published.active {
+    background: #fff ;
+    border-radius: 20px;
+    color: #41ce20;
+    padding-left: 10px;
+    position:relative;
+}
+.tasks-switch .status_tgl a.dsctag.active{
+   display:block !important;
+}
+.task-panel{
+    cursor:pointer;    
+}
+.tasks-dashboard{
+    clear:both;
+    border-top: 1px solid #c4d8e2;
+}
+.suppressrow{
+  opacity: 0.6;   
+}
+.supress-mode .add-button, .supress-mode .mkb_btn{
+    display:none !important;
+}
     
 /*** Icons start******/
 @font-face {

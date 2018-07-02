@@ -1,0 +1,16 @@
+<div class="cf_silhouette">
+    <div class="mks-notestEdit-wrap cf_silhouette_text c_txt_s pclr8 hide">
+        <i class="mksicon-Edit mks-task-icons"></i>
+    </div>
+    <div class="mks-notestDel-wrap cf_silhouette_text c_txt_s pclr12 hide">
+        <i class="mksicon-Delete mks-task-icons"></i>
+    </div>
+    <div class="mks-notestNote-wrap cf_silhouette_text c_txt_s pclr15">
+        <i class="mksicon-Notepad mks-task-icons"></i>
+    </div>
+</div>
+<div class="cf_email_wrap">
+    <div class="cf_email">
+        <span class="mkb_text_break" title="<%- this.model.get('comment') %>"><%- this.app.decodeHTML(this.model.get("comment"),true) %></span><p><strong><%- this.getUserName() %></strong> made a note at <%- this.getDateTimeStamp() %></p>
+    </div>
+</div>

@@ -6121,7 +6121,7 @@ a.badge:focus {
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .show {

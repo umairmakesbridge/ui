@@ -1,5 +1,5 @@
-define(['contacts/collections/subscribers','text!contacts/html/contacts.html','contacts/subscriber_row','contacts/multipleadd'],
-function (subscriberCollection,template,SubscriberRowView,addContactView) {
+define(['contacts/collections/subscribers','text!contacts/html/contacts.html','contacts/subscriber_row','contacts/multipleadd', 'contacts/collections/tasks', 'contacts/task_row'],
+function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCollection, taskRowView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Contacts dashboard view, depends on search control, chosen control, icheck control
@@ -13,43 +13,54 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
             */            
             events: {				
                 
-                "click .refresh_btn":function(){
-                    this.app.addSpinner(this.$el);
-                    this.fetchContacts();               
-                },
-                "click .searchbtn":function(e){
-                        this.searchTxt=this.$("#contact-search").val();
-                        if(this.searchTxt){
+                    "click .refresh_btn": function () {
+                        this.app.addSpinner(this.$el);
+                        this.fetchContacts();
+                    },
+                    "click .searchbtn": function (e) {
+                        this.searchTxt = this.$("#contact-search").val();
+                        if (this.searchTxt) {
                             this.search("click")
                         }
                     },
-                "paste .search-control":function(e){
-                        this.searchTxt=this.$("#contact-search").val();
-                        if(this.searchTxt){
+                    "paste .search-control": function (e) {
+                        this.searchTxt = this.$("#contact-search").val();
+                        if (this.searchTxt) {
                             this.search("paste")
                         }
-                },
-                "click .toggletags":function(event){
-                        this.$('.status_tgl a').removeClass('active');
+                    },
+                    "click .toggletags": function (event) {
+                        this.$('.contacts-switch .status_tgl a').removeClass('active');
                         $(event.currentTarget).addClass('active');
-                        if(this.$('#contact-search').val().length > 0){
+                        if (this.$('#contact-search').val().length > 0) {
                             this.$('#contact-search').val('');
                             this.fetchContacts();
                         }
-                        this.$('#contact-search').attr('placeholder','Search By Tags')
+                        this.$('#contact-search').attr('placeholder', 'Search By Tags')
                         this.isSearchTag = true;
                     },
-            "click .togglecontact": function(event){
-                        this.$('.status_tgl a').removeClass('active');
+                    "click .togglecontact": function (event) {
+                        this.$('.contacts-switch .status_tgl a').removeClass('active');
                         $(event.currentTarget).addClass('active');
                         this.$('#contact-search').val('');
-                        this.$('#contact-search').attr('placeholder','Search By Contacts')
-                        if(this.$('#contact-search').val().length > 0){
+                        this.$('#contact-search').attr('placeholder', 'Search By Contacts')
+                        if (this.$('#contact-search').val().length > 0) {
                             this.$('#contact-search').val('');
                             this.fetchContacts();
                         }
                         this.isSearchTag = false;
                     },
+                    "click .toggletoday": function (event) {
+                        this.$('.tasks-switch .status_tgl a').removeClass('active');
+                        $(event.currentTarget).addClass('active');
+
+                    },
+                    "click .toggleall": function (event) {
+                        this.$('.tasks-switch .status_tgl a').removeClass('active');
+                        $(event.currentTarget).addClass('active');
+                    },
+              "click .contact-group button":"changeContactDetails",
+              "click .task-panel":'populateTasks'
             },
             
              basicFields: {"firstName": {"label": "First Name"}, "lastName": {"label": "Last Name"}, "company": {"label": "Company"}, "areaCode": {"label": "Area Code"}, "telephone": {"label": "Telephone"},
@@ -65,6 +76,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                this.template = _.template(template);		
                //
                this.subscriberRequest = new subscriberCollection();
+               this.tasksRequest = new tasksCollection();
                this.addContactView = null;
                this.offset = 0;               
                this.searchTxt = '';
@@ -74,7 +86,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                this.contacts_request = null;
                this.sortBy = '';
                this.enqueueAjaxReq = [];
-                this.isSearchTag = false;
+               this.isSearchTag = false;
                this.render();
             },
             /**
@@ -84,14 +96,14 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                this.$el.html(this.template({}));
                this.app = this.options.app;        
                
-               this.$contactList = this.$(".contactsdiv");
-               this.$contactLoading = this.$(".loadmore");
+               this.$contactList = this.$(".contact-list");
+               this.$contactLoading = $("<li class='contact-li load-more-contacts'><div style='text-align:center'><img src='"+this.app.get('path')+"img/loading.gif' alt=''/></div></li>");
                this.isSalesforceUser = false;
                                
                this.initControls();      
                this.checkSalesforce();
                
-               //this.fetchContacts();               
+               //this.fetchTasks();               
             }
             /**
              * Custom init function called after view is completely render in wrokspace.
@@ -110,15 +122,13 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                var count_header =  '<ul class="c-current-status">';
                  count_header += '<li search="T" ><span class="badge pclr18 tempCount tcount totalCount">0</span>Total Contacts</li>';
                  count_header += '<li search="S"><span class="badge pclr11 tempCount suppressCount">0</span>Suppressed</li>';
-                 count_header += '<li style="display:none"><span class="badge pclr15 tempCount hiddenCount" >0</span>Hidden</li>';
-                 count_header += '<li search="A" style="border-left:1px solid #fff;padding-left:15px;">Last 24 hrs :</li>';
-                  count_header += '<li search="CK" ><span class="badge pclr23 tempCount clickCount">0</span>Clickers </li>';
-                  count_header += '<li search="WV" ><span class="badge pclr19 tempCount visitCount">0</span>Visitors </li>';
+                 count_header += '<li style="display:none"><span class="badge pclr15 tempCount hiddenCount" >0</span>Hidden</li>';                 
                  count_header += '</ul>';  
                  var $countHeader = $(count_header);                                                        
                  this.ws_header.append($countHeader);
                  this.tempCount = this.ws_header.find('.tempCount').parent();
                  this.tempCount.click(_.bind(this.filterContacts, this));
+                 this.$(".new-status .tempCount").parent().click(_.bind(this.filterContacts, this));
                  
                  this.current_ws.find("#addnew_action").attr("data-original-title", "Create New Contact").click(_.bind(this.addSubscriber, this));
             },
@@ -156,21 +166,21 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                      showicon: 'yes',
                      iconsource: 'subscribers'
               });
-              $(window).scroll(_.bind(this.liveLoading,this));
-              $(window).resize(_.bind(this.liveLoading,this));
+              this.$contactList.scroll(_.bind(this.liveLoading,this));
+              //$(window).resize(_.bind(this.liveLoading,this));
               this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
             },
             closeCallBack:function(){
                 if(this.enqueueAjaxReq.length > 0){
                         for(var i=0;i < this.enqueueAjaxReq.length ; i++){
                                         
-                                        if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
-                                            this.enqueueAjaxReq[i].abort();
-                                        }
-                                       //this.app.enqueueAjaxReq[i].abort();
-                                       var poped = this.enqueueAjaxReq.splice(i,1);
-                                       //console.log('Remaining enqueue obj',app.enqueueAjaxReq);
-                                    }   
+                        if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
+                            this.enqueueAjaxReq[i].abort();
+                        }
+                       //this.app.enqueueAjaxReq[i].abort();
+                       var poped = this.enqueueAjaxReq.splice(i,1);
+                       //console.log('Remaining enqueue obj',app.enqueueAjaxReq);
+                    }   
                 }
                       
             },
@@ -196,6 +206,54 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                         },this)
                     });
             },
+            fetchTasks: function (fcount) {
+                    var remove_cache = false;
+                    this.$(".tasks-listing .not-found").html("Loading...");
+                    if (!fcount) {
+                        remove_cache = true;
+                        this.offset = 0;    
+                        this.$('.tasks-listing .content-wrapper').children().remove();
+                    } else {
+                        this.offset = this.offset + 20;
+                    }
+                    var _data = {order: "desc",orderBy:"updationTime",offset:0,type:"getAllTask"};
+                    _data["fromDate"] = moment().format("MM-DD-YYYY");
+                    _data["toDate"] = moment().format("MM-DD-YYYY");
+                                       
+                    if (this.tasks_request) {
+                        this.tasks_request.abort();
+                    }
+                    
+                    
+                    this.tasks_request = this.tasksRequest.fetch({data: _data, remove: remove_cache,
+                        success: _.bind(function (collection, response) {
+                            // Display items
+                            if (this.app.checkError(response)) {
+                                return false;
+                            }
+                            //this.app.showLoading(false, this.$contactList);
+                                                        
+                            for (var s = this.offset; s < collection.length; s++) {
+                                var rowView = new taskRowView({model: collection.at(s), sub: this, fromDashboard: true});                                
+                                this.$('.tasks-listing .content-wrapper').append(rowView.$el);                                
+                            }
+                            
+                            if(collection.length==0){
+                                this.$(".tasks-listing .not-found").show();                       
+                                this.$(".tasks-listing .not-found").html("No Task found.")
+                            }
+                            else{
+                                this.$(".tasks-listing .not-found").hide();  
+                            }
+                           
+
+                        }, this),
+                        error: function (collection, resp) {
+
+                        }
+                    });
+                    
+                },
             /**
              * Fetching contacts list from server.
             */
@@ -212,6 +270,8 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                     _.each(_json,function(value,key){
                          _this.ws_header.find("."+key).html(_this.app.addCommas(value));
                          _this.ws_header.find("."+key).parent().addClass(_this.app.getClickableClass(value));
+                         _this.$(".new-status ."+key).html(_this.app.addCommas(value));
+                         _this.$(".new-status ."+key).parent().addClass(_this.app.getClickableClass(value));
                     });
                      
                 }),this); 
@@ -221,11 +281,12 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
             */
             fetchContacts:function(fcount){
                 // Fetch invite requests from server
+                this.showTasks(false);
                 var remove_cache = false;
                 if(!fcount){
                     remove_cache = true;
                     this.offset = 0;
-                    this.$contactList.find('.thumbnails.cards').children(".contact-li").remove();
+                    this.$contactList.children(".contact-li").remove();
                     this.app.showLoading("Loading Contacts...",this.$contactList);             
                     this.$(".notfound").remove();
                     this.$('.filter_seven').parent().remove();
@@ -290,7 +351,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                         this.app.showLoading(false,this.$contactList);                                                                         
                         this.showTotalCount(response.totalCount);
                         
-                        this.$contactLoading.hide();
+                        this.$(".load-more-contacts").remove();
                         if(collection.length!=0 && this.$el.find('.thumbnails.cards .open-csv').length == 0){
                         
                         //this.$('.thumbnails.cards').append('<li class="open-csv"><div style="height:;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Contact </span></div></div></li>');
@@ -311,16 +372,17 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                     /*------------*/
                        
                         if(collection.length<parseInt(response.totalCount)){
-                            //this.$(".thumbnails.cards li.contact-li").last().attr("data-load","true");
+                            this.$(".contact-list li.contact-li").last().attr("data-load","true");
                         } 
                         if(collection.length==0){
+                            this.$(".contact-list").removeClass("scroll-contact");
                             var search_message  ="";
                             if(this.searchTxt){
                               search_message +=" containing '"+this.searchTxt+"'" ;
                               
                             }
                             if(this.filterBy==="CK" && this.sortBy !=="CK_7"){
-                                 this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p><br/><p style="text-align:center;font-size: 17px;"><a class="filter_seven">Show last 7 days Clickers</a> | <a class="show_all_contacts">Show All Contacts</a></p>');
+                                 this.$contactList.after('<p class="notfound">No Contacts found'+search_message+'</p><br/><p style="text-align:center;font-size: 15px;"><a class="filter_seven">Show last 7 days Clickers</a> | <a class="show_all_contacts">Show All Contacts</a></p>');
                                  this.$('.filter_seven').click(_.bind(function(){
                                      this.$('.recent-activities').val('CK_7').trigger('chosen:updated');
                                      this.$('.recent-activities option:nth-child(5)').trigger('change');
@@ -328,7 +390,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                                  
                             }else{
                                   this.$('.filter_seven').parent().remove();
-                                  this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p>');
+                                  this.$contactList.after('<p class="notfound">No Contacts found'+search_message+'</p>');
                             }
                             // Show all contact if zero clicker or visitors
                             this.$('.show_all_contacts').click(_.bind(function(){
@@ -338,17 +400,17 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                                      this.$el.parents('.ws-content.active').find('.c-current-status li.clickable_badge:first-child').addClass('font-bold');
                                     this.fetchContacts();
                                  },this))
-                        }                               
+                        }    
+                        else{
+                            this.$(".contact-list").addClass("scroll-contact");
+                        }
                         
                     }, this),
                     error: function (collection, resp) {
                             
                     }
                 });
-                // add into enqueueAjax Request
-                if(this.$el.parents('body').find('#wstabs li.active').attr('workspace_id')){
-                    this.enqueueAjaxReq.push(this.contacts_request); 
-                }      
+                      
             },
              /**
             * Fetch next records on scroll and resize.
@@ -357,8 +419,8 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
             */
             liveLoading:function(){
                 var $w = $(window);
-                var th = 200;
-                var inview = this.$(".thumbnails.cards li.contact-li").last().filter(function() {
+                var th = 100;
+                var inview = this.$(".contact-list li").last().filter(function() {
                     var $e = $(this),
                         wt = $w.scrollTop(),
                         wb = wt + $w.height(),
@@ -368,7 +430,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                   });
                 if(inview.length && inview.attr("data-load") && this.$el.height()>0){
                    inview.removeAttr("data-load");
-                   this.$contactLoading.show();                         
+                   this.$contactList.append(this.$contactLoading);                         
                    this.fetchContacts(20);
                 }  
             },
@@ -575,8 +637,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                 }
                 event.preventDefault();
             },
-            addSubscriber: function(){
-                 var _this = this;
+            addSubscriber: function(){                 
                    $("body #new_autobot").remove();
                    $("body .autobots-modal-in").remove();
                    $('body').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
@@ -586,6 +647,32 @@ function (subscriberCollection,template,SubscriberRowView,addContactView) {
                    this.addContactView = new addContactView({ sub:this ,app:this.app}); 
                   // var addContactView = new addContactView({ sub:this ,app:this.app});  
                    $("body #new_autobot").html(this.addContactView.el);
+            },
+            changeContactDetails: function(e){
+                var btn = $(e.target);
+                if(!btn.hasClass("selected")){
+                    this.selectContactTab(btn.attr("id"));
+                }
+                
+            },
+            selectContactTab: function(buttonName){
+                this.$(".contact-group button.selected").removeClass("selected");
+                this.$(".contact-group button[id='"+buttonName+"']").addClass("selected");
+                this.$(".activity-container > div").addClass("hide");
+                this.$(".activity-container > div."+buttonName).removeClass("hide");
+            },
+            populateTasks: function(){
+                this.showTasks(true);
+            },
+            showTasks: function(show){
+                if(show){
+                    this.$(".contacts-listing").addClass("hide");
+                    this.$(".tasks-listing").removeClass("hide");
+                }
+                else{
+                    this.$(".tasks-listing").addClass("hide");
+                    this.$(".contacts-listing").removeClass("hide");
+                }
             }
                  
         });

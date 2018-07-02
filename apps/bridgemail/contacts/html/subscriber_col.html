@@ -1,0 +1,151 @@
+<div class="top-header contact_found top_managerLists_wrappers">
+    <div class="scf_o_right">
+      <ul class="top_manager_ul_wraps six">
+        <li title="Add to Sequence" class="addSequence showtooltip">
+          <div class="scf_option_icon ripple top_manage_lists add-to-sequence">
+            <a  style="text-decoration: none;" class="">
+              <div class="wrap_scf_o_i">
+                <div class="wrap_scf_o_i_md" style="padding-top: 5px;">
+                  <div class="scf_o_icon scf_o_edit mksicon-act_workflow mks_manageList_wrap">
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>                  
+        </li><li title="Manage list subscription" class="showtooltip" currentitem="false">
+            <div class="scf_option_icon ripple top_manage_lists manage-my-lists">
+              <a  style="text-decoration: none;">
+                <div class="wrap_scf_o_i">
+                  <div class="wrap_scf_o_i_md">
+                    <div class="scf_o_icon scf_o_edit mksicon-ManageLists mks_manageList_wrap"></div>
+                  </div>
+                </div>
+              </a>
+            </div>                   
+          </li><li title="Add to list" class="showtooltip" currentitem="false">
+            <div class="scf_option_icon ripple top_manage_lists add-to-list">
+              <a  style="text-decoration: none;">
+                <div class="wrap_scf_o_i">
+                  <div class="wrap_scf_o_i_md">
+                    <div class="scf_o_icon scf_o_edit  mksicon-Addlist mks_manageList_wrap"></div></div></div>
+                  </a>
+                </div>                        
+              </li><li title="Suppress contact" class="showtooltip" currentitem="false">
+                <div class="scf_option_icon ripple top_manage_lists suppress-contact">
+                  <a  style="text-decoration: none;">
+                    <div class="wrap_scf_o_i">
+                      <div class="wrap_scf_o_i_md">
+                        <div class="scf_o_icon scf_o_edit mksicon-User1 mks_manageList_wrap"></div>
+                      </div>
+                    </div>
+                  </a>
+                </div>                        
+              </li><li title="Course Correct" class="mks_cc_li_wrap showtooltip" currentitem="false">
+                <div class="scf_option_icon ripple top_manage_lists course-correct">
+                  <a style="text-decoration: none;">
+                    <div class="wrap_scf_o_i">
+                      <div class="wrap_scf_o_i_md">
+                        <div class="scf_o_icon scf_o_edit mksicon-course_correct mks_manageList_wrap"></div>
+                      </div>
+                    </div></a>
+                  </div>                          
+                </li><li title="Add Notes" class="showtooltip">
+                        <div class="scf_option_icon ripple top_manage_lists add-notes">
+                            <a  style="text-decoration: unset;">
+                                <div class="wrap_scf_o_i">
+                                    <div class="wrap_scf_o_i_md">
+                                        <div class="scf_o_icon scf_o_edit mksicon-Notepad mks_manageList_wrap"></div>                                                    
+                                    </div>                                                
+                                </div>
+                            </a>                                        
+                        </div>
+                    </li><li title="Add to Salesforce" class="addSf sf_icons showtooltip hide" currentitem="false">
+                  <div class="scf_option_icon ripple top_manage_lists add-salesforce">
+                    <a  style="text-decoration: unset;">
+                      <div class="wrap_scf_o_i">
+                        <div class="wrap_scf_o_i_md" style="padding-top: 5px">
+                          <div class="scf_o_icon scf_o_edit mksicon-add_to_salesforce mks_manageList_wrap" style="padding-top: 0px;"></div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>                          
+                </li><li title="Jump Salesforce" class="jumpSf showtooltip sf_icons hide" currentitem="false">
+                  <div class="scf_option_icon ripple top_manage_lists">
+                    <a  style="text-decoration: unset;">
+                      <div class="wrap_scf_o_i">
+                        <div class="wrap_scf_o_i_md">
+                          <div class="scf_o_icon scf_o_edit mksicon-jump_to_salesforce_record mks_manageList_wrap" style="padding-top: 0px;"></div>
+                        </div>
+                      </div></a>
+                    </div>                            
+                    </li>
+
+                  </ul>
+            </div>
+    </div>
+
+    <div class="scf_option">                
+      <div class="s_contact_found">
+        <div class="scf_silhouette">
+          <div class="scf_silhouette_text"><p><%- this.getSubLetter() %></p></div>
+        </div>
+        <div class="scf_email_wrap edit_top_slider_title">
+          <div class="scf_email">
+              <b><span><%- this.app.decodeHTML(this.model.get('firstName')) %></span></b>&nbsp;
+              <b><span><%- this.app.decodeHTML(this.model.get('lastName')) %></span></b>
+            <div class="clr"></div>
+               <b><span><%- this.app.decodeHTML(this.model.get('email')) %></span></b>
+            <div class="clr"></div>
+               <span class="contact-phone"><%- this.app.decodeHTML(this.model.get('telephone')) %></span>
+          </div>
+        </div>
+        <div class="clr"></div>        
+      </div>
+  </div>
+  <div class="SuppressNotify messagebox error animated hide" style="margin:0px;">
+     <p>This account has been <strong>Suppressed</strong></p>
+  </div>  
+
+  <div class="contacts-wrap">
+      <div id="Tags" class="contact-box mksph_cardbox">
+        <h3>Tags</h3>
+
+        <a class="add-button add-tag-button mkb_btn mkb_greenbtn ">Add Tag</a>
+        <div class="addTagWrapper hide" style="position: relative;">
+          <div class="autocomplete">            
+                <input type="text" style="width:236px" class="autocomplete__input tag__input_mks focusThis" value="" id="addTagName" placeholder="add or apply a tag to this contact...">
+          </div>
+          <div style="float:right;margin-top: -56px;">
+            <a class="mkb_btn pull-right mkb_tag-close mks_cc_action_gray" style="color: rgb(255, 255, 255); top: 10px; right: 5px;">Close</a>
+            <a class="mkb_btn pull-right mkb_tag-add mkb_greenbtn c_txt_s_blue" style="top: 10px; right: 10px;">Add</a>
+          </div>  
+        </div>
+        <div class="tags-contents tagscont">
+          <% if(this.model.get("tags")=="") { %>
+          <div class="tags-not-found">
+            <p class="not-found">No tags available.</p>
+          </div>
+          <%} else {%>
+          <div class="tags_content">
+              <ul class="mks_tag_ul">
+                  
+              </ul>
+          </div>
+          <%}%>
+        </div>
+      </div>
+      <div id="contact-tasks" class="contact-box mksph_cardbox">
+        
+      </div>
+      <div id="contact-notes" class="contact-box mksph_cardbox">
+        
+      </div>
+  </div>
+
+
+                        
+          
+            
+            
+            
+          
