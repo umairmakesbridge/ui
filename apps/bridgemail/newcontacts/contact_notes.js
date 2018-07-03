@@ -1,4 +1,4 @@
-define(['text!contacts/html/contact_notes.html', 'contacts/collections/notes', 'contacts/note_row'],
+define(['text!newcontacts/html/contact_notes.html', 'newcontacts/collections/notes', 'newcontacts/note_row'],
         function (template, notesCollection, noteRowView) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //

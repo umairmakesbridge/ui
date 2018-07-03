@@ -1,4 +1,4 @@
-define(['text!contacts/html/subscriber_fields_col.html','contacts/addcustomfiled'],
+define(['text!newcontacts/html/subscriber_fields_col.html','newcontacts/addcustomfiled'],
         function (template,customfieldpage) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
@@ -109,7 +109,7 @@ define(['text!contacts/html/subscriber_fields_col.html','contacts/addcustomfiled
                                 field_html += '<span class="mksph_contact_title">' + key + '</span>:&nbsp;';
                                 field_html += '<span class="mksph_contact_value show mkb_elipsis">' + val + '</span>';
                                 field_html += '<input class="hide" id="' + _key + '" name="frmFld_' + key + '" type="text" tabindex="' + tabindex + '" value="' + val + '">';
-                                _this.customFieldContainer.append(field_html);
+                                _this.customFieldContainer.find(".customFields_ul").append(field_html);
                                 tabindex++;
                                 custFieldCount = custFieldCount + 1;
                             });
@@ -242,7 +242,7 @@ define(['text!contacts/html/subscriber_fields_col.html','contacts/addcustomfiled
                     this.app.mainContainer.SubscriberName(this.subscriber.sub_id, subName);
                 },
                 showSalesforceUser: function () {
-                    if (this.model.get("conLeadId")) {
+                    if (this.model.get("conLeadId") && this.editable) {
                         this.$('#SalesForce').removeClass("hide");
                         this.$('#sfid').val(this.model.get("conLeadId"));
                         this.$('#sfowner').val(this.model.get("salesRep"));

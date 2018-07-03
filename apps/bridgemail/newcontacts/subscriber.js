@@ -1,5 +1,5 @@
-define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline","contacts/listviewonly",'contacts/subscriber_fields_col','contacts/contact_notes','contacts/contact_tasks'],
-        function(template, timelinePage,listView, subscriberFieldsCol, contactNotes, contactTasks) {
+define(['text!newcontacts/html/subscriber.html', "newcontacts/subscriber_timeline","newcontacts/listviewonly"],
+        function(template, timelinePage,listView) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber detail page view depends on search control, chosen , date library moment and tags control
@@ -20,25 +20,10 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                     'click .toggleinfo': 'toggleFieldsView',
                     'click .edit-profile': 'editProfile',
                     'click .oto-sendmail': 'sendEmail',
-                    'click .manage-my-lists': 'manageLists',
-                    'click .suppress-contact' : 'suppressDialog',
-                    'click .add-to-sequence':'addToWorkflowDialog',
-                    'click .course-correct':'courseCorrectDialog',
-                    'click .add-to-list':'add2list',
-                    'click .add-notes':function(){                      
-                      
-                       $('html, body').animate({
-                            scrollTop: this.$("#note_textarea").offset().top
-                          }, 1000,_.bind(function(){
-                              this.$("#note_textarea").focus();
-                          },this));
-                      
-                    },
-                    'click .mkb_tag-add':'addTag',
-                    'click .add-tag-button':'addTagMode',
-                    'click .mkb_tag-close': 'addTagMode',
-                    'click .addSf':'synctoSF',
-                    'click .jumpSf':'viewSyncedSF'
+                    'click .manage-lists': 'manageLists',
+                    'click .suppress-sub' : 'suppressDialog',
+                    'click .coursecorrect-sub':'courseCorrectDialog',
+                    'click .add-to-lists':'add2list'
                 },
                 /**
                  * Initialize view - backbone
@@ -50,7 +35,6 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                     this.getTimeLine = null;
                     this.getTimeLineDetail = null;
                     this.enqueueAjaxReq = [];
-                    this.tags_array = "";
                     this.template = _.template(template);
                     this.render();
                 },
@@ -58,28 +42,19 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                  * Render view on page.
                  */
                 render: function() {
-                    this.app = this.options.sub.app;     
-                    this.pPage = this.options.parentPage;
+                    this.app = this.options.app;                    
                
-                    if (this.model) {
-                        var sub_name = '';
-                        if (this.model.get("firstName")) {
-                            sub_name = this.model.get("firstName");
-                        } else if (this.model.get("lastName")) {
-                            sub_name = this.model.get("lastName");
-                        } else {
-                            sub_name = this.model.get("email");
-                        }
-                        this.sub_id = this.model.get("subNum");
-                        this.sub_name = sub_name;
-                        this.editable = this.model.get("supress")=="S"?false:true;
-                        this.email = this.model.get("email");
+                    if (this.options.params && this.options.params.sub_id) {
+                        this.sub_id = this.options.params.sub_id;
+                        this.sub_name = this.options.params.sub_name;
+                        this.editable = this.options.params.editable;
+                        this.email = this.options.params.email;
                     }
                     
                     this.$el.html(this.template({}));      
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                    
-                    if (this.options.params && this.options.params.rowtemplate) {
+                    if (this.options.params.rowtemplate) {
                         this.modelTemplate = this.options.params.rowtemplate;
                     }
                     this.initControls();
@@ -90,42 +65,26 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                  * Custom init function called after view is completely render in wrokspace.
                  */
                 init: function() {
-                    
-                    this.loadActivityTimeLine();        
-                    /*Load Fields Column*/
-                    this.subFieldsView = new subscriberFieldsCol({sub: this, model: this.model, parentPage: this.pPage, isSalesforceUser: this.pPage.isSalesforceUser});
-                    this.pPage.$(".contact-info").html(this.subFieldsView.$el);
-                    this.pPage.selectContactTab("contact-info");
-                    
-                    /*Load Notes Area*/
-                    
-                    this.subContactNotes = new contactNotes({sub: this, model: this.model});
-                    this.$("#contact-notes").html(this.subContactNotes.$el);
-                    
-                    this.subContactTasks = new contactTasks({sub: this, model: this.model});
-                    this.$("#contact-tasks").html(this.subContactTasks.$el);
-                    
-                    if(this.editable===false){
-                        this.$(".SuppressNotify").removeClass("hide");
-                        this.$el.addClass("supress-mode");
+                    this.current_ws = this.$el.parents(".ws-content");
+                    this.tagDiv = this.current_ws.find("#campaign_tags");
+                    this.campHeader = this.current_ws.find('.camp_header');
+                    this.tagDiv.show();
+                    if(this.editable==false){
+                        this.campHeader.addClass("not-editable");
                     }
-                    
-                    if(this.pPage.isSalesforceUser){
-                        this.$(".top_manager_ul_wraps").addClass("seven");                        
-                        if(this.model.get("conLeadId")){
-                            this.$(".jumpSf").removeClass("hide");
-                            this.$(".jumpSf").addClass("mks_hideRightBorder");
-                        }
-                        else{
-                            this.$(".addSf").removeClass("hide");
-                            this.$(".addSf").addClass("mks_hideRightBorder");
-                        }
+                    var editIconSub = $('<a class="icon edit"></a>');
+                    var deleteIconSub = $('<a class="icon delete"></a>');
+                    var action_icon = $('<div class="pointy"></div>")');
+                    action_icon.append(editIconSub);
+                    //action_icon.append(deleteIconSub);
+                    if(this.editable){
+                        this.current_ws.find(".edited  h2").append(action_icon);
+
+                        editIconSub.click(_.bind(function() {
+                            this.editProfile();
+                        }, this));
                     }
-                    else{
-                        this.$(".top_manager_ul_wraps").addClass("six");  
-                        this.$(".add-notes").parent().addClass("mks_hideRightBorder")
-                    }
-                    
+                    this.loadActivityTimeLine();
 
                 },
                 /**
@@ -133,28 +92,11 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                  */
                 initControls: function() {
 
-                    //this.$(".connection-setup").chosen({width: "150px", disable_search: "true"});
-                    this.tags_array = this.model.get("tags");
-                    this.populateTags();
-                    
-                },
-                /**
-                 * 
-                 * @returns {Sub Name first Alphabet}
-                 */
-                getSubLetter: function(){
-                    var fName = this.model.get("firstName");
-                    var lName = this.model.get("lastName");
-                    var email = this.model.get("email");
-                    var firstAlpha = '';
-                    if (fName) {
-                        firstAlpha = this.app.decodeHTML(fName);
-                    } else if (lName) {
-                        firstAlpha = this.app.decodeHTML(lName);
-                    } else {
-                        firstAlpha = this.app.decodeHTML(email);
+                    this.$(".connection-setup").chosen({width: "150px", disable_search: "true"})
+                    if(this.sub_name)
+                    {
+                        this.app.mainContainer.SubscriberName(this.sub_id,this.sub_name);
                     }
-                    return firstAlpha.charAt(0);                                        
                 },
                 /**
                  * Loading data from server to populate page info.
@@ -162,18 +104,28 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                 loadData: function() {
                     var _this = this;
                     var bms_token = this.app.get('bms_token');
-                    //Load subscriber details, fields and tags                    
-                    var URL = "";                    
-                    URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getSubscriber";
-
-                    //URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&sfid=" + this.sub_id + "&type=getSubscriberBySfInfo&email="+this.email;
-                    
-                    var getSubscriber = jQuery.getJSON(URL, function(tsv, state, xhr) {                        
+                    //Load subscriber details, fields and tags
+                    this.app.showLoading("Loading Contact Details...", this.$el);
+                    var URL = "";
+                    if(this.editable){
+                        URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getSubscriber";
+                    }
+                    else{
+                        URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&sfid=" + this.sub_id + "&type=getSubscriberBySfInfo&email="+this.email;
+                    }
+                    var getSubscriber = jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        _this.app.showLoading(false, _this.$el);
                         var _json = jQuery.parseJSON(xhr.responseText);
                         if (_this.app.checkError(_json)) {
                             return false;
                         }
-                        
+                        /*Contact Name on Header*/
+                        /*if (_json.firstName !== "" || _json.lastName !== "")
+                        {
+                            _this.$el.parents(".ws-content").find("#workspace-header").html(_json.firstName + " " + _json.lastName);
+                        } else {
+                            _this.$el.parents(".ws-content").find("#workspace-header").html(_json.email);
+                        }*/
                         var create_date = moment(_this.app.decodeHTML(_json.creationDate), 'YYYY-M-D H:m');
                         _this.$(".s-date").html(create_date.date());
                         _this.$(".s-month-year").html("<strong>" + _this.app.getMMM(create_date.month()) + "</strong> " + create_date.year());
@@ -184,38 +136,59 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                         }else{
                             _this.$('.score').html('<i class="icon score"></i>&nbsp;<span class="score-value">0</span>');
                         }
-                        
+                        if(_json.supress=="S"){
+                            //_this.$('.suppress-sub').parent().hide();
+                            _this.$('.suppress-sub').addClass('disabled-btn');
+                            _this.$('.suppress-sub').html('<i class="icon supress-w disabled-btn"></i>');
+                            _this.$('.suppress-sub').attr('data-original-title','Contact already suppressed');
+                            _this.$('.suppress-sub').removeClass('suppress-sub');
+                            _this.campHeader.addClass('orange-head');
+                            _this.campHeader.find('.supress-w').show();
+                        }
+                        else{
+                            _this.$('.suppress-sub').parent().show();
+                        }
                         
                         _this.showTags();
-                        //_this.showFields();
-                        //Show Custom Fields
-                        _this.subFieldsView.createCustomFields();
+                        _this.showFields();
                        
                         
+                        if(_json.firstName){
+                             _this.sub_name = _json.firstName;
+                        }else if(_json.firstName){
+                            _this.sub_name = _json.lastName;
+                        }else{
+                            _this.sub_name = _json.email;
+                        }
                         
+                        _this.firstLetterContact();
+                         _this.sub_id = _json.subNum;
+                        if(!this.editable){
+                            _this.getActiviites();
+                        }
                     })
-                    this.pPage.enqueueAjaxReq.push(getSubscriber);
-                    /*if(this.editable){
+                    this.enqueueAjaxReq.push(getSubscriber);
+                    if(this.editable){
                         this.getActiviites();
-                    }*/
+                    }
                     
                 },
                 closeCallBack:function(){
                 if(this.enqueueAjaxReq.length > 0){
-                    for(var i=0;i < this.enqueueAjaxReq.length ; i++){
+                        for(var i=0;i < this.enqueueAjaxReq.length ; i++){
                                         
-                        if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
-
-                            this.enqueueAjaxReq[i].abort();
-                        }
-                       //this.app.enqueueAjaxReq[i].abort();
-                       var poped = this.enqueueAjaxReq.splice(i,1);
-
-                    }   
+                                        if(this.enqueueAjaxReq[i].readyState !== 4 && this.enqueueAjaxReq[i].status !== 200){
+                                           
+                                            this.enqueueAjaxReq[i].abort();
+                                        }
+                                       //this.app.enqueueAjaxReq[i].abort();
+                                       var poped = this.enqueueAjaxReq.splice(i,1);
+                                       
+                                    }   
                 }
                       
             },
-            getActiviites: function(){
+                getActiviites: function(){
                   //Loading subscriber activities like last seen, visists and actions 
                     var _this = this;
                     this.app.showLoading("States..", this.$(".sub-stats"));
@@ -282,27 +255,19 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                 /**
                  * Show tags of view called when data is fetched.
                  */
-                showTags: function() {                                       
-                    var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=allSubscriberTags";                    
-                    var allTagsCall = jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
-                       if(xhr && xhr.responseText){                        
-                            var tags_json = jQuery.parseJSON(xhr.responseText);                                
-                            if(this.app.checkError(tags_json)){
-                                return false;
-                            }
-                            var tags_common = [];
-                            if(tags_json.tags){
-                              $.each(tags_json.tags[0], function(index, val) {
-                                    tags_common.push(val[0].tag);
-                              })
-
-                              var typeahead = this.$("input.autocomplete__input").data('typeahead');
-                              if(typeahead) typeahead.source = tags_common;
-                              else this.$("input.autocomplete__input").typeahead({source:tags_common,items:10});
-                            }
-                       }
-                    },this)).fail(function() {  }); 
-                    this.pPage.enqueueAjaxReq.push(allTagsCall);
+                showTags: function() {
+                    var tags = this.sub_fields.tags;
+                    var _this = this;
+                    this.tagDiv.tags({app: this.app,
+                        url: '/pms/io/subscriber/setData/?BMS_REQ_TK=' + this.app.get('bms_token'),
+                        params: {type: 'tags', subNum: this.sub_id, tags: ''}
+                        , showAddButton: this.editable,
+                        tempOpt: true,
+                        tags: tags,
+                        callBack: _.bind(_this.newTags, _this),
+                        typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=allSubscriberTags"
+                   
+                    });
 
                 },
                 newTags: function (data) {
@@ -468,11 +433,12 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                 fetchContacts: function() {
                     //this.sub.fetchContacts();
                 },
-                loadActivityTimeLine: function() {                    
-                    
+                loadActivityTimeLine: function() {
+                    var _this = this;
+                    this.app.showLoading("Loading Timeline...", this.$(".colright"));
                     //require(["contacts/subscriber_timeline"], function(timelinePage) {
-                        var page = new timelinePage({sub:this});
-                        this.pPage.$(".contact-activity").html(page.$el);
+                        var page = new timelinePage({sub: _this});
+                        _this.$(".colright").html(page.$el);
                     //});
                 },
                 sendEmail : function(){
@@ -557,26 +523,6 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                          },this))
                                                 
                 },
-                addToWorkflowDialog:function(){                     
-                        var dialog_width = 600;
-                        var dialog_height = 400;
-                        var dialog = this.app.showDialog({title:'Add To Workflow',
-                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                                  headerEditable:false,
-                                  headerIcon : 'dlgcoursecorrect',
-                                  bodyCss:{"min-height":dialog_height+"px"}
-                        });
-                        
-                        var coursecorrect_url = "/pms/trigger/addToWorkflow.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+ this.sub_id+"&fromNewUI=true";
-                        var iframHTML = "<iframe src=\""+coursecorrect_url+"\"  width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
-                        dialog.getBody().html(iframHTML);
-                        this.app.showLoading("Loading Course Correct...",dialog.getBody());
-                         dialog.getBody().find('.workflowiframe').load(_.bind(function () {
-                                this.app.showLoading(false,dialog.getBody());                                
-
-                         },this))
-                                                
-                },
                 firstLetterContact : function(){
                     //console.log('id : '+ this.sub_id + ' name : '+ this.sub_name);
                     this.app.mainContainer.SubscriberName(this.sub_id,this.sub_name);
@@ -608,7 +554,7 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                     this.dialog = this.app.showDialog(btn_prp);
                     this.app.showLoading("Loading...", this.dialog.getBody());
                      
-                            var page = new listView({sub: this, model: this.model,dialog:this.dialog});
+                            var page = new listView({sub: this, model: this.modelTemplate.model,dialog:this.dialog});
                             this.dialog.getBody().html(page.$el);
                             page.dialogStyles['height'] = dialog_height;
                             page.dialogStyles['width'] = dialog_width;
@@ -623,175 +569,6 @@ define(['text!contacts/html/subscriber_col.html', "contacts/subscriber_timeline"
                         //this.subDetail = new sub_detail({sub: this.parent, page: this, isSalesforceUser: false, isAddFlag: true, emailsFlag: true});
                     
                     
-                },
-                addTagMode: function(){
-                    if(this.$(".addTagWrapper").hasClass("hide")){
-                        this.$(".addTagWrapper").removeClass("hide");
-                        this.$(".add-tag-button").addClass("hide");
-                        this.$("input.tag__input_mks").focus();
-                    }
-                    else{
-                        this.$(".addTagWrapper").addClass("hide");
-                        this.$(".add-tag-button").removeClass("hide");
-                    }
-                },
-                populateTags: function(){                    
-                    var tags_ul = this.$(".mks_tag_ul");
-                    tags_ul.children().remove();
-                    var tags_array = this.tags_array.split(",");
-                    var _this = this;
-                    $.each(tags_array,function(i,t){            
-                        var li_html =$('<li id="_tag_'+i+'" data-id="'+i+'"><a class="tag" ><span> '+t+'</span><i class="icon cross" ></i></a></li>')            
-                        li_html.find(".cross").click(function(event){
-                           var li = $(this).parents("li")                           
-                           _this.deleteTag(li.data("id"));
-                        })
-                        tags_ul.append(li_html);                    
-                    });    
-                },
-                deleteTag: function(tag_id){
-                    var self = this  
-                    var URL = '/pms/io/subscriber/setData/?BMS_REQ_TK=' + this.app.get('bms_token');
-                    var tags_array = this.tags_array.split(",")
-                    var tag = tags_array[tag_id];
-                    tags_array.splice(tag_id,1)    
-                    var temp_tags = tags_array.join();
-                    tag = this.app.encodeHTML(tag);
-                    var _data = {"type":"deleteTag","tag":tag,subNum:this.sub_id} 
-                    this.app.showLoading("Deleting Tag...", this.$("#Tags"));
-                    $.post(URL, _data)
-                        .done(_.bind(function(data) {         
-                            this.app.showLoading(false, this.$("#Tags"));
-                            var tag_json = jQuery.parseJSON(data);
-                            if (this.app.checkError(tag_json)) {
-                                return false;
-                            }                                   
-                            if(tag_json && tag_json.success){
-                                this.tags_array = temp_tags;
-                                this.model.set("tags",this.app.encodeHTML(this.tags_array));
-                                this.populateTags();                                                                
-                            }
-                            else if(tag_json[0]=="err"){
-                                 this.app.showAlert(tag_json[1], $("body"));
-                            }
-
-                     },this));
-                },
-                addTag: function(){
-                     var _input = this.$("input.tag__input_mks")
-                     var tag = _input.val();
-                     var URL = '/pms/io/subscriber/setData/?BMS_REQ_TK=' + this.app.get('bms_token');
-                    if(URL && this.validationTag(tag)){  
-                        this.app.showLoading("Adding Tag...", this.$("#Tags"));
-                        tag = this.app.encodeHTML(tag)                        
-                        var temp_tags = (this.tags_array)?(this.tags_array+","+tag):tag                         
-                        _input.prop("disabled",true);                         
-                         var _data = {"type":"addTag","tag":tag,subNum:this.sub_id,tags:""}                                                    
-                          $.post(URL, _data)
-                              .done(_.bind(function(data) {                                  
-                                  var tag_json = jQuery.parseJSON(data);  
-                                  this.app.showLoading(false, this.$("#Tags"));
-                                  if (this.app.checkError(tag_json)) {
-                                        return false;
-                                   }
-                                  _input.prop("disabled",false);
-                                  this.app.showLoading(false, this.$el);
-                                  if (tag_json[0] !== "err") {
-                                       this.tags_array = this.app.encodeHTML(temp_tags); 
-                                       this.model.set("tags",this.app.encodeHTML(this.tags_array));
-                                       _input.val('');
-                                       this.populateTags();                                       
-                                    } else {
-                                        this.app.showAlert(tag_json[1], $("body"));
-                                    }
-
-                           },this));
-                    }
-                },
-                validationTag:function(tag){
-                    var isValid = true;
-                   
-                    var tags_arr = this.tags_array.split(",");
-                    var edit_id = null;
-                    if($.trim(tag)==""){
-                        isValid = false;
-                    }
-                    else if(tag.length>30){                        
-                        this.app.showAlert('Tag length shouldn\'t be greater than 30 characters.',$("body"),{fixed:true});
-                        isValid = false;
-                    }
-                    else if(tag.indexOf(",")>-1){                        
-                        this.app.showAlert('Tag shouldn\'t contain ",".',$("body"),{fixed:true});
-                        isValid = false;
-                    }
-                    else if($.inArray(this.app.encodeHTML(tag),tags_arr)>-1){                        
-                        if(edit_id===null){                            
-                            this.app.showAlert('Tag already exists with same name.',$("body"),{fixed:true});
-                            isValid = false;
-                        }                        
-                    }                            
-                    
-                    return isValid;
-                },
-                synctoSF: function (event) {
-                    var dialog_width = $(document.documentElement).width() - 60;
-                    var dialog_height = $(document.documentElement).height() - 182;
-                    var dialog = this.app.showDialog({title: 'Add to Salesforce',
-                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
-                        headerEditable: false,
-                        headerIcon: 'salesforcelog',
-                        bodyCss: {"min-height": dialog_height + "px"},
-                        tagRegen: false,
-                        reattach: false
-                    });
-                    var _this = this;
-                    this.app.showLoading("Loading Salesforce...", dialog.getBody());
-                    var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK=" + this.app.get('bms_token') + "&subNum=" + this.model.get("subNum");
-                    var iframHTML = "<iframe src=\"" + url + "\"  width=\"100%\" id='addtosalesforceframe' class=\"workflowiframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe>"
-                    dialog.getBody().append(iframHTML);
-                    dialog.getBody().find('.workflowiframe').load(function () {
-                        //$(this).show();
-                        var iframe = $(this);
-                        //console.log('load the iframe')
-                        if (iframe.contents().find('.info').hasClass('successfull-lead')) {
-                            // console.log('Successfully lead added need to hide ');
-                            _this.app.showLoading("Saving Salesforce...", dialog.getBody());
-                            _this.app.showMessge("Subscriber has been added successfully as a lead at Salesforce.");
-                            iframe.contents().find('.publisherPageWrapper').hide();
-                            _this.sub.$el.find('.refresh_btn').click();
-
-                            dialog.hide();
-                        }
-                        if (iframe.contents().find('.error').hasClass('error-lead')) {
-                            // console.log('lead error  ');
-                            dialog.$el.find('.modal-footer .btn-add').hide().delay(1000);
-                            dialog.$el.find('.modal-footer .btn-close').before('<a style="" class="btn-yellow left btn-backsales"><i class="icon back left"></i><span>Back</span></a>')
-                            //_this.app.showMessge("Subscriber has been added successfully as a lead at Salesforce.");
-                            //dialog.hide();  
-                            dialog.$el.find('.modal-footer .btn-backsales').click(function () {
-                                dialog.$el.find('#addtosalesforceframe').attr('src', url);
-                            })
-
-                        } else {
-                            dialog.$el.find('.modal-footer .btn-add').show();
-                            dialog.$el.find('.modal-footer .btn-backsales').remove();
-                        }
-                        _this.app.showLoading(false, dialog.getBody());
-                        dialog.$el.find('.modal-footer .btn-save span').html('Add to Salesforce');
-                        dialog.$el.find('.modal-footer .btn-save').removeClass('btn-save').addClass('btn-add').show();
-                        iframe.contents().find('.hideitiframe').hide();
-                        //console.log(url);
-                        dialog.$el.find('.modal-footer .btn-add').click(function (event) {
-                            document.getElementById('addtosalesforceframe').contentWindow.addtosf();
-                        })
-                    });
-                    event.stopPropagation();
-
-                },
-                viewSyncedSF: function (event) {
-                    var url = this.model.get('sfUrl');
-                    window.open(url, 'newwindow', 'scrollbars=yes,resizable=yes');
-                    event.stopPropagation();
                 }
 
             });

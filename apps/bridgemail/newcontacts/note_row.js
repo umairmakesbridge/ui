@@ -1,4 +1,4 @@
-define(['text!contacts/html/note_row.html'],
+define(['text!newcontacts/html/note_row.html'],
         function (template) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //

@@ -1,4 +1,4 @@
-define(['text!contacts/html/contact_tasks.html', 'contacts/collections/tasks', 'contacts/task_row', 'contacts/addtask'],
+define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tasks', 'newcontacts/task_row', 'newcontacts/addtask'],
         function (template, tasksCollection, taskRowView, addTaskDialog) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //

@@ -1,4 +1,4 @@
-define(['text!contacts/html/addtask.html','datetimepicker'],
+define(['text!newcontacts/html/addtask.html','datetimepicker'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

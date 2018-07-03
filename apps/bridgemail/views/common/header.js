@@ -16,7 +16,12 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     }
                     ,
                     'click .contacts-li': function (obj) {
-                        app.mainContainer.addWorkSpace({type: '', title: 'Contacts', sub_title: 'Listing', url: 'contacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
+                        if(app.testUsers.indexOf(app.get("user").userId) > -1){
+                            app.mainContainer.addWorkSpace({type: '', title: 'Contacts', sub_title: 'Listing', url: 'contacts/newcontacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
+                        }
+                        else{
+                            app.mainContainer.addWorkSpace({type: '', title: 'Contacts', sub_title: 'Listing', url: 'contacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
+                        }
                     },
                     'click .reports-li': function (obj) {
                         app.mainContainer.addWorkSpace({type: '', title: 'Reports', sub_title: 'Analytic', url: 'reports/campaign_report', workspace_id: 'camp_reports', tab_icon: 'reports', single_row: true});

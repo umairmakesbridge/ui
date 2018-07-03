@@ -1,4 +1,4 @@
-define(['contacts/collections/subscriber_timeline','contacts/collections/subscriber_timeline_future','text!contacts/html/subscriber_timeline.html','contacts/timeline_row','contacts/timeline_filter'],
+define(['newcontacts/collections/subscriber_timeline','newcontacts/collections/subscriber_timeline_future','text!newcontacts/html/subscriber_timeline.html','newcontacts/timeline_row','newcontacts/timeline_filter'],
 function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -57,8 +57,8 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                     iconsource: 'actfeed'
                 });
                 this.fetchTime();
-                $(window).scroll(_.bind(this.liveLoading,this));
-                $(window).resize(_.bind(this.liveLoading,this));
+                this.sub.pPage.$(".contact-activity").scroll(_.bind(this.liveLoading,this));
+                this.sub.pPage.$(".contact-activity").resize(_.bind(this.liveLoading,this));
                 this.app.scrollingTop({scrollDiv:'window',appendto:this.sub.$el});
             }
             /**
@@ -150,7 +150,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                     }
                 });
                 // add into enqueueAjax Request
-                this.sub.enqueueAjaxReq.push(this._request); 
+                this.sub.pPage.enqueueAjaxReq.push(this._request); 
                
             },
             validEvent: function(model){
@@ -224,14 +224,14 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
                             
                     }
                 });
-                this.sub.enqueueAjaxReq.push(this._request);
+                this.sub.pPage.enqueueAjaxReq.push(this._request);
             }
              /**
              * Fetching current server time.
             */
             ,
             fetchTime:function(){
-               this.app.showLoading("Loading Timeline...",this.$el);  
+               //this.app.showLoading("Loading Timeline...",this.$el);  
                var URL = '/pms/io/getMetaData/?type=time&BMS_REQ_TK='+this.app.get('bms_token');
                 jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
                     var _json = jQuery.parseJSON(xhr.responseText);

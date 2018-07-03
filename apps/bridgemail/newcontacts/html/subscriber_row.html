@@ -1,0 +1,11 @@
+<div class="contact-row <% if(this.model.get('supress')=='S') { print('suppressrow')} %>">
+    <div class="name"><%- contact_name %>
+        <% if(this.model.get("supress")=="S") { %>
+        <a class="suppressed-icon showtooltip" style="display: inline;" title="Contact is suppressed">
+            <img src="<%- this.app.get('path')%>img/suppressed.png">
+        </a>
+        <% } %>
+    </div>
+    <div class="email"><%- this.options.app.decodeHTML(model.get('email'))%></div>
+</div>
+

@@ -1,0 +1,98 @@
+
+<% if(this.emailsFlag){ %>
+<form id="sub_fields_viaEmails_form"  style="margin: 12px 0 14px;"> 
+    <div class="blockname-container" style="margin-top:0px;">        
+         <div style="font-size: 12px;margin-top:-15px;margin-bottom: 15px;">
+            <i>Paste or type email addresses below.</i>
+        </div> 
+        <div class="input-append sort-options blockname-container" style="margin-bottom: 0;">
+            <div class="inputcont" style="margin-bottom: 0px;">
+               <textarea placeholder="Add one or more subscribers, one record per line" class="header-info textfield contactsEmails" name="emails" style="height: 230px;width:570px;" autofocus></textarea>
+            </div>
+        </div>
+       
+    </div>
+</form>
+ <%} else { %>
+ 
+<form id="sub_fields_form">
+   
+    
+    <div class="basic-field-accordion" style="margin-top:0px">
+        <h3  class="clearfix"><span> Basic Fields</span><b class="caret"></b> </h3>
+        <div class="accordion-inner">
+             <div class="row-fluid basic-field-container" >      
+             </div>   
+        </div>
+    </div>
+    <% if(this.options.isSalesforceUser) {%>
+    <div class="basic-field-accordion sf-field-accordion" >
+        <h3  class="clearfix"><span> Salesforce Details</span><b class="caret"></b> </h3>
+        <div class="accordion-inner">
+             <div class="row-fluid sf-field-container" >   
+                 <div class="span6">
+                     <div class="row">
+                         <label>SFID</label>
+                         <div class="input-append">
+                             <div class="inputcont ">
+                                 <input type="text" class="header-info textfield" value="" id="sfid" name="sfid" tabindex="1">
+                             </div>
+                         </div>
+                     </div>
+                      <div class="row">
+                         <label>Owner Email</label>
+                         <div class="input-append">
+                             <div class="inputcont ">
+                                 <input type="text" class="header-info textfield" value="" id="sfowneremail" name="ownerEmail" tabindex="1">
+                             </div>
+                         </div>
+                     </div>
+                  </div>
+                 <div class="span6">
+                     <div class="row">
+                         <label>Owner</label>
+                         <div class="input-append">
+                             <div class="inputcont ">
+                                 <input type="text" class="header-info textfield" value="" id="sfowner" name="owner" tabindex="1">
+                             </div>
+                         </div>
+                     </div>
+                  </div>
+             </div>   
+        </div>
+    </div>
+    <% }else{ %>
+         <div class="basic-field-accordion sf-field-accordion" >
+        <h3  class="clearfix"><span> Salesforce Details</span><b class="caret"></b> </h3>
+        <div class="accordion-inner">
+             <div class="row-fluid sf-field-container" >   
+                 <div class="span5"></div>    
+                 <div class="span4">
+                     <div class="row">
+                         
+                       
+                             <label class="add-to-salesforce showtooltip disabled-btn" >
+                             <img src="<%- this.app.get('path')%>img/addto_salesforce_30x30.png" style="position: relative; top: -3px;" />
+                                Add To Salesforce
+                             </label>
+                         
+                     </div>
+                  </div>
+                 <div class="span3"></div>
+             </div>   
+        </div>
+    </div>
+        <% } %>
+        <div class="custom-field-accordion">
+            <h3  class="clearfix"><span class="left">Custom Fields</span> 
+                <div class="iconpointy">
+                  <a class="btn-green add-field"><i class="icon plus left"></i></a>
+                </div>
+            <b class="caret"></b> </h3>
+            <div class="accordion-inner">
+                <div class="row-fluid custom-field-container" >           
+                 </div>   
+            </div>
+        </div>
+    <% } %>
+</form>

@@ -1,0 +1,226 @@
+<div class="icon <%-cssClass %> this-event-type showtooltip" title="Click to view this event type only" style="cursor: pointer"></div>
+<% if(type=="SC" && model.get('score') > 0 )  { %>
+<h5><a class="<% if(model.get('score') >= 0){ print('green') }else{ print('red')} %>"><%- this.getScore() %></a></h5>
+<div class="info-p">
+    <% if(typeof(model.get('botLabel'))!=="undefined"){ %>
+      <div class="infotxt">
+        <span><%-this.app.decodeHTML(model.get("botLabel"))%></span>
+        <strong>Autobot Name</strong>
+      </div>    
+    <% } if(typeof(model.get('pageType'))!=="undefined"){ %>
+    <div class="infotxt">
+        <span><%-this.app.decodeHTML(model.get("pageType"))%></span>
+        <strong>Page Type</strong>
+    </div>
+    <% } if(typeof(model.get('pageURL'))!=="undefined"){ %>
+    <div class="infotxt">
+        <a href="<%- this.app.decodeHTML(model.get('pageURL')) %>" target='_blank'><i class="icon link"></i> <%- this.app.decodeHTML(model.get("pageURL")) %></a>
+        <strong>Page URL</strong>
+    </div>
+    <% } %>    
+    <% if(model.get('recur.isRecur')=="Y"){ %>
+        <div class="infotxt">
+            <% if(model.get("recur.recurCount")=="1") { %>
+                <span><%-model.get("recur.recurCount")%> time</span>
+            <% } else { %>
+                <span><%-model.get("recur.recurCount")%> times</span>
+            <% } %>
+            <strong>Action Performed</strong>
+        </div>
+        
+        <% if(model.get('status')=="P") { %>
+            <div class="infotxt">
+                <span><%-this.getLastExecutionDate() %> </span>
+                <strong>Last Recur Date</strong>
+            </div>
+        <% } %>
+    <% } %>
+</div>
+<%  } else if(type=="A" || type=="WA"){  %>
+<% if(typeof(model.get('workflowName'))!=="undefined" ) { %>
+<h5><a >Workflow Msg</a> <span class="soptn showtooltip" title="Step Label: <%- this.app.decodeHTML(model.get('stepLabel')) %>">Step <%- model.get("triggerOrder") %></span><span class="soptn showtooltip" title="Option Label: <%- this.app.decodeHTML(model.get('optionLabel')) %>">Option <%- model.get("optionNumber") %></span></h5>
+ <% }  else if(typeof(model.get('botLabel'))!=="undefined") { %>
+ <h5><a>Autobot Msg</a><span class="soptn showtooltip"  title="Autobot name"><%- model.get('botLabel') %></span></h5>
+ <% } %>
+<div class="info-p">
+    <p><%- this.app.decodeHTML(model.get("alertComments"),true) %></p>
+</div>
+<% } else if( type=="WV" ){ %>    
+    <h5><a class='showtooltip' title="Click to page" target="_blank" href="<%- this.app.decodeHTML(model.get('pageURL')) %>"><%- this.app.decodeHTML(model.get("pageTitle")) %></a></h5>
+    <a class="pageurl" target="_blank" href="<%- this.app.decodeHTML(model.get('pageURL')) %>"><%- this.app.decodeHTML(model.get("pageURL")) %></a>
+    <div class="info-p">
+        <% if(model.get('campaignName') ) { %>
+        <div class="infotxt">
+            <a class="preview-event showtooltip" title="Click to preview campaign"><%- this.app.decodeHTML(model.get("campaignName")) %></a>
+            <strong>Campaign Name</strong>
+        </div>
+        <% }  else if(model.get('workflowName') ) { %>
+        <div class="infotxt">
+            <span><%- this.app.decodeHTML(model.get("workflowName")) %></span>
+            <strong>Workflow Name</strong>
+        </div>
+        <% }  else if(model.get('trackName') ) { %>
+        <div class="infotxt">
+            <span><%- this.app.decodeHTML(model.get("trackName")) %></span>
+            <strong>Workflow Name</strong>
+        </div>
+        <% } %>
+        <% if(model.get('subject') ) { %>
+        <div class="infotxt">
+            <span><%- this.app.decodeHTML(model.get("subject")) %></span>
+            <strong>Subject</strong>
+        </div>
+        <% } %>
+    </div>
+<%  } else if(type=="WM") { %>
+<h5><a >Workflow Msg</a><span class="soptn showtooltip" title="Step Label: <%- this.app.decodeHTML(model.get('stepLabel')) %>">Step <%- model.get("triggerOrder") %></span><span class="soptn showtooltip" title="Option Label: <%- this.app.decodeHTML(model.get('optionLabel')) %>">Option <%- model.get("optionNumber") %></span></h5>
+<div class="info-p">
+    <p><%- this.app.decodeHTML(model.get("mailBody")) %></p>
+</div>
+<%  } else if(type=="W") { %>
+    <h5><a >Workflow Msg</a> </h5>
+    <div class="infotxt">
+        <a ><i class="icon link"></i> XXXXX</a>
+        <strong>Message URL</strong>
+    </div>
+<%  } else if(type=="MM") { %>
+    <h5><a ></a> <%- this.app.decodeHTML(model.get("subject")) %></h5>
+    <div class="info-p">
+    <p><%- this.app.decodeHTML(model.get("articleTitle")) %></p>
+    </div>
+<%  } else if(type=="CS" || type=="OP" || type=="CK" || type=="CT" ) { %>
+    <% if(type=="CS" && !this.future) {%>
+    <div class="meter  <%- this.getMeter() %>">
+        <span class="open showtooltip" title="Opened"></span>
+        <span class="click showtooltip" title="Clicked"></span>
+        <span class="visit  showtooltip" title="Page Viewed"></span>
+        <span class="conversion  showtooltip" title="Conversion"></span>        
+    </div>
+    <% } %>
+    
+    
+    <% if(model.get("campaignType")==="W") { %>
+    <h5><a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("workflowName")) %></a><span class="soptn showtooltip" title="Step Label: <%- this.app.decodeHTML(model.get('stepLabel')) %>">Step <%- model.get("triggerOrder") %></span><span class="soptn showtooltip" title="Option Label: <%- this.app.decodeHTML(model.get('optionLabel')) %>">Option <%- model.get("optionNumber") %></span></h5>
+    <% } else if(model.get("campaignType")==="N" && model.get("campaignName")){ %>
+        <h5>            
+            <a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("campaignName")) %> </a>
+             <% if(type=="OP"){ %>
+                <a class="icon preview2 preview-event showtooltip" title="Click to preview"></a>
+                <a class="icon report showtooltip view-report" title="Click to view report" ></a>   
+             <% } %>
+        </h5>
+    <% } else if(model.get("campaignType")==="T" && model.get("trackName")){ %>
+        <h5>            
+            <a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("trackName")) %> </a>
+             <% if(type=="OP"){ %>
+                <a class="icon preview2 preview-event showtooltip" title="Click to preview"></a>
+                <a class="icon report showtooltip view-report" title="Click to view report" ></a>   
+             <% } %>
+             <span class="soptn showtooltip" title="Message Label: <%- this.app.decodeHTML(model.get('messageLabel')) %>">Message <%- model.get("triggerOrder") %></span>
+        </h5>
+    <% } else if(model.get("campaignType")==="B" && model.get("botLabel")){ %>
+        <h5>            
+            <a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("botLabel")) %> </a>
+             <% if(type=="OP"){ %>
+                <a class="icon preview2 preview-event showtooltip" title="Click to preview"></a>
+                <a class="icon report showtooltip view-report" title="Click to view report" ></a>   
+             <% } %>             
+        </h5>
+    <% } %>
+    <% if(type=="CK") { %>
+        <a class="pageurl" href="<%- this.app.decodeHTML(model.get('articleURL')) %>" target="_blank"><%- this.app.decodeHTML(model.get("articleTitle")) %></a>
+    <% }%>
+     
+    <div class="info-p">
+        <div class="infotxt">
+            <span><%- this.app.decodeHTML(model.get("subject")) %></span>
+            <strong>Subject</strong>
+        </div>
+        <% if(model.get('pageViewsCount') && model.get('pageViewsCount')!=="0") { %>
+        <div class="infotxt">
+            <a class="page-views showtooltip" title="Click for page views details"><i class="icon viewcount"></i> <%- model.get("pageViewsCount") %></a>
+            <strong>Page Views</strong>
+        </div>
+        <% } %>
+    </div>
+
+    
+<%  } else if(type=="TF" || type=="UN" || type=="SP" || type=="CB") { %>
+<h5><a><%- model.get("campaignName") %></a></h5>
+<div class="info-p">
+    <div class="infotxt">
+        <a><%- this.app.decodeHTML(model.get("subject")) %></a>
+        <strong>Subject</strong>
+    </div>
+    <% if(type=="CB") {%>
+        <div class="infotxt">
+            <a><%- this.app.decodeHTML(model.get("bounceType")) %></a>
+            <strong>Bounce Type</strong>
+        </div>
+    <% } %>
+</div>
+<%  } else if(type=="WV" && typeof(model.get("campaignType"))=="undefined") { %>
+    <h5><a><%- this.app.decodeHTML(model.get("pageTitle")) %></a></h5>
+    <a href="<%- this.app.decodeHTML(model.get('pageURL')) %>" class="pageurl" target="_blank"><%- this.app.decodeHTML(model.get("pageURL")) %></a>
+<%  } else if(type=="SU") { %>
+    <h5><a><%- this.app.decodeHTML(model.get("formName")) %></a></h5>
+    <a href="<%- this.app.decodeHTML(model.get('formURL')) %>" class="pageurl" target="_blank"><%- this.app.decodeHTML(model.get('formURL')) %></a>
+<%  } else if(type=="MT" || type=="MC" || type=="MO" || type=="MS") { %>  
+    <h5><a ><%- this.app.decodeHTML(model.get('subject'))  %></a></h5>
+    <div class="info-p">
+    <% if( model.get('subject') ) { %>
+        <div class="infotxt">
+            <a><%- this.app.decodeHTML(model.get('subject'))  %></a>
+            <strong>Message Title</strong>
+        </div>
+    <% } %>
+    <% if(model.get('pageURL')) { %>
+        <div class="infotxt">
+            <a href="<%- this.app.decodeHTML(model.get('pageURL'))  %>"><i class="icon link"></i><%- this.app.decodeHTML(model.get('pageTitle'))  %></a>
+            <strong>Message URL</strong>
+        </div>
+    <% } %>
+    </div>
+
+<%  } %>
+<div class="filter">
+    <i class="filtericon"></i>
+    <ul>
+        <li>Filter by</li>        
+        <% if(tTypeName=="Workflow"){%>
+        <li class="this-event"><a>This Workflow Only</a></li>
+        <li class="this-event-campaign"><a>This Campaign Only</a></li>
+        <% } else if(tTypeName=="Campaign") { %>
+        <li class="this-event"><a>This Campaign Only</a></li>
+        <% } else if(tTypeName=="Autobot") { %>
+        <li class="this-event"><a>This Autobot  Only</a></li>
+        <% } else if(tTypeName=="Nurture Track") { %>
+        <li class="this-event"><a>This Nurture Track Only</a></li>
+        <li class="this-event-campaign"><a>This Message Only </a></li>                
+        <% } %>
+        
+        <li class="this-event-type"><a>This Event Type</a></li>
+        <li><a class="advance-filter">Advanced</a></li>
+    </ul>
+</div>
+<div class="btm-bar ">
+    <div class="datetime"><span class="this-event-type showtooltip" title="Click to view this event type only" style="cursor: pointer"><%-name %> </span> at <%-time %>, <%-date %></div>
+    <% if(tTypeName) { %>
+        <div class="camp_type">
+            <% if( tTypeName!=="Single Message") { %>
+            <span class="showtooltip all-timelineFilter" title="Click to view all <%- this.app.decodeHTML(tTypeName)%>s activities" style="cursor: pointer">
+            <% } else { %>
+            <span>
+            <% } %>
+                <% if(tTypecss) { %>
+                <i class="icon <%- tTypecss %>"></i> 
+                <% } %>    
+                <%- this.app.decodeHTML(tTypeName) %></span> 
+        </div>
+    <% } %>
+</div>
+
+
+   
+   
+ 

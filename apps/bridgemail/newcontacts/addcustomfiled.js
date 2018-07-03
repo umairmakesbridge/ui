@@ -1,4 +1,4 @@
-define(['text!contacts/html/addcustomfiled.html'],
+define(['text!newcontacts/html/addcustomfiled.html'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

@@ -177,6 +177,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                     "ws_type": "",
                                     "addAction": true,
                                 },
+                                "newcontacts" : {
+                                    "tab_icon": "contactlisting",
+                                    "url":"newcontacts/contacts",
+                                    "ws_type": "",
+                                    "addAction": true,
+                                },
                                 "subscriber_listings" : {
                                     "tab_icon": "contactdetail",
                                     "url":"contacts/subscriber",
@@ -1014,7 +1020,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     //this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});
                 },
                 viewContacts: function () {
-                    this.addWorkSpace({type: '', title: 'Contacts', sub_title: 'Listing', url: 'contacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
+                    if(this.app.testUsers.indexOf(this.app.get("user").userId) > -1){
+                        this.addWorkSpace({type: '', title: 'Contacts', sub_title: 'Listing', url: 'newcontacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
+                    }
+                    else{
+                        this.addWorkSpace({type: '', title: 'Contacts', sub_title: 'Listing', url: 'contacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
+                    }
                 },
                 campaignListing: function () {
                     this.addWorkSpace({type: '', title: 'Campaigns', sub_title: 'Listing', url: 'campaigns/campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});

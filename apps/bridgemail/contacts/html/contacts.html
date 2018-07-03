@@ -5,15 +5,8 @@
         <h2 id="total_selected" style="display:none"><strong class="badge total-selected-count">0</strong> <span class="total-selected-text">Contacts</span></h2>
         <a class=" btn-green actionbtn"  style="display:none;"><i class="icon mbaction"></i><span>Apply Action</span></a>
         <a class="badge badgebtn" style="display:none;"><strong>164</strong> Hidden </a>
-        
-        <ul class="c-current-status new-status">
-            <li class='task-panel showtooltip hide' title='Show Tasks'><span class="badge pclr22 clickCount">1</span>Tasks</li>
-            <li style="border-left:1px solid #fff;padding-left:15px;">Last 24 hrs :</li>
-            <li search="CK" ><span class="badge pclr23 tempCount clickCount">0</span>Clickers </li>
-            <li search="WV" ><span class="badge pclr19 tempCount visitCount">0</span>Visitors </li>
-        </ul>
     </h2>
-    
+
     <div class="srt-div">
         <a class="refresh_btn showtooltip" title="Refresh listing"><i>Refresh</i></a>
         <select class="nosearch filter-by" data-placeholder="Filter By" style="display:none">
@@ -30,7 +23,16 @@
             <option value="WV_30">Last 30 Days Visitors</option>                                       
            <!-- <option value="webVisit">Web Visit</option>            
             <option value="wfAlert">Alert</option>-->                        
-        </select>              
+        </select>
+        <div class="contacts-switch">
+        <div class="status_tgl">
+            <a class="draft toggletags showtooltip" title="Search by Tags"><i class="toggletag-icon"></i>Tags</a>
+            <a class="published active togglecontact showtooltip" title="Search by Contacts"><i class="togglecontact-icon"></i>Contacts</a>
+      </div>
+            </div>
+      <div class="input-append search contact-search" >         
+              
+      </div>
      
     </div>         
     <div class="refreshbtn" style="display: none;float:left!important"><img src="<%- this.options.app.get('path')%>img/recurring2.gif" alt="" /></div> 
@@ -38,72 +40,11 @@
   </div>
 
   <div class="contactsdiv tileview" style="clear:both;">
-    <div class="row-contact contacts-new" style="margin:5px;">      
-       <div class="column-contact contants-area" style="background-color:#fff">
-          <div class="contacts-listing">
-                <h2 id="total_templates"><strong>Contacts</strong></h2>
-                <div class="contacts-switch">
-                     <div class="status_tgl">
-                         <a class="published active togglecontact showtooltip" title="Search by Contacts"><i class="togglecontact-icon"></i>Contacts</a>
-                         <a class="draft toggletags showtooltip" title="Search by Tags"><i class="toggletag-icon"></i>Tags</a>                    
-                   </div>
-                </div>
-                <div class="sharedBox hide">
-                 <select class="shared-select-box">
-                     <option>My Contacts</option>
-                     <option>Shared Contacts</option>
-                 </select>
-                </div>
-                <div class="input-append search contact-search" >         
+      <ul class="thumbnails cards">
+           
+      </ul>
 
-                </div>
-                <ul class="contact-list">               
-                </ul>
-                <div class="loadmore" style="display:none">
-                     <img src="<%- this.options.app.get('path')%>img/loading.gif" alt=""/>
-                </div>
-           </div>
-           <div class="tasks-listing hide">
-                <h2 id="total_templates"><strong>Tasks</strong></h2>
-                <div class="tasks-switch">
-                     <div class="status_tgl">
-                         <a class="published active toggletoday showtooltip" title="Today's Tasks">Today's Tasks</a>
-                         <a class="draft toggleall showtooltip" title="All Tasks"><i class="toggletag-icon"></i>All Tasks</a>                    
-                      </div>
-                </div>                
-                <div class='tasks-dashboard'>                    
-                    <div class="content-wrapper task_expand_height mks_outlook_tasks_wrapper heighAuto" style="position: relative;">                                    
-                        <div class="tags-not-found">
-                            <p class="not-found">Loading...</p>
-                        </div>
-                    </div>                    
-                </div>
-                <div class="loadmore" style="display:none">
-                     <img src="<%- this.options.app.get('path')%>img/loading.gif" alt=""/>
-                </div>
-           </div>
-      </div>
-      <div class="column-contact contact-detail-area" style="background-color:#f8f8fb;overflow-y: auto;">
-          <p class="no-contact-found">No Contact Selected</p>        
-      </div>
-      <div class="column-contact contact-activity-area" style="background-color:#f8f8fb">
-            <div class="contact-group" style="width:100%">
-                <button id="contact-info">Contact Information</button>
-                <button id="contact-activity">Activities</button>                
-          </div>
-          <div class="activity-container">
-              <div class="contact-info" style="height:635px;overflow-y:auto;position: relative">
-                  
-              </div>
-              <div class="contact-activity hide" style="height:635px;overflow-y:auto;">
-                  
-              </div>
-              <div class="contact-email hide">
-                  
-              </div>
-          </div>
-      </div>
-    </div>
-
-                      
+    <div class="loadmore" style="display:none">
+         <img src="<%- this.options.app.get('path')%>img/loading.gif" alt=""/>
+    </div>                  
  </div> <!-- contactsdiv -->

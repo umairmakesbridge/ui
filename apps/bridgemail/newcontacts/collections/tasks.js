@@ -1,5 +1,5 @@
 define([
-	'backbone', 'app', 'contacts/models/task'
+	'backbone', 'app', 'newcontacts/models/task'
 ], function (Backbone, app, Task) {
         'use strict';
 	return Backbone.Collection.extend({

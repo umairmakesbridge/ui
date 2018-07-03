@@ -1,5 +1,5 @@
 define([
-	'backbone', 'app', 'contacts/models/note'
+	'backbone', 'app', 'newcontacts/models/note'
 ], function (Backbone, app, Note) {
         'use strict';
 	return Backbone.Collection.extend({

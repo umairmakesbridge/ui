@@ -1,0 +1,86 @@
+<div class="subscriber-detail">
+            
+<div class="colleft">
+    <div class="row-fluid">     
+
+       <div class="profile-infostats">         
+
+        <div class="score-buttons">
+             <ul>
+                 <li style="width: auto;min-width: 120px;max-width:150px;overflow:hidden"><div class="score"><i class="icon score"></i>+<span class="score-value">0</span></div> 
+                 <!--<a  class="sf"><img src="<%- this.app.get('path')%>img/sficon2.png" alt=""></a></li>-->                                  
+                 <% if(this.editable) { %>
+                 <li style="float:right;width: auto;"><a  class="btn-red suppress-sub showtooltip" data-original-title="Click to suppress contact"><i class="icon supress-w"></i></a></li>                 
+                 <li style="float:right;width: auto;"><a  class="btn-green coursecorrect-sub showtooltip" data-original-title="Click for course correct"><i class="icon coursecorrect-w"></i></a></li>                    
+                 <% } %>
+                 <% if(this.editable){%>
+                 <li style="float:right;width: auto;"><a  class="btn-blue add-to-lists showtooltip" data-original-title="Click to add into list"><i class="icon add-list"></i></a></li>
+                 <%}%>
+                 <li style="float:right;width: auto;"><a  class="btn-yellow manage-lists showtooltip" data-original-title="<% if(this.editable){%>Click to manage lists<%} else {%>Click to view lists<%}%>"><i class="icon mlist2"></i></a></li>
+                 <li style="float:right;width: auto;"><a  class="btn-green edit-profile showtooltip" data-original-title="<% if(this.editable){%>Click to edit profile<%} else {%>Click to view profile<%}%>"><i class="icon editpro2"></i></a></li>
+                 <li style="float:right;width: auto;"><a  class="btn-blue oto-sendmail showtooltip" data-original-title="Click to send email"><i class="icon otolist"></i></a></li>
+             </ul>
+         </div>
+
+
+        <ul class="stats">
+                <li>
+                <h5><i class="icon date"></i>Signup Date</h5>
+                <h3 class="s-date"></h3>
+                <span class="s-month-year"> </span>
+            </li>
+            <li>                             
+                <h5><i class="icon clock"></i>Last Seen</h5> 
+               <h3 class="seen-interval">12</h3>
+               <span> <strong class="seen-time-text">Hrs</strong>Ago</span>
+            </li>
+            <li>
+                <h5><i class="icon pointer"></i>Last 30 days</h5>
+               <h4><strong class="_visits">0 </strong> visits</h4>
+               <h4><strong class="_actions">0 </strong> actions</h4>
+            </li>
+        </ul><!--   Stats  -->
+
+
+        <div class="profileinfo">
+            <div class="topinfo">
+
+                </div>
+
+                <a class="toggleinfo "><span class="caret "></span></a>
+
+        </div> <!--   information  -->                    
+
+
+       </div>         
+     </div> <!-- row-fluid - Profile INFO + Stats  -->
+      <div class="row-fluid" style="margin:15px 0 0;"> 
+             <div class="">
+             <ul class="btnslist">
+                     <li class="workflow"><a ><i class="icon workflow"></i> Workflows <span class="badge workflowCount">12</span></a>
+                     <li class="mail"><a ><i class="icon mail"></i> Emails <span class="badge emailCount">12</span></a>
+                     <li class="segment"><a ><i class="icon segment"></i> Segments <span class="badge segmentCount">12</span></a>
+                     <li class="list manage-lists"><a ><i class="icon list"></i> Lists <span class="badge listCount">12</span></a>
+                     <li class="alerticon"><a ><i class="icon alerticon"></i> Alerts <span class="badge alertCount">12</span></a>
+             </ul>
+         </div>
+
+     </div> <!-- row-fluid -   -->
+</div> <!-- colleft  -->
+
+
+<div class="colright">
+
+    
+</div> <!-- colright  -->
+</div>
+
+<div class="clearfix"></div>
+
+
+                        
+          
+            
+            
+            
+          

@@ -1,0 +1,25 @@
+<div class="activitiespanel">
+
+    <div class="activitybar">
+        <h3 id="total_activities"><span class="total-text" >Total Activities</span> <strong class="badge total-count show-advance showtooltip" title="Click for advance filter" style="cursor: pointer">0</strong></h3>
+        <div class="filters">
+            <a class="show-all">show all</a> &nbsp;|&nbsp;
+            <a class="show-advance">advance filter</a>            
+        </div>               
+    </div>    <!-- activitybar  -->       
+
+<div class="timeline-container">
+    <!--  Timeline future  -->   
+    <div class="new_activities future">        
+
+    </div> 
+     <!--  Timeline current --> 
+    <div class="new_activities current">        
+        <br>
+    </div>
+    <div class="loadmore" style="display:block">
+         <img src="<%- this.app.get('path')%>img/loading.gif" alt=""/>
+    </div>       
+     <p class="notfound" style="display:none">No Activity Found &nbsp;|&nbsp; <a class="show-all">Show All</a> </p>
+</div>
+</div> <!-- activitiespanel  -->
