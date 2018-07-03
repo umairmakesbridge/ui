@@ -36,6 +36,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                     this.getTimeLineDetail = null;
                     this.enqueueAjaxReq = [];
                     this.template = _.template(template);
+                    this.subscriberModel = null;
                     this.render();
                 },
                 /**
@@ -130,7 +131,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                         _this.$(".s-date").html(create_date.date());
                         _this.$(".s-month-year").html("<strong>" + _this.app.getMMM(create_date.month()) + "</strong> " + create_date.year());
                         _this.sub_fields = _json;
-                        
+                        _this.subscriberModel = Backbone.Model.extend(_this.sub_fields);
                         if(_json.score !== '0'){
                             _this.$('.score').html('<i class="icon score"></i>+<span class="score-value">'+_json.score+'</span>');
                         }else{
@@ -553,8 +554,9 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                     }
                     this.dialog = this.app.showDialog(btn_prp);
                     this.app.showLoading("Loading...", this.dialog.getBody());
-                     
-                            var page = new listView({sub: this, model: this.modelTemplate.model,dialog:this.dialog});
+                            /*need to test the issue*/
+                            
+                            var page = new listView({sub: this, model: this.subscriberModel,dialog:this.dialog});
                             this.dialog.getBody().html(page.$el);
                             page.dialogStyles['height'] = dialog_height;
                             page.dialogStyles['width'] = dialog_width;
