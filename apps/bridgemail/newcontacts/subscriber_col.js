@@ -789,7 +789,7 @@ define(['text!newcontacts/html/subscriber_col.html', "newcontacts/subscriber_tim
 
                 },
                 viewSyncedSF: function (event) {
-                    var url = this.model.get('sfUrl');
+                    var url = this.app.decodeHTML(this.model.get('sfUrl'));
                     window.open(url, 'newwindow', 'scrollbars=yes,resizable=yes');
                     event.stopPropagation();
                 }

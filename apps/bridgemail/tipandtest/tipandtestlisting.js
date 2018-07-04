@@ -1,33 +1,20 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipandtest/html/tipandtestlisting.html',  'tipandtest/tipandtest_row','tipandtest/collections/tipandtestlisting'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, tipandtestRowView , tipandtestCollection) {
+define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipandtest/html/tipandtestlisting.html',  'tipandtest/tipandtest_row','tipandtest/collections/tipandtestlisting','tipandtest/collections/tracks','tipandtest/track_row_makesbridge'],
+        function (bmsgrid, jqhighlight, jsearchcontrol, template, tipandtestRowView , tipandtestCollection, tracksCollection, trackRowMakesbrdige) {
             'use strict';
             return Backbone.View.extend({
                 id: 'tip_test_listings',
                 tags: 'div',
                 events: {
-                    "click #addnew_campaign": function () {
-                        // this.createCampaign();
+                    "click #addnew_campaign": function () {                        
                     },
-                    "click #clearcal": function (obj) {
-                       // this.$el.find('#clearcal').hide();
-                       // this.$el.find('#daterange').val('');
-                       //  this.$('.ui-daterangepickercontain').find('li.ui-state-active').removeClass('ui-state-active')
-                      //  this.findEmails(obj);
+                    "click #clearcal": function (obj) {                       
                     },
-                    "click .refresh_btn": function () {
-                        //this.app.addSpinner(this.$el);
-                       // this.type='getMessageList';
-                       // this.getallemails();
-                       // this.headBadge();
-                    },
-                    
-                    //"click .cstats .closebtn": "closeChart",
-                    //"click .sortoption_expand": "toggleSortOption",
-             },
-             
-            
+                    "click .refresh_btn": function () {                        
+                    }                                        
+                },                        
                 initialize: function () {
                     this.template = _.template(template);
+                    this.tracksRequestBMS = new tracksCollection();
                     //this.singlelistingCollection = new singlelistingCollection();
                     this.tiptestCollection = new tipandtestCollection();
                     /*var tiptestArray = [
@@ -63,7 +50,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                     this.searchBadgeTxt = '';
                     
                     camp_obj.getalltipandtest();
-                    camp_obj.app.showLoading("Loading Proven Process...", camp_obj.$("#target-camps"));
+                    this.fetchBmsTracks();
+                    camp_obj.app.showLoading("Loading Playbooks...", camp_obj.$("#target-camps"));
                     camp_obj.$el.find('div#campslistsearch').searchcontrol({
                         id: 'list-search',
                         width: '300px',
@@ -71,7 +59,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                         gridcontainer: camp_obj.$el.find(".target-listing"),
                         // searchFunc: _.bind(this.searchEmails, this),
                        // clearFunc: _.bind(this.clearSearchEmails, this),
-                        placeholder: 'Search Proven Prcess',
+                        placeholder: 'Search Playbooks',
                         showicon: 'yes',
                         iconsource: 'wtab-tipntestlisting',
                         countcontainer: 'no_of_camps'
@@ -236,6 +224,81 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                         this.searchBadgeTxt = '';
                     }
 
+                },
+            /**
+             * Fetching contacts list from server.
+            */
+            fetchBmsTracks:function(fcount){
+                // Fetch invite requests from server
+                    var remove_cache = false;
+                    if(!fcount){
+                        remove_cache = true;
+                        this.offset = 0;                        
+                        this.app.showLoading("Loading Playbooks...", this.$("#target-camps"));          
+                        this.$(".bms_tracks .notfound").remove();
+                    }
+                    else{
+                        this.offset = this.offset + 20;
+                    }
+                    var _data = {offset:this.offset,type:'list',isAdmin:'Y'};
+
+                    if(this.tracks_bms_request){
+                        this.tracks_bms_request.abort();
+                    }                
+                    this.$("#total_bms_tracks").hide();
+                    this.makesbridge_tracks = true;
+                    this.tracks_bms_request = this.tracksRequestBMS.fetch({data:_data,remove: remove_cache,
+                        success: _.bind(function (collection, response) {                                
+                            // Display items
+                            if(this.app.checkError(response)){
+                                return false;
+                            }
+                            this.app.showLoading(false,this.$("#target-camps"));                                                                         
+                            this.showBmsTotalCount(parseInt(response.count)+3);
+
+                            //this.$contactLoading.hide();
+
+                            for(var s=this.offset;s<collection.length;s++){
+                                var trackView = new trackRowMakesbrdige({ model: collection.at(s),sub:this });                                                            
+                                trackView.on('tagbmsclick',_.bind(this.searchByTagBms,this));
+                                this.$el.find('#camp_list_grid tbody').append(trackView.$el);
+                            }                        
+
+                            if(collection.length<parseInt(response.totalCount)){
+                                this.$tracksBmsContainer.last().attr("data-load","true");
+                            } 
+                            
+
+                        }, this),
+                        error: function (collection, resp) {
+
+                        }
+                    });
+                },
+                searchByTagBms:function(tag){                              
+                   this.$(".bms_tracks #bms-nurture-search").val("Tag: "+tag);
+                   this.$(".bms_tracks .bms-nurture-search #clearsearch").show();
+                   this.$("#bms_nurturetrack_grid tr").hide();
+                   var count = 0;
+                   this.$("#bms_nurturetrack_grid tr").filter(function() {
+                        var tagExist = false;
+                        $(this).find(".tagscont li").each(function(i){
+                            $(this).removeHighlight();
+                            if($.trim($(this).text()).toLowerCase() == $.trim(tag).toLowerCase()){
+                                $(this).highlight(tag);	
+                                tagExist = true;
+                            }
+                        });                    
+                        if(tagExist){
+                            count++;
+                            return $(this);
+                        }
+                   }).show();
+                   this.$(".total-bms-count").html(count);
+                   this.$(".total-bms-text").html('Playbooks <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
+                },
+                showBmsTotalCount: function(count){
+                    this.$("#total_templates .badge").html(count);
                 }
             });
         });
