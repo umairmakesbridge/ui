@@ -135,7 +135,9 @@ define(['text!newcontacts/html/subscriber_col.html', "newcontacts/subscriber_tim
 
                     //this.$(".connection-setup").chosen({width: "150px", disable_search: "true"});
                     this.tags_array = this.model.get("tags");
-                    this.populateTags();
+                    if(this.tags_array){
+                        this.populateTags();
+                    }
                     
                 },
                 /**
@@ -184,8 +186,13 @@ define(['text!newcontacts/html/subscriber_col.html', "newcontacts/subscriber_tim
                         }else{
                             _this.$('.score').html('<i class="icon score"></i>&nbsp;<span class="score-value">0</span>');
                         }
-                        
-                        
+                                                
+                        if(!_this.tags_array){
+                            _this.tags_array = _json["tags"];
+                            if(_this.tags_array){
+                                _this.populateTags();
+                            }
+                        }
                         _this.showTags();
                         //_this.showFields();
                         //Show Custom Fields
@@ -559,7 +566,7 @@ define(['text!newcontacts/html/subscriber_col.html', "newcontacts/subscriber_tim
                 },
                 addToWorkflowDialog:function(){                     
                         var dialog_width = 600;
-                        var dialog_height = 400;
+                        var dialog_height = 280;
                         var dialog = this.app.showDialog({title:'Add To Workflow',
                                   css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                   headerEditable:false,
@@ -568,11 +575,19 @@ define(['text!newcontacts/html/subscriber_col.html', "newcontacts/subscriber_tim
                         });
                         
                         var coursecorrect_url = "/pms/trigger/addToWorkflow.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+ this.sub_id+"&fromNewUI=true";
-                        var iframHTML = "<iframe src=\""+coursecorrect_url+"\"  width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                        var iframHTML = "<iframe src=\""+coursecorrect_url+"\"  width=\"100%\" id=\"addToWorkFlow\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                         dialog.getBody().html(iframHTML);
-                        this.app.showLoading("Loading Course Correct...",dialog.getBody());
+                        $("[workspace_id='contacts']").data("dialogObj",dialog);
+                        this.app.showLoading("Loading..",dialog.getBody());
                          dialog.getBody().find('.workflowiframe').load(_.bind(function () {
                                 this.app.showLoading(false,dialog.getBody());                                
+                                dialog.$el.find('.modal-footer .btn-save span').html('Add to Workflow');
+                                dialog.$el.find('.modal-footer .btn-save').removeClass('btn-save').addClass('btn-add').show();                                                
+                                dialog.$el.find('.modal-footer .btn-add i.icon').removeClass('save').addClass('plus');
+                                dialog.$el.find('.modal-footer .btn-add').unbind('click');
+                                dialog.$el.find('.modal-footer .btn-add').bind('click',function (event) {
+                                    document.getElementById('addToWorkFlow').contentWindow.validate();
+                                })
 
                          },this))
                                                 
@@ -638,8 +653,15 @@ define(['text!newcontacts/html/subscriber_col.html', "newcontacts/subscriber_tim
                 populateTags: function(){                    
                     var tags_ul = this.$(".mks_tag_ul");
                     tags_ul.children().remove();
-                    var tags_array = this.tags_array.split(",");
+                    var tags_array = this.tags_array ? this.tags_array.split(","):[];
                     var _this = this;
+                    if(tags_ul.length==0 && tags_array.length>0){
+                        this.$(".tags-contents").html('<div class="tags_content"><ul class="mks_tag_ul"></ul></div>');
+                        tags_ul = this.$(".mks_tag_ul");
+                    }
+                    else if(tags_array.length==0){
+                        this.$(".tags-contents").html('<div class="tags-not-found"><p class="not-found">No tags available.</p></div>');
+                    }
                     $.each(tags_array,function(i,t){            
                         var li_html =$('<li id="_tag_'+i+'" data-id="'+i+'"><a class="tag" ><span> '+t+'</span><i class="icon cross" ></i></a></li>')            
                         li_html.find(".cross").click(function(event){
@@ -664,16 +686,15 @@ define(['text!newcontacts/html/subscriber_col.html', "newcontacts/subscriber_tim
                             this.app.showLoading(false, this.$("#Tags"));
                             var tag_json = jQuery.parseJSON(data);
                             if (this.app.checkError(tag_json)) {
+                                this.app.showAlert(tag_json[1], $("body"));
                                 return false;
                             }                                   
-                            if(tag_json && tag_json.success){
+                            else if(tag_json && tag_json.success){
                                 this.tags_array = temp_tags;
                                 this.model.set("tags",this.app.encodeHTML(this.tags_array));
                                 this.populateTags();                                                                
                             }
-                            else if(tag_json[0]=="err"){
-                                 this.app.showAlert(tag_json[1], $("body"));
-                            }
+                            
 
                      },this));
                 },

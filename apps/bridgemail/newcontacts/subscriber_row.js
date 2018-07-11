@@ -1,5 +1,5 @@
-define(['text!newcontacts/html/subscriber_row.html', 'common/tags_row','newcontacts/listviewonly', 'newcontacts/subscriber_col'],
-        function (template, tagView,listView, subscriberColView) {
+define(['text!newcontacts/html/subscriber_row.html', 'newcontacts/subscriber_col'],
+        function (template, subscriberColView) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber Record View to show on listing page

@@ -6,11 +6,14 @@
     </div>
     <div class="cf_email_wrap">
         <div class="cf_email">
-            <p class="mkb_elipsis mkb_text_break" title="Call" style="width: 145px;">
+            <p class="mkb_elipsis mkb_text_break" style="width: 145px;">
                 <%- this.model.get("taskName") %>
             </p>
-            <span class="ckvwicon">at <%- this.getDateTimeStamp()%> | created by <strong><%- this.getUserName()%></strong></span>
-
+             <% if(!this.fromDashboard) { %>
+                <span class="ckvwicon">at <%- this.getDateTimeStamp()%> | created by <strong><%- this.getUserName()%></strong></span>
+             <% } else { %>
+                <span class="ckvwicon">at <%- this.getDateTimeStamp()%> <strong><%- this.getContactName()%></strong></span>
+             <% } %>
         </div>
         <div class="cf_task_right">
             <span  class="mks_priority_icon <%- this.priorityIcons[this.model.get('priority')].topClass %> showtooltip" title="<%- this.priorityIcons[this.model.get('priority')].label %>" >

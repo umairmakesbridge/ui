@@ -96,9 +96,10 @@
             <div class="clr"></div>
                <b><span><%- this.app.decodeHTML(this.model.get('email')) %></span></b>
             <div class="clr"></div>
-               <span class="contact-phone"><%- this.app.decodeHTML(this.model.get('telephone')) %></span>
+               <span class="contact-phone"><% if(this.model.get('telephone')){ print(this.app.decodeHTML(this.model.get('telephone')) )} else {print('&nbsp;')} %></span>
           </div>
         </div>
+        <div class="score"><i class="icon score"></i>&nbsp;<span class="score-value">0</span></div>
         <div class="clr"></div>        
       </div>
   </div>

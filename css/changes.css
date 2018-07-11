@@ -10926,7 +10926,7 @@ ul.mks_priorty_wrap li {
     text-align: center;
     font-size: 14px;
     color: #bac2cb;
-       width:140px;
+       width:130px;
 }
 ul.mks_priorty_wrap li:first-child {
     border-left: 0;
@@ -10948,7 +10948,7 @@ ul.mks_ecc_wrap li {
     border: 1px solid rgb(221, 221, 221);
     color: rgb(186, 194, 203);
     border-right: unset;
-    font-size: 24px;
+    font-size: 18px;
 }
 ul.mks_ecc_wrap li.active {
     color: #006ffd;
@@ -11165,7 +11165,7 @@ left: 3px;
 }
 .date_wrapper__mks, .timePicker_wrap{
     display: inline-block;
-    width: 205px;
+    width: 185px;
     margin: 0px 3px;
 }
 .date_wrapper__mks input, .timePicker_wrap input {
@@ -11343,15 +11343,53 @@ ul.c-current-status.new-status{
 .supress-mode .add-button, .supress-mode .mkb_btn{
     display:none !important;
 }
+.contacts-new .score{
+    color: #748592;
+    float: right;    
+    margin-top: -39px;
+}
+.contacts-new .score .icon.score{
+    background: url("../img/score2.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.contacts-new .score-value{
+    font-size:16px;
+    font-weight: bold;
+}
+.task-dashboard{
+    border-bottom: 1px solid rgb(248, 248, 251);
+}
+.task-dashboard .contact_found{
+    border:0px !important;
+    cursor:pointer !important;
+    background-color:transparent !important;
+}
+.task-dashboard .mks_task_edit_delete_wrap{
+    display:none !important;
+}
+.selected-task{
+    background:#e8e8e8;
+}
+
+.types-area{
+    padding: 5px 10px;
+    border: 1px solid rgb(221, 221, 221);
+}
+.types-area label{
+    float:none;
+    padding:5px;
+    text-align: left;
+    width:23%;
+    font-size:12px;
+}
     
 /*** Icons start******/
 @font-face {
   font-family: 'mks_icon';
-  src:  url('images/plugin_icon/mks_icon.eot?d1rxm2');
-  src:  url('images/plugin_icon/mks_icon.eot?d1rxm2#iefix') format('embedded-opentype'),
-    url('images/plugin_icon/mks_icon.ttf?d1rxm2') format('truetype'),
-    url('images/plugin_icon/mks_icon.woff?d1rxm2') format('woff'),
-    url('images/plugin_icon/mks_icon.svg?d1rxm2#mks_icon') format('svg');
+  src:  url('images/plugin_icon/mks_icon_1.eot?d1rxm2');
+  src:  url('images/plugin_icon/mks_icon_1.eot?d1rxm2#iefix') format('embedded-opentype'),
+    url('images/plugin_icon/mks_icon_1.ttf?d1rxm2') format('truetype'),
+    url('images/plugin_icon/mks_icon_1.woff?d1rxm2') format('woff'),
+    url('images/plugin_icon/mks_icon_1.svg?d1rxm2#mks_icon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -11391,7 +11429,7 @@ you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
 
-.mksicon-Breakfast, .mksicon-Demo, .mksicon-Discovery, .mksicon-First-Touch, .mksicon-Lunch, .mksicon-Meeting, .mksicon-Proposal, .mksicon-calendar3, .mksicon-comment, .mksicon-Add_Contact, .mksicon-Phone, .mksicon-Task_List, .mksicon-Triangle_Down, .mksicon-Triangle_Up, .mksicon-course_contacts, .mksicon-CPlay, .mksicon-CPlayNext, .mksicon-Delete, .mksicon-Nurture_Track, .mksicon-Pause, .mksicon-Play, .mksicon-Prohibition, .mksicon-course_correct, .mksicon-add_to_salesforce, .mksicon-jump_to_salesforce_record, .mksicon-netsuite, .mksicon-salesforcelog, .mksicon-users, .mksicon-tag, .mksicon-file, .mksicon-logout, .mksicon-startflag, .mksicon-act_alert, .mksicon-act_bounce, .mksicon-act_click, .mksicon-act_conversion, .mksicon-act_form, .mksicon-act_linkicon, .mksicon-act_pageview, .mksicon-act_score, .mksicon-act_suppress, .mksicon-act_tellfriend, .mksicon-act_unsubscribe, .mksicon-act_wait, .mksicon-act_workflow, .mksicon-act_wtmail, .mksicon-User1, .mksicon-Silhouette, .mksicon-SendEmail, .mksicon-Search, .mksicon-Save2, .mksicon-Save, .mksicon-Pie, .mksicon-OpenMail, .mksicon-Notepad, .mksicon-More, .mksicon-Menu, .mksicon-ManageLists, .mksicon-MakesbridgeBot3, .mksicon-MakesbridgeBot2, .mksicon-MakesbridgeBot, .mksicon-Makesbridge, .mksicon-Mail, .mksicon-Gear, .mksicon-Funnel, .mksicon-Eye, .mksicon-Edit, .mksicon-Close, .mksicon-Clock, .mksicon-Check, .mksicon-Calendar2, .mksicon-AwardRibbon, .mksicon-ArrowNext, .mksicon-ArrowBack, .mksicon-Addlist, .mksicon-Add, .mksicon-ActSent {
+.mksicon-Invite_to_Group, .mksicon-Web_Seminar_Invite, .mksicon-PDF, .mksicon-Third_Message, .mksicon-Second_Message, .mksicon-First_Message, .mksicon-Shake_hands, .mksicon-Connect, .mksicon-Breakfast, .mksicon-Demo, .mksicon-Discovery, .mksicon-First-Touch, .mksicon-Lunch, .mksicon-Meeting, .mksicon-Proposal, .mksicon-calendar3, .mksicon-comment, .mksicon-Add_Contact, .mksicon-Phone, .mksicon-Task_List, .mksicon-Triangle_Down, .mksicon-Triangle_Up, .mksicon-course_contacts, .mksicon-CPlay, .mksicon-CPlayNext, .mksicon-Delete, .mksicon-Nurture_Track, .mksicon-Pause, .mksicon-Play, .mksicon-Prohibition, .mksicon-course_correct, .mksicon-add_to_salesforce, .mksicon-jump_to_salesforce_record, .mksicon-netsuite, .mksicon-salesforcelog, .mksicon-users, .mksicon-tag, .mksicon-file, .mksicon-logout, .mksicon-startflag, .mksicon-act_alert, .mksicon-act_bounce, .mksicon-act_click, .mksicon-act_conversion, .mksicon-act_form, .mksicon-act_linkicon, .mksicon-act_pageview, .mksicon-act_score, .mksicon-act_suppress, .mksicon-act_tellfriend, .mksicon-act_unsubscribe, .mksicon-act_wait, .mksicon-act_workflow, .mksicon-act_wtmail, .mksicon-User1, .mksicon-Silhouette, .mksicon-SendEmail, .mksicon-Search, .mksicon-Save2, .mksicon-Save, .mksicon-Pie, .mksicon-OpenMail, .mksicon-Notepad, .mksicon-More, .mksicon-Menu, .mksicon-ManageLists, .mksicon-MakesbridgeBot3, .mksicon-MakesbridgeBot2, .mksicon-MakesbridgeBot, .mksicon-Makesbridge, .mksicon-Mail, .mksicon-Gear, .mksicon-Funnel, .mksicon-Eye, .mksicon-Edit, .mksicon-Close, .mksicon-Clock, .mksicon-Check, .mksicon-Calendar2, .mksicon-AwardRibbon, .mksicon-ArrowNext, .mksicon-ArrowBack, .mksicon-Addlist, .mksicon-Add, .mksicon-ActSent {
   font-family: 'mks_icon';
   speak: none;
   font-style: normal;
@@ -11400,6 +11438,30 @@ you can use the generic selector below, but it's slower:
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
+}
+.mksicon-Invite_to_Group:before {
+  content: "\e94f";
+}
+.mksicon-Web_Seminar_Invite:before {
+  content: "\e950";
+}
+.mksicon-PDF:before {
+  content: "\e951";
+}
+.mksicon-Third_Message:before {
+  content: "\e952";
+}
+.mksicon-Second_Message:before {
+  content: "\e953";
+}
+.mksicon-First_Message:before {
+  content: "\e954";
+}
+.mksicon-Shake_hands:before {
+  content: "\e955";
+}
+.mksicon-Connect:before {
+  content: "\e956";
 }
 .mksicon-Breakfast:before {
   content: "\e948";

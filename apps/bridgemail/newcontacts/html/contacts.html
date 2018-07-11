@@ -7,7 +7,7 @@
         <a class="badge badgebtn" style="display:none;"><strong>164</strong> Hidden </a>
         
         <ul class="c-current-status new-status">
-            <li class='task-panel showtooltip hide' title='Show Tasks'><span class="badge pclr22 clickCount">1</span>Tasks</li>
+            <li class='task-panel showtooltip' title='See list of Tasks' style='margin-right:10px;'><i class="scf_o_icon scf_o_edit mksicon-Task_List mks_manageList_wrap" style="font-size: 16px; color: #b4b4b4;"></i><span style='margin-left: 5px;top: -2px;position: relative;'>Show Tasks</span></li>
             <li style="border-left:1px solid #fff;padding-left:15px;">Last 24 hrs :</li>
             <li search="CK" ><span class="badge pclr23 tempCount clickCount">0</span>Clickers </li>
             <li search="WV" ><span class="badge pclr19 tempCount visitCount">0</span>Visitors </li>
@@ -64,7 +64,7 @@
                 </div>
            </div>
            <div class="tasks-listing hide">
-                <h2 id="total_templates"><strong>Tasks</strong></h2>
+                <h2 id="total_templates"><strong class="badge total-task-count">0</strong> <span class="total-task-text">Tasks</span></h2>
                 <div class="tasks-switch">
                      <div class="status_tgl">
                          <a class="published active toggletoday showtooltip" title="Today's Tasks">Today's Tasks</a>
@@ -72,10 +72,7 @@
                       </div>
                 </div>                
                 <div class='tasks-dashboard'>                    
-                    <div class="content-wrapper task_expand_height mks_outlook_tasks_wrapper heighAuto" style="position: relative;">                                    
-                        <div class="tags-not-found">
-                            <p class="not-found">Loading...</p>
-                        </div>
+                    <div class="content-wrapper" style="position: relative;overlfow-y:auto;overflow-x:hidden;height:658px;">                                                            
                     </div>                    
                 </div>
                 <div class="loadmore" style="display:none">

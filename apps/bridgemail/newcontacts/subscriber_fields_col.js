@@ -79,13 +79,15 @@ define(['text!newcontacts/html/subscriber_fields_col.html','newcontacts/addcusto
                     _this.basicFieldsContainer = _this.$(".basic_fields");
                     _this.basicFieldsContainer.children().remove();
                     $.each(basicFields, function (key, val) {
-                        var field_html = '<div class="mksph_contact_data">';
-                        field_html += '<span class="mksph_contact_title">' + val.label + ':&nbsp;</span>';
-                        field_html += '<span class="mksph_contact_value show">' + _this.model.get(key) + '</span>';
-                        field_html += '<input class="hide focusThis" tabindex="' + tabindex + '" type="text" name="' + key + '" value="' + _this.model.get(key) + '">';
-                        field_html += '</div>';
-                        _this.basicFieldsContainer.append(field_html);
-                        tabindex++;
+                        if(typeof(_this.model.get(key))!=="undefined"){
+                            var field_html = '<div class="mksph_contact_data">';
+                            field_html += '<span class="mksph_contact_title">' + val.label + ':&nbsp;</span>';
+                            field_html += '<span class="mksph_contact_value show">' + _this.model.get(key) + '</span>';
+                            field_html += '<input class="hide focusThis" tabindex="' + tabindex + '" type="text" name="' + key + '" value="' + _this.model.get(key) + '">';
+                            field_html += '</div>';
+                            _this.basicFieldsContainer.append(field_html);                        
+                            tabindex++;
+                        }
                     });
 
                 },

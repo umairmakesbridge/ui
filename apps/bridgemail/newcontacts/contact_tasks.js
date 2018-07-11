@@ -66,7 +66,7 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                             //this.app.showLoading(false, this.$contactList);
                                                         
                             for (var s = this.offset; s < collection.length; s++) {
-                                var rowView = new taskRowView({model: collection.at(s), sub: this});                                
+                                var rowView = new taskRowView({model: collection.at(s), sub: this, subNum:this.model.get("subNum") });                                
                                 this.$('.content-wrapper').append(rowView.$el);                                
                             }
                             
@@ -112,8 +112,8 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                 },
                 openTaskDialog: function(model){
                     var _this = this;
-                    var dialog_width = 450;
-                    var dialog_height = 280;
+                    var dialog_width = 414;
+                    var dialog_height = 390;
                     var btn_prp = {title: model?'Edit Task':'Add Task',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "50px"},
                         headerEditable: false,
@@ -131,6 +131,9 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                 },
                 editTask: function(model){                   
                     this.openTaskDialog(model);
+                },
+                updateDashboard: function(){
+                    this.page.pPage.fetchTasks();
                 }
 
 

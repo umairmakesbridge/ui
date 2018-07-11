@@ -60,8 +60,8 @@ function (template) {
                     }
                 });
                 var d = new Date();
-                var dateS = this.addZero(d.getDate())+'-'+this.addZero(d.getMonth()+1)+'-'+d.getFullYear();                
-                this.$(".hasDatepicker").datetimepicker({format:'d-m-Y',timepicker:false,closeOnDateSelect:true,value: dateS, mousewheel: false,reverseMouseWheel: false,
+                var dateS = this.addZero(this.addZero(d.getMonth()+1)+'/'+d.getDate())+'/'+d.getFullYear();                
+                this.$(".hasDatepicker").datetimepicker({format:'m/d/Y',timepicker:false,closeOnDateSelect:true,value: dateS, mousewheel: false,reverseMouseWheel: false,
                 onGenerate:function( ct ){
                     var currentDat = $(this).find('.xdsoft_date.xdsoft_current').data('date')+1;
                     
@@ -78,7 +78,7 @@ function (template) {
                   onChangeDateTime:function(dp,$input){
                         
                   },
-                   minDate:'-1970/01/01'
+                   minDate:'01/01/-1970'
                   });   
                   var timeS = this.addZero(d.getHours())+':'+this.addZero(d.getMinutes())
                   this.$(".timepicker").datetimepicker({
@@ -94,7 +94,7 @@ function (template) {
                     this.activeType  =  this.taskModel.get("taskType");    
                     this.$("#taskname").val(this.taskModel.get("taskName"));
                     var _date = moment(this.app.decodeHTML(this.taskModel.get("taskDate")), 'YYYY-MM-DD HH:mm');
-                    this.$("#datepicker").val(_date.format("DD-MM-YYYY"));
+                    this.$("#datepicker").val(_date.format("MM/DD/YYYY"));
                     this.$(".timepicker").val(_date.format("HH:mm"));
                     this.$(".mks_ecc_wrap li").removeClass("active");
                     this.$(".mks_ecc_wrap li[data-type='"+this.activeType+"']").addClass("active");
@@ -108,7 +108,7 @@ function (template) {
                  var URL ="/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=" + this.app.get('bms_token') + "&subNum=" + this.subNum;
                     var taskText = $.trim(this.$("#taskname").val());
                     if(taskText){                        
-                        var _date = moment(this.$("#datepicker").val(), 'DD-MM-YYYY')
+                        var _date = moment(this.$("#datepicker").val(), 'MM/DD/YYYY')
                         var newtaskDate = _date.format("MM-DD-YYYY");
                         var timeDate = newtaskDate + " " + moment(this.$(".timepicker").val(), ["HH:mm"]).format("HH:mm")+":00";
                         var _data = {type:"add",
@@ -131,6 +131,7 @@ function (template) {
                             this.app.showLoading(false, this.dialog.getBody());
                             if (_json[0] !== "err") {
                                this.page.fetchTasks(); 
+                               this.page.updateDashboard();
                                this.dialog.hide();
                             } else {
                                 this.app.showAlert(_json[1], $("body"));

@@ -1,5 +1,5 @@
-define(['newcontacts/collections/subscribers','text!newcontacts/html/contacts.html','newcontacts/subscriber_row','newcontacts/multipleadd', 'newcontacts/collections/tasks', 'newcontacts/task_row'],
-function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCollection, taskRowView) {
+define(['newcontacts/collections/subscribers','text!newcontacts/html/contacts.html','newcontacts/subscriber_row','newcontacts/multipleadd', 'newcontacts/collections/tasks', 'newcontacts/task_row','newcontacts/subscriber_col'],
+function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCollection, taskRowView, subColView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Contacts dashboard view, depends on search control, chosen control, icheck control
@@ -51,13 +51,19 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                         this.isSearchTag = false;
                     },
                     "click .toggletoday": function (event) {
-                        this.$('.tasks-switch .status_tgl a').removeClass('active');
-                        $(event.currentTarget).addClass('active');
+                        if(!$(event.currentTarget).hasClass("active")){
+                            this.$('.tasks-switch .status_tgl a').removeClass('active');
+                            $(event.currentTarget).addClass('active');
+                            this.fetchTasks();
+                        }
 
                     },
                     "click .toggleall": function (event) {
-                        this.$('.tasks-switch .status_tgl a').removeClass('active');
-                        $(event.currentTarget).addClass('active');
+                        if(!$(event.currentTarget).hasClass("active")){
+                            this.$('.tasks-switch .status_tgl a').removeClass('active');
+                            $(event.currentTarget).addClass('active');
+                            this.fetchTasks();
+                        }
                     },
               "click .contact-group button":"changeContactDetails",
               "click .task-panel":'populateTasks'
@@ -87,6 +93,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                this.sortBy = '';
                this.enqueueAjaxReq = [];
                this.isSearchTag = false;
+               this.taskInView = false;
                this.render();
             },
             /**
@@ -103,7 +110,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                this.initControls();      
                this.checkSalesforce();
                
-               //this.fetchTasks();               
+               this.fetchTasks();               
             }
             /**
              * Custom init function called after view is completely render in wrokspace.
@@ -117,6 +124,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                 
                this.addCountHeader();
                this.fetchCount();
+               this.subColView = subColView;
             },
             addCountHeader:function(){
                var count_header =  '<ul class="c-current-status">';
@@ -167,6 +175,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                      iconsource: 'subscribers'
               });
               this.$contactList.scroll(_.bind(this.liveLoading,this));
+              //this.$contactList.scroll(_.bind(this.liveTaskLoading,this));
               //$(window).resize(_.bind(this.liveLoading,this));
               this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
             },
@@ -208,43 +217,50 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
             },
             fetchTasks: function (fcount) {
                     var remove_cache = false;
-                    this.$(".tasks-listing .not-found").html("Loading...");
+                    
                     if (!fcount) {
                         remove_cache = true;
-                        this.offset = 0;    
-                        this.$('.tasks-listing .content-wrapper').children().remove();
+                        this.offsetTask = 0;    
+                        this.$('.tasks-listing .content-wrapper').children().remove();                        
                     } else {
-                        this.offset = this.offset + 20;
+                        this.offsetTask = this.offsetTask + 20;
                     }
-                    var _data = {order: "desc",orderBy:"updationTime",offset:0,type:"getAllTask"};
-                    _data["fromDate"] = moment().format("MM-DD-YYYY");
-                    _data["toDate"] = moment().format("MM-DD-YYYY");
+                    var _data = {order: "desc",orderBy:"updationTime",offset:this.offsetTask,type:"getAllTask"};
+                    var selected = this.$(".tasks-switch .toggletoday");
+                    var isTodayTasks = false; 
+                    if(selected.hasClass("active")){
+                        _data["fromDate"] = moment().format("MM-DD-YYYY");
+                        _data["toDate"] = moment().format("MM-DD-YYYY");
+                        isTodayTasks = true;
+                    }
                                        
                     if (this.tasks_request) {
                         this.tasks_request.abort();
                     }
-                    
-                    
+                                        
+                    this.app.showLoading("Loading Tasks...",this.$(".tasks-listing .content-wrapper"));
                     this.tasks_request = this.tasksRequest.fetch({data: _data, remove: remove_cache,
                         success: _.bind(function (collection, response) {
                             // Display items
                             if (this.app.checkError(response)) {
                                 return false;
-                            }
-                            //this.app.showLoading(false, this.$contactList);
-                                                        
-                            for (var s = this.offset; s < collection.length; s++) {
-                                var rowView = new taskRowView({model: collection.at(s), sub: this, fromDashboard: true});                                
+                            }                            
+                            this.app.showLoading(false,this.$(".tasks-listing .content-wrapper"));
+                            
+                            for (var s = this.offsetTask; s < collection.length; s++) {
+                                var rowView = new taskRowView({model: collection.at(s), sub: this, fromDashboard: true, isTodayTasks: isTodayTasks,subNum:collection.at(s).get("subscriberInfo")["subscriberNumber.encode"]});                                
                                 this.$('.tasks-listing .content-wrapper').append(rowView.$el);                                
                             }
                             
                             if(collection.length==0){
-                                this.$(".tasks-listing .not-found").show();                       
-                                this.$(".tasks-listing .not-found").html("No Task found.")
+                                this.$(".tasks-listing .content-wrapper").html('<p class="notfound">No Tasks found</p>');                                                       
                             }
                             else{
-                                this.$(".tasks-listing .not-found").hide();  
+                                this.$(".tasks-listing .not-found").remove();  
                             }
+                            this.$(".tasks-listing .total-task-count").html(collection.length);
+                            var totalText= isTodayTasks?"Tasks for today":"Tasks"
+                            this.$(".tasks-listing .total-task-text").html(totalText);
                            
 
                         }, this),
@@ -288,7 +304,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                     this.offset = 0;
                     this.$contactList.children(".contact-li").remove();
                     this.app.showLoading("Loading Contacts...",this.$contactList);             
-                    this.$(".notfound").remove();
+                    this.$(".contacts-listing .notfound").remove();
                     this.$('.filter_seven').parent().remove();
                 }
                 else{
@@ -662,14 +678,23 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                 this.$(".activity-container > div."+buttonName).removeClass("hide");
             },
             populateTasks: function(){
-                this.showTasks(true);
+                if(!this.taskInView){                    
+                    this.showTasks(true);
+                }
+                else{                    
+                    this.showTasks(false);
+                }
             },
             showTasks: function(show){
                 if(show){
+                    this.taskInView = true;
+                    this.$(".task-panel span").html("Hide Tasks");
                     this.$(".contacts-listing").addClass("hide");
                     this.$(".tasks-listing").removeClass("hide");
                 }
                 else{
+                    this.taskInView = false;
+                    this.$(".task-panel span").html("Show Tasks");
                     this.$(".tasks-listing").addClass("hide");
                     this.$(".contacts-listing").removeClass("hide");
                 }
