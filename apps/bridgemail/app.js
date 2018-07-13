@@ -8,7 +8,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'test',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -241,6 +241,9 @@ define([
                 else {
                     this.mainContainer.$(".local-adds").hide();
                     this.mainContainer.initializeIsotops();
+                }
+                if (['admin', 'jayadams', 'demo', 'umair'].indexOf(this.get("user").userId) > -1) {
+                     this.mainContainer.$(".journey-canvas").removeClass('hide');
                 }
 
                 if (this.get("tipId") == 1) {

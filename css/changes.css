@@ -11381,6 +11381,11 @@ ul.c-current-status.new-status{
     width:23%;
     font-size:12px;
 }
+#contact-tasks .chosen-container{
+    position: absolute;
+    top:10px;
+    left:60px;
+}
     
 /*** Icons start******/
 @font-face {

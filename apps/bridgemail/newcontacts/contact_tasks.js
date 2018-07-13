@@ -24,6 +24,7 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                     this.page = this.options.sub;
                     this.app = this.page.app;
                     this.tasksRequest = new tasksCollection();
+                    this.sortBy = "-1";
                     this.render();
                 },
                 /**
@@ -32,6 +33,7 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                 render: function () {
                     this.$el.html(this.template({
                     }));
+                    this.$(".sort-task-select").chosen({ width: "160px",disable_search: "true"}).change(_.bind(this.sortTasks,this));
                     this.fetchTasks();
 
                 },
@@ -40,7 +42,7 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                 },
                 fetchTasks: function (fcount) {
                     var remove_cache = false;
-                    this.$(".not-found").html("Loading...");
+                    this.$(".not-found").show().html("Loading...");
                     if (!fcount) {
                         remove_cache = true;
                         this.offset = 0;    
@@ -51,15 +53,26 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                     var _data = {order: "desc",orderBy:"updationTime",subNum:this.model.get("subNum"),offset:0,type:"getTasks"};
                     _data["fromDate"] = moment().add('days', -90).format('MM-DD-YYYY');
                     _data["toDate"] = moment().add('days', 90).format('MM-DD-YYYY');
+                    
+                    if(this.sortBy!="-1"){
+                        if(['high','low','medium'].indexOf(this.sortBy)>-1){
+                            _data['sortType'] = 'priority';
+                        }
+                        else{
+                            _data['sortType'] = 'taskTypeSingle';
+                        }
+                        
+                         _data['sortBy'] = this.sortBy;
+                    }
                                        
                     if (this.tasks_request) {
                         this.tasks_request.abort();
-                    }
+                    }                    
                     
                     
                     this.tasks_request = this.tasksRequest.fetch({data: _data, remove: remove_cache,
                         success: _.bind(function (collection, response) {
-                            // Display items
+                            // Display items                            
                             if (this.app.checkError(response)) {
                                 return false;
                             }
@@ -78,7 +91,10 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                                 this.$(".not-found").hide();  
                                 if(collection.length>3){
                                     this.$(".tasks_collapse").removeClass("hide")
-                                }                                
+                                }    
+                                else{
+                                    this.$(".tasks_collapse").addClass("hide")
+                                }
                             }
                            
 
@@ -134,6 +150,15 @@ define(['text!newcontacts/html/contact_tasks.html', 'newcontacts/collections/tas
                 },
                 updateDashboard: function(){
                     this.page.pPage.fetchTasks();
+                },
+                /**
+                * Sort tasks by selected sort type from selectbox
+                * 
+                * @returns .
+                */
+                sortTasks:function(){                                
+                    this.sortBy = this.$(".sort-task-select").val();                    
+                    this.fetchTasks();
                 }
 
 

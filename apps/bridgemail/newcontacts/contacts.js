@@ -122,6 +122,7 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                this.ws_header = this.current_ws.find(".camp_header .edited"); 
                //this.ws_header.find(".add-action").remove();
                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                 
+               //this.$(".sort-task-dashboard").chosen({ width: "160px",disable_search: "true"}).change(_.bind(this.sortTasks,this));
                this.addCountHeader();
                this.fetchCount();
                this.subColView = subColView;
@@ -269,6 +270,15 @@ function (subscriberCollection,template,SubscriberRowView,addContactView,tasksCo
                         }
                     });
                     
+                },
+                /**
+                * Sort tasks by selected sort type from selectbox
+                * 
+                * @returns .
+                */
+                sortTasks:function(){                                
+                    this.sortBy = this.$(".sort-task-dashboard").val();                    
+                    this.fetchTasks();
                 },
             /**
              * Fetching contacts list from server.

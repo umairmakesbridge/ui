@@ -148,7 +148,7 @@ function (template, mappingPage) {
                 this.$(".total-camp-count").html(camp_list_json.count);
                 if(camp_list_json.count!=="0"){
                     this.setCounts = true;
-                    this.reportCSVData = [["CampaignName","CampaignID","ScheduledDate","SentCount","Opened/Open Rate","Clicked/Open CTR","Converted","PageViews","Unsubscribed","Supressed","Bounced"]]
+                    this.listedCampaigns = {};                    
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camps_grid_report"><tbody>';	
                         _.each(camp_list_json.campaigns[0], function(val, index) {
                              list_html += this.makerow(val);					
@@ -222,8 +222,8 @@ function (template, mappingPage) {
                 row_html += '<td width="60px"><div><div class="subscribers"><strong><span><em>Bounced</em><span class="bounceCount">'+0+'</span></span></strong></div></div></td> ';
                 var _dateTime = this.getDateFormat(val);
                 row_html += '<td width="132px"><div><div style="width:105px" class="time"><strong><span><em>'+_dateTime.dtHead +'</em>'+ _dateTime.dateTime +'</span></strong></div></div></td> ';                  
-                row_html += '</tr>';                
-                this.reportCSVData.push([val[0].name,'',this.getCSVDate(val),0,0,0,0,0,0,0,0]);
+                row_html += '</tr>';  
+                this.listedCampaigns[val[0]['campNum.encode']] = {"name":val[0].name,"date":this.getCSVDate(val)};                
                 return row_html;
             }
             ,
@@ -372,7 +372,7 @@ function (template, mappingPage) {
                 var _campaigns = $.map(this.$(".checkedadded"),function(el){
                     return el.id;
                 }).join(",");
-                
+                this.reportCSVData = [["CampaignName","CampaignID","ScheduledDate","SentCount","Opened/Open Rate","Clicked/Open CTR","Converted","PageViews","Unsubscribed","Supressed","Bounced"]];
                 if(_campaigns && this.chartPage){
                    this.$(".start-message").hide();
                    this.$(".col-cstats .campaign-chart").show();
@@ -381,6 +381,9 @@ function (template, mappingPage) {
                        this.states_call.abort();
                        this.states_call = null;
                    }
+                   _.each(_campaigns.split(","), function(val) {   
+                        _this.reportCSVData.push([_this.listedCampaigns[val].name,'',_this.listedCampaigns[val].date,0,0,0,0,0,0,0,0]);
+                   });
                    this.chart_data = {bounceCount:0,clickCount:0,conversionCount:0,facebookCount:0,googlePlusCount:0,linkedInCount:0
                                       ,openCount:0,pageViewsCount:0,pendingCount:0,pinterestCount:0,sentCount:0,supressCount:0,
                                       twitterCount:0,unSubscribeCount:0};
