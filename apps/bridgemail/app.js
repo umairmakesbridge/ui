@@ -7,8 +7,8 @@ define([
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
-                env: 'test',
-                complied: 0,
+                env: 'production',
+                complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
