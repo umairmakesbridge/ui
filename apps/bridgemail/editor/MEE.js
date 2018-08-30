@@ -3391,6 +3391,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                            }
                                            
                                            var _html = $('<div/>').html(val.InternalContents).html();
+                                           console.log('2.B. _html : ', _html);
                                            if(parseInt(activeDatali)==activeLi ){
                                                _html = CleanCode($("<div>" + firstTable.find('ul.dcInternalContents').html() + "</div>")).html();  
                                            }
@@ -5332,6 +5333,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         ContentLi.data("dcInternalData", $(reConstructCode("<div>" + _html + "</div>").html()));
                                                         ContentLi.data("content", variation);
                                                         ContentLi.addClass("defaultLi");
+                                                        ContentLi.attr("id", variation.DynamicContentID);
                                                         var dcInternal = args.droppedElement.find(".dcInternalContents:first");
 
                                                         //args.clickedLi = ContentLi;
@@ -5349,14 +5351,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                         //ContentLi.trigger( "click" );                        
 
                                                     } else {
-
                                                         var ContentLi = $(myElement.find(".dcLI").html());
                                                         ContentLi.find("span:first").html(variation.Label);
                                                         ContentLi.data("content", variation);
                                                         ContentLi.attr("id", variation.DynamicContentID);
-                                                        ContentLi.attr("id", variation.DynamicContentID);
+                                                        
                                                         var _html = $('<div/>').html(variation.InternalContents).text();
                                                         ContentLi.data("dcInternalData", $(reConstructCode("<div>" + _html + "</div>").html()));
+                                                        
                                                         if (firstBlock === false) {
                                                             var dcInternal = args.droppedElement.find(".dcInternalContents:first");
                                                             var defaultInternalContent = $(ContentLi.data("dcInternalData"));
@@ -5565,6 +5567,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             args.DynamicContent = previuosActivate.data("content");
                                             args.DynamicContent.InternalContents = CleanCode($("<div>" + previuosActivate.data("dcInternalData") + "</div>")).html();
                                             args['isLocalDC'] = true;
+                                            mee_view.DynamicContentsObj[args.ID][args.DynamicContent.checksum]['InternalContents']=args.DynamicContent.InternalContents;
+                                            console.log('3.C. Args :',  args.DynamicContent);
                                             options.OnDynamicContentSwap(args,mee_view);
                                         }
                                     }
@@ -9187,7 +9191,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             var dynamicNumberContent = content.DynamicContentID;
 
                             var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=updateContent&dynamicNumber=" + dynamicNumber  ;
-
+                           
                             $.ajax({
                                     dataType: "json",
                                     method:"POST",
@@ -9256,6 +9260,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         },
                         OnDynamicContentSwap: function (args,mee_view,gloFlag,globalMsg) 
                         {
+                            console.log('3.C.1 Args :',args.DynamicContent )
                             var content = args.DynamicContent;
                             var dynamicNumber = content.DynamicVariationID;
                             var _self = this;
@@ -9263,10 +9268,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             // NEED to call from function
                             
                             var str = _self.encodeHTMLStr(content.InternalContents);
+                            
                             var postObj = {"contents": str, campaignSubject: content.Label, contentLabel: content.Label, contentNumber: dynamicNumberContent, isDefault: content.IsDefault}
+                            
                             var contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContent&dynamicNumber="+dynamicNumber;
                             // making postObj content rich
-                                
                             //Data = postObj;
                             // DC ADD
                             if(this.isTemplate){
@@ -9278,7 +9284,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                   contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN+"&type=updateContents&dynamicNumber="+dynamicNumber; 
                                 }
                                 postObj={};
-                                
+                                console.log('4.D mee_view.DynamicContentsObj[args.ID] : ' , mee_view.DynamicContentsObj[args.ID]);
                                 // making postObj content rich
                                 var i=0;
                                 var contentCount =0;
@@ -9287,8 +9293,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 //contentRuleURL += "&"+ j +".spanInDays=";
                                                 //var _html = $('<div/>').html(value.InternalContents).html();
                                                 //_html = escape(_html);
+                                                console.log('2.B. isDel : ' + value.isDel);
                                                 if(!value.isDel){
+                                                    console.log('3.C default value.InternalContents for '+value.Label+' : ', value.InternalContents);
                                                     postObj[i+'.contents']=  mee_view.app.decodeHTML(value.InternalContents);
+                                                    console.log('3.C.1 decoded value.InternalContents for '+value.Label+' ' + mee_view.app.decodeHTML(value.InternalContents));
                                                     postObj[i+'.campaignSubjects']= value.Label;
                                                     postObj[i+'.contentLabels']= value.Label;
                                                     postObj[i+'.contentNumbers']= value.DynamicContentID;
@@ -9299,8 +9308,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                
                                                
                                             });
-                               
                                 postObj['contentCount']=contentCount;
+                                console.log('1.A. OnDynamicContentSwap postObject:', postObj);
                             }
                               /*$.ajax({
                                 url: contentURL,
@@ -9416,6 +9425,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
                                             var rules = content.ListOfDynamicRules;
                                             var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=updateContentRules&dynamicNumber=" + dynamicNumber + "&contentNumber=" + contentNumber + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
+                                       
                                             for (var j = 0; j < rules.length; j++) {
                                                 var rule = rules[j];
                                                 //contentRuleURL += "&"+ j +".spanInDays=";
