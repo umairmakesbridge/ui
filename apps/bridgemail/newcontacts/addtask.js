@@ -1,4 +1,4 @@
-define(['text!newcontacts/html/addtask.html','datetimepicker'],
+define(['text!newcontacts/html/addtask.html','datetimepicker', 'jquery.timepicker'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -81,11 +81,7 @@ function (template) {
                    minDate:'01/01/-1970'
                   });   
                   var timeS = this.addZero(d.getHours())+':'+this.addZero(d.getMinutes())
-                  this.$(".timepicker").datetimepicker({
-                    datepicker:false,
-                    format:'H:i',                    
-                    value:timeS
-                  });
+                  this.$(".timepicker").timepicker({ 'timeFormat': 'h:i A' ,'scrollDefault': 'now','setTime':new Date()});
                   // Populate for edit
                   if(this.taskModel){
                       
@@ -95,13 +91,16 @@ function (template) {
                     this.$("#taskname").val(this.taskModel.get("taskName"));
                     var _date = moment(this.app.decodeHTML(this.taskModel.get("taskDate")), 'YYYY-MM-DD HH:mm');
                     this.$("#datepicker").val(_date.format("MM/DD/YYYY"));
-                    this.$(".timepicker").val(_date.format("HH:mm"));
+                    this.$(".timepicker").val(_date.format("hh:mm A"));
                     this.$(".mks_ecc_wrap li").removeClass("active");
                     this.$(".mks_ecc_wrap li[data-type='"+this.activeType+"']").addClass("active");
                     this.$(".mks_priorty_wrap li").removeClass("active");
                     this.$(".mks_priorty_wrap li[data-type='"+this.activePriority+"']").addClass("active");
                     this.$("#notes").val(this.taskModel.get("notes"));
                     
+                  }
+                  else{
+                    this.$(".timepicker").val(moment().add('hours', 1).minute(0).format('hh:mm A'));  
                   }
             },
             saveTask: function(){
@@ -110,7 +109,7 @@ function (template) {
                     if(taskText){                        
                         var _date = moment(this.$("#datepicker").val(), 'MM/DD/YYYY')
                         var newtaskDate = _date.format("MM-DD-YYYY");
-                        var timeDate = newtaskDate + " " + moment(this.$(".timepicker").val(), ["HH:mm"]).format("HH:mm")+":00";
+                        var timeDate = newtaskDate + " " + moment(this.$(".timepicker").val(), ["hh:mm A"]).format("HH:mm")+":00";
                         var _data = {type:"add",
                                      name:taskText,
                                      notes:this.$("#notes").val(),

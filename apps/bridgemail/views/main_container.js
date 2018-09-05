@@ -436,7 +436,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         allow = true;
                     }
                     else {
-                        if (options.url == "contacts/contacts" || options.url == "contacts/subscriber") {
+                        if (options.url == "contacts/contacts" || options.url == "contacts/subscriber" || options.url == "contacts/newcontacts") {
                             allow = true;
                         }
                     }
@@ -1020,12 +1020,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     //this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});
                 },
                 viewContacts: function () {
-                    if(this.app.testUsers.indexOf(this.app.get("user").userId) > -1){
+                    //if(this.app.testUsers.indexOf(this.app.get("user").userId) > -1){
                         this.addWorkSpace({type: '', title: 'Contacts', sub_title: 'Listing', url: 'newcontacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
-                    }
+                    /*}
                     else{
                         this.addWorkSpace({type: '', title: 'Contacts', sub_title: 'Listing', url: 'contacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
-                    }
+                    }*/
                 },
                 campaignListing: function () {
                     this.addWorkSpace({type: '', title: 'Campaigns', sub_title: 'Listing', url: 'campaigns/campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});

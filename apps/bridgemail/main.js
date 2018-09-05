@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.472_9224" ,       
+       urlArgs: "bust=1.472_9226" ,       
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
@@ -17,6 +17,7 @@
            'jquery.calendario': 'shared/libs/jquery.calendario',
            'jquery.icheck': 'shared/libs/jquery.icheck',
            'jquery.chosen': 'shared/libs/chosen.jquery',
+           'jquery.timepicker': 'shared/libs/jquery.timepicker',
            'jquery.highlight': 'shared/libs/jquery.highlight',           
            'jquery.colresize':'shared/libs/jquery.colresizable',
            'jquery.searchcontrol': 'shared/searchcontrol',
@@ -80,6 +81,10 @@
                'jquery.highlight':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.highlight'
+               },
+               'jquery.timepicker':{
+                   deps: ['jquery'],
+                   exports: 'jQuery.fn.timepicker'
                }
                ,
                'jquery.colresize':{

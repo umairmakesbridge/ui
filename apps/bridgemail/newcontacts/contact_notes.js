@@ -104,6 +104,7 @@ define(['text!newcontacts/html/contact_notes.html', 'newcontacts/collections/not
                         }
                         $.post(URL, _data)
                         .done(_.bind(function (data) {
+                            this.$("#note_textarea").prop("disabled",false);
                             var _json = jQuery.parseJSON(data);
 
                             if (_json[0] !== "err") {

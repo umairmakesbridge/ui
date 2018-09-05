@@ -26,9 +26,7 @@ define([
                 session: null,
                 app_data: {}
             }, window.sz_config || {}));
-            this.testUsers = ['admin', 'jayadams', 'demo', 'MKS-Training2', 'mansoor@makesbridge.com','umair','beadragonfly','contractornation','erik@cg-ins.com','lawprose'
-                ,'wendi.grinnell@vizpin.com','mrogers@emergentvisiontec.com','marketing@ebridgeconnections.com','kerri@coffeetalk.com','miguel@cpoaglobal.net',
-                'tom.knickerbocker@afbcenter.com','tom@northernmarineelectronics.com','wbrown@courthousenews.com','Resourcive'];
+            this.testUsers = ['admin', 'jayadams', 'demo', 'MKS-Training2', 'mansoor@makesbridge.com','umair'];
             this.dcItemsUsers = ['admin', 'jayadams', 'demo', 'fisglobal','terry.arnold@hartehanks.com'];                                                                                  
 
             //Convenience for accessing the app object in the console
