@@ -333,7 +333,7 @@ define(['text!listupload/html/mapdata.html'],
 
                             }
                             app.setAppData('lists', list_array);
-                            curview.$el.find("#existing_lists").chosen({no_results_text: 'Oops, nothing found!', width: "288px"});
+                            curview.$el.find("#existing_lists").chosen({no_results_text: 'Oops, nothing found!', width: "400px"});
                         }
                     }).fail(function () {
                         console.log("error lists listing");

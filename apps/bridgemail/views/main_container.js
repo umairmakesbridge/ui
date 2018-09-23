@@ -136,6 +136,14 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .dc-listing' : 'dcTemplateGallery',
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
+                    },
+                    'click .drift-chat-live':function(){
+                        if(drift_API){
+                            drift_API.sidebar.open()
+                        }
+                        else{
+                            console.log("Drift API not found");
+                        }
                     }
 
                 },

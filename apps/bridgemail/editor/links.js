@@ -508,8 +508,8 @@ function (template) {
                         lineNameStr = "";
                     }
                     var url_val = $.trim(_hyperlinkInput.val());
-                    if(url_val!=="" && (/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i.test(url_val) || url_val=="#" || /^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val))){
-                        if(url_val!=="#" && /^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val)==false){ 
+                    if(url_val!=="" && (/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i.test(url_val) || url_val=="#" || /^{{[A-Z0-9_-]+(?:(\.|\s)*[A-Z0-9_-])*}}/i.test(url_val))){
+                        if(url_val!=="#" && /^{{[A-Z0-9_-]+(?:(\.|\s)*[A-Z0-9_-])*}}/i.test(url_val)==false){ 
                             if ( url_val.startsWith("http://")){
                                 link = url_val + lineNameStr;
                             }
@@ -521,7 +521,7 @@ function (template) {
                            }
                        }
                        else{
-                           if(/^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val)==true){
+                           if(/^{{[A-Z0-9_-]+(?:(\.|\s)*[A-Z0-9_-])*}}/i.test(url_val)==true){
                                link = url_val;
                            }
                            else{
@@ -605,7 +605,7 @@ function (template) {
                     if($(obj).attr("href")){
                         _a_href = $(obj).attr("href"); 
                         showName = $.getUrlVar(_a_href,'campaignkw');
-                        merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                        merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\.|\s)*[A-Z0-9_-])*}}","ig");
                         if(_a_href !=="#" && $.trim(_a_href)!=="" && _a_href.startsWith("mailto:")==false && merge_field_patt.test(_a_href)===false){
                             _array.push(_a_href.replace("?campaignkw="+showName,""));
                         }

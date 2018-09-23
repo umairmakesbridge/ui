@@ -244,7 +244,7 @@ function (template,templateCollection,templateRowView,templateView) {
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'Create a Dynmaic Block',
+                      heading : 'Create a Dynamic Block',
                       buttnText: 'Create',
                       plHolderText : 'Enter dynamic name here',
                       emptyError : 'Dynamic name can\'t be empty',

@@ -17,13 +17,6 @@
 #activities{
     display: none !important;
 }
-a,div,span,h1,h2,h3,h4,h5,h5{
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    -o-user-select: none;
-    user-select: none;         
-} 
 .workspace{
     margin:0 15px 0 75px;
 }
@@ -2953,6 +2946,8 @@ a.tw-toggle.tiles.active:hover i { opacity:0.7;}
     color: #FFFFFF;
     font-size: 18px;
     line-height: 24px;
+    width:235px;
+    word-break: break-word;
 }
 
 .schedule-detail p {
@@ -3761,16 +3756,16 @@ ul.autobot-headbadge li.clickable_badge a:hover{
     background-position :  7px -568px;
 }
 .google-tilt .watermark_tilt{
-    background-position : 152px 138px;
+    background-position : 143px 282px;
 }
 .highrise-tilt .watermark_tilt{
-    background-position :  0 137px;
+    background-position :  0 275px;
 }
 .netsuit-tilt .watermark_tilt{
-    background-position :  0 282px;
+    background-position :  0 408px;
 }
 .salesforce-tilt .watermark_tilt{
-    background-position :  143px 282px;
+    background-position :  -137px -704px;
 }
 .landingpage-tilt .watermark_tilt{
     background-position :  0 -283px;
