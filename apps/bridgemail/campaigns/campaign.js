@@ -3079,7 +3079,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var filter_type = input_radio.val();
                     input_radio.iCheck('check');
                     if (filter_type == "contact") {
-                        dialog_title = "Contant";
+                        dialog_title = "Contact";
                     }
                     else if (filter_type == "both") {
                         dialog_title = "Lead & Contact";
@@ -3390,7 +3390,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var filter_type = input_radio.val();
                     input_radio.iCheck('check');
                     if (filter_type == "contact") {
-                        dialog_title = "Contant";
+                        dialog_title = "Contact";
                     }
                     else if (filter_type == "partner") {
                         dialog_title = "Partner";
