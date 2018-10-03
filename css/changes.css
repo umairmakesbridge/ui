@@ -11778,3 +11778,6 @@ li.ui-timepicker-selected .ui-timepicker-duration,
 .ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
 	background: #f2f2f2;
 }
+.managefilter.active .icon{
+    background-color:#00a1dd !important;
+}   

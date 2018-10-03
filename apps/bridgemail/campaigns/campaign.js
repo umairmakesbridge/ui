@@ -2986,6 +2986,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     }
                     if (!this.states.step3.salesforce) {
                         this.$("#sf_accordion").accordion({active: 0, collapsible: false});
+                        this.$("#sf_accordion .accordion-inner").height(300);
                         this.$("#sf_accordion h3.ui-accordion-header").unbind("keydown");
                         self.$("#salesforce_setup .filterbtn .managefilter").click(_.bind(self.showSalesForceFitler, self));
                         self.$("#salesforce_setup .filterbtn .selectall").click(_.bind(self.selectAllSalesforceFilter, self));
@@ -3070,8 +3071,16 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     }
                 },
                 selectAllSalesforceFilter: function (obj) {
-                    var input_radio = $(obj.target).parents(".ui-accordion-header").find("input.radiopanel");
+                    var parent_acc =  $(obj.target).parents(".ui-accordion-header");
+                    var input_radio = parent_acc.find("input.radiopanel");
                     input_radio.iCheck('check');
+                    
+                    this.$(".salesforce_campaigns .ui-accordion-header .managefilter .badge").hide();
+                    this.$(".salesforce_campaigns .ui-accordion-header .subscribers").css({"visibility":"visible"});
+                    this.$(".salesforce_campaigns .ui-accordion-header .subscribers").eq(3).hide();
+                    
+                    parent_acc.find(".selectall").addClass("active");
+                    parent_acc.find(".managefilter").removeClass("active");                    
                 },
                 showSalesForceFitler: function (obj) {
                     var dialog_title = "Lead";
@@ -3079,10 +3088,10 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var filter_type = input_radio.val();
                     input_radio.iCheck('check');
                     if (filter_type == "contact") {
-                        dialog_title = "Contact";
+                        dialog_title = "Contacts";
                     }
                     else if (filter_type == "both") {
-                        dialog_title = "Lead & Contact";
+                        dialog_title = "Leads & Contacts";
                     }
                     else if (filter_type == "opportunity") {
                         dialog_title = "Opportunities";
@@ -3187,8 +3196,14 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                         camp_obj.app.showMessge("Saleforce Filters saved successfully!");
                                         camp_obj.$(".salesforce_campaigns .ui-accordion-header .managefilter .badge").hide();
                                         var totalCount = parseInt(camp_json.contactCount) + parseInt(camp_json.leadCount);
-                                        badge.show().html(totalCount)
+                                        badge.show().html(totalCount);                                        
                                         camp_obj.fetchFilters("Saleforce");
+                                                                                
+                                        
+                                        camp_obj.$(".salesforce_campaigns .ui-accordion-header.selected .subscribers").css({"visibility":"hidden"});
+                                        camp_obj.$(".salesforce_campaigns .ui-accordion-header.selected .selectall").removeClass("active");
+                                        camp_obj.$(".salesforce_campaigns .ui-accordion-header.selected .managefilter").addClass("active");
+                                        
                                     }
                                 }
                                 else {
@@ -3390,7 +3405,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var filter_type = input_radio.val();
                     input_radio.iCheck('check');
                     if (filter_type == "contact") {
-                        dialog_title = "Contact";
+                        dialog_title = "Contacts";
                     }
                     else if (filter_type == "partner") {
                         dialog_title = "Partner";

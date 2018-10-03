@@ -132,10 +132,10 @@ function (template) {
                      var filter_type = input_radio.val();
                      input_radio.iCheck('check');
                      if(filter_type=="contact"){
-                         dialog_title= "Contact";
+                         dialog_title= "Contacts";
                      }
                      else if(filter_type=="both"){
-                         dialog_title= "Lead & Contact";
+                         dialog_title= "Leads & Contacts";
                      }
                      else if(filter_type=="opportunity"){
                          dialog_title= "Opportunities";
