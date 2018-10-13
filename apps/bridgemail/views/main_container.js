@@ -983,7 +983,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 showPopup: function (e) {
 
                     var _arr = {"_liveChat": {title: "Live Chat", cssClass: 'livechatdialog', url: "https://server.iad.liveperson.net/hc/69791877/?cmd=file&file=visitorWantsToChat&site=69791877&byhref=1&imageUrl=https://server.iad.liveperson.net/hcp/Gallery/ChatButton-Gallery/English/General/1a/"},
-                        "_knowledgeBase": {title: "Knowledgebase", cssClass: 'knowledgebasedialog', url: "http://server.iad.liveperson.net/hc/s-69791877/cmd/kbresource/kb-5320825346138970912/front_page!PAGETYPE"},
+                        "_knowledgeBase": {title: "Knowledgebase", cssClass: 'knowledgebasedialog', url: "https://www.makesbridge.com/video-guides/"},
                         "_supportMessage": {title: "Support message", cssClass: 'supportmessagedialog', url: "http://server.iad.liveperson.net/hc/s-69791877/web/ticketpub/msgcontroller.jsp"}}
 
                     var target = $.getObj(e, "a");

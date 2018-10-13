@@ -17,6 +17,7 @@ define(['text!autobots/html/choose_bot.html'],
                     this.template = _.template(template);
                     this.render();
                     var that = this;
+                    this.botType= "";
                     this.app = this.options.app
                     if(this.options.type !==false){
                       setTimeout(function(){
@@ -49,6 +50,7 @@ define(['text!autobots/html/choose_bot.html'],
                     }
                     var plHolderText =this.getCaption(actionType);
                     this.closeAutobot();
+                    var botURL = actionType=="Z"?'/pms/io/trigger/saveZapierExportBotData/':'/pms/io/trigger/saveAutobotData/'
                     this.app.showAddDialog(
                     {
                         app: this.app,
@@ -57,7 +59,7 @@ define(['text!autobots/html/choose_bot.html'],
                         bgClass: '',
                         plHolderText: 'Enter bot name here',
                         emptyError: 'Autobot name can\'t be empty',
-                        createURL: '/pms/io/trigger/saveAutobotData/',
+                        createURL: botURL,
                         fieldKey: "label",
                         postData: {type: 'create', BMS_REQ_TK: this.app.get('bms_token'), actionType:actionType,botType:botType},
                         saveCallBack: _.bind(this.addAutobot, this) // Calling same view for refresh headBadge
@@ -67,6 +69,7 @@ define(['text!autobots/html/choose_bot.html'],
                 },
                 getCaption:function(actionType){
                     var caption = ""; 
+                    this.botType = actionType;
                     switch (actionType) {
                        case "E":
                            if (this.options.botType == "B") {
@@ -84,12 +87,20 @@ define(['text!autobots/html/choose_bot.html'],
                         case "TG":
                             caption = "Enter name for tag bot";
                             break;
+                        case "Z":
+                            caption = "Enter name for Zaiper bot";
+                            break;    
                     }
                     return caption;
                 },
                 addAutobot : function(field_text,_json){
                     //console.log('field_text : '+field_text +' And Complete Json ' + _json);
-                    this.options.listing.fetchBots(0,_json[2],true);
+                    if(this.botType=="Z"){
+                        this.options.listing.fetchExportBots(0,_json[2],true);
+                    }
+                    else{
+                        this.options.listing.fetchBots(0,_json[2],true);
+                    }
                 }
             });
         });

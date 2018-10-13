@@ -5,8 +5,8 @@
  * Description: 
  */
 
-define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'autobots/autobot', 'autobots/autobots_tile', 'app', 'autobots/choose_bot','autobots/autobot_name'],
-        function(template, Autobots, Autobot, AutobotTile, app, Choosebot, AutobotName) {
+define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'autobots/collections/export_autobots', 'autobots/autobot', 'autobots/autobots_tile', 'app', 'autobots/choose_bot','autobots/autobot_name'],
+        function(template, Autobots, ExportAutobots, Autobot, AutobotTile, app, Choosebot, AutobotName) {
             'use strict';
             return Backbone.View.extend({
                 events: {
@@ -25,6 +25,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 initialize: function() {
                     this.template = _.template(template);
                     this.objAutobots = new Autobots();
+                    this.objExportAutobots = new ExportAutobots();
                     this.type = "search";
                     this.current_ws = "";
                     this.isTiles = false;
@@ -313,7 +314,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
                 updateCount: function() {
                     $(this.el).find('#total_autobots').find('.sort-text').html('');
-                    $(this.el).find('#total_autobots').find('.badge').html(this.objAutobots.total);
+                    $(this.el).find('#total_autobots').find('.badge').html(this.total);
                     if (this.searchText) {
                         $(this.el).find('#total_autobots').find('.search-text').html(' for <b>  &quot;' + this.searchText + '&quot;<b/>');
                     } else {
@@ -360,13 +361,15 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     }) 
                     var progress  = $("<ul class='c-current-status autobot-headbadge' id='top_count'><li style='margin-left:5px;'><a><img src='"+this.options.app.get("path")+"img/greenloader.gif'></a></li></ul>");
                     that.ws_header.append(progress);
-                    var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
+                    var URL = "/pms/io/trigger/getZapierExportBotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
                         var data = jQuery.parseJSON(xhr.responseText);
                         var header_part = "<li class='"+that.app.getClickableClass(data.pauseCount)+"'> <a data-text='D'><span class='badge pclr2'>" + that.options.app.addCommas(data.pauseCount) + "</span> Paused </a> </li>";
                         header_part = header_part + "<li class='"+that.app.getClickableClass(data.playCount)+"'> <a data-text='R'><span class='badge pclr18'>" + that.options.app.addCommas(data.playCount) + "</span> Playing </a> </li>";
                         header_part = header_part + "<li class='"+that.app.getClickableClass(data.pendingCount)+"'> <a data-text='P'><span class='badge pclr6'>" + that.options.app.addCommas(data.pendingCount) + "</span> Pending </a> </li>";
-                        header_part = header_part + "<li class='"+that.app.getClickableClass(data.presetCount)+"'> <a data-text='PRE'><span class='badge pclr1'>" + that.options.app.addCommas(data.presetCount) + "</span> Preset </a> </li>";
+                        header_part = header_part + "<li class='"+that.app.getClickableClass(data.presetCount)+"'> <a data-text='PRE'><span class='badge pclr1'>" + that.options.app.addCommas(data.presetCount) + "</span> Preset </a> </li>";                        
+                        data["totalExportBot"]=4;
+                        header_part = header_part + "<li class='"+that.app.getClickableClass(data.totalExportBot)+"'> <a data-text='Z'><span class='badge pclr20'>" + that.options.app.addCommas(data.totalExportBot) + "</span> Export </a> </li>";
                         var $header_part = $(header_part);
                         that.ws_header.find(".c-current-status").html($header_part);
                         that.ws_header.find(".c-current-status li a").on('click', function(ev) {
@@ -377,7 +380,12 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             that.sortBy = $(this).data('text');
                             that.sortText = $(this).text().split(" ")[1];
                             that.topClickEvent = true;
-                            that.fetchBots();
+                            if(target.data("text")=="Z"){
+                                that.fetchExportBots();
+                            }
+                            else{
+                                that.fetchBots();
+                            }
                              
                         })
                         if (isDelete) {
@@ -395,7 +403,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     }
                    
                     $('body').append('<div class="modal-backdrop  in autobots-modal-in" style="visibility : '+visibilty+'"></div>');
-                    $("body").append("<div id='new_autobot' style='width: 795px;  top: 120px;left:50%;visibility:"+visibilty+"' class='modal in'></div>");
+                    $("body").append("<div id='new_autobot' style='width: 950px;  top: 120px;left:50%;visibility:"+visibilty+"' class='modal in'></div>");
                     $("body #new_autobot").html(new Choosebot({app: this.app, listing: this,type:this.typeOfBots}).el);
                     $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
                     this.typeOfBots = false;
@@ -518,7 +526,126 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 else{
                     this.dispenseTimeout = setTimeout(_.bind(this.dispenseStats,this),1000*30);
                 }
-            } 
+            },
+            fetchExportBots: function(offset,botId,isCreateAB) {
+                    var _data = {};
+                    _data['type'] = this.type;
+                    var that = this;
+                    if (!offset) {
+                        this.offset = 0;
+                        this.total_fetch = 0;
+                        that.$el.find(".thumbnails").html('');
+                        that.$el.find("#autobots_listing  .create_new").remove();
+                        that.$el.find("#tblAutobots tbody").html('');
+                        this.app.showLoading("Loading Export Autobots...", that.$el);
+                        this.checkStatus = [];
+                    } else {
+                        this.offset = this.offset + this.offsetLength;
+                    }
+                    if(botId){
+                        this.searchText = "";
+                        this.sortBy = "";
+                        this.total_fetch = 0;
+                        this.total = 0;
+                        this.offsetLength = 0;
+                        this.actionType = "";
+                        this.sortText = "";
+                    }
+                   
+                    if (this.exportRequest)
+                        this.request.abort();
+                    var that = this;
+                    _data['offset'] = this.offset;
+                    if (this.sortBy) {                          
+                      _data['status'] = this.sortBy;
+                          
+                    } else {
+                        _data['actionType'] = this.actionType;
+                    }
+                   
+                    if (this.searchText) {
+                        _data['searchText'] = this.searchText;
+                    }
+
+                    this.request = this.objExportAutobots.fetch({data: _data, success: function(data,collection) {
+                            that.total = collection.totalCount;
+                            if (data.length < 1) {
+                                that.$el.find("#tblAutobots tbody").append('<tr><td><p class="notfound" style="margin-top:-8px">No Export Autobots found</p></td>');
+                                that.$el.find(".thumbnails").append('<li style="width:100%;"><p style="margin-top:-8px" class="notfound">No Export Autobots found</p></li>');
+                            }
+                            _.each(data.models, function(model) {
+                                that.$el.find("#tblAutobots tbody").append(new Autobot({model: model, app: that.options.app, page: that}).el)
+                                var autoBotTiles = new AutobotTile({model: model, app: that.options.app, page: that});
+                                that.$el.find(".thumbnails").append(autoBotTiles.el)
+                                autoBotTiles.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll p a'});
+                                 if(model.get("status")=="P" || model.get("status")=="Q"){                                
+                                        that.callDispenseStats(model.get("botId.encode"),model.get("botId.checksum"),true);
+                                 }
+                            })
+                            /*-----Remove loading------*/
+                                 that.app.removeSpinner(that.$el);
+                            /*------------*/
+                           
+                            
+                            that.offsetLength = data.length;
+                            that.total_fetch = that.total_fetch + data.length;
+                            if (that.total_fetch < parseInt(collection.totalCount)) {
+                                that.$el.find("#tblAutobots tbody tr:last").attr("data-load", "true");
+                                that.$el.find(".thumbnails li:last").attr("data-load", "true");
+                                that.$el.find("#tblAutobots tbody").append("<tr id='tr_loading'><td colspan='6'><div class='gridLoading' style='text-align:center; margin-left:auto;'><img src='"+that.options.app.get("path")+"img/loading.gif'></div></td>");
+                                 
+                            } 
+                            if(botId){
+                                 if(isCreateAB){
+                                     that.isCreateAB = isCreateAB;
+                                 }
+                                 else if(that.options.params.isCreateAB){
+                                     that.isCreateAB = that.options.params.isCreateAB;
+                                 }
+                                 else{
+                                     that.isCreateAB = false;
+                                 }
+                                 that.$el.find(".thumbnails li").find("#bottileid_"+botId).click();
+                            }
+                             if (!offset) {
+                                that.$el.find("#autobots_listing").prepend(that.addListingRow());
+                                that.$el.find(".thumbnails").prepend(that.addThumbnailLi());                                
+                             }
+                            if(that.isTileFlag){
+                                that.showTiles();
+                            }else{
+                                that.show
+                            }
+                            that.app.showLoading(false, that.$el);
+                            
+                                if (!offset) {
+                                    if (that.searchText == "" && that.sortBy == "" && that.actionType == "") {
+                                     that.topCounts();
+                                    }
+                                     that.updateCount();
+                                  } else {
+                                     that.$el.find("#tblAutobots tbody").find('#tr_loading').remove();
+                                     that.$el.find(".footer-loading").hide();
+                                }
+                                if (that.searchText) {
+                                     that.$el.find(".thumbnails li").each(function(){
+                                        $(this).find('h3 a').highlight($.trim(that.searchText));
+                                        $(this).find(".t-scroll a").each(function(){
+                                            $(this).highlight($.trim(that.searchText));
+                                        })
+                                    });
+                                     that.$el.find("#tblAutobots tbody tr").each(function() {
+                                         $(this).find('td h3 a').highlight($.trim(that.searchText));
+                                          $(this).find(".tagscont ul li").each(function(){
+                                            $(this).find('.tag').highlight($.trim(that.searchText));
+                                        })
+                                    });
+                                }        
+                                   
+                        }});
+                    
+
+                } 
                
             });
         });

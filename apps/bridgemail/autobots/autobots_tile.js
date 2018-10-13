@@ -41,6 +41,8 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                 },
                 render: function() {
                     this.$el.html(this.template(this.model.toJSON()));
+                    this.botType = this.model.get('actionType');    
+                    this.autbotapi =  this.botType == "Z"?"saveZapierExportBotData":"saveAutobotData";
                     this.$el.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.showTagsTemplate();
                     
@@ -90,6 +92,9 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                         case "TG":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/tagbot.png'>";
                             break;
+                        case "Z":
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/zapier_bot.png'>";
+                            break;    
                     }
                      switch (this.model.get('presetType')) {
                         case "PRE.1":
@@ -323,7 +328,7 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                     var tile = this.$el.find("row_" + botId);
 
                     var bms_token = that.options.app.get('bms_token');
-                    var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + bms_token;
+                    var URL = "/pms/io/trigger/"+this.autbotapi+"/?BMS_REQ_TK=" + bms_token;
                     that.options.app.showLoading("Playing Autobots...", tile);
                     $.post(URL, {type: 'play', botId: botId})
                             .done(function(data) {
@@ -342,7 +347,12 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                                    // 
                                     //that.parent.callDispenseStats(that.model.get('botId.encode'),that.model.get("botId.checksum"),true);
                                    // that.options.page.topCounts();
-                                   that.parent.fetchBots();
+                                     if(that.botType == "Z"){
+                                         that.parent.fetchExportBots();
+                                        }
+                                     else{
+                                          that.parent.fetchBots();
+                                     }
                                    if (where == "dialog") { that.getAutobotById(where, botId);}
                                 }
                                 
@@ -357,7 +367,7 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                     }
                     var tile = this.$el.find("row_" + botId);
                     var bms_token = that.options.app.get('bms_token');
-                    var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + bms_token;
+                    var URL = "/pms/io/trigger/"+this.autbotapi+"/?BMS_REQ_TK=" + bms_token;
                     //that.options.app.showLoading("Pause Autobots...",tile);
                     $.post(URL, {type: 'pause', botId: botId})
                             .done(function(data) {
@@ -369,7 +379,12 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot paused.");
-                                    that.parent.fetchBots();
+                                      if(that.botType == "Z"){
+                                         that.parent.fetchExportBots();
+                                        }
+                                     else{
+                                          that.parent.fetchBots();
+                                     }
                                     if (where == "dialog") { that.getAutobotById(where, botId);}
                                 }
                             });
@@ -412,7 +427,8 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                     }
                     var that = this;
                     var bms_token = that.options.app.get('bms_token');
-                    var url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + botId;
+                    var getAPI = this.botType=="Z"?"getZapierExportBotData":"getAutobotData";
+                    var url = "/pms/io/trigger/"+getAPI+"/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + botId;
                     jQuery.getJSON(url, function(tsv, state, xhr) {
                         var autobot = jQuery.parseJSON(xhr.responseText);
                         if (that.options.app.checkError(autobot)) {
@@ -489,6 +505,9 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                         case "TG":
                             this.chooseBotToEdit('autobots/tag');
                             break;
+                        case "Z":
+                            this.chooseBotToEdit('autobots/export');
+                            break;    
                     }
                 },
                 chooseBotToEdit: function(files) {
@@ -556,6 +575,10 @@ define(['text!autobots/html/autobots_tile.html','common/tags_row'],
                                 dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
                                 that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTagAutobot, mPage); // New Dialog
                                 break;
+                            case "Z":
+                                dialog.saveCallBack(_.bind(mPage.saveExportAutobot, mPage));
+                                that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveExportAutobot, mPage); // New Dialog
+                                break;    
                         }
                             var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
                             dialog.getFooter().append(btn);

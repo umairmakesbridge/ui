@@ -35,6 +35,7 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                     }else{
                         this.label = this.model.get('label');
                     }
+                    
                     this.showUseButton = this.options.showUse;
                     this.showRemoveButton = this.options.showRemove;
                     this.showCheckbox = this.options.showCheckbox;
@@ -46,6 +47,8 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                 },
                 render: function() {
                     this.$el.html(this.template(this.model.toJSON()));
+                    this.botType = this.model.get('actionType');     
+                    this.autbotapi =  this.botType == "Z"?"saveZapierExportBotData":"saveAutobotData";
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     if(this.showUseButton){
                         this.$el.attr("data-checksum",this.model.get("botId.checksum"))
@@ -79,6 +82,9 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                         case "TG":
                             label = "<img src='"+this.options.app.get("path")+"img/tagbot-icon.png' style='max-width:none!important;'>";
                             break;
+                        case "Z":
+                            label = "<img src='"+this.options.app.get("path")+"img/zapier_bot-icon.png' style='max-width:none!important;'>";
+                            break;    
                     }
                      switch (this.model.get('presetType')) {
                         case "PRE.1":
@@ -207,7 +213,8 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                     }
                     var tile = this.$el;
                     var bms_token = that.options.app.get('bms_token');
-                    var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + bms_token;
+                   
+                    var URL =  "/pms/io/trigger/"+this.autbotapi+"/?BMS_REQ_TK="+ bms_token;
                     that.options.app.showAlertDetail({heading: 'Confirm Deletion',
                         detail: "Are you sure you want to delete this Autobot?",
                         callback: _.bind(function() {
@@ -243,8 +250,8 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                         var botId = this.model.get('botId.encode');
                     }
                     var tile = this.$el.find("row_" + botId);
-                       var bms_token = that.options.app.get('bms_token');
-                    var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + bms_token;
+                    var bms_token = that.options.app.get('bms_token');                    
+                    var URL = "/pms/io/trigger/"+this.autbotapi+"/?BMS_REQ_TK=" + bms_token;
                     that.options.app.showLoading("Playing Autobots...", tile);
                     $.post(URL, {type: 'play', botId: botId})
                             .done(function(data) {
@@ -260,8 +267,12 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot played.");
-                                    
-                                         that.parent.fetchBots();
+                                        if(that.botType == "Z"){
+                                         that.parent.fetchExportBots();
+                                        }
+                                     else{
+                                          that.parent.fetchBots();
+                                     }
                                      if (where == "dialog") { that.getAutobotById(where, botId);}
 
                                 }
@@ -275,8 +286,8 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                         var botId = this.model.get('botId.encode');
                     }
                     var tile = this.$el.find("row_" + botId);
-                    var bms_token = that.options.app.get('bms_token');
-                    var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + bms_token;
+                    var bms_token = that.options.app.get('bms_token');                    
+                    var URL = "/pms/io/trigger/"+this.autbotapi+"/?BMS_REQ_TK=" + bms_token;
                     that.options.app.showLoading("Pause Autobots...", tile);
                     $.post(URL, {type: 'pause', botId: botId})
                             .done(function(data) {
@@ -292,7 +303,12 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                                 } else {
                                     that.options.app.showMessge("Autobot paused.");
                                      
-                                         that.parent.fetchBots();
+                                          if(that.botType == "Z"){
+                                         that.parent.fetchExportBots();
+                                        }
+                                     else{
+                                          that.parent.fetchBots();
+                                     }
                                        if (where == "dialog") { that.getAutobotById(where, botId);}
                                     
                                 }
@@ -326,8 +342,9 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                         var botId = this.model.get('botId.encode');
                     }
                     var that = this;
-                    var bms_token = that.options.app.get('bms_token');
-                    var url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + botId;
+                    var bms_token = that.options.app.get('bms_token');      
+                    var getAPI = this.botType=="Z"?"getZapierExportBotData":"getAutobotData";
+                    var url = "/pms/io/trigger/"+getAPI+"/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + botId;
                     jQuery.getJSON(url, function(tsv, state, xhr) {
                         var autobot = jQuery.parseJSON(xhr.responseText);
                         if (that.options.app.checkError(autobot)) {
@@ -378,6 +395,9 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                         case "TG":
                             this.chooseBotToEdit('autobots/tag');
                             break;
+                        case "Z":
+                            this.chooseBotToEdit('autobots/export');
+                            break;    
                     }
                 },
                 chooseBotToEdit: function(files) {
@@ -439,6 +459,10 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                                 dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
                                 that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTagAutobot, mPage); // New Dialog
                                 break;
+                            case "Z":
+                                dialog.saveCallBack(_.bind(mPage.saveExportAutobot, mPage));
+                                that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveExportAutobot, mPage); // New Dialog
+                                break;    
                         }
                         that.options.app.showLoading(false, dialog.getBody());
                         var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
