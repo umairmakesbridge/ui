@@ -124,7 +124,7 @@ define(['text!listupload/html/mapdata.html'],
                         {
                             app.showError({
                                 control: el.find('.list-container'),
-                                message: "Please enter correct email address format"
+                                message: "Please choose a list"
                             });
                             isValid = false;
                         } else
@@ -291,6 +291,7 @@ define(['text!listupload/html/mapdata.html'],
                             if (list_array != '')
                             {
                                 var $i = 0;
+                                list_html +="<option value='' ></option>";
                                 $.each(list_array.lists[0], function (index, val) {
                                     /*=========
                                      * Check if Supress List to be show

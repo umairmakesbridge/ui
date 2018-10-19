@@ -418,7 +418,7 @@
             filter_html += '</div>'
             filter_html += '<div class="row">'
             filter_html += '<label style="width: 120px;">Campaign</label>'
-            filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="N" selected>Campaigns</option><option value="A">Auto Trigger</option><option value="T">Nurture Track</option><option value="W">Workflow</option><option value="B">Autobot</option></select></div>'
+            filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="N" selected>Campaigns</option><option value="T">Nurture Track</option><option value="W">Workflow</option><option value="B">Autobot</option></select></div>'
             filter_html += '<div class="btn-group "><div style="display: none;" class="loadingPurl-mask"><div class="loadingPageUrl"></div><p>Loading...</p></div><select data-placeholder="Select Campaign" id="campaign-lists-filterplug" class="campaign-list" disabled="disabled">'
             filter_html += '<option value="-1">Any Campaign</option>'
             var campaigns_array = this.options.app.getAppData("campaigns")
@@ -434,7 +434,7 @@
             filter_html += '<div class="row nolabel campaign-url-container" style="display:none"><label style="width: 9px; visibility: hidden;">test</label><div class="btn-group "><select data-placeholder="Select URL" class="campaign-url"></select></div>'
             filter_html += '<a  class="icon view preview-campaign-url showtooltip" title="Preview Link"></a></div>'
             filter_html += '<div class="row match"> <em class="text">happens in last</em> '
-            filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">' + this.getTimeSpan(30, 90) + '</select><em class="text">days</em></div> '
+            filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">' + this.getTimeSpan(30, 90,true) + '</select><em class="text">days</em></div> '
             filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailFreq">' + this.getTimeSpan(1) + '</select><em class="text">or more times</em></div> '
 
             filter_html += '</div>'
@@ -2268,7 +2268,7 @@
         clearSearchLists: function () {
             $('#total_subscriber strong').text($('#filter_list_grid tr').length);
         }
-        , getTimeSpan: function (val, count) {
+        , getTimeSpan: function (val, count, isCutom) {
             var spanHTML = ""
             var selected_val = ""
             spanHTML += ''
@@ -2276,6 +2276,12 @@
             for (var i = 1; i <= counter; i++) {
                 selected_val = (i == val) ? "selected" : ""
                 spanHTML += '<option value="' + i + '" ' + selected_val + '>' + i + '</option>'
+            }
+            if(isCutom){
+                var customValues = [180,365];
+                for(var i=0;i<customValues.length;i++){
+                    spanHTML += '<option value="' + customValues[i] + '">' + customValues[i] + '</option>';
+                }
             }
             return spanHTML
         }

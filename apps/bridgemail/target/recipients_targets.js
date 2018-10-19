@@ -44,6 +44,9 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                         this.dialogType = this.options.type;
                         this.dialog = this.options.dialog;
                     } 
+                    if(typeof(this.options.isSharedAllowed)!=="undefined" && this.options.isSharedAllowed==false){
+                        this.doNotShowSharedTargets = true;
+                    }   
                     this.render();
                 },
                 render: function(search) {
@@ -123,7 +126,10 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
 
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
-                                that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that,showUse:that.showUse,type:that.dialogType,dialog:that.dialog}).el);
+                                if(that.allowShared(model)){
+                                                                    
+                                    that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that,showUse:that.showUse,type:that.dialogType,dialog:that.dialog}).el);
+                                }
                             });
                              /*-----Remove loading------*/
                              that.app.removeSpinner(that.$el);
@@ -159,6 +165,15 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                                 that.updateRunningModels();
                             },30000);
                         }});
+                },
+                allowShared:function(model){
+                    var allow = true;
+                    if(this.doNotShowSharedTargets) {
+                        if(this.app.get("user").userId!==model.get('userId')){
+                            allow =false;
+                        }
+                    }
+                    return allow;
                 },
                 search: function(ev) {
                     this.searchText = '';

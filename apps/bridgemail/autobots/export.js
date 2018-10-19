@@ -111,7 +111,7 @@ define(['text!autobots/html/export.html', 'target/views/recipients_target', 'tar
                     this.options.app.showLoading("Loading Targets...", dialog.getBody());
                     var that = this;
                     require(["target/recipients_targets"], _.bind(function(page) {
-                        var targetsPage = new page({page: this, dialog: dialog, editable: that.editable, type: "autobots", showUseButton: true});
+                        var targetsPage = new page({page: this, dialog: dialog, editable: that.editable, type: "autobots", showUseButton: true,isSharedAllowed:false});
                         dialog.getBody().append(targetsPage.$el);
                         this.app.showLoading(false, targetsPage.$el.parent());
                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
@@ -229,7 +229,7 @@ define(['text!autobots/html/export.html', 'target/views/recipients_target', 'tar
                     });
                     this.tagDiv.addClass("template-tag").show();
                     this.tagDiv.tags({app: this.options.app,
-                        url: '/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=' + this.options.app.get('bms_token'),
+                        url: '/pms/io/trigger/saveZapierExportBotData/?BMS_REQ_TK=' + this.options.app.get('bms_token'),
                         params: {type: 'tags', botId: this.botId, tags: ''}
                         , showAddButton: true,
                         tags: tags,
@@ -338,6 +338,31 @@ define(['text!autobots/html/export.html', 'target/views/recipients_target', 'tar
                         var ele = ele.find(".loading-wheel");
                         ele.remove();
                     }
+                },
+                saveTemplateName: function(obj) {
+                    var _this = this;
+                    var name = $(obj.target).parents(".edited").find("input");
+                    var dailog_head = this.dialog;
+                    var URL = "/pms/io/trigger/saveZapierExportBotData/?BMS_REQ_TK=" + this.app.get('bms_token');
+                    $(obj.target).addClass("saving");
+                    $.post(URL, {type: "rename", label: name.val(), botId: this.botId})
+                            .done(function(data) {
+                                var _json = jQuery.parseJSON(data);
+                                if (_json[0] !== "err") {
+                                    dailog_head.$("#dialog-title span").html(_this.app.encodeHTML(name.val()));
+                                    _this.showHideTargetTitle();
+                                    _this.app.showMessge("Autobot Renamed");
+                                    //_this.page.$("#template_search_menu li:first-child").removeClass("active").click();
+                                    _this.model.set("name", name.val());
+                                    _this.options.refer.model.set("name", name.val());
+                                    _this.options.refer.render();
+                                }
+                                else {
+                                    _this.app.showAlert(_json[1], _this.$el);
+
+                                }
+                                $(obj.target).removeClass("saving");
+                            });
                 },
                 changeTargetText: function() {
                     if (this.targetsModel) {

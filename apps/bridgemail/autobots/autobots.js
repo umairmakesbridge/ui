@@ -49,6 +49,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.getFiltersData();
                     this.getFormatsData();
                     this.typeOfBots = false;
+                    this.exportBots = false;
                     
                 },
                 refreshWorkSpace:function(options){
@@ -73,7 +74,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             this.fetchBots();
                         }
                     }else{
-                        this.fetchBots();
+                        this.fetchAutobots();
                     }
                     if(typeof this.options.params !="undefined" && !ev){
                        if(typeof this.options.params.botType !="undefined"){
@@ -105,11 +106,12 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         this.sortBy = sort;
                     }
                     this.sortText = html.html();
-                    this.fetchBots();
+                    this.fetchAutobots();
                 },
                 fetchBots: function(offset,botId,isCreateAB) {
                     var _data = {};
                     _data['type'] = this.type;
+                    this.exportBots = false;
                     var that = this;
                     if (!offset) {
                         this.offset = 0;
@@ -283,12 +285,12 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     if (code == 13 || code == 8) {
                         that.$el.find('#clearsearch').show();
                         this.searchText = text;
-                        that.fetchBots();
+                        that.fetchAutobots();
                     } else if (code == 8 || code == 46) {
                         if (!text) {
                             that.$el.find('#clearsearch').hide();
                             this.searchText = text;
-                            that.fetchBots();
+                            that.fetchAutobots();
                         }
                     } else {
                         that.$el.find('#clearsearch').show();
@@ -298,7 +300,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             if (text.length < 2)
                                 return;
                             that.searchText = text;
-                            that.fetchBots();
+                            that.fetchAutobots();
                         }, 500); // 2000ms delay, tweak for faster/slower
                     }
                 },
@@ -310,7 +312,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.searchTags = '';
                     this.total_fetch = 0;
                     // this.$el.find("#total_subscriber span").html("contacts found");
-                    this.fetchBots();
+                    this.fetchAutobots();
                 },
                 updateCount: function() {
                     $(this.el).find('#total_autobots').find('.sort-text').html('');
@@ -361,14 +363,14 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     }) 
                     var progress  = $("<ul class='c-current-status autobot-headbadge' id='top_count'><li style='margin-left:5px;'><a><img src='"+this.options.app.get("path")+"img/greenloader.gif'></a></li></ul>");
                     that.ws_header.append(progress);
-                    var URL = "/pms/io/trigger/getZapierExportBotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
+                    var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
                         var data = jQuery.parseJSON(xhr.responseText);
                         var header_part = "<li class='"+that.app.getClickableClass(data.pauseCount)+"'> <a data-text='D'><span class='badge pclr2'>" + that.options.app.addCommas(data.pauseCount) + "</span> Paused </a> </li>";
                         header_part = header_part + "<li class='"+that.app.getClickableClass(data.playCount)+"'> <a data-text='R'><span class='badge pclr18'>" + that.options.app.addCommas(data.playCount) + "</span> Playing </a> </li>";
                         header_part = header_part + "<li class='"+that.app.getClickableClass(data.pendingCount)+"'> <a data-text='P'><span class='badge pclr6'>" + that.options.app.addCommas(data.pendingCount) + "</span> Pending </a> </li>";
                         header_part = header_part + "<li class='"+that.app.getClickableClass(data.presetCount)+"'> <a data-text='PRE'><span class='badge pclr1'>" + that.options.app.addCommas(data.presetCount) + "</span> Preset </a> </li>";                        
-                        data["totalExportBot"]=4;
+                        data["totalExportBot"]=0;
                         header_part = header_part + "<li class='"+that.app.getClickableClass(data.totalExportBot)+"'> <a data-text='Z'><span class='badge pclr20'>" + that.options.app.addCommas(data.totalExportBot) + "</span> Export </a> </li>";
                         var $header_part = $(header_part);
                         that.ws_header.find(".c-current-status").html($header_part);
@@ -381,19 +383,27 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             that.sortText = $(this).text().split(" ")[1];
                             that.topClickEvent = true;
                             if(target.data("text")=="Z"){
-                                that.fetchExportBots();
+                                that.fetchExportBots();                                
                             }
                             else{
-                                that.fetchBots();
+                                that.fetchBots();                                
                             }
                              
                         })
                         if (isDelete) {
-                            that.objAutobots.total = that.objAutobots.total - 1;
-                            $(that.el).find('#total_autobots').find('.badge').html(that.objAutobots.total);
+                            var totalCount = that.exportBots ?that.objExportAutobots.total:that.objAutobots.total;
+                            totalCount = totalCount - 1;
+                            $(that.el).find('#total_autobots').find('.badge').html(totalCount);
                         }
+                        var URL = "/pms/io/trigger/getZapierExportBotData/?BMS_REQ_TK=" + that.app.get('bms_token') + "&type=counts";
+                        jQuery.getJSON(URL, function(tsv, state, xhr) {
+                             var data = jQuery.parseJSON(xhr.responseText);
+                             that.ws_header.find(".c-current-status a[data-text='Z'] .badge").html(data.totalExportBot);
+                             that.ws_header.find(".c-current-status a[data-text='Z']").parent("li").addClass("clickable_badge");
+                        });
                         // this.ws_header.find("#workspace-header").after($('<a class="cstatus pclr18" style="margin:6px 4px 0px -7px">Playing </a>'));
                     });
+                    
                 },
                 addNewAutobot: function(ev) {
                     $("body #new_autobot").remove();
@@ -450,7 +460,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     if (inview.length && inview.attr("data-load") && this.$el.height() > 0) {
                         inview.removeAttr("data-load");
                         this.$el.find(".footer-loading").show();
-                        this.fetchBots(this.offsetLength);
+                        this.fetchAutobots(this.offsetLength);
                     }
                 },
                 scrollTop: function() {
@@ -490,11 +500,12 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                           }
                       }).fail(function() { console.log( "error in basic fields" ); });    
                 },
-                  dispenseStats:function(){
+                dispenseStats:function(){
                       var that = this;
                         if(this.checkStatus.length){
+                            var api = this.exportBots?"getZapierExportBotData": "getAutobotData";
                             for(var i=0;i<this.checkStatus.length;i++){
-                                var URL = '/pms/io/trigger/getAutobotData/?type=dispenseStats&botId='+this.checkStatus[i].id+'&BMS_REQ_TK='+this.app.get('bms_token')
+                                var URL = '/pms/io/trigger/'+api+'/?type=dispenseStats&botId='+this.checkStatus[i].id+'&BMS_REQ_TK='+this.app.get('bms_token')
                                  jQuery.getJSON(URL,  _.bind(function(_i, state, xhr){                                                        
                                     var _json = state;   
                                     if(this.app.checkError(_json)){
@@ -507,7 +518,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                             if(that.checkStatus[_i].length > 0){
                                                 that.checkStatus[_i].splice(i,1);
                                             }   
-                                            that.fetchBots()
+                                            that.fetchAutobots()
                                         }
                                     }  else{
                                         clearTimeout(that.dispenseTimeout);
@@ -530,6 +541,8 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
             fetchExportBots: function(offset,botId,isCreateAB) {
                     var _data = {};
                     _data['type'] = this.type;
+                    this.exportBots = true;
+                    this.actionType = "Z";
                     var that = this;
                     if (!offset) {
                         this.offset = 0;
@@ -645,7 +658,15 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         }});
                     
 
-                } 
+                },
+                fetchAutobots: function(){
+                    if(this.exportBots){
+                        this.fetchExportBots();
+                    }
+                    else{
+                        this.fetchBots();
+                    }
+                }
                
             });
         });

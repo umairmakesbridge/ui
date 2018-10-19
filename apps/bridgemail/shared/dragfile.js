@@ -174,7 +174,10 @@
         },
         url: uploadURL,
         type: "POST",
-        contentType:false,
+        contentType:false,     
+        accepts: {
+            json: 'application/json'
+        },
         processData: false,
             cache: false,
             data: formData,

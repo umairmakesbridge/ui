@@ -34,7 +34,8 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                     var name = this.dialog.$("#dialog-title span").html();
                     that.options.app.showLoading("Loading " + name + "...", that.$el);
                     var bms_token = that.options.app.get('bms_token');
-                    var url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + this.options.botId;
+                    var api = this.options.model.get("actionType")=="Z"?"getZapierExportBotData":"getAutobotData";
+                    var url = "/pms/io/trigger/"+api+"/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + this.options.botId;
                     jQuery.getJSON(url, function (tsv, state, xhr) {
                         var autobot = jQuery.parseJSON(xhr.responseText);
                         that.autobotData = autobot;
@@ -48,8 +49,11 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                         that.dialog = that.options.dialog;
                         that.targetsModel = null;
                         that.filterNumber = null;
-                        that.alertMessage = that.model.get('actionData')[0].alertMessage;
-                        that.alertEmails = that.model.get('actionData')[0].alertEmails;
+                        that.object = that.model.get('actionData');
+                        if(that.object){
+                            that.alertMessage = that.model.get('actionData')[0].alertMessage;
+                            that.alertEmails = that.model.get('actionData')[0].alertEmails;
+                        }
                         that.status = that.model.get('status');
                         that.botId = that.model.get('botId.encode');
                         that.messageLabel = that.model.get("subject");
@@ -57,8 +61,9 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                         if (!that.messageLabel) {
                             that.messageLabel = 'Subject line goes here ...';
                         }
-                        that.object = that.model.get('actionData');
-                        that.campNum = that.model.get('actionData')[0]['campNum.encode'];
+                        if(that.object){
+                            that.campNum = that.model.get('actionData')[0]['campNum.encode'];
+                        }
                         that.filterNumber = that.model.get('filterNumber.encode');
                         if (that.status == "D") {
                             that.editable = false;
@@ -66,6 +71,10 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                         } else {
                             that.editable = true;
 
+                        }
+                        
+                        if(that.model.get("actionType")=="Z" && that.model.get("status")=="D"){
+                            $('.modal').find('.modal-footer').find('.btn-save').hide();
                         }
                         that.mainTags = "";
                         that.render();                        
@@ -112,7 +121,7 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     
-                   
+                    this.hideShowFiltersZaiper();
                     
                     this.options.app.showLoading(false, this.$el);
                 },
@@ -202,14 +211,16 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                                     $(this).parents(".checkpanelinput").css({"background-color": "#CCDCE5"});
                                 }
                         );
-                        //wait added
-                        that.waitView = new WaitView({page:that,editable:that.editable }); 
-                        that.$(".delayRow").html(that.waitView.$el);
-                        
-                        //wait added
-                        if(that.waitView){
-                            that.waitView.setData(that.autobotData);
-                        }
+                        if(that.model.get("actionType")!=="Z"){
+                            //wait added
+                            that.waitView = new WaitView({page:that,editable:that.editable }); 
+                            that.$(".delayRow").html(that.waitView.$el);                        
+
+                            //wait added
+                            if(that.waitView){
+                                that.waitView.setData(that.autobotData);
+                            }
+                        }   
 
                     });
 
@@ -246,6 +257,21 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                         case "PRE.7":
                             label = "Score will be updated by <span>+100</span>  ";
                             break;
+                        case "PRE.7":
+                            label = "Score will be updated by <span>+100</span>  ";
+                            break;   
+                        case "EXPPRE.3":
+                            label = "All <span>Web Visitors will be exported</span>";
+                            information = "I'll constantly watch for people who match your web visit rules.";
+                            break;   
+                        case "EXPPRE.2":
+                            label = "All <span>Openers will be exported</span>  ";
+                            information = "I'll constantly watch for people who match your opener rules.";
+                            break;   
+                        case "EXPPRE.1":
+                            label = "All <span>Clickers will be exported</span>  ";
+                            information = "I'll constantly watch for people who match your clicker rules.";
+                            break;   
                     }
                     if (info == 1)
                         return information;
@@ -276,6 +302,15 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                         case "PRE.7":
                             label = "<img class='img-replaced' src='" + this.options.app.get("path") + "img/score100bot-h.png'>";
                             break;
+                        case "EXPPRE.3":
+                            label = "<img class='img-replaced' src='" + this.options.app.get("path") + "img/zapier_autobots_web_visit.png'>";
+                            break;    
+                        case "EXPPRE.2":
+                            label = "<img class='img-replaced' src='" + this.options.app.get("path") + "img/zapier_autobots_open.png'>";
+                            break;    
+                        case "EXPPRE.1":
+                            label = "<img class='img-replaced' src='" + this.options.app.get("path") + "img/zapier_autobots_click.png'>";
+                            break;     
                     }
                     return label;
                 },
@@ -461,7 +496,10 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                     }
                     this.head_action_bar.find(".copy").remove();//addClass('showtooltip').attr('data-original-title', "Click to Copy").css('cursor', 'pointer');
                     this.head_action_bar.find(".delete").remove();//addClass('showtooltip').attr('data-original-title', "Click to Delete").css('cursor', 'pointer');
-                    this.head_action_bar.append("<div class='percent_stats autobots_percent'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:-1px 0px 0px !important'></a></div>");
+                    var model =this.options.model;
+                    if(model.get("actionType")!=="Z"){                        
+                        this.head_action_bar.append("<div class='percent_stats autobots_percent'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:-1px 0px 0px !important'></a></div>");
+                    }
                     this.head_action_bar.find(".percent").on('click', function (ev) {
                         that.showPercentage(ev);
                     });
@@ -526,6 +564,10 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                     this.options.refer.getAutobotById(this.botId);
                 },
                 saveTagAutobot: function (close, isPlayClicked) {
+                    if(this.model.get("actionType")=="Z"){
+                        this.playAutobot(isPlayClicked);
+                        return false;
+                    }
                     var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                     //wait added
@@ -589,6 +631,48 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                     }
 
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
+                    var result = false;
+                    var that = this;
+                    $.post(URL, post_data)
+                            .done(function (data) {
+                                that.options.app.showLoading(false, that.$('.modal-body'));
+                                var _json = jQuery.parseJSON(data);
+                                if (_json[0] !== "err") {
+                                    result = true;
+                                    if (isPlayClicked) {
+                                        that.options.refer.playAutobot('dialog', that.botId);
+                                    } else {
+                                        that.app.showMessge(_json[1]);
+                                    }
+
+                                } else {
+                                    that.app.showAlert(_json[1], $("body"), {fixed: true});
+                                    result = false;
+
+                                }
+                                btnSave.removeClass('saving');
+                                btnPlay.removeClass('saving-blue');
+                                return result;
+                            });
+                    this.options.app.showLoading(false, this.$('.modal-body'));
+                },
+                playAutobot: function (isPlayClicked) {
+                    var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+                    var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                    //wait added
+                     
+                    if (this.status != "D") {
+                        this.options.refer.pauseAutobot(('dialog', this.botId));
+                        this.options.app.showLoading(false, this.$el);
+                        btnPlay.removeClass('saving-blue');
+                        btnSave.removeClass('saving');
+                        return false;
+                    }
+                    var that = this;
+                    var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update"};
+                    
+
+                    var URL = "/pms/io/trigger/saveZapierExportBotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                     var result = false;
                     var that = this;
                     $.post(URL, post_data)
@@ -1462,6 +1546,27 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                             });
 
 
+                },
+                hideShowFiltersZaiper: function(){
+                    var model =this.options.model;
+                    if(model.get("actionType")=="Z"){
+                        
+                        this.$(".emailclicks-submit,.pageviews-submit,.form-submit,.form-score").hide();
+                        this.$("#ddlif").attr("disabled",true);
+                        if(model.get("presetType")=="EXPPRE.3"){
+                            this.$(".pageviews-submit").show();
+                            this.$(".pageviews-submit").append("<div class='blocker-div'></div>");
+                        }
+                        else if(model.get("presetType")=="EXPPRE.2"){
+                            this.$(".emailclicks-submit").show();
+                            this.$(".emailclicks-submit").append("<div class='blocker-div'></div>");
+                        }
+                        else if(model.get("presetType")=="EXPPRE.1"){
+                            this.$(".emailclicks-submit").show();
+                            this.$(".emailclicks-submit").append("<div class='blocker-div'></div>");
+                        }
+                    }
+                    
                 }
 
             });

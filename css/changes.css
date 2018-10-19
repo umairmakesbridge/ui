@@ -11781,3 +11781,13 @@ li.ui-timepicker-selected .ui-timepicker-duration,
 .managefilter.active .icon{
     background-color:#00a1dd !important;
 }   
+.blocker-div{
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    background: #e2e2e2;
+    z-index: 100;
+    top: 0px;
+    left: 0px;
+    opacity: 0.1;
+}

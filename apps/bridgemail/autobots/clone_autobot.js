@@ -31,7 +31,8 @@ function (template) {
                                     message:'Autobot name can\'t be empty' 
                             });
                      } 
-                             var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=clone";
+                            var apiName = this.parent.botType =="Z"?'saveZapierExportBotData':'saveAutobotData';
+                             var URL = "/pms/io/trigger/"+apiName+"/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=clone";
                              this.app.showLoading("Creating copy of Autobot...",this.$el);
                              $.post(URL, { botId:this.page.get('botId.encode'),label: this.$('#bot_name').val()})
                              .done(_.bind(function(data){
@@ -44,7 +45,12 @@ function (template) {
                                          if(typeof this.parent.dialog !="undefined")
                                             this.parent.dialog.hide(); 
                                          this.app.showMessge("Copy created successfully.");
-                                         this.options.page.options.page.fetchBots();  
+                                         if(this.parent.botType =="Z"){
+                                            this.options.page.options.page.fetchExportBots();  
+                                        }
+                                         else{
+                                            this.options.page.options.page.fetchBots();  
+                                        }
                                      }
                              },this));
                      }

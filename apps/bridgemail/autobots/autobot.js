@@ -46,8 +46,8 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                     $(this.el).attr('id', 'row_' + this.model.get('botId.encode'));
                 },
                 render: function() {
-                    this.$el.html(this.template(this.model.toJSON()));
-                    this.botType = this.model.get('actionType');     
+                    this.botType = this.model.get('actionType');
+                    this.$el.html(this.template(this.model.toJSON()));                         
                     this.autbotapi =  this.botType == "Z"?"saveZapierExportBotData":"saveAutobotData";
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     if(this.showUseButton){
@@ -100,6 +100,15 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                             this.icon = 'salesalertbotc18';
                             label = "<img src='"+this.options.app.get("path")+"img/salesalertbot-icon.png' style='max-width:none!important;'>";
                             break;
+                        case "EXPPRE.3":
+                            label = "<img src='"+this.options.app.get("path")+"img/zapier_web_visit.png' style='max-width:none!important;'>";
+                            break; 
+                       case "EXPPRE.2":
+                            label = "<img src='"+this.options.app.get("path")+"img/zapier_open.png' style='max-width:none!important;'>";
+                            break;   
+                        case "EXPPRE.1":
+                            label = "<img src='"+this.options.app.get("path")+"img/zapier_click.png' style='max-width:none!important;'>";
+                            break;   
                     }
                     if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
                         label = "<img src='"+this.options.app.get("path")+"img/bdaybot-icon.png' style='max-width:none!important;'>"
@@ -120,7 +129,8 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                        app.mainContainer.addWorkSpace({params: {camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
                   },
                 dateSetting: function(sentDate) {
-                    var _date = moment(sentDate, 'MM-DD-YY');
+                    var dateFormat = this.botType == "Z" ? 'MM-DD-YYYY':'MM-DD-YY';
+                    var _date = moment(sentDate, dateFormat);
                     return _date.format("DD MMM YYYY");
                 },
                 isRecurring: function() {
@@ -371,10 +381,12 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                     }
                     this.botId = botId;
                      if(this.model.get('isPreset') == "Y"){
-                        if(this.model.get('presetType') == "PRE.1")
-                        this.chooseBotToEdit('autobots/birthday');
-                        else    
-                        this.chooseBotToEdit('autobots/preset');
+                        if(this.model.get('presetType') == "PRE.1"){
+                            this.chooseBotToEdit('autobots/birthday');
+                        }
+                        else {
+                            this.chooseBotToEdit('autobots/preset');
+                        }
                         
                     return;
                     }
