@@ -45,8 +45,9 @@
            'scrollbox':'shared/jquery.scrollbox',
            'highcharts':'shared/libs/charts/highcharts',          
            'jspdf' : 'reports/summary/vendors/jspdf',
-           'offline':'shared/libs/offline',
+           'offline':'shared/libs/offline',           
            'jquery.flowchart':'shared/libs/jquery.flowchart'
+           
        },
         shim: {
                 backbone: {

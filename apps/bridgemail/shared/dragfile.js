@@ -152,7 +152,7 @@
         }
         
        //if(this.module !=="Image" || this.module !== "csv")this.app.showLoading("Uploading...",this.$element);
-       var jqXHR=$.ajax({
+       this.jqXHR=$.ajax({
             xhr: function() {
             var xhrobj = $.ajaxSettings.xhr();
             if (xhrobj.upload) {
@@ -315,12 +315,30 @@
                     isCSV = false;
                     this.errMessage = 0;
                 }
-         }
+         } else {
+            var reader = new FileReader();
+            var that = this;
+            reader.onload = function(e) {
+              var codes = new Uint8Array(e.target.result);
+              try{
+              var encoding = Encoding.detect(codes);
+              if(encoding=="UNICODE"){
+                  isCSV = false;
+                  that.app.showAlert("Your file doesn't have proper encoding, Please convert file to UTF8 Encoding and then try again",$("body"),{fixed:true})
+                  that.jqXHR.abort();
+                   that.progressElement.find("#progress").remove();
+                   that.progressElement.find(".csv-opcbg").remove();
+              }   
+             }
+             catch(e){console.log(e)};
+            };
+            reader.readAsArrayBuffer(file);
          if(file.size > 1000000*350){
              this.app.showAlert("CSV file size should not be greater than <b>350MB</b>",$("body"),{fixed:true})
              isCSV = false;
              this.errMessage = 0;
          }
+        }
          return isCSV;
     }
     
