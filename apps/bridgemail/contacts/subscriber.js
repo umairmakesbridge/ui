@@ -131,7 +131,7 @@ define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline","co
                         _this.$(".s-date").html(create_date.date());
                         _this.$(".s-month-year").html("<strong>" + _this.app.getMMM(create_date.month()) + "</strong> " + create_date.year());
                         _this.sub_fields = _json;
-                        _this.subscriberModel = Backbone.Model.extend(_this.sub_fields);
+                        _this.subscriberModel = new Backbone.Model(_this.sub_fields);
                         if(_json.score !== '0'){
                             _this.$('.score').html('<i class="icon score"></i>+<span class="score-value">'+_json.score+'</span>');
                         }else{
