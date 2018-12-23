@@ -1,9 +1,12 @@
 (function () {
    'use strict';
+   /**
+    * Configruation for requirejs
+    */
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.472_923" ,       
+       urlArgs: "bust=1.472_924" ,   //Set version as cache reload    
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
@@ -149,7 +152,14 @@
                }
          }
     });
- 
+    /**
+     * 
+     * @param {object} Backbone
+     * @param {object} app
+     * @param {object} Router
+     * @param {object} MainContainer
+     * @returns {unresolved}
+     */
     define(['backbone', 'app', 'router', 'views/main_container'], function (Backbone, app, Router, MainContainer) {
         app.start(Router, MainContainer, function () {                
                 Backbone.history.start({pushState: true}); //Start routing

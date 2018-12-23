@@ -12,13 +12,13 @@
                             <h4 style="margin-top:5px;">Triggers</h4>
                             <ul class="b-blocks">
                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="target" data-trigger="manual">
-                                    <i class="icon cblock"></i>
+                                    <i class="icon target"></i>
                                     <a >
                                         <span class=" font_75">Target</span>
                                     </a>
                                 </li>
-                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="time" data-trigger="manual">
-                                    <i class="icon cblock"></i>
+                                <li class="j_disabled" data-type="time">
+                                    <i class="icon time_target"></i>
                                     <a >
                                         <span class=" font_75">Time Trigger</span>
                                     </a>
@@ -28,36 +28,36 @@
                              <h4 style="margin-top:5px;">Actions</h4>
                              <ul class="b-blocks">
                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="campaign" data-trigger="manual">
-                                    <i class="icon cblock"></i>
+                                    <i class="icon email"></i>
                                     <a >
-                                        <span class=" font_75">Send Email</span>
+                                        <span class=" font_75">Send Message</span>
                                     </a>
                                 </li>
                                  <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="exit" data-trigger="manual">
-                                    <i class="icon cblock"></i>
+                                    <i class="icon exit_journey"></i>
                                     <a >
                                         <span class=" font_75">Exit Journey</span>
                                     </a>
                                 </li>   
                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="wait" data-trigger="manual">
-                                    <i class="icon cblock"></i>
+                                    <i class="icon delay"></i>
                                     <a >
                                         <span class=" font_75">Add Delay</span>
                                     </a>
                                 </li>
-                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="score" data-trigger="manual">
-                                    <i class="icon cblock"></i>
+                                <li class="j_disabled" data-type="score">
+                                    <i class="icon score"></i>
                                     <a >
                                         <span class=" font_75">Change Score</span>
                                     </a>
                                 </li>
-                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag"  data-type="alert" data-trigger="manual">
-                                    <i class="icon cblock"></i>
+                                 <li class="j_disabled" data-type="alert">
+                                    <i class="icon j_alert"></i>
                                     <a >
                                         <span class=" font_75">Send Alert</span>
                                     </a>
                                 </li>                                                             
-                                <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="end" data-trigger="manual">
+                                <li class="draggableControl ui-draggable showtooltip-dg" style="display:none" title="Drag" data-type="end" data-trigger="manual">
                                     <i class="icon cblock"></i>
                                     <a >
                                         <span class=" font_75">Do Nothing</span>
@@ -65,8 +65,8 @@
                                 </li>   
                                 
                             </ul>
-                             <h4 style="margin-top:5px;">Decisions</h4>
-                             <ul class="b-blocks">
+                             <h4 style="margin-top:5px;display:none" >Decisions</h4>
+                             <ul class="b-blocks" style="display:none">
                                 <li class="draggableControl ui-draggable showtooltip-dg" title="Drag" data-type="decision" data-trigger="manual">
                                     <i class="icon cblock"></i>
                                     <a >

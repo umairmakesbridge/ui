@@ -4530,8 +4530,8 @@ border-color: #0096FF #0096FF transparent transparent;
 
 .flowchart-operator {
     position: absolute;
-    width: 150px;
-    min-height:70px; 
+    width: 174px;
+    min-height:94px; 
     border: 1px solid #e9e9e9;
     background: #FFFFFF;
     pointer-events: initial;
@@ -4587,5 +4587,11 @@ border-color: #0096FF #0096FF transparent transparent;
 .flowchart-operator .flowchart-operator-inputs, .flowchart-default-operator .flowchart-operator-outputs {
     display: table-cell;
     width: 50%;
+}
+.flowchart-linktext{
+    position:absolute;
+    top:42px;
+    left:20px;
+    cursor: pointer;
 }
 /* ================================================End jquery.flowchart.css================================================ */

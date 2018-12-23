@@ -12,6 +12,8 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                     this.camp_json = null;
                     this.render();
                     this.elementCount = 0;
+                    this.elementMap = {"target":{"text":"Select a target"},"campaign":{"text":"Add a message"}
+                                       ,"wait":{"text":"Delay"} ,"exit":{"text":""}};
                 },
                 render: function ()
                 {
@@ -70,7 +72,7 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                                     inputs: {},
                                     outputs: {
                                         output_1: {
-                                            label: 'Journey',
+                                            label: 'Start Point',
                                         }
                                     }
                                 }
@@ -86,8 +88,10 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                 },
                 createNode: function (obj) {
                     this.elementCount = this.elementCount + 1;
-                    var operatorId = $.trim($(obj.dragEle).data('type')+"_"+this.elementCount);
+                    var oType = $.trim($(obj.dragEle).data('type'));
+                    var operatorId = oType+"_"+this.elementCount;
                     var operatorTitle = $.trim($(obj.dragEle).text());
+                    var operatorClass = oType+"_cls";
                     var outputs = {
                                     output_1: {
                                         label: '',
@@ -107,14 +111,17 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                         top: obj.pos.top,
                         left: obj.pos.left,
                         properties: {
-                            title: operatorTitle,                            
+                            title: operatorTitle, 
+                            linkText: this.elementMap[oType].text,
+                            type:oType,
                             inputs: {
                                 input_1: {
                                     label: '',
                                 }
                             },
-                            outputs: outputs
-                        }
+                            outputs: outputs                            
+                        },
+                        clsName : operatorClass
                     };
 
                     this.$('.journey-builder').flowchart('createOperator', operatorId, operatorData);

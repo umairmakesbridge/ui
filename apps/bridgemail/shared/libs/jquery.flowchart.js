@@ -497,8 +497,10 @@ $(function () {
 
         _getOperatorFullElement: function (operatorData) {
             var infos = this.getOperatorCompleteData(operatorData);
-
-            var $operator = $('<div class="flowchart-operator"></div>');
+            var addClass ="custom-node-cls"
+            var nodeCls =operatorData.clsName?operatorData.clsName:"";
+            addClass += " "+ nodeCls;
+            var $operator = $('<div class="flowchart-operator '+addClass+'"></div>');
             $operator.addClass(infos.class);
 
             var $operator_title = $('<div class="flowchart-operator-title"></div>');
@@ -508,6 +510,11 @@ $(function () {
             if(!infos.remove){
                 var $operator_delete = $('<div class="flowchart-cross" title="Delete Node"></div>');
                 $operator_delete.appendTo($operator);
+            }
+            
+            if(infos.linkText){
+                var $operator_linktext = $('<div class="flowchart-linktext" title="'+infos.linkText+'"><a>'+infos.linkText+'</a></div>');
+                $operator_linktext.appendTo($operator);
             }
 
             var $operator_inputs_outputs = $('<div class="flowchart-operator-inputs-outputs"></div>');

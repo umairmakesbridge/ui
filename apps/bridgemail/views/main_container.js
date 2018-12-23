@@ -121,7 +121,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-alertbot': 'newAutobot',
                     'click .new-scorebot': 'newAutobot',
                     'click .landing-pages': 'landingPageslist',
-                    'click .workflow-listing': 'workflowListing',
+                    'click .workflow-listing': function(){
+                        this.workflowListing();
+                    },
                     'click .journey-canvas': 'journeCanvas',
                     'click .bridge-statz': 'openBridgeStatz',
                     'click .exportsubscribers': 'exportsubscribers',
@@ -1038,8 +1040,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 campaignListing: function () {
                     this.addWorkSpace({type: '', title: 'Campaigns', sub_title: 'Listing', url: 'campaigns/campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});
                 },
-                workflowListing: function () {
-                    this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
+                workflowListing: function (wf_id) {
+                    var workflow_id = (wf_id)?wf_id:null;
+                    this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting',params:{workflow_id:workflow_id}});
                 },
                 journeCanvas:function(){
                     this.addWorkSpace({type: '', title: 'Journey', sub_title: 'Create your journey', url: 'workflow/journey', workspace_id: 'journeycanvas', 'addAction': false, tab_icon: 'workflowlisting', noTags: true});

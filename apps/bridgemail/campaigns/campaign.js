@@ -1,3 +1,16 @@
+/**
+ * 
+ * @param {html} template
+ * @param {view} editorView
+ * @param {view} templatesPage
+ * @param {view} selectListPage
+ * @param {view} selectTarget
+ * @param {view} csvuploadPage
+ * @param {view} bmsfilters
+ * @param {view} Mapping
+ * @param {view} bms
+ * @param {view} scrollbox
+ */
 define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/templates', "listupload/campaign_recipients_lists",'target/selecttarget', 'listupload/csvupload', 'bms-filters', 'bms-mapping', 'bms-mergefields', 'scrollbox','bms-remote'],
         function ( template, editorView,templatesPage, selectListPage, selectTarget, csvuploadPage, bmsfilters, Mapping, bms, scrollbox) {
             'use strict';
@@ -98,11 +111,18 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.app.showInfo(this.$el.find('#lblReplyto'), "Reply to email of the email");
 
                 },
+                /**
+                 * Remove non Printable characters
+                 * @param {object} obj
+                 */
                  cleanNonPrintableCharacters: function(obj){
                     var _input = $(obj.target);                                        
                     setTimeout(_.bind(function(){_input.val(this.app.replaceNonPrintableChar(_input.val()));}, this), 100);
                     
                 },
+                /**
+                 * Initialize all merge fields inputs
+                 */
                 initMergeFields: function () {
                     this.$('#campaign_subject-wrap').mergefields({app: this.app, view: this, elementID: 'campaign_subject', config: {state: 'workspace', isrequest: true}, placeholder_text: 'Enter subject'});
                     this.$('#campaign_reply_to-wrap').mergefields({app: this.app, view: this, config: {salesForce: true, emailType: true, state: 'workspace', isrequest: true}, elementID: 'campaign_reply_to', placeholder_text: 'Enter reply to'});
@@ -112,6 +132,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.$('#merge_field_plugin-wrap-hand').mergefields({app: this.app, view: this, config: {links: true, state: 'workspace'}, elementID: 'merge-field-hand', placeholder_text: 'Merge Tags'});
                     this.$('#merge_field_plugin-wrap-plain').mergefields({app: this.app, view: this, config: {links: true, state: 'workspace'}, elementID: 'merge-field-plain', placeholder_text: 'Merge Tags'});
                 },
+                /**
+                 * Render view and initialize plugins
+                 */
                 render: function () {
                     this.$el.html(this.template({}));
                     this.wizard = this.options.wizard;
@@ -154,6 +177,11 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     //this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace',isrequest:true},placeholder_text:'Enter subject',mergeFieldsCallback:_.bind(this.initMergeFields,this)});                    
 
                 },
+                /**
+                 * Move to given step for campaign wizard
+                 * @param {string} step
+                 * @returns {Number|campaignL#15.campaignAnonym$1.stepsCall@call;saveStep4|campaignL#15.campaignAnonym$1.stepsCall@call;saveStep3|campaignL#15.campaignAnonym$1.stepsCall@call;saveStep2|campaignL#15.campaignAnonym$1.stepsCall@call;saveStep1}
+                 */
                 stepsCall: function (step) {
                     var proceed = -1;
                     $(".messagebox.messagebox_").remove();
@@ -184,6 +212,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     }
                     return proceed;
                 },
+                /**
+                 * Remove CSV upoad area
+                 */
                 removeCSVUpload: function () {
                     var camp_obj = this;
                     var csvupload = camp_obj.states.step3.csvupload
@@ -199,6 +230,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                         camp_obj.app.showLoading(false, camp_obj.states.step3.mapdataview.$el);
                     }
                 },
+                /**
+                 * After render initialize call
+                 */
                 init: function () {
                     this.app.showLoading("Loading...", this.$el);
                     this.initMergeFields();
@@ -249,9 +283,16 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.$("#fromemail_default_chosen .chosen-single div").attr("title", "View More Options").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
 
                 },
+                /**
+                 * Set width of from name email field
+                 */
                 setFromNameField: function () {
                     this.app.fixEmailFrom();
                 },
+                /**
+                 * 
+                 * @param {object} obj
+                 */
                 fromNameSelectBoxChange: function (obj) {
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
                     if (merge_field_patt.test($(obj).val())) {

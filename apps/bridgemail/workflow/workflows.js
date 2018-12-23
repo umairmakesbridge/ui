@@ -30,6 +30,7 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                         countcontainer: 'no_of_camps'
                   });
                   this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                  this.workflow_id = (this.options.params) ? this.options.params.workflow_id :'';
                 },
                 init: function () {
                     this.showLoadingMask();
@@ -44,7 +45,10 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                         this.app.removeSpinner(this.$el); 
                         //this.$("#workflowlistsearch #clearsearch").click();
                         
-                    },this))
+                    },this));
+                    if(this.workflow_id){
+                        this.viewWorkFlow(this.workflow_id);
+                    }
                 },
                 resizeHeight:function(height){
                     this.$(".workflowiframe").css("height",height+"px");
@@ -290,6 +294,11 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                      tmPr.init();
                                           
                    },this));
+                },
+                viewWorkFlow: function(wid){
+                    this.showLoadingMask('Loading Workflow Wizard...',true);
+                    var url = "/pms/trigger/workflow.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&workflowId="+wid+"&fromNewUI=true";
+                    this.$(".workflowiframe").attr("src",url);
                 }
                 
 

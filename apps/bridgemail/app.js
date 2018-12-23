@@ -1,9 +1,21 @@
+/**
+ * Application start file, contains common functions for most ui
+ * @param {object} $
+ * @param {object} _
+ * @param {object} Backbone
+ * @param {object} bootstrap
+ * @param {object} bmsStaticDialog
+ * @param {object} bmsDialog
+ * @param {object} addDialog
+ * @param {object} moment
+ * @returns {appL#6.App}
+ */
 define([
     'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment', 'jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker','highcharts'
 ], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog, moment) {
     'use strict';
     var App = Backbone.Model.extend({        
-        showbacktooltip: false,
+        showbacktooltip: false,        
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
@@ -44,6 +56,12 @@ define([
             }
 
         },
+        /**
+         * Start function called from main.js
+         * @param {object} Router
+         * @param {object} MainContainer
+         * @param {object} callback          
+         */
         start: function (Router, MainContainer, callback) {
             //Create the router
             this.router = new Router('landing');
@@ -91,6 +109,10 @@ define([
                 (callback || $.noop)();
             }, this));
         },
+        /**
+         * All starting scripts are loaded for UI
+         * Called from start function.
+         */
         initScript: function () {
 
             this.autoLoadImages();
@@ -215,6 +237,10 @@ define([
             require(["editor/MEE",'jquery-ui','offline'], _.bind(function (MEE) { },this));
 
         },
+        /**
+         * 
+         * Get users details - called from start
+         */
         getUser: function () {
             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.get("bms_token") + "&type=get";
             jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
@@ -280,6 +306,9 @@ define([
             this.checkFromCRM();
             this.loadCampaignDefaults();
         },
+        /**
+         *Loads campaign defaults - called from getUser 
+         */
         loadCampaignDefaults:function(){
             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.get('bms_token') + "&type=campaignDefaults";
             $.ajax({
@@ -294,6 +323,9 @@ define([
             
             
         },
+        /**
+         * Check for all CRM connections 
+         */
         checkFromCRM: function () {
             if (this.mainContainer) {
                 this.fromCRM();
@@ -301,6 +333,9 @@ define([
                 setTimeout(_.bind(this.fromCRM, this), 200);
             }
         },
+        /**
+         * Show on demand features which are currently under development.  
+         */
         showFeatures: function () {
             var allowedUser = ['admin', 'jayadams', 'demo', 'hawaiilife', 'MKS-Training2', 'mansoor@makesbridge.com'];
             if (allowedUser.indexOf(this.get("user").userId) > -1) {
@@ -318,6 +353,9 @@ define([
                 this.mainContainer.$(".report-flow").show();
             }
         },
+        /**
+         * Hides logout link - if user login from CRM 
+         */
         fromCRM: function () {
             if (this.get("isFromCRM") && this.get("isFromCRM").toLowerCase() == "y") {
                 this.mainContainer.$(".logout").hide();
@@ -326,9 +364,15 @@ define([
                 this.mainContainer.$(".logout").show();
             }
         },
+        /**
+         * Clear all UI objects which are cached. 
+         */
         clearCache: function () {
             window.setTimeout(_.bind(this.removeAllCache, this), 1000 * 60 * 30);
         },
+        /**
+         * Common check error funtion on json returned from server 
+         */
         checkError: function (result) {
             var isError = false;
             if (result && result[0] && result[0] == "err") {
@@ -336,12 +380,18 @@ define([
             }
             return isError;
         },
+        /**
+         * Preloads some defined images in start 
+         */
         autoLoadImages: function () {
             var preLoadArray = ['img/trans_gray.png', 'img/recurring.gif', 'img/loading.gif', 'img/spinner-medium.gif', 'img/greenloader.gif', 'img/refresh-g.gif']
             $(preLoadArray).each(function () {
                 var image = $('<img />').attr('src', this);
             });
         },
+        /**
+         * Resize workspace on demand 
+         */
         resizeWorkSpace: function () {
             var body_size = $('body').height() - 90;
             $(".workspace .ws-content").css("min-height", (body_size - 100));
@@ -352,6 +402,9 @@ define([
             //$('#campaign_from_email_chosen').width(parseInt(subj_w-40));
             this.fixEmailFrom();
         },
+        /**
+         * Set Width of fromEmail in campaign wizard and email dialog 
+         */
         fixEmailFrom: function () {
 
             var active_workspace = $(".ws-content.active");
@@ -366,8 +419,15 @@ define([
             }
         },
         openModule: function (obj) {
-            alert($(obj.target).attr("id"));
+            //alert($(obj.target).attr("id"));
         },
+        /**
+         * Show loading mask with message. 
+         * @param {string} message
+         * @param {object} container
+         * @param {object} _styles
+         */
+         
         showLoading: function (message, container, _styles) {
             var divStyles = "";
             if (message) {
@@ -384,6 +444,12 @@ define([
                 $(container).find(' > .loading').remove();
             }
         },
+        /**
+         * Show UI custom alert 
+         * @param {string} message
+         * @param {object} container
+         * @param {object} option
+         */
         showAlert: function (message, container, option) {
             if (message) {
                 var inlineStyle = (option && option.top) ? ('top:' + option.top) : '';
@@ -411,6 +477,11 @@ define([
                 });
             }
         },
+        /**
+         * Show Custom UI Alert with details
+         * @param {string} message
+         * @param {object} container
+         */
         showAlertDetail: function (message, container) {
             if (message) {
                 var dialogHTML = '<div class="overlay"></div><div class="messagebox messagebox_ delete"><h3>' + message.heading + '</h3>';
@@ -433,6 +504,11 @@ define([
                 });
             }
         },
+        /**
+         * Show alert custom ui alert popup
+         * @param {type} message
+         * @param {type} container
+         */
         showAlertPopup: function (message, container) {
             if (message) {
                 var dialogWidth = message.dialogWidth ? "width:" + message.dialogWidth : "";
@@ -459,6 +535,11 @@ define([
                 });
             }
         },
+        /**
+         * Show login expire alert
+         * @param {string} message
+         * @param {object} container
+         */
         showLoginExpireAlert: function (message, container) {
             if (message) {
                 var dialogHTML = '<div class="overlay"><div class="messagebox caution"><h3>' + message.heading + '</h3>';
@@ -471,6 +552,10 @@ define([
                 });
             }
         },
+        /**
+         * Show a success message
+         * @param {String} msg
+         */
         showMessge: function (msg) {
             $(".global_messages p").html(msg);
             $(".global_messages").show();
@@ -486,6 +571,11 @@ define([
                 })
             });
         },
+        /**
+         * Replace non printable characters
+         * @param {string} str
+         * @returns {String}
+         */
         replaceNonPrintableChar: function(str){
             if (typeof (str) !== "undefined") {
                 str = str.replace(//g, "");
@@ -494,8 +584,13 @@ define([
                 str = "";
             }
             return str;
-        }
+        }        
         ,
+        /**
+         * Encode characters to send response to server
+         * @param {string} str
+         * @returns {String}
+         */
         encodeHTML: function (str) {
             if (typeof (str) !== "undefined") {
                 str = str.replace(/:/g, "&#58;");
@@ -515,6 +610,12 @@ define([
             return str;
         }
         ,
+        /**
+         * Decode characters 
+         * @param {string} str
+         * @param {boolean} lineFeed
+         * @returns {String}
+         */
         decodeHTML: function (str, lineFeed) {
             //decoding HTML entites to show in textfield and text area 				
             if (typeof (str) !== "undefined") {
@@ -540,6 +641,11 @@ define([
             }
             return str;
         },
+        /**
+         * Encode values in attribute - Used in Easy editor
+         * @param {string} val
+         * @returns {String}
+         */
         encodingAttr: function (val) {
             if (typeof (val) !== "undefined") {
                 val = val.replace(/&/g, "&amp;")
@@ -553,6 +659,11 @@ define([
         decodeJSON: function (str) {                        
              return str;
         },
+        /**
+         * Convert month number to month name
+         * @param {integer} month
+         * @returns {String}
+         */
         getMMM: function (month) {
             var monthNames = [
                 "Jan", "Feb", "Mar",
@@ -562,6 +673,11 @@ define([
             ];
             return monthNames[month];
         },
+        /**
+         * Get campaign stuats based on flag sent from server
+         * @param {string} flag
+         * @returns {String}
+         */
         getCampStatus: function (flag) {
             // A=all, D=draft, S=scheduled, P=pending, C=completed, R = Running  
             var status = 'Draft';
@@ -585,6 +701,12 @@ define([
             }
             return status;
         },
+        /**
+         * Returns tags html
+         * @param {string} tags
+         * @param {string} type
+         * @returns {String}
+         */
         showTags: function (tags, type) {
             var tag_array = tags.split(",");
             var tag_html = "<ul>";
@@ -595,19 +717,38 @@ define([
             tag_html += "</ul>";
             return tag_html;
         },
+        /**
+         * Start search 
+         * @param {object} obj
+         * @param {string} searchInput
+         */
         initSearch: function (obj, searchInput)
         {
             var target = $.getObj(obj, "a");
             searchInput.val(target.text());
             searchInput.keyup();
         },
+        /**
+         * Sets application level cache
+         * @param {string} appVar
+         * @param {string} data
+         * @returns {undefined}
+         */
         setAppData: function (appVar, data) {
             var _data = this.get("app_data");
             _data[appVar] = data;
         },
+        /**
+         * Returns application level cache
+         * @param {string} appVar
+         * @returns {Object}
+         */
         getAppData: function (appVar) {
             return this.get("app_data")[appVar];
         },
+        /**
+         * Remove all cache for applicaiton
+         */
         removeAllCache: function () {
             var cache = this.get("app_data");
             $.each(cache, function (k, v) {
@@ -618,11 +759,19 @@ define([
             this.loadCampaignDefaults();
             console.log("Cache is cleared now time=" + (new Date()));
         },
+        /**
+         * Remove any given cache based on key
+         * @param {string} key
+         */
         removeCache: function (key) {
             var cache = this.get("app_data");
             cache[key] = null;
             delete cache[key];
         },
+        /**
+         * Remove spinner shown on workspace tab
+         * @param {object} elObj
+         */
         removeSpinner: function (elObj) {
             var isCreatePage = false;
             if (elObj.parents('.ws-content').length) {
@@ -638,6 +787,10 @@ define([
             }
             
         },
+        /**
+         * Add spinner on workspace tab
+         * @param {string} elObj
+         */
         addSpinner: function (elObj) {
             if (elObj.parents('.ws-content').length) {
                 var activeSpaceID = elObj.parents('.ws-content.active').attr('id');
@@ -645,6 +798,11 @@ define([
                 $('#wp_li_' + lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
             }
         },
+        /**
+         * Get a clickable class name
+         * @param {string} value
+         * @returns {String}
+         */
         getClickableClass: function (value) {
             var classname = "";
             if (Number(value) === 0) {
@@ -654,6 +812,10 @@ define([
             }
             return classname;
         },
+        /**
+         * Common function to make an ajax call and to get data
+         * @param {object} data
+         */
         getData: function (data) {
             var app = this;
             $.ajax({
@@ -675,6 +837,11 @@ define([
                 }
             });
         },
+        /**
+         * Show a common dialog based on given options
+         * @param {object} options
+         * @returns {object|appL#15.appAnonym$1.showDialog@call;appendDialogView}
+         */
         showDialog: function (options) {
             options['app'] = this;
             if (!this.isDialogExists) {
@@ -690,6 +857,11 @@ define([
                 return returnDialog;
             }
         },
+        /**
+         * Show a static dialog 
+         * @param {object} options
+         * @returns {object}
+         */
         showStaticDialog: function (options) {
             options['app'] = this;
             var dialog = new bmsStaticDialog(options);
@@ -698,6 +870,11 @@ define([
             dialog.show();
             return dialog;
         },
+        /**
+         * Show add dialog
+         * @param {object} options
+         * @returns {appL#15.addDialog}
+         */
         showAddDialog: function (options) {
             if (this.get("user") && this.get("user").hasSalesOnlyAccess == "N") {
                 this.addDialogView = new addDialog(options);
@@ -706,6 +883,10 @@ define([
                 return this.addDialogView;
             }
         },
+        /**
+         * Enable validations in email dialogs
+         * @param {object} options
+         */
         enableValidation: function (options)
         {
             if (options.controlcss)
@@ -716,6 +897,10 @@ define([
             options.valid_icon.attr('data-content', options.message);
             options.valid_icon.popover({'placement': 'right', 'trigger': 'hover', delay: {show: 0, hide: 0}, animation: false});
         },
+        /**
+         * Disable validation in email dialogs
+         * @param {object} options
+         */
         disableValidation: function (options)
         {
             options.valid_icon.hide();
@@ -723,23 +908,41 @@ define([
             if (options.customfield)
                 options.customfield.removeAttr('style');
         },
+        /**
+         * Validate email address
+         * @param {string} emailVal
+         * @returns {Boolean}
+         */
         validateEmail: function (emailVal)
         {
             var email_patt = new RegExp("[A-Za-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?");            
             return email_patt.test(emailVal);
         },
+        /**
+         * Show error on fields when validation is performed
+         * @param {object} params
+         */
         showError: function (params) {
             if (params.control) {
                 params.control.find(".inputcont").addClass("error");
                 params.control.find(".inputcont").append('<span class="errortext"><i class="erroricon"></i><em>' + params.message + '</em></span>');
             }
         },
+        /**
+         * Hide validatin from input fields when validation is performed
+         * @param {object} params
+         */
         hideError: function (params) {
             if (params.control) {
                 params.control.find(".inputcont").removeClass("error");
                 params.control.find(".inputcont span.errortext").remove();
             }
         },
+        /**
+         * Add commas(,) i.e. 123,453.00
+         * @param {string} nStr
+         * @returns {String|appL#15.appAnonym$1.addCommas.x}
+         */
         addCommas: function (nStr) {
             nStr += '';
             var x = nStr.split('.');
@@ -751,6 +954,12 @@ define([
             }
             return x1 + x2;
         },
+        /**
+         * Returns a date format to show on UI
+         * @param {string} sentDate
+         * @param {string} sep
+         * @returns {String}
+         */
         dateSetting: function (sentDate, sep) {
             sentDate = this.decodeHTML(sentDate);
             if (sep == "/")
@@ -761,10 +970,18 @@ define([
             return _date.format("DD MMM YYYY");
 
         },
+        /**
+         * Show info icon message with field
+         * @param {object} control
+         * @param {string} message
+         */
         showInfo: function (control, message)
         {
             control.append('<span class="fieldinfo"><i class="icon"></i><em>' + message + '</em></span>');
         },
+        /**
+         * Set information when user is logged in in top menu icon
+         */
         setInfo: function () {
             if (this.get("user")) {
                 var _user = this.get("user");
@@ -807,6 +1024,12 @@ define([
                 window.setTimeout(_.bind(this.setInfo, this), 200);
             }
         },
+        /**
+         * Truncate string
+         * @param {string} title
+         * @param {integer} length
+         * @returns {String}
+         */
         stringTruncate: function (title, length) {
             // var title = 'web administrator';
 
@@ -818,6 +1041,9 @@ define([
             }
 
         },
+        /**
+         * Get netsuite and salesforce CRM status for user
+         */
         CRMGetStatus: function () {
             this.getData({
                 "URL": "/pms/io/netsuite/getData/?BMS_REQ_TK=" + this.get('bms_token') + "&type=status",
@@ -828,6 +1054,10 @@ define([
                 "key": "salesfocre"
             });
         },
+        /**
+         * Show scroll to top icon with functionality
+         * @param {object} scrollObj
+         */
         scrollingTop: function (scrollObj) {
             var scrolltoDiv = scrollObj.scrollDiv;
             var appendtoDiv = scrollObj.appendto;
@@ -853,14 +1083,27 @@ define([
                 //console.log(scrolltoDiv + '   ' + appendtoDiv);
             }
         },
+        /**
+         * Remove Dialog when closed
+         */
         removeDialogs: function () {
             if (this.dialogView) {
                 this.dialogView.hide();
             }
         },
+        /**
+         * Check if value is empty
+         * @param {string} val
+         * @returns {Boolean}
+         */
         isEmpty: function (val) {
             return (val === undefined || val == null || val.length <= 0) ? true : false;
         },
+        /**
+         * Check if values is Numeric
+         * @param {string} s
+         * @returns {Boolean}
+         */
         isNumeric: function (s) {
             if (!/^\d+$/.test(s)) {
                 return false;
@@ -868,6 +1111,11 @@ define([
                 return true;
             }
         },
+        /**
+         * Add/Append dialog to view
+         * @param {object} options
+         * @returns {dialog}
+         */
         appendDialogView: function (options) {
             this.dialogArray.push(options);
             var length = this.dialogArray.length;
@@ -885,6 +1133,11 @@ define([
             //console.log(this.dialogArray);
             return this.dialogView;
         },
+        /**
+         * Check if search text is valid
+         * @param {object} event
+         * @returns {Boolean}
+         */
         validkeysearch: function (event) {
             var regex = new RegExp("^[A-Z,a-z,0-9]+$");
             var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -899,6 +1152,10 @@ define([
             }
             event.preventDefault();
         },
+        /**
+         * Get IE browser version
+         * @returns {appL#15.appAnonym$1.getIEVersion.msie}
+         */
         getIEVersion: function () {
             var msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
             if (isNaN(msie)) {

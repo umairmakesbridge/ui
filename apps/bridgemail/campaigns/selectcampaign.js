@@ -340,6 +340,9 @@ function (template, CampaignsCollection, campRowView) {
                     if(toDate){
                         this.toDate = toDate.format("MM-DD-YYYY");
                     }   
+                    else{
+                        this.toDate = moment(new Date()).format("MM-DD-YYYY");
+                    }
                     this.loadCampaigns();
                     
                }

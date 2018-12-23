@@ -1,0 +1,20 @@
+<div class="thumbnail temp-thumbnail">
+  <div class="img">                               
+                                                        
+       <img src="<%- this.app.get('path')%>img/msgimg.png" data-src="holder.js" alt="" />       
+  </div>
+  <div class="caption nurture-caption">
+      <h3><a id="<%- model.get('stepChecksum')%>"><%- model.get('name')%></a></h3>
+    <a class="cstatus pclr18">Step <strong><%-model.get('order')%></strong> </a>
+   <div class="t-scroll">                         
+    <p>
+         
+    </p>
+    </div>    
+    <div class="btm-bar">        
+        <% if(!this.parent.hideReport) {%>
+        <span style="float:left"><span class="icon report showtooltip" title="Click to view report"></span></span>                
+        <% } %>
+    </div>
+  </div>
+</div>

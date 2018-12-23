@@ -4857,6 +4857,34 @@ div.textcontent ol{
 ul.b-blocks > li > i.icon.cblock{
     background:url("../images/mblogo.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+
+ul.b-blocks > li > i.icon.target{
+    background:url("../../img/n_targets.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+ul.b-blocks > li > i.icon.j_alert{
+    background:url("icons_journey/alert.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+ul.b-blocks > li > i.icon.email{
+    background:url("icons_journey/email.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+ul.b-blocks > li > i.icon.exit_journey{
+    background:url("icons_journey/exit_journey.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+ul.b-blocks > li > i.icon.delay{
+    background:url("icons_journey/delay.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+ul.b-blocks > li > i.icon.score{
+    background:url("icons_journey/score.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+ul.b-blocks > li > i.icon.time_target{
+    background:url("icons_journey/time_target.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.j_disabled{
+  opacity:0.7;
+  cursor: default !important;
+}
+
+
 ._addNewSocialLinkDiv .radiopanelinput .icheck_radio-icon{
     margin:7px 0 0 7px !important;
 }

@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipandtest/html/tipandtestlisting.html',  'tipandtest/tipandtest_row','tipandtest/collections/tipandtestlisting','tipandtest/collections/tracks','tipandtest/track_row_makesbridge'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, tipandtestRowView , tipandtestCollection, tracksCollection, trackRowMakesbrdige) {
+define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipandtest/html/tipandtestlisting.html',  'tipandtest/tipandtest_row','tipandtest/collections/tipandtestlisting','tipandtest/collections/tracks','tipandtest/track_row_makesbridge','tipandtest/collections/workflows','tipandtest/workflow_row'],
+        function (bmsgrid, jqhighlight, jsearchcontrol, template, tipandtestRowView , tipandtestCollection, tracksCollection, trackRowMakesbrdige, workflowsCollection, workflowRowMakesbridge) {
             'use strict';
             return Backbone.View.extend({
                 id: 'tip_test_listings',
@@ -15,6 +15,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                 initialize: function () {
                     this.template = _.template(template);
                     this.tracksRequestBMS = new tracksCollection();
+                    this.workflowsRequestBMS = new workflowsCollection();
                     //this.singlelistingCollection = new singlelistingCollection();
                     this.tiptestCollection = new tipandtestCollection();
                     /*var tiptestArray = [
@@ -50,7 +51,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                     this.searchBadgeTxt = '';
                     
                     camp_obj.getalltipandtest();
-                    this.fetchBmsTracks();
+                    
+                    this.fetchBmsWorkflow();
                     camp_obj.app.showLoading("Loading Playbooks...", camp_obj.$("#target-camps"));
                     camp_obj.$el.find('div#campslistsearch').searchcontrol({
                         id: 'list-search',
@@ -68,18 +70,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                     camp_obj.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 init: function () {
-                   /* this.$el.find('#daterange').daterangepicker();
-                    $(".btnDone").click(_.bind(this.findEmails, this));
-                    $(".ui-daterangepicker li a").click(_.bind(function (obj) {
-                        this.$el.find('#clearcal').show();
-                        this.findEmails(obj);
-                    }, this));
-                    $("#daterange").keyup(_.bind(function (obj) {
-                        this.findEmails(obj);
-                    }, this));
-                    // var camp_obj = this;
-                    this.addEmail();
-                    this.headBadge();*/
+                   
                     this.current_ws = this.$el.parents(".ws-content");
                     this.tagDiv = this.current_ws.find("#campaign_tags");
                     $(window).scroll(_.bind(this.liveLoading, this));
@@ -88,49 +79,28 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                         
                     this.tagDiv.hide();
                 },
-                getalltipandtest: function () {
-                    
+                getalltipandtest: function () {                                                               
+                    this.app.showLoading(false, this.$("#target-camps"));                    
+                    var _data ;                            
+                    this.tiptestCollection = this.tiptestCollection.fetch({data: _data,
+                            success: _.bind(function (data1, collection) {
+                               this.$("#total_templates strong.badge").html(collection.totalCount);
+                                _.each(data1.models, _.bind(function (model) {
+                                    this.$el.find('#camp_list_grid tbody').append(new tipandtestRowView({model: model, sub: this}).el);
+                                }, this));
 
-                  
-                            // Display items
-                            
-                            
-                           
-                            //console.log('offsetLength = '+ this.offsetLength + ' & total Fetch = ' + this.total_fetch);
-
-                            this.app.showLoading(false, this.$("#target-camps"));
-                            //this.showTotalCount(response.totalCount);
-                           
-                           
-                            //console.log(this.tiptestCollection);
-                            var _data ;
-                            //this.$campaginLoading.hide();
-                            this.tiptestCollection = this.tiptestCollection.fetch({data: _data,
-                                    success: _.bind(function (data1, collection) {
-                                       this.$("#total_templates strong.badge").html(collection.totalCount);
-                                        _.each(data1.models, _.bind(function (model) {
-                                            this.$el.find('#camp_list_grid tbody').append(new tipandtestRowView({model: model, sub: this}).el);
-                                        }, this));
-                                        
-                                         this.app.showLoading(false, this.$("#target-camps"));
-                                         /*-----Remove loading------*/
-                                            this.app.removeSpinner(this.$el);
-                                            /*------------*/
-                                    },this)
-                    
-                    
-                            });
-                          _.each(this.tiptestCollection.models, _.bind(function (model) {
-                              //  console.log(model);
-                               // var mPage = new tipandtestRowView({model: model, sub: this}).el;
-                               // this.$el.find('#camp_list_grid tbody').append(mPage);
-                                    
-                            }, this));
-                            
-                           
-                           
+                                 this.app.showLoading(false, this.$("#target-camps"));
+                                 /*-----Remove loading------*/
+                                    this.app.removeSpinner(this.$el);
+                                    /*------------*/
+                            },this)
 
 
+                    });
+                  _.each(this.tiptestCollection.models, _.bind(function (model) {
+                      
+
+                    }, this));
                 },
                 
                 liveLoading: function () {
@@ -254,7 +224,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                                 return false;
                             }
                             this.app.showLoading(false,this.$("#target-camps"));                                                                         
-                            this.showBmsTotalCount(parseInt(response.count)+3);
+                            this.showBmsTotalCount(parseInt(response.count)+this.total_Count);
 
                             //this.$contactLoading.hide();
 
@@ -269,6 +239,50 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                             } 
                             
 
+                        }, this),
+                        error: function (collection, resp) {
+
+                        }
+                    });
+                },
+                fetchBmsWorkflow:function(fcount){
+                // Fetch invite requests from server
+                    var remove_cache = false;
+                    if(!fcount){
+                        remove_cache = true;
+                        this.offset = 0;                        
+                        this.app.showLoading("Loading Playbooks...", this.$("#target-camps"));          
+                        this.$(".bms_tracks .notfound").remove();
+                    }
+                    else{
+                        this.offset = this.offset + 20;
+                    }
+                    var _data = {offset:this.offset,type:'list',admin:true};
+
+                    if(this.workflows_bms_request){
+                        this.workflows_bms_request.abort();
+                    }                
+                    this.$("#total_bms_tracks").hide();
+                    this.makesbridge_tracks = true;
+                    this.workflows_bms_request = this.workflowsRequestBMS.fetch({data:_data,remove: remove_cache,
+                        success: _.bind(function (collection, response) {                                
+                            // Display items
+                            if(this.app.checkError(response)){
+                                return false;
+                            }
+                            this.app.showLoading(false,this.$("#target-camps"));   
+                            this.total_Count = parseInt(response.length)+3;
+                            this.showBmsTotalCount(this.total_Count);
+
+                            //this.$contactLoading.hide();
+
+                            for(var s=this.offset;s<collection.length;s++){
+                                var workflowView = new workflowRowMakesbridge({ model: collection.at(s),sub:this });                                                            
+                                //trackView.on('tagbmsclick',_.bind(this.searchByTagBms,this));
+                                this.$el.find('#camp_list_grid tbody').append(workflowView.$el);
+                            }                                                
+                            
+                            this.fetchBmsTracks();    
                         }, this),
                         error: function (collection, resp) {
 

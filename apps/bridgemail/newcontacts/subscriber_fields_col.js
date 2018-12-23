@@ -89,6 +89,19 @@ define(['text!newcontacts/html/subscriber_fields_col.html','newcontacts/addcusto
                             tabindex++;
                         }
                     });
+                    var handle = this.$(".basic_expand");
+                    if(this.app.get("basic_field_expand") && this.app.get("basic_field_expand")==true){                        
+                        handle.find('span').eq(0).text('Click to collapse')
+                        this.$('.basic_expand_height').addClass('heighAuto');
+                        handle.removeClass('expand');
+                        handle.addClass('collapse');
+                    }
+                    else{
+                        handle.find('span').eq(0).text('Click to expand')
+                        this.$('.basic_expand_height').removeClass('heighAuto');
+                        handle.removeClass('collapse');
+                        handle.addClass('expand');
+                    }
 
                 },
                 /**
@@ -122,6 +135,20 @@ define(['text!newcontacts/html/subscriber_fields_col.html','newcontacts/addcusto
                     }
                     if(custFieldCount > 6){
                         this.$(".cf_expand").removeClass("hide");
+                        
+                        var handle = this.$(".cf_expand");
+                        if(this.app.get("custom_fields_expand") && this.app.get("custom_fields_expand")==true){                        
+                            handle.find('span').eq(0).text('Click to collapse')
+                            this.$('.cf_expand_height').addClass('heighAuto');
+                            handle.removeClass('expand');
+                            handle.addClass('collapse');
+                        }
+                        else{
+                            handle.find('span').eq(0).text('Click to expand')
+                            this.$('.cf_expand_height').removeClass('heighAuto');
+                            handle.removeClass('collapse');
+                            handle.addClass('expand');
+                        }
                     }
                     
                     
@@ -324,9 +351,11 @@ define(['text!newcontacts/html/subscriber_fields_col.html','newcontacts/addcusto
                         if (handle.hasClass('expand')) {
                             handle.find('span').eq(0).text('Click to collapse')
                             this.$('.basic_expand_height').addClass('heighAuto');
+                            this.app.set("basic_field_expand",true);
                         } else {
                             handle.find('span').eq(0).text('Click to expand')
                             this.$('.basic_expand_height').removeClass('heighAuto');
+                            this.app.set("basic_field_expand",false);
                         }
 
                     } else if (handle.hasClass('cf_expand')) {
@@ -334,9 +363,11 @@ define(['text!newcontacts/html/subscriber_fields_col.html','newcontacts/addcusto
                         if (handle.hasClass('expand')) {
                             handle.find('span').eq(0).text('Click to collapse')
                             this.$('.cf_expand_height').addClass('heighAuto');
+                            this.app.set("custom_fields_expand",true);
                         } else {
                             handle.find('span').eq(0).text('Click to expand');
                             this.$('.cf_expand_height').removeClass('heighAuto');
+                            this.app.set("custom_fields_expand",false);
                         }
 
                     }
