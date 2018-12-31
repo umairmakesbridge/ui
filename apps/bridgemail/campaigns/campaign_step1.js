@@ -672,6 +672,7 @@ function (template) {
                                       _postData.isThirdPartySMTP="Y"
                                       _postData.thirdPartySMTPName="Gmail"
                                   }
+                                if(this.parent.type!=="journey"){  
                                 $.post(URL, _postData)
                                  .done(_.bind(function(data) {                                 
                                     var step1_json = jQuery.parseJSON(data);
@@ -698,6 +699,10 @@ function (template) {
                                 if (this.$("#conversion_filter").prop("checked")) {
                                     this.saveConversionPage();
                                 }
+                            }
+                            else{
+                                this.parent.saveStep2();
+                            }
                                 
                         }
                     }

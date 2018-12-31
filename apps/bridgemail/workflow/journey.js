@@ -5,6 +5,7 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                 tags: 'div',
                 className: 'MEE_EDITOR',
                 events: {
+                   
                 },
                 initialize: function () {
                     this.app = this.options.app;
@@ -12,8 +13,8 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                     this.camp_json = null;
                     this.render();
                     this.elementCount = 0;
-                    this.elementMap = {"target":{"text":"Select a target"},"campaign":{"text":"Add a message"}
-                                       ,"wait":{"text":"Delay"} ,"exit":{"text":""}};
+                    this.elementMap = {"target":{"text":"Click to configure"},"campaign":{"text":"Click to configure"}
+                                       ,"wait":{"text":"3 Days"} ,"exit":{"text":""}, "score":{text:"Click to configure"}};
                 },
                 render: function ()
                 {
@@ -68,11 +69,12 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                                 left: 20,
                                 properties: {
                                     title: 'Start',
+                                    linkText: 'Start Journey',
                                     remove: 1,
                                     inputs: {},
                                     outputs: {
                                         output_1: {
-                                            label: 'Start Point',
+                                            label: '',
                                         }
                                     }
                                 }
@@ -83,7 +85,8 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                         data: data,
                         defaultLinkColor: "#82bc42",
                         linkWidth: 4,
-                        multipleLinksOnOutput: true
+                        multipleLinksOnOutput: true,                        
+                        linkClicked:_.bind(this.bindClickFunctions,this),
                     });
                 },
                 createNode: function (obj) {
@@ -124,7 +127,88 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                         clsName : operatorClass
                     };
 
-                    this.$('.journey-builder').flowchart('createOperator', operatorId, operatorData);
+                    this.$('.journey-builder').flowchart('createOperator', operatorId, operatorData);                    
+                },
+                bindClickFunctions: function(e){
+                    var parentNode = $(e.target).parents(".flowchart-operator");
+                    this.clickedNode = $(e.target);
+                    if(parentNode.hasClass("campaign_cls")){
+                        this.editMessage();
+                    }
+                    else if(parentNode.hasClass("target_cls")){
+                        this.editTarget();
+                    }
+                    else if(parentNode.hasClass("wait_cls")){
+                        this.editDelay();
+                    }
+                },
+                editMessage:function(){                    
+                    var isEdit =  true;   
+                    var params = {};
+                    var dialog_width = $(document.documentElement).width() - 50;
+                    var dialog_height = $(document.documentElement).height() - 162;
+                    
+                    if(params.campNum){
+                        this.campNum = params.campNum;
+                    }
+                    else{
+                        this.camp_json = null;
+                    }
+                    var dialog_object = {title: "Create Message For Your Jounrey ",
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        bodyCss: {"min-height": dialog_height + "px"}
+                    };
+
+                    if(isEdit){
+                        dialog_object["buttons"]=  {saveBtn:{text:'Save Message',btncolor:'btn-green'} }
+                    }
+
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Message...", dialog.getBody());                    
+                    require(["nurturetrack/message_setting"], _.bind(function(settingPage) {
+                        var sPage = new settingPage({page: this, dialog: dialog, editable: isEdit, type: "journey", campNum: params.campNum, workflowObj:params});
+                        this.sPage = sPage;
+                        dialog.getBody().append(sPage.$el);
+                        this.app.showLoading(false, sPage.$el.parent());
+                        dialog.saveCallBack(_.bind(sPage.saveCall, sPage));     
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        sPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].currentView = sPage; // New dialog
+                        this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(sPage.saveCall,sPage); // New Dialog
+                        sPage.init();                        
+                    }, this));
+                },
+                editTarget:function(){
+                     var dialog_object = {title: 'Select Target',
+                        css: {"width": "1200px", "margin-left": "-600px"},
+                        bodyCss: {"min-height": "423px"},
+                        headerIcon: 'targetw'
+                    }
+                    var dialog = this.options.app.showDialog(dialog_object);
+
+                    this.options.app.showLoading("Loading Targets...", dialog.getBody());
+
+                    require(["target/recipients_targets"], _.bind(function(page) {
+                        var targetsPage = new page({page: this, dialog: dialog, editable: true, type: "journey", showUseButton: true});
+                        dialog.getBody().append(targetsPage.$el);
+                        this.app.showLoading(false, targetsPage.$el.parent());
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        targetsPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        dialog.$('.modal-header .cstatus').remove();
+                        dialog.$('.modal-footer').find('.btn-play').hide();
+
+                    }, this));
+                },
+                addTargetToJourney: function(model) {
+                    this.clickedNode.html(model.get("name"));
+                },
+                addMessageToJourney: function(message) {
+                    this.clickedNode.html(message);                 
+                },
+                editDelay:function(){
+                    alert('Work In Progress');
                 }
 
 

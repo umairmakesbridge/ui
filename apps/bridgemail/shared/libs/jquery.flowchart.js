@@ -16,6 +16,7 @@ $(function () {
             multipleLinksOnOutput: false,
             multipleLinksOnInput: false,
             linkVerticalDecal: 0,
+            linkClicked: null,
             onOperatorSelect: function (operatorId) {
                 return true;
             },
@@ -202,6 +203,11 @@ $(function () {
             
             this.objs.layers.operators.on('click', '.flowchart-cross', function (e) {
                 self._deleteOperator($(this).parent().data('operator_id'),false);
+                e.stopPropagation();
+            });
+            
+            this.objs.layers.operators.on('click', '.flowchart-linktext', function (e) {
+                self.options.linkClicked(e);
                 e.stopPropagation();
             });
 

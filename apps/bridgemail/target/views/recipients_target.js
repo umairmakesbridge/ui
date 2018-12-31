@@ -317,7 +317,10 @@ function (template,copytargetPage, shareCommonPage) {
                 var that = this;
                 if(this.showUseButton){
                     this.$el.fadeOut("fast",_.bind(function(){
-                        if(that.options.type == "autobots"){
+                        if(that.options.type == "journey"){
+                            that.parent.options.page.addTargetToJourney(this.model);
+                            this.parent.dialog.hide();                            
+                        }else if(that.options.type == "autobots"){
                             that.parent.options.page.addToCol2(this.model);
                             that.options.dialog.showPrevious();
                         }else{

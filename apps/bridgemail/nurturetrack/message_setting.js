@@ -37,6 +37,9 @@ function (template) {
                  else if(this.options.type !="undefined" && this.options.type == "workflow"){
                      this.camp_id = this.options.campNum;     
                  }
+                 else if(this.options.type !="undefined" && this.options.type == "journey"){
+                     this.camp_id = this.options.campNum;     
+                 }
                  else {
                      this.camp_id = this.camp_obj['campNum.encode'];     
                  }
@@ -197,6 +200,16 @@ function (template) {
                  }
             },
             saveStep2:function(showLoading,htmlText){       
+                if(this.type=="journey" ){                                        
+                    if(this.messagebody_page.meeView.autoSaveFlag==false){
+                        this.parent.addMessageToJourney(this.$("#campaign_subject").val());                    
+                        this.dialog.hide();
+                    }
+                    else{
+                        this.messagebody_page.meeView.autoSaveFlag=false;
+                    }
+                    return false;
+                }
                  if(!this.camp_id){return false}
                  this.saveEditorType();
                  var html = "",plain="";             

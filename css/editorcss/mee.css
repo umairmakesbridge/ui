@@ -2824,6 +2824,15 @@ ul.b-blocks > li:hover {
     -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
     box-shadow:0 3px 3px rgba(0, 0, 0, 0.2);
 }
+ul.b-blocks.journey > li{
+    background: transparent;
+}
+ul.b-blocks.journey > li:hover {
+   background: transparent;
+    -webkit-box-shadow:0 3px 3px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0);
+    box-shadow:0 3px 3px rgba(0, 0, 0, 0);
+}
 ul.b-blocks > li > i.icon {
     display: block;
     float: none;
@@ -2832,6 +2841,17 @@ ul.b-blocks > li > i.icon {
     background: url("../images/meeicons.png") no-repeat scroll center center; 
     width: 40px;
 }
+ul.b-blocks.journey > li > i.icon.jcirlce{
+    border-radius: 50%; 
+    height:80px;
+    width:80px;
+}
+ul.b-blocks.journey > li > i.icon.jsquare{
+    height:80px;
+    width:80px;
+    border-radius: 2px;
+}
+
 ul.b-blocks > li > a span {
     clear: both;
     color: #FFFFFF;
@@ -2841,6 +2861,10 @@ ul.b-blocks > li > a span {
     margin: 10px 0 0;
     text-align: center; 
 
+}
+ul.b-blocks.journey > li > a span{
+    color:#2E383D;
+    margin-top:5px;
 }
 
 ul.b-blocks > li:hover  span { display:block;}

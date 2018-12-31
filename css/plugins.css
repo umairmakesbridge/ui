@@ -4450,7 +4450,7 @@ border-color: #0096FF #0096FF transparent transparent;
     height: 0px;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-left: 10px solid rgb(204, 204, 204);
+    border-left: 10px solid #28C9A9;
     position: absolute;
     top: 5px;
     cursor:pointer;
@@ -4497,7 +4497,12 @@ border-color: #0096FF #0096FF transparent transparent;
 }
 
 .flowchart-operator-inputs .flowchart-operator-connector-arrow {
-    left: -1px;
+    left: -5px;
+    width:12px;
+    height:12px;
+    border-radius: 50%;
+    border:0px !important;
+    background-color:#28C9A9;
 }
 
 .flowchart-operator-outputs .flowchart-operator-connector-arrow {
@@ -4531,8 +4536,7 @@ border-color: #0096FF #0096FF transparent transparent;
 .flowchart-operator {
     position: absolute;
     width: 174px;
-    min-height:94px; 
-    border: 1px solid #e9e9e9;
+    min-height:94px;     
     background: #FFFFFF;
     pointer-events: initial;
     -webkit-border-radius: 2px 2px;
@@ -4551,7 +4555,7 @@ border-color: #0096FF #0096FF transparent transparent;
 }
 
 .flowchart-operator.hover {
-    border-color: #999;
+    
 }
 
 .flowchart-operator.selected {
@@ -4562,36 +4566,91 @@ border-color: #0096FF #0096FF transparent transparent;
 
 
 .flowchart-operator .flowchart-operator-title {
-    width: 100%;
-    padding: 5px;
+    width: 100px;  
+    padding: 60px 5px 5px 5px;
     font-weight: bold;
-    box-sizing: border-box;
-    border-bottom: 1px solid #01AEEE;
-    background: #01AEEE;
+    box-sizing: border-box;        
     height: auto;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    border-radius: 4px;
     cursor: move;
     color:#ffffff;
     font-size:12px;
+    text-align: center;
+    background: url(editorcss/icons_journey/thumb/play48.png) no-repeat center 10px;
+    margin: 10px auto 0px auto;
 }
 
 .flowchart-operator .flowchart-operator-inputs-outputs {
     display: table;
     width: 100%;
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 5px;    
 }
 
 .flowchart-operator .flowchart-operator-inputs, .flowchart-default-operator .flowchart-operator-outputs {
     display: table-cell;
-    width: 50%;
+    width: 20px;
 }
-.flowchart-linktext{
-    position:absolute;
-    top:42px;
-    left:20px;
+.flowchart-linktext{    
     cursor: pointer;
 }
+.MEE_EDITOR .flowchart-linktext a {
+    color: #fff;
+    text-align: center;
+    font-weight: 400;
+    font-style: italic;
+    width: 100%;
+    display: inline-block;
+
+}
+.flowchart-container .custom-node-cls{
+    width: 153px;
+    height: 133px !important;
+    background-color: #01AEEE;
+    
+}
+.flowchart-container .custom-node-cls.campaign_cls{
+    background-color:#f2b101
+}
+.flowchart-container .custom-node-cls.wait_cls{
+    background-color:#fb7138;
+}
+.flowchart-container .custom-node-cls.score_cls{
+    background-color:#6c94d9;
+}
+
+.flowchart-container .custom-node-cls.target_cls{
+    height: 153px !important;
+    border-radius: 50%;
+    background-color:#7AB260;
+}
+
+.flowchart-operator .flowchart-operator-inputs-outputs{
+    position: absolute;
+    top: 45px;
+}
+
+.flowchart-operator.target_cls .flowchart-operator-inputs-outputs{
+    position: absolute;
+    top: 55px;
+}
+
+.flowchart-operator.campaign_cls .flowchart-operator-title{    
+    
+    background: url(editorcss/icons_journey/thumb/email_32.png) no-repeat center 10px;
+}
+.flowchart-operator.wait_cls .flowchart-operator-title{
+   
+    background: url(editorcss/icons_journey/thumb/delay_32.png) no-repeat center 10px;
+}
+.flowchart-operator.target_cls .flowchart-operator-title{   
+    background: url(editorcss/icons_journey/thumb/target_40.png) no-repeat center 10px;
+}
+.flowchart-operator.score_cls .flowchart-operator-title{   
+    background: url(editorcss/icons_journey/thumb/score_32.png) no-repeat center 10px;
+}
+
 /* ================================================End jquery.flowchart.css================================================ */
