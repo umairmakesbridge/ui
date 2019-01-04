@@ -11791,3 +11791,10 @@ li.ui-timepicker-selected .ui-timepicker-duration,
     left: 0px;
     opacity: 0.1;
 }
+.delay-body{
+    padding: 20px 20px 20px 5px;
+    border: 1px solid #4FC8F5;
+}
+.journey-delay .btn-group .btn{
+    width:100px !important;
+}

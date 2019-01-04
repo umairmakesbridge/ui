@@ -207,8 +207,28 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                 addMessageToJourney: function(message) {
                     this.clickedNode.html(message);                 
                 },
+                addDelayToJourney: function(message) {
+                    this.clickedNode.html(message);                 
+                },
                 editDelay:function(){
-                    alert('Work In Progress');
+                    var dialog_object = {title: 'Add Delay',
+                        css: {"width": "400px", "margin-left": "-200px"},
+                        bodyCss: {"min-height": "130px"},
+                        headerIcon: 'jdelay',
+                        buttons:{saveBtn:{text:'Add',btncolor:'btn-green'} }
+                    }
+                    var dialog = this.options.app.showDialog(dialog_object);
+
+                    this.options.app.showLoading("Loading Delay...", dialog.getBody());
+
+                    require(["workflow/delay_journey"], _.bind(function(page) {
+                        var sPage = new page({page: this, dialog: dialog, editable: true, type: "journey"});
+                        dialog.getBody().append(sPage.$el);
+                        this.app.showLoading(false, sPage.$el.parent());
+                        dialog.saveCallBack(_.bind(sPage.saveCall, sPage));  
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        sPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog                        
+                    }, this));
                 }
 
 

@@ -4652,5 +4652,9 @@ border-color: #0096FF #0096FF transparent transparent;
 .flowchart-operator.score_cls .flowchart-operator-title{   
     background: url(editorcss/icons_journey/thumb/score_32.png) no-repeat center 10px;
 }
+.target_cls .flowchart-cross {
+    top: 2px;
+    right: 66px;
+}
 
 /* ================================================End jquery.flowchart.css================================================ */

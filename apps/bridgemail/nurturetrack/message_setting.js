@@ -201,13 +201,16 @@ function (template) {
             },
             saveStep2:function(showLoading,htmlText){       
                 if(this.type=="journey" ){                                        
-                    if(this.messagebody_page.meeView.autoSaveFlag==false){
-                        this.parent.addMessageToJourney(this.$("#campaign_subject").val());                    
-                        this.dialog.hide();
+                    
+                    try{
+                        if(this.messagebody_page.meeView.autoSaveFlag==true){
+                            this.messagebody_page.meeView.autoSaveFlag=false;     
+                            return false;
+                        }
                     }
-                    else{
-                        this.messagebody_page.meeView.autoSaveFlag=false;
-                    }
+                    catch(e){}
+                    this.parent.addMessageToJourney(this.$("#campaign_subject").val());                    
+                    this.dialog.hide();                                                       
                     return false;
                 }
                  if(!this.camp_id){return false}
