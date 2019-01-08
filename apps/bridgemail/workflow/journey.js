@@ -154,7 +154,7 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                     else{
                         this.camp_json = null;
                     }
-                    var dialog_object = {title: "Create Message For Your Jounrey ",
+                    var dialog_object = {title: "Create Message For Your Journey ",
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
                         bodyCss: {"min-height": dialog_height + "px"}
