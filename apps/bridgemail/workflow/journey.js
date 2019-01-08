@@ -111,8 +111,8 @@ define(['text!workflow/html/journey.html', 'jquery.flowchart'],
                                   };
                     }
                     var operatorData = {
-                        top: obj.pos.top,
-                        left: obj.pos.left,
+                        top: obj.pos.top +this.$(".journey-grid").scrollTop(),
+                        left: obj.pos.left +this.$(".journey-grid").scrollLeft() ,
                         properties: {
                             title: operatorTitle, 
                             linkText: this.elementMap[oType].text,

@@ -672,6 +672,7 @@ $(function () {
                 fullElement.operator.draggable({
                     containment: operatorData.internal.properties.uncontained ? false : this.element,
                     handle: '.flowchart-operator-title',
+                    scroll: true,
                     start: function (e, ui) {
                         if (self.lastOutputConnectorClicked != null) {
                             e.preventDefault();
