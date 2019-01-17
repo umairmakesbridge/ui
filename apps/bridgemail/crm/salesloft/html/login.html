@@ -1,0 +1,52 @@
+<% if(layout=='') { %>
+<div style=" min-height:365px;"  class="clearfix template-container gray-panel">
+  <div class="cont-box loginForm-container" style="top:30%;left:57%;">
+    <div class="row uid-container">
+      <label>User ID</label>
+      <div class="inputcont">      	
+           <input type="text" name="sl_key" id="sf_userid" placeholder="Enter salesloft API Key" class="uid" />
+      </div>
+      <!--<span id="sfuid_erroricon" class="erroricon"></span>-->
+    </div>        
+    <h5>Send synchronization confirmation email to:</h5>
+    <div class="row email-container">
+      <label>Email</label>
+      <div class="inputcont">      	
+      	<input type="text" name="sl_email" id="sf_email" placeholder="Enter email to send confirmation" class="email" />
+      </div>
+      <!--<span id="sfemail_erroricon" class="erroricon"></span>-->
+    </div>
+     <div class="row btnrow login-saving"><a class="btn-green right setEmail"><span>Save</span><i class="icon save"></i></a></div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+<% } else { %>
+
+<div style=" position:static; margin:0;" class="cont-box row-fluid ">
+    <div class="center-block">
+      <div class="row uid-container">
+        <label>API Key</label>
+        <div class="input-append adv_dd sort-options">
+        <div class="inputcont ">
+          <input type="text" class="header-info textfield"  name="sl_key" id="sf_userid" placeholder="Enter salesloft API Key" >
+        </div>
+        </div>
+      </div>
+      <h5>Send synchronization confirmation email to:</h5>
+      <div class="row email-container">
+        <label>Email</label>
+        <div class="input-append adv_dd sort-options">
+          <div class="inputcont ">
+            <input type="text" name="sl_email" id="sf_email" class="header-info textfield"  placeholder="Enter email to send confirmation">
+          </div>
+        </div>
+
+     </div>  
+      
+    <div class="row btnrow login-saving"><a class="btn-green right btnSaveLogin"><span>Save</span><i class="icon save"></i></a> </div>
+    </div>
+    
+    <div class="clearfix"></div>
+</div>
+
+<% } %>

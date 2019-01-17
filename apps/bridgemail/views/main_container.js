@@ -108,6 +108,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .crm-salesforce': 'salesforceCrm',
                     'click .crm-netsuite': 'netsuiteCrm',
                     'click .crm-highrise': 'highriseCrm',
+                    'click .crm-salesloft':'salesloftCRM',
                     'click .crm-google': 'googleCRM',
                     'click .create-target': 'createTarget',
                     'click .view-lists': 'viewLists',
@@ -1180,6 +1181,18 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         workspace_id: 'crm_google',
                         tab_icon: 'google',
                         sub_title: 'Connection With Apps'
+                    });
+                },
+                salesloftCRM: function () {
+                    this.addWorkSpace({
+                        type:'',
+                        title:'SalesLoft',
+                        url:'crm/salesloft/salesloft',
+                        workspace_id: 'crm_salesloft',
+                        tab_icon:'salesloft',
+                        sub_title:'Connection With Apps',
+                        addAction: false,
+                        noTags: true
                     });
                 },
                 createTarget: function () {

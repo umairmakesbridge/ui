@@ -9,7 +9,8 @@ define(['text!crm/html/crm.html','app'],
                 'click .salesforce-tile': 'loadSalesForceCRM',
                 'click .netsuite-tile': 'loadNetSuiteCRM',
                 'click .highrise-tile':'loadHighRiseCRM',
-                'click .google-tile':'loadGoogleCRM'
+                'click .google-tile':'loadGoogleCRM',
+                'click .salesloft-tile':'loadSalesLoftCRM'
                     
             },	
             /**
@@ -23,6 +24,7 @@ define(['text!crm/html/crm.html','app'],
                 this.checkNetSuiteStatus();
                 this.checkHighriseStatus();
                 this.checkGoogleStatus();
+                this.checkSalesLoftStatus();
             },
             /**
              * Render view .
@@ -98,6 +100,22 @@ define(['text!crm/html/crm.html','app'],
                     workspace_id: 'crm_google',
                     tab_icon:'google',
                     sub_title:'Connection With Apps'
+                });
+            },
+            loadSalesLoftCRM: function(e){
+                var tile = $.getObj(e,"li");
+                if(tile.find(".loading").length>0){
+                   // return false;
+                }
+                app.mainContainer.addWorkSpace({ 
+                    type:'',
+                    title:'SalesLoft',
+                    url:'crm/salesloft/salesloft',
+                    workspace_id: 'crm_salesloft',
+                    tab_icon:'salesloft',
+                    sub_title:'Connection With Apps',
+                    addAction: false,
+                    noTags: true,
                 });
             },
             checkSalesForceStatus: function(){                
@@ -218,6 +236,36 @@ define(['text!crm/html/crm.html','app'],
                 else{
                      this.app.showLoading(false,this.$(".google-tile"));                            
                      this.$(".google-tile").addClass("complete");
+                }
+                
+            },
+            checkSalesLoftStatus: function(){                                
+                var saelsloft = this.app.getAppData("salesloft");
+                this.app.showLoading("...",this.$(".salesloft-tile"));
+                if(!saelsloft || saelsloft[0] == "err")
+                {                        
+                    this.app.getData({
+                        "URL":"/pms/io/salesloft/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getCred",
+                        "key":"salesloft",
+                        callback:_.bind(function(){
+                            this.app.showLoading(false,this.$(".salesloft-tile"));
+                            var google = this.app.getAppData("salesloft");
+                            if(google[0]=="err"){
+                                this.$(".salesloft-tile").addClass("incomplete");
+                            }
+                            else{
+                                this.$(".salesloft-tile").addClass("complete");
+                            }
+                        },this),
+                        errorCallback:_.bind(function(){
+                            this.app.showLoading(false,this.$(".salesloft-tile"));                            
+                            this.$(".salesloft-tile").addClass("incomplete");                            
+                        },this)
+                    });
+                }
+                else{
+                     this.app.showLoading(false,this.$(".salesloft-tile"));                            
+                     this.$(".salesloft-tile").addClass("complete");
                 }
                 
             }

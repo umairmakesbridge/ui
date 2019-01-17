@@ -44,6 +44,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.isTileFlag = false;
                     this.isCreateAB = false;
                     this.request = null;
+                    this.botType = this.options.botType;
                     this.app = app;
                     this.render();
                     this.getFiltersData();
@@ -148,6 +149,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     } else {
                         _data['actionType'] = this.actionType;
                     }
+                    if(this.botType){
+                        _data['actionType'] = this.botType;
+                    }
                    
                     if (this.searchText) {
                         _data['searchText'] = this.searchText;
@@ -217,7 +221,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             that.app.showLoading(false, that.$el);
                             
                                 if (!offset) {
-                                    if (that.searchText == "" && that.sortBy == "" && that.actionType == "") {
+                                    if (that.searchText == "" && that.sortBy == "" && that.actionType == "" && typeof(that.botType)=="undefined") {
                                      that.topCounts();
                                     }
                                      that.updateCount();
@@ -406,6 +410,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     
                 },
                 addNewAutobot: function(ev) {
+                    if(typeof(this.botType)=="undefined"){
                     $("body #new_autobot").remove();
                     $("body .autobots-modal-in").remove();
                     if(!ev){
@@ -417,6 +422,52 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     $("body #new_autobot").html(new Choosebot({app: this.app, listing: this,type:this.typeOfBots}).el);
                     $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
                     this.typeOfBots = false;
+                    }
+                    else{
+                        var actionType = this.botType;
+                        var plHolderText =this.getCaption(actionType);                        
+                        var botURL = '/pms/io/trigger/saveAutobotData/';
+                        this.app.showAddDialog(
+                        {
+                            app: this.app,
+                            heading: plHolderText,
+                            buttnText: 'Create',
+                            bgClass: '',
+                            plHolderText: 'Enter bot name here',
+                            emptyError: 'Autobot name can\'t be empty',
+                            createURL: botURL,
+                            fieldKey: "label",
+                            postData: {type: 'create', BMS_REQ_TK: this.app.get('bms_token'), actionType:actionType,botType:'N'},
+                            saveCallBack: _.bind(function(field_text,_json){
+                                this.fetchBots(0,_json[2],true);
+                            }, this) // Calling same view for refresh headBadge
+                        });
+                    }
+                },
+                getCaption:function(actionType){
+                    var caption = "";                     
+                    switch (actionType) {
+                       case "E":
+                           if (this.options.botType == "B") {
+                                caption =  "Enter name for birthday bot";
+                            } else {
+                                caption = "Enter name for email bot";
+                            }
+                            break;
+                        case "SC":
+                            caption = "Enter name for score bot";
+                            break;
+                        case "A":
+                            caption = "Enter name for alert bot";
+                            break;
+                        case "TG":
+                            caption = "Enter name for tag bot";
+                            break;
+                        case "Z":
+                            caption = "Enter name for Zaiper bot";
+                            break;    
+                    }
+                    return caption;
                 },
                 showTiles: function(ev) {
                     this.isTiles = true;

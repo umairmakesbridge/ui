@@ -1,7 +1,8 @@
 <div class="content-inner soruces" id="area_choose_targets" style="margin:  0 0;">
     <div class="temp-filters clearfix">
-        <h2 id="total_autobots"><strong class="badge">0</strong> <span class='sort-text'></span> autobots found <span class='search-text'></span></h2>
+        <h2 id="total_autobots"><strong class="badge">0</strong> <span class='sort-text'></span>  <% if(typeof(this.botType)=="undefined") { %> autobots <% } else { %> triggers <%}%> found <span class='search-text'></span></h2>
         <div style=" " class="srt-div">
+            <% if(typeof(this.botType)=="undefined") { %>
             <div class="btn-group tile-list">
                 <button class="btn btn-default view-tiles active showtooltip" style="border-radius: 3px;" data-original-title="Switch to gallery view" type="button"><i class="icon tiles"></i></button>
                 <button class="btn btn-default view-listing active showtooltip" style="border-radius: 3px;display:none;"  data-original-title="Switch to list view" type="button"><i class="icon listing"></i></button>
@@ -22,7 +23,7 @@
                     
                 </ul>
             </div>
-
+            <% } %>
  
         <div id="" class="input-append search">         
             <span class="icon bot"></span><input type="text" id="txtAutobotSearch" placeholder="Search autobots" class="search-control show-image" style="width:300px;"><a class="close-icon" id="clearsearch" style="display:none"></a><div class="btn-group"><button tabindex="-1" class="searchbtn" id="searchbtn"><span class="icon-search icon-white"> 				  </span></button></div></div>

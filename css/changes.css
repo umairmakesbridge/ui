@@ -986,6 +986,9 @@ ul.tabs-btns li.active a{
 .wtab-lpageslisting{background-position: -30px -210px;}
 .wtab-lpages{background-position: -30px -180px}
 .wtab-accountpage{background-position: -60px -150px}
+.wtab-salesloft{
+    background: url("../img/salesloft_tab.png") no-repeat scroll center center transparent !important;
+}
 
 .wtab-onetoonelisting{
     background-position:-60px -60px;
@@ -11797,4 +11800,11 @@ li.ui-timepicker-selected .ui-timepicker-duration,
 }
 .journey-delay .btn-group .btn{
     width:100px !important;
+}
+.center-block{
+    width:50%;
+    margin:0px auto;
+}
+.salesloft-setup .cont-box .chosen-container{
+    width:100% !important;
 }
