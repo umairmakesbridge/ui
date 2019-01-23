@@ -710,12 +710,12 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     
 
                 },
-                fetchAutobots: function(){
+                fetchAutobots: function(offset){
                     if(this.exportBots){
-                        this.fetchExportBots();
+                        this.fetchExportBots(offset);
                     }
                     else{
-                        this.fetchBots();
+                        this.fetchBots(offset);
                     }
                 }
                
