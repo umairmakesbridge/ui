@@ -4,7 +4,7 @@ function (template) {
         return Backbone.View.extend({                                                
                 className:'cont-box row-fluid',
                 events: {
-
+                    'click .target-select':'loadTargets'
                 },
                 initialize: function () {                    			                 
                     this.template = _.template(template);	                                        
@@ -25,6 +25,26 @@ function (template) {
                         checkboxClass: 'checkinput'
                     });
                     //this.setUpSalesforceFields();                                                                                     
+                },                
+                loadTargets: function() {
+                    var dialog_object = {title: 'Select Targets',
+                        css: {"width": "1200px", "margin-left": "-600px"},
+                        bodyCss: {"min-height": "423px"},
+                        headerIcon: 'targetw'
+                    }
+                    var dialog = this.app.showDialog(dialog_object);
+
+                    this.options.app.showLoading("Loading Targets...", dialog.getBody());
+
+                    require(["target/recipients_targets"], _.bind(function(page) {
+                        var targetsPage = new page({page: this, dialog: dialog, editable: true, type: "autobots", showUseButton: true});
+                        dialog.getBody().append(targetsPage.$el);
+                        this.app.showLoading(false, targetsPage.$el.parent());
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        targetsPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog                        
+
+                    }, this));
+
                 }
         });
 });

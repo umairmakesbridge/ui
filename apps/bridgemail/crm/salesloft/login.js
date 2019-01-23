@@ -2,13 +2,7 @@ define(['text!crm/salesloft/html/login.html'],
 function (template) {
         'use strict';
         return Backbone.View.extend({                
-                events: {
-                    "click #btnTestLogin":function(){						                        
-                        var isValid = this.validateLoginFields(true);
-                        if(isValid){						
-                          this.testCredentials();						
-                        }        
-                    },
+                events: {                   
                     "click .btnSaveLogin":function(obj){
                         if($(obj.target).hasClass('saving'))
                                 return false;
@@ -19,77 +13,21 @@ function (template) {
                                 this.saveCredentials();							
                             }
                         }
-                    },
-                    "click .setEmail":function(obj){
-                        if($(obj.target).hasClass('saving'))
-                                return false;
-                        else
-                        {                                                        
-                            var isValid = this.validateEmail();
-                            if(isValid){							
-                                this.saveEmail();							
-                            }
-                        }
-                    },
-                    "keyup #sf_pwd":function(){
-                        this.passwordChange = true;
                     }
-                 },
-                testCredentials: function() {
-                        var curview = this;                        
-                        var app = curview.app;                        
-                        curview.$el.find('#sf_pwd,#sf_userid').attr('readonly','readonly');
-                        var URL = "/pms/io/salesforce/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=testCred";
-                        var postData = { sfUserID: curview.$el.find('#sf_userid').val(),sfEmail:curview.$el.find('#sf_email').val()}
-                        var salesforce_setting = this.app.getAppData("salesfocre");
-                        var salesforceLoggedIn = salesforce_setting && salesforce_setting[0] !== "err" && salesforce_setting.isSalesforceUser=="Y";
-                        if(salesforceLoggedIn && this.passwordChange==true){
-                            postData['sfPass']= curview.$el.find('#sf_pwd').val();
-                        }
-                        this.$("#btnTestLogin").addClass("saving");
-                        $.post(URL, postData)
-                        .done(function(data) { 
-                               curview.$("#btnTestLogin").removeClass("saving"); 
-                               curview.$el.find('#sf_pwd,#sf_userid').removeAttr('readonly');
-                                var creds = jQuery.parseJSON(data);                            
-                                if(creds.err)							
-                                        app.showAlert(creds.err.replace('&#58;',':'),curview.$el);
-                                else						
-                                        app.showMessge(creds.success,$("body"),{fixed:true});						
-                        });                        
-                },
-                saveEmail: function() {
-                        var curview = this;                        
-                        var app = curview.app;
-                        app.showLoading(true,curview.$el);
-                        var URL = "/pms/io/salesforce/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setEmail";
-                        curview.$el.find('#sf_email').attr('readonly','readonly');
-                        this.$('.setEmail').addClass('saving');
-                        $.post(URL, { sfEmail:curview.$el.find('#sf_email').val()})
-                        .done(function(data) { 
-                                var creds = jQuery.parseJSON(data);                            
-                                curview.$el.find('#sf_email').removeAttr('readonly')
-                                curview.$('.setEmail').removeClass('saving');
-                                if(creds.err)							
-                                    app.showAlert(creds.err.replace('&#58;',':'),curview.$el);
-                                else						
-                                   app.showMessge(creds.success,$("body"),{fixed:true});						
-                        });
-                        app.showLoading(false,curview.$el);
-                }
+                 }
                 ,
                 saveCredentials: function() {
                         var curview = this;
                         var logindialog = this.dialog;
                         var app = this.app;
                         var el = this.$el;
-                        el.find('#sf_userid,#sf_pwd').attr('readonly','readonly');
+                        el.find('#sl_userid').attr('readonly','readonly');
                         el.find('.btnSaveLogin').addClass('saving');
-                        var URL = "/pms/io/salesforce/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setCred";
-                        $.post(URL, { sfUserID: curview.$el.find('#sf_userid').val(),sfPass: curview.$el.find('#sf_pwd').val(),sfEmail:curview.$el.find('#sf_email').val()})
+                        var URL = "/pms/io/salesloft/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setCred";
+                        $.post(URL, { apiKey: curview.$el.find('#sl_userid').val(),email:curview.$el.find('#sl_email').val()})
                         .done(function(data) { 
                                 var creds = jQuery.parseJSON(data);        
-                                el.find('#sf_userid,#sf_pwd').removeAttr('readonly');
+                                el.find('#sl_userid').removeAttr('readonly');
                                 el.find('.btnSaveLogin').removeClass('saving');
                                 if(creds.err)
                                 {							
@@ -103,9 +41,8 @@ function (template) {
                                      }
                                      else{
                                          curview.$("#btnTestLogin").show();
-                                         curview.parent.loadMapping();
-                                         curview.parent.loadSyncArea();
-                                         app.setAppData("salesfocre", {"isLoggedIn":"Y","isSalesforceUser":"Y"});
+                                         curview.setAccordion();
+                                         app.setAppData("salesloft", {"slEmail":curview.$el.find('#sl_email').val(),"apiKey":curview.$el.find('#sl_userid')});
                                          app.showMessge(creds.success,$("body"),{fixed:true});						
                                      }
                                 }
@@ -115,64 +52,38 @@ function (template) {
                         var el = this.$el;
                         var isValid = true;
                         var app = this.app;                        
-                        if((el.find('#sf_userid').val() == ''))
+                        if((el.find('#sl_userid').val() == ''))
                         {						
                             app.showError({
                                 control:el.find('.uid-container'),
-                                message:"User ID cannot be empty"
+                                message:"API Key cannot be empty"
                             });
                             isValid = false;
-                        }
-                        else if(!app.validateEmail(el.find('#sf_userid').val()))
-                        {						
-                            app.showError({
-                                control:el.find('.uid-container'),
-                                message:"Invalid User ID. Hint: IDs are in an email format"
-                            });
-                            isValid = false;
-                        }
+                        }                        
                         else
                         {						
                             app.hideError({control:el.find(".uid-container")});
                         }
-                        var salesforce_setting = this.app.getAppData("salesfocre");
-                        var salesforceLoggedIn = salesforce_setting && salesforce_setting[0] !== "err" && salesforce_setting.isSalesforceUser=="Y";
-                        if(!isTest || (salesforceLoggedIn && this.passwordChange==true)){
-                            isValid = this.validatePassword();  
+                        //var salesforce_setting = this.app.getAppData("salesfocre");
+                        var salesforceLoggedIn = true; //salesforce_setting && salesforce_setting[0] !== "err" && salesforce_setting.isSalesforceUser=="Y";
+                        if(salesforceLoggedIn){
+                            isValid = this.validateEmail();  
                         }
                         
                         return isValid;
-                },
-                validatePassword:function(){
-                    var el = this.$el;
-                    var isValid = true;
-                    var app = this.app;                    
-                    if(el.find('#sf_pwd').val() == '')
-                        {						
-                        app.showError({
-                                control:el.find('.pwd-container'),
-                                message:"Enter password"
-                        });
-                        isValid = false;
-                    }
-                    else
-                    {						
-                         app.hideError({control:el.find(".pwd-container")});
-                    }
-                    return isValid;
                 },
                 validateEmail:function(){
                     var el = this.$el;
                     var isValid = true;
                     var app = this.app;                    
-                    if(el.find('#sf_email').val() == ''){
+                    if(el.find('#sl_email').val() == ''){
                         app.showError({
                                 control:el.find('.email-container'),
                                 message:'Email can\'t be empty'
                         });
                         isValid = false;
                     }
-                    else if(el.find('#sf_email').val() != '' && !app.validateEmail(el.find('#sf_email').val()))
+                    else if(el.find('#sl_email').val() != '' && !app.validateEmail(el.find('#sl_email').val()))
                     {						
                         app.showError({
                                 control:el.find('.email-container'),
@@ -194,25 +105,37 @@ function (template) {
                         this.layout = this.options.layout?this.options.layout:'';
                         var el = this.$el;
                         this.passwordChange = false;
-                        //app.showLoading('Loading Credentials',el);					
-                        /*var salesforce_setting = this.app.getAppData("salesfocre");
-                        if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y")
+                        this.app.showLoading('Loading Credentials',el);					
+                        var salesloft_setting = this.app.getAppData("salesloft");
+                        if(!salesloft_setting)
                         {
-                            el.find('#sf_userid,#sf_pwd,#sf_email').attr('readonly','readonly');
-                            var URL = "/pms/io/salesforce/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getCred";
-                            jQuery.getJSON(URL,  function(tsv, state, xhr){
+                            el.find('#sl_userid#sl_email').attr('readonly','readonly');
+                            var URL = "/pms/io/salesloft/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getCred";
+                            jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
                                 var creds = jQuery.parseJSON(xhr.responseText);
-                                if(creds)
-                                {								
-                                    el.find('#sf_pwd').removeAttr('readonly');								
-                                    el.find('#sf_userid').removeAttr('readonly').val(creds["sfUserID"]);
-                                    el.find('#sf_email').removeAttr('readonly').val(creds["sfEmail"]);								
-                                }
-                            });
-                        }*/
-                        //app.showLoading(false,el);
+                                this.setAPIKey(creds)
+                            },this));
+                        }
+                        else{
+                            this.setAPIKey(salesloft_setting)
+                        }
+                        
+                        this.app.showLoading(false,el);
                 },
-
+                setAPIKey:function(creds){
+                    if(creds)
+                    {								                                    
+                        this.$('#sl_userid').removeAttr('readonly').val(creds["apiKey"]);
+                        this.$('#sl_email').removeAttr('readonly').val(creds["slEmail"]);
+                        this.setAccordion();
+                        
+                    }
+                },
+                setAccordion:function(){
+                  this.parent.$("#accordion_score,#accordion_export,#accordion_import").show();
+                  this.parent.$("#accordion_import .ui-accordion-content,#accordion_export .ui-accordion-content").css({"height":"235px","overflow":"inherit"});  
+                  this.parent.$("#accordion_score .ui-accordion-content").css("height","400px");
+                },
                 render: function () {                        
                      this.$el.html(this.template({layout:this.layout}));                        
                 }
