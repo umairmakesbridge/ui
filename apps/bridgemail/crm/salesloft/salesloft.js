@@ -31,8 +31,7 @@ define(['text!crm/salesloft/html/salesloft.html','crm/salesloft/login','crm/sale
                 this.$importsArea = this.$(".accordion_import-inner");
                 this.$exportArea = this.$(".accordion_export-inner");
                 this.$scoreBotArea = this.$(".accordion_score-inner");                               
-                this.salesloftSetup = false;
-                
+                this.salesloftSetup = false;               
                 this.$("#accordion_score,#accordion_export,#accordion_import").hide();
                                 
             },

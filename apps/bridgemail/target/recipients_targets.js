@@ -43,6 +43,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     if(typeof this.options.type !="undefined"){
                         this.dialogType = this.options.type;
                         this.dialog = this.options.dialog;
+                        this.dialogSubType = this.options.subType;
                     } 
                     if(typeof(this.options.isSharedAllowed)!=="undefined" && this.options.isSharedAllowed==false){
                         this.doNotShowSharedTargets = true;
@@ -128,7 +129,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                             _.each(data.models, function(model) {
                                 if(that.allowShared(model)){
                                                                     
-                                    that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that,showUse:that.showUse,type:that.dialogType,dialog:that.dialog}).el);
+                                    that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that,showUse:that.showUse,type:that.dialogType,subType:that.dialogSubType,dialog:that.dialog}).el);
                                 }
                             });
                              /*-----Remove loading------*/

@@ -6531,6 +6531,8 @@ input.search-control[type="text"] {
 }
 .bmsgrid .colico.sfr > strong {
     background: url("../img/sfricon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+.bmsgrid .colico.slr > strong {
+    background: url("../img/slicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 .bmsgrid .colico.mbr > strong {
     background: url("../img/mbricon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 .bmsgrid .colico.nst > strong {

@@ -132,9 +132,9 @@ function (template) {
                     }
                 },
                 setAccordion:function(){
-                  this.parent.$("#accordion_score,#accordion_export,#accordion_import").show();
+                  this.parent.$("#accordion_export,#accordion_import").show();
                   this.parent.$("#accordion_import .ui-accordion-content,#accordion_export .ui-accordion-content").css({"height":"235px","overflow":"inherit"});  
-                  this.parent.$("#accordion_score .ui-accordion-content").css("height","400px");
+                  //this.parent.$("#accordion_score .ui-accordion-content").show().css("height","400px");
                 },
                 render: function () {                        
                      this.$el.html(this.template({layout:this.layout}));                        

@@ -14,21 +14,26 @@
         <label>&nbsp;</label>
         <div class="input-append adv_dd sort-options">
             <div class="inputcont ">
-                <input type="checkbox"  id="import_notification" class="checkinput"  value="">
+                <input type="checkbox"  id="export_notification" class="checkinput"  value="">
                 <label style="margin-top: -5px;margin-left: 10px;" for="import_notification">Send Notification Alert </label>
             </div>
         </div>
     </div>  
     <div class="row email-container">
         <label>Target</label>
-        <div class="input-append adv_dd sort-options">
+        <div class="input-append adv_dd sort-options" style="display: inline-block">
             <div class="inputcont ">
-                <label><a class="target-select">Click to Select Target</a></label>                  
+                <label><a class="target-select">Click to Select Target</a></label>  
+                <i class="icon edit2 edit-target" style="cursor: pointer"></i>
             </div>
         </div>
     </div>     
 
-    <div class="row btnrow login-saving"><a class="btn-green right btnSaveLogin"><span>Activate</span><i class="icon play"></i></a> </div>
+    <div class="row btnrow login-saving">
+        <a class="btn-green right btn-activate"><span>Activate</span><i class="icon play"></i></a> 
+        <a class="btn-red btn-deactivate right" style="display: none;"><span>Deactivate</span><i class="icon deactivate"></i></a>
+        <a style="color:#fff;padding:0px 10px" class="btn-blue right field-mapping">Fields Mapping</a>
+    </div>
 </div>
 
 <div class="clearfix"></div>      

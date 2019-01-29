@@ -322,7 +322,12 @@ function (template,copytargetPage, shareCommonPage) {
                             this.parent.dialog.hide();                            
                         }else if(that.options.type == "autobots"){
                             that.parent.options.page.addToCol2(this.model);
-                            that.options.dialog.showPrevious();
+                            if(that.options.subType){
+                                that.options.dialog.hide();
+                            }
+                            else{
+                                that.options.dialog.showPrevious();
+                            }
                         }else{
                             this.parent.addToCol2(this.model);    
                             this.$el.hide();
