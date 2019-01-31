@@ -257,8 +257,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         return str;
                 },
                 addListingRow:function(){
+                    var keyWord = typeof(this.botType)=="undefined"?"Autobot":"Trigger";
                     var listing = ' <div class="create_new">';
-                        listing = listing +  '<span>Add Autobot</span>';
+                        listing = listing +  '<span>Add '+keyWord+'</span>';
                         listing = listing +  '</div> '; 
                         return listing;
                 },
@@ -433,8 +434,8 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             heading: plHolderText,
                             buttnText: 'Create',
                             bgClass: '',
-                            plHolderText: 'Enter bot name here',
-                            emptyError: 'Autobot name can\'t be empty',
+                            plHolderText: 'Enter trigger name here',
+                            emptyError: 'Trigger name can\'t be empty',
                             createURL: botURL,
                             fieldKey: "label",
                             postData: {type: 'create', BMS_REQ_TK: this.app.get('bms_token'), actionType:actionType,botType:'N'},
@@ -455,7 +456,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             }
                             break;
                         case "SC":
-                            caption = "Enter name for score bot";
+                            caption = typeof(this.botType)=="undefined"?"Enter name for score bot":"Enter name for score trigger";
                             break;
                         case "A":
                             caption = "Enter name for alert bot";

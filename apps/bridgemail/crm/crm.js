@@ -249,8 +249,8 @@ define(['text!crm/html/crm.html','app'],
                         "key":"salesloft",
                         callback:_.bind(function(){
                             this.app.showLoading(false,this.$(".salesloft-tile"));
-                            var google = this.app.getAppData("salesloft");
-                            if(google[0]=="err"){
+                            var salesloft = this.app.getAppData("salesloft");
+                            if(salesloft.apiKey==""){
                                 this.$(".salesloft-tile").addClass("incomplete");
                             }
                             else{

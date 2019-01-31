@@ -66,7 +66,10 @@ function (template) {
                                 if (total_count != 0) {
                                     curview.$el.find("#existing_lists").html(list_html);
                                     curview.$el.find('#existing_lists option[data-checksum="' + curview.listChecksum + '"]').prop('selected', true).trigger("chosen:updated")
-                                    if(curview.importDetails.status=="D"){
+                                    if(curview.importDetails && curview.importDetails.status=="D"){
+                                        curview.$el.find('#existing_lists').prop('disabled', false).trigger("chosen:updated");
+                                    }
+                                    else if(!curview.importDetails){
                                         curview.$el.find('#existing_lists').prop('disabled', false).trigger("chosen:updated");
                                     }
                                 } else {
@@ -78,6 +81,7 @@ function (template) {
                             app.setAppData('lists', list_array);
                             curview.$el.find("#existing_lists").chosen({no_results_text: 'Oops, nothing found!'});
                         }
+                        curview.$el.parents("#accordion_import .ui-accordion-content").css({"overflow":""});
                     }).fail(function () {
                         console.log("error lists listing");
                     });

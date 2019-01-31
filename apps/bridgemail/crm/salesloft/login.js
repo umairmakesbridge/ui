@@ -44,6 +44,9 @@ function (template) {
                                          curview.setAccordion();
                                          app.setAppData("salesloft", {"slEmail":curview.$el.find('#sl_email').val(),"apiKey":curview.$el.find('#sl_userid')});
                                          app.showMessge(creds.success,$("body"),{fixed:true});						
+                                         if(curview.parent.exportAccordion){
+                                           curview.parent.exportAccordion.getExportBot();
+                                        }
                                      }
                                 }
                         });
@@ -123,7 +126,7 @@ function (template) {
                         this.app.showLoading(false,el);
                 },
                 setAPIKey:function(creds){
-                    if(creds)
+                    if(creds && creds.apiKey!="")
                     {								                                    
                         this.$('#sl_userid').removeAttr('readonly').val(creds["apiKey"]);
                         this.$('#sl_email').removeAttr('readonly').val(creds["slEmail"]);
@@ -132,9 +135,9 @@ function (template) {
                     }
                 },
                 setAccordion:function(){
-                  this.parent.$("#accordion_export,#accordion_import").show();
-                  this.parent.$("#accordion_import .ui-accordion-content,#accordion_export .ui-accordion-content").css({"height":"235px","overflow":"inherit"});  
-                  //this.parent.$("#accordion_score .ui-accordion-content").show().css("height","400px");
+                  this.parent.$("#accordion_export,#accordion_import,#accordion_score").show();
+                  this.parent.$("#accordion_import .ui-accordion-content,#accordion_export .ui-accordion-content").css({"height":"235px","overflow":""});  
+                  this.parent.$("#accordion_score .ui-accordion-content").show().css("height","400px");
                 },
                 render: function () {                        
                      this.$el.html(this.template({layout:this.layout}));                        
