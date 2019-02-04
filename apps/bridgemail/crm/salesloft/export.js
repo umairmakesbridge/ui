@@ -161,9 +161,9 @@ function (template) {
                     }
                 },
                 showMapping:function(){
-                    var dialog = this.app.showDialog({title: 'SalesLoft Leads or/and Contacts to Export Mapping',
+                    var dialog = this.app.showDialog({title: 'Export Mapping',
                         css: {"width": "1200px", "margin-left": "-600px"},
-                        bodyCss: {"min-height": "443px"}
+                        bodyCss: {"min-height": "410px"}
                     });
 
                     this.app.showLoading("Loading Mapping...", dialog.getBody());

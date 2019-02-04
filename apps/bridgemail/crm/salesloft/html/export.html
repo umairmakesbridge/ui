@@ -1,39 +1,29 @@
-<div class="center-block">
-    <div class="row uid-container">
-        <label>Synch. Every</label>
-        <div class="input-append adv_dd sort-options">
-            <div class="inputcont ">
-                <select id="import_time" disabled="disabled">
-                    <option> Select time </option>                
-                    <option value="30" selected="selected"> 30 mins.</option>                
-                </select>
-            </div>
-        </div>
-    </div>      
+<div class="center-block">  
     <div class="row email-container">
-        <label>&nbsp;</label>
-        <div class="input-append adv_dd sort-options">
-            <div class="inputcont ">
-                <input type="checkbox"  id="export_notification" class="checkinput"  value="">
-                <label style="margin-top: -5px;margin-left: 10px;" for="import_notification">Send Notification Alert </label>
-            </div>
-        </div>
-    </div>  
-    <div class="row email-container">
-        <label>Target</label>
+        <label>Select or create a Target</label>
         <div class="input-append adv_dd sort-options" style="display: inline-block">
             <div class="inputcont ">
                 <label><a class="target-select">Click to Select Target</a></label>  
                 <i class="icon edit2 edit-target" style="cursor: pointer"></i>
             </div>
         </div>
-    </div>     
-
-    <div class="row btnrow login-saving">
-        <a class="btn-green right btn-activate"><span>Activate</span><i class="icon play"></i></a> 
-        <a class="btn-red btn-deactivate right" style="display: none;"><span>Deactivate</span><i class="icon deactivate"></i></a>
-        <a style="color:#fff;padding:0px 10px" class="btn-blue right field-mapping">Fields Mapping</a>
-    </div>
+    </div>    
+    <div style="clear:both;margin:20px 0 0; padding:0 0 8px 27.5%; text-align: left;">Use Targets to set rules for who should be sent to SalesLoft. We'll add/update these contacts to SalesLoft once per day.</div>
+    <div class="row email-container">
+        <label>&nbsp;</label>
+        <div class="input-append adv_dd sort-options">
+            <div class="inputcont ">
+               <div style='float:left;margin-top:6px;'>
+                <input type="checkbox"  id="export_notification" class="checkinput"  value="">
+                <label style="margin-top: -5px;margin-left: 10px;" for="import_notification">Send Notification </label>
+                </div>
+                 <a class="btn-green right btn-activate"><span>Activate</span><i class="icon play"></i></a> 
+                <a class="btn-red btn-deactivate right" style="display: none;"><span>Deactivate</span><i class="icon deactivate"></i></a>
+                <a style="color:#fff;padding:0px 10px;margin-right:10px;" class="btn-blue right field-mapping">Fields Mapping</a>
+            </div>
+        </div>
+    </div>  
+    
 </div>
 
 <div class="clearfix"></div>      
