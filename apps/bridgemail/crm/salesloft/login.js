@@ -42,7 +42,7 @@ function (template) {
                                      else{
                                          curview.$("#btnTestLogin").show();
                                          curview.setAccordion();
-                                         app.setAppData("salesloft", {"slEmail":curview.$el.find('#sl_email').val(),"apiKey":curview.$el.find('#sl_userid')});
+                                         app.setAppData("salesloft", {"slEmail":curview.$el.find('#sl_email').val(),"apiKey":curview.$el.find('#sl_userid').val()});
                                          app.showMessge(creds.success,$("body"),{fixed:true});						
                                          if(curview.parent.exportAccordion){
                                            curview.parent.exportAccordion.getExportBot();
