@@ -136,7 +136,7 @@ function (template) {
                 },
                 setAccordion:function(){
                   this.parent.$("#accordion_export,#accordion_import,#accordion_score").show();
-                  this.parent.$("#accordion_import .ui-accordion-content,#accordion_export .ui-accordion-content").css({"height":"235px","overflow":""});  
+                  this.parent.$("#accordion_import .ui-accordion-content,#accordion_export .ui-accordion-content").css({"height":"200px","overflow":""});  
                   this.parent.$("#accordion_score .ui-accordion-content").show().css("height","400px");
                 },
                 render: function () {                        

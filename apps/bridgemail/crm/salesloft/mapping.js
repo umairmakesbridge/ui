@@ -39,13 +39,14 @@ function (template,Mapping) {
                             var c_fields_html = '<table cellpadding="0" cellspacing="0" width="100%" id="contact_mapping_list_grid"><tbody>';                            
                             $.each(import_fields, function(index, val) {                                                                                  
                                 if(val.type.toLowerCase()==self.fieldType || val.type.toLowerCase()=="both"){
+                                    var fieldName = val.salesloftField=="BMS_LEAD_SCORE"?"Makesbridge Lead Score":val.salesloftField;
                                     fields_html += '<tr id="row_'+val.mksField+'">';                                                                                               
-                                    fields_html += '<td><div class="name-type colico slr"> <strong><span><em>Salesloft Field</em><a><b>'+val.salesloftField+'</b></a></span></strong> </div></td>';                                                                             
+                                    fields_html += '<td><div class="name-type colico slr"> <strong><span><em>Salesloft Field</em><a><b>'+fieldName+'</b></a></span></strong> </div></td>';                                                                             
                                     fields_html += '<td><div class="type colico mbr show" style="width:162px"> <strong><span><em>Makesbridge Field</em>'+val.mksField+'</span></strong> </div><div id="'+val.mksField+'" class="action"></div></td>';                                                             
                                     fields_html += '</tr>';
 
                                     c_fields_html+= '<tr id="row_'+val.mksField+'">';                        
-                                    c_fields_html += '<td><div class="name-type colico slr"> <strong><span><em>Salesloft Field</em><a><b>'+val.salesloftField+'</b></a></span></strong> </div></td>';                                                       
+                                    c_fields_html += '<td><div class="name-type colico slr"> <strong><span><em>Salesloft Field</em><a><b>'+fieldName+'</b></a></span></strong> </div></td>';                                                       
                                     c_fields_html += '<td><div class="type colico mbr show" style="width:162px"> <strong><span><em>Makesbridge Field</em>'+val.mksField+'</span></strong></div><div id="'+val.mksField+'" class="action"></div></td>';                        
                                     c_fields_html += '</tr>';
                                 }

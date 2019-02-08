@@ -11808,3 +11808,12 @@ li.ui-timepicker-selected .ui-timepicker-duration,
 .salesloft-setup .cont-box .chosen-container{
     width:100% !important;
 }
+.activating{
+    background: url("../img/greenloader.gif") no-repeat scroll 30px center #94CF1E;    
+}
+.deactivating{
+    background: url("../img/greenloader.gif") no-repeat scroll 22px center #f71a1a;    
+}
+.activating span, .deactivating span{
+    visibility: hidden;
+}

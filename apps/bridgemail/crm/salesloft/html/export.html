@@ -1,10 +1,15 @@
 <div class="center-block">  
     <div class="row email-container">
         <label>Select or create a Target</label>
-        <div class="input-append adv_dd sort-options" style="display: inline-block">
+        <div class="input-append adv_dd sort-options" style="display: inline-block;height:40px">
             <div class="inputcont ">
-                <label><a class="target-select">Click to Select Target</a></label>  
-                <i class="icon edit2 edit-target" style="cursor: pointer"></i>
+                <!--<label><a class="target-select">Click to Select Target</a></label>  
+                <i class="icon edit2 edit-target" style="cursor: pointer"></i>-->
+                <select id="existing_targets" class="targets" data-placeholder="Choose target">                
+                </select>
+                <div class="iconpointy" style="top:-40px;left:35px;float:right">
+                    <a class="btn-green add-list" title="Create target"><i class="icon plus left"></i></a>
+                </div>  
             </div>
         </div>
     </div>    
@@ -13,7 +18,7 @@
         <label>&nbsp;</label>
         <div class="input-append adv_dd sort-options">
             <div class="inputcont ">
-               <div style='float:left;margin-top:6px;'>
+               <div style='float:left;margin-top:6px;position:relative'>
                 <input type="checkbox"  id="export_notification" class="checkinput"  value="">
                 <label style="margin-top: -5px;margin-left: 10px;" for="import_notification">Send Notification </label>
                 </div>

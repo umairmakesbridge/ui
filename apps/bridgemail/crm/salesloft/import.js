@@ -133,14 +133,14 @@ function (template) {
                 }
                 ,
                 activate: function(){
-                    this.$(".btn-activate").addClass("saving");
+                    this.$(".btn-activate").addClass("activating");
                     var URL = "/pms/io/salesloft/setup/";
                     var listNumber = this.$("#existing_lists").val();
                     var senderAlert = this.$("#import_notification").prop("checked")?"Y":"N";
                     var post_data = {BMS_REQ_TK:this.app.get('bms_token'),type:"activateSynch",listNumber:listNumber,recurPeriod:30,sendAlert:senderAlert};
                     $.post(URL,post_data)
                     .done(_.bind(function(data) {                          
-                        this.$(".btn-activate").removeClass("saving");                        
+                        this.$(".btn-activate").removeClass("activating");                        
                         var _json = jQuery.parseJSON(data); 
                         if(_json[0]!=="err"){
                             this.app.showMessge("Import activated successfully!");                             
@@ -157,12 +157,12 @@ function (template) {
                     },this));
                 },
                 deactivate: function(){
-                    this.$(".btn-deactivate").addClass("saving");
+                    this.$(".btn-deactivate").addClass("deactivating");
                     var URL = "/pms/io/salesloft/setup/";                    
                     var post_data = {BMS_REQ_TK:this.app.get('bms_token'),type:"deactivateSynch"};
                     $.post(URL,post_data)
                     .done(_.bind(function(data) {                          
-                        this.$(".btn-deactivate").removeClass("saving");                        
+                        this.$(".btn-deactivate").removeClass("deactivating");                        
                         var _json = jQuery.parseJSON(data); 
                         if(_json[0]=="success"){
                             this.app.showMessge("Import Dectivated successfully!"); 
