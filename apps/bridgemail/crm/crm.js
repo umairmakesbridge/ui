@@ -10,7 +10,8 @@ define(['text!crm/html/crm.html','app'],
                 'click .netsuite-tile': 'loadNetSuiteCRM',
                 'click .highrise-tile':'loadHighRiseCRM',
                 'click .google-tile':'loadGoogleCRM',
-                'click .salesloft-tile':'loadSalesLoftCRM'
+                'click .salesloft-tile':'loadSalesLoftCRM',
+                'click .zapier-tile': 'loadZapierCRM'
                     
             },	
             /**
@@ -116,6 +117,18 @@ define(['text!crm/html/crm.html','app'],
                     sub_title:'Connection With Apps',
                     addAction: false,
                     noTags: true,
+                });
+            },
+            loadZapierCRM:function(){
+                app.mainContainer.addWorkSpace({ 
+                    type:'',
+                    title:'Zapier',
+                    url:'crm/zapier/zapier',
+                    workspace_id: 'crm_zapier',
+                    tab_icon:'zapier',
+                    sub_title:'Connection With Apps',
+                    addAction: false,
+                    noTags: true
                 });
             },
             checkSalesForceStatus: function(){                

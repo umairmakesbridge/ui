@@ -989,6 +989,9 @@ ul.tabs-btns li.active a{
 .wtab-salesloft{
     background: url("../img/salesloft_tab.png") no-repeat scroll center center transparent !important;
 }
+.wtab-zapier{
+    background: url("../img/wtab-zapier.png") no-repeat scroll center center transparent !important;
+}
 
 .wtab-onetoonelisting{
     background-position:-60px -60px;

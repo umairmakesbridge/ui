@@ -109,6 +109,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .crm-netsuite': 'netsuiteCrm',
                     'click .crm-highrise': 'highriseCrm',
                     'click .crm-salesloft':'salesloftCRM',
+                    'click .crm-zapier':'zapierCRM',
                     'click .crm-google': 'googleCRM',
                     'click .create-target': 'createTarget',
                     'click .view-lists': 'viewLists',
@@ -1190,6 +1191,18 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         url:'crm/salesloft/salesloft',
                         workspace_id: 'crm_salesloft',
                         tab_icon:'salesloft',
+                        sub_title:'Connection With Apps',
+                        addAction: false,
+                        noTags: true
+                    });
+                },
+                zapierCRM:function(){
+                    this.addWorkSpace({
+                        type:'',
+                        title:'Zapier',
+                        url:'crm/zapier/zapier',
+                        workspace_id: 'crm_zapier',
+                        tab_icon:'zapier',
                         sub_title:'Connection With Apps',
                         addAction: false,
                         noTags: true

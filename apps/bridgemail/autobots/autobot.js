@@ -55,12 +55,17 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                     }
                 },
                 getStatus: function() {
-                    if (this.model.get('status') == "D")
-                        return "<a class='cstatus pclr1'> Paused </a>";
-                    else if (this.model.get("status") == "R")
-                        return "<a class='cstatus pclr18'> Playing </a>";
-                    else if (this.model.get('status') == "P")
-                        return "<a class='cstatus pclr6'> Pending </a>";
+                    if(this.model.get("actionType")=="Z" && this.model.get("isPreset")=="Y"){
+                        return "";                    
+                    }
+                    else{
+                        if (this.model.get('status') == "D")
+                            return "<a class='cstatus pclr1'> Paused </a>";
+                        else if (this.model.get("status") == "R")
+                            return "<a class='cstatus pclr18'> Playing </a>";
+                        else if (this.model.get('status') == "P")
+                            return "<a class='cstatus pclr6'> Pending </a>";
+                    }
                 },
                 getReport:function(){
                        if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
@@ -560,6 +565,15 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                     if (this.parent.createAutobotChart) {
                         this.parent.createAutobotChart();
                     }
+                },
+                getLabel:function(){
+                    var label = this.model.get('presetLabel');
+                    /*if(this.model.get("actionType")=="Z"){
+                        label = label.replace("Zapier","");                        
+                        label = label.replace("Bot","");
+                        label = $.trim(label);
+                    }*/
+                    return label;
                 }
             });
         });

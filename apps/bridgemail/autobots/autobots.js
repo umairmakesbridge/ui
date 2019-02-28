@@ -46,11 +46,11 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.request = null;
                     this.botType = this.options.botType;
                     this.app = app;
+                    this.exportBots = this.options.exportBot?this.options.exportBot:false;
                     this.render();
                     this.getFiltersData();
                     this.getFormatsData();
-                    this.typeOfBots = false;
-                    this.exportBots = false;
+                    this.typeOfBots = false;                    
                     
                 },
                 refreshWorkSpace:function(options){
@@ -68,7 +68,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 render: function(ev) {
                     this.app.addSpinner(this.$el);
                     this.$el.html(this.template()); ;
-                    if(typeof this.options.params !="undefined"){
+                    if(typeof this.options.params !="undefined" && this.exportBots===false){
                         if(typeof this.options.params.botId !="undefined" && typeof ev =="undefined"){
                              this.fetchBots(0,this.options.params.botId);
                         }else{
@@ -134,6 +134,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         this.actionType = "";
                         this.sortText = "";
                     }
+                    
                    
                     if (this.request)
                         this.request.abort();
@@ -155,6 +156,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                    
                     if (this.searchText) {
                         _data['searchText'] = this.searchText;
+                    }
+                    if(this.botType && this.botType=="SC"){
+                        _data['orderBy'] = "SL";
                     }
 
                     this.request = this.objAutobots.fetch({data: _data, success: function(data) {
@@ -427,7 +431,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     else{
                         var actionType = this.botType;
                         var plHolderText =this.getCaption(actionType);                        
-                        var botURL = '/pms/io/trigger/saveAutobotData/';
+                        var botURL = actionType=="Z"?'/pms/io/trigger/saveZapierExportBotData/':'/pms/io/trigger/saveAutobotData/';
                         this.app.showAddDialog(
                         {
                             app: this.app,
@@ -440,7 +444,12 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             fieldKey: "label",
                             postData: {type: 'create', BMS_REQ_TK: this.app.get('bms_token'), actionType:actionType,botType:'N'},
                             saveCallBack: _.bind(function(field_text,_json){
-                                this.fetchBots(0,_json[2],true);
+                                if(this.botType!=="Z"){
+                                    this.fetchBots(0,_json[2],true);
+                                }
+                                else{
+                                    this.fetchExportBots(0,_json[2],true);
+                                }
                             }, this) // Calling same view for refresh headBadge
                         });
                     }
@@ -465,7 +474,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             caption = "Enter name for tag bot";
                             break;
                         case "Z":
-                            caption = "Enter name for Zaiper bot";
+                            caption = "Enter name for trigger";
                             break;    
                     }
                     return caption;
@@ -631,6 +640,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     if (this.searchText) {
                         _data['searchText'] = this.searchText;
                     }
+                    _data['orderBy']="preset";
 
                     this.request = this.objExportAutobots.fetch({data: _data, success: function(data,collection) {
                             that.total = collection.totalCount;

@@ -1,9 +1,9 @@
 <div class="content-inner soruces" id="area_choose_targets" style="margin:  0 0;">
     <div class="temp-filters clearfix">
-        <% if(typeof(this.botType)=="undefined") { %>
-        <h2 id="total_autobots"><strong class="badge">0</strong> <span class='sort-text'></span> autobots found <span class='search-text'></span></h2>
+        <% if(this.botType!=="SC") { %>
+            <h2 id="total_autobots"><strong class="badge">0</strong> <span class='sort-text'></span><% if(this.botType=="Z") { %> triggers <%} else { %> autobots <%}%>found <span class='search-text'></span></h2>
         <% } else { %> 
-        <strong>Lead Score triggers are used to increase scores. Makesbridge Lead Scores are added to SalesLoft record</strong>
+            <strong>Lead Score triggers are used to increase scores. Makesbridge Lead Scores are added to SalesLoft record</strong>
         <%}%>
         <div style=" " class="srt-div">
             <% if(typeof(this.botType)=="undefined") { %>
@@ -30,7 +30,7 @@
             <% } %>
  
         <div id="" class="input-append search">         
-            <span class="icon bot"></span><input type="text" id="txtAutobotSearch" placeholder="Search <% if(typeof(this.botType)=='undefined') { %> autobots <% } else { %> lead score triggers <%}%>" class="search-control show-image" style="width:300px;"><a class="close-icon" id="clearsearch" style="display:none"></a><div class="btn-group"><button tabindex="-1" class="searchbtn" id="searchbtn"><span class="icon-search icon-white"> 				  </span></button></div></div>
+            <span class="icon bot"></span><input type="text" id="txtAutobotSearch" placeholder="Search <% if(typeof(this.botType)=='undefined') { %> autobots <% } else { %> triggers <%}%>" class="search-control show-image" style="width:300px;"><a class="close-icon" id="clearsearch" style="display:none"></a><div class="btn-group"><button tabindex="-1" class="searchbtn" id="searchbtn"><span class="icon-search icon-white"> 				  </span></button></div></div>
         <a  data-original-title="Refresh listing" class="refresh_btn showtooltip"><i id="refresh_autobots">Refresh</i></a>
         <!--  search  --> 
     </div>

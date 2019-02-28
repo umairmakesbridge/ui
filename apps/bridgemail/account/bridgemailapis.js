@@ -6,7 +6,8 @@ define(['text!account/html/bridgemailapis.html'],
                 className:'bridgemailapis setting-section',                
                 events: {                    
                     'click .regenerate-key':'confirmRegenerate',
-                    'click .open-help':'openHelp'
+                    'click .open-help':'openHelp',
+                    'click .copy-key':'copyTextToClipBoard'
                 },
                 initialize: function () {
                     this.postObject = this.options.postObj;
@@ -42,8 +43,8 @@ define(['text!account/html/bridgemailapis.html'],
                 },
                 confirmRegenerate: function(e){
                   this.app.showAlertPopup({heading:'Confirm key generation',
-                    detail:'This action will generate new API key causing old key to stop working for your current app. Are you sure you want to continue?',  
-                    text: "Continue",
+                    detail:'Warning, if you regenerate this key your current API connections will need to be updated with the new key. Are you sure you wish to proceed?',  
+                    text: "Generate a Key",
                     btnClass:"btn-yellow",
                     dialogWidth: "460px",
                     icon: "next",
@@ -76,6 +77,13 @@ define(['text!account/html/bridgemailapis.html'],
                 },
                 openHelp:function(){
                     window.open('/pms/help/BMSAPIHelp.html','_blank','width=850,height=450,left=200,top=200,screenX=200,screenY=200,resizable=yes,scrollbars=yes');
+                }
+                ,
+                copyTextToClipBoard: function(){
+                    var copyText = this.$(".api-key")[0];                    
+                    copyText.select();                    
+                    document.execCommand("copy");
+                    alert("API Key copied to clipboard");
                 }
             });
         });
