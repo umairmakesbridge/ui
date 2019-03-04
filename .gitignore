@@ -27,3 +27,4 @@ apps/bridgemail/templates/.DS_Store
 apps/bridgemail/templates/.DS_Store
 
 build/
+package-lock.json

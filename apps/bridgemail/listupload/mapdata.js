@@ -153,6 +153,9 @@ define(['text!listupload/html/mapdata.html'],
                         var id = $(e).parent().find('.erroricon').attr('id');
                         if ($(e).val() == '' && j == 0) {
                             layout_map = [];
+                            if($(e).val() == ''){
+                                layout_map.push('');
+                            }
                         } else
                         {
                             if ($(e).val() == "" || layout_map.indexOf($(e).val()) == -1)
