@@ -211,8 +211,9 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                                     $(this).parents(".checkpanelinput").css({"background-color": "#CCDCE5"});
                                 }
                         );
-                        if(that.model.get("actionType")!=="Z"){
+                        if(that.model.get("actionType")!=="Z" && that.model.get("actionType")!=="SC"){
                             //wait added
+                            
                             that.waitView = new WaitView({page:that,editable:that.editable }); 
                             that.$(".delayRow").html(that.waitView.$el);                        
 
@@ -571,11 +572,13 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                     var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                     //wait added
-                     var delayData = this.waitView.getPostData();
-                     if(delayData.isError!==""){
-                        setTimeout(_.bind(function(){this.app.showAlert(delayData.isError, $("body"), {fixed: true})},this),10);
-                        return false;
-                     }
+                     if(this.model.get("actionType")!=="SC"){
+                        var delayData = this.waitView.getPostData();
+                        if(delayData.isError!==""){
+                           setTimeout(_.bind(function(){this.app.showAlert(delayData.isError, $("body"), {fixed: true})},this),10);
+                           return false;
+                        }
+                    }
                     if (!isPlayClicked)
                         btnSave.addClass('saving');
                     if (this.status != "D") {
@@ -588,7 +591,7 @@ define(['text!autobots/html/preset.html','autobots/wait_row', 'bms-tags','bms-me
                     var that = this;
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update"};
                      //wait added
-                    var delayData = this.waitView.getPostData();
+                    var delayData = this.model.get("actionType")=="SC"?{isDelay:'N',isError:""}:this.waitView.getPostData();
                     if(delayData.isError==""){
                         $.extend( post_data, delayData.post );
                     }

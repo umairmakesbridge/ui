@@ -389,6 +389,9 @@ define(['text!forms/html/formlistings.html', 'forms/collections/formlistings', '
                             else if(response.showMessage){
                                 this.app.showMessge(response.msg);
                             }
+                            else if(response.showAlert){
+                                this.app.showAlert(response.msg, $("body"), {fixed: true});
+                            }
 
                         },this),
                         props:{style:{width:"100%",height:dialog_height+"px"},frameborder:0},

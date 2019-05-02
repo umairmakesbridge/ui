@@ -151,7 +151,7 @@
         <%=this.getAutobotImage()%>
     </div>
 </td>
-<td width="100%"><div>
+<td width="<% if(!this.exportBot){ print('100%')}else{ print('80%')}%>"><div>
         <div class="name-type">
             <h3> <a class="edit-autobot showtooltip" data-original-title="Click to view"  data-id="<%=this.model.get('botId.encode')%>">
                     
@@ -176,7 +176,9 @@
         </div>
     </div>
 </td>
-<td width="90px"><div>
+<td width="90px">
+    <% if(!this.exportBot){ %>
+    <div>
         <div class="mail  pr<%=this.model.get("botId.checksum")%> showtooltip" data-original-title="in progress 1%">
              <% if(this.model.get('status')==='P' || this.model.get('status')==='Q'){  %>    
                 <img alt="" class="recurring2img showprogressnt" src="<%- this.options.app.get('path')%>img/recurring2.gif">
@@ -186,6 +188,7 @@
             <% }  %>  
         </div>
     </div>
+    <% } %>
 </td>
 <td width="90px"><div>
         <% if(this.model.get('actionType')!=='Z') {%>

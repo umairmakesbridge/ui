@@ -254,6 +254,13 @@ function (template,editorView) {
                       this.showChangeEditorDialog("Your current built Template will be lost, as it is not compatible with <b>Easy Editor</b>. Are you sure you want to continue?",target_li);
                       return true;    
                   }
+                  if(selected_li.length && this.campobjData.editorType=="MEE" && target_li.attr("id")=="plain_text"  && this.$("#mee_editor").getMEEBody() !== ""){
+                        this.showChangeEditorDialog("Your current message will be lost and this will be a Plain Text email.<br/> NOTE: The Plain Text is not used to create a text version of your message.<br/>This is done in the Text tabs on the HTML editors.",target_li);
+                        return true;    
+                  }else if(selected_li.length && ( (this.campobjData.editorType=="W" && (_tinyMCE.get('bmseditor_'+this.wp_id).getBody().childNodes.length!==1) || _tinyMCE.get('bmseditor_'+this.wp_id).getBody().innerHTML.length>30) || ( this.campobjData.editorType=="H" && this.$("textarea#handcodedhtml").val()!="")) && target_li.attr("id")=="plain_text" ){
+                      this.showChangeEditorDialog("Your current message will be lost and this will be a Plain Text email.<br/> NOTE: The Plain Text is not used to create a text version of your message.<br/>This is done in the Text tabs on the HTML editors.",target_li);
+                      return true;    
+                  }
                   return false;
             },
             step2SlectSource:function(target_li,byPass){ 

@@ -3674,6 +3674,24 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             RemoveDroppables(myElement, true);
 
                                             OnNewElementDropped(args);
+                                            
+                                            //Fix for copy paste after cloning
+                                            var mainHTMLELE = meeIframe.find(".mainContentHtml");
+                                            mainHTMLELE.find(".bgimage").each(function () {
+                                                $(this).attr("mee-style", $(this).attr("style"));
+                                                $(this).removeAttr("style");
+                                            });
+                                            var constructedHTML = $(mainHTMLELE.outerHTML());
+
+                                            var cleanedupHTML = mee.encodeSpecialHTML(CleanCode(constructedHTML).html());
+
+                                            var outputter = $("<div style='margin:0px auto;width:" + emailWidth + "'></div>");
+                                            outputter.wrapInner(cleanedupHTML);
+
+                                            var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();
+
+                                            myElement.setMEEHTML(outputHTML.replace(/\n/g, ""));
+                                            
                                         } else {
 
                                             //Dynamic Blocks Copy Handling. 

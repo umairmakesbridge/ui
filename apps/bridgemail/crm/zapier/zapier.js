@@ -27,7 +27,8 @@ define(['text!crm/zapier/html/zapier.html','crm/zapier/login','autobots/autobots
             render: function () {                        
                 this.$el.html(this.template({}));                            
                 this.$loginArea = this.$(".accordion_login-inner");                
-                this.$scoreBotArea = this.$(".accordion_score-inner");                               
+                this.$scoreBotArea = this.$(".accordion_score-inner");                                               
+                this.$zaiperArea = this.$(".accordion_zaiper-inner");                                               
                 this.salesloftSetup = false;                               
                                 
             },
@@ -39,11 +40,17 @@ define(['text!crm/zapier/html/zapier.html','crm/zapier/login','autobots/autobots
                 this.$loginArea.append(this.loginAccordion.$el);                                 
                 
                 this.scoreAccordion = new sl_score({page: this, app: this.app,botType:'Z',exportBot:true});
-                this.$scoreBotArea.append(this.scoreAccordion.$el); 
-                
+                this.$scoreBotArea.append(this.scoreAccordion.$el);                                 
+                                                 
                 this.$(".salesloft-setup").show();
                 this.$("#accordion_login").accordion({heightStyle: "fill",collapsible: true});                
                 this.$("#accordion_score").accordion({heightStyle: "fill",collapsible: true});
+                this.$("#accordion_zaiper").accordion({heightStyle: "fill",collapsible: true});
+                
+                this.$zaiperArea.css("height","356px");
+                
+                this.$scoreBotArea.find("#tblAutobots tr td:nth-child(3)").html('');
+                this.$scoreBotArea.find("#tblAutobots tr td:nth-child(2)").attr("width","70%");
                 
                 this.current_ws = this.$el.parents(".ws-content");                
                 //this.checkSalesforceStatus();

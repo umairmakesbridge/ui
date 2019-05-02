@@ -128,7 +128,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     }
                     //wait added
                     this.waitView = new WaitView({page:this,editable:this.editable }); 
-                    this.$(".delayRow").html(this.waitView.$el);
+                    //this.$(".delayRow").html(this.waitView.$el);
 
                 }, changeSetting: function(ev) {
                     var selected = $(ev.target).val();
@@ -261,11 +261,11 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                      var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                      var btnPlay = this.modal.find('.modal-footer').find('.btn-play');
                      //wait added
-                     var delayData = this.waitView.getPostData();
-                     if(delayData.isError!==""){
+                     var delayData = {isDelay:'N'};//this.waitView.getPostData();
+                     /*if(delayData.isError!==""){
                         setTimeout(_.bind(function(){this.app.showAlert(delayData.isError, $("body"), {fixed: true})},this),10);
                         return false;
-                     }
+                     }*/
                      if(!isPlayClicked)
                         btnSave.addClass('saving');
                    
@@ -295,7 +295,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     var recurPeriod = this.model.get('recurTimes');//this.$el.find("#txtRecurPeriod").val();
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll, actionTags: this.tags};
-                    var delayData = this.waitView.getPostData();
+                    var delayData = {isDelay:'N',isError:""};//this.waitView.getPostData();
                     if(delayData.isError==""){
                         $.extend( post_data, delayData.post );
                     }

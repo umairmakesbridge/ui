@@ -41,6 +41,7 @@ define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox
                     this.showCheckbox = this.options.showCheckbox;
                     this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.showSummaryChart = this.options.showSummaryChart;
+                    this.exportBot = this.parent ? this.parent.exportBots:false;
                     this.model.on('change', this.render, this);
                     this.render();
                     $(this.el).attr('id', 'row_' + this.model.get('botId.encode'));
