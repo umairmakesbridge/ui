@@ -28,3 +28,7 @@ apps/bridgemail/templates/.DS_Store
 
 build/
 package-lock.json
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/ui.iml
+.idea/modules.xml
