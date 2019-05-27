@@ -99,7 +99,7 @@ define(['text!account/html/gmailaccounts.html'],
                         if (this.app.checkError(_json)) {
                             return false;
                         }
-                        if (_json[0] !== "err" && _json.id) {
+                        if (_json[0] !== "err" && _json.email) {
                             this.$(".gmail-account-name").html(_json.name ? _json.name : "&nbsp;");
                             this.$(".gmail-account-email").html(_json.email);
                             if(_json.picture){

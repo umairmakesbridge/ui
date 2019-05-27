@@ -45,7 +45,7 @@ function (template,templateCollection,templateRowView) {
                this.otoTemplateFlag = false;
                this.templateCollection = new templateCollection(); 
                this.getTemplateCall = null;
-               this.orderBy = 'usageDate';    
+               this.orderBy = 'viewCount';    
                this.templateTotalFlag = false;
                this.subNum = this.options.subNum ? this.options.subNum : '';
                this.directContactFlag = this.options.directContactFlag ? this.options.directContactFlag : false;
