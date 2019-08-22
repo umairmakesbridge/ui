@@ -36,7 +36,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     var predefinedControls = [
                         {
                             "type": "text",
-                            "html": "<div class='textcontent' style='font-family:Arial,sans-serif;font-size:10pt;'><span style='font-family:Arial,sans-serif;font-size:10pt;'>This is sample text</span></div>"
+                            "html": "<div class='textcontent' style='font-family: helvetica, arial, sans-serif; font-size: 14px; color:#606975; line-height: 24px;'>This is sample text</div>"
                         },
                         {
                             "type": "image",
@@ -44,11 +44,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         },
                         {
                             "type": "textWithImage",
-                            "html": "<table class='MEE_TEXTWITHIMAGECONTENT' width='100%'><tr><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td><td width='50%'><div class='imageContainer imagePlaceHolderAlone drapableImageContainer'>Drag image here</div></td></tr></table></div>"
+                            "html": "<table class='MEE_TEXTWITHIMAGECONTENT' width='100%'><tr><td valign='top' width='50%'><div class='textcontent' style='font-family: helvetica, arial, sans-serif; font-size: 14px; color:#606975; line-height: 24px;'>You can write text here...</div></td><td width='50%'><div class='imageContainer imagePlaceHolderAlone drapableImageContainer'>Drag image here</div></td></tr></table></div>"
                         },
                         {
                             "type": "imageWithText",
-                            "html": "<table class='MEE_IMAGEWITHTEXTCONTENT' width='100%'><tr><td width='50%'><div class='imageContainer imagePlaceHolderAlone drapableImageContainer'>Drag image here</div></td><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td></tr></table></div>"
+                            "html": "<table class='MEE_IMAGEWITHTEXTCONTENT' width='100%'><tr><td width='50%'><div class='imageContainer imagePlaceHolderAlone drapableImageContainer'>Drag image here</div></td><td valign='top' width='50%'><div class='textcontent' style='font-family: helvetica, arial, sans-serif; font-size: 14px; color:#606975; line-height: 24px;'>You can write text here...</div></td></tr></table></div>"
                         },
                         {
                             "type": "signupForm",
@@ -6384,12 +6384,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
-                                                toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist | LineHeight",
-                                                fontsize_formats: "8pt 10pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 36pt",
+                                                toolbar1: " LinksButton | personalizeMenu | fontselection fontsizeselection | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist | LineHeight",
+                                                //fontsize_formats: "8px 9px 10px 11px 12px 13px 14px 15px 16px 18px 20px 22px 24px 26px 28px 30px 32px 36px 48px 72px",
                                                 formats: {
                                                     underline: {inline: 'font', 'classes': 'underline', styles: {textDecoration:'underline'},exact:true}
-
-
                                                 },
                                                 setup: function (editor) {
                                                     if (meeIframe.find("#" + editor.id).data('tinymce') == undefined) {
@@ -6493,11 +6491,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             } else if (e.command == "Undo") {
                                                                 mee.reAdjusToolBarByID(meeIframe.find('#' + editor.theme.panel._id))
                                                             }
+                                                            
+                                                            
 
                                                         });
                                                         editor.on('BeforeExecCommand', function (e) {
-                                                            
-
+                                                            console.log(e);
+                                                            var currentNode = editor.selection.getNode();
+                                                            if(e.command=="FontName"){                                                                                                                                
+                                                                $(currentNode).parents(".textcontent").css("font-family",e.value);
+                                                                return false;
+                                                            }
+                                                            else if(e.command=="FontSize"){                                                                                                                                
+                                                                $(currentNode).parents(".textcontent").css("font-size",e.value);
+                                                                return false;
+                                                            }  
                                                         });
 
                                                         editor.on('NodeChange', function (e) {
@@ -6587,10 +6595,30 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     var selectedText = meeIframeWindow.tinyMCE.activeEditor.selection.getContent({
                                                                         format: 'text'
                                                                     });
+                                                                    var spanSelected = $(meeIframeWindow.tinyMCE.activeEditor.selection.getNode());
+                                                                    var selectedNode = spanSelected.parents(".textcontent")
                                                                     var selectedFontColor = myElement.find(".selectedFontColor");
                                                                     var selectedColor = selectedFontColor.val();
                                                                     if (selectedColor != "") {
-                                                                        var result = editor.execCommand('ForeColor', false, selectedColor);
+                                                                        if(selectedText){
+                                                                            var result = editor.execCommand('ForeColor', false, selectedColor);
+                                                                            if(selectedText==selectedNode.text()){
+                                                                                selectedNode.css("color",selectedColor);
+                                                                            }
+                                                                        }
+                                                                        else{
+                                                                            if(spanSelected[0].tagName=="SPAN" || spanSelected[0].tagName=="A" || spanSelected[0].tagName=="P" || spanSelected[0].tagName=="DIV"){
+                                                                                spanSelected.css("color",selectedColor);
+                                                                            }
+                                                                            else{
+                                                                                var textParentNode = spanSelected.parent();
+                                                                                if(textParentNode[0].tagName =="SPAN"){
+                                                                                    textParentNode.css("color",selectedColor);
+                                                                                }
+                                                                            }
+                                                                            selectedNode.css("color",selectedColor);
+                                                                        }
+                                                                        //var result = editor.execCommand('ForeColor', false, selectedColor);
                                                                         // var changedText = "<span style='color:"+ selectedColor +";'>" + selectedText+"</span>";
                                                                         // tinyMCE.activeEditor.selection.setContent(changedText);
                                                                     }
@@ -6669,12 +6697,33 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     var selectedText = meeIframeWindow.tinyMCE.activeEditor.selection.getContent({
                                                                         format: 'text'
                                                                     });
-
-                                                                    var selectedFontColor = myElement.find(".selectedFontColor");
+                                                                    
+                                                                    var spanSelected = $(meeIframeWindow.tinyMCE.activeEditor.selection.getNode());
+                                                                    var selectedNode = spanSelected.parents(".textcontent");
+                                                                    var selectedFontColor = myElement.find(".selectedFontColor");                                                                    
                                                                     var selectedColor = selectedFontColor.val();
+                                                                    
                                                                     if (selectedColor != "") {
-                                                                        var result = editor.execCommand('HiliteColor', false, selectedColor);
+                                                                        if (selectedText) {
+                                                                            var result = editor.execCommand('HiliteColor', false, selectedColor);
+                                                                            if(selectedText==selectedNode.text()){
+                                                                                selectedNode.css("background-color",selectedColor);
+                                                                            }
+                                                                        }
+                                                                        else {
+                                                                            if(spanSelected[0].tagName=="SPAN" || spanSelected[0].tagName=="A" || spanSelected[0].tagName=="P" || spanSelected[0].tagName=="DIV"){
+                                                                                spanSelected.css("background-color",selectedColor);
+                                                                            }
+                                                                            else{
+                                                                                var textParentNode = spanSelected.parent();
+                                                                                if(textParentNode[0].tagName =="SPAN"){
+                                                                                    textParentNode.css("background-color",selectedColor);
+                                                                                }
+                                                                            }
+                                                                            selectedNode.css("background-color",selectedColor);
+                                                                        }
                                                                     }
+                                                                    
 
                                                                     myElement.find(".modalDialog").hide();
                                                                     myElement.find("#ColorPickerpop").hide();
@@ -6714,14 +6763,74 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
 
                                                         },
                                                     });
-                                                    editor.addButton('LineHeight', {
-                                                        type: 'listbox',
-                                                        title: 'Line Height',
-                                                        text: 'Line Height',
+                                                    //Font Family 
+                                                    editor.addButton('fontselection',{
+                                                         type: 'listbox',
+                                                        title: 'Font Family',
+                                                        text: 'Font Family',
+                                                        icon: false,
+                                                        values: [
+                                                            {text: "Andale Mono", value: "andale mono,monospace"},
+                                                            {text: "Arial", value: "arial,helvetica,sans-serif"},
+                                                            {text: "Arial Black", value: "arial black,sans-serif"},
+                                                            {text: "Book Antiqua", value: "book antiqua,palatino,serif"},
+                                                            {text: "Comic Sans MS", value: "comic sans,sans-serif"},
+                                                            {text: "Courier New", value: "courier new,courier,monospace"},
+                                                            {text: "Georgia", value: "georgia,palatino,serif"},
+                                                            {text: "Helvetica", value: "helvetica,arial,sans-serif"},
+                                                            {text: "Impact", value: "impact,sans-serif"},
+                                                            {text: "Symbol", value: "symbol"},
+                                                            {text: "Tahoma", value: "tahoma,arial,helvetica,sans-serif"},
+                                                            {text: "Terminal", value: "terminal,monaco,monospace"},
+                                                            {text: "Times New Roman", value: "times new roman,times,serif"},
+                                                            {text: "Trebuchet MS", value: "trebuchet ms,geneva,sans-serif"},
+                                                            {text: "Verdana", value: "verdana,geneva,sans-serif"},
+                                                            {text: "Webdings", value: "Webdings"},
+                                                            {text: "Wingdings", value: "Wingdings"},
+                                                        ],
+                                                        fixedWidth: true,
+                                                        onPostRender: function () {
+                                                            this.value('12px');
+                                                            var self = this;
+                                                            editor.on('nodeChange', function (e) {
+                                                                var textElement = $(e.element).parents(".textcontent");
+                                                                if(textElement.length){
+                                                                    if(textElement.css('font-family')){
+                                                                      var fontFamilyValue = textElement.css('font-family').replace(/\"/g, "");
+                                                                      fontFamilyValue = fontFamilyValue.replace(/, /g, ",");   
+                                                                      self.value(fontFamilyValue);
+                                                                    }
+                                                                }                                                                
+                                                            });
+                                                        },
+                                                        onselect: function (e) {
+                                                            var selected_node = $(editor.selection.getNode());
+                                                            selected_node.css('font-family', this.value());
+                                                            var textContentDiv = selected_node.parents(".textcontent");
+                                                            textContentDiv.css("font-family",this.value());
+                                                            textContentDiv.find("span,p").css("font-family",this.value());
+                                                            //Span fix for outlook
+                                                            /*if(selected_node.tagName=="SPAN"){
+                                                                var parent_p = selected_node.parent("p");
+                                                                if(parent_p.length){
+                                                                    if(selected_node.text()==parent_p.text()){
+                                                                        parent_p.css('font-family', this.value());
+                                                                    }
+                                                                }
+                                                            }*/
+                                                        }
+                                                    });
+                                                    //Font Size Plugin
+                                                    editor.addButton('fontsizeselection',{
+                                                         type: 'listbox',
+                                                        title: 'Font Size',
+                                                        text: 'Font Size',
                                                         icon: false,
                                                         values: [
                                                             {text: "8px", value: "8px"},
+                                                            {text: "9px", value: "9px"},
                                                             {text: "10px", value: "10px"},
+                                                            {text: "11px", value: "11px"},
                                                             {text: "12px", value: "12px"},
                                                             {text: "13px", value: "13px"},
                                                             {text: "14px", value: "14px"},
@@ -6736,23 +6845,77 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                             {text: "30px", value: "30px"},
                                                             {text: "32px", value: "32px"},
                                                             {text: "36px", value: "36px"},
+                                                            {text: "72px", value: "72px"},
                                                         ],
                                                         fixedWidth: true,
                                                         onPostRender: function () {
-                                                            this.value('9px');
+                                                            this.value('12px');
                                                             var self = this;
                                                             editor.on('nodeChange', function (e) {
-                                                                $.each(e.parents, function (key, val) {
-                                                                    if (val.nodeName === "SPAN" && $(val).css('line-height') != "") {
-                                                                        self.value($(val).css('line-height'));
-                                                                        makeCloneAndRegister();
+                                                                var textElement = $(e.element).parents(".textcontent");
+                                                                if(textElement.length){
+                                                                    if(textElement.css('font-size')){
+                                                                      self.value(textElement.css('font-size'));
                                                                     }
-                                                                })
+                                                                }                                                                
+                                                            });
+                                                        },
+                                                        onselect: function (e) {
+                                                            var selected_node = $(editor.selection.getNode());
+                                                            selected_node.css('font-size', this.value());
+                                                            selected_node.parents(".textcontent").css("font-size",this.value())
+                                                            //Span fix for outlook
+                                                            if(editor.selection.getNode().tagName=="SPAN"){
+                                                                var parent_p = selected_node.parent("p");
+                                                                if(parent_p.length){
+                                                                    if(selected_node.text()==parent_p.text()){
+                                                                        parent_p.css('font-size', this.value());
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    //Line Height Custom Plugin
+                                                    editor.addButton('LineHeight', {
+                                                        type: 'listbox',
+                                                        title: 'Line Height',
+                                                        text: 'Line Height',
+                                                        icon: false,
+                                                        values: [
+                                                            {text: "8px", value: "8px",color: '#ff0000;'},
+                                                            {text: "10px", value: "10px"},
+                                                            {text: "12px", value: "12px"},
+                                                            {text: "13px", value: "13px"},
+                                                            {text: "14px", value: "14px"},
+                                                            {text: "15px", value: "15px"},
+                                                            {text: "16px", value: "16px"},
+                                                            {text: "18px", value: "18px"},
+                                                            {text: "20px", value: "20px"},
+                                                            {text: "22px", value: "22px"},
+                                                            {text: "24px", value: "24px"},
+                                                            {text: "26px", value: "26px"},
+                                                            {text: "28px", value: "28px"},
+                                                            {text: "30px", value: "30px"},
+                                                            {text: "32px", value: "32px"},
+                                                            {text: "36px", value: "36px"}
+                                                        ],
+                                                        fixedWidth: true,
+                                                        onPostRender: function () {
+                                                            this.value('24px');
+                                                            var self = this;
+                                                            editor.on('nodeChange', function (e) {
+                                                                var textElement = $(e.element).parents(".textcontent");
+                                                                if(textElement.length){
+                                                                    if(textElement.css('line-height')){
+                                                                      self.value(textElement.css('line-height'));
+                                                                    }
+                                                                }                                                                
                                                             });
                                                         },
                                                         onselect: function (e) {
                                                             var selected_node = $(editor.selection.getNode());
                                                             selected_node.css('line-height', this.value());
+                                                            selected_node.parents(".textcontent").css("line-height",this.value())
                                                             //Span fix for outlook
                                                             if(editor.selection.getNode().tagName=="SPAN"){
                                                                 var parent_p = selected_node.parent("p");
@@ -6762,7 +6925,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     }
                                                                 }
                                                             }
-                                                        },
+                                                        }
+                                                        
                                                     });
                                                 },
                                                 //theme_modern_buttons2: "exapmle Mybutton",

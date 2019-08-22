@@ -33,7 +33,12 @@ define(['app', 'text!listupload/html/csvupload.html', 'fileuploader', 'bms-dragf
                     var el = this.$el;
                     this.fileName = arguments[1].fileName;
                     if (campview) {
-                        campview.states.step3.change = true;
+                        if(campview.states){
+                            campview.states.step3.change = true;
+                        }
+                        else{
+                            campview = null;
+                        }
                     }
                     var _csv = jQuery.parseJSON(files);
                     if (_csv[0] !== "err") {
