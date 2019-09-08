@@ -6363,7 +6363,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 selector: "div.textcontent",
                                                 inline: true,
                                                 theme: "modern",
-                                                paste_preprocess: function (plugin, args) {                                                        
+                                                paste_as_text: true,
+                                                paste_preprocess: function (plugin, args) {
                                                     args.content = mee.strip_tags(args.content,"i","b","em","strong","a","u","font"); //Strip all tags except i,b,em,strong,a,u and span with underlineclass
                                                     var pasteDiv = meeIframeWindow.$("<div>"+args.content+"</div>");
                                                     if(pasteDiv.find("a").length){
@@ -6602,13 +6603,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                     if (selectedColor != "") {
                                                                         if(selectedText){
                                                                             var result = editor.execCommand('ForeColor', false, selectedColor);
-                                                                            if(selectedText==selectedNode.text()){
+                                                                            if($.trim(selectedText)==$.trim(selectedNode.text())){
                                                                                 selectedNode.css("color",selectedColor);
+                                                                                selectedNode.children().css("color",selectedColor);
                                                                             }
                                                                         }
                                                                         else{
                                                                             if(spanSelected[0].tagName=="SPAN" || spanSelected[0].tagName=="A" || spanSelected[0].tagName=="P" || spanSelected[0].tagName=="DIV"){
                                                                                 spanSelected.css("color",selectedColor);
+                                                                                if(spanSelected.parentsUntil){
+                                                                                    spanSelected.parentsUntil(selectedNode).css("color",selectedColor);
+                                                                                }
                                                                             }
                                                                             else{
                                                                                 var textParentNode = spanSelected.parent();
