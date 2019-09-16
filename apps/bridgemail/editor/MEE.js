@@ -93,6 +93,24 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         {
                             "type": "dynamicContentContainer",
                             "html": "<table class='MEE_DYNAMICCONTENTCONTAINER container dynamicContentContainer'><tr><td><div id='basic' class='well main_blocker' style='max-width:44em;'><div class='block_head'><input type='text' class='txtVariationName' name='content_name' placeholder='Name Dynamic Variation' /> <input type='button' class='dcSaveButton' value='Save' />&nbsp;<img src='images/ico-edit1.png' /></div><div class='block_body'><div class='block_controls'><img class='addDynamicRule' src='images/add-btn.png' style='float: left';/><ul class='dcContents'></ul></div></div></td></tr><tr><td><ul class='sortable dcInternalContents' style='list-style: none;'></ul></td></tr></table>"
+                        },
+                        {
+                             "type": "oneRowContainer",
+                             "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr></table>"
+                        },
+                         {
+                              "type": "twoRowContainer",
+                              "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr></table>"
+                         }
+                         ,
+                          {
+                               "type": "threeRowContainer",
+                               "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr></table>"
+                          }
+                          ,
+                        {
+                             "type": "fourRowContainer",
+                             "html": "<table class='MEE_CONTAINER container' width='100%'><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr><tr><td><ul class='sortable' style='list-style: none;'></ul></td></tr></table>"
                         }
                     ];
                     if ($("body").MakeBridgeEditor) {

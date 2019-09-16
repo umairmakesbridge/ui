@@ -2902,6 +2902,11 @@ ul.b-blocks > li > i.icon.col2 { background-position: -150px -55px; }
 ul.b-blocks > li > i.icon.col3 { background-position: -100px -105px; }
 ul.b-blocks > li > i.icon.col4 { background-position: -150px -105px; }
 
+ul.b-blocks > li > i.icon.row1 { background-position: -100px -55px; transform:rotate(90deg);}
+ul.b-blocks > li > i.icon.row2 { background-position: -150px -55px; transform:rotate(90deg);}
+ul.b-blocks > li > i.icon.row3 { background-position: -100px -105px; transform:rotate(90deg);}
+ul.b-blocks > li > i.icon.row4 { background-position: -150px -105px; transform:rotate(90deg);}
+
 ul.b-blocks > li > i.icon.txt { background-position: -0px -55px; }
 ul.b-blocks > li > i.icon.imag { background-position: -50px -55px; }
 
