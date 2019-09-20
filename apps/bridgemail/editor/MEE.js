@@ -6291,8 +6291,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             console.log("Exception on destroying resizable on text");
                                         }
                                         //Tiny MCE DESTROY work here:
-                                        element.find("div.textcontent").each(function (index, element) {
-                                            var tinyEnableElement = $(element);
+                                        element.find("div.textcontent").each(function (index, ele) {
+                                            var tinyEnableElement = $(ele);
 
                                             //Avoid memory leak here
                                             if (tinyEnableElement.hasClass("textcontent")) {
@@ -6305,8 +6305,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                     var i = attributes.length;
                                                     while (i--) {
                                                         var attr = attributes[i];
-                                                        if ($.inArray(attr.name, whitelist) == -1)
-                                                            this.removeAttributeNode(attr);
+                                                        if ($.inArray(attr.name, whitelist) == -1){
+                                                           $(this).removeAttr(attr.name);
+                                                        }
                                                     }
 
                                                 });
@@ -6375,8 +6376,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             mee.initTinyMCE();
                                         }
 
-                                        element.find("div.textcontent").each(function (index, element) {
-
+                                        //element.find("div.textcontent").each(function (index, element) {
                                             meeIframeWindow.tinymce.init({
                                                 selector: "div.textcontent",
                                                 inline: true,
@@ -6960,7 +6960,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 object_resizing: false
                                             });
                                             //}
-                                        });
+                                        //});
 
 
                                     }
