@@ -6376,7 +6376,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             mee.initTinyMCE();
                                         }
 
-                                        //element.find("div.textcontent").each(function (index, element) {
+                                        element.find("div.textcontent").each(function (index, element) {
                                             meeIframeWindow.tinymce.init({
                                                 selector: "div.textcontent",
                                                 inline: true,
@@ -6960,7 +6960,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 object_resizing: false
                                             });
                                             //}
-                                        //});
+                                        });
 
 
                                     }
