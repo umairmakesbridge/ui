@@ -4639,6 +4639,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var formObj = $(this);
                                     var formURL = "/pms/io/publish/saveImagesData/?" + options._BMSTOKEN + "&type=add";
                                     var formData = new FormData(this);
+                                    var str = $(this).find("#myUploadFile")[0].files[0].name;
+                                    var isImage = true;
+                                     if(/^[a-zA-Z0-9_@.&+-]*$/.test(str) == false) {
+                                            options._app.showAlert("Your file name contains blank spaces or illegal characters. <br/>Allowed characters are 'Alphabets,Numbers and @ . & + - _ ' ", $("body"), {fixed: true})
+                                            isImage = false;
+                                        }
+                                        var _type = $(this).find("#myUploadFile")[0].files[0].type;
+                                        if(_type.indexOf("image") < 0){
+                                         options._app.showAlert("Please select a image with extension jpeg,jpg,png or gif.",$("body"),{fixed:true})
+                                         isImage = false;
+                                     }
+                                     if(!isImage){return false;}
                                     options._app.showLoading("Uploading Image...", myElement.find(".imageLib"), {
                                         "width": "140px",
                                         "margin-left": "-70px"
