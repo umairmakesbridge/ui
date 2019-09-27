@@ -6932,17 +6932,28 @@ background:#F1F9FD;
 }
 
 
-.nurturw_wizard .accordion-heading .accordion-toggle .preview {  height: 26px; width:28px; float:left !important; margin:1px 0 0 5px !important; !important;background: url("../img/preview24.png") no-repeat scroll center center rgba(0, 0, 0, 0);
- -webkit-border-radius: 2px;
-	-moz-border-radius:2px;
+.nurturw_wizard .accordion-heading .accordion-toggle .preview {
+   height: 26px;
+   width:28px;
+   float:left !important;
+   margin:1px 0 0 5px !important;
+   background: url("../img/preview24.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+   -webkit-border-radius: 2px;
+    -moz-border-radius:2px;
 	border-radius: 2px;}
 
 
-.nurturw_wizard .accordion-heading .accordion-toggle .preview:hover, .nurturw_wizard .accordion-heading .accordion-toggle .editnt:hover  {    background-color: #77c9a3;}
+.nurturw_wizard .accordion-heading .accordion-toggle .preview:hover, .nurturw_wizard .accordion-heading .accordion-toggle .editnt:hover  {
+background-color: #77c9a3;
+}
 .nurturw_wizard .wait-message .accordion-heading .accordion-toggle .editnt:hover  { background-color: #ffb2ac;  }
 
 .nurturw_wizard .accordion-heading .accordion-toggle .editnt {  
-    height: 26px; width:28px; float:left !important; margin:1px 0 0 5px !important; !important;background: url("../img/edit.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 26px;
+    width:28px;
+    float:left !important;
+    margin:1px 0 0 5px !important;
+    background: url("../img/edit.png") no-repeat scroll center center rgba(0, 0, 0, 0);
     -webkit-border-radius: 2px;
 	-moz-border-radius:2px;
 	border-radius: 2px;
