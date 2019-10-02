@@ -1390,14 +1390,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     options.formCallBack(id);
                                 }
 
-                                $.fn.setAccordian = function (diff) {
+                                $.fn.setAccordian = function (diff, acc_height) {
 
                                     var accordian_height = 550;
                                     if (options._app.get("isFromCRM") && options._app.get("isFromCRM").toLowerCase() == "y") {
                                         accordian_height = 550;
                                     } else {
                                         accordian_height = options.parentWindowobj.height() - 62 - diff;
-                                    }                                    
+                                    }
+                                    if(acc_height){
+                                        accordian_height = acc_height;
+                                    }
                                     this.find(".builder-panel").css("height", accordian_height + "px");
                                     this.find(".style-panel").css("height", accordian_height + "px");
 

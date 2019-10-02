@@ -120,7 +120,8 @@ function (template,editorView) {
                       }
                         var lessBy = this.navTop - scrollTop;
                         if(lessBy>0){
-                            this.$("#mee_editor").setAccordian(lessBy);
+                            var modalHeight = this.$win.height()-52;
+                            this.$("#mee_editor").setAccordian(lessBy,modalHeight);
                         }  
                     }
                   }
