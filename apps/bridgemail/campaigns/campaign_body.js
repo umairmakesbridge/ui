@@ -397,8 +397,9 @@ function (template,editorView) {
                 // Abdullah 
                 if(!this.copyCampaigns){
                 this.app.showLoading("Loading Campaigns...",this.$("#area_copy_campaign"));
-                require(["campaigns/copy_campaign_listing"],_.bind(function(copyCampaigns){                                     
-                    var mPage = new copyCampaigns({app:this.app,sub:this,scrollElement:this.scrollElement,checksum:this.camp_obj['campNum.checksum'],editable:this.editable});
+                require(["campaigns/copy_campaign_listing"],_.bind(function(copyCampaigns){
+                    var checkSum = this.camp_obj?this.camp_obj['campNum.checksum']:false;
+                    var mPage = new copyCampaigns({app:this.app,sub:this,scrollElement:this.scrollElement,checksum:checkSum,editable:this.editable});
                     this.$("#area_copy_campaign").html(mPage.$el);
                 },this));
                 this.copyCampaigns = true;

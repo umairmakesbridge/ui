@@ -6,7 +6,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.473" ,   //Set version as cache reload
+       urlArgs: "bust=1.473.2" ,   //Set version as cache reload
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
