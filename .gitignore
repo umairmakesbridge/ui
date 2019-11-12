@@ -2,6 +2,7 @@ node_modules/
 nbproject/
 json/
 backup/
+jsp/
 
 Gruntfile.js
 package.json
