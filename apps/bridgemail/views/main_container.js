@@ -142,11 +142,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         this.loadHeaderCount(true);
                     },
                     'click .drift-chat-live':function(){
-                        if(drift_API){
-                            drift_API.sidebar.open()
+                        if($crisp){
+                           $crisp.push(['do', 'chat:open']);
                         }
                         else{
-                            console.log("Drift API not found");
+                            console.log("Crisp not found");
                         }
                     }
 

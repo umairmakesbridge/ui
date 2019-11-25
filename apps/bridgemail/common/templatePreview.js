@@ -480,7 +480,7 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts'],
                                     }
                                     else if (data[0] == "err") {
                                         if(data[1]){
-                                            this.app.showAlert(data[1]);
+                                            this.app.showAlert(data[1],$("body"));
                                         }
                                     }
                                 }, this));
