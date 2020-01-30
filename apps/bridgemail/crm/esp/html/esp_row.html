@@ -1,0 +1,17 @@
+    <td width="90px">
+        <div class="img" style="max-width:none!important;">
+            <img src='<%=this.getESPImage(this.model)%>' style="max-width:none!important;">
+        </div>
+    </td>
+    <td width="100%"><div>
+        <div class="name-type">
+            <h3> <a class="setup-esp showtooltip" data-original-title="Click to setup" data-id="<%=this.model.get('id')%>">
+                <%=this.model.get('name')%>
+            </a>
+                <% if(this.model.get("default")) { %>
+                    <a class="cstatus pclr18"> Default </a>
+                <% } %>
+            </h3>
+        </div>
+    </div>
+    </td>

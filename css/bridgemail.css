@@ -163,6 +163,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.edit2 {   background: url("../img/edit2.png") no-repeat center center ;}
 .icon.newwin2 {   background: url("../img/newwin.png") no-repeat center center ;}
 .icon.plus {   background: url("../img/plus.png") no-repeat center center ;}
+.icon.domain-list {   background: url("../img/refresh-listing.png") no-repeat scroll center center;}
 .icon.setting {   background: url("../img/setting.png") no-repeat center center ;}
 .icon.filter {   background: url("../img/icon-map.png") no-repeat scroll -210px -838px rgba(0, 0, 0, 0);}
 .icon.time {   background: url("../img/time.png") no-repeat scroll center center !important;}
@@ -229,7 +230,17 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.google {   background: url("../img/google-g.png") no-repeat scroll center center ;}
 .icon.sharecamp {   background: url("../img/share35.png") no-repeat scroll center center;}
 .icon.jdelay {   background: url("editorcss/icons_journey/thumb/delay_32.png") no-repeat scroll center center;}
-
+.fetch-domains-btn .btn-green{
+    margin-top:0px
+}
+.fetch-domains-btn a{
+    width: 125px;
+    display: inline-block;
+    padding: 5px !important;
+    font-weight: bold;
+    height: 30px;
+    margin-top: 4px !important;
+ }
 
 .icon.h-info {
    background: url("../img/headinfo.png") no-repeat center center;
@@ -8868,6 +8879,7 @@ margin: 10px 0 0;
 .dashgoogle {background: url("../images/google-logo.png") no-repeat scroll center center; }
 .dashsalesloft {background: url("../images/salesloft-logo.png") no-repeat scroll center center; }
 .dashzapier {background: url("../img/zapier-logo.png") no-repeat scroll center center; }
+.espicon {background: url("../img/esp-icon.png") no-repeat scroll center center; }
 .livechat {background: url("../images/livechat.png") no-repeat scroll center center; }
 .knowledgebase {background: url("../images/knowledgebase.png") no-repeat scroll center center; }
 .videogallery {background: url("../images/videogallery.png") no-repeat scroll center center; }
@@ -12492,4 +12504,7 @@ right: 66px;
 }
 .newImg-icon{
     background-position : -298px -423px;
+}
+.disabled-row{
+    opacity: 0.4;
 }

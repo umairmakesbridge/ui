@@ -1,0 +1,37 @@
+    <td width="90px">
+        <div class="img" style="max-width:none!important;">
+            <img src='<%=this.getImage()%>' style="max-width:none!important;">
+        </div>
+    </td>
+    <td width="100%"><div>
+        <div class="name-type">
+            <h3> <a class="setup-domain showtooltip" data-id="<%=this.model.get('id')%>">
+                <%=this.model.get('name')%>
+            </a>
+                <% if(this.model.get("default")) { %>
+                    <a class="cstatus pclr1"> Default </a>
+                <% } %>
+            </h3>
+        </div>
+    </div>
+    </td>
+    <td width="132px">
+        <div>
+            <div style="width:105px" class="time"> <strong><span><em>Last edited on</em>16 Feb 2016</span></strong> </div>
+                <% if(this.model.get("default")) { %>
+                <div style="width:;" class="slide-btns  one s-clr2">
+                <% } else { %>
+                    <div style="width:;" class="slide-btns  two s-clr3">
+                    <% } %>
+                <span class="icon setting"></span>
+                <div>
+                    <% if(this.model.get("default")) { %>
+                        <a class="sendmail clr2 test-domain icon"><span>Test Mail</span></a>
+                    <% } else { %>
+                        <a class="draft clr1 set-default icon"><span>Set Draft</span></a>
+                        <a class="sendmail clr2 test-domain icon"><span>Test Mail</span></a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </td>

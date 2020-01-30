@@ -109,6 +109,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .crm-netsuite': 'netsuiteCrm',
                     'click .crm-highrise': 'highriseCrm',
                     'click .crm-salesloft':'salesloftCRM',
+                    'click .crm-esp':'espCRM',
                     'click .crm-zapier':'zapierCRM',
                     'click .crm-google': 'googleCRM',
                     'click .create-target': 'createTarget',
@@ -1198,6 +1199,18 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         noTags: true
                     });
                 },
+                espCRM: function () {
+                     this.addWorkSpace({
+                         type:'',
+                         title:'ESP',
+                         url:'crm/esp/esp',
+                         workspace_id: 'crm_esp',
+                         tab_icon:'crm',
+                         sub_title:'Connection With ESP',
+                         addAction: false,
+                         noTags: true
+                     });
+                 },
                 zapierCRM:function(){
                     this.addWorkSpace({
                         type:'',
