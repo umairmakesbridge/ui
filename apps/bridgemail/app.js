@@ -413,6 +413,7 @@ define([
             if (active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()) {
                 active_workspace.find("#campaign_from_email_input").css({"width": active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width() + "px", "margin-right": "61px"}); // Abdullah Check
                 active_workspace.find("#campaign_from_email_chosen .chosen-drop").css("width", (parseInt(active_workspace.find('#campaign_from_email_chosen').width())) + "px");
+                active_workspace.find("#campaign_from_email_chosen .chosen-drop").css("width", (parseInt(active_workspace.find('#campaign_from_email_chosen').width())) + "px");
             }
             if (active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()) {
                 active_workspace.find("#fromemail_default_input").css("width", active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width() - 6 + "px");   // Abdullah Check

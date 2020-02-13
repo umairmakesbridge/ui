@@ -1855,6 +1855,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                             camp_obj.$(".flyinput").val(selected_fromEmail);
                             setTimeout(_.bind(camp_obj.setFromNameField, camp_obj), 300);
 
+                            camp_obj.$("#campaign_from_esp").chosen({no_results_text: 'Oops, nothing found!', disable_search: true});
+
                             var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck   
                             //camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40));
                             //camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try

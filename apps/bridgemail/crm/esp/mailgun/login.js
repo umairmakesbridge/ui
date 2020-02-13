@@ -8,9 +8,9 @@ function (template) {
                                 return false;
                         else
                         {                                                        
-                            var isValid = this.validateLoginFields();                            
-                            if(isValid){							
-                                this.saveCredentials();							
+                            var isValid =  true;
+                            if(isValid){
+                                this.saveCredentials();
                             }
                         }
                     }
@@ -21,41 +21,40 @@ function (template) {
                         var logindialog = this.dialog;
                         var app = this.app;
                         var el = this.$el;
-                        el.find('#sl_userid').attr('readonly','readonly');
-                        el.find('.btnSaveLogin').addClass('saving');
-                        var URL = "/pms/io/salesloft/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setCred";
-                        $.post(URL, { apiKey: curview.$el.find('#sl_userid').val(),email:curview.$el.find('#sl_email').val()})
-                        .done(function(data) { 
-                                var creds = jQuery.parseJSON(data);        
-                                el.find('#sl_userid').removeAttr('readonly');
-                                el.find('.btnSaveLogin').removeClass('saving');
-                                if(creds.err)
-                                {							
-                                    app.showAlert(creds.err.replace('&#58;',':'),curview.$el);							
+                        this.apiKeyInput.attr('readonly','readonly');
+                        this.saveButton.addClass('saving');
+                        var URL = "/pms/io/user/setData/?BMS_REQ_TK="+app.get('bms_token')+"&type=addMailgun";
+                        var api_key =  this.apiKeyInput;
+                        var emailAddress = this.emailAddressInput;
+                        $.post(URL, { privateKey:api_key.val(),emailAddress:emailAddress.val()})
+                        .done(function(data) {
+                                curview.apiKeyInput.removeAttr('readonly');
+                                curview.saveButton.removeClass('saving');
+                                if(data){
+                                    var creds = jQuery.parseJSON(data);
+                                    if(creds[0]=="err")
+                                    {
+                                        app.showAlert(creds[1].replace('&#58;',':'),curview.$el);
+                                    }
+                                    else
+                                    {
+                                         app.setAppData("mailgun", {"emailAddress":emailAddress,"privateKey":emailAddress});
+                                         app.showMessge(creds[1],$("body"),{fixed:true});
+
+                                    }
                                 }
-                                else
-                                {
-                                     if(logindialog){
-                                        logindialog.hide();														
-                                        curview.options.camp.checkSalesForceStatus();
-                                     }
-                                     else{
-                                         curview.$("#btnTestLogin").show();
-                                         curview.setAccordion();
-                                         app.setAppData("salesloft", {"slEmail":curview.$el.find('#sl_email').val(),"apiKey":curview.$el.find('#sl_userid').val()});
-                                         app.showMessge(creds.success,$("body"),{fixed:true});						
-                                         if(curview.parent.exportAccordion){
-                                           curview.parent.exportAccordion.getExportBot();
-                                        }
-                                     }
+                                else{
+                                    app.showAlert("UnExpected response from server.",curview.$el);
                                 }
-                        });
+                        }).fail(function() {
+                               app.showAlert("Something went wrong on server. Please try again later.",curview.$el);
+                            });
                 },
                 validateLoginFields: function(isTest) {
                         var el = this.$el;
                         var isValid = true;
                         var app = this.app;                        
-                        if((el.find('#sl_userid').val() == ''))
+                        if((this.apiKeyInput.val() == ''))
                         {						
                             app.showError({
                                 control:el.find('.uid-container'),
@@ -67,26 +66,23 @@ function (template) {
                         {						
                             app.hideError({control:el.find(".uid-container")});
                         }
-                        //var salesforce_setting = this.app.getAppData("salesfocre");
-                        var salesforceLoggedIn = true; //salesforce_setting && salesforce_setting[0] !== "err" && salesforce_setting.isSalesforceUser=="Y";
-                        if(salesforceLoggedIn){
-                            isValid = this.validateEmail();  
-                        }
-                        
+
+                        isValid = this.validateEmail();
+
                         return isValid;
                 },
                 validateEmail:function(){
                     var el = this.$el;
                     var isValid = true;
                     var app = this.app;                    
-                    if(el.find('#sl_email').val() == ''){
+                    if(this.emailAddressInput.val() == ''){
                         app.showError({
-                                control:el.find('.email-container'),
-                                message:'Email can\'t be empty'
+                            control:el.find('.email-container'),
+                            message:'Email can\'t be empty'
                         });
                         isValid = false;
                     }
-                    else if(el.find('#sl_email').val() != '' && !app.validateEmail(el.find('#sl_email').val()))
+                    else if(this.emailAddressInput.val() != '' && !app.validateEmail(this.emailAddressInput.val()))
                     {						
                         app.showError({
                                 control:el.find('.email-container'),
@@ -108,29 +104,40 @@ function (template) {
                         this.layout = this.options.layout?this.options.layout:'';
                         var el = this.$el;
                         this.passwordChange = false;
+                        this.getElements();
                         this.app.showLoading('Loading Credentials',el);					
-                        var salesloft_setting = this.app.getAppData("salesloft");
-                        if(!salesloft_setting)
+                        var mailgun_setting = this.app.getAppData("mailgun");
+                        if(!mailgun_setting)
                         {
                             el.find('#sl_userid#sl_email').attr('readonly','readonly');
-                            var URL = "/pms/io/salesloft/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getCred";
-                            /*jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
+                            var URL = "/pms/events/getMailgun.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getMailgun";
+                            jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
                                 var creds = jQuery.parseJSON(xhr.responseText);
-                                this.setAPIKey(creds)
-                            },this));*/
+                                if(creds[0]!=="err"){
+                                    this.setAPIKey(creds)
+                                }
+                                else{
+                                    this.app.showAlert(creds[1].replace('&#58;',':'),this.$el);
+                                }
+                            },this));
                         }
                         else{
-                            this.setAPIKey(salesloft_setting)
+                            this.setAPIKey(mailgun_setting)
                         }
                         
                         this.app.showLoading(false,el);
                 },
+                getElements: function(){
+                    this.apiKeyInput = this.$("#mailgun_key");
+                    this.emailAddressInput = this.$("#mailgun_email");
+                    this.saveButton = this.$(".btnSaveLogin")
+                },
                 setAPIKey:function(creds){
                     if(creds && creds.apiKey!="")
                     {								                                    
-                        this.$('#sl_userid').removeAttr('readonly').val(creds["apiKey"]);
-                        this.$('#sl_email').removeAttr('readonly').val(creds["slEmail"]);
-                        this.setAccordion();
+                        this.apiKeyInput.removeAttr('readonly').val(creds["publicKey"]);
+                        this.emailAddressInput.removeAttr('readonly').val(creds["email"]);
+                        //this.setAccordion();
                         
                     }
                 },

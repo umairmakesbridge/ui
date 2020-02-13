@@ -37,11 +37,15 @@ function (template, domainRowTemplate) {
                             tdNo:2
                      });
                 },
+                getMailGunAccount: function(){
+
+                },
                 fetchDomains: function(){
                     this.$(".notfound").hide();
                     var collectionDomain = new Backbone.Collection(this.domainArray);
                     var domainRow = this.domainView();
                     this.$el.find('#mailgun-domains-grid tbody').children().remove();
+
                     this.$("#total_templates").html('<strong class="badge">'+this.domainArray.length+'</strong> Domains');
                      _.each(collectionDomain.models, _.bind(function (model) {
                         var rowView = new domainRow({model: model, sub: this});
